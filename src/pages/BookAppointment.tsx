@@ -260,41 +260,47 @@ const BookAppointment = () => {
         return;
       }
 
-      const { data: newAppointment, error } = await supabase
-        .from("appointments")
-        .insert({
-          stylist_id: selectedStylist,
-          client_id: clientProfile.id,
-          appointment_date: appointmentDate.toISOString(),
-          service_type: selectedService.service_name,
-          service_id: selectedService.id,
-          duration_minutes: selectedService.duration_minutes,
-          notes,
-          status: "scheduled",
-        })
-        .select()
+      // Get user details for Stripe
+      const { data: { session } } = await supabase.auth.getSession();
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name, email")
+        .eq("id", session?.user.id)
         .single();
 
-      if (error) throw error;
+      // Create Stripe checkout session
+      const appointmentData = {
+        stylist_id: selectedStylist,
+        client_id: clientProfile.id,
+        appointment_date: appointmentDate.toISOString(),
+        service_type: selectedService.service_name,
+        service_id: selectedService.id,
+        duration_minutes: selectedService.duration_minutes,
+        notes,
+      };
 
-      // Send confirmation email
-      try {
-        await supabase.functions.invoke("send-appointment-email", {
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke(
+        'create-appointment-checkout',
+        {
           body: {
-            appointmentId: newAppointment.id,
-            type: "confirmation",
+            appointmentData,
+            clientEmail: profile?.email,
+            clientName: profile?.full_name,
           },
-        });
-      } catch (emailError) {
-        console.error("Failed to send confirmation email:", emailError);
-      }
+        }
+      );
 
-      toast.success("Appointment booked successfully! Your stylist will confirm soon.");
-      navigate("/my-appointments");
+      if (checkoutError) throw checkoutError;
+
+      // Redirect to Stripe checkout
+      if (checkoutData?.url) {
+        window.location.href = checkoutData.url;
+      } else {
+        throw new Error("Failed to create checkout session");
+      }
     } catch (error: any) {
       console.error("Error booking appointment:", error);
-      toast.error("Error booking appointment");
-    } finally {
+      toast.error("Error processing payment. Please try again.");
       setSubmitting(false);
     }
   };
@@ -613,12 +619,14 @@ const BookAppointment = () => {
                 )}
 
                 <div className="bg-primary/5 p-4 rounded-lg mt-4">
-                  <p className="text-sm text-muted-foreground mb-2">📋 What happens next:</p>
-                  <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
-                    <li>Your stylist will receive your booking request</li>
-                    <li>They'll confirm your appointment</li>
-                    <li>You'll receive updates on your booking status</li>
-                  </ol>
+                  <p className="text-sm text-muted-foreground mb-2">💳 Secure Payment Required</p>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    You'll be redirected to Stripe's secure checkout to complete your payment. Your appointment will be confirmed immediately after payment.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <span>Powered by Stripe - Secure & Encrypted</span>
+                  </div>
                 </div>
               </>
             )}
@@ -632,12 +640,12 @@ const BookAppointment = () => {
               {submitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Booking Your Appointment...
+                  Processing...
                 </>
               ) : (
                 <>
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Confirm Booking
+                  Proceed to Payment - ${selectedService?.price || 0}
                 </>
               )}
             </Button>
