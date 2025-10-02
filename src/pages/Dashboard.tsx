@@ -11,9 +11,9 @@ import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import avatarMale from "@/assets/avatar-male-lego.png";
-import avatarFemale from "@/assets/avatar-female-lego.png";
-import avatarNeutral from "@/assets/avatar-neutral-lego.png";
+import avatarMale from "@/assets/avatar-male-pixel.png";
+import avatarFemale from "@/assets/avatar-female-pixel.png";
+import avatarNeutral from "@/assets/avatar-neutral-pixel.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
