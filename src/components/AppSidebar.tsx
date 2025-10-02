@@ -66,16 +66,16 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const getNavClassName = (path: string) => {
     const active = isActive(path);
     return active
-      ? "bg-yellow-400 text-foreground font-bold border-l-4 border-white shadow-[3px_0_0_0_white]"
-      : "text-white hover:bg-orange-600 border-l-4 border-transparent hover:border-orange-300";
+      ? "bg-primary/10 text-primary font-medium border-l-4 border-primary"
+      : "hover:bg-muted/50 border-l-4 border-transparent";
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r-4 border-foreground bg-orange-500">
-      <SidebarContent className="gap-0">
+    <Sidebar collapsible="icon" className="border-r">
+      <SidebarContent>
         {/* Main Navigation */}
-        <SidebarGroup className="border-b-4 border-orange-600 pb-4">
-          <SidebarGroupLabel className={collapsed ? "sr-only" : "text-white font-bold text-xs uppercase tracking-wider px-3 py-2"}>
+        <SidebarGroup>
+          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
             Main Menu
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -84,8 +84,10 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
                     <NavLink to={item.url} className={getNavClassName(item.url)}>
-                      <item.icon className="h-5 w-5 flex-shrink-0" />
-                      {!collapsed && <span className="ml-3">{item.title}</span>}
+                      <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+                        <item.icon className="h-4 w-4 text-white" />
+                      </div>
+                      {!collapsed && <span className="ml-2">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -96,8 +98,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
         {/* Secondary Navigation (Stylist Only) */}
         {userRole === "stylist" && secondaryItems.length > 0 && (
-          <SidebarGroup className="border-b-4 border-orange-600 pb-4">
-            <SidebarGroupLabel className={collapsed ? "sr-only" : "text-white font-bold text-xs uppercase tracking-wider px-3 py-2"}>
+          <SidebarGroup>
+            <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
               Business Tools
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -106,8 +108,10 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild tooltip={item.title}>
                       <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <item.icon className="h-5 w-5 flex-shrink-0" />
-                        {!collapsed && <span className="ml-3">{item.title}</span>}
+                        <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+                          <item.icon className="h-4 w-4 text-white" />
+                        </div>
+                        {!collapsed && <span className="ml-2">{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -118,22 +122,26 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         )}
 
         {/* Account Section */}
-        <SidebarGroup className="mt-auto border-t-4 border-orange-600 pt-4">
+        <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Profile">
                   <NavLink to="/profile" className={getNavClassName("/profile")}>
-                    <User className="h-5 w-5 flex-shrink-0" />
-                    {!collapsed && <span className="ml-3">Profile</span>}
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-slate-500 to-gray-500">
+                      <User className="h-4 w-4 text-white" />
+                    </div>
+                    {!collapsed && <span className="ml-2">Profile</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Settings">
                   <NavLink to="/settings" className={getNavClassName("/settings")}>
-                    <Settings className="h-5 w-5 flex-shrink-0" />
-                    {!collapsed && <span className="ml-3">Settings</span>}
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500">
+                      <Settings className="h-4 w-4 text-white" />
+                    </div>
+                    {!collapsed && <span className="ml-2">Settings</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
