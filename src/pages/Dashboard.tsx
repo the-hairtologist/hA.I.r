@@ -325,14 +325,14 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h2 className="text-5xl font-display font-bold mb-3 animate-fade-in bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-            Welcome back, {user?.user_metadata?.full_name || "there"}!
+        <div className="mb-8 p-8 rounded-xl bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
+          <h2 className="text-5xl md:text-6xl font-display font-bold mb-3 animate-fade-in text-foreground">
+            Welcome back, {user?.user_metadata?.full_name || "there"}! 👋
           </h2>
-          <p className="text-lg text-muted-foreground animate-fade-in font-medium" style={{ animationDelay: "100ms" }}>
+          <p className="text-lg font-semibold animate-fade-in text-foreground/90" style={{ animationDelay: "100ms" }}>
             {userRole === "stylist" 
-              ? "Manage your clients and grow your business" 
-              : "Book appointments and stay beautiful"}
+              ? "🎨 Ready to create some color magic today?" 
+              : "✨ Your hair journey continues!"}
           </p>
         </div>
 
