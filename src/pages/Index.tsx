@@ -36,33 +36,33 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="bg-gradient-to-br from-blue-500 via-cyan-400 to-teal-400 p-8 md:p-16 relative min-h-[500px] text-center">
+            <div className="bg-blue-600 p-8 md:p-16 relative min-h-[500px] text-center">
               <div className="window-scrollbar"></div>
               
               <div className="max-w-4xl mx-auto relative z-10">
                 <div className="flex items-center justify-center gap-4 mb-8">
-                  <Scissors className="h-12 w-12 text-foreground" />
+                  <Scissors className="h-12 w-12 text-pink-400" />
                   <div className="text-5xl">✨</div>
-                  <div className="w-12 h-12 border-4 border-foreground rotate-45"></div>
+                  <div className="w-12 h-12 border-4 border-pink-400 rotate-45"></div>
                   <div className="text-5xl">🎨</div>
                 </div>
                 
-                <h2 className="text-5xl md:text-7xl font-display font-black mb-8 text-foreground uppercase leading-tight">
+                <h2 className="text-5xl md:text-7xl font-display font-black mb-8 text-pink-400 uppercase leading-tight">
                   Transform Every Color Service
                 </h2>
                 
-                <p className="text-xl md:text-2xl font-bold text-foreground mb-4">
+                <p className="text-xl md:text-2xl font-bold text-pink-300 mb-4">
                   AI-Powered Precision
                 </p>
                 
-                <p className="text-base md:text-lg font-medium text-foreground/70 mb-12 max-w-2xl mx-auto">
+                <p className="text-base md:text-lg font-medium text-pink-200 mb-12 max-w-2xl mx-auto">
                   Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
                 </p>
                 
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-xl px-12 py-6 font-display font-black bg-foreground text-background hover:bg-foreground/90 border-4 border-foreground hover:translate-x-1 hover:translate-y-1 transition-transform uppercase"
+                  className="text-xl px-12 py-6 font-display font-black bg-pink-500 text-white hover:bg-pink-600 border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-transform uppercase"
                 >
                   Start Free
                 </Button>
