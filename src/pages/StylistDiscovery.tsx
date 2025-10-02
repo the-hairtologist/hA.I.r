@@ -55,12 +55,14 @@ const StylistDiscovery = () => {
 
   useEffect(() => {
     fetchStylists();
-    discoverMoreStylists();
+    // Don't auto-discover on mount to save API calls
+    // User can click "Show Discovered Stylists" button
   }, []);
 
   const discoverMoreStylists = async () => {
     setDiscoveringStylists(true);
     try {
+      console.log('🔍 Starting stylist discovery...');
       const { data, error } = await supabase.functions.invoke('search-stylists', {
         body: {
           location: locationFilter !== "all" ? locationFilter : "",
@@ -69,11 +71,24 @@ const StylistDiscovery = () => {
         },
       });
 
-      if (error) throw error;
-      setDiscoveredStylists(data.stylists || []);
+      console.log('📊 Discovery response:', { data, error });
+
+      if (error) {
+        console.error('❌ Discovery error:', error);
+        throw error;
+      }
+      
+      console.log('✅ Found stylists:', data?.stylists?.length || 0);
+      setDiscoveredStylists(data?.stylists || []);
+      
+      if (data?.stylists?.length > 0) {
+        toast.success(`Discovered ${data.stylists.length} stylists from the web`);
+      } else {
+        toast.info("No stylists found at this time. Try adjusting your filters.");
+      }
     } catch (error: any) {
-      console.error("Error discovering stylists:", error);
-      toast.error("Failed to discover more stylists");
+      console.error("❌ Error discovering stylists:", error);
+      toast.error(error.message || "Failed to discover more stylists");
     } finally {
       setDiscoveringStylists(false);
     }
@@ -280,7 +295,12 @@ const StylistDiscovery = () => {
           </div>
           <Button
             variant="outline"
-            onClick={() => setShowDiscovered(!showDiscovered)}
+            onClick={() => {
+              if (!showDiscovered && discoveredStylists.length === 0) {
+                discoverMoreStylists();
+              }
+              setShowDiscovered(!showDiscovered);
+            }}
             disabled={discoveringStylists}
           >
             {discoveringStylists ? (
@@ -291,7 +311,7 @@ const StylistDiscovery = () => {
             ) : showDiscovered ? (
               "Hide Results"
             ) : (
-              "Show Discovered Stylists"
+              `Discover Stylists Online${discoveredStylists.length > 0 ? ` (${discoveredStylists.length})` : ''}`
             )}
           </Button>
         </div>
