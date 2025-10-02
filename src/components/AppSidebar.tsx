@@ -67,7 +67,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     const active = isActive(path);
     return active
       ? "bg-yellow-400 text-foreground font-bold border-l-4 border-white shadow-[3px_0_0_0_white]"
-      : "hover:bg-orange-600 border-l-4 border-transparent hover:border-orange-300 text-white";
+      : "text-white hover:bg-orange-600 border-l-4 border-transparent hover:border-orange-300";
   };
 
   return (
@@ -84,8 +84,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
                     <NavLink to={item.url} className={getNavClassName(item.url)}>
-                      <item.icon className="h-5 w-5" />
-                      {!collapsed && <span className="ml-2">{item.title}</span>}
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
+                      {!collapsed && <span className="ml-3">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -106,8 +106,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild tooltip={item.title}>
                       <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <item.icon className="h-5 w-5" />
-                        {!collapsed && <span className="ml-2">{item.title}</span>}
+                        <item.icon className="h-5 w-5 flex-shrink-0" />
+                        {!collapsed && <span className="ml-3">{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -124,16 +124,16 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Profile">
                   <NavLink to="/profile" className={getNavClassName("/profile")}>
-                    <User className="h-5 w-5" />
-                    {!collapsed && <span className="ml-2">Profile</span>}
+                    <User className="h-5 w-5 flex-shrink-0" />
+                    {!collapsed && <span className="ml-3">Profile</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Settings">
                   <NavLink to="/settings" className={getNavClassName("/settings")}>
-                    <Settings className="h-5 w-5" />
-                    {!collapsed && <span className="ml-2">Settings</span>}
+                    <Settings className="h-5 w-5 flex-shrink-0" />
+                    {!collapsed && <span className="ml-3">Settings</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
