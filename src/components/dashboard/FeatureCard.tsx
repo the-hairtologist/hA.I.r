@@ -25,12 +25,12 @@ export const FeatureCard = ({
 
   return (
     <Card
-      className="group cursor-pointer transition-all animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 bg-card relative overflow-hidden"
+      className="group cursor-pointer transition-all animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 relative overflow-hidden"
       style={{ animationDelay: `${index * 50}ms` }}
       onClick={() => navigate(route)}
     >
       <div className={cn(
-        "absolute inset-0 bg-gradient-to-br opacity-10",
+        "absolute inset-0 bg-gradient-to-br opacity-20",
         gradient
       )} />
       <CardHeader className="relative">

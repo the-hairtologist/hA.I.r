@@ -71,21 +71,21 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
 
   if (activities.length === 0) {
     return (
-      <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
+      <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-red-400">
         <CardHeader>
-          <CardTitle className="font-display">Recent Activity</CardTitle>
+          <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground text-center py-8 font-medium">No recent activity</p>
+          <p className="text-foreground/80 text-center py-8 font-medium">No recent activity</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
+    <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-red-400">
       <CardHeader>
-        <CardTitle className="font-display">Recent Activity</CardTitle>
+        <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -96,7 +96,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
             return (
               <div
                 key={activity.id}
-                className="flex items-start gap-4 p-4 rounded-lg border-2 border-foreground hover:bg-accent/50 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
+                className="flex items-start gap-4 p-4 rounded-lg border-2 border-foreground bg-white hover:bg-white/90 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
                 style={{ animationDelay: `${index * 50}ms` }}
                 onClick={() => {
                   if (activity.type === "appointment") navigate("/appointments");
@@ -111,7 +111,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <p className="font-display font-semibold truncate">{activity.title}</p>
-                      <p className="text-sm text-muted-foreground truncate">
+                      <p className="text-sm text-foreground/70 truncate">
                         {activity.description}
                       </p>
                     </div>
@@ -121,7 +121,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-foreground/60 mt-1">
                     {format(new Date(activity.timestamp), "MMM d, h:mm a")}
                   </p>
                 </div>

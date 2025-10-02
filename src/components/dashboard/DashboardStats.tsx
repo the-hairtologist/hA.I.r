@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, MessageSquare, Star, DollarSign, Users, Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DashboardStatsProps {
   stats: {
@@ -19,29 +20,29 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
       label: "Today's Appointments",
       value: stats.todayAppointments || 0,
       icon: Calendar,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
+      color: "text-blue-600",
+      bgColor: "bg-blue-400",
     },
     {
       label: "Upcoming This Week",
       value: stats.upcomingAppointments || 0,
       icon: Clock,
-      color: "text-purple-500",
-      bgColor: "bg-purple-500/10",
+      color: "text-purple-600",
+      bgColor: "bg-purple-400",
     },
     {
       label: "Unread Messages",
       value: stats.unreadMessages || 0,
       icon: MessageSquare,
-      color: "text-green-500",
-      bgColor: "bg-green-500/10",
+      color: "text-green-600",
+      bgColor: "bg-green-400",
     },
     {
       label: "Total Clients",
       value: stats.totalClients || 0,
       icon: Users,
-      color: "text-orange-500",
-      bgColor: "bg-orange-500/10",
+      color: "text-orange-600",
+      bgColor: "bg-orange-400",
     },
   ];
 
@@ -50,22 +51,22 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
       label: "Upcoming Appointments",
       value: stats.upcomingAppointments || 0,
       icon: Calendar,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
+      color: "text-blue-600",
+      bgColor: "bg-blue-400",
     },
     {
       label: "Unread Messages",
       value: stats.unreadMessages || 0,
       icon: MessageSquare,
-      color: "text-green-500",
-      bgColor: "bg-green-500/10",
+      color: "text-green-600",
+      bgColor: "bg-green-400",
     },
     {
       label: "Pending Reviews",
       value: stats.pendingReviews || 0,
       icon: Star,
-      color: "text-yellow-500",
-      bgColor: "bg-yellow-500/10",
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-300",
     },
   ];
 
@@ -78,16 +79,19 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
         return (
           <Card
             key={stat.label}
-            className="animate-fade-in hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]"
+            className={cn(
+              "animate-fade-in hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]",
+              stat.bgColor
+            )}
             style={{ animationDelay: `${index * 100}ms` }}
           >
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1 font-medium">{stat.label}</p>
-                  <p className="text-4xl font-display font-bold">{stat.value}</p>
+                  <p className="text-sm font-display font-semibold mb-1 text-foreground/80">{stat.label}</p>
+                  <p className="text-4xl font-display font-bold text-foreground">{stat.value}</p>
                 </div>
-                <div className={`p-3 rounded-lg ${stat.bgColor} border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]`}>
+                <div className="p-3 rounded-lg bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                   <Icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
               </div>

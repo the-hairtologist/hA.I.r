@@ -111,7 +111,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const displayedActions = allActions.filter(a => selectedActions.includes(a.id));
 
   return (
-    <Card className="mb-8 animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-card">
+    <Card className="mb-8 animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -119,7 +119,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
               <Sparkles className="h-5 w-5 text-primary" />
               Your Quick Actions
             </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1 font-medium">
+            <p className="text-sm font-semibold mt-1 text-foreground/80">
               {isCustomizing ? "Select your favorite shortcuts" : "Jump to what matters most"}
             </p>
           </div>
@@ -148,8 +148,8 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                   className={cn(
                     "relative p-4 rounded-lg border-2 border-foreground transition-all text-left group shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]",
                     isSelected
-                      ? "bg-primary/10"
-                      : "bg-background hover:bg-accent"
+                      ? "bg-white"
+                      : "bg-white/60 hover:bg-white"
                   )}
                 >
                   <div className="flex items-start gap-3">
@@ -162,7 +162,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-display font-semibold text-sm mb-1">{action.label}</h4>
-                      <p className="text-xs text-muted-foreground">{action.description}</p>
+                      <p className="text-xs text-foreground/70">{action.description}</p>
                     </div>
                     {isSelected && (
                       <div className="absolute top-2 right-2 h-5 w-5 rounded-full bg-primary flex items-center justify-center border-2 border-foreground">
@@ -183,7 +183,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                 <button
                   key={action.id}
                   onClick={() => navigate(action.route)}
-                  className="group relative p-5 rounded-xl border-[3px] border-foreground hover:border-primary bg-card transition-all text-left overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1"
+                  className="group relative p-5 rounded-xl border-[3px] border-foreground hover:border-primary bg-white transition-all text-left overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div className={cn(
@@ -200,7 +200,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                     <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
                       {action.label}
                     </h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-foreground/70">
                       {action.description}
                     </p>
                   </div>
@@ -209,8 +209,8 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             })}
             {displayedActions.length === 0 && (
               <div className="col-span-full text-center py-8">
-                <Plus className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-muted-foreground text-sm font-medium">
+                <Plus className="h-8 w-8 text-foreground/60 mx-auto mb-2" />
+                <p className="text-foreground/60 text-sm font-medium">
                   Click "Customize" to add your favorite shortcuts
                 </p>
               </div>
