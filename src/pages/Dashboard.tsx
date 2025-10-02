@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles } from "lucide-react";
+import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings } from "lucide-react";
+import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Dashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);
+  const [showProfileCompletion, setShowProfileCompletion] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -54,6 +56,17 @@ const Dashboard = () => {
             .single();
           setProfile(clientProfile);
         }
+      }
+
+      // Check if profile needs completion
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", session.user.id)
+        .single();
+
+      if (!profileData?.full_name) {
+        setShowProfileCompletion(true);
       }
     } catch (error: any) {
       toast.error("Error loading dashboard");
@@ -120,6 +133,12 @@ const Dashboard = () => {
       description: "Learn color theory and techniques",
       icon: BookOpen,
       route: "/knowledge",
+    },
+    {
+      title: "Availability",
+      description: "Set your working hours",
+      icon: Settings,
+      route: "/availability",
     },
   ];
 
@@ -219,6 +238,13 @@ const Dashboard = () => {
           })}
         </div>
       </main>
+
+      <ProfileCompletionDialog
+        open={showProfileCompletion}
+        onOpenChange={setShowProfileCompletion}
+        userRole={userRole}
+        userId={user?.id}
+      />
     </div>
   );
 };

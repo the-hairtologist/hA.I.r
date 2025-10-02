@@ -17,6 +17,7 @@ import Payments from "./pages/Payments";
 import Messages from "./pages/Messages";
 import Knowledge from "./pages/Knowledge";
 import Profile from "./pages/Profile";
+import Availability from "./pages/Availability";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/payments" element={<Payments />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/knowledge" element={<Knowledge />} />
+          <Route path="/availability" element={<Availability />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
