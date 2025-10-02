@@ -332,13 +332,6 @@ const Dashboard = () => {
       gradient: "from-purple-400 to-pink-500",
     },
     {
-      title: "💬 AI Hair Assistant",
-      description: "Get instant hair advice—ask about color maintenance, styling tips, or product recommendations anytime",
-      icon: Sparkles,
-      route: "/ai-assistant",
-      gradient: "from-pink-400 to-red-500",
-    },
-    {
       title: "My Color Formulas",
       description: "Your custom formulas saved forever—bring them to any salon, anywhere",
       icon: Scissors,
