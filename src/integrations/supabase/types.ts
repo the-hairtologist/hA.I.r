@@ -118,33 +118,49 @@ export type Database = {
       }
       commissions: {
         Row: {
+          brand_id: string | null
           commission_amount: number
           created_at: string
           id: string
           product_name: string
           product_url: string | null
+          purchase_date: string | null
+          referral_code_used: string | null
           status: string | null
           stylist_id: string
         }
         Insert: {
+          brand_id?: string | null
           commission_amount: number
           created_at?: string
           id?: string
           product_name: string
           product_url?: string | null
+          purchase_date?: string | null
+          referral_code_used?: string | null
           status?: string | null
           stylist_id: string
         }
         Update: {
+          brand_id?: string | null
           commission_amount?: number
           created_at?: string
           id?: string
           product_name?: string
           product_url?: string | null
+          purchase_date?: string | null
+          referral_code_used?: string | null
           status?: string | null
           stylist_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "commissions_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "hair_brands"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "commissions_stylist_id_fkey"
             columns: ["stylist_id"]
@@ -207,6 +223,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hair_brands: {
+        Row: {
+          affiliate_program_url: string | null
+          base_commission_rate: number
+          created_at: string
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          name: string
+        }
+        Insert: {
+          affiliate_program_url?: string | null
+          base_commission_rate?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name: string
+        }
+        Update: {
+          affiliate_program_url?: string | null
+          base_commission_rate?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name?: string
+        }
+        Relationships: []
       }
       knowledge_resources: {
         Row: {
@@ -367,6 +413,54 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      stylist_affiliate_codes: {
+        Row: {
+          affiliate_link: string | null
+          brand_id: string | null
+          created_at: string
+          custom_commission_rate: number | null
+          id: string
+          is_active: boolean | null
+          referral_code: string
+          stylist_id: string
+        }
+        Insert: {
+          affiliate_link?: string | null
+          brand_id?: string | null
+          created_at?: string
+          custom_commission_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          referral_code: string
+          stylist_id: string
+        }
+        Update: {
+          affiliate_link?: string | null
+          brand_id?: string | null
+          created_at?: string
+          custom_commission_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          referral_code?: string
+          stylist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stylist_affiliate_codes_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "hair_brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stylist_affiliate_codes_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       stylist_profiles: {
         Row: {
