@@ -53,34 +53,48 @@ const Auth = () => {
       if (error) throw error;
 
       if (data.user) {
-        // Assign role to the user
-        const { error: roleError } = await supabase
-          .from("user_roles")
-          .insert({
-            user_id: data.user.id,
-            role: userType,
-          });
-
-        if (roleError) throw roleError;
-
-        // Create appropriate profile
-        if (userType === "stylist") {
-          const { error: profileError } = await supabase
-            .from("stylist_profiles")
+        try {
+          // Create role and profile in sequence to avoid race condition
+          const { error: roleError } = await supabase
+            .from("user_roles")
             .insert({
               user_id: data.user.id,
+              role: userType,
             });
-          if (profileError) throw profileError;
-        } else {
-          const { error: profileError } = await supabase
-            .from("client_profiles")
-            .insert({
-              user_id: data.user.id,
-            });
-          if (profileError) throw profileError;
+
+          if (roleError) throw roleError;
+
+          // Create appropriate profile
+          if (userType === "stylist") {
+            const { error: profileError } = await supabase
+              .from("stylist_profiles")
+              .insert({
+                user_id: data.user.id,
+              });
+            if (profileError) {
+              // Rollback: delete the role if profile creation fails
+              await supabase.from("user_roles").delete().eq("user_id", data.user.id);
+              throw profileError;
+            }
+          } else {
+            const { error: profileError } = await supabase
+              .from("client_profiles")
+              .insert({
+                user_id: data.user.id,
+              });
+            if (profileError) {
+              // Rollback: delete the role if profile creation fails
+              await supabase.from("user_roles").delete().eq("user_id", data.user.id);
+              throw profileError;
+            }
+          }
+
+          toast.success("Account created successfully! Welcome to hA.I.r!");
+        } catch (profileError) {
+          // If profile creation failed, sign out the user
+          await supabase.auth.signOut();
+          throw profileError;
         }
-
-        toast.success("Account created successfully! Welcome to hA.I.r!");
       }
     } catch (error: any) {
       toast.error(error.message || "Error signing up");

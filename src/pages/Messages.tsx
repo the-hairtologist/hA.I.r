@@ -26,6 +26,33 @@ const Messages = () => {
 
   useEffect(() => {
     loadData();
+    
+    // Set up realtime subscription for all messages
+    const channel = supabase
+      .channel('messages-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'messages',
+        },
+        (payload) => {
+          console.log('Realtime message update:', payload);
+          
+          // Reload data when any message changes
+          supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+              loadData();
+            }
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   useEffect(() => {

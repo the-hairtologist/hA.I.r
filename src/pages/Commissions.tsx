@@ -98,8 +98,10 @@ const Commissions = () => {
 
   const generateAffiliateCode = async (brandId: string) => {
     try {
-      // Generate unique code based on stylist name and brand
-      const code = `${stylistProfile.business_name?.replace(/\s/g, '').toUpperCase().slice(0, 4) || 'STYL'}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      // Generate unique code based on stylist name, brand, and timestamp
+      const timestamp = Date.now().toString(36).toUpperCase();
+      const brandPrefix = stylistProfile.business_name?.replace(/\s/g, '').toUpperCase().slice(0, 4) || 'STYL';
+      const code = `${brandPrefix}-${timestamp.slice(-6)}`;
       
       const { error } = await supabase
         .from("stylist_affiliate_codes")
@@ -110,7 +112,13 @@ const Commissions = () => {
           is_active: true,
         });
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '23505') { // Unique constraint violation
+          toast.error("Code generation failed. Please try again.");
+          return;
+        }
+        throw error;
+      }
 
       toast.success("Affiliate code generated!");
       loadData();

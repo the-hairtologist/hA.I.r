@@ -105,10 +105,28 @@ const BookAppointment = () => {
       const adjustedHours = period === "PM" && hours !== 12 ? hours + 12 : hours === 12 && period === "AM" ? 0 : hours;
       
       const appointmentDate = setMinutes(setHours(selectedDate, adjustedHours), minutes);
+      const appointmentEndDate = addHours(appointmentDate, parseInt(duration) / 60);
 
       // Check if appointment is in the past
       if (isBefore(appointmentDate, new Date())) {
         toast.error("Cannot book appointments in the past");
+        setSubmitting(false);
+        return;
+      }
+
+      // Check for scheduling conflicts
+      const { data: conflicts, error: conflictError } = await supabase
+        .from("appointments")
+        .select("id, appointment_date, duration_minutes")
+        .eq("stylist_id", selectedStylist)
+        .neq("status", "cancelled")
+        .gte("appointment_date", appointmentDate.toISOString())
+        .lte("appointment_date", appointmentEndDate.toISOString());
+
+      if (conflictError) throw conflictError;
+
+      if (conflicts && conflicts.length > 0) {
+        toast.error("This time slot is already booked. Please choose a different time.");
         setSubmitting(false);
         return;
       }
@@ -251,10 +269,11 @@ const BookAppointment = () => {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     rows={4}
+                    maxLength={500}
                     className="resize-none"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Share any concerns or special requests with your stylist
+                    {notes.length}/500 characters
                   </p>
                 </div>
               </CardContent>

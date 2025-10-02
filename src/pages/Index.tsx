@@ -33,7 +33,7 @@ const Index = () => {
             Your AI-Powered Salon Assistant
           </h2>
           <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-            hA.I.r helps stylists and clients manage formulas, appointments, payments, and communication—all powered by AI.
+            hA.I.r helps stylists and clients manage formulas, appointments, and communication—powered by advanced AI technology.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -51,9 +51,9 @@ const Index = () => {
               <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Calendar className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">Easy Booking</h3>
+              <h3 className="font-semibold text-lg mb-2">Easy Scheduling</h3>
               <p className="text-muted-foreground text-sm">
-                Visual appointment scheduling with automated reminders
+                Visual appointment calendar with conflict prevention
               </p>
             </div>
 
@@ -61,15 +61,15 @@ const Index = () => {
               <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <MessageSquare className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">Seamless Communication</h3>
+              <h3 className="font-semibold text-lg mb-2">Real-Time Communication</h3>
               <p className="text-muted-foreground text-sm">
-                Chat, video messages, and formula history all in one place
+                Instant messaging, video notes, and formula history all in one place
               </p>
             </div>
           </div>
 
           <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8 py-6">
-            Start Your Free Trial
+            Get Started Free
           </Button>
         </div>
       </main>
