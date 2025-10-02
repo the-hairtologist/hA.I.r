@@ -348,7 +348,9 @@ const Dashboard = () => {
             
             <div className="max-w-3xl">
               <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
-                Welcome back, {user?.user_metadata?.full_name || "there"}!
+                Welcome back,
+                <br />
+                {user?.user_metadata?.full_name || "there"}!
               </h2>
               
               <p className="text-lg md:text-xl font-medium text-pink-200 mb-8 max-w-2xl">
