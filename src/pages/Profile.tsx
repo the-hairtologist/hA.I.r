@@ -7,13 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { ArrowLeft, User, Loader2, Save } from "lucide-react";
+import { ArrowLeft, User, Loader2, Save, Upload } from "lucide-react";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
   
   // Profile fields
   const [email, setEmail] = useState("");
@@ -56,6 +58,7 @@ const Profile = () => {
         setEmail(profile.email);
         setFullName(profile.full_name || "");
         setPhone(profile.phone || "");
+        setAvatarUrl(profile.avatar_url || "");
       }
 
       // Get user role
@@ -103,6 +106,45 @@ const Profile = () => {
       toast.error("Error loading profile");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${session.user.id}/${Math.random()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('id', session.user.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      toast.success("Avatar updated successfully!");
+    } catch (error: any) {
+      console.error("Error uploading avatar:", error);
+      toast.error("Failed to upload avatar");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -195,6 +237,31 @@ const Profile = () => {
               <CardDescription>Your account details</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Avatar Upload */}
+              <div className="flex flex-col items-center gap-4 mb-6">
+                <div className="relative w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    <User className="h-12 w-12 text-muted-foreground" />
+                  )}
+                </div>
+                <Label htmlFor="avatar-upload" className="cursor-pointer">
+                  <div className="flex items-center gap-2 text-sm text-primary hover:underline">
+                    <Upload className="h-4 w-4" />
+                    {uploading ? "Uploading..." : "Upload Photo"}
+                  </div>
+                  <Input
+                    id="avatar-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarUpload}
+                    disabled={uploading}
+                    className="hidden"
+                  />
+                </Label>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input

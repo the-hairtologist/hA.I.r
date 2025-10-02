@@ -131,7 +131,7 @@ const BookAppointment = () => {
         return;
       }
 
-      const { error } = await supabase
+      const { data: newAppointment, error } = await supabase
         .from("appointments")
         .insert({
           stylist_id: selectedStylist,
@@ -141,9 +141,23 @@ const BookAppointment = () => {
           duration_minutes: parseInt(duration),
           notes,
           status: "scheduled",
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Send confirmation email
+      try {
+        await supabase.functions.invoke("send-appointment-email", {
+          body: {
+            appointmentId: newAppointment.id,
+            type: "confirmation",
+          },
+        });
+      } catch (emailError) {
+        console.error("Failed to send confirmation email:", emailError);
+      }
 
       toast.success("Appointment booked successfully! Your stylist will confirm soon.");
       navigate("/my-appointments");

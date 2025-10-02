@@ -2,3 +2,6 @@ project_id = "iyotklwiwyljospfqnoy"
 
 [functions.generate-formula]
 verify_jwt = true
+
+[functions.send-appointment-email]
+verify_jwt = true

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut } from "lucide-react";
+import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles } from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -125,16 +125,22 @@ const Dashboard = () => {
 
   const clientFeatures = [
     {
-      title: "Book Appointment",
-      description: "Schedule your next salon visit",
-      icon: Calendar,
-      route: "/book",
+      title: "Find Stylists",
+      description: "Discover and book with professional stylists",
+      icon: Users,
+      route: "/stylists",
     },
     {
       title: "My Formulas",
       description: "View your hair color history",
-      icon: Scissors,
+      icon: Sparkles,
       route: "/my-formulas",
+    },
+    {
+      title: "Book Appointment",
+      description: "Schedule your next salon visit",
+      icon: Calendar,
+      route: "/book-appointment",
     },
     {
       title: "Messages",
