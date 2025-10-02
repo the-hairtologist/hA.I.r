@@ -237,24 +237,43 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name *</Label>
+                <Label htmlFor="fullName">
+                  Full Name <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="fullName"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="John Doe"
+                  maxLength={100}
+                  className={!fullName.trim() ? "border-destructive/50" : ""}
                 />
+                {!fullName.trim() && (
+                  <p className="text-xs text-destructive">This field is required</p>
+                )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">
+                  Phone Number <span className="text-muted-foreground text-xs">(Optional)</span>
+                </Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="(555) 123-4567"
+                  onChange={(e) => {
+                    // Basic phone formatting
+                    const cleaned = e.target.value.replace(/\D/g, '');
+                    if (cleaned.length <= 10) {
+                      setPhone(cleaned);
+                    }
+                  }}
+                  placeholder="5551234567"
+                  maxLength={10}
                 />
+                <p className="text-xs text-muted-foreground">
+                  {phone.length}/10 - Clients can reach you at this number
+                </p>
               </div>
             </div>
           )}
@@ -268,58 +287,88 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="businessName">Business/Salon Name</Label>
+                  <Label htmlFor="businessName">
+                    Business/Salon Name <span className="text-muted-foreground text-xs">(Optional)</span>
+                  </Label>
                   <Input
                     id="businessName"
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
-                    placeholder="Salon Elite"
+                    placeholder="e.g., Salon Elite"
+                    maxLength={100}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Helps clients find you
+                  </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="specialty">Specialty</Label>
+                  <Label htmlFor="specialty">
+                    Specialty <span className="text-muted-foreground text-xs">(Optional)</span>
+                  </Label>
                   <Input
                     id="specialty"
                     value={specialty}
                     onChange={(e) => setSpecialty(e.target.value)}
-                    placeholder="Color, Balayage, etc."
+                    placeholder="e.g., Color Correction, Balayage"
+                    maxLength={50}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Your primary expertise
+                  </p>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
+                  <Label htmlFor="location">
+                    Location <span className="text-muted-foreground text-xs">(Optional)</span>
+                  </Label>
                   <Input
                     id="location"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="Los Angeles, CA"
+                    placeholder="e.g., Los Angeles, CA"
+                    maxLength={100}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    City and state
+                  </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="yearsExperience">Years Experience</Label>
+                  <Label htmlFor="yearsExperience">
+                    Years Experience <span className="text-muted-foreground text-xs">(Optional)</span>
+                  </Label>
                   <Input
                     id="yearsExperience"
                     type="number"
                     min="0"
+                    max="70"
                     value={yearsExperience}
                     onChange={(e) => setYearsExperience(e.target.value)}
                     placeholder="5"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Years of professional experience
+                  </p>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="colorLine">Preferred Color Line</Label>
+                <Label htmlFor="colorLine">
+                  Preferred Color Line <span className="text-muted-foreground text-xs">(Optional)</span>
+                </Label>
                 <Input
                   id="colorLine"
                   value={colorLine}
                   onChange={(e) => setColorLine(e.target.value)}
-                  placeholder="Redken, Wella, Schwarzkopf"
+                  placeholder="e.g., Redken, Wella, Schwarzkopf"
+                  maxLength={100}
                 />
+                <p className="text-xs text-muted-foreground">
+                  The AI will tailor formulas to your preferred brands
+                </p>
               </div>
             </div>
           )}
@@ -332,17 +381,24 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="bio">Bio</Label>
+                <Label htmlFor="bio">
+                  Professional Bio <span className="text-muted-foreground text-xs">(Optional)</span>
+                </Label>
                 <Textarea
                   id="bio"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  placeholder="Tell clients about your experience, specialties, and what makes you unique..."
+                  placeholder="Example: I specialize in lived-in color and dimensional balayage. With 10+ years of experience, I love creating natural, low-maintenance looks that enhance your natural beauty..."
                   rows={6}
+                  maxLength={500}
+                  className="resize-none"
                 />
-                <p className="text-xs text-muted-foreground">
-                  This will be visible on your profile and in stylist discovery
-                </p>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>Visible on your profile and in stylist discovery</span>
+                  <span className={bio.length > 450 ? "text-warning" : ""}>
+                    {bio.length}/500
+                  </span>
+                </div>
               </div>
             </div>
           )}

@@ -184,8 +184,30 @@ const BookAppointment = () => {
   };
 
   const handleBookAppointment = async () => {
-    if (!selectedStylist || !selectedDate || !selectedTime || !selectedService) {
-      toast.error("Please fill in all required fields");
+    // Comprehensive validation with specific error messages
+    if (!selectedStylist) {
+      toast.error("Please select a stylist");
+      return;
+    }
+
+    if (!selectedService) {
+      toast.error("Please select a service");
+      return;
+    }
+
+    if (!selectedDate) {
+      toast.error("Please select a date");
+      return;
+    }
+
+    if (!selectedTime) {
+      toast.error("Please select a time");
+      return;
+    }
+
+    // Validate notes length
+    if (notes.length > 500) {
+      toast.error("Notes must be 500 characters or less");
       return;
     }
 
@@ -216,7 +238,7 @@ const BookAppointment = () => {
 
       // Check if appointment is in the past
       if (isBefore(appointmentDate, new Date())) {
-        toast.error("Cannot book appointments in the past");
+        toast.error("Cannot book appointments in the past. Please select a future date and time.");
         setSubmitting(false);
         return;
       }
@@ -307,16 +329,27 @@ const BookAppointment = () => {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Select Your Stylist</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  Select Your Stylist
+                  <Badge variant="secondary" className="text-xs">Step 1</Badge>
+                </CardTitle>
                 <CardDescription>Choose from available stylists</CardDescription>
               </CardHeader>
               <CardContent>
                 {stylists.length === 0 ? (
-                  <p className="text-muted-foreground">No stylists available at the moment</p>
+                  <div className="text-center py-4">
+                    <p className="text-muted-foreground mb-2">No stylists available at the moment</p>
+                    <Button variant="outline" size="sm" onClick={() => navigate("/stylists")}>
+                      Discover Stylists
+                    </Button>
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     <Select value={selectedStylist} onValueChange={setSelectedStylist}>
-                      <SelectTrigger className="bg-background">
+                      <SelectTrigger className={cn(
+                        "bg-background",
+                        !selectedStylist && "border-primary/50"
+                      )}>
                         <SelectValue placeholder="Choose a stylist" />
                       </SelectTrigger>
                       <SelectContent className="bg-popover z-50 max-h-[300px]">
@@ -334,8 +367,15 @@ const BookAppointment = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    <p className="text-xs text-muted-foreground">
-                      All stylists are currently accepting bookings
+                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                      {selectedStylist ? (
+                        <>
+                          <CheckCircle className="h-3 w-3 text-green-500" />
+                          Stylist selected
+                        </>
+                      ) : (
+                        <>All stylists are currently accepting bookings</>
+                      )}
                     </p>
                   </div>
                 )}
@@ -344,13 +384,20 @@ const BookAppointment = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Service Details</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  Service Details
+                  <Badge variant="secondary" className="text-xs">Step 2</Badge>
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Service *</Label>
+                  <Label className="flex items-center gap-1">
+                    Service <span className="text-destructive">*</span>
+                  </Label>
                   {!selectedStylist ? (
-                    <p className="text-sm text-muted-foreground py-2">Select a stylist first</p>
+                    <div className="py-3 px-4 bg-muted/50 rounded-md text-sm text-muted-foreground">
+                      ⬆️ Select a stylist first
+                    </div>
                   ) : stylistServices.length === 0 ? (
                     <p className="text-sm text-muted-foreground py-2">No services available for this stylist</p>
                   ) : (
@@ -361,7 +408,10 @@ const BookAppointment = () => {
                         setSelectedService(service);
                       }}
                     >
-                      <SelectTrigger className="bg-background">
+                      <SelectTrigger className={cn(
+                        "bg-background",
+                        selectedStylist && !selectedService && "border-primary/50"
+                      )}>
                         <SelectValue placeholder="Select service" />
                       </SelectTrigger>
                       <SelectContent className="bg-popover z-50 max-h-[300px]">
@@ -379,18 +429,28 @@ const BookAppointment = () => {
                     </Select>
                   )}
                   {selectedService && (
-                    <div className="text-sm text-muted-foreground mt-2">
-                      <p><strong>Price:</strong> ${selectedService.price}</p>
-                      <p><strong>Duration:</strong> {selectedService.duration_minutes} minutes</p>
+                    <div className="bg-primary/5 rounded-lg p-3 space-y-1 border border-primary/20">
+                      <div className="flex items-center gap-1 text-sm">
+                        <CheckCircle className="h-3 w-3 text-green-500" />
+                        <span className="font-medium">{selectedService.service_name}</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground grid grid-cols-2 gap-2">
+                        <div>💵 ${selectedService.price}</div>
+                        <div>⏱️ {selectedService.duration_minutes} min</div>
+                      </div>
                       {selectedService.description && (
-                        <p className="mt-1">{selectedService.description}</p>
+                        <p className="text-xs text-muted-foreground mt-2 pt-2 border-t">
+                          {selectedService.description}
+                        </p>
                       )}
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Additional Notes (Optional)</Label>
+                  <Label>
+                    Additional Notes <span className="text-muted-foreground text-xs">(Optional)</span>
+                  </Label>
                   <Textarea
                     placeholder="Example: I'd like to discuss color options during the appointment. I have a sensitive scalp."
                     value={notes}
@@ -399,9 +459,12 @@ const BookAppointment = () => {
                     maxLength={500}
                     className="resize-none"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    {notes.length}/500 characters
-                  </p>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>Share any special requests or concerns</span>
+                    <span className={notes.length > 450 ? "text-warning font-medium" : ""}>
+                      {notes.length}/500
+                    </span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -411,7 +474,10 @@ const BookAppointment = () => {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Select Date</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  Select Date
+                  <Badge variant="secondary" className="text-xs">Step 3</Badge>
+                </CardTitle>
                 <CardDescription>Choose your preferred appointment date</CardDescription>
               </CardHeader>
               <CardContent>
@@ -431,22 +497,33 @@ const BookAppointment = () => {
                   }}
                   className={cn("rounded-md border pointer-events-auto w-full")}
                 />
-                {blockedDates.length > 0 && (
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Grayed out dates are unavailable
-                  </p>
-                )}
-                {selectedDate && (
-                  <p className="text-sm text-primary mt-3 font-medium">
-                    Selected: {format(selectedDate, "EEEE, MMMM d, yyyy")}
-                  </p>
-                )}
+                <div className="mt-3 space-y-2">
+                  {blockedDates.length > 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      ⚠️ Grayed out dates are unavailable
+                    </p>
+                  )}
+                  {selectedDate && (
+                    <div className="bg-primary/5 rounded-lg p-3 border border-primary/20">
+                      <p className="text-sm font-medium flex items-center gap-1">
+                        <CheckCircle className="h-3 w-3 text-green-500" />
+                        Selected Date
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {format(selectedDate, "EEEE, MMMM d, yyyy")}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Select Time</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  Select Time
+                  <Badge variant="secondary" className="text-xs">Step 4</Badge>
+                </CardTitle>
                 <CardDescription>Pick your preferred time slot</CardDescription>
               </CardHeader>
               <CardContent>
