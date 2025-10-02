@@ -325,7 +325,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-12 window-frame bg-gradient-to-br from-pink-300 via-orange-200 to-yellow-200 relative">
+        <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative">
           <div className="window-titlebar">
             <span className="text-background font-mono text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}

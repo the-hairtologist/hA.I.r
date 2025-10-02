@@ -26,7 +26,7 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-20">
         <div className="max-w-6xl mx-auto mb-16">
-          <div className="window-frame bg-gradient-to-br from-purple-300 via-pink-300 to-orange-200 mb-16 relative">
+          <div className="window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 mb-16 relative">
             <div className="window-titlebar">
               <span className="text-background font-mono text-sm font-bold">hA.I.r / welcome</span>
               <div className="window-controls">
