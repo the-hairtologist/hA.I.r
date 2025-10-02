@@ -66,16 +66,16 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const getNavClassName = (path: string) => {
     const active = isActive(path);
     return active
-      ? "bg-primary/10 text-primary font-medium border-l-4 border-primary"
-      : "hover:bg-muted/50 border-l-4 border-transparent";
+      ? "bg-primary text-primary-foreground font-bold border-l-4 border-secondary shadow-[3px_0_0_0_hsl(var(--secondary))]"
+      : "hover:bg-accent/20 border-l-4 border-transparent hover:border-accent/50";
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
-      <SidebarContent>
+    <Sidebar collapsible="icon" className="border-r-4 border-foreground bg-gradient-to-b from-blue-50 via-yellow-50 to-green-50 dark:from-blue-950 dark:via-yellow-950 dark:to-green-950">
+      <SidebarContent className="gap-0">
         {/* Main Navigation */}
-        <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+        <SidebarGroup className="border-b-4 border-foreground/10 pb-4">
+          <SidebarGroupLabel className={collapsed ? "sr-only" : "text-foreground font-bold text-xs uppercase tracking-wider px-3 py-2"}>
             Main Menu
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -98,8 +98,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
         {/* Secondary Navigation (Stylist Only) */}
         {userRole === "stylist" && secondaryItems.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+          <SidebarGroup className="border-b-4 border-foreground/10 pb-4">
+            <SidebarGroupLabel className={collapsed ? "sr-only" : "text-foreground font-bold text-xs uppercase tracking-wider px-3 py-2"}>
               Business Tools
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -122,7 +122,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         )}
 
         {/* Account Section */}
-        <SidebarGroup className="mt-auto">
+        <SidebarGroup className="mt-auto border-t-4 border-foreground/20 pt-4">
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
