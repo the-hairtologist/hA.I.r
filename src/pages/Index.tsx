@@ -25,28 +25,49 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-20">
-        <div className="text-center max-w-5xl mx-auto mb-16">
-          <div className="p-10 md:p-14 rounded-3xl gradient-glow sleek-shadow modern-border bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 mb-16 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent"></div>
-            <div className="absolute top-8 right-8 w-20 h-20 bg-yellow-400/20 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-8 left-8 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl"></div>
-            
-            <div className="flex items-center justify-center mb-6 relative z-10">
-              <div className="bg-white/10 backdrop-blur-sm border border-white/20 w-16 h-16 rounded-2xl flex items-center justify-center">
-                <Sparkles className="h-8 w-8 text-white" />
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="window-frame bg-gradient-to-br from-purple-300 via-pink-300 to-orange-200 mb-16 relative">
+            <div className="window-titlebar">
+              <span className="text-background font-mono text-sm font-bold">hA.I.r / welcome</span>
+              <div className="window-controls">
+                <div className="window-control bg-background"></div>
+                <div className="window-control bg-background"></div>
+                <div className="window-control bg-background"></div>
               </div>
             </div>
             
-            <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-white relative z-10 leading-tight">
-              Transform Every Color Service with AI-Powered Precision
-            </h2>
-            <p className="text-lg md:text-xl font-medium mb-8 text-white/90 max-w-3xl mx-auto relative z-10">
-              Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
-            </p>
-            
-            <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-10 py-6 font-display font-semibold bg-white text-primary hover:bg-white/95 sleek-shadow hover:scale-105 transition-all relative z-10">
-              Start Creating Perfect Color—Free
-            </Button>
+            <div className="bg-[#F5F1E8] p-8 md:p-16 relative min-h-[500px] text-center">
+              <div className="window-scrollbar"></div>
+              
+              <div className="max-w-4xl mx-auto relative z-10">
+                <div className="flex items-center justify-center gap-4 mb-8">
+                  <Scissors className="h-12 w-12 text-foreground" />
+                  <div className="text-5xl">✨</div>
+                  <div className="w-12 h-12 border-4 border-foreground rotate-45"></div>
+                  <div className="text-5xl">🎨</div>
+                </div>
+                
+                <h2 className="text-5xl md:text-7xl font-display font-black mb-8 text-foreground uppercase leading-tight">
+                  Transform Every Color Service
+                </h2>
+                
+                <p className="text-xl md:text-2xl font-bold text-foreground mb-4">
+                  AI-Powered Precision
+                </p>
+                
+                <p className="text-base md:text-lg font-medium text-foreground/70 mb-12 max-w-2xl mx-auto">
+                  Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
+                </p>
+                
+                <Button 
+                  size="lg" 
+                  onClick={() => navigate("/auth")} 
+                  className="text-xl px-12 py-6 font-display font-black bg-foreground text-background hover:bg-foreground/90 border-4 border-foreground hover:translate-x-1 hover:translate-y-1 transition-transform uppercase"
+                >
+                  Start Free
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">

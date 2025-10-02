@@ -154,40 +154,69 @@ All colors MUST be HSL.
     box-shadow: 0px 0px 0px hsl(var(--foreground) / 0.3);
   }
 
-  /* Modern gradient effects */
-  .gradient-glow {
-    position: relative;
+  /* Browser window chrome aesthetic */
+  .window-frame {
+    border: 4px solid hsl(var(--foreground));
+    border-radius: 12px;
     overflow: hidden;
+    box-shadow: 8px 8px 0px hsl(var(--foreground) / 0.2);
   }
 
-  .gradient-glow::after {
+  .window-titlebar {
+    background: hsl(var(--foreground));
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px solid hsl(var(--foreground));
+  }
+
+  .window-controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  .window-control {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 3px solid hsl(var(--background));
+  }
+
+  .window-scrollbar {
+    position: absolute;
+    right: 12px;
+    top: 60px;
+    bottom: 12px;
+    width: 24px;
+    background: hsl(var(--foreground) / 0.1);
+    border: 3px solid hsl(var(--foreground));
+    border-radius: 12px;
+  }
+
+  .window-scrollbar::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: subtle-rotate 8s linear infinite;
-    pointer-events: none;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 8px solid hsl(var(--foreground));
   }
 
-  @keyframes subtle-rotate {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  .sleek-shadow {
-    box-shadow: 
-      0 10px 40px -10px rgba(0,0,0,0.2),
-      0 0 0 1px rgba(0,0,0,0.05);
-  }
-
-  .modern-border {
-    border: 1px solid rgba(255,255,255,0.2);
+  .window-scrollbar::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid hsl(var(--foreground));
   }
 }

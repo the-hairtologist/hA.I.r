@@ -325,17 +325,49 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-12 p-8 md:p-10 rounded-2xl gradient-glow sleek-shadow modern-border bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent"></div>
+        <div className="mb-12 window-frame bg-gradient-to-br from-pink-300 via-orange-200 to-yellow-200 relative">
+          <div className="window-titlebar">
+            <span className="text-background font-mono text-sm font-bold">
+              {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
+            </span>
+            <div className="window-controls">
+              <div className="window-control bg-background"></div>
+              <div className="window-control bg-background"></div>
+              <div className="window-control bg-background"></div>
+            </div>
+          </div>
           
-          <h2 className="text-4xl md:text-6xl font-display font-bold mb-3 animate-fade-in text-white relative z-10">
-            Welcome back, {user?.user_metadata?.full_name || "there"}! 👋
-          </h2>
-          <p className="text-lg md:text-xl font-medium animate-fade-in text-white/90 relative z-10" style={{ animationDelay: "100ms" }}>
-            {userRole === "stylist" 
-              ? "Ready to create some color magic today?" 
-              : "Your hair journey continues"}
-          </p>
+          <div className="bg-[#F5F1E8] p-8 md:p-12 relative min-h-[300px]">
+            <div className="window-scrollbar"></div>
+            
+            <div className="max-w-3xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-3 h-3 bg-foreground rounded-full"></div>
+                <div className="w-8 h-3 bg-foreground rotate-45"></div>
+                <div className="w-3 h-3 bg-foreground rounded-full"></div>
+                <div className="text-4xl">✨</div>
+              </div>
+              
+              <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-foreground uppercase leading-tight">
+                Welcome back, {user?.user_metadata?.full_name || "there"}!
+              </h2>
+              
+              <p className="text-lg md:text-xl font-medium text-foreground/70 mb-8 max-w-2xl">
+                {userRole === "stylist" 
+                  ? "Ready to create some color magic today? Let's make beautiful hair transformations happen." 
+                  : "Your hair journey continues. Discover new styles, book appointments, and keep track of your favorite looks."}
+              </p>
+              
+              <div className="flex gap-4 flex-wrap">
+                <div className="px-6 py-3 bg-foreground text-background font-display font-bold text-lg border-4 border-foreground hover:translate-x-1 hover:translate-y-1 transition-transform cursor-pointer">
+                  LET'S GO!
+                </div>
+                <div className="px-6 py-3 bg-transparent text-foreground font-display font-bold text-lg border-4 border-foreground hover:bg-foreground hover:text-background transition-colors cursor-pointer">
+                  MAYBE LATER
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <QuickActions userRole={userRole || ""} />
