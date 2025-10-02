@@ -356,7 +356,7 @@ const Dashboard = () => {
                         userProfile.gender === 'female' ? avatarFemale :
                         avatarNeutral
                       } 
-                      alt="Your Lego avatar"
+                      alt="Your h.A.I.r avatar"
                       className="w-full h-full object-cover"
                     />
                   </div>

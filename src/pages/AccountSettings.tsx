@@ -271,7 +271,7 @@ const AccountSettings = () => {
           {/* Avatar Selection */}
           <Card>
             <CardHeader>
-              <CardTitle>Your Lego Avatar</CardTitle>
+              <CardTitle>Your h.A.I.r Avatar</CardTitle>
               <CardDescription>Choose your personal avatar style</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
