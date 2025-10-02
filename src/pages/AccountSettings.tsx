@@ -271,13 +271,13 @@ const AccountSettings = () => {
           {/* Avatar Selection */}
           <Card>
             <CardHeader>
-              <CardTitle>Your h.A.I.r Avatar</CardTitle>
+              <CardTitle>Your Lego Avatar</CardTitle>
               <CardDescription>Choose your personal avatar style</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4 flex-wrap">
                 {selectedGender && (
-                  <div className="w-24 h-24 border-4 border-foreground rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_hsl(var(--foreground))] animate-float">
+                  <div className="w-24 h-24 border-4 border-foreground rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
                     <img 
                       src={
                         selectedGender === 'male' ? avatarMale :
@@ -285,7 +285,7 @@ const AccountSettings = () => {
                         avatarNeutral
                       } 
                       alt="Your current avatar"
-                      className="w-full h-full object-cover animate-subtle-bounce"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 )}
