@@ -475,6 +475,7 @@ export type Database = {
           specialty: string | null
           updated_at: string
           user_id: string
+          weekly_schedule: Json | null
           years_experience: number | null
         }
         Insert: {
@@ -489,6 +490,7 @@ export type Database = {
           specialty?: string | null
           updated_at?: string
           user_id: string
+          weekly_schedule?: Json | null
           years_experience?: number | null
         }
         Update: {
@@ -503,6 +505,7 @@ export type Database = {
           specialty?: string | null
           updated_at?: string
           user_id?: string
+          weekly_schedule?: Json | null
           years_experience?: number | null
         }
         Relationships: [

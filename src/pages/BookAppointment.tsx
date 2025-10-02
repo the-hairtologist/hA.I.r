@@ -25,6 +25,7 @@ const BookAppointment = () => {
   const [duration, setDuration] = useState<string>("90");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
 
   const serviceTypes = [
     "Color & Cut",
@@ -36,14 +37,39 @@ const BookAppointment = () => {
     "Consultation",
   ];
 
-  const timeSlots = [
-    "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-    "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM"
-  ];
+  // Generate time slots based on stylist availability
+  const generateTimeSlots = (startTime: string, endTime: string): string[] => {
+    const slots: string[] = [];
+    const [startHour, startMin] = startTime.split(':').map(Number);
+    const [endHour, endMin] = endTime.split(':').map(Number);
+    
+    let currentHour = startHour;
+    let currentMin = startMin;
+    
+    while (currentHour < endHour || (currentHour === endHour && currentMin < endMin)) {
+      const period = currentHour >= 12 ? 'PM' : 'AM';
+      const displayHour = currentHour === 0 ? 12 : currentHour > 12 ? currentHour - 12 : currentHour;
+      const displayMin = currentMin === 0 ? '00' : currentMin;
+      slots.push(`${displayHour}:${displayMin} ${period}`);
+      
+      // Increment by 30 minutes
+      currentMin += 30;
+      if (currentMin >= 60) {
+        currentMin = 0;
+        currentHour += 1;
+      }
+    }
+    
+    return slots;
+  };
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    updateAvailableTimeSlots();
+  }, [selectedStylist, selectedDate, stylists]);
 
   const loadData = async () => {
     try {
@@ -68,7 +94,7 @@ const BookAppointment = () => {
 
       setClientProfile(client);
 
-      // Get available stylists
+      // Get available stylists with their schedules
       const { data: stylistsData } = await supabase
         .from("stylist_profiles")
         .select(`
@@ -88,6 +114,38 @@ const BookAppointment = () => {
       toast.error("Error loading stylists");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateAvailableTimeSlots = () => {
+    if (!selectedStylist || !selectedDate) {
+      setAvailableTimeSlots([]);
+      return;
+    }
+
+    const stylist = stylists.find(s => s.id === selectedStylist);
+    if (!stylist || !stylist.weekly_schedule) {
+      setAvailableTimeSlots([]);
+      return;
+    }
+
+    // Get day of week (lowercase)
+    const dayOfWeek = format(selectedDate, 'EEEE').toLowerCase();
+    const schedule = stylist.weekly_schedule as any;
+    const daySchedule = schedule[dayOfWeek];
+
+    if (!daySchedule || !daySchedule.enabled) {
+      setAvailableTimeSlots([]);
+      setSelectedTime("");
+      return;
+    }
+
+    const slots = generateTimeSlots(daySchedule.startTime, daySchedule.endTime);
+    setAvailableTimeSlots(slots);
+    
+    // Clear selected time if it's not in available slots
+    if (selectedTime && !slots.includes(selectedTime)) {
+      setSelectedTime("");
     }
   };
 
@@ -323,8 +381,17 @@ const BookAppointment = () => {
                 <CardDescription>Pick your preferred time slot</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-2">
-                  {timeSlots.map((time) => (
+                {!selectedStylist || !selectedDate ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    Select a stylist and date first
+                  </p>
+                ) : availableTimeSlots.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    No available time slots for this day
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
+                    {availableTimeSlots.map((time) => (
                     <Button
                       key={time}
                       variant={selectedTime === time ? "default" : "outline"}
@@ -336,7 +403,8 @@ const BookAppointment = () => {
                       {time}
                     </Button>
                   ))}
-                </div>
+                  </div>
+                )}
                 {selectedTime && (
                   <p className="text-sm text-primary mt-3 font-medium flex items-center gap-1">
                     <CheckCircle className="h-4 w-4" />

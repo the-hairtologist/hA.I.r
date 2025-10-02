@@ -66,7 +66,11 @@ const Availability = () => {
       }
 
       setStylistProfile(stylist);
-      // In a real implementation, load saved schedule from database
+      
+      // Load saved schedule from database
+      if (stylist.weekly_schedule) {
+        setSchedule(stylist.weekly_schedule as unknown as Record<string, DaySchedule>);
+      }
     } catch (error: any) {
       console.error("Error loading data:", error);
       toast.error("Error loading availability");
@@ -92,7 +96,14 @@ const Availability = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // In a real implementation, save schedule to database
+      const { error } = await supabase
+        .from("stylist_profiles")
+        .update({ weekly_schedule: schedule as any })
+        .eq("id", stylistProfile.id);
+
+      if (error) throw error;
+
+      setStylistProfile({ ...stylistProfile, weekly_schedule: schedule as any });
       toast.success("Availability saved successfully!");
     } catch (error: any) {
       console.error("Error saving availability:", error);
