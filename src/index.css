@@ -154,69 +154,40 @@ All colors MUST be HSL.
     box-shadow: 0px 0px 0px hsl(var(--foreground) / 0.3);
   }
 
-  /* Lego-inspired UI elements */
-  .lego-studs {
+  /* Modern gradient effects */
+  .gradient-glow {
     position: relative;
     overflow: hidden;
   }
 
-  .lego-studs::before {
+  .gradient-glow::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(circle, rgba(0,0,0,0.08) 20%, transparent 20%);
-    background-size: 24px 24px;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: subtle-rotate 8s linear infinite;
     pointer-events: none;
-    z-index: 1;
   }
 
-  .lego-studs > * {
-    position: relative;
-    z-index: 2;
+  @keyframes subtle-rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
-  .lego-block {
+  .sleek-shadow {
     box-shadow: 
-      inset 0 0 0 3px hsl(var(--foreground)),
-      inset 0 -6px 0 rgba(0,0,0,0.15),
-      inset 0 6px 0 rgba(255,255,255,0.15),
-      6px 6px 0 hsl(var(--foreground) / 0.4);
+      0 10px 40px -10px rgba(0,0,0,0.2),
+      0 0 0 1px rgba(0,0,0,0.05);
   }
 
-  .lego-shadow {
-    box-shadow: 
-      0 4px 0 rgba(0,0,0,0.1),
-      0 8px 0 rgba(0,0,0,0.08),
-      8px 8px 0 hsl(var(--foreground) / 0.3);
-  }
-
-  @keyframes lego-shimmer {
-    0%, 100% {
-      background-position: -200% center;
-    }
-    50% {
-      background-position: 200% center;
-    }
-  }
-
-  .lego-shimmer {
-    background-size: 200% 100%;
-    animation: lego-shimmer 4s ease-in-out infinite;
-  }
-
-  @keyframes lego-float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-8px);
-    }
-  }
-
-  .lego-float {
-    animation: lego-float 3s ease-in-out infinite;
+  .modern-border {
+    border: 1px solid rgba(255,255,255,0.2);
   }
 }

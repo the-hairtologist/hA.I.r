@@ -325,19 +325,16 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-16 p-10 rounded-2xl lego-studs lego-block lego-shimmer bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 border-[4px] border-foreground relative">
-          <div className="absolute -top-3 -left-3 w-8 h-8 bg-yellow-300 rounded-full border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"></div>
-          <div className="absolute -top-3 -right-3 w-8 h-8 bg-green-400 rounded-full border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"></div>
-          <div className="absolute -bottom-3 -left-3 w-8 h-8 bg-red-400 rounded-full border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"></div>
-          <div className="absolute -bottom-3 -right-3 w-8 h-8 bg-blue-300 rounded-full border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"></div>
+        <div className="mb-12 p-8 md:p-10 rounded-2xl gradient-glow sleek-shadow modern-border bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent"></div>
           
-          <h2 className="text-5xl md:text-7xl font-display font-black mb-4 animate-fade-in text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+          <h2 className="text-4xl md:text-6xl font-display font-bold mb-3 animate-fade-in text-white relative z-10">
             Welcome back, {user?.user_metadata?.full_name || "there"}! 👋
           </h2>
-          <p className="text-xl md:text-2xl font-bold animate-fade-in text-white/95 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.2)]" style={{ animationDelay: "100ms" }}>
+          <p className="text-lg md:text-xl font-medium animate-fade-in text-white/90 relative z-10" style={{ animationDelay: "100ms" }}>
             {userRole === "stylist" 
-              ? "🎨 Ready to create some color magic today?" 
-              : "✨ Your hair journey continues!"}
+              ? "Ready to create some color magic today?" 
+              : "Your hair journey continues"}
           </p>
         </div>
 

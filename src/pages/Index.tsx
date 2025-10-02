@@ -26,21 +26,25 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-20">
         <div className="text-center max-w-5xl mx-auto mb-16">
-          <div className="p-12 rounded-2xl lego-studs lego-block bg-gradient-to-br from-yellow-300 via-orange-400 to-red-400 border-[4px] border-foreground mb-16 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 lego-float">
-              <div className="bg-white border-[3px] border-foreground w-16 h-16 rounded-xl flex items-center justify-center shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                <Sparkles className="h-8 w-8 text-primary" />
+          <div className="p-10 md:p-14 rounded-3xl gradient-glow sleek-shadow modern-border bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 mb-16 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent"></div>
+            <div className="absolute top-8 right-8 w-20 h-20 bg-yellow-400/20 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-8 left-8 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl"></div>
+            
+            <div className="flex items-center justify-center mb-6 relative z-10">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 w-16 h-16 rounded-2xl flex items-center justify-center">
+                <Sparkles className="h-8 w-8 text-white" />
               </div>
             </div>
             
-            <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-white drop-shadow-[5px_5px_0px_rgba(0,0,0,0.3)] pt-8">
+            <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-white relative z-10 leading-tight">
               Transform Every Color Service with AI-Powered Precision
             </h2>
-            <p className="text-xl md:text-2xl font-bold mb-6 text-white/95 max-w-3xl mx-auto drop-shadow-[3px_3px_0px_rgba(0,0,0,0.2)]">
+            <p className="text-lg md:text-xl font-medium mb-8 text-white/90 max-w-3xl mx-auto relative z-10">
               Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
             </p>
             
-            <Button size="lg" onClick={() => navigate("/auth")} className="text-xl px-10 py-7 font-display font-bold bg-white text-foreground hover:bg-white/90 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all mt-4">
+            <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-10 py-6 font-display font-semibold bg-white text-primary hover:bg-white/95 sleek-shadow hover:scale-105 transition-all relative z-10">
               Start Creating Perfect Color—Free
             </Button>
           </div>
