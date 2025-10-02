@@ -8,90 +8,83 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47% 11%;
+    --background: 35 45% 95%;
+    --foreground: 25 35% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47% 11%;
+    --card: 40 50% 97%;
+    --card-foreground: 25 35% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47% 11%;
+    --popover: 40 50% 97%;
+    --popover-foreground: 25 35% 15%;
 
-    /* Vibrant professional salon colors */
-    --primary: 280 65% 50%;
+    /* Retro Y2K warm palette */
+    --primary: 18 75% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 320 45% 55%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 350 50% 75%;
+    --secondary-foreground: 25 35% 15%;
 
-    --muted: 280 20% 96%;
-    --muted-foreground: 280 10% 45%;
+    --muted: 40 35% 90%;
+    --muted-foreground: 25 20% 40%;
 
-    --accent: 320 50% 92%;
-    --accent-foreground: 280 65% 40%;
+    --accent: 200 35% 65%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 280 20% 90%;
-    --input: 280 20% 90%;
-    --ring: 280 65% 50%;
+    --border: 25 30% 75%;
+    --input: 25 30% 75%;
+    --ring: 18 75% 60%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 35 45% 95%;
+    --sidebar-foreground: 25 35% 15%;
+    --sidebar-primary: 18 75% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 35% 88%;
+    --sidebar-accent-foreground: 25 35% 15%;
+    --sidebar-border: 25 30% 80%;
+    --sidebar-ring: 18 75% 60%;
   }
 
   .dark {
-    --background: 280 20% 10%;
-    --foreground: 0 0% 98%;
+    --background: 25 20% 12%;
+    --foreground: 40 35% 90%;
 
-    --card: 280 20% 12%;
-    --card-foreground: 0 0% 98%;
+    --card: 25 20% 15%;
+    --card-foreground: 40 35% 90%;
 
-    --popover: 280 20% 12%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 25 20% 15%;
+    --popover-foreground: 40 35% 90%;
 
-    --primary: 280 65% 60%;
+    --primary: 18 70% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 320 45% 45%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 350 45% 65%;
+    --secondary-foreground: 25 20% 12%;
 
-    --muted: 280 20% 20%;
-    --muted-foreground: 280 10% 70%;
+    --muted: 25 15% 25%;
+    --muted-foreground: 40 20% 70%;
 
-    --accent: 280 30% 25%;
-    --accent-foreground: 280 65% 70%;
+    --accent: 200 30% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 63% 31%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 280 20% 20%;
-    --input: 280 20% 20%;
-    --ring: 280 65% 60%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 25 20% 25%;
+    --input: 25 20% 25%;
+    --ring: 18 70% 55%;
+    --sidebar-background: 25 20% 12%;
+    --sidebar-foreground: 40 35% 90%;
+    --sidebar-primary: 18 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 25 15% 22%;
+    --sidebar-accent-foreground: 40 35% 90%;
+    --sidebar-border: 25 20% 25%;
+    --sidebar-ring: 18 70% 55%;
   }
 }
 
@@ -129,10 +122,35 @@ All colors MUST be HSL.
   }
 
   .hover-scale {
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .hover-scale:hover {
-    transform: scale(1.02);
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: 0 8px 20px -6px hsl(var(--primary) / 0.3);
+  }
+
+  /* Retro window chrome effect */
+  .window-chrome {
+    border: 3px solid hsl(var(--foreground));
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0px hsl(var(--foreground) / 0.2);
+  }
+
+  /* Playful button effect */
+  .retro-button {
+    border: 2.5px solid hsl(var(--foreground));
+    box-shadow: 3px 3px 0px hsl(var(--foreground) / 0.3);
+    transition: all 0.15s ease;
+  }
+
+  .retro-button:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px hsl(var(--foreground) / 0.3);
+  }
+
+  .retro-button:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px hsl(var(--foreground) / 0.3);
   }
 }
