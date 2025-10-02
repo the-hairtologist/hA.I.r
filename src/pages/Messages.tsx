@@ -163,18 +163,17 @@ const Messages = () => {
           schema: "public",
           table: "messages",
         },
-        (payload) => {
-          const { data: { session } } = supabase.auth.getSession();
-          session.then(({ data: { session } }) => {
-            if (
-              (payload.new.sender_id === partnerId && payload.new.recipient_id === session?.user.id) ||
-              (payload.new.sender_id === session?.user.id && payload.new.recipient_id === partnerId)
-            ) {
-              loadMessages(partnerId);
-              loadConversations(session?.user.id || "");
-            }
-          });
-        }
+      (payload) => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          if (
+            (payload.new.sender_id === partnerId && payload.new.recipient_id === session?.user.id) ||
+            (payload.new.sender_id === session?.user.id && payload.new.recipient_id === partnerId)
+          ) {
+            loadMessages(partnerId);
+            loadConversations(session?.user.id || "");
+          }
+        });
+      }
       )
       .subscribe();
 
