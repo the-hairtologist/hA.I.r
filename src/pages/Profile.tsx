@@ -2,14 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { ArrowLeft, User, Save, Loader2 } from "lucide-react";
+import { ArrowLeft, User, Loader2, Save } from "lucide-react";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -17,21 +15,20 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   
-  // User profile state
+  // Profile fields
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-
-  // Stylist-specific state
+  
+  // Stylist-specific fields
   const [businessName, setBusinessName] = useState("");
   const [bio, setBio] = useState("");
   const [specialty, setSpecialty] = useState("");
   const [location, setLocation] = useState("");
   const [yearsExperience, setYearsExperience] = useState("");
   const [colorLine, setColorLine] = useState("");
-
-  // Client-specific state
+  
+  // Client-specific fields
   const [hairType, setHairType] = useState("");
   const [allergies, setAllergies] = useState("");
   const [notes, setNotes] = useState("");
@@ -48,7 +45,7 @@ const Profile = () => {
         return;
       }
 
-      // Get user profile
+      // Get basic profile
       const { data: profile } = await supabase
         .from("profiles")
         .select("*")
@@ -56,10 +53,9 @@ const Profile = () => {
         .single();
 
       if (profile) {
-        setEmail(profile.email || "");
+        setEmail(profile.email);
         setFullName(profile.full_name || "");
         setPhone(profile.phone || "");
-        setAvatarUrl(profile.avatar_url || "");
       }
 
       // Get user role
@@ -88,7 +84,7 @@ const Profile = () => {
             setYearsExperience(stylistProfile.years_experience?.toString() || "");
             setColorLine(stylistProfile.color_line || "");
           }
-        } else {
+        } else if (roleData.role === "client") {
           const { data: clientProfile } = await supabase
             .from("client_profiles")
             .select("*")
@@ -110,7 +106,7 @@ const Profile = () => {
     }
   };
 
-  const handleSaveProfile = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
@@ -118,13 +114,12 @@ const Profile = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
 
-      // Update main profile
+      // Update basic profile
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
           full_name: fullName,
-          phone: phone,
-          avatar_url: avatarUrl,
+          phone: phone || null,
         })
         .eq("id", session.user.id);
 
@@ -135,23 +130,23 @@ const Profile = () => {
         const { error: stylistError } = await supabase
           .from("stylist_profiles")
           .update({
-            business_name: businessName,
-            bio: bio,
-            specialty: specialty,
-            location: location,
+            business_name: businessName || null,
+            bio: bio || null,
+            specialty: specialty || null,
+            location: location || null,
             years_experience: yearsExperience ? parseInt(yearsExperience) : null,
-            color_line: colorLine,
+            color_line: colorLine || null,
           })
           .eq("user_id", session.user.id);
 
         if (stylistError) throw stylistError;
-      } else {
+      } else if (userRole === "client") {
         const { error: clientError } = await supabase
           .from("client_profiles")
           .update({
-            hair_type: hairType,
-            allergies: allergies,
-            notes: notes,
+            hair_type: hairType || null,
+            allergies: allergies || null,
+            notes: notes || null,
           })
           .eq("user_id", session.user.id);
 
@@ -191,210 +186,183 @@ const Profile = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-3xl">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-4">
-              <Avatar className="h-20 w-20">
-                <AvatarImage src={avatarUrl} alt={fullName} />
-                <AvatarFallback className="text-2xl">
-                  {fullName?.split(" ").map(n => n[0]).join("").toUpperCase() || "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle className="text-2xl">{fullName || "Your Profile"}</CardTitle>
-                <CardDescription className="capitalize">{userRole} Account</CardDescription>
+      <main className="container mx-auto px-4 py-8 max-w-2xl">
+        <form onSubmit={handleSave} className="space-y-6">
+          {/* Basic Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Basic Information</CardTitle>
+              <CardDescription>Your account details</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  disabled
+                  className="bg-muted"
+                />
+                <p className="text-xs text-muted-foreground">Email cannot be changed</p>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSaveProfile}>
-              <Tabs defaultValue="basic" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="basic">Basic Info</TabsTrigger>
-                  <TabsTrigger value="specific">
-                    {userRole === "stylist" ? "Business Info" : "Hair Info"}
-                  </TabsTrigger>
-                </TabsList>
 
-                <TabsContent value="basic" className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      disabled
-                      className="bg-muted"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Email cannot be changed
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
-                    <Input
-                      id="fullName"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="John Doe"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="(555) 123-4567"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="avatarUrl">Avatar URL (Optional)</Label>
-                    <Input
-                      id="avatarUrl"
-                      type="url"
-                      value={avatarUrl}
-                      onChange={(e) => setAvatarUrl(e.target.value)}
-                      placeholder="https://..."
-                    />
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="specific" className="space-y-4">
-                  {userRole === "stylist" ? (
-                    <>
-                      <div className="space-y-2">
-                        <Label htmlFor="businessName">Business Name</Label>
-                        <Input
-                          id="businessName"
-                          value={businessName}
-                          onChange={(e) => setBusinessName(e.target.value)}
-                          placeholder="Salon Name or Your Name"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="bio">Bio</Label>
-                        <Textarea
-                          id="bio"
-                          value={bio}
-                          onChange={(e) => setBio(e.target.value)}
-                          placeholder="Tell clients about yourself..."
-                          rows={4}
-                        />
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="specialty">Specialty</Label>
-                          <Input
-                            id="specialty"
-                            value={specialty}
-                            onChange={(e) => setSpecialty(e.target.value)}
-                            placeholder="e.g., Color Specialist"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="yearsExperience">Years of Experience</Label>
-                          <Input
-                            id="yearsExperience"
-                            type="number"
-                            value={yearsExperience}
-                            onChange={(e) => setYearsExperience(e.target.value)}
-                            placeholder="5"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="location">Location</Label>
-                        <Input
-                          id="location"
-                          value={location}
-                          onChange={(e) => setLocation(e.target.value)}
-                          placeholder="City, State"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="colorLine">Preferred Color Line</Label>
-                        <Input
-                          id="colorLine"
-                          value={colorLine}
-                          onChange={(e) => setColorLine(e.target.value)}
-                          placeholder="e.g., Redken, Wella"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="space-y-2">
-                        <Label htmlFor="hairType">Hair Type</Label>
-                        <Input
-                          id="hairType"
-                          value={hairType}
-                          onChange={(e) => setHairType(e.target.value)}
-                          placeholder="e.g., Fine, Thick, Curly"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="allergies">Allergies</Label>
-                        <Textarea
-                          id="allergies"
-                          value={allergies}
-                          onChange={(e) => setAllergies(e.target.value)}
-                          placeholder="List any product allergies..."
-                          rows={3}
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="notes">Additional Notes</Label>
-                        <Textarea
-                          id="notes"
-                          value={notes}
-                          onChange={(e) => setNotes(e.target.value)}
-                          placeholder="Any other information your stylist should know..."
-                          rows={3}
-                        />
-                      </div>
-                    </>
-                  )}
-                </TabsContent>
-              </Tabs>
-
-              <div className="flex justify-end gap-3 mt-6 pt-6 border-t">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => navigate("/dashboard")}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={saving}>
-                  {saving ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Changes
-                    </>
-                  )}
-                </Button>
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input
+                  id="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="John Doe"
+                />
               </div>
-            </form>
-          </CardContent>
-        </Card>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="(555) 123-4567"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Stylist-specific fields */}
+          {userRole === "stylist" && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Professional Details</CardTitle>
+                <CardDescription>Information visible to clients</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="businessName">Business/Salon Name</Label>
+                  <Input
+                    id="businessName"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    placeholder="Salon Elite"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="bio">Bio</Label>
+                  <Textarea
+                    id="bio"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    placeholder="Tell clients about your experience and specialties..."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="specialty">Specialty</Label>
+                    <Input
+                      id="specialty"
+                      value={specialty}
+                      onChange={(e) => setSpecialty(e.target.value)}
+                      placeholder="Color, Balayage, etc."
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="yearsExperience">Years Experience</Label>
+                    <Input
+                      id="yearsExperience"
+                      type="number"
+                      min="0"
+                      value={yearsExperience}
+                      onChange={(e) => setYearsExperience(e.target.value)}
+                      placeholder="5"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Los Angeles, CA"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="colorLine">Preferred Color Line</Label>
+                  <Input
+                    id="colorLine"
+                    value={colorLine}
+                    onChange={(e) => setColorLine(e.target.value)}
+                    placeholder="e.g., Redken, Wella, Schwarzkopf"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Client-specific fields */}
+          {userRole === "client" && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Hair Information</CardTitle>
+                <CardDescription>Help your stylist provide the best service</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="hairType">Hair Type</Label>
+                  <Input
+                    id="hairType"
+                    value={hairType}
+                    onChange={(e) => setHairType(e.target.value)}
+                    placeholder="Fine, Medium, Thick, Curly, etc."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="allergies">Allergies or Sensitivities</Label>
+                  <Textarea
+                    id="allergies"
+                    value={allergies}
+                    onChange={(e) => setAllergies(e.target.value)}
+                    placeholder="List any known allergies to hair products or ingredients..."
+                    rows={3}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="notes">Additional Notes</Label>
+                  <Textarea
+                    id="notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Any other information your stylist should know..."
+                    rows={3}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <Button type="submit" disabled={saving} className="w-full" size="lg">
+            {saving ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4 mr-2" />
+                Save Profile
+              </>
+            )}
+          </Button>
+        </form>
       </main>
     </div>
   );

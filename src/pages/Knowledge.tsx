@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
@@ -18,6 +18,7 @@ const Knowledge = () => {
 
   useEffect(() => {
     checkAccess();
+    loadResources();
   }, []);
 
   const checkAccess = async () => {
@@ -38,15 +39,10 @@ const Knowledge = () => {
       if (roleData?.role !== "stylist") {
         toast.error("This feature is only available for stylists");
         navigate("/dashboard");
-        return;
       }
-
-      await loadResources();
     } catch (error: any) {
       console.error("Error checking access:", error);
-      toast.error("Error loading knowledge base");
-    } finally {
-      setLoading(false);
+      navigate("/dashboard");
     }
   };
 
@@ -61,30 +57,20 @@ const Knowledge = () => {
       setResources(data || []);
     } catch (error: any) {
       console.error("Error loading resources:", error);
-      toast.error("Error loading resources");
+      toast.error("Error loading knowledge base");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const filteredResources = resources.filter((resource) => {
-    const matchesSearch = 
-      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      resource.content.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = 
-      selectedCategory === "all" || 
-      resource.category === selectedCategory;
+  const categories = Array.from(new Set(resources.map(r => r.category).filter(Boolean)));
 
+  const filteredResources = resources.filter(resource => {
+    const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         resource.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || resource.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-
-  const categories = [
-    { value: "all", label: "All Topics" },
-    { value: "color_theory", label: "Color Theory" },
-    { value: "techniques", label: "Techniques" },
-    { value: "products", label: "Products" },
-    { value: "trends", label: "Trends" },
-    { value: "business", label: "Business" },
-  ];
 
   if (loading) {
     return (
@@ -111,56 +97,54 @@ const Knowledge = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Welcome Card */}
+        {/* Hero Section */}
         <Card className="mb-8 bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
           <CardHeader>
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-primary/20 rounded-lg">
-                <Sparkles className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <CardTitle className="text-2xl mb-2">Welcome to Your Learning Hub</CardTitle>
-                <CardDescription className="text-base">
-                  Expand your skills with curated resources on color theory, techniques, products, and business growth.
-                </CardDescription>
-              </div>
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <CardTitle className="text-2xl">Professional Hair Styling Resources</CardTitle>
             </div>
+            <CardDescription className="text-base">
+              Expand your expertise with curated color theory, techniques, and industry best practices
+            </CardDescription>
           </CardHeader>
         </Card>
 
-        {/* Search and Filter */}
-        <div className="mb-6 space-y-4">
+        {/* Search Bar */}
+        <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search resources..."
+              placeholder="Search knowledge base..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
-
-          <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
-            <TabsList className="w-full grid grid-cols-3 lg:grid-cols-6">
-              {categories.map((cat) => (
-                <TabsTrigger key={cat.value} value={cat.value} className="text-xs lg:text-sm">
-                  {cat.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
         </div>
+
+        {/* Categories */}
+        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-6">
+          <TabsList>
+            <TabsTrigger value="all">All</TabsTrigger>
+            {categories.map(category => (
+              <TabsTrigger key={category} value={category}>
+                {category}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
 
         {/* Resources Grid */}
         {filteredResources.length === 0 ? (
           <Card>
-            <CardContent className="flex flex-col items-center justify-center py-12">
-              <BookOpen className="h-16 w-16 text-muted-foreground mb-4" />
-              <p className="text-xl font-semibold mb-2">No resources found</p>
-              <p className="text-muted-foreground text-center max-w-md">
-                {searchQuery 
-                  ? "Try adjusting your search or filters" 
-                  : "Check back soon for new educational content"}
+            <CardContent className="text-center py-12">
+              <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-xl font-semibold mb-2">
+                {searchQuery ? "No results found" : "No resources available yet"}
+              </p>
+              <p className="text-muted-foreground">
+                {searchQuery ? "Try a different search term" : "Check back soon for educational content"}
               </p>
             </CardContent>
           </Card>
@@ -169,19 +153,17 @@ const Knowledge = () => {
             {filteredResources.map((resource) => (
               <Card key={resource.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="text-xl mb-2">{resource.title}</CardTitle>
+                      <CardTitle className="mb-2">{resource.title}</CardTitle>
                       {resource.category && (
-                        <Badge variant="secondary" className="capitalize mb-2">
-                          {resource.category.replace("_", " ")}
+                        <Badge variant="secondary" className="mb-2">
+                          {resource.category}
                         </Badge>
                       )}
                     </div>
                     {!resource.is_free && (
-                      <Badge variant="outline" className="bg-primary/10">
-                        Premium
-                      </Badge>
+                      <Badge variant="outline" className="ml-2">Premium</Badge>
                     )}
                   </div>
                 </CardHeader>
@@ -189,12 +171,11 @@ const Knowledge = () => {
                   <p className="text-sm text-muted-foreground line-clamp-3">
                     {resource.content}
                   </p>
-                  
                   {resource.resource_url && (
                     <Button
                       variant="outline"
                       className="w-full"
-                      onClick={() => window.open(resource.resource_url, "_blank")}
+                      onClick={() => window.open(resource.resource_url, '_blank')}
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
                       View Resource
@@ -206,17 +187,19 @@ const Knowledge = () => {
           </div>
         )}
 
-        {/* Info Card */}
-        <Card className="mt-8 bg-muted/50">
+        {/* Tips Card */}
+        <Card className="mt-8 bg-primary/5 border-primary/20">
           <CardHeader>
-            <CardTitle className="text-lg">Growing Your Knowledge</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              Pro Tips
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm text-muted-foreground">
-            <p>• Access curated educational content for stylists</p>
-            <p>• Learn advanced color theory and application techniques</p>
-            <p>• Stay updated with the latest industry trends</p>
-            <p>• Discover product recommendations and usage tips</p>
-            <p>• Get business advice to grow your salon career</p>
+          <CardContent className="space-y-2 text-sm">
+            <p>• Bookmark important articles for quick reference during client consultations</p>
+            <p>• Stay updated with the latest color trends and techniques</p>
+            <p>• Apply color theory principles to create custom formulas</p>
+            <p>• Share knowledge with clients to build trust and expertise</p>
           </CardContent>
         </Card>
       </main>
