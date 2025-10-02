@@ -22,7 +22,7 @@ const AccountSettings = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [gender, setGender] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<string>("");
-  const [savingGender, setSavingGender] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
@@ -72,34 +72,37 @@ const AccountSettings = () => {
     setHasChanges(newGender !== gender);
   };
 
-  const handleSaveAvatar = async () => {
-    setSavingGender(true);
+  const handleSaveAll = async () => {
+    setSaving(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
 
-      const { error } = await supabase
-        .from("profiles")
-        .update({ gender: selectedGender })
-        .eq("id", session.user.id);
+      // Save avatar changes
+      if (selectedGender !== gender) {
+        const { error } = await supabase
+          .from("profiles")
+          .update({ gender: selectedGender })
+          .eq("id", session.user.id);
 
-      if (error) throw error;
+        if (error) throw error;
+        setGender(selectedGender);
+      }
 
-      setGender(selectedGender);
       setHasChanges(false);
-      toast.success("Avatar saved successfully!");
+      toast.success("All changes saved successfully!");
     } catch (error: any) {
-      console.error("Error updating gender:", error);
-      toast.error("Error updating avatar");
+      console.error("Error saving changes:", error);
+      toast.error("Error saving changes");
     } finally {
-      setSavingGender(false);
+      setSaving(false);
     }
   };
 
-  const handleCancelAvatar = () => {
+  const handleCancelAll = () => {
     setSelectedGender(gender);
     setHasChanges(false);
-    toast.info("Changes cancelled");
+    toast.info("All changes cancelled");
   };
 
   const handleExportData = async () => {
@@ -288,7 +291,7 @@ const AccountSettings = () => {
                 )}
                 <div className="flex-1 min-w-[200px]">
                   <label className="text-sm font-medium mb-2 block">Avatar Style</label>
-                  <Select value={selectedGender} onValueChange={handleGenderChange} disabled={savingGender}>
+                  <Select value={selectedGender} onValueChange={handleGenderChange} disabled={saving}>
                     <SelectTrigger className="border-2 border-foreground">
                       <SelectValue placeholder="Select avatar style" />
                     </SelectTrigger>
@@ -300,33 +303,6 @@ const AccountSettings = () => {
                   </Select>
                 </div>
               </div>
-              
-              {hasChanges && (
-                <div className="flex gap-3 pt-2">
-                  <Button 
-                    onClick={handleSaveAvatar} 
-                    disabled={savingGender}
-                    className="flex-1 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] transition-all"
-                  >
-                    {savingGender ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      'Save Avatar'
-                    )}
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={handleCancelAvatar}
-                    disabled={savingGender}
-                    className="flex-1 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] transition-all"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              )}
             </CardContent>
           </Card>
 
@@ -467,6 +443,46 @@ const AccountSettings = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Sticky Save/Cancel Bar */}
+        {hasChanges && (
+          <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 border-t-4 border-foreground shadow-[0_-4px_0px_0px_hsl(var(--foreground))] z-50">
+            <div className="container mx-auto px-4 py-4 max-w-2xl">
+              <div className="flex items-center justify-between gap-4 bg-white/95 backdrop-blur-sm p-4 rounded-xl border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                  <p className="text-sm font-bold text-foreground">
+                    You have unsaved changes
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <Button 
+                    variant="outline"
+                    onClick={handleCancelAll}
+                    disabled={saving}
+                    className="border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] transition-all"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleSaveAll}
+                    disabled={saving}
+                    className="border-2 border-foreground bg-green-400 hover:bg-green-500 text-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] transition-all"
+                  >
+                    {saving ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      'Save All Changes'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
