@@ -260,10 +260,10 @@ const Dashboard = () => {
       gradient: "from-emerald-500 to-teal-500",
     },
     {
-      title: "Availability",
-      description: "Take control of your calendar—set hours, block dates, and never miss a beat",
+      title: "Schedule Management",
+      description: "Control your calendar—set weekly hours, block vacation days, and manage your availability all in one place",
       icon: Settings,
-      route: "/availability",
+      route: "/schedule",
       gradient: "from-blue-500 to-cyan-500",
     },
     {
@@ -300,13 +300,6 @@ const Dashboard = () => {
       icon: BookOpen,
       route: "/knowledge",
       gradient: "from-indigo-500 to-purple-500",
-    },
-    {
-      title: "Blocked Dates",
-      description: "Protect your time off—schedule vacations and holidays with zero stress",
-      icon: Calendar,
-      route: "/blocked-dates",
-      gradient: "from-red-500 to-pink-500",
     },
   ];
 

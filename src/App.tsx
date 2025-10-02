@@ -17,9 +17,8 @@ import Payments from "./pages/Payments";
 import Messages from "./pages/Messages";
 import Knowledge from "./pages/Knowledge";
 import Profile from "./pages/Profile";
-import Availability from "./pages/Availability";
+import ScheduleManagement from "./pages/ScheduleManagement";
 import Services from "./pages/Services";
-import BlockedDates from "./pages/BlockedDates";
 import AccountSettings from "./pages/AccountSettings";
 import AIAssistant from "./pages/AIAssistant";
 import NotFound from "./pages/NotFound";
@@ -48,9 +47,8 @@ const App = () => (
           <Route path="/payments" element={<Payments />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/knowledge" element={<Knowledge />} />
-          <Route path="/availability" element={<Availability />} />
+          <Route path="/schedule" element={<ScheduleManagement />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/blocked-dates" element={<BlockedDates />} />
           <Route path="/settings" element={<AccountSettings />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
