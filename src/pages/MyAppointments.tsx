@@ -7,9 +7,11 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, ArrowLeft, Plus, Clock, User, XCircle, Loader2, RefreshCw } from "lucide-react";
+import { Calendar as CalendarIcon, ArrowLeft, Plus, Clock, User, XCircle, Loader2, RefreshCw, Search, Star } from "lucide-react";
 import { format } from "date-fns";
 import { RescheduleDialog } from "@/components/RescheduleDialog";
+import { ReviewDialog } from "@/components/ReviewDialog";
+import { Input } from "@/components/ui/input";
 
 const MyAppointments = () => {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ const MyAppointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [rescheduleOpen, setRescheduleOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -108,6 +112,18 @@ const MyAppointments = () => {
     (apt) => new Date(apt.appointment_date) < new Date() || apt.status === "completed" || apt.status === "cancelled"
   );
 
+  const filteredUpcoming = upcomingAppointments.filter(apt =>
+    apt.stylist?.user?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    apt.stylist?.business_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    apt.service_type?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredPast = pastAppointments.filter(apt =>
+    apt.stylist?.user?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    apt.stylist?.business_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    apt.service_type?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -139,6 +155,19 @@ const MyAppointments = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Search Bar */}
+        <div className="mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search appointments..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </div>
+
         {/* Upcoming Appointments */}
         <Card className="mb-6">
           <CardHeader>
@@ -146,10 +175,12 @@ const MyAppointments = () => {
             <CardDescription>Your scheduled and confirmed appointments</CardDescription>
           </CardHeader>
           <CardContent>
-            {upcomingAppointments.length === 0 ? (
+            {filteredUpcoming.length === 0 ? (
               <div className="text-center py-12">
                 <CalendarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground mb-4">No upcoming appointments</p>
+                <p className="text-muted-foreground mb-4">
+                  {searchTerm ? "No matching appointments found" : "No upcoming appointments"}
+                </p>
                 <Button onClick={() => navigate("/book")}>
                   <Plus className="h-4 w-4 mr-2" />
                   Book Appointment
@@ -157,7 +188,7 @@ const MyAppointments = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {upcomingAppointments.map((apt) => (
+                {filteredUpcoming.map((apt) => (
                   <div
                     key={apt.id}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 cursor-pointer transition-colors"
@@ -189,14 +220,14 @@ const MyAppointments = () => {
         </Card>
 
         {/* Past Appointments */}
-        {pastAppointments.length > 0 && (
+        {filteredPast.length > 0 && (
           <Card>
             <CardHeader>
               <CardTitle>Past Appointments</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {pastAppointments.map((apt) => (
+                {filteredPast.map((apt) => (
                   <div
                     key={apt.id}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 cursor-pointer transition-colors"
@@ -268,6 +299,19 @@ const MyAppointments = () => {
                 <div className="mt-2">{getStatusBadge(selectedAppointment.status)}</div>
               </div>
 
+              {selectedAppointment.status === "completed" && (
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    setDetailsOpen(false);
+                    setReviewDialogOpen(true);
+                  }}
+                >
+                  <Star className="h-4 w-4 mr-2" />
+                  Leave a Review
+                </Button>
+              )}
+
               {(selectedAppointment.status === "scheduled" || selectedAppointment.status === "confirmed") && 
                new Date(selectedAppointment.appointment_date) > new Date() && (
                 <div className="flex gap-2">
@@ -301,6 +345,14 @@ const MyAppointments = () => {
         open={rescheduleOpen}
         onOpenChange={setRescheduleOpen}
         appointment={selectedAppointment}
+        onSuccess={loadData}
+      />
+
+      <ReviewDialog
+        open={reviewDialogOpen}
+        onOpenChange={setReviewDialogOpen}
+        appointment={selectedAppointment}
+        clientProfileId={clientProfile?.id}
         onSuccess={loadData}
       />
     </div>

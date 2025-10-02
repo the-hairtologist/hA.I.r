@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle } from "lucide-react";
+import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle, Search, Edit, Save } from "lucide-react";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -20,6 +20,9 @@ const Formulas = () => {
   const [stylistProfile, setStylistProfile] = useState<any>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingFormula, setEditingFormula] = useState<any>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   
   // Form state
   const [selectedClient, setSelectedClient] = useState("");
@@ -201,6 +204,38 @@ const Formulas = () => {
       toast.error("Error saving formula");
     }
   };
+
+  const handleEditFormula = async () => {
+    if (!editingFormula) return;
+
+    try {
+      const { error } = await supabase
+        .from("formulas")
+        .update({
+          formula_text: editingFormula.formula_text,
+          instructions: editingFormula.instructions,
+          result_notes: editingFormula.result_notes,
+          color_line: editingFormula.color_line,
+        })
+        .eq("id", editingFormula.id);
+
+      if (error) throw error;
+
+      toast.success("Formula updated successfully!");
+      setEditDialogOpen(false);
+      setEditingFormula(null);
+      loadData();
+    } catch (error: any) {
+      console.error("Error updating formula:", error);
+      toast.error("Error updating formula");
+    }
+  };
+
+  const filteredFormulas = formulas.filter(formula =>
+    formula.client?.user?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    formula.formula_text?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    formula.color_line?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -400,8 +435,23 @@ const Formulas = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {/* Search Bar */}
+        {formulas.length > 0 && (
+          <div className="mb-6 max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search formulas..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+          </div>
+        )}
+
         <div className="grid gap-6">
-          {formulas.length === 0 ? (
+          {filteredFormulas.length === 0 && formulas.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Scissors className="h-16 w-16 text-muted-foreground mb-4" />
@@ -413,8 +463,14 @@ const Formulas = () => {
                 </Button>
               </CardContent>
             </Card>
+          ) : filteredFormulas.length === 0 ? (
+            <Card>
+              <CardContent className="text-center py-12">
+                <p className="text-muted-foreground">No formulas match your search</p>
+              </CardContent>
+            </Card>
           ) : (
-            formulas.map((formula) => (
+            filteredFormulas.map((formula) => (
               <Card key={formula.id}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -426,6 +482,12 @@ const Formulas = () => {
                         {new Date(formula.created_at).toLocaleDateString()} • {formula.color_line || "Professional"}
                       </CardDescription>
                     </div>
+                    <Button variant="ghost" size="sm" onClick={() => {
+                      setEditingFormula(formula);
+                      setEditDialogOpen(true);
+                    }}>
+                      <Edit className="h-4 w-4" />
+                    </Button>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -456,6 +518,59 @@ const Formulas = () => {
             ))
           )}
         </div>
+
+        {/* Edit Formula Dialog */}
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Edit Formula</DialogTitle>
+              <DialogDescription>Update formula details</DialogDescription>
+            </DialogHeader>
+            {editingFormula && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-formula">Formula</Label>
+                  <Textarea
+                    id="edit-formula"
+                    value={editingFormula.formula_text}
+                    onChange={(e) => setEditingFormula({...editingFormula, formula_text: e.target.value})}
+                    rows={6}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-instructions">Instructions</Label>
+                  <Textarea
+                    id="edit-instructions"
+                    value={editingFormula.instructions || ""}
+                    onChange={(e) => setEditingFormula({...editingFormula, instructions: e.target.value})}
+                    rows={6}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-notes">Notes</Label>
+                  <Textarea
+                    id="edit-notes"
+                    value={editingFormula.result_notes || ""}
+                    onChange={(e) => setEditingFormula({...editingFormula, result_notes: e.target.value})}
+                    rows={3}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-colorline">Color Line</Label>
+                  <Input
+                    id="edit-colorline"
+                    value={editingFormula.color_line || ""}
+                    onChange={(e) => setEditingFormula({...editingFormula, color_line: e.target.value})}
+                  />
+                </div>
+                <Button onClick={handleEditFormula} className="w-full">
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Changes
+                </Button>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );

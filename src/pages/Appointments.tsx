@@ -9,9 +9,11 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2, CalendarDays } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { CalendarView } from "@/components/CalendarView";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ const Appointments = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
 
   useEffect(() => {
     loadData();
@@ -164,7 +167,14 @@ const Appointments = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-3 gap-6">
+        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar")} className="space-y-6">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="list">List View</TabsTrigger>
+            <TabsTrigger value="calendar">Calendar View</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="list">
+            <div className="grid lg:grid-cols-3 gap-6">
           {/* Calendar Section */}
           <div className="lg:col-span-1">
             <Card>
@@ -281,7 +291,19 @@ const Appointments = () => {
               </CardContent>
             </Card>
           </div>
-        </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="calendar">
+            <CalendarView 
+              appointments={appointments}
+              onAppointmentClick={(apt) => {
+                setSelectedAppointment(apt);
+                setDetailsOpen(true);
+              }}
+            />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Appointment Details Dialog */}

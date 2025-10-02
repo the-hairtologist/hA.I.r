@@ -18,6 +18,8 @@ interface StylistProfile {
   location: string;
   years_experience: number;
   color_line: string;
+  average_rating?: number;
+  total_reviews?: number;
   is_available: boolean;
   profiles: {
     full_name: string;
@@ -159,7 +161,16 @@ const StylistDiscovery = () => {
                   </div>
                   <div className="flex-1">
                     <CardTitle>{stylist.business_name || stylist.profiles.full_name}</CardTitle>
-                    <CardDescription>{stylist.profiles.full_name}</CardDescription>
+                    <CardDescription>
+                      {stylist.profiles.full_name}
+                      {stylist.total_reviews > 0 && (
+                        <span className="flex items-center gap-1 mt-1">
+                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                          <span className="font-semibold">{stylist.average_rating?.toFixed(1)}</span>
+                          <span className="text-xs">({stylist.total_reviews} reviews)</span>
+                        </span>
+                      )}
+                    </CardDescription>
                   </div>
                 </div>
               </CardHeader>

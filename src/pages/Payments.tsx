@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { DollarSign, ArrowLeft, Plus, CreditCard, CheckCircle, Clock, Loader2 } from "lucide-react";
+import { DollarSign, ArrowLeft, Plus, CreditCard, CheckCircle, Clock, Loader2, Search } from "lucide-react";
 import { format } from "date-fns";
 
 const Payments = () => {
@@ -20,6 +20,7 @@ const Payments = () => {
   const [stylistProfile, setStylistProfile] = useState<any>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Form state
   const [selectedAppointment, setSelectedAppointment] = useState("");
@@ -165,6 +166,12 @@ const Payments = () => {
              paymentDate.getFullYear() === now.getFullYear();
     })
     .reduce((sum, p) => sum + parseFloat(p.amount), 0);
+
+  const filteredPayments = payments.filter(payment =>
+    payment.client?.user?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    payment.appointment?.service_type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    payment.payment_method?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -316,13 +323,26 @@ const Payments = () => {
         {/* Payments List */}
         <Card>
           <CardHeader>
-            <CardTitle>Payment History</CardTitle>
-            <CardDescription>
-              All payments received from clients
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Payment History</CardTitle>
+                <CardDescription>All payments received from clients</CardDescription>
+              </div>
+              {payments.length > 0 && (
+                <div className="relative w-64">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search payments..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
-            {payments.length === 0 ? (
+            {filteredPayments.length === 0 && payments.length === 0 ? (
               <div className="text-center py-12">
                 <CreditCard className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                 <p className="text-xl font-semibold mb-2">No payments recorded</p>
@@ -334,9 +354,13 @@ const Payments = () => {
                   Record First Payment
                 </Button>
               </div>
+            ) : filteredPayments.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No payments match your search</p>
+              </div>
             ) : (
               <div className="space-y-3">
-                {payments.map((payment) => (
+                {filteredPayments.map((payment) => (
                   <div
                     key={payment.id}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 transition-colors"

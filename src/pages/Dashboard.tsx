@@ -146,6 +146,12 @@ const Dashboard = () => {
       icon: DollarSign,
       route: "/services",
     },
+    {
+      title: "Blocked Dates",
+      description: "Manage vacations & holidays",
+      icon: Calendar,
+      route: "/blocked-dates",
+    },
   ];
 
   const clientFeatures = [

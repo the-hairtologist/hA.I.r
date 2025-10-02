@@ -19,7 +19,20 @@ const Knowledge = () => {
   useEffect(() => {
     checkAccess();
     loadResources();
+    seedIfEmpty();
   }, []);
+
+  const seedIfEmpty = async () => {
+    const { data } = await supabase.from('knowledge_resources').select('id').limit(1);
+    if (!data || data.length === 0) {
+      try {
+        await supabase.functions.invoke('seed-knowledge-base');
+        loadResources();
+      } catch (error) {
+        console.error('Error seeding knowledge:', error);
+      }
+    }
+  };
 
   const checkAccess = async () => {
     try {
