@@ -267,9 +267,9 @@ const Formulas = () => {
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Generate AI Formula</DialogTitle>
+                <DialogTitle>Generate AI Formula Suggestions</DialogTitle>
                 <DialogDescription>
-                  Upload a hair photo and describe what you want to achieve
+                  Upload a hair photo and describe what you want to achieve. AI-generated formulas are suggestions only - results may vary based on individual hair chemistry. Always perform a strand test.
                 </DialogDescription>
               </DialogHeader>
 
@@ -383,9 +383,16 @@ const Formulas = () => {
 
                 {generatedFormulas.length > 0 && (
                   <div className="space-y-4 mt-6 animate-fade-in">
-                    <div className="flex items-center gap-2 text-primary">
-                      <Sparkles className="h-5 w-5" />
-                      <h3 className="font-semibold text-lg">AI Generated Formulas</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-primary">
+                        <Sparkles className="h-5 w-5" />
+                        <h3 className="font-semibold text-lg">AI Formula Suggestions</h3>
+                      </div>
+                      <div className="bg-amber-50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-200 dark:border-amber-900">
+                        <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed">
+                          <strong>⚠️ Disclaimer:</strong> These are AI-generated suggestions only. Hair color results vary significantly between individuals due to differences in hair chemistry, porosity, previous treatments, and other factors. Always perform strand and patch tests before full application. Use professional judgment and adjust formulas as needed for each client.
+                        </p>
+                      </div>
                     </div>
                     {generatedFormulas.map((formula, index) => (
                       <Card key={index} className="border-primary/20 shadow-lg">
@@ -447,6 +454,14 @@ const Formulas = () => {
                 className="pl-9"
               />
             </div>
+          </div>
+        )}
+
+        {formulas.length > 0 && (
+          <div className="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-lg border border-amber-200 dark:border-amber-900 mb-6">
+            <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
+              <strong>⚠️ Professional Disclaimer:</strong> All formulas are suggestions based on AI analysis. Individual results may vary due to hair chemistry, porosity, and previous treatments. Always perform strand and patch tests before applying any formula to clients.
+            </p>
           </div>
         )}
 

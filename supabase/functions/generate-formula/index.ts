@@ -22,6 +22,8 @@ serve(async (req) => {
     const systemPrompt = `You are a master hair colorist with 20+ years of experience specializing in ${colorLine || 'professional hair color'}. 
 Your task is to provide 2-3 detailed hair color formulas with step-by-step instructions.
 
+IMPORTANT: These formulas are SUGGESTIONS only. Hair color results can vary significantly based on individual hair chemistry, porosity, previous treatments, and other factors. Always recommend a strand test and patch test before full application.
+
 Format your response as a JSON array with this structure:
 [
   {
