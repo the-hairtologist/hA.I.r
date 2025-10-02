@@ -352,13 +352,21 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="colorLine">Preferred Color Line</Label>
+                  <Label htmlFor="colorLine" className="text-base font-semibold">
+                    Preferred Color Line <span className="text-primary">*</span>
+                  </Label>
                   <Input
                     id="colorLine"
                     value={colorLine}
                     onChange={(e) => setColorLine(e.target.value)}
-                    placeholder="e.g., Redken, Wella, Schwarzkopf"
+                    placeholder="e.g., Redken, Wella, Schwarzkopf, Goldwell, Matrix"
+                    className={!colorLine.trim() ? "border-primary/50" : ""}
                   />
+                  <div className="bg-primary/5 border border-primary/20 rounded-lg p-3">
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-semibold text-primary">Critical for accuracy:</span> Your color line ensures AI formulas match your exact products and mixing ratios. Popular brands: Redken, Wella, Schwarzkopf, Goldwell, Matrix, Pravana, Pulp Riot, Joico, L'Oréal Professional
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>

@@ -130,6 +130,10 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
       }
       setStep(2);
     } else if (step === 2 && userRole === "stylist") {
+      if (!colorLine.trim()) {
+        toast.error("Please specify your preferred color line for accurate formula generation");
+        return;
+      }
       setStep(3);
     } else {
       await handleComplete();
@@ -356,19 +360,28 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="colorLine">
-                  Preferred Color Line <span className="text-muted-foreground text-xs">(Optional)</span>
+                <Label htmlFor="colorLine" className="text-base font-semibold">
+                  Preferred Color Line <span className="text-primary">*</span>
                 </Label>
                 <Input
                   id="colorLine"
                   value={colorLine}
                   onChange={(e) => setColorLine(e.target.value)}
-                  placeholder="e.g., Redken, Wella, Schwarzkopf"
+                  placeholder="e.g., Redken, Wella, Schwarzkopf, Goldwell, Matrix"
                   maxLength={100}
+                  className={!colorLine.trim() ? "border-primary/50" : ""}
                 />
-                <p className="text-xs text-muted-foreground">
-                  The AI will tailor formulas to your preferred brands
-                </p>
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 space-y-2">
+                  <p className="text-sm font-medium text-primary">
+                    🎨 Important for Formula Accuracy
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Specifying your color line ensures AI-generated formulas match your exact products and mixing ratios. This dramatically improves formula reliability and consistency.
+                  </p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Popular brands: Redken, Wella, Schwarzkopf, Goldwell, Matrix, Pravana, Pulp Riot, Joico, L'Oréal Professional
+                  </p>
+                </div>
               </div>
             </div>
           )}
