@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { ArrowLeft, Send, Sparkles, Loader2, User, Bot } from "lucide-react";
+import { ArrowLeft, Send, Sparkles, Loader2, User, Bot, Trash2 } from "lucide-react";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -64,9 +65,23 @@ const AIAssistant = () => {
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
+    // Input validation
+    const messageText = input.trim();
+    const MAX_MESSAGE_LENGTH = 2000;
+    
+    if (messageText.length > MAX_MESSAGE_LENGTH) {
+      toast.error(`Message too long. Please keep it under ${MAX_MESSAGE_LENGTH} characters.`);
+      return;
+    }
+
+    if (messageText.length < 3) {
+      toast.error("Please enter a more detailed question.");
+      return;
+    }
+
     const userMessage: Message = {
       role: 'user',
-      content: input.trim()
+      content: messageText
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -87,7 +102,21 @@ const AIAssistant = () => {
 
       if (error) {
         console.error('❌ Error from edge function:', error);
+        
+        // Handle specific error types
+        if (error.message?.includes('Rate limit')) {
+          toast.error("Too many requests. Please wait a moment and try again.");
+        } else if (error.message?.includes('usage limit')) {
+          toast.error("AI usage limit reached. Please contact support to add credits.");
+        } else {
+          toast.error("Failed to get response. Please try again.");
+        }
+        
         throw error;
+      }
+
+      if (!data?.message) {
+        throw new Error("Invalid response from AI assistant");
       }
 
       const assistantMessage: Message = {
@@ -96,15 +125,26 @@ const AIAssistant = () => {
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+      
     } catch (error: any) {
       console.error("❌ Error sending message:", error);
-      toast.error(error.message || "Failed to get response from AI assistant");
       
       // Remove the user message if the request failed
       setMessages(prev => prev.slice(0, -1));
+      setInput(messageText); // Restore the input so user can try again
+      
     } finally {
       setLoading(false);
     }
+  };
+
+  const clearChat = () => {
+    setMessages([{
+      role: 'assistant',
+      content: `Hi! I'm your personal AI Hair Color Assistant. I can help you with:\n\n✨ **Formula consultations** - Get expert advice on color formulations\n🔧 **Troubleshooting** - Fix color issues and challenges\n💡 **Technique guidance** - Learn best practices and application methods\n👥 **Client consultations** - Interpret requests and set expectations\n\nWhat can I help you with today?`
+    }]);
+    setInput("");
+    toast.success("Chat cleared");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -140,10 +180,27 @@ const AIAssistant = () => {
       <main className="container mx-auto px-4 py-6 max-w-4xl">
         <Card className="h-[calc(100vh-200px)] flex flex-col">
           <CardHeader className="border-b">
-            <CardTitle className="flex items-center gap-2">
-              <Bot className="h-5 w-5 text-primary" />
-              Your Personal Color Expert
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <Bot className="h-5 w-5 text-primary" />
+                Your Personal Color Expert
+                <Badge variant="secondary" className="ml-2">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  AI Powered
+                </Badge>
+              </CardTitle>
+              {messages.length > 1 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearChat}
+                  className="text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4 mr-1" />
+                  Clear
+                </Button>
+              )}
+            </div>
           </CardHeader>
 
           <ScrollArea className="flex-1 p-4" ref={scrollRef}>
@@ -227,10 +284,11 @@ const AIAssistant = () => {
                 placeholder="Ask me anything about hair color..."
                 className="flex-1"
                 disabled={loading}
+                maxLength={2000}
               />
               <Button
                 onClick={sendMessage}
-                disabled={loading || !input.trim()}
+                disabled={loading || !input.trim() || input.trim().length < 3}
                 size="icon"
               >
                 {loading ? (
@@ -240,9 +298,14 @@ const AIAssistant = () => {
                 )}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              💡 Tip: Be specific about hair level, condition, and desired results for best advice
-            </p>
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-xs text-muted-foreground">
+                💡 Be specific: mention hair level, condition, and desired results
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {input.length}/2000
+              </p>
+            </div>
           </CardContent>
         </Card>
       </main>

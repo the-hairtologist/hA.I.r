@@ -14,10 +14,37 @@ serve(async (req) => {
   try {
     const { messages, stylistProfile } = await req.json();
     
+    // Input validation
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid messages format' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check message length
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage?.content || lastMessage.content.length > 2000) {
+      return new Response(
+        JSON.stringify({ error: 'Message too long or empty' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Rate limiting check - limit conversation history
+    if (messages.length > 50) {
+      return new Response(
+        JSON.stringify({ error: 'Conversation too long. Please start a new chat.' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
+
+    console.log('Processing chat request with', messages.length, 'messages');
 
     // Build context-aware system prompt
     const systemPrompt = `You are an expert AI Hair Color Assistant with 25+ years of professional salon experience. Your role is to provide personalized guidance to hair stylists.
