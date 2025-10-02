@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Star, Calendar } from "lucide-react";
+import { Search, MapPin, Star, Calendar, Globe, ExternalLink, Award, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
 
 interface StylistProfile {
   id: string;
@@ -27,6 +28,20 @@ interface StylistProfile {
   };
 }
 
+interface DiscoveredStylist {
+  name: string;
+  businessName: string;
+  location: string;
+  specialty: string;
+  certifications?: string[];
+  rating?: string;
+  reviewCount?: string;
+  portfolio?: string;
+  contact?: string;
+  bio?: string;
+  source?: string;
+}
+
 const StylistDiscovery = () => {
   const navigate = useNavigate();
   const [stylists, setStylists] = useState<StylistProfile[]>([]);
@@ -34,10 +49,35 @@ const StylistDiscovery = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("all");
   const [specialtyFilter, setSpecialtyFilter] = useState("all");
+  const [discoveredStylists, setDiscoveredStylists] = useState<DiscoveredStylist[]>([]);
+  const [discoveringStylists, setDiscoveringStylists] = useState(false);
+  const [showDiscovered, setShowDiscovered] = useState(false);
 
   useEffect(() => {
     fetchStylists();
+    discoverMoreStylists();
   }, []);
+
+  const discoverMoreStylists = async () => {
+    setDiscoveringStylists(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('search-stylists', {
+        body: {
+          location: locationFilter !== "all" ? locationFilter : "",
+          specialty: specialtyFilter !== "all" ? specialtyFilter : "",
+          colorLine: "",
+        },
+      });
+
+      if (error) throw error;
+      setDiscoveredStylists(data.stylists || []);
+    } catch (error: any) {
+      console.error("Error discovering stylists:", error);
+      toast.error("Failed to discover more stylists");
+    } finally {
+      setDiscoveringStylists(false);
+    }
+  };
 
   const fetchStylists = async () => {
     try {
@@ -135,91 +175,237 @@ const StylistDiscovery = () => {
         </Select>
       </div>
 
-      {/* Stylists Grid */}
-      {filteredStylists.length === 0 ? (
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <p className="text-muted-foreground">No stylists found matching your criteria</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredStylists.map((stylist) => (
-            <Card key={stylist.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-2xl overflow-hidden">
-                    {stylist.profiles.avatar_url ? (
-                      <img 
-                        src={stylist.profiles.avatar_url} 
-                        alt={stylist.profiles.full_name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      stylist.profiles.full_name?.charAt(0).toUpperCase()
+      {/* Local Stylists Grid */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Stylists in Your Network</h2>
+        {filteredStylists.length === 0 ? (
+          <Card>
+            <CardContent className="pt-6 text-center">
+              <p className="text-muted-foreground">No stylists found matching your criteria</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredStylists.map((stylist) => (
+              <Card key={stylist.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-2xl overflow-hidden">
+                      {stylist.profiles.avatar_url ? (
+                        <img 
+                          src={stylist.profiles.avatar_url} 
+                          alt={stylist.profiles.full_name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        stylist.profiles.full_name?.charAt(0).toUpperCase()
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle>{stylist.business_name || stylist.profiles.full_name}</CardTitle>
+                      <CardDescription>
+                        {stylist.profiles.full_name}
+                        {stylist.total_reviews > 0 && (
+                          <span className="flex items-center gap-1 mt-1">
+                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold">{stylist.average_rating?.toFixed(1)}</span>
+                            <span className="text-xs">({stylist.total_reviews} reviews)</span>
+                          </span>
+                        )}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="space-y-3">
+                  {stylist.specialty && (
+                    <Badge variant="secondary">{stylist.specialty}</Badge>
+                  )}
+
+                  {stylist.bio && (
+                    <p className="text-sm text-muted-foreground line-clamp-2">{stylist.bio}</p>
+                  )}
+
+                  <div className="space-y-2 text-sm">
+                    {stylist.location && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        <span>{stylist.location}</span>
+                      </div>
+                    )}
+
+                    {stylist.years_experience && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Star className="h-4 w-4" />
+                        <span>{stylist.years_experience} years experience</span>
+                      </div>
+                    )}
+
+                    {stylist.color_line && (
+                      <div className="text-muted-foreground">
+                        <strong>Color Line:</strong> {stylist.color_line}
+                      </div>
                     )}
                   </div>
-                  <div className="flex-1">
-                    <CardTitle>{stylist.business_name || stylist.profiles.full_name}</CardTitle>
-                    <CardDescription>
-                      {stylist.profiles.full_name}
-                      {stylist.total_reviews > 0 && (
-                        <span className="flex items-center gap-1 mt-1">
-                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                          <span className="font-semibold">{stylist.average_rating?.toFixed(1)}</span>
-                          <span className="text-xs">({stylist.total_reviews} reviews)</span>
-                        </span>
-                      )}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
+                </CardContent>
 
-              <CardContent className="space-y-3">
-                {stylist.specialty && (
-                  <Badge variant="secondary">{stylist.specialty}</Badge>
-                )}
+                <CardFooter>
+                  <Button 
+                    className="w-full" 
+                    onClick={() => handleBookAppointment(stylist.id)}
+                  >
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Book Appointment
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
 
-                {stylist.bio && (
-                  <p className="text-sm text-muted-foreground line-clamp-2">{stylist.bio}</p>
-                )}
-
-                <div className="space-y-2 text-sm">
-                  {stylist.location && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <MapPin className="h-4 w-4" />
-                      <span>{stylist.location}</span>
-                    </div>
-                  )}
-
-                  {stylist.years_experience && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Star className="h-4 w-4" />
-                      <span>{stylist.years_experience} years experience</span>
-                    </div>
-                  )}
-
-                  {stylist.color_line && (
-                    <div className="text-muted-foreground">
-                      <strong>Color Line:</strong> {stylist.color_line}
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-
-              <CardFooter>
-                <Button 
-                  className="w-full" 
-                  onClick={() => handleBookAppointment(stylist.id)}
-                >
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Book Appointment
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+      {/* Discover More Section */}
+      <Separator className="my-8" />
+      
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              <Globe className="h-6 w-6 text-primary" />
+              Discover More Stylists
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Find certified professionals from brand directories and top-rated platforms
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => setShowDiscovered(!showDiscovered)}
+            disabled={discoveringStylists}
+          >
+            {discoveringStylists ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Discovering...
+              </>
+            ) : showDiscovered ? (
+              "Hide Results"
+            ) : (
+              "Show Discovered Stylists"
+            )}
+          </Button>
         </div>
-      )}
+
+        {showDiscovered && (
+          <>
+            {discoveredStylists.length === 0 && !discoveringStylists ? (
+              <Card>
+                <CardContent className="pt-6 text-center">
+                  <p className="text-muted-foreground">No discovered stylists yet</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {discoveredStylists.map((stylist, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow border-primary/20">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{stylist.name}</CardTitle>
+                          <CardDescription className="flex items-center gap-1 mt-1">
+                            {stylist.businessName}
+                            {stylist.source && (
+                              <Badge variant="outline" className="ml-2 text-xs">
+                                <Globe className="h-3 w-3 mr-1" />
+                                {stylist.source}
+                              </Badge>
+                            )}
+                          </CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent className="space-y-3">
+                      {stylist.specialty && (
+                        <Badge variant="secondary">{stylist.specialty}</Badge>
+                      )}
+
+                      {stylist.certifications && stylist.certifications.length > 0 && (
+                        <div className="flex items-start gap-2">
+                          <Award className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                          <div className="flex flex-wrap gap-1">
+                            {stylist.certifications.map((cert, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {cert}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {stylist.bio && (
+                        <p className="text-sm text-muted-foreground line-clamp-2">{stylist.bio}</p>
+                      )}
+
+                      <div className="space-y-2 text-sm">
+                        {stylist.location && (
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <MapPin className="h-4 w-4" />
+                            <span>{stylist.location}</span>
+                          </div>
+                        )}
+
+                        {stylist.rating && (
+                          <div className="flex items-center gap-2">
+                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold">{stylist.rating}</span>
+                            {stylist.reviewCount && (
+                              <span className="text-muted-foreground">({stylist.reviewCount} reviews)</span>
+                            )}
+                          </div>
+                        )}
+
+                        {stylist.portfolio && (
+                          <div className="flex items-center gap-2 text-primary">
+                            <ExternalLink className="h-4 w-4" />
+                            <a 
+                              href={stylist.portfolio.startsWith('http') ? stylist.portfolio : `https://instagram.com/${stylist.portfolio}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:underline"
+                            >
+                              View Portfolio
+                            </a>
+                          </div>
+                        )}
+
+                        {stylist.contact && (
+                          <div className="text-muted-foreground">
+                            <strong>Contact:</strong> {stylist.contact}
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+
+                    <CardFooter>
+                      <Button variant="outline" className="w-full" asChild>
+                        <a 
+                          href={stylist.portfolio?.startsWith('http') ? stylist.portfolio : '#'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="h-4 w-4 mr-2" />
+                          Learn More
+                        </a>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
