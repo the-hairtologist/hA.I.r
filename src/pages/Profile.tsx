@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Navigation } from "@/components/Navigation";
 import { ArrowLeft, User, Loader2, Save, Upload } from "lucide-react";
 
 const Profile = () => {
@@ -214,19 +215,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <User className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">My Profile</h1>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation userRole={userRole || undefined} userName={fullName} />
 
       <main className="container mx-auto px-4 py-8 max-w-2xl">
         <form onSubmit={handleSave} className="space-y-6">

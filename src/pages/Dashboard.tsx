@@ -9,6 +9,7 @@ import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
+import { Navigation } from "@/components/Navigation";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 
 const Dashboard = () => {
@@ -330,28 +331,10 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Scissors className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">hA.I.r</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/profile")}>
-              <User className="h-4 w-4 mr-2" />
-              Profile
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => navigate("/settings")}>
-              <Settings className="h-4 w-4 mr-2" />
-              Settings
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Navigation 
+        userRole={userRole || undefined} 
+        userName={profile?.user?.full_name || user?.user_metadata?.full_name}
+      />
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">

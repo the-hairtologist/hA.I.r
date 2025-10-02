@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { Navigation } from "@/components/Navigation";
 import { Settings, ArrowLeft, Download, Trash2, Loader2, FileDown } from "lucide-react";
 
 const AccountSettings = () => {
@@ -12,7 +13,9 @@ const AccountSettings = () => {
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [switching, setSwitching] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     loadUser();
@@ -26,6 +29,17 @@ const AccountSettings = () => {
         return;
       }
       setUser(session.user);
+
+      // Get user role
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (roleData) {
+        setUserRole(roleData.role);
+      }
     } catch (error) {
       toast.error("Error loading user data");
     } finally {
@@ -100,6 +114,53 @@ const AccountSettings = () => {
     }
   };
 
+  const handleSwitchRole = async () => {
+    setSwitching(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const newRole = userRole === "stylist" ? "client" : "stylist";
+
+      // Update user role
+      const { error: roleError } = await supabase
+        .from("user_roles")
+        .update({ role: newRole })
+        .eq("user_id", session.user.id);
+
+      if (roleError) throw roleError;
+
+      // Create new profile for the switched role
+      if (newRole === "stylist") {
+        const { error: profileError } = await supabase
+          .from("stylist_profiles")
+          .insert({ user_id: session.user.id });
+        
+        if (profileError && profileError.code !== "23505") throw profileError; // Ignore duplicate key error
+      } else {
+        const { error: profileError } = await supabase
+          .from("client_profiles")
+          .insert({ user_id: session.user.id });
+        
+        if (profileError && profileError.code !== "23505") throw profileError; // Ignore duplicate key error
+      }
+
+      toast.success(`Successfully switched to ${newRole} account!`);
+      setUserRole(newRole);
+      
+      // Redirect to dashboard to refresh
+      setTimeout(() => {
+        navigate("/dashboard");
+        window.location.reload();
+      }, 1000);
+    } catch (error: any) {
+      console.error("Error switching role:", error);
+      toast.error("Error switching account type");
+    } finally {
+      setSwitching(false);
+    }
+  };
+
   const handleDeleteAccount = async () => {
     setDeleting(true);
     try {
@@ -125,19 +186,7 @@ const AccountSettings = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <Settings className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">Account Settings</h1>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation userRole={userRole || undefined} />
 
       <main className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="space-y-6">
@@ -158,6 +207,60 @@ const AccountSettings = () => {
                   {user?.created_at && new Date(user.created_at).toLocaleDateString()}
                 </p>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Role Switching */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Account Type</CardTitle>
+              <CardDescription>
+                Switch between stylist and client accounts
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Current Account Type</p>
+                <p className="font-medium capitalize">{userRole || "Loading..."}</p>
+              </div>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" className="w-full">
+                    Switch to {userRole === "stylist" ? "Client" : "Stylist"} Account
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Switch Account Type?</AlertDialogTitle>
+                    <AlertDialogDescription className="space-y-2">
+                      <p>You're about to switch from a {userRole} account to a {userRole === "stylist" ? "client" : "stylist"} account.</p>
+                      <p className="font-medium">Important:</p>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Your existing {userRole} data will be preserved</li>
+                        <li>You can switch back anytime</li>
+                        <li>A new {userRole === "stylist" ? "client" : "stylist"} profile will be created</li>
+                        <li>The app will reload to apply changes</li>
+                      </ul>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleSwitchRole}
+                      disabled={switching}
+                    >
+                      {switching ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Switching...
+                        </>
+                      ) : (
+                        "Yes, switch account type"
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardContent>
           </Card>
 
