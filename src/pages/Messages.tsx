@@ -308,17 +308,17 @@ const Messages = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
+      <header className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+          <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="border-2 border-foreground">
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="flex items-center gap-2">
             <MessageSquare className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold">Messages</h1>
+            <h1 className="text-2xl font-bold font-display">Messages</h1>
           </div>
-          <Button size="sm" onClick={() => setNewConversationOpen(true)}>
+          <Button size="sm" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
             <Plus className="h-4 w-4 mr-2" />
             New Chat
           </Button>
@@ -328,10 +328,10 @@ const Messages = () => {
       <div className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 h-full flex gap-4 py-4">
           {/* Conversations List */}
-          <Card className="w-80 flex flex-col">
+          <Card className="w-80 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
             <CardHeader>
-              <CardTitle>Conversations</CardTitle>
-              <CardDescription>Your recent chats</CardDescription>
+              <CardTitle className="font-display text-foreground">Conversations</CardTitle>
+              <CardDescription className="text-foreground/80 font-medium">Your recent chats</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto space-y-2">
               {conversations.length === 0 ? (
@@ -380,7 +380,7 @@ const Messages = () => {
           </Card>
 
           {/* Chat Area */}
-          <Card className="flex-1 flex flex-col">
+          <Card className="flex-1 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
             {!selectedConversation ? (
               <div className="flex-1 flex items-center justify-center text-muted-foreground">
                 <div className="text-center">

@@ -188,12 +188,12 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-accent/5 p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-4">
+      <Card className="w-full max-w-md border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-white">
         <CardHeader className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Scissors className="h-8 w-8 text-primary" />
-            <CardTitle className="text-3xl font-bold">hA.I.r</CardTitle>
+            <CardTitle className="text-3xl font-bold font-display">hA.I.r</CardTitle>
           </div>
           <CardDescription>
             {isRecoveryMode ? "Create your new password" : "Your AI-powered salon assistant"}

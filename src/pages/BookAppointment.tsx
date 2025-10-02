@@ -314,16 +314,16 @@ const BookAppointment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400">
+      <header className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="border-2 border-foreground">
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">Book Appointment</h1>
+              <h1 className="text-2xl font-bold font-display">Book Appointment</h1>
             </div>
           </div>
         </div>
@@ -333,13 +333,13 @@ const BookAppointment = () => {
         <div className="grid md:grid-cols-2 gap-6">
           {/* Left Column - Form */}
           <div className="space-y-6">
-            <Card>
+            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-foreground">
                   Select Your Stylist
-                  <Badge variant="secondary" className="text-xs">Step 1</Badge>
+                  <Badge variant="secondary" className="text-xs bg-white border-2 border-foreground">Step 1</Badge>
                 </CardTitle>
-                <CardDescription>Choose from available stylists</CardDescription>
+                <CardDescription className="text-foreground/80 font-medium">Choose from available stylists</CardDescription>
               </CardHeader>
               <CardContent>
                 {stylists.length === 0 ? (
@@ -388,11 +388,11 @@ const BookAppointment = () => {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-green-400 to-emerald-400">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-foreground">
                   Service Details
-                  <Badge variant="secondary" className="text-xs">Step 2</Badge>
+                  <Badge variant="secondary" className="text-xs bg-white border-2 border-foreground">Step 2</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -478,13 +478,13 @@ const BookAppointment = () => {
 
           {/* Right Column - Date & Time */}
           <div className="space-y-6">
-            <Card>
+            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-purple-400 to-pink-400">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-foreground">
                   Select Date
-                  <Badge variant="secondary" className="text-xs">Step 3</Badge>
+                  <Badge variant="secondary" className="text-xs bg-white border-2 border-foreground">Step 3</Badge>
                 </CardTitle>
-                <CardDescription>Choose your preferred appointment date</CardDescription>
+                <CardDescription className="text-foreground/80 font-medium">Choose your preferred appointment date</CardDescription>
               </CardHeader>
               <CardContent>
                 <Calendar
@@ -524,13 +524,13 @@ const BookAppointment = () => {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-400 to-orange-400">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-foreground">
                   Select Time
-                  <Badge variant="secondary" className="text-xs">Step 4</Badge>
+                  <Badge variant="secondary" className="text-xs bg-white border-2 border-foreground">Step 4</Badge>
                 </CardTitle>
-                <CardDescription>Pick your preferred time slot</CardDescription>
+                <CardDescription className="text-foreground/80 font-medium">Pick your preferred time slot</CardDescription>
               </CardHeader>
               <CardContent>
                 {!selectedStylist || !selectedDate ? (

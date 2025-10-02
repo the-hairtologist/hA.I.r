@@ -167,17 +167,17 @@ const Services = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-green-400 via-teal-400 to-blue-500">
+      <header className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+              <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="border-2 border-foreground">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div className="flex items-center gap-2">
                 <DollarSign className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold">Service Pricing</h1>
+                <h1 className="text-2xl font-bold font-display">Service Pricing</h1>
               </div>
             </div>
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
@@ -274,12 +274,12 @@ const Services = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {services.length === 0 ? (
-          <Card>
+          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-400 to-amber-400">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <DollarSign className="h-16 w-16 text-muted-foreground mb-4" />
-              <p className="text-xl font-semibold mb-2">No services yet</p>
-              <p className="text-muted-foreground mb-4">Add your first service with pricing</p>
-              <Button onClick={() => setDialogOpen(true)}>
+              <DollarSign className="h-16 w-16 text-foreground mb-4" />
+              <p className="text-xl font-semibold mb-2 text-foreground font-display">No services yet</p>
+              <p className="text-foreground/80 mb-4 font-medium">Add your first service with pricing</p>
+              <Button onClick={() => setDialogOpen(true)} className="border-2 border-foreground">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Service
               </Button>
@@ -287,24 +287,28 @@ const Services = () => {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {services.map((service) => (
-              <Card key={service.id} className={!service.is_active ? "opacity-60" : ""}>
+            {services.map((service, idx) => (
+              <Card key={service.id} className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all ${
+                idx % 4 === 0 ? 'bg-blue-400' :
+                idx % 4 === 1 ? 'bg-green-400' :
+                idx % 4 === 2 ? 'bg-pink-400' : 'bg-yellow-300'
+              } ${!service.is_active ? "opacity-60" : ""}`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="flex items-center gap-2">
+                      <CardTitle className="flex items-center gap-2 text-foreground font-display">
                         {service.service_name}
-                        {!service.is_active && <span className="text-xs text-muted-foreground">(Inactive)</span>}
+                        {!service.is_active && <span className="text-xs text-foreground/70 font-normal">(Inactive)</span>}
                       </CardTitle>
-                      <CardDescription className="mt-1">
+                      <CardDescription className="mt-1 text-foreground/80 font-medium">
                         {service.duration_minutes} minutes • ${parseFloat(service.price).toFixed(2)}
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(service)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(service)} className="border-2 border-foreground bg-white hover:bg-white/90">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(service.id)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(service.id)} className="border-2 border-foreground bg-white hover:bg-white/90">
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
@@ -312,7 +316,7 @@ const Services = () => {
                 </CardHeader>
                 {service.description && (
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">{service.description}</p>
+                    <p className="text-sm text-foreground/80 font-medium">{service.description}</p>
                   </CardContent>
                 )}
               </Card>

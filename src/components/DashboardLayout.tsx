@@ -82,33 +82,33 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
         <AppSidebar userRole={userRole || undefined} />
         
         <div className="flex-1 flex flex-col">
           {/* Top Header */}
-          <header className="sticky top-0 z-40 border-b bg-card/50 backdrop-blur-sm">
+          <header className="sticky top-0 z-40 border-b-4 border-foreground bg-white/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
             <div className="flex h-16 items-center gap-4 px-4">
-              <SidebarTrigger className="-ml-1" />
+              <SidebarTrigger className="-ml-1 border-2 border-foreground" />
               
               <button 
                 onClick={() => navigate("/dashboard")}
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
                 <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-bold hidden sm:block">hA.I.r</h1>
+                <h1 className="text-xl font-bold font-display hidden sm:block">hA.I.r</h1>
               </button>
 
               <div className="ml-auto flex items-center gap-3">
                 {userRole && (
-                  <Badge variant="secondary" className="hidden sm:flex">
-                    {userRole === "stylist" ? "Stylist" : "Client"}
+                  <Badge variant="secondary" className="hidden sm:flex bg-yellow-300 border-2 border-foreground">
+                    {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
                   </Badge>
                 )}
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-2">
+                    <Button variant="ghost" size="sm" className="gap-2 border-2 border-foreground">
                       <User className="h-4 w-4" />
                       <span className="hidden sm:inline">
                         {user?.user_metadata?.full_name || "Account"}
