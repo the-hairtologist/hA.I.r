@@ -51,7 +51,6 @@ const Dashboard = () => {
         .single();
 
       if (roleData) {
-        console.log('👤 User role detected:', roleData.role);
         setUserRole(roleData.role);
 
         // Get appropriate profile
@@ -331,7 +330,7 @@ const Dashboard = () => {
   const features = userRole === "stylist" ? stylistFeatures : clientFeatures;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <Navigation 
         userRole={userRole || undefined} 
         userName={profile?.user?.full_name || user?.user_metadata?.full_name}
@@ -339,16 +338,13 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2 animate-fade-in">
+          <h2 className="text-4xl font-bold mb-3 animate-fade-in bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
             Welcome back, {user?.user_metadata?.full_name || "there"}!
           </h2>
-          <p className="text-muted-foreground animate-fade-in" style={{ animationDelay: "100ms" }}>
+          <p className="text-lg text-muted-foreground animate-fade-in" style={{ animationDelay: "100ms" }}>
             {userRole === "stylist" 
               ? "Manage your clients and grow your business" 
               : "Book appointments and stay beautiful"}
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Account type: <span className="font-semibold capitalize">{userRole || "loading..."}</span>
           </p>
         </div>
 

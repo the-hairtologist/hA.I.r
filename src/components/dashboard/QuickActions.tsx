@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Users, Scissors, MessageSquare, Plus, Sparkles } from "lucide-react";
+import { Sparkles, Users, Calendar, MessageSquare, Scissors } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface QuickActionsProps {
@@ -18,8 +18,6 @@ interface ActionButton {
 
 export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const navigate = useNavigate();
-
-  console.log('🎯 QuickActions rendering for role:', userRole);
 
   const stylistActions: ActionButton[] = [
     {
@@ -75,12 +73,15 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const actions = userRole === "stylist" ? stylistActions : clientActions;
 
   return (
-    <Card className="mb-8 animate-fade-in shadow-lg">
-      <CardHeader className="pb-4">
+    <Card className="mb-8 animate-fade-in shadow-md border-primary/10">
+      <CardHeader className="pb-4 bg-gradient-to-r from-primary/5 to-secondary/5">
         <CardTitle className="flex items-center gap-2 text-xl">
-          <Plus className="h-5 w-5 text-primary" />
+          <Sparkles className="h-5 w-5 text-primary" />
           Quick Actions
         </CardTitle>
+        <p className="text-xs text-muted-foreground mt-1">
+          Jump to your most-used features
+        </p>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -95,16 +96,16 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                 size="lg"
                 onClick={() => navigate(action.route)}
                 className={`
-                  hover-scale h-auto flex flex-col items-start gap-2 p-4
-                  ${isFeatured ? 'ring-2 ring-primary ring-offset-2 shadow-xl' : ''}
+                  h-auto flex flex-col items-start gap-2 p-4 transition-all
+                  ${isFeatured ? 'ring-2 ring-primary/50 shadow-lg hover:shadow-xl hover:ring-primary' : 'hover:shadow-md'}
                 `}
               >
                 <div className="flex items-center gap-2 w-full">
-                  <Icon className={`h-5 w-5 ${isFeatured ? 'animate-pulse' : ''}`} />
-                  <span className="font-semibold">{action.label}</span>
+                  <Icon className={`h-5 w-5 ${isFeatured ? 'text-primary' : ''}`} />
+                  <span className="font-semibold text-sm">{action.label}</span>
                 </div>
                 {'description' in action && action.description && (
-                  <span className="text-xs opacity-90 text-left">
+                  <span className="text-xs opacity-80 text-left leading-snug">
                     {action.description}
                   </span>
                 )}

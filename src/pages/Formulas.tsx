@@ -246,7 +246,7 @@ const Formulas = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-2">
@@ -256,7 +256,7 @@ const Formulas = () => {
               </Button>
               <div className="flex items-center gap-2">
                 <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold">📋 Formula Generator & History</h1>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">📋 Formula Generator & History</h1>
               </div>
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -441,7 +441,7 @@ const Formulas = () => {
             </Dialog>
           </div>
           <p className="text-sm text-muted-foreground">
-            Create & save detailed client formulas • For quick questions, use <button onClick={() => navigate("/ai-assistant")} className="text-primary hover:underline font-medium">AI Chat Assistant →</button>
+            Create & save detailed client formulas • For quick questions, use <button onClick={() => navigate("/ai-assistant")} className="text-primary hover:underline font-medium transition-colors">AI Chat Assistant →</button>
           </p>
         </div>
       </header>

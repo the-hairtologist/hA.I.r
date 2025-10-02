@@ -162,7 +162,7 @@ const AIAssistant = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4 mb-2">
@@ -171,11 +171,11 @@ const AIAssistant = () => {
             </Button>
             <div className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">💬 AI Chat Assistant</h1>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">💬 AI Chat Assistant</h1>
             </div>
           </div>
           <p className="text-sm text-muted-foreground ml-12">
-            Ask questions & get instant advice • Nothing is saved • For client formulas, use <button onClick={() => navigate("/formulas")} className="text-primary hover:underline font-medium">Formula Generator →</button>
+            Ask questions & get instant advice • Nothing is saved • For client formulas, use <button onClick={() => navigate("/formulas")} className="text-primary hover:underline font-medium transition-colors">Formula Generator →</button>
           </p>
         </div>
       </header>
