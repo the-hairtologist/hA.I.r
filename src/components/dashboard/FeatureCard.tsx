@@ -37,7 +37,7 @@ export const FeatureCard = ({
           </div>
           <CardTitle className="text-xl">{title}</CardTitle>
         </div>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="text-base leading-relaxed">{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <Button variant={isPrimary ? "default" : "outline"} className="w-full">

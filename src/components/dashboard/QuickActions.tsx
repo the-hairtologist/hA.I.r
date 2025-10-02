@@ -12,19 +12,19 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
 
   const stylistActions = [
     {
-      label: "View Today's Schedule",
+      label: "See Today's Schedule",
       icon: Calendar,
       route: "/appointments",
       variant: "default" as const,
     },
     {
-      label: "Create Formula",
+      label: "Generate Formula Now",
       icon: Scissors,
       route: "/formulas",
       variant: "secondary" as const,
     },
     {
-      label: "Message Clients",
+      label: "Check Messages",
       icon: MessageSquare,
       route: "/messages",
       variant: "outline" as const,
@@ -33,19 +33,19 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
 
   const clientActions = [
     {
-      label: "Book Appointment",
+      label: "Book My Next Visit",
       icon: Calendar,
       route: "/book-appointment",
       variant: "default" as const,
     },
     {
-      label: "Find Stylists",
+      label: "Discover Stylists",
       icon: Users,
       route: "/stylists",
       variant: "secondary" as const,
     },
     {
-      label: "Message Stylist",
+      label: "Chat with Stylist",
       icon: MessageSquare,
       route: "/messages",
       variant: "outline" as const,

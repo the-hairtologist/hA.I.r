@@ -30,10 +30,10 @@ const Index = () => {
             <Sparkles className="h-12 w-12 text-primary animate-pulse" />
           </div>
           <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Your AI-Powered Salon Assistant
+            Transform Every Color Service with AI-Powered Precision
           </h2>
           <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-            hA.I.r helps stylists and clients manage formulas, appointments, and communication—powered by advanced AI technology.
+            Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -41,9 +41,9 @@ const Index = () => {
               <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Scissors className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">Smart Formulas</h3>
+              <h3 className="font-semibold text-lg mb-2">Instant AI Formulas</h3>
               <p className="text-muted-foreground text-sm">
-                AI-generated color formulas based on hair photos and your preferred color line
+                Upload a photo, describe the look—and get 2-3 expert formulas with step-by-step instructions. No guesswork, just results.
               </p>
             </div>
 
@@ -51,9 +51,9 @@ const Index = () => {
               <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Calendar className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">Easy Scheduling</h3>
+              <h3 className="font-semibold text-lg mb-2">Effortless Booking</h3>
               <p className="text-muted-foreground text-sm">
-                Visual appointment calendar with conflict prevention
+                Smart calendar that prevents double-bookings automatically. Clients book instantly, you stay organized—zero stress.
               </p>
             </div>
 
@@ -61,15 +61,15 @@ const Index = () => {
               <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <MessageSquare className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">Real-Time Communication</h3>
+              <h3 className="font-semibold text-lg mb-2">Client Connection Hub</h3>
               <p className="text-muted-foreground text-sm">
-                Instant messaging, video notes, and formula history all in one place
+                Send video consultations, share formulas instantly, and keep every conversation in one place. Build trust, boost loyalty.
               </p>
             </div>
           </div>
 
           <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8 py-6">
-            Get Started Free
+            Start Creating Perfect Color—Free
           </Button>
         </div>
       </main>
