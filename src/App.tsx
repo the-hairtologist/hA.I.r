@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -33,27 +34,107 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/formulas" element={<Formulas />} />
-          <Route path="/appointments" element={<Appointments />} />
-          <Route path="/book" element={<BookAppointment />} />
-          <Route path="/book-appointment" element={<BookAppointment />} />
-          <Route path="/stylists" element={<StylistDiscovery />} />
-          <Route path="/stylist" element={<StylistProfile />} />
-          <Route path="/my-appointments" element={<MyAppointments />} />
-          <Route path="/my-formulas" element={<MyFormulas />} />
-          <Route path="/commissions" element={<Commissions />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/knowledge" element={<Knowledge />} />
-          <Route path="/schedule" element={<ScheduleManagement />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/settings" element={<AccountSettings />} />
-          <Route path="/ai-assistant" element={<AIAssistant />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          
+          {/* Shared Protected Routes (Both Roles) */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/messages" element={
+            <ProtectedRoute>
+              <Messages />
+            </ProtectedRoute>
+          } />
+          <Route path="/knowledge" element={
+            <ProtectedRoute>
+              <Knowledge />
+            </ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <AccountSettings />
+            </ProtectedRoute>
+          } />
+          
+          {/* Stylist-Only Routes */}
+          <Route path="/formulas" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Formulas />
+            </ProtectedRoute>
+          } />
+          <Route path="/appointments" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Appointments />
+            </ProtectedRoute>
+          } />
+          <Route path="/commissions" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Commissions />
+            </ProtectedRoute>
+          } />
+          <Route path="/payments" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Payments />
+            </ProtectedRoute>
+          } />
+          <Route path="/schedule" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <ScheduleManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/services" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Services />
+            </ProtectedRoute>
+          } />
+          <Route path="/ai-assistant" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <AIAssistant />
+            </ProtectedRoute>
+          } />
+          
+          {/* Client-Only Routes */}
+          <Route path="/book" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <BookAppointment />
+            </ProtectedRoute>
+          } />
+          <Route path="/book-appointment" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <BookAppointment />
+            </ProtectedRoute>
+          } />
+          <Route path="/stylists" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <StylistDiscovery />
+            </ProtectedRoute>
+          } />
+          <Route path="/stylist" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <StylistProfile />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-appointments" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <MyAppointments />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-formulas" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <MyFormulas />
+            </ProtectedRoute>
+          } />
+          
+          {/* 404 Catch-All */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
