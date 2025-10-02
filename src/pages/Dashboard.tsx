@@ -337,7 +337,7 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-blue-100 via-cyan-50 to-green-50 p-8 md:p-12 relative min-h-[300px]">
+          <div className="bg-gradient-to-br from-yellow-400 via-lime-300 to-cyan-400 p-8 md:p-12 relative min-h-[300px]">
             <div className="window-scrollbar"></div>
             
             <div className="max-w-3xl">
