@@ -84,31 +84,10 @@ export default {
             height: "0",
           },
         },
-        "float": {
-          "0%, 100%": {
-            transform: "translateY(0px)",
-          },
-          "50%": {
-            transform: "translateY(-8px)",
-          },
-        },
-        "subtle-bounce": {
-          "0%, 100%": {
-            transform: "scale(1) rotate(0deg)",
-          },
-          "25%": {
-            transform: "scale(1.02) rotate(-2deg)",
-          },
-          "75%": {
-            transform: "scale(0.98) rotate(2deg)",
-          },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "float": "float 3s ease-in-out infinite",
-        "subtle-bounce": "subtle-bounce 4s ease-in-out infinite",
       },
     },
   },
