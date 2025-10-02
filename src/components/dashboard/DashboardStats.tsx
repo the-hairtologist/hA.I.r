@@ -78,16 +78,16 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
         return (
           <Card
             key={stat.label}
-            className="animate-fade-in hover-scale"
+            className="animate-fade-in hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]"
             style={{ animationDelay: `${index * 100}ms` }}
           >
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
-                  <p className="text-3xl font-bold">{stat.value}</p>
+                  <p className="text-sm text-muted-foreground mb-1 font-medium">{stat.label}</p>
+                  <p className="text-4xl font-display font-bold">{stat.value}</p>
                 </div>
-                <div className={`p-3 rounded-full ${stat.bgColor}`}>
+                <div className={`p-3 rounded-lg ${stat.bgColor} border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]`}>
                   <Icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
               </div>

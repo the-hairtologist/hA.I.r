@@ -71,24 +71,24 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
 
   if (activities.length === 0) {
     return (
-      <Card className="animate-fade-in">
+      <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
+          <CardTitle className="font-display">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground text-center py-8">No recent activity</p>
+          <p className="text-muted-foreground text-center py-8 font-medium">No recent activity</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="animate-fade-in">
+    <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
       <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
+        <CardTitle className="font-display">Recent Activity</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {activities.map((activity, index) => {
             const Icon = getActivityIcon(activity.type);
             const colorClass = getActivityColor(activity.type);
@@ -96,7 +96,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
             return (
               <div
                 key={activity.id}
-                className="flex items-start gap-4 p-3 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer animate-fade-in"
+                className="flex items-start gap-4 p-4 rounded-lg border-2 border-foreground hover:bg-accent/50 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
                 style={{ animationDelay: `${index * 50}ms` }}
                 onClick={() => {
                   if (activity.type === "appointment") navigate("/appointments");
@@ -104,13 +104,13 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                   if (activity.type === "formula") navigate("/formulas");
                 }}
               >
-                <div className={`p-2 rounded-full ${colorClass}`}>
+                <div className={`p-2 rounded-lg ${colorClass} border-2 border-foreground`}>
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <p className="font-medium truncate">{activity.title}</p>
+                      <p className="font-display font-semibold truncate">{activity.title}</p>
                       <p className="text-sm text-muted-foreground truncate">
                         {activity.description}
                       </p>

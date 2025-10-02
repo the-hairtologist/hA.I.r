@@ -111,15 +111,15 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const displayedActions = allActions.filter(a => selectedActions.includes(a.id));
 
   return (
-    <Card className="mb-8 animate-fade-in border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+    <Card className="mb-8 animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-card">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2 text-xl">
+            <CardTitle className="flex items-center gap-2 text-xl font-display">
               <Sparkles className="h-5 w-5 text-primary" />
               Your Quick Actions
             </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1 font-medium">
               {isCustomizing ? "Select your favorite shortcuts" : "Jump to what matters most"}
             </p>
           </div>
@@ -146,26 +146,26 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                   key={action.id}
                   onClick={() => toggleAction(action.id)}
                   className={cn(
-                    "relative p-4 rounded-lg border-2 transition-all text-left group",
+                    "relative p-4 rounded-lg border-2 border-foreground transition-all text-left group shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]",
                     isSelected
-                      ? "border-primary bg-primary/5 shadow-md"
-                      : "border-border hover:border-primary/50 hover:bg-accent"
+                      ? "bg-primary/10"
+                      : "bg-background hover:bg-accent"
                   )}
                 >
                   <div className="flex items-start gap-3">
                     <div className={cn(
-                      "p-2 rounded-lg bg-gradient-to-br shrink-0",
+                      "p-2 rounded-lg bg-gradient-to-br shrink-0 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
                       action.gradient,
                       !isSelected && "opacity-50"
                     )}>
                       <Icon className="h-5 w-5 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-sm mb-1">{action.label}</h4>
+                      <h4 className="font-display font-semibold text-sm mb-1">{action.label}</h4>
                       <p className="text-xs text-muted-foreground">{action.description}</p>
                     </div>
                     {isSelected && (
-                      <div className="absolute top-2 right-2 h-5 w-5 rounded-full bg-primary flex items-center justify-center">
+                      <div className="absolute top-2 right-2 h-5 w-5 rounded-full bg-primary flex items-center justify-center border-2 border-foreground">
                         <Sparkles className="h-3 w-3 text-primary-foreground" />
                       </div>
                     )}
@@ -183,21 +183,21 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                 <button
                   key={action.id}
                   onClick={() => navigate(action.route)}
-                  className="group relative p-5 rounded-xl border border-border hover:border-primary/50 bg-card hover:shadow-lg transition-all text-left overflow-hidden"
+                  className="group relative p-5 rounded-xl border-[3px] border-foreground hover:border-primary bg-card transition-all text-left overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div className={cn(
-                    "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity",
+                    "absolute inset-0 bg-gradient-to-br opacity-10",
                     action.gradient
                   )} />
                   <div className="relative">
                     <div className={cn(
-                      "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3",
+                      "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
                       action.gradient
                     )}>
                       <Icon className="h-6 w-6 text-white" />
                     </div>
-                    <h4 className="font-semibold text-base mb-1 group-hover:text-primary transition-colors">
+                    <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
                       {action.label}
                     </h4>
                     <p className="text-sm text-muted-foreground">
@@ -210,7 +210,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             {displayedActions.length === 0 && (
               <div className="col-span-full text-center py-8">
                 <Plus className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-sm font-medium">
                   Click "Customize" to add your favorite shortcuts
                 </p>
               </div>
