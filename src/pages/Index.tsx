@@ -25,18 +25,27 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-20">
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Sparkles className="h-12 w-12 text-primary animate-pulse" />
+        <div className="text-center max-w-5xl mx-auto mb-16">
+          <div className="p-12 rounded-2xl lego-studs lego-block bg-gradient-to-br from-yellow-300 via-orange-400 to-red-400 border-[4px] border-foreground mb-16 relative">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 lego-float">
+              <div className="bg-white border-[3px] border-foreground w-16 h-16 rounded-xl flex items-center justify-center shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                <Sparkles className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            
+            <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-white drop-shadow-[5px_5px_0px_rgba(0,0,0,0.3)] pt-8">
+              Transform Every Color Service with AI-Powered Precision
+            </h2>
+            <p className="text-xl md:text-2xl font-bold mb-6 text-white/95 max-w-3xl mx-auto drop-shadow-[3px_3px_0px_rgba(0,0,0,0.2)]">
+              Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
+            </p>
+            
+            <Button size="lg" onClick={() => navigate("/auth")} className="text-xl px-10 py-7 font-display font-bold bg-white text-foreground hover:bg-white/90 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all mt-4">
+              Start Creating Perfect Color—Free
+            </Button>
           </div>
-          <h2 className="text-5xl md:text-6xl font-display font-bold mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-            Transform Every Color Service with AI-Powered Precision
-          </h2>
-          <p className="text-xl text-foreground/70 mb-12 max-w-2xl mx-auto font-medium">
-            Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
-          </p>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-3 gap-6">
             <div className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all">
               <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                 <Scissors className="h-7 w-7 text-blue-600" />
@@ -67,10 +76,6 @@ const Index = () => {
               </p>
             </div>
           </div>
-
-          <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8 py-6 font-display">
-            Start Creating Perfect Color—Free
-          </Button>
         </div>
       </main>
 
