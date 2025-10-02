@@ -67,7 +67,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     const active = isActive(path);
     return active
       ? "bg-yellow-400 text-foreground font-bold border-l-4 border-pink-500 shadow-[3px_0_0_0_rgb(236,72,153)]"
-      : "hover:bg-white/20 border-l-4 border-transparent hover:border-white/50 text-white";
+      : "hover:bg-white/30 border-l-4 border-transparent hover:border-white/50 text-foreground bg-white/80";
   };
 
   return (
@@ -75,7 +75,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       <SidebarContent className="gap-0">
         {/* Main Navigation */}
         <SidebarGroup className="border-b-4 border-white/20 pb-4">
-          <SidebarGroupLabel className={collapsed ? "sr-only" : "text-white font-bold text-xs uppercase tracking-wider px-3 py-2"}>
+          <SidebarGroupLabel className={collapsed ? "sr-only" : "text-foreground font-bold text-xs uppercase tracking-wider px-3 py-2 bg-white/80 rounded-md mx-2"}>
             Main Menu
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -99,7 +99,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         {/* Secondary Navigation (Stylist Only) */}
         {userRole === "stylist" && secondaryItems.length > 0 && (
           <SidebarGroup className="border-b-4 border-white/20 pb-4">
-            <SidebarGroupLabel className={collapsed ? "sr-only" : "text-white font-bold text-xs uppercase tracking-wider px-3 py-2"}>
+            <SidebarGroupLabel className={collapsed ? "sr-only" : "text-foreground font-bold text-xs uppercase tracking-wider px-3 py-2 bg-white/80 rounded-md mx-2"}>
               Business Tools
             </SidebarGroupLabel>
             <SidebarGroupContent>
