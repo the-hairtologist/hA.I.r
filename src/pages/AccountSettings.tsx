@@ -21,7 +21,9 @@ const AccountSettings = () => {
   const [user, setUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [gender, setGender] = useState<string>("");
+  const [selectedGender, setSelectedGender] = useState<string>("");
   const [savingGender, setSavingGender] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     loadUser();
@@ -56,6 +58,7 @@ const AccountSettings = () => {
 
       if (profileData?.gender) {
         setGender(profileData.gender);
+        setSelectedGender(profileData.gender);
       }
     } catch (error) {
       toast.error("Error loading user data");
@@ -64,7 +67,12 @@ const AccountSettings = () => {
     }
   };
 
-  const handleGenderUpdate = async (newGender: string) => {
+  const handleGenderChange = (newGender: string) => {
+    setSelectedGender(newGender);
+    setHasChanges(newGender !== gender);
+  };
+
+  const handleSaveAvatar = async () => {
     setSavingGender(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -72,19 +80,26 @@ const AccountSettings = () => {
 
       const { error } = await supabase
         .from("profiles")
-        .update({ gender: newGender })
+        .update({ gender: selectedGender })
         .eq("id", session.user.id);
 
       if (error) throw error;
 
-      setGender(newGender);
-      toast.success("Avatar updated successfully!");
+      setGender(selectedGender);
+      setHasChanges(false);
+      toast.success("Avatar saved successfully!");
     } catch (error: any) {
       console.error("Error updating gender:", error);
       toast.error("Error updating avatar");
     } finally {
       setSavingGender(false);
     }
+  };
+
+  const handleCancelAvatar = () => {
+    setSelectedGender(gender);
+    setHasChanges(false);
+    toast.info("Changes cancelled");
   };
 
   const handleExportData = async () => {
@@ -258,12 +273,12 @@ const AccountSettings = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4 flex-wrap">
-                {gender && (
+                {selectedGender && (
                   <div className="w-24 h-24 border-4 border-foreground rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
                     <img 
                       src={
-                        gender === 'male' ? avatarMale :
-                        gender === 'female' ? avatarFemale :
+                        selectedGender === 'male' ? avatarMale :
+                        selectedGender === 'female' ? avatarFemale :
                         avatarNeutral
                       } 
                       alt="Your current avatar"
@@ -273,7 +288,7 @@ const AccountSettings = () => {
                 )}
                 <div className="flex-1 min-w-[200px]">
                   <label className="text-sm font-medium mb-2 block">Avatar Style</label>
-                  <Select value={gender} onValueChange={handleGenderUpdate} disabled={savingGender}>
+                  <Select value={selectedGender} onValueChange={handleGenderChange} disabled={savingGender}>
                     <SelectTrigger className="border-2 border-foreground">
                       <SelectValue placeholder="Select avatar style" />
                     </SelectTrigger>
@@ -283,14 +298,35 @@ const AccountSettings = () => {
                       <SelectItem value="neutral">Neutral Style</SelectItem>
                     </SelectContent>
                   </Select>
-                  {savingGender && (
-                    <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      Updating avatar...
-                    </p>
-                  )}
                 </div>
               </div>
+              
+              {hasChanges && (
+                <div className="flex gap-3 pt-2">
+                  <Button 
+                    onClick={handleSaveAvatar} 
+                    disabled={savingGender}
+                    className="flex-1 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] transition-all"
+                  >
+                    {savingGender ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Avatar'
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={handleCancelAvatar}
+                    disabled={savingGender}
+                    className="flex-1 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] transition-all"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
 
