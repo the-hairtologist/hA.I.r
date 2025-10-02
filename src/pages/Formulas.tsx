@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -281,8 +282,9 @@ const Formulas = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+    <DashboardLayout>
+      <div>
+        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-4">
@@ -755,7 +757,8 @@ const Formulas = () => {
           </DialogContent>
         </Dialog>
       </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

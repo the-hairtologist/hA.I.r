@@ -1,0 +1,144 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Scissors, User, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+}
+
+export function DashboardLayout({ children }: DashboardLayoutProps) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate("/auth");
+        return;
+      }
+
+      setUser(session.user);
+
+      // Get user role
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (roleData) {
+        setUserRole(roleData.role);
+      }
+    } catch (error: any) {
+      toast.error("Error loading user data");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate("/auth");
+      toast.success("Signed out successfully");
+    } catch (error) {
+      toast.error("Error signing out");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-primary/10 via-background to-secondary/10">
+        <AppSidebar userRole={userRole || undefined} />
+        
+        <div className="flex-1 flex flex-col">
+          {/* Top Header */}
+          <header className="sticky top-0 z-40 border-b bg-card/50 backdrop-blur-sm">
+            <div className="flex h-16 items-center gap-4 px-4">
+              <SidebarTrigger className="-ml-1" />
+              
+              <button 
+                onClick={() => navigate("/dashboard")}
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                <Scissors className="h-6 w-6 text-primary" />
+                <h1 className="text-xl font-bold hidden sm:block">hA.I.r</h1>
+              </button>
+
+              <div className="ml-auto flex items-center gap-3">
+                {userRole && (
+                  <Badge variant="secondary" className="hidden sm:flex">
+                    {userRole === "stylist" ? "Stylist" : "Client"}
+                  </Badge>
+                )}
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="gap-2">
+                      <User className="h-4 w-4" />
+                      <span className="hidden sm:inline">
+                        {user?.user_metadata?.full_name || "Account"}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate("/profile")}>
+                      <User className="h-4 w-4 mr-2" />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </header>
+
+          {/* Main Content */}
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+}

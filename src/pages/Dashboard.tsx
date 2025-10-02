@@ -9,8 +9,8 @@ import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
-import { Navigation } from "@/components/Navigation";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
+import { DashboardLayout } from "@/components/DashboardLayout";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -323,13 +323,8 @@ const Dashboard = () => {
   const features = userRole === "stylist" ? stylistFeatures : clientFeatures;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-      <Navigation 
-        userRole={userRole || undefined} 
-        userName={profile?.user?.full_name || user?.user_metadata?.full_name}
-      />
-
-      <main className="container mx-auto px-4 py-8">
+    <DashboardLayout>
+      <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="text-4xl font-bold mb-3 animate-fade-in bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
             Welcome back, {user?.user_metadata?.full_name || "there"}!
@@ -368,15 +363,15 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
-      </main>
 
-      <ProfileCompletionDialog
-        open={showProfileCompletion}
-        onOpenChange={setShowProfileCompletion}
-        userRole={userRole}
-        userId={user?.id}
-      />
-    </div>
+        <ProfileCompletionDialog
+          open={showProfileCompletion}
+          onOpenChange={setShowProfileCompletion}
+          userRole={userRole}
+          userId={user?.id}
+        />
+      </div>
+    </DashboardLayout>
   );
 };
 
