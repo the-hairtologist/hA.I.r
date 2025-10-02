@@ -1,118 +1,222 @@
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, Users, Calendar, MessageSquare, Scissors } from "lucide-react";
+import { Sparkles, Users, Calendar, MessageSquare, Scissors, Settings2, Plus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface QuickActionsProps {
   userRole: string;
 }
 
 interface ActionButton {
+  id: string;
   label: string;
   icon: any;
   route: string;
-  variant: "default" | "secondary" | "outline";
   description?: string;
-  featured?: boolean;
+  gradient?: string;
 }
 
 export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const navigate = useNavigate();
+  const [isCustomizing, setIsCustomizing] = useState(false);
+  const [selectedActions, setSelectedActions] = useState<string[]>([]);
 
-  const stylistActions: ActionButton[] = [
+  const allStylistActions: ActionButton[] = [
     {
-      label: "💬 Chat with AI Expert",
-      description: "Ask questions & get instant advice",
+      id: "ai-chat",
+      label: "AI Expert Chat",
+      description: "Get instant advice",
       icon: Sparkles,
       route: "/ai-assistant",
-      variant: "default" as const,
-      featured: true,
+      gradient: "from-violet-500 to-purple-500",
     },
     {
-      label: "📋 Create Client Formula",
-      description: "Generate & save detailed formulas",
+      id: "formula",
+      label: "Create Formula",
+      description: "Generate client formulas",
       icon: Scissors,
       route: "/formulas",
-      variant: "secondary" as const,
+      gradient: "from-pink-500 to-rose-500",
     },
     {
+      id: "schedule",
       label: "Today's Schedule",
+      description: "View appointments",
       icon: Calendar,
       route: "/appointments",
-      variant: "outline" as const,
+      gradient: "from-blue-500 to-cyan-500",
     },
     {
+      id: "messages",
       label: "Messages",
+      description: "Client conversations",
       icon: MessageSquare,
       route: "/messages",
-      variant: "outline" as const,
+      gradient: "from-emerald-500 to-teal-500",
     },
   ];
 
-  const clientActions: ActionButton[] = [
+  const allClientActions: ActionButton[] = [
     {
-      label: "Book My Next Visit",
+      id: "book",
+      label: "Book Appointment",
+      description: "Schedule your visit",
       icon: Calendar,
       route: "/book-appointment",
-      variant: "default" as const,
+      gradient: "from-blue-500 to-cyan-500",
     },
     {
-      label: "Discover Stylists",
+      id: "discover",
+      label: "Find Stylists",
+      description: "Discover local talent",
       icon: Users,
       route: "/stylists",
-      variant: "secondary" as const,
+      gradient: "from-purple-500 to-pink-500",
     },
     {
-      label: "Chat with Stylist",
+      id: "messages",
+      label: "Messages",
+      description: "Chat with stylist",
       icon: MessageSquare,
       route: "/messages",
-      variant: "outline" as const,
+      gradient: "from-emerald-500 to-teal-500",
     },
   ];
 
-  const actions = userRole === "stylist" ? stylistActions : clientActions;
+  const allActions = userRole === "stylist" ? allStylistActions : allClientActions;
+  const storageKey = `quickActions-${userRole}`;
+
+  useEffect(() => {
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      setSelectedActions(JSON.parse(saved));
+    } else {
+      // Default: show first 3 actions
+      setSelectedActions(allActions.slice(0, 3).map(a => a.id));
+    }
+  }, [userRole]);
+
+  const toggleAction = (id: string) => {
+    setSelectedActions(prev => {
+      const newSelection = prev.includes(id)
+        ? prev.filter(a => a !== id)
+        : [...prev, id];
+      localStorage.setItem(storageKey, JSON.stringify(newSelection));
+      return newSelection;
+    });
+  };
+
+  const displayedActions = allActions.filter(a => selectedActions.includes(a.id));
 
   return (
-    <Card className="mb-8 animate-fade-in shadow-md border-primary/10">
-      <CardHeader className="pb-4 bg-gradient-to-r from-primary/5 to-secondary/5">
-        <CardTitle className="flex items-center gap-2 text-xl">
-          <Sparkles className="h-5 w-5 text-primary" />
-          Quick Actions
-        </CardTitle>
-        <p className="text-xs text-muted-foreground mt-1">
-          Jump to your most-used features
-        </p>
+    <Card className="mb-8 animate-fade-in border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Sparkles className="h-5 w-5 text-primary" />
+              Your Quick Actions
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              {isCustomizing ? "Select your favorite shortcuts" : "Jump to what matters most"}
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsCustomizing(!isCustomizing)}
+            className="gap-2"
+          >
+            {isCustomizing ? <X className="h-4 w-4" /> : <Settings2 className="h-4 w-4" />}
+            {isCustomizing ? "Done" : "Customize"}
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {actions.map((action) => {
-            const Icon = action.icon;
-            const isFeatured = 'featured' in action && action.featured;
-            
-            return (
-              <Button
-                key={action.label}
-                variant={action.variant}
-                size="lg"
-                onClick={() => navigate(action.route)}
-                className={`
-                  h-auto flex flex-col items-start gap-2 p-4 transition-all
-                  ${isFeatured ? 'ring-2 ring-primary/50 shadow-lg hover:shadow-xl hover:ring-primary' : 'hover:shadow-md'}
-                `}
-              >
-                <div className="flex items-center gap-2 w-full">
-                  <Icon className={`h-5 w-5 ${isFeatured ? 'text-primary' : ''}`} />
-                  <span className="font-semibold text-sm">{action.label}</span>
-                </div>
-                {'description' in action && action.description && (
-                  <span className="text-xs opacity-80 text-left leading-snug">
-                    {action.description}
-                  </span>
-                )}
-              </Button>
-            );
-          })}
-        </div>
+        {isCustomizing ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {allActions.map((action) => {
+              const Icon = action.icon;
+              const isSelected = selectedActions.includes(action.id);
+              
+              return (
+                <button
+                  key={action.id}
+                  onClick={() => toggleAction(action.id)}
+                  className={cn(
+                    "relative p-4 rounded-lg border-2 transition-all text-left group",
+                    isSelected
+                      ? "border-primary bg-primary/5 shadow-md"
+                      : "border-border hover:border-primary/50 hover:bg-accent"
+                  )}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={cn(
+                      "p-2 rounded-lg bg-gradient-to-br shrink-0",
+                      action.gradient,
+                      !isSelected && "opacity-50"
+                    )}>
+                      <Icon className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-sm mb-1">{action.label}</h4>
+                      <p className="text-xs text-muted-foreground">{action.description}</p>
+                    </div>
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 h-5 w-5 rounded-full bg-primary flex items-center justify-center">
+                        <Sparkles className="h-3 w-3 text-primary-foreground" />
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {displayedActions.map((action, index) => {
+              const Icon = action.icon;
+              
+              return (
+                <button
+                  key={action.id}
+                  onClick={() => navigate(action.route)}
+                  className="group relative p-5 rounded-xl border border-border hover:border-primary/50 bg-card hover:shadow-lg transition-all text-left overflow-hidden"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <div className={cn(
+                    "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity",
+                    action.gradient
+                  )} />
+                  <div className="relative">
+                    <div className={cn(
+                      "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3",
+                      action.gradient
+                    )}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <h4 className="font-semibold text-base mb-1 group-hover:text-primary transition-colors">
+                      {action.label}
+                    </h4>
+                    <p className="text-sm text-muted-foreground">
+                      {action.description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+            {displayedActions.length === 0 && (
+              <div className="col-span-full text-center py-8">
+                <Plus className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                <p className="text-muted-foreground text-sm">
+                  Click "Customize" to add your favorite shortcuts
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

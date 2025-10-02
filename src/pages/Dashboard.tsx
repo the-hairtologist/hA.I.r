@@ -352,13 +352,17 @@ const Dashboard = () => {
 
         <DashboardStats stats={stats} userRole={userRole || ""} />
 
-        <div className="grid lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2">
-            <RecentActivity activities={recentActivities} />
-          </div>
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            {features.slice(0, 4).map((feature, index) => (
+        <div className="grid lg:grid-cols-1 gap-6 mb-8">
+          <RecentActivity activities={recentActivities} />
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <Sparkles className="h-6 w-6 text-primary" />
+            Explore More Features
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
               <FeatureCard
                 key={feature.route}
                 title={feature.title}
@@ -371,24 +375,6 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
-
-        {features.length > 4 && (
-          <>
-            <h3 className="text-lg font-semibold mb-4">More Features</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.slice(4).map((feature, index) => (
-                <FeatureCard
-                  key={feature.route}
-                  title={feature.title}
-                  description={feature.description}
-                  icon={feature.icon}
-                  route={feature.route}
-                  index={index + 4}
-                />
-              ))}
-            </div>
-          </>
-        )}
       </main>
 
       <ProfileCompletionDialog
