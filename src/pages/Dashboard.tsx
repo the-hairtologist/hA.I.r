@@ -104,6 +104,12 @@ const Dashboard = () => {
       route: "/messages",
     },
     {
+      title: "Payment Tracking",
+      description: "Track service payments from clients",
+      icon: DollarSign,
+      route: "/payments",
+    },
+    {
       title: "Commissions",
       description: "Track your product commissions",
       icon: DollarSign,
