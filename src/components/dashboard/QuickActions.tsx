@@ -23,15 +23,16 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
 
   const stylistActions: ActionButton[] = [
     {
-      label: "🌟 Ask AI Assistant",
-      description: "Get instant hair color advice",
+      label: "💬 Chat with AI Expert",
+      description: "Ask questions & get instant advice",
       icon: Sparkles,
       route: "/ai-assistant",
       variant: "default" as const,
       featured: true,
     },
     {
-      label: "Generate Formula",
+      label: "📋 Create Client Formula",
+      description: "Generate & save detailed formulas",
       icon: Scissors,
       route: "/formulas",
       variant: "secondary" as const,

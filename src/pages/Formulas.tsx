@@ -248,23 +248,24 @@ const Formulas = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <Scissors className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">Formulas & History</h1>
-            </div>
-          </div>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                New Formula
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+                <ArrowLeft className="h-4 w-4" />
               </Button>
-            </DialogTrigger>
+              <div className="flex items-center gap-2">
+                <Scissors className="h-6 w-6 text-primary" />
+                <h1 className="text-2xl font-bold">📋 Formula Generator & History</h1>
+              </div>
+            </div>
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Formula
+                </Button>
+              </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Generate AI Formula Suggestions</DialogTitle>
@@ -437,7 +438,11 @@ const Formulas = () => {
                 )}
               </div>
             </DialogContent>
-          </Dialog>
+            </Dialog>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Create & save detailed client formulas • For quick questions, use <button onClick={() => navigate("/ai-assistant")} className="text-primary hover:underline font-medium">AI Chat Assistant →</button>
+          </p>
         </div>
       </header>
 
