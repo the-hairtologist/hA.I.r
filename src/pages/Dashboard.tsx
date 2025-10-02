@@ -346,9 +346,25 @@ const Dashboard = () => {
           <div className="bg-blue-600 p-8 md:p-12 relative min-h-[300px]">
             <div className="window-scrollbar"></div>
             
+            {userProfile?.gender && (
+              <div className="absolute top-8 right-8 md:right-12 w-32 h-48 md:w-40 md:h-56 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)]">
+                <img 
+                  src={
+                    userProfile.gender === 'male' ? avatarMale :
+                    userProfile.gender === 'female' ? avatarFemale :
+                    avatarNeutral
+                  } 
+                  alt="Your Lego avatar"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+            )}
+            
             <div className="max-w-3xl">
               <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
-                Welcome back, {user?.user_metadata?.full_name || "there"}!
+                Welcome back,
+                <br />
+                {user?.user_metadata?.full_name || "there"}!
               </h2>
               
               <p className="text-lg md:text-xl font-medium text-pink-200 mb-8 max-w-2xl">
