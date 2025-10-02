@@ -22,6 +22,7 @@ export type Database = {
           duration_minutes: number | null
           id: string
           notes: string | null
+          service_id: string | null
           service_type: string
           status: string | null
           stylist_id: string
@@ -34,6 +35,7 @@ export type Database = {
           duration_minutes?: number | null
           id?: string
           notes?: string | null
+          service_id?: string | null
           service_type: string
           status?: string | null
           stylist_id: string
@@ -46,6 +48,7 @@ export type Database = {
           duration_minutes?: number | null
           id?: string
           notes?: string | null
+          service_id?: string | null
           service_type?: string
           status?: string | null
           stylist_id?: string
@@ -60,6 +63,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_services"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "appointments_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
@@ -67,6 +77,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          record_id: string | null
+          table_name: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: string | null
+          table_name: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: string | null
+          table_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       client_profiles: {
         Row: {
@@ -414,6 +457,61 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          appointment_id: string | null
+          client_id: string
+          created_at: string
+          id: string
+          rating: number
+          review_text: string | null
+          stylist_id: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          client_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          review_text?: string | null
+          stylist_id: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          client_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          review_text?: string | null
+          stylist_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stylist_affiliate_codes: {
         Row: {
           affiliate_link: string | null
@@ -462,8 +560,41 @@ export type Database = {
           },
         ]
       }
+      stylist_blocked_dates: {
+        Row: {
+          blocked_date: string
+          created_at: string
+          id: string
+          reason: string | null
+          stylist_id: string
+        }
+        Insert: {
+          blocked_date: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          stylist_id: string
+        }
+        Update: {
+          blocked_date?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          stylist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stylist_blocked_dates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stylist_profiles: {
         Row: {
+          average_rating: number | null
           bio: string | null
           business_name: string | null
           color_line: string | null
@@ -473,12 +604,14 @@ export type Database = {
           is_available: boolean | null
           location: string | null
           specialty: string | null
+          total_reviews: number | null
           updated_at: string
           user_id: string
           weekly_schedule: Json | null
           years_experience: number | null
         }
         Insert: {
+          average_rating?: number | null
           bio?: string | null
           business_name?: string | null
           color_line?: string | null
@@ -488,12 +621,14 @@ export type Database = {
           is_available?: boolean | null
           location?: string | null
           specialty?: string | null
+          total_reviews?: number | null
           updated_at?: string
           user_id: string
           weekly_schedule?: Json | null
           years_experience?: number | null
         }
         Update: {
+          average_rating?: number | null
           bio?: string | null
           business_name?: string | null
           color_line?: string | null
@@ -503,6 +638,7 @@ export type Database = {
           is_available?: boolean | null
           location?: string | null
           specialty?: string | null
+          total_reviews?: number | null
           updated_at?: string
           user_id?: string
           weekly_schedule?: Json | null
@@ -514,6 +650,50 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stylist_services: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          is_active: boolean | null
+          price: number
+          service_name: string
+          stylist_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean | null
+          price: number
+          service_name: string
+          stylist_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean | null
+          price?: number
+          service_name?: string
+          stylist_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stylist_services_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
             referencedColumns: ["id"]
           },
         ]

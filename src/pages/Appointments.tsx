@@ -89,6 +89,9 @@ const Appointments = () => {
   };
 
   const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
+    const action = newStatus === "cancelled" ? "cancel" : newStatus;
+    if (!confirm(`Are you sure you want to ${action} this appointment?`)) return;
+
     try {
       const { error } = await supabase
         .from("appointments")

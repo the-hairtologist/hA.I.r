@@ -140,6 +140,12 @@ const Dashboard = () => {
       icon: Settings,
       route: "/availability",
     },
+    {
+      title: "Services & Pricing",
+      description: "Manage your service menu",
+      icon: DollarSign,
+      route: "/services",
+    },
   ];
 
   const clientFeatures = [
@@ -189,6 +195,10 @@ const Dashboard = () => {
             <Button variant="ghost" size="sm" onClick={() => navigate("/profile")}>
               <User className="h-4 w-4 mr-2" />
               Profile
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => navigate("/settings")}>
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
             </Button>
             <Button variant="ghost" size="sm" onClick={handleSignOut}>
               <LogOut className="h-4 w-4 mr-2" />

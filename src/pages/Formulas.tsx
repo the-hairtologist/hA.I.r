@@ -71,14 +71,25 @@ const Formulas = () => {
 
       setFormulas(formulasData || []);
 
-      // Get clients
-      const { data: clientsData } = await supabase
-        .from("client_profiles")
-        .select(`
-          id,
-          user:profiles(full_name, email)
-        `)
-        .eq("preferred_stylist_id", stylist.id);
+      // Get clients from appointments (all clients who have booked with this stylist)
+      const { data: appointmentsData } = await supabase
+        .from("appointments")
+        .select(`client_id`)
+        .eq("stylist_id", stylist.id);
+
+      const clientIds = [...new Set(appointmentsData?.map(apt => apt.client_id) || [])];
+      
+      let clientsData = [];
+      if (clientIds.length > 0) {
+        const { data } = await supabase
+          .from("client_profiles")
+          .select(`
+            id,
+            user:profiles(full_name, email)
+          `)
+          .in("id", clientIds);
+        clientsData = data || [];
+      }
 
       setClients(clientsData || []);
     } catch (error: any) {
@@ -91,6 +102,19 @@ const Formulas = () => {
 
   const handlePhotoUpload = async (file: File): Promise<string | null> => {
     try {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please upload an image file");
+        return null;
+      }
+
+      // Validate file size (10MB limit)
+      const MAX_SIZE = 10 * 1024 * 1024;
+      if (file.size > MAX_SIZE) {
+        toast.error("Image must be less than 10MB");
+        return null;
+      }
+
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return null;
 

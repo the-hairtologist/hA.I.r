@@ -9,8 +9,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { MessageSquare, ArrowLeft, Send, Upload, Video, Loader2, User } from "lucide-react";
+import { MessageSquare, ArrowLeft, Send, Upload, Video, Loader2, User, Plus } from "lucide-react";
 import { format } from "date-fns";
+import { NewConversationDialog } from "@/components/NewConversationDialog";
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Messages = () => {
   const [uploading, setUploading] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>("");
+  const [newConversationOpen, setNewConversationOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -235,16 +237,24 @@ const Messages = () => {
     }
   };
 
+  const handleStartConversation = (partnerId: string) => {
+    const partner = { id: partnerId };
+    setSelectedConversation(partner);
+    loadMessages(partnerId);
+  };
+
   const handleVideoUpload = async (file: File) => {
     if (!selectedConversation) return;
 
-    // Validate file
+    // Validate file type
     if (!file.type.startsWith("video/")) {
       toast.error("Please upload a video file");
       return;
     }
 
-    if (file.size > 50 * 1024 * 1024) {
+    // Validate file size (50MB limit)
+    const MAX_SIZE = 50 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
       toast.error("Video must be less than 50MB");
       return;
     }
@@ -308,6 +318,10 @@ const Messages = () => {
             <MessageSquare className="h-6 w-6 text-primary" />
             <h1 className="text-2xl font-bold">Messages</h1>
           </div>
+          <Button size="sm" onClick={() => setNewConversationOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            New Chat
+          </Button>
         </div>
       </header>
 
@@ -494,6 +508,13 @@ const Messages = () => {
           </Card>
         </div>
       </div>
+
+      <NewConversationDialog
+        open={newConversationOpen}
+        onOpenChange={setNewConversationOpen}
+        userRole={userRole}
+        onConversationStarted={handleStartConversation}
+      />
     </div>
   );
 };

@@ -7,8 +7,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, ArrowLeft, Plus, Clock, User, XCircle, Loader2 } from "lucide-react";
+import { Calendar as CalendarIcon, ArrowLeft, Plus, Clock, User, XCircle, Loader2, RefreshCw } from "lucide-react";
 import { format } from "date-fns";
+import { RescheduleDialog } from "@/components/RescheduleDialog";
 
 const MyAppointments = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const MyAppointments = () => {
   const [clientProfile, setClientProfile] = useState<any>(null);
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [rescheduleOpen, setRescheduleOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -69,6 +71,8 @@ const MyAppointments = () => {
   };
 
   const cancelAppointment = async (appointmentId: string) => {
+    if (!confirm("Are you sure you want to cancel this appointment?")) return;
+
     try {
       const { error } = await supabase
         .from("appointments")
@@ -266,19 +270,39 @@ const MyAppointments = () => {
 
               {(selectedAppointment.status === "scheduled" || selectedAppointment.status === "confirmed") && 
                new Date(selectedAppointment.appointment_date) > new Date() && (
-                <Button
-                  variant="destructive"
-                  className="w-full"
-                  onClick={() => cancelAppointment(selectedAppointment.id)}
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Cancel Appointment
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => {
+                      setDetailsOpen(false);
+                      setRescheduleOpen(true);
+                    }}
+                  >
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Reschedule
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="flex-1"
+                    onClick={() => cancelAppointment(selectedAppointment.id)}
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Cancel Appointment
+                  </Button>
+                </div>
               )}
             </div>
           )}
         </DialogContent>
       </Dialog>
+
+      <RescheduleDialog
+        open={rescheduleOpen}
+        onOpenChange={setRescheduleOpen}
+        appointment={selectedAppointment}
+        onSuccess={loadData}
+      />
     </div>
   );
 };
