@@ -348,7 +348,7 @@ const Dashboard = () => {
             
             {userProfile?.gender && (
               <div 
-                className="absolute -bottom-8 right-8 md:right-12 w-20 h-28 md:w-24 md:h-36 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] cursor-pointer transition-all duration-300 hover:scale-110 hover:-translate-y-2 hover:shadow-[6px_6px_0px_0px_rgba(244,114,182,1)] animate-[bounce_3s_ease-in-out_infinite] group z-10"
+                className="absolute -bottom-8 right-8 md:right-12 w-20 h-28 md:w-24 md:h-36 cursor-pointer transition-all duration-300 hover:scale-110 hover:-translate-y-2 animate-[bounce_3s_ease-in-out_infinite] group z-10"
                 onClick={() => toast.success("Hey there! Need any help? 👋", { description: "I'm here to assist you!" })}
               >
                 <img 
@@ -358,9 +358,8 @@ const Dashboard = () => {
                     avatarNeutral
                   } 
                   alt="Your helpful assistant"
-                  className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-lg"
                 />
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 border-2 border-pink-400 rounded-full animate-pulse"></div>
               </div>
             )}
             
