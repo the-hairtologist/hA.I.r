@@ -10,6 +10,8 @@ interface QuickActionsProps {
 export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const navigate = useNavigate();
 
+  console.log('🎯 QuickActions rendering for role:', userRole);
+
   const stylistActions = [
     {
       label: "Ask AI Assistant",

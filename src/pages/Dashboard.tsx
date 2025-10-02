@@ -51,6 +51,7 @@ const Dashboard = () => {
         .single();
 
       if (roleData) {
+        console.log('👤 User role detected:', roleData.role);
         setUserRole(roleData.role);
 
         // Get appropriate profile
@@ -345,6 +346,9 @@ const Dashboard = () => {
             {userRole === "stylist" 
               ? "Manage your clients and grow your business" 
               : "Book appointments and stay beautiful"}
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Account type: <span className="font-semibold capitalize">{userRole || "loading..."}</span>
           </p>
         </div>
 
