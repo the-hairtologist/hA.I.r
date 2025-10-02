@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings } from "lucide-react";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
+import { DashboardStats } from "@/components/dashboard/DashboardStats";
+import { QuickActions } from "@/components/dashboard/QuickActions";
+import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { FeatureCard } from "@/components/dashboard/FeatureCard";
+import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -14,10 +18,18 @@ const Dashboard = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
+  const [stats, setStats] = useState<any>({});
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
 
   useEffect(() => {
     checkUser();
   }, []);
+
+  useEffect(() => {
+    if (userRole && profile) {
+      loadDashboardData();
+    }
+  }, [userRole, profile]);
 
   const checkUser = async () => {
     try {
@@ -76,6 +88,147 @@ const Dashboard = () => {
     }
   };
 
+  const loadDashboardData = async () => {
+    try {
+      if (userRole === "stylist") {
+        await loadStylistDashboard();
+      } else {
+        await loadClientDashboard();
+      }
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
+    }
+  };
+
+  const loadStylistDashboard = async () => {
+    const today = new Date();
+    const weekStart = startOfWeek(today);
+    const weekEnd = endOfWeek(today);
+
+    // Get today's appointments
+    const { data: todayAppts } = await supabase
+      .from("appointments")
+      .select("*")
+      .eq("stylist_id", profile.id)
+      .gte("appointment_date", startOfDay(today).toISOString())
+      .lte("appointment_date", endOfDay(today).toISOString())
+      .neq("status", "cancelled");
+
+    // Get week's appointments
+    const { data: weekAppts } = await supabase
+      .from("appointments")
+      .select("*")
+      .eq("stylist_id", profile.id)
+      .gte("appointment_date", weekStart.toISOString())
+      .lte("appointment_date", weekEnd.toISOString())
+      .neq("status", "cancelled");
+
+    // Get unread messages
+    const { data: messages } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("recipient_id", user.id)
+      .eq("is_read", false);
+
+    // Get total unique clients
+    const { data: appointments } = await supabase
+      .from("appointments")
+      .select("client_id")
+      .eq("stylist_id", profile.id);
+
+    const uniqueClients = new Set(appointments?.map(a => a.client_id) || []).size;
+
+    setStats({
+      todayAppointments: todayAppts?.length || 0,
+      upcomingAppointments: weekAppts?.length || 0,
+      unreadMessages: messages?.length || 0,
+      totalClients: uniqueClients,
+    });
+
+    // Load recent activity
+    const { data: recentAppts } = await supabase
+      .from("appointments")
+      .select(`
+        *,
+        client:client_profiles(user:profiles(full_name))
+      `)
+      .eq("stylist_id", profile.id)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    const activities = (recentAppts || []).map(appt => ({
+      id: appt.id,
+      type: "appointment" as const,
+      title: `Appointment with ${appt.client?.user?.full_name || "Client"}`,
+      description: `${appt.service_type} - ${format(new Date(appt.appointment_date), "MMM d, h:mm a")}`,
+      timestamp: appt.created_at,
+      status: appt.status,
+    }));
+
+    setRecentActivities(activities);
+  };
+
+  const loadClientDashboard = async () => {
+    const today = new Date();
+
+    // Get upcoming appointments
+    const { data: upcomingAppts } = await supabase
+      .from("appointments")
+      .select("*")
+      .eq("client_id", profile.id)
+      .gte("appointment_date", today.toISOString())
+      .neq("status", "cancelled")
+      .order("appointment_date", { ascending: true });
+
+    // Get unread messages
+    const { data: messages } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("recipient_id", user.id)
+      .eq("is_read", false);
+
+    // Get appointments that need reviews
+    const { data: completedAppts } = await supabase
+      .from("appointments")
+      .select(`
+        *,
+        reviews(id)
+      `)
+      .eq("client_id", profile.id)
+      .eq("status", "completed")
+      .is("reviews.id", null);
+
+    setStats({
+      upcomingAppointments: upcomingAppts?.length || 0,
+      unreadMessages: messages?.length || 0,
+      pendingReviews: completedAppts?.length || 0,
+    });
+
+    // Load recent activity
+    const { data: recentAppts } = await supabase
+      .from("appointments")
+      .select(`
+        *,
+        stylist:stylist_profiles(
+          user:profiles(full_name)
+        )
+      `)
+      .eq("client_id", profile.id)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    const activities = (recentAppts || []).map(appt => ({
+      id: appt.id,
+      type: "appointment" as const,
+      title: `Appointment with ${appt.stylist?.user?.full_name || "Stylist"}`,
+      description: `${appt.service_type} - ${format(new Date(appt.appointment_date), "MMM d, h:mm a")}`,
+      timestamp: appt.created_at,
+      status: appt.status,
+    }));
+
+    setRecentActivities(activities);
+  };
+
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -99,91 +252,70 @@ const Dashboard = () => {
 
   const stylistFeatures = [
     {
-      title: "Formulas & History",
-      description: "View and manage client formulas with AI assistance",
-      icon: Scissors,
-      route: "/formulas",
-    },
-    {
-      title: "Appointments",
-      description: "Manage your schedule and bookings",
-      icon: Calendar,
-      route: "/appointments",
-    },
-    {
-      title: "Messages",
-      description: "Chat with clients and view videos",
-      icon: MessageSquare,
-      route: "/messages",
-    },
-    {
-      title: "Payment Tracking",
-      description: "Track service payments from clients",
+      title: "Services & Pricing",
+      description: "Manage your service menu",
       icon: DollarSign,
-      route: "/payments",
-    },
-    {
-      title: "Commissions",
-      description: "Track your product commissions",
-      icon: DollarSign,
-      route: "/commissions",
-    },
-    {
-      title: "Knowledge Base",
-      description: "Learn color theory and techniques",
-      icon: BookOpen,
-      route: "/knowledge",
+      route: "/services",
+      isPrimary: true,
     },
     {
       title: "Availability",
       description: "Set your working hours",
       icon: Settings,
       route: "/availability",
+      isPrimary: true,
     },
     {
-      title: "Services & Pricing",
-      description: "Manage your service menu",
+      title: "Formulas & History",
+      description: "View and manage client formulas with AI assistance",
+      icon: Scissors,
+      route: "/formulas",
+      isPrimary: false,
+    },
+    {
+      title: "Payment Tracking",
+      description: "Track service payments from clients",
       icon: DollarSign,
-      route: "/services",
+      route: "/payments",
+      isPrimary: false,
+    },
+    {
+      title: "Commissions",
+      description: "Track your product commissions",
+      icon: DollarSign,
+      route: "/commissions",
+      isPrimary: false,
+    },
+    {
+      title: "Knowledge Base",
+      description: "Learn color theory and techniques",
+      icon: BookOpen,
+      route: "/knowledge",
+      isPrimary: false,
     },
     {
       title: "Blocked Dates",
       description: "Manage vacations & holidays",
       icon: Calendar,
       route: "/blocked-dates",
+      isPrimary: false,
     },
   ];
 
   const clientFeatures = [
     {
-      title: "Find Stylists",
-      description: "Discover and book with professional stylists",
-      icon: Users,
-      route: "/stylists",
-    },
-    {
       title: "My Formulas",
       description: "View your hair color history",
       icon: Sparkles,
       route: "/my-formulas",
+      isPrimary: false,
     },
     {
-      title: "Book Appointment",
-      description: "Schedule your next salon visit",
-      icon: Calendar,
-      route: "/book-appointment",
-    },
-    {
-      title: "Messages",
-      description: "Chat with your stylist",
-      icon: MessageSquare,
-      route: "/messages",
-    },
-    {
-      title: "My Appointments",
-      description: "View and manage bookings",
-      icon: Calendar,
-      route: "/my-appointments",
+      title: "Knowledge Base",
+      description: "Hair care tips and tutorials",
+      icon: BookOpen,
+      route: "/knowledge",
+      isPrimary: false,
     },
   ];
 
@@ -216,43 +348,57 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">
+          <h2 className="text-3xl font-bold mb-2 animate-fade-in">
             Welcome back, {user?.user_metadata?.full_name || "there"}!
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground animate-fade-in" style={{ animationDelay: "100ms" }}>
             {userRole === "stylist" 
               ? "Manage your clients and grow your business" 
               : "Book appointments and stay beautiful"}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => {
-            const Icon = feature.icon;
-            return (
-              <Card 
-                key={feature.route} 
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => navigate(feature.route)}
-              >
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
-                  </div>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" className="w-full">
-                    Open
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
+        <DashboardStats stats={stats} userRole={userRole || ""} />
+
+        <QuickActions userRole={userRole || ""} />
+
+        <div className="grid lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <RecentActivity activities={recentActivities} />
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            {features.slice(0, 4).map((feature, index) => (
+              <FeatureCard
+                key={feature.route}
+                title={feature.title}
+                description={feature.description}
+                icon={feature.icon}
+                route={feature.route}
+                isPrimary={feature.isPrimary}
+                index={index}
+              />
+            ))}
+          </div>
         </div>
+
+        {features.length > 4 && (
+          <>
+            <h3 className="text-lg font-semibold mb-4">More Features</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.slice(4).map((feature, index) => (
+                <FeatureCard
+                  key={feature.route}
+                  title={feature.title}
+                  description={feature.description}
+                  icon={feature.icon}
+                  route={feature.route}
+                  index={index + 4}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </main>
 
       <ProfileCompletionDialog
