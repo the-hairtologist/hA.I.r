@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -79,38 +80,23 @@ const MyFormulas = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+      <DashboardLayout>
+        <div className="flex justify-center items-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <Scissors className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">My Hair Color History</h1>
-            </div>
-          </div>
+    <DashboardLayout>
+      <div className="container mx-auto px-4 py-8 max-w-6xl animate-fade-in">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">My Hair Color History</h1>
+          <p className="text-muted-foreground">
+            View all your past color formulas and track your hair transformation
+          </p>
         </div>
-      </header>
-
-      <main className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Info Card */}
-        <Card className="mb-8 bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
-          <CardHeader>
-            <CardTitle>Your Color Journey</CardTitle>
-            <CardDescription>
-              View all your past color formulas and track your hair transformation
-            </CardDescription>
-          </CardHeader>
-        </Card>
 
         {/* Formulas */}
         {formulas.length === 0 ? (
@@ -210,8 +196,8 @@ const MyFormulas = () => {
             <p>• Discuss any concerns or adjustments with your stylist</p>
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

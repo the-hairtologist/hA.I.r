@@ -10,6 +10,7 @@ import Formulas from "./pages/Formulas";
 import Appointments from "./pages/Appointments";
 import BookAppointment from "./pages/BookAppointment";
 import StylistDiscovery from "./pages/StylistDiscovery";
+import StylistProfile from "./pages/StylistProfile";
 import MyAppointments from "./pages/MyAppointments";
 import MyFormulas from "./pages/MyFormulas";
 import Commissions from "./pages/Commissions";
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/book" element={<BookAppointment />} />
           <Route path="/book-appointment" element={<BookAppointment />} />
           <Route path="/stylists" element={<StylistDiscovery />} />
+          <Route path="/stylist" element={<StylistProfile />} />
           <Route path="/my-appointments" element={<MyAppointments />} />
           <Route path="/my-formulas" element={<MyFormulas />} />
           <Route path="/commissions" element={<Commissions />} />

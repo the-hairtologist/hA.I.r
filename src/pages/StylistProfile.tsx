@@ -1,0 +1,206 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { DashboardLayout } from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { ReviewsList } from "@/components/reviews/ReviewsList";
+import { 
+  ArrowLeft, 
+  Calendar, 
+  MapPin, 
+  Star, 
+  Award,
+  Sparkles,
+  User,
+  Loader2 
+} from "lucide-react";
+import { toast } from "sonner";
+
+const StylistProfile = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const stylistId = searchParams.get("id");
+  
+  const [loading, setLoading] = useState(true);
+  const [stylist, setStylist] = useState<any>(null);
+
+  useEffect(() => {
+    if (stylistId) {
+      loadStylist();
+    } else {
+      toast.error("Stylist not found");
+      navigate("/stylists");
+    }
+  }, [stylistId]);
+
+  const loadStylist = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("stylist_profiles")
+        .select(`
+          *,
+          profiles (full_name, avatar_url, phone, email)
+        `)
+        .eq("id", stylistId)
+        .single();
+
+      if (error) throw error;
+      setStylist(data);
+    } catch (error: any) {
+      console.error("Error loading stylist:", error);
+      toast.error("Failed to load stylist profile");
+      navigate("/stylists");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBookAppointment = () => {
+    navigate(`/book-appointment?stylist=${stylistId}`);
+  };
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (!stylist) {
+    return null;
+  }
+
+  return (
+    <DashboardLayout>
+      <div className="container mx-auto p-6 max-w-5xl">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate("/stylists")}
+          className="mb-6"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Stylists
+        </Button>
+
+        {/* Profile Header */}
+        <Card className="mb-8">
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Avatar */}
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-5xl overflow-hidden border-4 border-white shadow-lg">
+                {stylist.profiles.avatar_url ? (
+                  <img 
+                    src={stylist.profiles.avatar_url} 
+                    alt={stylist.profiles.full_name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-16 w-16 text-primary" />
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold mb-2">
+                  {stylist.business_name || stylist.profiles.full_name}
+                </h1>
+                <p className="text-lg text-muted-foreground mb-4">
+                  {stylist.profiles.full_name}
+                </p>
+
+                {/* Rating */}
+                {stylist.total_reviews > 0 && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`h-5 w-5 ${
+                            star <= Math.round(stylist.average_rating)
+                              ? "fill-amber-400 text-amber-400"
+                              : "text-muted-foreground/30"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="font-semibold">{stylist.average_rating.toFixed(1)}</span>
+                    <span className="text-muted-foreground">
+                      ({stylist.total_reviews} {stylist.total_reviews === 1 ? "review" : "reviews"})
+                    </span>
+                  </div>
+                )}
+
+                {/* Details */}
+                <div className="space-y-2 mb-6">
+                  {stylist.specialty && (
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <Badge variant="secondary">{stylist.specialty}</Badge>
+                    </div>
+                  )}
+
+                  {stylist.location && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <MapPin className="h-4 w-4" />
+                      <span>{stylist.location}</span>
+                    </div>
+                  )}
+
+                  {stylist.years_experience && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Award className="h-4 w-4" />
+                      <span>{stylist.years_experience} years of experience</span>
+                    </div>
+                  )}
+
+                  {stylist.color_line && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Sparkles className="h-4 w-4" />
+                      <span>Color Line: <strong>{stylist.color_line}</strong></span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Book Button */}
+                <Button onClick={handleBookAppointment} size="lg" className="w-full md:w-auto">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Book Appointment
+                </Button>
+              </div>
+            </div>
+
+            {/* Bio */}
+            {stylist.bio && (
+              <>
+                <Separator className="my-6" />
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">About</h3>
+                  <p className="text-muted-foreground leading-relaxed">{stylist.bio}</p>
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Reviews Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Client Reviews</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ReviewsList stylistId={stylistId!} />
+          </CardContent>
+        </Card>
+      </div>
+    </DashboardLayout>
+  );
+};
+
+export default StylistProfile;

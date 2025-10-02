@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -136,18 +137,21 @@ const StylistDiscovery = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <DashboardLayout>
+        <div className="flex justify-center items-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Discover Stylists</h1>
-        <p className="text-muted-foreground">Find the perfect hair stylist for your needs</p>
-      </div>
+    <DashboardLayout>
+      <div className="container mx-auto p-6 max-w-7xl animate-fade-in">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Discover Stylists</h1>
+          <p className="text-muted-foreground">Find the perfect hair stylist for your needs</p>
+        </div>
 
       {/* Search and Filters */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -221,11 +225,11 @@ const StylistDiscovery = () => {
                       <CardDescription>
                         {stylist.profiles.full_name}
                         {stylist.total_reviews > 0 && (
-                          <span className="flex items-center gap-1 mt-1">
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <span className="font-semibold">{stylist.average_rating?.toFixed(1)}</span>
+                          <div className="flex items-center gap-1 mt-1">
+                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                            <span className="font-semibold text-foreground">{stylist.average_rating?.toFixed(1)}</span>
                             <span className="text-xs">({stylist.total_reviews} reviews)</span>
-                          </span>
+                          </div>
                         )}
                       </CardDescription>
                     </div>
@@ -264,13 +268,20 @@ const StylistDiscovery = () => {
                   </div>
                 </CardContent>
 
-                <CardFooter>
+                <CardFooter className="flex gap-2">
                   <Button 
-                    className="w-full" 
+                    variant="outline"
+                    className="flex-1" 
+                    onClick={() => navigate(`/stylist?id=${stylist.id}`)}
+                  >
+                    View Profile
+                  </Button>
+                  <Button 
+                    className="flex-1" 
                     onClick={() => handleBookAppointment(stylist.id)}
                   >
                     <Calendar className="h-4 w-4 mr-2" />
-                    Book Appointment
+                    Book
                   </Button>
                 </CardFooter>
               </Card>
@@ -425,8 +436,9 @@ const StylistDiscovery = () => {
             )}
           </>
         )}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

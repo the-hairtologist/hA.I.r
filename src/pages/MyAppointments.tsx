@@ -300,16 +300,23 @@ const MyAppointments = () => {
               </div>
 
               {selectedAppointment.status === "completed" && (
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    setDetailsOpen(false);
-                    setReviewDialogOpen(true);
-                  }}
-                >
-                  <Star className="h-4 w-4 mr-2" />
-                  Leave a Review
-                </Button>
+                <div className="space-y-3">
+                  <div className="bg-gradient-to-br from-primary/5 to-secondary/5 p-4 rounded-lg border">
+                    <p className="text-sm text-center text-muted-foreground">
+                      💬 Your feedback helps other clients find the perfect stylist!
+                    </p>
+                  </div>
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setDetailsOpen(false);
+                      setReviewDialogOpen(true);
+                    }}
+                  >
+                    <Star className="h-4 w-4 mr-2" />
+                    Leave a Review
+                  </Button>
+                </div>
               )}
 
               {(selectedAppointment.status === "scheduled" || selectedAppointment.status === "confirmed") && 

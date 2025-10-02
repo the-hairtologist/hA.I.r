@@ -7,15 +7,23 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-interface ReviewDialogProps {
+interface WriteReviewDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  appointment: any;
-  clientProfileId: string;
-  onSuccess: () => void;
+  appointmentId: string;
+  stylistId: string;
+  stylistName: string;
+  onSuccess?: () => void;
 }
 
-export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId, onSuccess }: ReviewDialogProps) => {
+export const WriteReviewDialog = ({
+  open,
+  onOpenChange,
+  appointmentId,
+  stylistId,
+  stylistName,
+  onSuccess,
+}: WriteReviewDialogProps) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -40,10 +48,28 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
     setSubmitting(true);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to leave a review");
+        return;
+      }
+
+      // Get client profile ID
+      const { data: clientProfile } = await supabase
+        .from("client_profiles")
+        .select("id")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (!clientProfile) {
+        toast.error("Client profile not found");
+        return;
+      }
+
       const { error } = await supabase.from("reviews").insert({
-        stylist_id: appointment.stylist_id,
-        client_id: clientProfileId,
-        appointment_id: appointment.id,
+        client_id: clientProfile.id,
+        stylist_id: stylistId,
+        appointment_id: appointmentId,
         rating,
         review_text: reviewText.trim() || null,
       });
@@ -54,21 +80,16 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
       onOpenChange(false);
       setRating(0);
       setReviewText("");
-      onSuccess();
+      onSuccess?.();
     } catch (error: any) {
       console.error("Error submitting review:", error);
-      if (error.code === '23505') {
-        toast.error("You've already reviewed this appointment");
-      } else {
-        toast.error(error.message || "Failed to submit review");
-      }
+      toast.error(error.message || "Failed to submit review");
     } finally {
       setSubmitting(false);
     }
   };
 
   const displayRating = hoveredRating || rating;
-  const stylistName = appointment?.stylist?.user?.full_name || appointment?.stylist?.business_name;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
