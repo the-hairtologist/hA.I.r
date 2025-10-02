@@ -84,8 +84,10 @@ const Dashboard = () => {
 
       setUserProfile(profileData);
 
+      // CRITICAL: Profile completion is MANDATORY - block all features until complete
       if (!profileData?.full_name) {
         setShowProfileCompletion(true);
+        return; // Stop loading dashboard data until profile is complete
       }
     } catch (error: any) {
       toast.error("Error loading dashboard");
