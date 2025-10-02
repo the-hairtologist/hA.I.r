@@ -11,9 +11,6 @@ import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import avatarMale from "@/assets/avatar-male-pixel.png";
-import avatarFemale from "@/assets/avatar-female-pixel.png";
-import avatarNeutral from "@/assets/avatar-neutral-pixel.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -346,22 +343,6 @@ const Dashboard = () => {
           <div className="bg-blue-600 p-8 md:p-12 relative min-h-[300px]">
             <div className="window-scrollbar"></div>
             
-            {userProfile?.gender && (
-              <div 
-                className="absolute -bottom-8 right-8 md:right-12 w-20 h-28 md:w-24 md:h-36 cursor-pointer transition-all duration-300 hover:scale-110 hover:-translate-y-2 animate-[bounce_3s_ease-in-out_infinite] group z-10"
-                onClick={() => toast.success("Hey there! Need any help? 👋", { description: "I'm here to assist you!" })}
-              >
-                <img 
-                  src={
-                    userProfile.gender === 'male' ? avatarMale :
-                    userProfile.gender === 'female' ? avatarFemale :
-                    avatarNeutral
-                  } 
-                  alt="Your helpful assistant"
-                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-lg"
-                />
-              </div>
-            )}
             
             <div className="max-w-3xl">
               <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
