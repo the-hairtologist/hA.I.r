@@ -11,6 +11,9 @@ import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import avatarMale from "@/assets/avatar-male-lego.png";
+import avatarFemale from "@/assets/avatar-female-lego.png";
+import avatarNeutral from "@/assets/avatar-neutral-lego.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,6 +24,7 @@ const Dashboard = () => {
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
   const [stats, setStats] = useState<any>({});
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
     checkUser();
@@ -74,9 +78,11 @@ const Dashboard = () => {
       // Check if profile needs completion
       const { data: profileData } = await supabase
         .from("profiles")
-        .select("full_name")
+        .select("full_name, gender")
         .eq("id", session.user.id)
         .single();
+
+      setUserProfile(profileData);
 
       if (!profileData?.full_name) {
         setShowProfileCompletion(true);
@@ -341,11 +347,25 @@ const Dashboard = () => {
             <div className="window-scrollbar"></div>
             
             <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                <div className="w-8 h-3 bg-pink-400 rotate-45"></div>
-                <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                <div className="text-4xl">✨</div>
+              <div className="flex items-center gap-6 mb-6">
+                {userProfile?.gender && (
+                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0">
+                    <img 
+                      src={
+                        userProfile.gender === 'male' ? avatarMale :
+                        userProfile.gender === 'female' ? avatarFemale :
+                        avatarNeutral
+                      } 
+                      alt="Your Lego avatar"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
+                  <div className="w-8 h-3 bg-pink-400 rotate-45"></div>
+                  <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
+                </div>
               </div>
               
               <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">

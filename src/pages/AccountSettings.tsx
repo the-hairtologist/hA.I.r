@@ -4,9 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Navigation } from "@/components/Navigation";
 import { Settings, ArrowLeft, Download, Trash2, Loader2, FileDown } from "lucide-react";
+import avatarMale from "@/assets/avatar-male-lego.png";
+import avatarFemale from "@/assets/avatar-female-lego.png";
+import avatarNeutral from "@/assets/avatar-neutral-lego.png";
 
 const AccountSettings = () => {
   const navigate = useNavigate();
@@ -16,6 +20,8 @@ const AccountSettings = () => {
   const [switching, setSwitching] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [gender, setGender] = useState<string>("");
+  const [savingGender, setSavingGender] = useState(false);
 
   useEffect(() => {
     loadUser();
@@ -40,10 +46,44 @@ const AccountSettings = () => {
       if (roleData) {
         setUserRole(roleData.role);
       }
+
+      // Get user profile for gender
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("gender")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profileData?.gender) {
+        setGender(profileData.gender);
+      }
     } catch (error) {
       toast.error("Error loading user data");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGenderUpdate = async (newGender: string) => {
+    setSavingGender(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({ gender: newGender })
+        .eq("id", session.user.id);
+
+      if (error) throw error;
+
+      setGender(newGender);
+      toast.success("Avatar updated successfully!");
+    } catch (error: any) {
+      console.error("Error updating gender:", error);
+      toast.error("Error updating avatar");
+    } finally {
+      setSavingGender(false);
     }
   };
 
@@ -206,6 +246,50 @@ const AccountSettings = () => {
                 <p className="font-medium">
                   {user?.created_at && new Date(user.created_at).toLocaleDateString()}
                 </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Avatar Selection */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Your Lego Avatar</CardTitle>
+              <CardDescription>Choose your personal avatar style</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-4 flex-wrap">
+                {gender && (
+                  <div className="w-24 h-24 border-4 border-foreground rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                    <img 
+                      src={
+                        gender === 'male' ? avatarMale :
+                        gender === 'female' ? avatarFemale :
+                        avatarNeutral
+                      } 
+                      alt="Your current avatar"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex-1 min-w-[200px]">
+                  <label className="text-sm font-medium mb-2 block">Avatar Style</label>
+                  <Select value={gender} onValueChange={handleGenderUpdate} disabled={savingGender}>
+                    <SelectTrigger className="border-2 border-foreground">
+                      <SelectValue placeholder="Select avatar style" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male Style</SelectItem>
+                      <SelectItem value="female">Female Style</SelectItem>
+                      <SelectItem value="neutral">Neutral Style</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {savingGender && (
+                    <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      Updating avatar...
+                    </p>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
