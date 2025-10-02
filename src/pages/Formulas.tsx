@@ -24,7 +24,7 @@ const Formulas = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingFormula, setEditingFormula] = useState<any>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [manualDialogOpen, setManualDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"manual" | "ai">("manual");
   
   // Form state
   const [selectedClient, setSelectedClient] = useState("");
@@ -227,11 +227,12 @@ const Formulas = () => {
       if (error) throw error;
 
       toast.success("Formula saved successfully!");
-      setManualDialogOpen(false);
+      setDialogOpen(false);
       setSelectedClient("");
       setHairDescription("");
       setClientNotes("");
       setColorLine("");
+      setActiveTab("manual");
       loadData();
     } catch (error: any) {
       console.error("Error saving formula:", error);
@@ -293,100 +294,106 @@ const Formulas = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Client Formula History</h1>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Dialog open={manualDialogOpen} onOpenChange={setManualDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Add Manual Formula
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>Add Manual Formula</DialogTitle>
-                    <DialogDescription>
-                      Record a formula you've created without AI assistance
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="manual-client">Select Client *</Label>
-                      <Select value={selectedClient} onValueChange={setSelectedClient}>
-                        <SelectTrigger className="bg-background">
-                          <SelectValue placeholder="Choose a client" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-popover z-50 max-h-[300px]">
-                          {clients.length === 0 ? (
-                            <div className="p-4 text-sm text-muted-foreground text-center">
-                              <p>No clients found</p>
-                              <p className="text-xs mt-1">Clients will appear after their first booking</p>
-                            </div>
-                          ) : (
-                            clients.map((client) => (
-                              <SelectItem key={client.id} value={client.id}>
-                                {client.user?.full_name || client.user?.email}
-                              </SelectItem>
-                            ))
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="manual-formula">Formula *</Label>
-                      <Textarea
-                        id="manual-formula"
-                        placeholder="Enter the complete formula..."
-                        value={hairDescription}
-                        onChange={(e) => setHairDescription(e.target.value)}
-                        rows={6}
-                        className="resize-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="manual-instructions">Application Instructions</Label>
-                      <Textarea
-                        id="manual-instructions"
-                        placeholder="Step-by-step application instructions..."
-                        value={clientNotes}
-                        onChange={(e) => setClientNotes(e.target.value)}
-                        rows={4}
-                        className="resize-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="manual-colorline">Color Line</Label>
-                      <Input
-                        id="manual-colorline"
-                        placeholder="e.g., Wella, Redken"
-                        value={colorLine}
-                        onChange={(e) => setColorLine(e.target.value)}
-                      />
-                    </div>
-                    <Button onClick={handleSaveManualFormula} className="w-full">
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Formula
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button>
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Generate with AI
-                  </Button>
-                </DialogTrigger>
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Formula
+                </Button>
+              </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Generate AI Formula Suggestions</DialogTitle>
+                <DialogTitle>Create New Formula</DialogTitle>
                 <DialogDescription>
-                  Upload a hair photo and describe what you want to achieve. AI-generated formulas are suggestions only - results may vary based on individual hair chemistry. Always perform a strand test.
+                  Add a formula manually or generate suggestions with AI
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="client">Select Client *</Label>
+              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "manual" | "ai")} className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="manual" className="gap-2">
+                    <FileText className="h-4 w-4" />
+                    Manual Entry
+                  </TabsTrigger>
+                  <TabsTrigger value="ai" className="gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    AI Generate
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="manual" className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="manual-client">Select Client *</Label>
+                    <Select value={selectedClient} onValueChange={setSelectedClient}>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="Choose a client" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-popover z-50 max-h-[300px]">
+                        {clients.length === 0 ? (
+                          <div className="p-4 text-sm text-muted-foreground text-center">
+                            <p>No clients found</p>
+                            <p className="text-xs mt-1">Clients will appear after their first booking</p>
+                          </div>
+                        ) : (
+                          clients.map((client) => (
+                            <SelectItem key={client.id} value={client.id}>
+                              {client.user?.full_name || client.user?.email}
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="manual-formula">Formula *</Label>
+                    <Textarea
+                      id="manual-formula"
+                      placeholder="Enter the complete formula..."
+                      value={hairDescription}
+                      onChange={(e) => setHairDescription(e.target.value)}
+                      rows={6}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="manual-instructions">Application Instructions</Label>
+                    <Textarea
+                      id="manual-instructions"
+                      placeholder="Step-by-step application instructions..."
+                      value={clientNotes}
+                      onChange={(e) => setClientNotes(e.target.value)}
+                      rows={4}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="manual-colorline">Color Line</Label>
+                    <Input
+                      id="manual-colorline"
+                      placeholder="e.g., Wella, Redken"
+                      value={colorLine}
+                      onChange={(e) => setColorLine(e.target.value)}
+                    />
+                  </div>
+
+                  <Button onClick={handleSaveManualFormula} className="w-full">
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Formula
+                  </Button>
+                </TabsContent>
+
+                <TabsContent value="ai" className="space-y-4 mt-4">
+                  <div className="bg-amber-50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-200 dark:border-amber-900 mb-4">
+                    <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed">
+                      AI-generated formulas are suggestions only - results may vary based on individual hair chemistry. Always perform a strand test.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="client">Select Client *</Label>
                   <Select value={selectedClient} onValueChange={setSelectedClient}>
                     <SelectTrigger className="bg-background">
                       <SelectValue placeholder="Choose a client" />
@@ -546,13 +553,13 @@ const Formulas = () => {
                     ))}
                   </div>
                 )}
-              </div>
+                </TabsContent>
+              </Tabs>
             </DialogContent>
-              </Dialog>
-            </div>
+            </Dialog>
           </div>
           <p className="text-sm text-muted-foreground">
-            View all client formulas • Add manual formulas or generate with AI • For quick questions, use <button onClick={() => navigate("/ai-assistant")} className="text-primary hover:underline font-medium transition-colors">AI Chat Assistant →</button>
+            Track all client formulas • Enter manually or generate with AI • For quick questions, use <button onClick={() => navigate("/ai-assistant")} className="text-primary hover:underline font-medium transition-colors">AI Chat Assistant →</button>
           </p>
         </div>
       </header>
@@ -586,17 +593,11 @@ const Formulas = () => {
             <CardContent className="flex flex-col items-center justify-center py-12">
               <History className="h-16 w-16 text-muted-foreground mb-4" />
               <p className="text-xl font-semibold mb-2">No client formulas yet</p>
-              <p className="text-muted-foreground mb-4">Start by adding a formula manually or generate one with AI</p>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setManualDialogOpen(true)}>
-                  <FileText className="h-4 w-4 mr-2" />
-                  Add Manual Formula
-                </Button>
-                <Button onClick={() => setDialogOpen(true)}>
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Generate with AI
-                </Button>
-              </div>
+              <p className="text-muted-foreground mb-4">Create your first formula manually or with AI assistance</p>
+              <Button onClick={() => setDialogOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Formula
+              </Button>
             </CardContent>
           </Card>
         ) : filteredFormulas.length === 0 ? (
