@@ -349,7 +349,7 @@ const Dashboard = () => {
             <div className="max-w-3xl">
               <div className="flex items-center gap-6 mb-6">
                 {userProfile?.gender && (
-                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0">
+                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0 animate-float">
                     <img 
                       src={
                         userProfile.gender === 'male' ? avatarMale :
@@ -357,7 +357,7 @@ const Dashboard = () => {
                         avatarNeutral
                       } 
                       alt="Your h.A.I.r avatar"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover animate-subtle-bounce"
                     />
                   </div>
                 )}
