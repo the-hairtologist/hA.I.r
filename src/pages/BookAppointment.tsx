@@ -21,21 +21,12 @@ const BookAppointment = () => {
   const [selectedStylist, setSelectedStylist] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState<string>("");
-  const [serviceType, setServiceType] = useState<string>("");
-  const [duration, setDuration] = useState<string>("90");
+  const [selectedService, setSelectedService] = useState<any>(null);
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
-
-  const serviceTypes = [
-    "Color & Cut",
-    "Color Only",
-    "Haircut",
-    "Highlights",
-    "Balayage",
-    "Color Correction",
-    "Consultation",
-  ];
+  const [stylistServices, setStylistServices] = useState<any[]>([]);
+  const [blockedDates, setBlockedDates] = useState<Date[]>([]);
 
   // Generate time slots based on stylist availability
   const generateTimeSlots = (startTime: string, endTime: string): string[] => {
@@ -70,6 +61,13 @@ const BookAppointment = () => {
   useEffect(() => {
     updateAvailableTimeSlots();
   }, [selectedStylist, selectedDate, stylists]);
+
+  useEffect(() => {
+    if (selectedStylist) {
+      loadStylistServices();
+      loadBlockedDates();
+    }
+  }, [selectedStylist]);
 
   const loadData = async () => {
     try {
@@ -117,6 +115,42 @@ const BookAppointment = () => {
     }
   };
 
+  const loadStylistServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("stylist_services")
+        .select("*")
+        .eq("stylist_id", selectedStylist)
+        .eq("is_active", true)
+        .order("price");
+
+      if (error) throw error;
+      setStylistServices(data || []);
+      
+      // Reset selected service if stylist changes
+      setSelectedService(null);
+    } catch (error) {
+      console.error("Error loading services:", error);
+      toast.error("Failed to load services");
+    }
+  };
+
+  const loadBlockedDates = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("stylist_blocked_dates")
+        .select("blocked_date")
+        .eq("stylist_id", selectedStylist);
+
+      if (error) throw error;
+      
+      const dates = (data || []).map(d => new Date(d.blocked_date));
+      setBlockedDates(dates);
+    } catch (error) {
+      console.error("Error loading blocked dates:", error);
+    }
+  };
+
   const updateAvailableTimeSlots = () => {
     if (!selectedStylist || !selectedDate) {
       setAvailableTimeSlots([]);
@@ -150,20 +184,35 @@ const BookAppointment = () => {
   };
 
   const handleBookAppointment = async () => {
-    if (!selectedStylist || !selectedDate || !selectedTime || !serviceType) {
+    if (!selectedStylist || !selectedDate || !selectedTime || !selectedService) {
       toast.error("Please fill in all required fields");
       return;
     }
 
     setSubmitting(true);
     try {
+      // Check if date is blocked
+      const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      const { data: blocked } = await supabase
+        .from("stylist_blocked_dates")
+        .select("id")
+        .eq("stylist_id", selectedStylist)
+        .eq("blocked_date", dateStr)
+        .maybeSingle();
+
+      if (blocked) {
+        toast.error("This date is not available. Please choose another date.");
+        setSubmitting(false);
+        return;
+      }
+
       // Convert selected time to date
       const [time, period] = selectedTime.split(" ");
       const [hours, minutes] = time.split(":").map(Number);
       const adjustedHours = period === "PM" && hours !== 12 ? hours + 12 : hours === 12 && period === "AM" ? 0 : hours;
       
       const appointmentDate = setMinutes(setHours(selectedDate, adjustedHours), minutes);
-      const appointmentEndDate = addHours(appointmentDate, parseInt(duration) / 60);
+      const appointmentEndDate = addHours(appointmentDate, selectedService.duration_minutes / 60);
 
       // Check if appointment is in the past
       if (isBefore(appointmentDate, new Date())) {
@@ -195,8 +244,9 @@ const BookAppointment = () => {
           stylist_id: selectedStylist,
           client_id: clientProfile.id,
           appointment_date: appointmentDate.toISOString(),
-          service_type: serviceType,
-          duration_minutes: parseInt(duration),
+          service_type: selectedService.service_name,
+          service_id: selectedService.id,
+          duration_minutes: selectedService.duration_minutes,
           notes,
           status: "scheduled",
         })
@@ -298,40 +348,45 @@ const BookAppointment = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Service Type *</Label>
-                  <Select value={serviceType} onValueChange={setServiceType}>
-                    <SelectTrigger className="bg-background">
-                      <SelectValue placeholder="Select service" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover z-50 max-h-[300px]">
-                      {serviceTypes.map((service) => (
-                        <SelectItem key={service} value={service}>
-                          {service}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-muted-foreground">
-                    Choose the service you'd like to book
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Duration</Label>
-                  <Select value={duration} onValueChange={setDuration}>
-                    <SelectTrigger className="bg-background">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover z-50">
-                      <SelectItem value="60">1 hour</SelectItem>
-                      <SelectItem value="90">1.5 hours (recommended)</SelectItem>
-                      <SelectItem value="120">2 hours</SelectItem>
-                      <SelectItem value="180">3 hours</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-muted-foreground">
-                    Choose appointment duration
-                  </p>
+                  <Label>Service *</Label>
+                  {!selectedStylist ? (
+                    <p className="text-sm text-muted-foreground py-2">Select a stylist first</p>
+                  ) : stylistServices.length === 0 ? (
+                    <p className="text-sm text-muted-foreground py-2">No services available for this stylist</p>
+                  ) : (
+                    <Select 
+                      value={selectedService?.id} 
+                      onValueChange={(value) => {
+                        const service = stylistServices.find(s => s.id === value);
+                        setSelectedService(service);
+                      }}
+                    >
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="Select service" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-popover z-50 max-h-[300px]">
+                        {stylistServices.map((service) => (
+                          <SelectItem key={service.id} value={service.id}>
+                            <div className="flex flex-col">
+                              <span className="font-medium">{service.service_name}</span>
+                              <span className="text-xs text-muted-foreground">
+                                ${service.price} • {service.duration_minutes} min
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                  {selectedService && (
+                    <div className="text-sm text-muted-foreground mt-2">
+                      <p><strong>Price:</strong> ${selectedService.price}</p>
+                      <p><strong>Duration:</strong> {selectedService.duration_minutes} minutes</p>
+                      {selectedService.description && (
+                        <p className="mt-1">{selectedService.description}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -364,9 +419,23 @@ const BookAppointment = () => {
                   mode="single"
                   selected={selectedDate}
                   onSelect={setSelectedDate}
-                  disabled={(date) => isBefore(date, startOfDay(new Date()))}
+                  disabled={(date) => {
+                    // Disable past dates
+                    if (isBefore(date, startOfDay(new Date()))) return true;
+                    
+                    // Disable blocked dates
+                    const isBlocked = blockedDates.some(
+                      blockedDate => format(blockedDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+                    );
+                    return isBlocked;
+                  }}
                   className={cn("rounded-md border pointer-events-auto w-full")}
                 />
+                {blockedDates.length > 0 && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Grayed out dates are unavailable
+                  </p>
+                )}
                 {selectedDate && (
                   <p className="text-sm text-primary mt-3 font-medium">
                     Selected: {format(selectedDate, "EEEE, MMMM d, yyyy")}
@@ -423,7 +492,7 @@ const BookAppointment = () => {
             <CardDescription>Review your appointment details</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {!selectedStylist || !selectedDate || !selectedTime || !serviceType ? (
+            {!selectedStylist || !selectedDate || !selectedTime || !selectedService ? (
               <div className="text-center py-6 text-muted-foreground">
                 <p className="text-sm">Complete all required fields to see your booking summary</p>
               </div>
@@ -437,11 +506,21 @@ const BookAppointment = () => {
                     </span>
                   </div>
                 )}
-                {serviceType && (
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-muted-foreground">Service:</span>
-                    <span className="font-medium">{serviceType}</span>
-                  </div>
+                {selectedService && (
+                  <>
+                    <div className="flex justify-between items-center py-2 border-b">
+                      <span className="text-muted-foreground">Service:</span>
+                      <span className="font-medium">{selectedService.service_name}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b">
+                      <span className="text-muted-foreground">Price:</span>
+                      <span className="font-medium">${selectedService.price}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b">
+                      <span className="text-muted-foreground">Duration:</span>
+                      <span className="font-medium">{selectedService.duration_minutes} minutes</span>
+                    </div>
+                  </>
                 )}
                 {selectedDate && (
                   <div className="flex justify-between items-center py-2 border-b">
@@ -455,10 +534,6 @@ const BookAppointment = () => {
                     <span className="font-medium">{selectedTime}</span>
                   </div>
                 )}
-                <div className="flex justify-between items-center py-2 border-b">
-                  <span className="text-muted-foreground">Duration:</span>
-                  <span className="font-medium">{duration} minutes</span>
-                </div>
 
                 <div className="bg-primary/5 p-4 rounded-lg mt-4">
                   <p className="text-sm text-muted-foreground mb-2">📋 What happens next:</p>
@@ -473,7 +548,7 @@ const BookAppointment = () => {
 
             <Button
               onClick={handleBookAppointment}
-              disabled={submitting || !selectedStylist || !selectedDate || !selectedTime || !serviceType}
+              disabled={submitting || !selectedStylist || !selectedDate || !selectedTime || !selectedService}
               className="w-full mt-4 transition-all hover:scale-105"
               size="lg"
             >
