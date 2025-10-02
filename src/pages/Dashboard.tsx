@@ -347,10 +347,25 @@ const Dashboard = () => {
             <div className="window-scrollbar"></div>
             
             <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                <div className="w-8 h-3 bg-pink-400 rotate-45"></div>
-                <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
+              <div className="flex items-center gap-6 mb-6">
+                {userProfile?.gender && (
+                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0">
+                    <img 
+                      src={
+                        userProfile.gender === 'male' ? avatarMale :
+                        userProfile.gender === 'female' ? avatarFemale :
+                        avatarNeutral
+                      } 
+                      alt="Your Lego avatar"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
+                  <div className="w-8 h-3 bg-pink-400 rotate-45"></div>
+                  <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
+                </div>
               </div>
               
               <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
@@ -372,21 +387,6 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Avatar positioned outside the box on the right */}
-            {userProfile?.gender && (
-              <div className="absolute -bottom-6 -right-4 md:-right-8 w-32 h-48 md:w-40 md:h-56 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[6px_6px_0px_0px_rgba(244,114,182,0.8)] z-10">
-                <img 
-                  src={
-                    userProfile.gender === 'male' ? avatarMale :
-                    userProfile.gender === 'female' ? avatarFemale :
-                    avatarNeutral
-                  } 
-                  alt="Your h.A.I.r avatar"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-            )}
           </div>
         </div>
 
