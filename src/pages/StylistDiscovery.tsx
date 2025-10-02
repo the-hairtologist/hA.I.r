@@ -198,18 +198,22 @@ const StylistDiscovery = () => {
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-4">Stylists in Your Network</h2>
         {filteredStylists.length === 0 ? (
-          <Card>
+          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
             <CardContent className="pt-6 text-center">
-              <p className="text-muted-foreground">No stylists found matching your criteria</p>
+              <p className="text-foreground/80 font-medium">No stylists found matching your criteria</p>
             </CardContent>
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredStylists.map((stylist) => (
-              <Card key={stylist.id} className="hover:shadow-lg transition-shadow">
+            {filteredStylists.map((stylist, idx) => (
+              <Card key={stylist.id} className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all ${
+                idx % 4 === 0 ? 'bg-blue-400' :
+                idx % 4 === 1 ? 'bg-green-400' :
+                idx % 4 === 2 ? 'bg-yellow-300' : 'bg-purple-400'
+              }`}>
                 <CardHeader>
                   <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-2xl overflow-hidden">
+                    <div className="w-16 h-16 rounded-full bg-white border-2 border-foreground flex items-center justify-center text-2xl overflow-hidden shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                       {stylist.profiles.avatar_url ? (
                         <img 
                           src={stylist.profiles.avatar_url} 
@@ -221,14 +225,14 @@ const StylistDiscovery = () => {
                       )}
                     </div>
                     <div className="flex-1">
-                      <CardTitle>{stylist.business_name || stylist.profiles.full_name}</CardTitle>
-                      <CardDescription>
+                      <CardTitle className="font-display text-foreground">{stylist.business_name || stylist.profiles.full_name}</CardTitle>
+                      <CardDescription className="text-foreground/80 font-medium">
                         {stylist.profiles.full_name}
                         {stylist.total_reviews > 0 && (
                           <div className="flex items-center gap-1 mt-1">
-                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                            <span className="font-semibold text-foreground">{stylist.average_rating?.toFixed(1)}</span>
-                            <span className="text-xs">({stylist.total_reviews} reviews)</span>
+                            <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                            <span className="font-bold text-foreground">{stylist.average_rating?.toFixed(1)}</span>
+                            <span className="text-xs text-foreground/70">({stylist.total_reviews} reviews)</span>
                           </div>
                         )}
                       </CardDescription>
@@ -238,31 +242,31 @@ const StylistDiscovery = () => {
 
                 <CardContent className="space-y-3">
                   {stylist.specialty && (
-                    <Badge variant="secondary">{stylist.specialty}</Badge>
+                    <Badge variant="secondary" className="bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">{stylist.specialty}</Badge>
                   )}
 
                   {stylist.bio && (
-                    <p className="text-sm text-muted-foreground line-clamp-2">{stylist.bio}</p>
+                    <p className="text-sm text-foreground/80 line-clamp-2 font-medium">{stylist.bio}</p>
                   )}
 
                   <div className="space-y-2 text-sm">
                     {stylist.location && (
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-foreground/80 font-medium">
                         <MapPin className="h-4 w-4" />
                         <span>{stylist.location}</span>
                       </div>
                     )}
 
                     {stylist.years_experience && (
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-foreground/80 font-medium">
                         <Star className="h-4 w-4" />
                         <span>{stylist.years_experience} years experience</span>
                       </div>
                     )}
 
                     {stylist.color_line && (
-                      <div className="text-muted-foreground">
-                        <strong>Color Line:</strong> {stylist.color_line}
+                      <div className="text-foreground/80 font-medium">
+                        <strong className="text-foreground">Color Line:</strong> {stylist.color_line}
                       </div>
                     )}
                   </div>
@@ -330,23 +334,27 @@ const StylistDiscovery = () => {
         {showDiscovered && (
           <>
             {discoveredStylists.length === 0 && !discoveringStylists ? (
-              <Card>
+              <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-red-400">
                 <CardContent className="pt-6 text-center">
-                  <p className="text-muted-foreground">No discovered stylists yet</p>
+                  <p className="text-foreground/80 font-medium">No discovered stylists yet</p>
                 </CardContent>
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {discoveredStylists.map((stylist, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow border-primary/20">
+                  <Card key={index} className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all ${
+                    index % 4 === 0 ? 'bg-red-400' :
+                    index % 4 === 1 ? 'bg-blue-400' :
+                    index % 4 === 2 ? 'bg-green-400' : 'bg-yellow-300'
+                  }`}>
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <CardTitle className="text-lg">{stylist.name}</CardTitle>
-                          <CardDescription className="flex items-center gap-1 mt-1">
+                          <CardTitle className="text-lg font-display text-foreground">{stylist.name}</CardTitle>
+                          <CardDescription className="flex items-center gap-1 mt-1 text-foreground/80 font-medium">
                             {stylist.businessName}
                             {stylist.source && (
-                              <Badge variant="outline" className="ml-2 text-xs">
+                              <Badge variant="outline" className="ml-2 text-xs bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                                 <Globe className="h-3 w-3 mr-1" />
                                 {stylist.source}
                               </Badge>
@@ -358,15 +366,15 @@ const StylistDiscovery = () => {
 
                     <CardContent className="space-y-3">
                       {stylist.specialty && (
-                        <Badge variant="secondary">{stylist.specialty}</Badge>
+                        <Badge variant="secondary" className="bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">{stylist.specialty}</Badge>
                       )}
 
                       {stylist.certifications && stylist.certifications.length > 0 && (
                         <div className="flex items-start gap-2">
-                          <Award className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                          <Award className="h-4 w-4 text-foreground mt-0.5 flex-shrink-0" />
                           <div className="flex flex-wrap gap-1">
                             {stylist.certifications.map((cert, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
+                              <Badge key={idx} variant="outline" className="text-xs bg-white border-2 border-foreground">
                                 {cert}
                               </Badge>
                             ))}
@@ -375,7 +383,7 @@ const StylistDiscovery = () => {
                       )}
 
                       {stylist.bio && (
-                        <p className="text-sm text-muted-foreground line-clamp-2">{stylist.bio}</p>
+                        <p className="text-sm text-foreground/80 line-clamp-2 font-medium">{stylist.bio}</p>
                       )}
 
                       <div className="space-y-2 text-sm">

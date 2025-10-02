@@ -92,19 +92,19 @@ const MyFormulas = () => {
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8 max-w-6xl animate-fade-in">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">My Hair Color History</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-4xl font-display font-bold mb-2">My Hair Color History</h1>
+          <p className="text-foreground/70 font-medium">
             View all your past color formulas and track your hair transformation
           </p>
         </div>
 
         {/* Formulas */}
         {formulas.length === 0 ? (
-          <Card>
+          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-purple-400">
             <CardContent className="text-center py-12">
-              <Scissors className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-xl font-semibold mb-2">No formulas yet</p>
-              <p className="text-muted-foreground mb-4">
+              <Scissors className="h-16 w-16 text-foreground/70 mx-auto mb-4" />
+              <p className="text-xl font-display font-bold mb-2 text-foreground">No formulas yet</p>
+              <p className="text-foreground/80 mb-4 font-medium">
                 Your stylist will create formulas during your appointments
               </p>
               <Button onClick={() => navigate("/book")}>
@@ -114,34 +114,38 @@ const MyFormulas = () => {
           </Card>
         ) : (
           <div className="space-y-6">
-            {formulas.map((formula) => (
-              <Card key={formula.id} className="hover:shadow-lg transition-shadow">
+            {formulas.map((formula, idx) => (
+              <Card key={formula.id} className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all ${
+                idx % 4 === 0 ? 'bg-blue-400' :
+                idx % 4 === 1 ? 'bg-green-400' :
+                idx % 4 === 2 ? 'bg-yellow-300' : 'bg-purple-400'
+              }`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <p className="text-sm text-muted-foreground">
+                        <Calendar className="h-4 w-4 text-foreground/70" />
+                        <p className="text-sm text-foreground/80 font-medium">
                           {format(new Date(formula.created_at), "MMMM d, yyyy")}
                         </p>
                       </div>
                       {formula.stylist && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-foreground/80 font-medium">
                           by {formula.stylist.business_name || formula.stylist.user?.full_name}
                         </p>
                       )}
                     </div>
                     {formula.color_line && (
-                      <Badge variant="secondary">{formula.color_line}</Badge>
+                      <Badge variant="secondary" className="bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">{formula.color_line}</Badge>
                     )}
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Formula */}
                   <div>
-                    <h3 className="font-semibold mb-2">Formula</h3>
-                    <div className="bg-muted/50 p-4 rounded-lg">
-                      <pre className="text-sm whitespace-pre-wrap font-mono">
+                    <h3 className="font-display font-bold mb-2 text-foreground">Formula</h3>
+                    <div className="bg-white border-2 border-foreground p-4 rounded-lg shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                      <pre className="text-sm whitespace-pre-wrap font-mono text-foreground">
                         {formula.formula_text}
                       </pre>
                     </div>
@@ -150,8 +154,8 @@ const MyFormulas = () => {
                   {/* Instructions */}
                   {formula.instructions && (
                     <div>
-                      <h3 className="font-semibold mb-2">Application Instructions</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-display font-bold mb-2 text-foreground">Application Instructions</h3>
+                      <p className="text-sm text-foreground/80 font-medium">
                         {formula.instructions}
                       </p>
                     </div>
@@ -160,8 +164,8 @@ const MyFormulas = () => {
                   {/* Results */}
                   {formula.result_notes && (
                     <div>
-                      <h3 className="font-semibold mb-2">Results & Notes</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-display font-bold mb-2 text-foreground">Results & Notes</h3>
+                      <p className="text-sm text-foreground/80 font-medium">
                         {formula.result_notes}
                       </p>
                     </div>
@@ -170,11 +174,11 @@ const MyFormulas = () => {
                   {/* Photo */}
                   {formula.hair_photo_url && (
                     <div>
-                      <h3 className="font-semibold mb-2">Result Photo</h3>
+                      <h3 className="font-display font-bold mb-2 text-foreground">Result Photo</h3>
                       <img
                         src={formula.hair_photo_url}
                         alt="Hair color result"
-                        className="rounded-lg max-w-md w-full h-auto"
+                        className="rounded-lg border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] max-w-md w-full h-auto"
                       />
                     </div>
                   )}
@@ -185,11 +189,11 @@ const MyFormulas = () => {
         )}
 
         {/* Tips Card */}
-        <Card className="mt-8 bg-primary/5 border-primary/20">
+        <Card className="mt-8 bg-red-400 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
           <CardHeader>
-            <CardTitle className="text-lg">💡 Pro Tips</CardTitle>
+            <CardTitle className="text-lg font-display">💡 Pro Tips</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm text-muted-foreground">
+          <CardContent className="space-y-2 text-sm text-foreground/80 font-medium">
             <p>• Share your favorite formulas with your stylist for future appointments</p>
             <p>• Take progress photos to track your hair journey over time</p>
             <p>• Note which formulas worked best for your hair type</p>
