@@ -326,10 +326,10 @@ const Dashboard = () => {
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-4xl font-bold mb-3 animate-fade-in bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+          <h2 className="text-5xl font-display font-bold mb-3 animate-fade-in bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             Welcome back, {user?.user_metadata?.full_name || "there"}!
           </h2>
-          <p className="text-lg text-muted-foreground animate-fade-in" style={{ animationDelay: "100ms" }}>
+          <p className="text-lg text-muted-foreground animate-fade-in font-medium" style={{ animationDelay: "100ms" }}>
             {userRole === "stylist" 
               ? "Manage your clients and grow your business" 
               : "Book appointments and stay beautiful"}
@@ -345,8 +345,8 @@ const Dashboard = () => {
         </div>
 
         <div className="mb-8">
-          <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-primary" />
+          <h3 className="text-3xl font-display font-bold mb-6 flex items-center gap-3 text-foreground">
+            <Sparkles className="h-7 w-7 text-primary" />
             Explore More Features
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

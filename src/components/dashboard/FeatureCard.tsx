@@ -25,29 +25,29 @@ export const FeatureCard = ({
 
   return (
     <Card
-      className="group cursor-pointer hover:shadow-lg transition-all hover-scale animate-fade-in border-border/50 hover:border-primary/50 bg-card/50 backdrop-blur-sm relative overflow-hidden"
+      className="group cursor-pointer transition-all animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 bg-card relative overflow-hidden"
       style={{ animationDelay: `${index * 50}ms` }}
       onClick={() => navigate(route)}
     >
       <div className={cn(
-        "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-5 transition-opacity",
+        "absolute inset-0 bg-gradient-to-br opacity-10",
         gradient
       )} />
       <CardHeader className="relative">
         <div className="flex items-center gap-3 mb-2">
           <div className={cn(
-            "p-2.5 rounded-lg bg-gradient-to-br",
+            "p-3 rounded-lg bg-gradient-to-br border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
             gradient
           )}>
             <Icon className="h-6 w-6 text-white" />
           </div>
-          <CardTitle className="text-xl group-hover:text-primary transition-colors">{title}</CardTitle>
+          <CardTitle className="text-xl font-display group-hover:text-primary transition-colors">{title}</CardTitle>
         </div>
         <CardDescription className="text-base leading-relaxed">{description}</CardDescription>
       </CardHeader>
       <CardContent className="relative">
-        <Button variant="outline" className="w-full group-hover:border-primary/50">
-          Open
+        <Button variant="outline" className="w-full font-display">
+          Open →
         </Button>
       </CardContent>
     </Card>
