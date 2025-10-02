@@ -21,6 +21,7 @@ import Availability from "./pages/Availability";
 import Services from "./pages/Services";
 import BlockedDates from "./pages/BlockedDates";
 import AccountSettings from "./pages/AccountSettings";
+import AIAssistant from "./pages/AIAssistant";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
           <Route path="/services" element={<Services />} />
           <Route path="/blocked-dates" element={<BlockedDates />} />
           <Route path="/settings" element={<AccountSettings />} />
+          <Route path="/ai-assistant" element={<AIAssistant />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

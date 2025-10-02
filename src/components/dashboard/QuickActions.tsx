@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Users, Scissors, MessageSquare, Plus } from "lucide-react";
+import { Calendar, Users, Scissors, MessageSquare, Plus, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface QuickActionsProps {
@@ -12,9 +12,9 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
 
   const stylistActions = [
     {
-      label: "See Today's Schedule",
-      icon: Calendar,
-      route: "/appointments",
+      label: "Ask AI Assistant",
+      icon: Sparkles,
+      route: "/ai-assistant",
       variant: "default" as const,
     },
     {
@@ -22,6 +22,12 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
       icon: Scissors,
       route: "/formulas",
       variant: "secondary" as const,
+    },
+    {
+      label: "See Today's Schedule",
+      icon: Calendar,
+      route: "/appointments",
+      variant: "outline" as const,
     },
     {
       label: "Check Messages",

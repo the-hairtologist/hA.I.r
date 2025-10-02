@@ -266,6 +266,13 @@ const Dashboard = () => {
       isPrimary: true,
     },
     {
+      title: "AI Hair Assistant",
+      description: "Get instant expert guidance—ask anything about color formulation, troubleshooting, or techniques",
+      icon: Sparkles,
+      route: "/ai-assistant",
+      isPrimary: true,
+    },
+    {
       title: "AI Formula Generator",
       description: "Create flawless color formulas in seconds—just upload a photo and let AI do the work",
       icon: Scissors,
