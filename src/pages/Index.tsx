@@ -42,9 +42,9 @@ const Index = () => {
               <div className="max-w-4xl mx-auto relative z-10">
                 <div className="flex items-center justify-center gap-4 mb-8">
                   <Scissors className="h-12 w-12 text-pink-400" />
-                  <div className="text-5xl">✂️</div>
+                  <div className="text-5xl">✨</div>
                   <div className="w-12 h-12 border-4 border-pink-400 rotate-45"></div>
-                  <div className="text-5xl">💈</div>
+                  <div className="text-5xl">🎨</div>
                 </div>
                 
                 <h2 className="text-5xl md:text-7xl font-display font-black mb-8 text-pink-400 uppercase leading-tight">

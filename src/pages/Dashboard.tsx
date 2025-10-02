@@ -343,9 +343,9 @@ const Dashboard = () => {
             <div className="max-w-3xl">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                <Scissors className="h-5 w-5 text-pink-400" />
+                <div className="w-8 h-3 bg-pink-400 rotate-45"></div>
                 <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                <div className="text-3xl">💈</div>
+                <div className="text-4xl">✨</div>
               </div>
               
               <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
