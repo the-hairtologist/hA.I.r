@@ -174,19 +174,30 @@ const BookAppointment = () => {
                 {stylists.length === 0 ? (
                   <p className="text-muted-foreground">No stylists available at the moment</p>
                 ) : (
-                  <Select value={selectedStylist} onValueChange={setSelectedStylist}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose a stylist" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {stylists.map((stylist) => (
-                        <SelectItem key={stylist.id} value={stylist.id}>
-                          {stylist.user?.full_name || stylist.business_name || "Stylist"}
-                          {stylist.specialty && ` • ${stylist.specialty}`}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="space-y-2">
+                    <Select value={selectedStylist} onValueChange={setSelectedStylist}>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue placeholder="Choose a stylist" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-popover z-50 max-h-[300px]">
+                        {stylists.map((stylist) => (
+                          <SelectItem key={stylist.id} value={stylist.id}>
+                            <div className="flex flex-col">
+                              <span className="font-medium">
+                                {stylist.user?.full_name || stylist.business_name || "Stylist"}
+                              </span>
+                              {stylist.specialty && (
+                                <span className="text-xs text-muted-foreground">{stylist.specialty}</span>
+                              )}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">
+                      All stylists are currently accepting bookings
+                    </p>
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -199,10 +210,10 @@ const BookAppointment = () => {
                 <div className="space-y-2">
                   <Label>Service Type *</Label>
                   <Select value={serviceType} onValueChange={setServiceType}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-background">
                       <SelectValue placeholder="Select service" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-popover z-50 max-h-[300px]">
                       {serviceTypes.map((service) => (
                         <SelectItem key={service} value={service}>
                           {service}
@@ -210,31 +221,41 @@ const BookAppointment = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Choose the service you'd like to book
+                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label>Duration</Label>
                   <Select value={duration} onValueChange={setDuration}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-popover z-50">
                       <SelectItem value="60">1 hour</SelectItem>
-                      <SelectItem value="90">1.5 hours</SelectItem>
+                      <SelectItem value="90">1.5 hours (recommended)</SelectItem>
                       <SelectItem value="120">2 hours</SelectItem>
                       <SelectItem value="180">3 hours</SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Choose appointment duration
+                  </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Additional Notes</Label>
+                  <Label>Additional Notes (Optional)</Label>
                   <Textarea
-                    placeholder="Any special requests or information for your stylist..."
+                    placeholder="Example: I'd like to discuss color options during the appointment. I have a sensitive scalp."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     rows={4}
+                    className="resize-none"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Share any concerns or special requests with your stylist
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -245,6 +266,7 @@ const BookAppointment = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Select Date</CardTitle>
+                <CardDescription>Choose your preferred appointment date</CardDescription>
               </CardHeader>
               <CardContent>
                 <Calendar
@@ -252,14 +274,20 @@ const BookAppointment = () => {
                   selected={selectedDate}
                   onSelect={setSelectedDate}
                   disabled={(date) => isBefore(date, startOfDay(new Date()))}
-                  className={cn("rounded-md border pointer-events-auto")}
+                  className={cn("rounded-md border pointer-events-auto w-full")}
                 />
+                {selectedDate && (
+                  <p className="text-sm text-primary mt-3 font-medium">
+                    Selected: {format(selectedDate, "EEEE, MMMM d, yyyy")}
+                  </p>
+                )}
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
                 <CardTitle>Select Time</CardTitle>
+                <CardDescription>Pick your preferred time slot</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-2">
@@ -269,65 +297,89 @@ const BookAppointment = () => {
                       variant={selectedTime === time ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedTime(time)}
-                      className="justify-start"
+                      className="justify-start transition-all hover:scale-105"
                     >
                       <Clock className="h-4 w-4 mr-2" />
                       {time}
                     </Button>
                   ))}
                 </div>
+                {selectedTime && (
+                  <p className="text-sm text-primary mt-3 font-medium flex items-center gap-1">
+                    <CheckCircle className="h-4 w-4" />
+                    Selected: {selectedTime}
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>
         </div>
 
         {/* Summary & Submit */}
-        <Card className="mt-6">
+        <Card className="mt-6 border-primary/20 shadow-lg">
           <CardHeader>
             <CardTitle>Booking Summary</CardTitle>
+            <CardDescription>Review your appointment details</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {selectedStylist && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Stylist:</span>
-                <span className="font-medium">
-                  {stylists.find(s => s.id === selectedStylist)?.user?.full_name}
-                </span>
+            {!selectedStylist || !selectedDate || !selectedTime || !serviceType ? (
+              <div className="text-center py-6 text-muted-foreground">
+                <p className="text-sm">Complete all required fields to see your booking summary</p>
               </div>
+            ) : (
+              <>
+                {selectedStylist && (
+                  <div className="flex justify-between items-center py-2 border-b">
+                    <span className="text-muted-foreground">Stylist:</span>
+                    <span className="font-medium">
+                      {stylists.find(s => s.id === selectedStylist)?.user?.full_name}
+                    </span>
+                  </div>
+                )}
+                {serviceType && (
+                  <div className="flex justify-between items-center py-2 border-b">
+                    <span className="text-muted-foreground">Service:</span>
+                    <span className="font-medium">{serviceType}</span>
+                  </div>
+                )}
+                {selectedDate && (
+                  <div className="flex justify-between items-center py-2 border-b">
+                    <span className="text-muted-foreground">Date:</span>
+                    <span className="font-medium">{format(selectedDate, "EEEE, MMMM d, yyyy")}</span>
+                  </div>
+                )}
+                {selectedTime && (
+                  <div className="flex justify-between items-center py-2 border-b">
+                    <span className="text-muted-foreground">Time:</span>
+                    <span className="font-medium">{selectedTime}</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center py-2 border-b">
+                  <span className="text-muted-foreground">Duration:</span>
+                  <span className="font-medium">{duration} minutes</span>
+                </div>
+
+                <div className="bg-primary/5 p-4 rounded-lg mt-4">
+                  <p className="text-sm text-muted-foreground mb-2">📋 What happens next:</p>
+                  <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+                    <li>Your stylist will receive your booking request</li>
+                    <li>They'll confirm your appointment</li>
+                    <li>You'll receive updates on your booking status</li>
+                  </ol>
+                </div>
+              </>
             )}
-            {serviceType && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Service:</span>
-                <span className="font-medium">{serviceType}</span>
-              </div>
-            )}
-            {selectedDate && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Date:</span>
-                <span className="font-medium">{format(selectedDate, "MMMM d, yyyy")}</span>
-              </div>
-            )}
-            {selectedTime && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Time:</span>
-                <span className="font-medium">{selectedTime}</span>
-              </div>
-            )}
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Duration:</span>
-              <span className="font-medium">{duration} minutes</span>
-            </div>
 
             <Button
               onClick={handleBookAppointment}
               disabled={submitting || !selectedStylist || !selectedDate || !selectedTime || !serviceType}
-              className="w-full mt-4"
+              className="w-full mt-4 transition-all hover:scale-105"
               size="lg"
             >
               {submitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Booking...
+                  Booking Your Appointment...
                 </>
               ) : (
                 <>

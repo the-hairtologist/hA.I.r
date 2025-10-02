@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2 } from "lucide-react";
+import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle } from "lucide-react";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -217,17 +218,27 @@ const Formulas = () => {
                 <div className="space-y-2">
                   <Label htmlFor="client">Select Client *</Label>
                   <Select value={selectedClient} onValueChange={setSelectedClient}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-background">
                       <SelectValue placeholder="Choose a client" />
                     </SelectTrigger>
-                    <SelectContent>
-                      {clients.map((client) => (
-                        <SelectItem key={client.id} value={client.id}>
-                          {client.user?.full_name || client.user?.email}
-                        </SelectItem>
-                      ))}
+                    <SelectContent className="bg-popover z-50 max-h-[300px]">
+                      {clients.length === 0 ? (
+                        <div className="p-4 text-sm text-muted-foreground text-center">
+                          <p>No clients found</p>
+                          <p className="text-xs mt-1">Clients will appear after their first booking</p>
+                        </div>
+                      ) : (
+                        clients.map((client) => (
+                          <SelectItem key={client.id} value={client.id}>
+                            {client.user?.full_name || client.user?.email}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Select the client this formula is for
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -237,39 +248,60 @@ const Formulas = () => {
                     type="file"
                     accept="image/*"
                     onChange={(e) => setHairPhoto(e.target.files?.[0] || null)}
+                    className="cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                   />
+                  {hairPhoto && (
+                    <p className="text-xs text-primary flex items-center gap-1">
+                      <Upload className="h-3 w-3" />
+                      {hairPhoto.name} ready to upload
+                    </p>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Upload a photo for better AI formula suggestions
+                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="description">Hair Description *</Label>
                   <Textarea
                     id="description"
-                    placeholder="Current hair level, condition, previous color treatments..."
+                    placeholder="Example: Natural level 6 brown, virgin hair, wants to go lighter with dimension. Hair is healthy, no previous color treatments."
                     value={hairDescription}
                     onChange={(e) => setHairDescription(e.target.value)}
                     rows={4}
+                    className="resize-none"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Include: current level, condition, desired result, any previous treatments
+                  </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="colorLine">Color Line</Label>
+                  <Label htmlFor="colorLine">Color Line (Optional)</Label>
                   <Input
                     id="colorLine"
                     placeholder="e.g., Wella, Redken, Schwarzkopf"
                     value={colorLine}
                     onChange={(e) => setColorLine(e.target.value)}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    AI will tailor formulas to your preferred brand
+                  </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="notes">Additional Notes</Label>
+                  <Label htmlFor="notes">Additional Notes (Optional)</Label>
                   <Textarea
                     id="notes"
-                    placeholder="Desired result, client preferences, allergies..."
+                    placeholder="Example: Client wants low maintenance, avoid warm tones, sensitive scalp"
                     value={clientNotes}
                     onChange={(e) => setClientNotes(e.target.value)}
                     rows={3}
+                    className="resize-none"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Add any special considerations or client preferences
+                  </p>
                 </div>
 
                 <Button 
@@ -291,33 +323,45 @@ const Formulas = () => {
                 </Button>
 
                 {generatedFormulas.length > 0 && (
-                  <div className="space-y-4 mt-6">
-                    <h3 className="font-semibold text-lg">Generated Formulas:</h3>
+                  <div className="space-y-4 mt-6 animate-fade-in">
+                    <div className="flex items-center gap-2 text-primary">
+                      <Sparkles className="h-5 w-5" />
+                      <h3 className="font-semibold text-lg">AI Generated Formulas</h3>
+                    </div>
                     {generatedFormulas.map((formula, index) => (
-                      <Card key={index}>
+                      <Card key={index} className="border-primary/20 shadow-lg">
                         <CardHeader>
-                          <CardTitle className="text-lg">{formula.formula_name}</CardTitle>
-                          <CardDescription>
-                            {formula.processing_time} • {formula.difficulty}
-                          </CardDescription>
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <CardTitle className="text-lg">{formula.formula_name}</CardTitle>
+                              <CardDescription className="mt-1">
+                                ⏱️ {formula.processing_time} • 📊 {formula.difficulty}
+                              </CardDescription>
+                            </div>
+                            <Badge variant="outline" className="bg-primary/10">
+                              Option {index + 1}
+                            </Badge>
+                          </div>
                         </CardHeader>
-                        <CardContent className="space-y-3">
-                          <div>
-                            <p className="font-semibold text-sm mb-1">Formula:</p>
-                            <p className="text-sm whitespace-pre-wrap">{formula.formula_text}</p>
+                        <CardContent className="space-y-4">
+                          <div className="bg-muted/50 p-4 rounded-lg">
+                            <p className="font-semibold text-sm mb-2 text-primary">Formula:</p>
+                            <p className="text-sm whitespace-pre-wrap leading-relaxed">{formula.formula_text}</p>
                           </div>
                           <div>
-                            <p className="font-semibold text-sm mb-1">Instructions:</p>
-                            <p className="text-sm whitespace-pre-wrap">{formula.instructions}</p>
+                            <p className="font-semibold text-sm mb-2 text-primary">Step-by-Step Instructions:</p>
+                            <p className="text-sm whitespace-pre-wrap leading-relaxed">{formula.instructions}</p>
                           </div>
-                          <div>
-                            <p className="font-semibold text-sm mb-1">Expected Result:</p>
-                            <p className="text-sm">{formula.expected_result}</p>
+                          <div className="bg-green-50 dark:bg-green-950/20 p-4 rounded-lg border border-green-200 dark:border-green-900">
+                            <p className="font-semibold text-sm mb-1 text-green-700 dark:text-green-400">Expected Result:</p>
+                            <p className="text-sm text-green-600 dark:text-green-300">{formula.expected_result}</p>
                           </div>
                           <Button 
                             onClick={() => handleSaveFormula(formula)}
                             className="w-full"
+                            size="lg"
                           >
+                            <CheckCircle className="h-4 w-4 mr-2" />
                             Save This Formula
                           </Button>
                         </CardContent>
