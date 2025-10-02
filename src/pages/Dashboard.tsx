@@ -352,9 +352,9 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <DashboardStats stats={stats} userRole={userRole || ""} />
-
         <QuickActions userRole={userRole || ""} />
+
+        <DashboardStats stats={stats} userRole={userRole || ""} />
 
         <div className="grid lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2">

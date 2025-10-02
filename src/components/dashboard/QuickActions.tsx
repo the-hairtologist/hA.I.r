@@ -7,39 +7,50 @@ interface QuickActionsProps {
   userRole: string;
 }
 
+interface ActionButton {
+  label: string;
+  icon: any;
+  route: string;
+  variant: "default" | "secondary" | "outline";
+  description?: string;
+  featured?: boolean;
+}
+
 export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const navigate = useNavigate();
 
   console.log('🎯 QuickActions rendering for role:', userRole);
 
-  const stylistActions = [
+  const stylistActions: ActionButton[] = [
     {
-      label: "Ask AI Assistant",
+      label: "🌟 Ask AI Assistant",
+      description: "Get instant hair color advice",
       icon: Sparkles,
       route: "/ai-assistant",
       variant: "default" as const,
+      featured: true,
     },
     {
-      label: "Generate Formula Now",
+      label: "Generate Formula",
       icon: Scissors,
       route: "/formulas",
       variant: "secondary" as const,
     },
     {
-      label: "See Today's Schedule",
+      label: "Today's Schedule",
       icon: Calendar,
       route: "/appointments",
       variant: "outline" as const,
     },
     {
-      label: "Check Messages",
+      label: "Messages",
       icon: MessageSquare,
       route: "/messages",
       variant: "outline" as const,
     },
   ];
 
-  const clientActions = [
+  const clientActions: ActionButton[] = [
     {
       label: "Book My Next Visit",
       icon: Calendar,
@@ -63,27 +74,39 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const actions = userRole === "stylist" ? stylistActions : clientActions;
 
   return (
-    <Card className="mb-8 animate-fade-in">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <Card className="mb-8 animate-fade-in shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-xl">
           <Plus className="h-5 w-5 text-primary" />
           Quick Actions
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {actions.map((action) => {
             const Icon = action.icon;
+            const isFeatured = 'featured' in action && action.featured;
+            
             return (
               <Button
                 key={action.label}
                 variant={action.variant}
                 size="lg"
                 onClick={() => navigate(action.route)}
-                className="hover-scale"
+                className={`
+                  hover-scale h-auto flex flex-col items-start gap-2 p-4
+                  ${isFeatured ? 'ring-2 ring-primary ring-offset-2 shadow-xl' : ''}
+                `}
               >
-                <Icon className="h-4 w-4 mr-2" />
-                {action.label}
+                <div className="flex items-center gap-2 w-full">
+                  <Icon className={`h-5 w-5 ${isFeatured ? 'animate-pulse' : ''}`} />
+                  <span className="font-semibold">{action.label}</span>
+                </div>
+                {'description' in action && action.description && (
+                  <span className="text-xs opacity-90 text-left">
+                    {action.description}
+                  </span>
+                )}
               </Button>
             );
           })}
