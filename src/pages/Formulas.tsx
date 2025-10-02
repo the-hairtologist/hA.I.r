@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle, Search, Edit, Save } from "lucide-react";
+import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle, Search, Edit, Save, FileText, History } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Formulas = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingFormula, setEditingFormula] = useState<any>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [manualDialogOpen, setManualDialogOpen] = useState(false);
   
   // Form state
   const [selectedClient, setSelectedClient] = useState("");
@@ -205,6 +207,38 @@ const Formulas = () => {
     }
   };
 
+  const handleSaveManualFormula = async () => {
+    if (!selectedClient || !hairDescription) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("formulas")
+        .insert({
+          stylist_id: stylistProfile.id,
+          client_id: selectedClient,
+          formula_text: hairDescription,
+          instructions: clientNotes,
+          color_line: colorLine || stylistProfile?.color_line,
+        });
+
+      if (error) throw error;
+
+      toast.success("Formula saved successfully!");
+      setManualDialogOpen(false);
+      setSelectedClient("");
+      setHairDescription("");
+      setClientNotes("");
+      setColorLine("");
+      loadData();
+    } catch (error: any) {
+      console.error("Error saving formula:", error);
+      toast.error("Error saving formula");
+    }
+  };
+
   const handleEditFormula = async () => {
     if (!editingFormula) return;
 
@@ -255,17 +289,93 @@ const Formulas = () => {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div className="flex items-center gap-2">
-                <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">📋 Formula Generator & History</h1>
+                <History className="h-6 w-6 text-primary" />
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Client Formula History</h1>
               </div>
             </div>
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Formula
-                </Button>
-              </DialogTrigger>
+            <div className="flex gap-2">
+              <Dialog open={manualDialogOpen} onOpenChange={setManualDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Add Manual Formula
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>Add Manual Formula</DialogTitle>
+                    <DialogDescription>
+                      Record a formula you've created without AI assistance
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="manual-client">Select Client *</Label>
+                      <Select value={selectedClient} onValueChange={setSelectedClient}>
+                        <SelectTrigger className="bg-background">
+                          <SelectValue placeholder="Choose a client" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-popover z-50 max-h-[300px]">
+                          {clients.length === 0 ? (
+                            <div className="p-4 text-sm text-muted-foreground text-center">
+                              <p>No clients found</p>
+                              <p className="text-xs mt-1">Clients will appear after their first booking</p>
+                            </div>
+                          ) : (
+                            clients.map((client) => (
+                              <SelectItem key={client.id} value={client.id}>
+                                {client.user?.full_name || client.user?.email}
+                              </SelectItem>
+                            ))
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="manual-formula">Formula *</Label>
+                      <Textarea
+                        id="manual-formula"
+                        placeholder="Enter the complete formula..."
+                        value={hairDescription}
+                        onChange={(e) => setHairDescription(e.target.value)}
+                        rows={6}
+                        className="resize-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="manual-instructions">Application Instructions</Label>
+                      <Textarea
+                        id="manual-instructions"
+                        placeholder="Step-by-step application instructions..."
+                        value={clientNotes}
+                        onChange={(e) => setClientNotes(e.target.value)}
+                        rows={4}
+                        className="resize-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="manual-colorline">Color Line</Label>
+                      <Input
+                        id="manual-colorline"
+                        placeholder="e.g., Wella, Redken"
+                        value={colorLine}
+                        onChange={(e) => setColorLine(e.target.value)}
+                      />
+                    </div>
+                    <Button onClick={handleSaveManualFormula} className="w-full">
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Formula
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Generate with AI
+                  </Button>
+                </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Generate AI Formula Suggestions</DialogTitle>
@@ -438,10 +548,11 @@ const Formulas = () => {
                 )}
               </div>
             </DialogContent>
-            </Dialog>
+              </Dialog>
+            </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Create & save detailed client formulas • For quick questions, use <button onClick={() => navigate("/ai-assistant")} className="text-primary hover:underline font-medium transition-colors">AI Chat Assistant →</button>
+            View all client formulas • Add manual formulas or generate with AI • For quick questions, use <button onClick={() => navigate("/ai-assistant")} className="text-primary hover:underline font-medium transition-colors">AI Chat Assistant →</button>
           </p>
         </div>
       </header>
@@ -470,74 +581,125 @@ const Formulas = () => {
           </div>
         )}
 
-        <div className="grid gap-6">
-          {filteredFormulas.length === 0 && formulas.length === 0 ? (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Scissors className="h-16 w-16 text-muted-foreground mb-4" />
-                <p className="text-xl font-semibold mb-2">No formulas yet</p>
-                <p className="text-muted-foreground mb-4">Create your first AI-powered formula</p>
-                <Button onClick={() => setDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Formula
+        {filteredFormulas.length === 0 && formulas.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <History className="h-16 w-16 text-muted-foreground mb-4" />
+              <p className="text-xl font-semibold mb-2">No client formulas yet</p>
+              <p className="text-muted-foreground mb-4">Start by adding a formula manually or generate one with AI</p>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setManualDialogOpen(true)}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Add Manual Formula
                 </Button>
-              </CardContent>
-            </Card>
-          ) : filteredFormulas.length === 0 ? (
-            <Card>
-              <CardContent className="text-center py-12">
-                <p className="text-muted-foreground">No formulas match your search</p>
-              </CardContent>
-            </Card>
-          ) : (
-            filteredFormulas.map((formula) => (
-              <Card key={formula.id}>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle>
-                        {formula.client?.user?.full_name || "Client"}
-                      </CardTitle>
-                      <CardDescription>
-                        {new Date(formula.created_at).toLocaleDateString()} • {formula.color_line || "Professional"}
-                      </CardDescription>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => {
-                      setEditingFormula(formula);
-                      setEditDialogOpen(true);
-                    }}>
-                      <Edit className="h-4 w-4" />
-                    </Button>
+                <Button onClick={() => setDialogOpen(true)}>
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Generate with AI
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : filteredFormulas.length === 0 ? (
+          <Card>
+            <CardContent className="text-center py-12">
+              <p className="text-muted-foreground">No formulas match your search</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="space-y-6">
+            {/* Group formulas by client */}
+            {Object.entries(
+              filteredFormulas.reduce((acc: any, formula: any) => {
+                const clientName = formula.client?.user?.full_name || formula.client?.user?.email || "Unknown Client";
+                if (!acc[clientName]) {
+                  acc[clientName] = [];
+                }
+                acc[clientName].push(formula);
+                return acc;
+              }, {})
+            ).map(([clientName, clientFormulas]: [string, any]) => (
+              <div key={clientName} className="space-y-3">
+                <div className="flex items-center gap-2 px-1">
+                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">
+                      {clientName.charAt(0).toUpperCase()}
+                    </span>
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
                   <div>
-                    <p className="font-semibold text-sm mb-1">Formula:</p>
-                    <p className="text-sm whitespace-pre-wrap bg-muted p-3 rounded-md">
-                      {formula.formula_text}
-                    </p>
+                    <h2 className="font-semibold text-lg">{clientName}</h2>
+                    <p className="text-xs text-muted-foreground">{clientFormulas.length} formula{clientFormulas.length !== 1 ? 's' : ''}</p>
                   </div>
-                  {formula.instructions && (
-                    <div>
-                      <p className="font-semibold text-sm mb-1">Instructions:</p>
-                      <p className="text-sm whitespace-pre-wrap">
-                        {formula.instructions}
-                      </p>
-                    </div>
-                  )}
-                  {formula.result_notes && (
-                    <div>
-                      <p className="font-semibold text-sm mb-1">Notes:</p>
-                      <p className="text-sm text-muted-foreground">
-                        {formula.result_notes}
-                      </p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
+                </div>
+                <div className="grid gap-4 pl-10">
+                  {clientFormulas.map((formula: any) => (
+                    <Card key={formula.id} className="border-l-4 border-l-primary/30">
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge variant="outline" className="text-xs">
+                                {new Date(formula.created_at).toLocaleDateString('en-US', { 
+                                  month: 'short', 
+                                  day: 'numeric', 
+                                  year: 'numeric' 
+                                })}
+                              </Badge>
+                              {formula.color_line && (
+                                <Badge variant="secondary" className="text-xs">
+                                  {formula.color_line}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          <Button variant="ghost" size="sm" onClick={() => {
+                            setEditingFormula(formula);
+                            setEditDialogOpen(true);
+                          }}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="bg-muted/50 p-4 rounded-lg">
+                          <p className="font-semibold text-sm mb-2 text-primary">Formula:</p>
+                          <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                            {formula.formula_text}
+                          </p>
+                        </div>
+                        {formula.instructions && (
+                          <div>
+                            <p className="font-semibold text-sm mb-2 text-primary">Application Instructions:</p>
+                            <p className="text-sm whitespace-pre-wrap leading-relaxed text-muted-foreground">
+                              {formula.instructions}
+                            </p>
+                          </div>
+                        )}
+                        {formula.result_notes && (
+                          <div className="bg-secondary/10 p-3 rounded-lg">
+                            <p className="font-semibold text-sm mb-1 text-secondary-foreground">Notes:</p>
+                            <p className="text-sm text-muted-foreground">
+                              {formula.result_notes}
+                            </p>
+                          </div>
+                        )}
+                        {formula.hair_photo_url && (
+                          <div>
+                            <p className="font-semibold text-sm mb-2 text-primary">Reference Photo:</p>
+                            <img 
+                              src={formula.hair_photo_url} 
+                              alt="Hair reference" 
+                              className="rounded-lg max-w-sm w-full object-cover"
+                            />
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Edit Formula Dialog */}
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
