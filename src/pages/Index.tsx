@@ -36,7 +36,7 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="bg-[#F5F1E8] p-8 md:p-16 relative min-h-[500px] text-center">
+            <div className="bg-gradient-to-br from-blue-100 via-cyan-50 to-green-50 p-8 md:p-16 relative min-h-[500px] text-center">
               <div className="window-scrollbar"></div>
               
               <div className="max-w-4xl mx-auto relative z-10">
