@@ -84,9 +84,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
                     <NavLink to={item.url} className={getNavClassName(item.url)}>
-                      <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-                        <item.icon className="h-4 w-4 text-white" />
-                      </div>
+                      <item.icon className="h-5 w-5" />
                       {!collapsed && <span className="ml-2">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
@@ -108,9 +106,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild tooltip={item.title}>
                       <NavLink to={item.url} className={getNavClassName(item.url)}>
-                        <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-                          <item.icon className="h-4 w-4 text-white" />
-                        </div>
+                        <item.icon className="h-5 w-5" />
                         {!collapsed && <span className="ml-2">{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
@@ -128,9 +124,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Profile">
                   <NavLink to="/profile" className={getNavClassName("/profile")}>
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-slate-500 to-gray-500">
-                      <User className="h-4 w-4 text-white" />
-                    </div>
+                    <User className="h-5 w-5" />
                     {!collapsed && <span className="ml-2">Profile</span>}
                   </NavLink>
                 </SidebarMenuButton>
@@ -138,9 +132,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Settings">
                   <NavLink to="/settings" className={getNavClassName("/settings")}>
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500">
-                      <Settings className="h-4 w-4 text-white" />
-                    </div>
+                    <Settings className="h-5 w-5" />
                     {!collapsed && <span className="ml-2">Settings</span>}
                   </NavLink>
                 </SidebarMenuButton>
