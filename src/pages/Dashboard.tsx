@@ -257,56 +257,56 @@ const Dashboard = () => {
       description: "Showcase what you do best—set your prices, durations, and watch bookings roll in",
       icon: DollarSign,
       route: "/services",
-      isPrimary: true,
+      gradient: "from-emerald-500 to-teal-500",
     },
     {
       title: "Availability",
       description: "Take control of your calendar—set hours, block dates, and never miss a beat",
       icon: Settings,
       route: "/availability",
-      isPrimary: true,
+      gradient: "from-blue-500 to-cyan-500",
     },
     {
       title: "💬 AI Chat Assistant",
       description: "Ask questions, troubleshoot issues, learn techniques—your personal color expert for quick advice and guidance (nothing saved)",
       icon: Sparkles,
       route: "/ai-assistant",
-      isPrimary: true,
+      gradient: "from-violet-500 to-purple-500",
     },
     {
       title: "📋 Formula Generator",
       description: "Create complete client formulas with exact measurements, step-by-step instructions, and save them to your client's history",
       icon: Scissors,
       route: "/formulas",
-      isPrimary: false,
+      gradient: "from-pink-500 to-rose-500",
     },
     {
       title: "Payment Tracking",
       description: "See every dollar earned at a glance—never lose track of client payments",
       icon: DollarSign,
       route: "/payments",
-      isPrimary: false,
+      gradient: "from-amber-500 to-orange-500",
     },
     {
       title: "Commissions",
       description: "Turn product recommendations into income—track your earnings effortlessly",
       icon: DollarSign,
       route: "/commissions",
-      isPrimary: false,
+      gradient: "from-green-500 to-emerald-500",
     },
     {
       title: "Knowledge Base",
       description: "Master your craft with curated color techniques, trends, and pro tips",
       icon: BookOpen,
       route: "/knowledge",
-      isPrimary: false,
+      gradient: "from-indigo-500 to-purple-500",
     },
     {
       title: "Blocked Dates",
       description: "Protect your time off—schedule vacations and holidays with zero stress",
       icon: Calendar,
       route: "/blocked-dates",
-      isPrimary: false,
+      gradient: "from-red-500 to-pink-500",
     },
   ];
 
@@ -316,14 +316,14 @@ const Dashboard = () => {
       description: "Your custom formulas saved forever—bring them to any salon, anywhere",
       icon: Sparkles,
       route: "/my-formulas",
-      isPrimary: false,
+      gradient: "from-violet-500 to-purple-500",
     },
     {
       title: "Hair Care Library",
       description: "Unlock expert tips on maintaining your color and keeping your hair healthy",
       icon: BookOpen,
       route: "/knowledge",
-      isPrimary: false,
+      gradient: "from-pink-500 to-rose-500",
     },
   ];
 
@@ -369,7 +369,7 @@ const Dashboard = () => {
                 description={feature.description}
                 icon={feature.icon}
                 route={feature.route}
-                isPrimary={feature.isPrimary}
+                gradient={feature.gradient}
                 index={index}
               />
             ))}
