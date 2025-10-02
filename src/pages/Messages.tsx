@@ -1,0 +1,475 @@
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { MessageSquare, ArrowLeft, Send, Upload, Video, Loader2, User } from "lucide-react";
+import { format } from "date-fns";
+
+const Messages = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [selectedConversation, setSelectedConversation] = useState<any>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [messageText, setMessageText] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userRole, setUserRole] = useState<string>("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (selectedConversation) {
+      loadMessages(selectedConversation.id);
+      subscribeToMessages(selectedConversation.id);
+    }
+  }, [selectedConversation]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const loadData = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/auth");
+        return;
+      }
+
+      // Get user profile and role
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      setUserProfile(profile);
+
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .single();
+
+      setUserRole(roleData?.role || "");
+
+      // Get conversations
+      await loadConversations(session.user.id);
+    } catch (error: any) {
+      console.error("Error loading data:", error);
+      toast.error("Error loading messages");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadConversations = async (userId: string) => {
+    try {
+      // Get all messages where user is sender or recipient
+      const { data: allMessages } = await supabase
+        .from("messages")
+        .select(`
+          *,
+          sender:sender_id(id, full_name, email),
+          recipient:recipient_id(id, full_name, email)
+        `)
+        .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
+
+      if (!allMessages) return;
+
+      // Group by conversation partner
+      const conversationsMap = new Map();
+      
+      allMessages.forEach((msg: any) => {
+        const partnerId = msg.sender_id === userId ? msg.recipient_id : msg.sender_id;
+        const partner = msg.sender_id === userId ? msg.recipient : msg.sender;
+        
+        if (!conversationsMap.has(partnerId)) {
+          conversationsMap.set(partnerId, {
+            id: partnerId,
+            partner: partner,
+            lastMessage: msg,
+            unreadCount: msg.recipient_id === userId && !msg.is_read ? 1 : 0,
+          });
+        } else {
+          const conv = conversationsMap.get(partnerId);
+          if (msg.recipient_id === userId && !msg.is_read) {
+            conv.unreadCount++;
+          }
+        }
+      });
+
+      setConversations(Array.from(conversationsMap.values()));
+    } catch (error: any) {
+      console.error("Error loading conversations:", error);
+    }
+  };
+
+  const loadMessages = async (partnerId: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data } = await supabase
+        .from("messages")
+        .select(`
+          *,
+          sender:sender_id(id, full_name, email)
+        `)
+        .or(`and(sender_id.eq.${session.user.id},recipient_id.eq.${partnerId}),and(sender_id.eq.${partnerId},recipient_id.eq.${session.user.id})`)
+        .order("created_at", { ascending: true });
+
+      setMessages(data || []);
+
+      // Mark messages as read
+      const unreadMessages = data?.filter(
+        (msg: any) => msg.recipient_id === session.user.id && !msg.is_read
+      );
+
+      if (unreadMessages && unreadMessages.length > 0) {
+        await supabase
+          .from("messages")
+          .update({ is_read: true })
+          .in("id", unreadMessages.map((msg: any) => msg.id));
+      }
+    } catch (error: any) {
+      console.error("Error loading messages:", error);
+    }
+  };
+
+  const subscribeToMessages = (partnerId: string) => {
+    const channel = supabase
+      .channel(`messages-${partnerId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+        },
+        (payload) => {
+          const { data: { session } } = supabase.auth.getSession();
+          session.then(({ data: { session } }) => {
+            if (
+              (payload.new.sender_id === partnerId && payload.new.recipient_id === session?.user.id) ||
+              (payload.new.sender_id === session?.user.id && payload.new.recipient_id === partnerId)
+            ) {
+              loadMessages(partnerId);
+              loadConversations(session?.user.id || "");
+            }
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  };
+
+  const handleSendMessage = async () => {
+    if (!messageText.trim() || !selectedConversation) return;
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { error } = await supabase
+        .from("messages")
+        .insert({
+          sender_id: session.user.id,
+          recipient_id: selectedConversation.id,
+          message_text: messageText.trim(),
+        });
+
+      if (error) throw error;
+
+      setMessageText("");
+      await loadMessages(selectedConversation.id);
+      await loadConversations(session.user.id);
+    } catch (error: any) {
+      console.error("Error sending message:", error);
+      toast.error("Error sending message");
+    }
+  };
+
+  const handleVideoUpload = async (file: File) => {
+    if (!selectedConversation) return;
+
+    // Validate file
+    if (!file.type.startsWith("video/")) {
+      toast.error("Please upload a video file");
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error("Video must be less than 50MB");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${session.user.id}/${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("client-videos")
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("client-videos")
+        .getPublicUrl(fileName);
+
+      const { error } = await supabase
+        .from("messages")
+        .insert({
+          sender_id: session.user.id,
+          recipient_id: selectedConversation.id,
+          video_url: publicUrl,
+          message_text: "Sent a video",
+        });
+
+      if (error) throw error;
+
+      toast.success("Video sent successfully!");
+      await loadMessages(selectedConversation.id);
+      await loadConversations(session.user.id);
+    } catch (error: any) {
+      console.error("Error uploading video:", error);
+      toast.error("Error uploading video");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-screen flex flex-col bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <header className="border-b bg-card/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div className="flex items-center gap-2">
+            <MessageSquare className="h-6 w-6 text-primary" />
+            <h1 className="text-2xl font-bold">Messages</h1>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex-1 overflow-hidden">
+        <div className="container mx-auto px-4 h-full flex gap-4 py-4">
+          {/* Conversations List */}
+          <Card className="w-80 flex flex-col">
+            <CardHeader>
+              <CardTitle>Conversations</CardTitle>
+              <CardDescription>Your recent chats</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-y-auto space-y-2">
+              {conversations.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <MessageSquare className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No conversations yet</p>
+                </div>
+              ) : (
+                conversations.map((conv) => (
+                  <div
+                    key={conv.id}
+                    className={`p-3 rounded-lg cursor-pointer transition-all hover:bg-accent/50 ${
+                      selectedConversation?.id === conv.id ? "bg-accent" : ""
+                    }`}
+                    onClick={() => setSelectedConversation(conv)}
+                  >
+                    <div className="flex items-start gap-3">
+                      <Avatar>
+                        <AvatarFallback>
+                          <User className="h-4 w-4" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="font-semibold text-sm truncate">
+                            {conv.partner?.full_name || conv.partner?.email}
+                          </p>
+                          {conv.unreadCount > 0 && (
+                            <Badge variant="default" className="ml-2">
+                              {conv.unreadCount}
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {conv.lastMessage?.message_text || "Video message"}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {format(new Date(conv.lastMessage?.created_at), "MMM d, h:mm a")}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Chat Area */}
+          <Card className="flex-1 flex flex-col">
+            {!selectedConversation ? (
+              <div className="flex-1 flex items-center justify-center text-muted-foreground">
+                <div className="text-center">
+                  <MessageSquare className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                  <p>Select a conversation to start chatting</p>
+                </div>
+              </div>
+            ) : (
+              <>
+                <CardHeader className="border-b">
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarFallback>
+                        <User className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle className="text-lg">
+                        {selectedConversation.partner?.full_name || selectedConversation.partner?.email}
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        {selectedConversation.partner?.email}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+
+                {/* Messages */}
+                <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {messages.map((message) => {
+                    const isOwnMessage = message.sender_id === userProfile?.id;
+                    return (
+                      <div
+                        key={message.id}
+                        className={`flex ${isOwnMessage ? "justify-end" : "justify-start"} animate-fade-in`}
+                      >
+                        <div className={`max-w-[70%] ${isOwnMessage ? "order-2" : "order-1"}`}>
+                          <div
+                            className={`rounded-2xl px-4 py-2 ${
+                              isOwnMessage
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted"
+                            }`}
+                          >
+                            {message.video_url ? (
+                              <div className="space-y-2">
+                                <video
+                                  src={message.video_url}
+                                  controls
+                                  className="rounded-lg max-w-full"
+                                  style={{ maxHeight: "300px" }}
+                                />
+                                <p className="text-sm">{message.message_text}</p>
+                              </div>
+                            ) : (
+                              <p className="text-sm whitespace-pre-wrap break-words">
+                                {message.message_text}
+                              </p>
+                            )}
+                          </div>
+                          <p className={`text-xs text-muted-foreground mt-1 ${isOwnMessage ? "text-right" : "text-left"}`}>
+                            {format(new Date(message.created_at), "h:mm a")}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <div ref={messagesEndRef} />
+                </CardContent>
+
+                {/* Message Input */}
+                <div className="border-t p-4">
+                  <div className="flex gap-2">
+                    <Input
+                      type="file"
+                      accept="video/*"
+                      className="hidden"
+                      id="video-upload"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleVideoUpload(file);
+                      }}
+                      disabled={uploading}
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => document.getElementById("video-upload")?.click()}
+                      disabled={uploading}
+                      title="Upload video"
+                    >
+                      {uploading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Video className="h-4 w-4" />
+                      )}
+                    </Button>
+                    <Textarea
+                      placeholder="Type your message..."
+                      value={messageText}
+                      onChange={(e) => setMessageText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        }
+                      }}
+                      className="min-h-[60px] max-h-[120px] resize-none"
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!messageText.trim()}
+                      size="icon"
+                      className="h-[60px] w-[60px]"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Press Enter to send, Shift+Enter for new line
+                  </p>
+                </div>
+              </>
+            )}
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Messages;
