@@ -11,9 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle, Search, Edit, Save, FileText, History, UserPlus } from "lucide-react";
+import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle, Search, Edit, Save, FileText, History, UserPlus, Copy, Zap } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AddClientDialog } from "@/components/AddClientDialog";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ const Formulas = () => {
   const [editingFormula, setEditingFormula] = useState<any>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"manual" | "ai">("manual");
+  const [clientSearchOpen, setClientSearchOpen] = useState(false);
   
   // Form state
   const [selectedClient, setSelectedClient] = useState("");
@@ -36,6 +39,25 @@ const Formulas = () => {
   const [hairPhoto, setHairPhoto] = useState<File | null>(null);
   const [generatedFormulas, setGeneratedFormulas] = useState<any[]>([]);
   const [addClientDialogOpen, setAddClientDialogOpen] = useState(false);
+
+  // Formula templates
+  const formulaTemplates = [
+    {
+      name: "Full Head Color",
+      formula: "Base: [Color Line] [Level][Tone]\nDeveloper: [Volume]\nRatio: [Mixing ratio]",
+      instructions: "1. Section hair into 4 quadrants\n2. Apply to roots first\n3. Process for [time]\n4. Emulsify and rinse"
+    },
+    {
+      name: "Balayage",
+      formula: "Lightener: [Brand]\nDeveloper: [Volume]\nToner: [Color Line] [Level][Tone]",
+      instructions: "1. Paint lightener freehand\n2. Process to desired lift\n3. Apply toner\n4. Process and rinse"
+    },
+    {
+      name: "Root Touch-Up",
+      formula: "Root Color: [Color Line] [Level][Tone]\nDeveloper: [Volume]",
+      instructions: "1. Apply to new growth only\n2. Process for [time]\n3. Emulsify and rinse"
+    },
+  ];
 
   useEffect(() => {
     loadData();
@@ -221,16 +243,37 @@ const Formulas = () => {
 
       toast.success("Formula saved successfully!");
       setDialogOpen(false);
-      setSelectedClient("");
-      setHairDescription("");
-      setClientNotes("");
-      setColorLine("");
-      setActiveTab("manual");
+      resetForm();
       loadData();
     } catch (error: any) {
       console.error("Error saving formula:", error);
       toast.error("Error saving formula");
     }
+  };
+
+  const resetForm = () => {
+    setSelectedClient("");
+    setHairDescription("");
+    setClientNotes("");
+    setColorLine("");
+    setHairPhoto(null);
+    setActiveTab("manual");
+  };
+
+  const handleCopyFormula = (formula: any) => {
+    setSelectedClient(formula.client_id);
+    setHairDescription(formula.formula_text);
+    setClientNotes(formula.instructions || "");
+    setColorLine(formula.color_line || "");
+    setActiveTab("manual");
+    setDialogOpen(true);
+    toast.success("Formula copied! Adjust as needed and save.");
+  };
+
+  const handleApplyTemplate = (template: any) => {
+    setHairDescription(template.formula);
+    setClientNotes(template.instructions);
+    toast.success(`${template.name} template applied!`);
   };
 
   const handleEditFormula = async () => {
@@ -270,6 +313,8 @@ const Formulas = () => {
     );
   });
 
+  const selectedClientData = clients.find(c => c.id === selectedClient);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -303,6 +348,25 @@ const Formulas = () => {
             </TabsList>
 
             <TabsContent value="manual" className="space-y-4 mt-4">
+              {/* Quick Templates */}
+              <div className="bg-primary/5 p-3 rounded-lg border border-primary/20">
+                <p className="text-xs font-semibold mb-2 text-primary">Quick Start Templates:</p>
+                <div className="flex flex-wrap gap-2">
+                  {formulaTemplates.map((template, idx) => (
+                    <Button
+                      key={idx}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleApplyTemplate(template)}
+                      className="h-auto py-1.5 px-3 text-xs"
+                    >
+                      <Zap className="h-3 w-3 mr-1" />
+                      {template.name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="manual-client">Select Client *</Label>
@@ -316,25 +380,63 @@ const Formulas = () => {
                     Add New
                   </Button>
                 </div>
-                <Select value={selectedClient} onValueChange={setSelectedClient}>
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="Choose a client" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover z-50 max-h-[300px]">
-                    {clients.length === 0 ? (
-                      <div className="p-4 text-sm text-muted-foreground text-center">
-                        <p>No clients yet</p>
-                        <p className="text-xs mt-1">Click "Add New" to create your first client</p>
-                      </div>
-                    ) : (
-                      clients.map((client) => (
-                        <SelectItem key={client.id} value={client.id}>
-                          {client.full_name || client.user?.full_name || client.email || client.user?.email || "Unknown Client"}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
+                <Popover open={clientSearchOpen} onOpenChange={setClientSearchOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={clientSearchOpen}
+                      className="w-full justify-between bg-background"
+                    >
+                      {selectedClientData
+                        ? (selectedClientData.full_name || selectedClientData.user?.full_name || selectedClientData.email || "Client")
+                        : "Search and select a client..."}
+                      <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search clients..." />
+                      <CommandEmpty>
+                        <div className="p-4 text-sm text-center">
+                          <p className="text-muted-foreground mb-2">No clients found</p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setClientSearchOpen(false);
+                              setAddClientDialogOpen(true);
+                            }}
+                          >
+                            <UserPlus className="h-3 w-3 mr-1" />
+                            Add New Client
+                          </Button>
+                        </div>
+                      </CommandEmpty>
+                      <CommandGroup>
+                        {clients.map((client) => (
+                          <CommandItem
+                            key={client.id}
+                            value={client.full_name || client.user?.full_name || client.email || ""}
+                            onSelect={() => {
+                              setSelectedClient(client.id);
+                              setClientSearchOpen(false);
+                            }}
+                          >
+                            <div className="flex flex-col">
+                              <span className="font-medium">
+                                {client.full_name || client.user?.full_name || "Client"}
+                              </span>
+                              {client.email && (
+                                <span className="text-xs text-muted-foreground">{client.email}</span>
+                              )}
+                            </div>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <div className="space-y-2">
@@ -793,6 +895,31 @@ const Formulas = () => {
                                 />
                               </div>
                             )}
+                            
+                            {/* Quick Actions */}
+                            <div className="flex gap-2 pt-2 border-t">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleCopyFormula(formula)}
+                                className="flex-1"
+                              >
+                                <Copy className="h-3 w-3 mr-1" />
+                                Copy & Modify
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingFormula(formula);
+                                  setEditDialogOpen(true);
+                                }}
+                                className="flex-1"
+                              >
+                                <Edit className="h-3 w-3 mr-1" />
+                                Edit
+                              </Button>
+                            </div>
                           </CardContent>
                         </Card>
                       ))}
