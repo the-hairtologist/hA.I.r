@@ -591,15 +591,30 @@ const Formulas = () => {
         )}
 
         {filteredFormulas.length === 0 && formulas.length === 0 ? (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center py-12">
-              <History className="h-16 w-16 text-muted-foreground mb-4" />
-              <p className="text-xl font-semibold mb-2">No client formulas yet</p>
-              <p className="text-muted-foreground mb-4">Create your first formula manually or with AI assistance</p>
-              <Button onClick={() => setDialogOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create Formula
-              </Button>
+          <Card className="border-[3px] border-primary/20 shadow-lg">
+            <CardContent className="flex flex-col items-center justify-center py-16 px-4">
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 animate-scale-in">
+                <History className="h-10 w-10 text-primary" />
+              </div>
+              <h3 className="text-2xl font-display font-bold mb-3">Start Your Formula Library</h3>
+              <div className="max-w-md text-center space-y-3 mb-6">
+                <p className="text-muted-foreground">
+                  Keep all your client color formulas in one place - perfect for recreating their favorite looks!
+                </p>
+                <div className="flex items-center justify-center gap-8 text-sm">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-primary" />
+                    <span className="font-medium">Manual Entry</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <span className="font-medium">AI Generation</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-sm text-primary font-semibold">
+                Click "New Formula" above to get started →
+              </p>
             </CardContent>
           </Card>
         ) : filteredFormulas.length === 0 ? (
