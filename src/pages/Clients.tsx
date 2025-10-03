@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { InviteClientDialog } from "@/components/InviteClientDialog";
 
 interface ClientProfile {
   id: string;
@@ -26,7 +27,10 @@ export default function Clients() {
   const [clients, setClients] = useState<ClientProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [stylistId, setStylistId] = useState<string | null>(null);
+  const [stylistName, setStylistName] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<ClientProfile | null>(null);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -56,12 +60,13 @@ export default function Clients() {
 
       const { data: stylistProfile } = await supabase
         .from("stylist_profiles")
-        .select("id")
+        .select("id, user:profiles(full_name)")
         .eq("user_id", user.id)
         .single();
 
       if (stylistProfile) {
         setStylistId(stylistProfile.id);
+        setStylistName(stylistProfile.user?.full_name || "");
       }
     } catch (error) {
       console.error("Error loading stylist profile:", error);
@@ -268,14 +273,38 @@ export default function Clients() {
                   </div>
                 )}
                 {client.notes && (
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm text-muted-foreground mb-3">
                     {client.notes}
                   </div>
+                )}
+                {client.email && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
+                      setSelectedClient(client);
+                      setInviteDialogOpen(true);
+                    }}
+                  >
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Invite to App
+                  </Button>
                 )}
               </CardContent>
             </Card>
           ))}
         </div>
+      )}
+
+      {selectedClient && (
+        <InviteClientDialog
+          open={inviteDialogOpen}
+          onOpenChange={setInviteDialogOpen}
+          clientEmail={selectedClient.email || ""}
+          clientName={selectedClient.full_name || ""}
+          stylistName={stylistName}
+        />
       )}
     </div>
   );

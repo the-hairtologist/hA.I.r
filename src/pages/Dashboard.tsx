@@ -8,6 +8,7 @@ import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { RecentReviews } from "@/components/dashboard/RecentReviews";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -24,6 +25,7 @@ const Dashboard = () => {
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
   const [stats, setStats] = useState<any>({});
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [recentReviews, setRecentReviews] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
@@ -175,6 +177,21 @@ const Dashboard = () => {
     }));
 
     setRecentActivities(activities);
+
+    // Load recent reviews
+    const { data: reviewsData } = await supabase
+      .from("reviews")
+      .select(`
+        *,
+        client:client_profiles(
+          user:profiles(full_name)
+        )
+      `)
+      .eq("stylist_id", profile.id)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    setRecentReviews(reviewsData || []);
   };
 
   const loadClientDashboard = async () => {
@@ -426,8 +443,9 @@ const Dashboard = () => {
 
         <DashboardStats stats={stats} userRole={userRole || ""} />
 
-        <div className="grid lg:grid-cols-1 gap-6 mb-8">
+        <div className="grid lg:grid-cols-2 gap-6 mb-8">
           <RecentActivity activities={recentActivities} />
+          {userRole === "stylist" && <RecentReviews reviews={recentReviews} />}
         </div>
 
         <div className="mb-8">
