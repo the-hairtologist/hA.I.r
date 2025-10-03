@@ -7,7 +7,15 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="container mx-auto px-4 py-6 border-b-4 border-foreground">
+      {/* Skip to main content for accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:m-2"
+      >
+        Skip to main content
+      </a>
+      
+      <header className="container mx-auto px-4 py-6 border-b-4 border-foreground" role="banner">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Scissors className="h-8 w-8 text-primary" />
@@ -24,7 +32,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-20">
+      <main id="main-content" className="container mx-auto px-4 py-20">
         <div className="max-w-6xl mx-auto mb-16">
           <div className="window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 mb-16 relative">
             <div className="window-titlebar">
@@ -47,9 +55,9 @@ const Index = () => {
                   <div className="text-5xl">🎨</div>
                 </div>
                 
-                <h2 className="text-5xl md:text-7xl font-display font-black mb-8 text-pink-400 uppercase leading-tight">
+                <h1 className="text-5xl md:text-7xl font-display font-black mb-8 text-pink-400 uppercase leading-tight">
                   Transform Every Color Service
-                </h2>
+                </h1>
                 
                 <p className="text-xl md:text-2xl font-bold text-pink-300 mb-4">
                   AI-Powered Precision
@@ -62,44 +70,46 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-xl px-12 py-6 font-display font-black bg-pink-500 text-white hover:bg-pink-600 border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-transform uppercase"
+                  className="text-xl px-12 py-6 font-display font-black bg-pink-500 text-white hover:bg-pink-600 border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-all hover:scale-105 uppercase group"
+                  aria-label="Start your free trial"
                 >
                   Start Free
+                  <span className="inline-block transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
                 </Button>
               </div>
             </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in">
               <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                <Scissors className="h-7 w-7 text-blue-600" />
+                <Scissors className="h-7 w-7 text-blue-600" aria-hidden="true" />
               </div>
-              <h3 className="font-display font-bold text-xl mb-2 text-foreground">Instant AI Formulas</h3>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Instant AI Formulas</h2>
               <p className="text-foreground/80 text-sm font-medium">
                 Upload a photo, describe the look—and get 2-3 expert formulas with step-by-step instructions. No guesswork, just results.
               </p>
-            </div>
+            </article>
 
-            <div className="p-6 border-[3px] border-foreground rounded-xl bg-green-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--accent))] hover:-translate-y-1 transition-all">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-green-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--accent))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in" style={{animationDelay: '100ms'}}>
               <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                <Calendar className="h-7 w-7 text-green-600" />
+                <Calendar className="h-7 w-7 text-green-600" aria-hidden="true" />
               </div>
-              <h3 className="font-display font-bold text-xl mb-2 text-foreground">Effortless Booking</h3>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Effortless Booking</h2>
               <p className="text-foreground/80 text-sm font-medium">
                 Smart calendar that prevents double-bookings automatically. Clients book instantly, you stay organized—zero stress.
               </p>
-            </div>
+            </article>
 
-            <div className="p-6 border-[3px] border-foreground rounded-xl bg-yellow-300 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--secondary))] hover:-translate-y-1 transition-all">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-yellow-300 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--secondary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in" style={{animationDelay: '200ms'}}>
               <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                <MessageSquare className="h-7 w-7 text-yellow-600" />
+                <MessageSquare className="h-7 w-7 text-yellow-600" aria-hidden="true" />
               </div>
-              <h3 className="font-display font-bold text-xl mb-2 text-foreground">Client Connection Hub</h3>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Client Connection Hub</h2>
               <p className="text-foreground/80 text-sm font-medium">
                 Send video consultations, share formulas instantly, and keep every conversation in one place. Build trust, boost loyalty.
               </p>
-            </div>
+            </article>
           </div>
         </div>
       </main>

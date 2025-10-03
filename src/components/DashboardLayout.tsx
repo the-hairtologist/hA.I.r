@@ -74,10 +74,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
+        <div className="text-center bg-white p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
+          <div className="relative mb-4">
+            <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
+            <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+          </div>
+          <p className="text-muted-foreground font-medium" role="status" aria-live="polite">Loading...</p>
         </div>
       </div>
     );
