@@ -64,7 +64,7 @@ const Index = () => {
                 </p>
                 
                 <p className="text-base md:text-lg font-medium text-pink-200 mb-12 max-w-2xl mx-auto">
-                  Say goodbye to guesswork. Generate professional color formulas in seconds, manage your entire salon workflow, and deliver flawless results—every single time.
+                  Stop wasting time on guesswork and inconsistent results. Generate flawless color formulas in seconds, automate your bookings, and deliver the transformations your clients crave—every single time.
                 </p>
                 
                 <Button 
@@ -85,9 +85,9 @@ const Index = () => {
               <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                 <Scissors className="h-7 w-7 text-blue-600" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Instant AI Formulas</h2>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">AI Formulas in Seconds</h2>
               <p className="text-foreground/80 text-sm font-medium">
-                Upload a photo, describe the look—and get 2-3 expert formulas with step-by-step instructions. No guesswork, just results.
+                Upload a photo, describe your vision—get 2-3 professional formulas with precise measurements and step-by-step instructions. Perfect results, zero guesswork.
               </p>
             </article>
 
@@ -95,9 +95,9 @@ const Index = () => {
               <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                 <Calendar className="h-7 w-7 text-green-600" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Effortless Booking</h2>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Never Miss a Booking</h2>
               <p className="text-foreground/80 text-sm font-medium">
-                Smart calendar that prevents double-bookings automatically. Clients book instantly, you stay organized—zero stress.
+                Smart scheduling that prevents double-bookings and sends automatic reminders. Clients book 24/7, your calendar stays organized—zero stress.
               </p>
             </article>
 
@@ -105,9 +105,9 @@ const Index = () => {
               <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                 <MessageSquare className="h-7 w-7 text-yellow-600" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Client Connection Hub</h2>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Build Loyalty on Autopilot</h2>
               <p className="text-foreground/80 text-sm font-medium">
-                Send video consultations, share formulas instantly, and keep every conversation in one place. Build trust, boost loyalty.
+                Send video consultations, share formulas instantly, and keep every client conversation organized. Stronger relationships = more repeat bookings.
               </p>
             </article>
           </div>

@@ -16,33 +16,33 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
   const features = [
     {
       icon: Users,
-      title: "Client Management",
-      description: "Track unlimited clients with detailed profiles, allergies, and preferences"
+      title: "Effortless Client Profiles",
+      description: "Store unlimited client histories—allergies, preferences, past formulas—all organized so you never miss a detail"
     },
     {
       icon: Calendar,
-      title: "Appointment Booking",
-      description: "Manage your calendar with automated reminders and online booking"
+      title: "Smart Scheduling",
+      description: "Automated bookings and reminders that prevent double-booking. Your calendar works for you—not the other way around"
     },
     {
       icon: Scissors,
       title: "AI Formula Generator",
-      description: "Create custom color formulas with AI assistance and save to client history"
+      description: "Generate professional color formulas in seconds with precise measurements and step-by-step instructions—saved automatically to each client"
     },
     {
       icon: Sparkles,
-      title: "AI Hair Assistant",
-      description: "Get instant answers to color questions and technique guidance"
+      title: "24/7 AI Expert",
+      description: "Instant answers to color theory, technique troubleshooting, and product advice—like having a master colorist on speed dial"
     },
     {
       icon: DollarSign,
-      title: "Payment & Commission Tracking",
-      description: "Monitor earnings, track commissions, and manage payments effortlessly"
+      title: "Revenue Tracking That Works",
+      description: "See every payment and commission at a glance. No more spreadsheets, no more guesswork—just clear insights into your earnings"
     },
     {
       icon: MessageSquare,
-      title: "Client Messaging",
-      description: "Communicate with clients through secure in-app messaging"
+      title: "Client Communication Hub",
+      description: "Keep every conversation, consultation video, and formula in one secure place—build trust and loyalty effortlessly"
     }
   ];
 
@@ -83,10 +83,10 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
             <Sparkles className="h-12 w-12 text-primary" />
           </div>
           <DialogTitle className="text-2xl font-bold text-center">
-            Unlock Your Stylist Pro Account
+            Ready to Transform Your Business?
           </DialogTitle>
           <DialogDescription className="text-center text-base">
-            Get full access to all professional tools with a 7-day free trial
+            Join thousands of stylists maximizing their income with AI-powered tools. Start your 7-day free trial today
           </DialogDescription>
         </DialogHeader>
 
@@ -138,10 +138,10 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
             <div className="flex items-start gap-2">
               <Lock className="h-5 w-5 text-muted-foreground mt-0.5" />
               <div>
-                <h3 className="font-semibold text-sm mb-1">Free Account Limitations</h3>
+                <h3 className="font-semibold text-sm mb-1">What You're Missing Without Pro</h3>
                 <p className="text-xs text-muted-foreground">
-                  Without a subscription, you'll have access to basic features like viewing your profile and settings, 
-                  but won't be able to manage clients, take appointments, or use AI tools.
+                  Free accounts can't manage clients, book appointments, generate AI formulas, or track revenue. 
+                  Upgrade now to unlock your full earning potential.
                 </p>
               </div>
             </div>

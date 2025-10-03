@@ -196,10 +196,10 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            Complete Your Profile
+            Let's Get You Set Up
           </DialogTitle>
           <DialogDescription>
-            Let's set up your profile to get the most out of hA.I.r
+            Just a few quick details to unlock the full power of hA.I.r
           </DialogDescription>
         </DialogHeader>
 
@@ -215,8 +215,8 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           {step === 1 && (
             <div className="space-y-4 animate-fade-in">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold mb-2">Basic Information</h3>
-                <p className="text-sm text-muted-foreground">Tell us about yourself</p>
+                <h3 className="text-lg font-semibold mb-2">Let's Start With the Basics</h3>
+                <p className="text-sm text-muted-foreground">Help us personalize your experience</p>
               </div>
 
               <div className="flex flex-col items-center gap-4 mb-6">
@@ -288,8 +288,8 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           {step === 2 && userRole === "stylist" && (
             <div className="space-y-4 animate-fade-in">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold mb-2">Professional Details</h3>
-                <p className="text-sm text-muted-foreground">Help clients find you</p>
+                <h3 className="text-lg font-semibold mb-2">Showcase Your Expertise</h3>
+                <p className="text-sm text-muted-foreground">Stand out and attract more clients</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
@@ -392,8 +392,8 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           {step === 3 && userRole === "stylist" && (
             <div className="space-y-4 animate-fade-in">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold mb-2">Tell Your Story</h3>
-                <p className="text-sm text-muted-foreground">Make a great first impression</p>
+                <h3 className="text-lg font-semibold mb-2">Share Your Story</h3>
+                <p className="text-sm text-muted-foreground">Connect with clients on a personal level</p>
               </div>
 
               <div className="space-y-2">
