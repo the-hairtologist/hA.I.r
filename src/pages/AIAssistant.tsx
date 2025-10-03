@@ -166,8 +166,8 @@ const AIAssistant = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
-      <header className="border-b-[3px] border-foreground bg-white sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+    <div className="min-h-screen bg-yellow-300">
+      <header className="border-b-[3px] border-foreground bg-yellow-400 sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -175,7 +175,7 @@ const AIAssistant = () => {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => navigate("/dashboard")}
-                className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]"
+                className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] bg-white"
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
@@ -193,7 +193,7 @@ const AIAssistant = () => {
                 </div>
               </div>
             </div>
-            <Badge variant="outline" className="border-2 border-foreground font-semibold">
+            <Badge variant="outline" className="border-2 border-foreground font-semibold bg-white">
               Not Saved
             </Badge>
           </div>
@@ -201,8 +201,8 @@ const AIAssistant = () => {
       </header>
 
       <main className="container mx-auto px-4 py-6 max-w-4xl">
-        <Card className="h-[calc(100vh-200px)] flex flex-col border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] bg-yellow-300 overflow-hidden">
-          <CardHeader className="border-b-[3px] border-foreground bg-white">
+        <Card className="h-[calc(100vh-200px)] flex flex-col border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] bg-yellow-200 overflow-hidden">
+          <CardHeader className="border-b-[3px] border-foreground bg-yellow-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary to-secondary">
@@ -224,7 +224,7 @@ const AIAssistant = () => {
                   variant="ghost"
                   size="sm"
                   onClick={clearChat}
-                  className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
+                  className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] bg-white"
                 >
                   <Trash2 className="h-4 w-4 mr-1" />
                   Clear
@@ -327,14 +327,14 @@ const AIAssistant = () => {
             </div>
           </ScrollArea>
 
-          <CardContent className="border-t-[3px] border-foreground p-4 bg-white">
+          <CardContent className="border-t-[3px] border-foreground p-4 bg-yellow-300">
             <div className="flex gap-2">
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about hair color..."
-                className="flex-1 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+                className="flex-1 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-white"
                 disabled={loading}
                 maxLength={2000}
               />
