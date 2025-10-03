@@ -11,8 +11,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle, Search, Edit, Save, FileText, History } from "lucide-react";
+import { Scissors, Plus, Upload, Sparkles, ArrowLeft, Loader2, CheckCircle, Search, Edit, Save, FileText, History, UserPlus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AddClientDialog } from "@/components/AddClientDialog";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const Formulas = () => {
   const [clientNotes, setClientNotes] = useState("");
   const [hairPhoto, setHairPhoto] = useState<File | null>(null);
   const [generatedFormulas, setGeneratedFormulas] = useState<any[]>([]);
+  const [addClientDialogOpen, setAddClientDialogOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -305,7 +307,18 @@ const Formulas = () => {
 
             <TabsContent value="manual" className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label htmlFor="manual-client">Select Client *</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="manual-client">Select Client *</Label>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setAddClientDialogOpen(true)}
+                    className="h-auto py-1 px-2 text-xs gap-1"
+                  >
+                    <UserPlus className="h-3 w-3" />
+                    Add New
+                  </Button>
+                </div>
                 <Select value={selectedClient} onValueChange={setSelectedClient}>
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Choose a client" />
@@ -313,8 +326,8 @@ const Formulas = () => {
                   <SelectContent className="bg-popover z-50 max-h-[300px]">
                     {clients.length === 0 ? (
                       <div className="p-4 text-sm text-muted-foreground text-center">
-                        <p>No clients found</p>
-                        <p className="text-xs mt-1">Clients will appear after their first booking</p>
+                        <p>No clients yet</p>
+                        <p className="text-xs mt-1">Click "Add New" to create your first client</p>
                       </div>
                     ) : (
                       clients.map((client) => (
@@ -375,7 +388,18 @@ const Formulas = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="client">Select Client *</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="client">Select Client *</Label>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setAddClientDialogOpen(true)}
+                    className="h-auto py-1 px-2 text-xs gap-1"
+                  >
+                    <UserPlus className="h-3 w-3" />
+                    Add New
+                  </Button>
+                </div>
                 <Select value={selectedClient} onValueChange={setSelectedClient}>
                   <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Choose a client" />
@@ -383,8 +407,8 @@ const Formulas = () => {
                   <SelectContent className="bg-popover z-50 max-h-[300px]">
                     {clients.length === 0 ? (
                       <div className="p-4 text-sm text-muted-foreground text-center">
-                        <p>No clients found</p>
-                        <p className="text-xs mt-1">Clients will appear after their first booking</p>
+                        <p>No clients yet</p>
+                        <p className="text-xs mt-1">Click "Add New" to create your first client</p>
                       </div>
                     ) : (
                       clients.map((client) => (
@@ -783,6 +807,21 @@ const Formulas = () => {
           </main>
         </div>
       </DashboardLayout>
+
+      {/* Add Client Dialog */}
+      {stylistProfile && (
+        <AddClientDialog
+          open={addClientDialogOpen}
+          onOpenChange={setAddClientDialogOpen}
+          stylistId={stylistProfile.id}
+          onClientAdded={(newClientId) => {
+            // Reload clients and select the new one
+            loadData().then(() => {
+              setSelectedClient(newClientId);
+            });
+          }}
+        />
+      )}
     </>
   );
 };

@@ -19,7 +19,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Save, Loader2 } from "lucide-react";
+import { Save, Loader2, UserPlus } from "lucide-react";
+import { AddClientDialog } from "./AddClientDialog";
 
 interface SaveFormulaDialogProps {
   open: boolean;
@@ -40,6 +41,7 @@ export const SaveFormulaDialog = ({
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingClients, setLoadingClients] = useState(true);
+  const [addClientDialogOpen, setAddClientDialogOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -153,7 +155,18 @@ export const SaveFormulaDialog = ({
 
             {/* Client Selection */}
             <div className="space-y-2">
-              <Label htmlFor="client">Select Client *</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="client">Select Client *</Label>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setAddClientDialogOpen(true)}
+                  className="h-auto py-1 px-2 text-xs gap-1"
+                >
+                  <UserPlus className="h-3 w-3" />
+                  Add New
+                </Button>
+              </div>
               <Select value={selectedClient} onValueChange={setSelectedClient}>
                 <SelectTrigger className="bg-background">
                   <SelectValue placeholder="Choose a client" />
@@ -161,8 +174,8 @@ export const SaveFormulaDialog = ({
                 <SelectContent className="bg-popover z-50 max-h-[300px]">
                   {clients.length === 0 ? (
                     <div className="p-4 text-sm text-muted-foreground text-center">
-                      <p>No clients found</p>
-                      <p className="text-xs mt-1">Clients will appear after their first booking</p>
+                      <p>No clients yet</p>
+                      <p className="text-xs mt-1">Click "Add New" to create your first client</p>
                     </div>
                   ) : (
                     clients.map((client) => (
@@ -229,6 +242,19 @@ export const SaveFormulaDialog = ({
           </div>
         )}
       </DialogContent>
+
+      {/* Add Client Dialog */}
+      <AddClientDialog
+        open={addClientDialogOpen}
+        onOpenChange={setAddClientDialogOpen}
+        stylistId={stylistId}
+        onClientAdded={(newClientId) => {
+          // Reload clients and select the new one
+          loadClients().then(() => {
+            setSelectedClient(newClientId);
+          });
+        }}
+      />
     </Dialog>
   );
 };
