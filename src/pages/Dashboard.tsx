@@ -212,7 +212,7 @@ const Dashboard = () => {
         .from("profiles")
         .select("full_name, gender")
         .eq("id", session.user.id)
-        .single();
+        .maybeSingle();
 
       setUserProfile(profileData);
 
