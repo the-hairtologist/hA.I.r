@@ -79,25 +79,17 @@ const Formulas = () => {
 
       setFormulas(formulasData || []);
 
-      // Get clients from appointments
-      const { data: appointmentsData } = await supabase
-        .from("appointments")
-        .select(`client_id`)
-        .eq("stylist_id", stylist.id);
-
-      const clientIds = [...new Set(appointmentsData?.map(apt => apt.client_id) || [])];
-      
-      let clientsData = [];
-      if (clientIds.length > 0) {
-        const { data } = await supabase
-          .from("client_profiles")
-          .select(`
-            id,
-            user:profiles(full_name, email)
-          `)
-          .in("id", clientIds);
-        clientsData = data || [];
-      }
+      // Get ALL clients linked to this stylist (not just those with appointments)
+      const { data: clientsData } = await supabase
+        .from("client_profiles")
+        .select(`
+          id,
+          full_name,
+          email,
+          user:profiles(full_name, email)
+        `)
+        .eq("preferred_stylist_id", stylist.id)
+        .order("full_name");
 
       setClients(clientsData || []);
     } catch (error: any) {
@@ -267,11 +259,16 @@ const Formulas = () => {
     }
   };
 
-  const filteredFormulas = formulas.filter(formula =>
-    formula.client?.user?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    formula.formula_text?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    formula.color_line?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredFormulas = formulas.filter(formula => {
+    const search = searchTerm.toLowerCase();
+    return (
+      formula.client?.user?.full_name?.toLowerCase().includes(search) ||
+      formula.client?.full_name?.toLowerCase().includes(search) ||
+      formula.formula_text?.toLowerCase().includes(search) ||
+      formula.color_line?.toLowerCase().includes(search) ||
+      formula.instructions?.toLowerCase().includes(search)
+    );
+  });
 
   if (loading) {
     return (
@@ -332,7 +329,7 @@ const Formulas = () => {
                     ) : (
                       clients.map((client) => (
                         <SelectItem key={client.id} value={client.id}>
-                          {client.user?.full_name || client.user?.email}
+                          {client.full_name || client.user?.full_name || client.email || client.user?.email || "Unknown Client"}
                         </SelectItem>
                       ))
                     )}

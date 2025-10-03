@@ -100,7 +100,6 @@ Always be supportive, professional, and emphasize that these are expert suggesti
           { role: 'system', content: systemPrompt },
           ...messages
         ],
-        temperature: 0.8,
         max_tokens: 2000,
       }),
     });

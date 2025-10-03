@@ -53,27 +53,19 @@ export const SaveFormulaDialog = ({
     try {
       setLoadingClients(true);
 
-      // Get clients from appointments
-      const { data: appointmentsData } = await supabase
-        .from("appointments")
-        .select(`client_id`)
-        .eq("stylist_id", stylistId);
-
-      const clientIds = [...new Set(appointmentsData?.map(apt => apt.client_id) || [])];
+      // Get ALL clients linked to this stylist
+      const { data: clientsData } = await supabase
+        .from("client_profiles")
+        .select(`
+          id,
+          full_name,
+          email,
+          user:profiles(full_name, email)
+        `)
+        .eq("preferred_stylist_id", stylistId)
+        .order("full_name");
       
-      if (clientIds.length > 0) {
-        const { data } = await supabase
-          .from("client_profiles")
-          .select(`
-            id,
-            user:profiles(full_name, email)
-          `)
-          .in("id", clientIds);
-        
-        setClients(data || []);
-      } else {
-        setClients([]);
-      }
+      setClients(clientsData || []);
     } catch (error: any) {
       console.error("Error loading clients:", error);
       toast.error("Failed to load clients");
@@ -180,7 +172,7 @@ export const SaveFormulaDialog = ({
                   ) : (
                     clients.map((client) => (
                       <SelectItem key={client.id} value={client.id}>
-                        {client.user?.full_name || client.user?.email || "Unknown Client"}
+                        {client.full_name || client.user?.full_name || client.email || client.user?.email || "Unknown Client"}
                       </SelectItem>
                     ))
                   )}

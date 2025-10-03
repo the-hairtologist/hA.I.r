@@ -26,6 +26,19 @@ const MyAppointments = () => {
 
   useEffect(() => {
     loadData();
+    
+    // Check for payment success
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    
+    if (paymentStatus === 'success') {
+      toast.success('🎉 Payment successful!', {
+        description: 'Your appointment has been confirmed. Check your email for details!',
+        duration: 5000,
+      });
+      // Clean up URL
+      window.history.replaceState({}, '', '/my-appointments');
+    }
   }, []);
 
   const loadData = async () => {
