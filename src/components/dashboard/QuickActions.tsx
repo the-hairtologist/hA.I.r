@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, Users, Calendar, MessageSquare, Scissors, Settings2, Plus, X } from "lucide-react";
+import { Sparkles, Users, Calendar, MessageSquare, Scissors, Settings2, Plus, X, Palette, DollarSign, BookOpen, CreditCard, GripVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface QuickActionsProps {
   userRole: string;
@@ -22,6 +23,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
   const navigate = useNavigate();
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [selectedActions, setSelectedActions] = useState<string[]>([]);
+  const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   const allStylistActions: ActionButton[] = [
     {
@@ -55,6 +57,54 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
       icon: MessageSquare,
       route: "/messages",
       gradient: "from-emerald-500 to-teal-500",
+    },
+    {
+      id: "clients",
+      label: "Client Management",
+      description: "Manage your clients",
+      icon: Users,
+      route: "/clients",
+      gradient: "from-amber-500 to-orange-500",
+    },
+    {
+      id: "services",
+      label: "Services & Pricing",
+      description: "Edit your offerings",
+      icon: Settings2,
+      route: "/services",
+      gradient: "from-indigo-500 to-blue-500",
+    },
+    {
+      id: "portfolio",
+      label: "Portfolio",
+      description: "Showcase your work",
+      icon: Palette,
+      route: "/portfolio",
+      gradient: "from-fuchsia-500 to-pink-500",
+    },
+    {
+      id: "payments",
+      label: "Payment History",
+      description: "Track your earnings",
+      icon: CreditCard,
+      route: "/payments",
+      gradient: "from-green-500 to-emerald-500",
+    },
+    {
+      id: "commissions",
+      label: "Commissions",
+      description: "Product commissions",
+      icon: DollarSign,
+      route: "/commissions",
+      gradient: "from-yellow-500 to-amber-500",
+    },
+    {
+      id: "knowledge",
+      label: "Knowledge Base",
+      description: "Hair care resources",
+      icon: BookOpen,
+      route: "/knowledge",
+      gradient: "from-cyan-500 to-blue-500",
     },
   ];
 
@@ -108,7 +158,33 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
     });
   };
 
-  const displayedActions = allActions.filter(a => selectedActions.includes(a.id));
+  const handleDragStart = (id: string) => {
+    setDraggedItem(id);
+  };
+
+  const handleDragOver = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    if (!draggedItem || draggedItem === targetId) return;
+
+    setSelectedActions(prev => {
+      const newOrder = [...prev];
+      const draggedIndex = newOrder.indexOf(draggedItem);
+      const targetIndex = newOrder.indexOf(targetId);
+      
+      newOrder.splice(draggedIndex, 1);
+      newOrder.splice(targetIndex, 0, draggedItem);
+      
+      localStorage.setItem(storageKey, JSON.stringify(newOrder));
+      return newOrder;
+    });
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+  };
+
+  const displayedActions = allActions.filter(a => selectedActions.includes(a.id))
+    .sort((a, b) => selectedActions.indexOf(a.id) - selectedActions.indexOf(b.id));
 
   return (
     <Card className="mb-8 animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
@@ -118,9 +194,12 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             <CardTitle className="flex items-center gap-2 text-xl font-display">
               <Sparkles className="h-5 w-5 text-primary" />
               Your Quick Actions
+              <Badge variant="outline" className="ml-2 font-mono">
+                {selectedActions.length}/{allActions.length}
+              </Badge>
             </CardTitle>
             <p className="text-sm font-semibold mt-1 text-foreground/80">
-              {isCustomizing ? "Select your favorite shortcuts" : "Jump to what matters most"}
+              {isCustomizing ? "Select & drag to reorder your shortcuts" : "Jump to what matters most"}
             </p>
           </div>
           <Button
@@ -180,31 +259,45 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
               const Icon = action.icon;
               
               return (
-                <button
+                <div
                   key={action.id}
-                  onClick={() => navigate(action.route)}
-                  className="group relative p-5 rounded-xl border-[3px] border-foreground hover:border-primary bg-white transition-all text-left overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1"
+                  draggable
+                  onDragStart={() => handleDragStart(action.id)}
+                  onDragOver={(e) => handleDragOver(e, action.id)}
+                  onDragEnd={handleDragEnd}
+                  className={cn(
+                    "group relative rounded-xl border-[3px] border-foreground bg-white transition-all overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1",
+                    draggedItem === action.id && "opacity-50"
+                  )}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <div className={cn(
-                    "absolute inset-0 bg-gradient-to-br opacity-10",
-                    action.gradient
-                  )} />
-                  <div className="relative">
-                    <div className={cn(
-                      "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
-                      action.gradient
-                    )}>
-                      <Icon className="h-6 w-6 text-white" />
-                    </div>
-                    <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
-                      {action.label}
-                    </h4>
-                    <p className="text-sm text-foreground/70">
-                      {action.description}
-                    </p>
+                  <div className="flex items-start gap-2 p-5 cursor-move">
+                    <GripVertical className="h-5 w-5 text-foreground/30 shrink-0 mt-1" />
+                    <button
+                      onClick={() => navigate(action.route)}
+                      className="flex-1 text-left"
+                    >
+                      <div className={cn(
+                        "absolute inset-0 bg-gradient-to-br opacity-10",
+                        action.gradient
+                      )} />
+                      <div className="relative">
+                        <div className={cn(
+                          "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+                          action.gradient
+                        )}>
+                          <Icon className="h-6 w-6 text-white" />
+                        </div>
+                        <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
+                          {action.label}
+                        </h4>
+                        <p className="text-sm text-foreground/70">
+                          {action.description}
+                        </p>
+                      </div>
+                    </button>
                   </div>
-                </button>
+                </div>
               );
             })}
             {displayedActions.length === 0 && (
