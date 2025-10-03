@@ -91,6 +91,16 @@ const MyFormulas = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8 max-w-6xl animate-fade-in">
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+        </div>
         <div className="mb-8">
           <h1 className="text-4xl font-display font-bold mb-2">My Hair Color History</h1>
           <p className="text-foreground/70 font-medium">

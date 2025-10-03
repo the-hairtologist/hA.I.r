@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, ArrowLeft } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 interface PortfolioPhoto {
@@ -233,6 +233,16 @@ const Portfolio = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto p-6 max-w-6xl animate-fade-in">
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+        </div>
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 font-display">My Portfolio</h1>
           <p className="text-muted-foreground">Showcase your best work to attract more clients</p>
