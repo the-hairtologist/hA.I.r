@@ -328,6 +328,30 @@ const Dashboard = () => {
     },
   ];
 
+  const stylistMessages = [
+    "Every masterpiece starts with a vision—grab your brush, trust your instincts, and let's turn some heads today! 💫",
+    "Your chair is your canvas, your client is your muse—time to create something they'll absolutely love! 🎨",
+    "Coffee's brewing, creativity's flowing—let's make today unforgettable, one transformation at a time! ☕✨",
+    "Behind every great hairstyle is a stylist who dared to dream bigger. That's you. Now go make magic happen! 🌟",
+    "The world needs your artistry today—ready to blend, highlight, and slay? Let's do this! 💅",
+    "Some days you change hair, other days you change lives. Today? Let's aim for both! 🚀",
+    "Your scissors are sharp, your vision is clear, your talent is undeniable—let's create some jaw-dropping looks! ⚡"
+  ];
+
+  const clientMessages = [
+    "Your next iconic look is just a booking away. Ready to discover the transformation you've been dreaming of? ✨",
+    "Great hair isn't just styled—it's crafted with care. Find your perfect stylist and let the transformation begin! 💫",
+    "Today's a great day to treat yourself to something fabulous. Your dream hair is waiting! 🌟",
+    "Life's too short for boring hair. Ready to turn heads and feel amazing? Let's find your look! 💁‍♀️",
+    "Every great style starts with a great stylist. Your perfect match is just a click away! 🎨",
+    "You deserve to feel confident and gorgeous. Time to book that appointment you've been thinking about! ✨",
+    "Your hair journey is a story worth telling. Let's write the next beautiful chapter together! 📖"
+  ];
+
+  const welcomeMessage = userRole === "stylist" 
+    ? stylistMessages[Math.floor(Math.random() * stylistMessages.length)]
+    : clientMessages[Math.floor(Math.random() * clientMessages.length)];
+
   const features = userRole === "stylist" ? stylistFeatures : clientFeatures;
 
   return (
@@ -370,9 +394,7 @@ const Dashboard = () => {
               </h2>
               
               <p className="text-base md:text-lg font-medium text-pink-200 mb-6 max-w-2xl">
-                {userRole === "stylist" 
-                  ? "Every masterpiece starts with a vision—grab your brush, trust your instincts, and let's turn some heads today! 💫" 
-                  : "Your next iconic look is just a booking away. Ready to discover the transformation you've been dreaming of? ✨"}
+                {welcomeMessage}
               </p>
               
               <div className="flex gap-4 flex-wrap">
