@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Send, Sparkles, Loader2, User, Bot, Trash2, BookmarkPlus, Zap, Star } from "lucide-react";
 import { SaveFormulaDialog } from "@/components/SaveFormulaDialog";
 import { cn } from "@/lib/utils";
+import { HelpTooltip } from "@/components/HelpTooltip";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -193,9 +194,15 @@ const AIAssistant = () => {
                 </div>
               </div>
             </div>
-            <Badge variant="outline" className="border-2 border-foreground font-semibold bg-white">
-              Not Saved
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="border-2 border-foreground font-semibold bg-white">
+                Temporary Chat
+              </Badge>
+              <Badge variant="outline" className="border-2 border-foreground font-semibold bg-white">
+                Session Only
+              </Badge>
+              <HelpTooltip content="Your conversations are temporary and only last for this session. Once you leave or refresh this page, your chat history will be cleared. For saving client formulas permanently, use the Formula Generator instead." />
+            </div>
           </div>
         </div>
       </header>
