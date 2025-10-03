@@ -255,9 +255,7 @@ const AIAssistant = () => {
                     <div
                       className={cn(
                         "rounded-lg px-4 py-3 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
-                        message.role === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-white'
+                        "bg-black text-white"
                       )}
                     >
                       <p className="text-sm whitespace-pre-wrap leading-relaxed">
@@ -299,8 +297,8 @@ const AIAssistant = () => {
                       <Bot className="h-4 w-4 text-white" />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="rounded-lg px-4 py-3 bg-white border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
-                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  <div className="rounded-lg px-4 py-3 bg-black text-white border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   </div>
                 </div>
               )}
