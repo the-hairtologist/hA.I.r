@@ -166,82 +166,56 @@ const AIAssistant = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-fuchsia-50 to-cyan-50">
-      {/* Animated background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-violet-400/20 to-fuchsia-400/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-pink-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
-
-      <header className="border-b-[3px] border-foreground bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
+      <header className="border-b-[3px] border-foreground bg-white sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4 mb-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate("/dashboard")}
-              className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-lg blur opacity-75 animate-pulse" />
-                <div className="relative bg-gradient-to-r from-violet-500 to-fuchsia-500 p-2 rounded-lg border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate("/dashboard")}
+                className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <div className="flex items-center gap-3">
+                <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-lg border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
                   <Sparkles className="h-6 w-6 text-white" />
                 </div>
-              </div>
-              <div>
-                <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-2">
-                  AI Expert Chat
-                  <Zap className="h-6 w-6 text-violet-500 animate-pulse" />
-                </h1>
-                <p className="text-sm font-semibold text-foreground/70">
-                  Powered by Advanced AI • Instant Expert Advice
-                </p>
+                <div>
+                  <h1 className="text-2xl font-display font-bold text-foreground">
+                    AI Chat Assistant
+                  </h1>
+                  <p className="text-xs font-semibold text-foreground/60">
+                    Get instant expert advice
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="ml-16 flex items-center gap-2 flex-wrap">
-            <Badge variant="outline" className="border-2 border-violet-500 bg-violet-50 text-violet-700 font-semibold">
-              <Star className="h-3 w-3 mr-1" />
-              Nothing Saved
+            <Badge variant="outline" className="border-2 border-foreground font-semibold">
+              Not Saved
             </Badge>
-            <span className="text-sm text-foreground/60">•</span>
-            <p className="text-sm text-foreground/70">
-              For client formulas, use <button onClick={() => navigate("/formulas")} className="text-violet-600 hover:text-violet-700 underline font-bold transition-colors">Formula Generator →</button>
-            </p>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-4xl relative">
-        <Card className="h-[calc(100vh-200px)] flex flex-col border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-white overflow-hidden">
-          {/* Gradient header overlay */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-violet-100 via-fuchsia-50 to-transparent pointer-events-none" />
-          
-          <CardHeader className="border-b-[3px] border-foreground relative bg-gradient-to-r from-violet-50 to-fuchsia-50">
+      <main className="container mx-auto px-4 py-6 max-w-4xl">
+        <Card className="h-[calc(100vh-200px)] flex flex-col border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] bg-yellow-300 overflow-hidden">
+          <CardHeader className="border-b-[3px] border-foreground bg-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full blur-md opacity-50 animate-pulse" />
-                  <Avatar className="h-12 w-12 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] relative bg-gradient-to-br from-violet-500 to-fuchsia-500">
-                    <AvatarFallback className="bg-transparent">
-                      <Bot className="h-6 w-6 text-white" />
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
+                <Avatar className="h-10 w-10 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary to-secondary">
+                  <AvatarFallback className="bg-transparent">
+                    <Bot className="h-5 w-5 text-white" />
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <CardTitle className="font-display text-xl flex items-center gap-2">
-                    Your AI Color Expert
-                    <Badge className="bg-gradient-to-r from-violet-500 to-fuchsia-500 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-white font-bold">
-                      <Sparkles className="h-3 w-3 mr-1 animate-pulse" />
-                      LIVE
-                    </Badge>
+                  <CardTitle className="font-display text-lg">
+                    AI Color Expert
                   </CardTitle>
-                  <p className="text-xs font-semibold text-foreground/60 mt-1">
-                    ⚡ Instant responses • 🧠 Expert knowledge • 💯 Always available
+                  <p className="text-xs font-semibold text-foreground/60">
+                    Ask me anything about hair color
                   </p>
                 </div>
               </div>
@@ -250,7 +224,7 @@ const AIAssistant = () => {
                   variant="ghost"
                   size="sm"
                   onClick={clearChat}
-                  className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] bg-white"
+                  className="border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
                 >
                   <Trash2 className="h-4 w-4 mr-1" />
                   Clear
@@ -259,8 +233,8 @@ const AIAssistant = () => {
             </div>
           </CardHeader>
 
-          <ScrollArea className="flex-1 p-6 bg-gradient-to-b from-transparent to-violet-50/30" ref={scrollRef}>
-            <div className="space-y-6">
+          <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+            <div className="space-y-4">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -268,38 +242,25 @@ const AIAssistant = () => {
                     "flex gap-3 animate-fade-in",
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   )}
-                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {message.role === 'assistant' && (
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full blur-sm opacity-40 animate-pulse" />
-                      <Avatar className="h-10 w-10 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] relative bg-gradient-to-br from-violet-500 to-fuchsia-500">
-                        <AvatarFallback className="bg-transparent">
-                          <Bot className="h-5 w-5 text-white" />
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
+                    <Avatar className="h-8 w-8 border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary to-secondary">
+                      <AvatarFallback className="bg-transparent">
+                        <Bot className="h-4 w-4 text-white" />
+                      </AvatarFallback>
+                    </Avatar>
                   )}
                   
                   <div className="flex flex-col gap-2 max-w-[75%]">
                     <div
                       className={cn(
-                        "rounded-xl px-5 py-4 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5",
+                        "rounded-lg px-4 py-3 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
                         message.role === 'user'
-                          ? 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white'
+                          ? 'bg-primary text-primary-foreground'
                           : 'bg-white'
                       )}
                     >
-                      {message.role === 'assistant' && index === 0 && (
-                        <div className="flex items-center gap-2 mb-3 pb-3 border-b-2 border-foreground/10">
-                          <Sparkles className="h-4 w-4 text-violet-500 animate-pulse" />
-                          <span className="text-xs font-bold text-violet-600">AI EXPERT</span>
-                        </div>
-                      )}
-                      <p className={cn(
-                        "text-sm whitespace-pre-wrap leading-relaxed font-medium",
-                        message.role === 'user' ? 'text-white' : 'text-foreground'
-                      )}>
+                      <p className="text-sm whitespace-pre-wrap leading-relaxed">
                         {message.content}
                       </p>
                     </div>
@@ -313,18 +274,18 @@ const AIAssistant = () => {
                           setSelectedFormulaText(message.content);
                           setSaveDialogOpen(true);
                         }}
-                        className="self-start gap-2 text-xs h-8 border-2 border-foreground bg-white shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]"
+                        className="self-start gap-2 text-xs h-7 border-2 border-foreground bg-white shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
                       >
                         <BookmarkPlus className="h-3 w-3" />
-                        Save as Formula
+                        Save
                       </Button>
                     )}
                   </div>
 
                   {message.role === 'user' && (
-                    <Avatar className="h-10 w-10 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-cyan-400 to-blue-500">
-                      <AvatarFallback className="bg-transparent text-white">
-                        <User className="h-5 w-5" />
+                    <Avatar className="h-8 w-8 border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] bg-primary">
+                      <AvatarFallback className="bg-transparent text-primary-foreground">
+                        <User className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
                   )}
@@ -333,42 +294,31 @@ const AIAssistant = () => {
 
               {loading && (
                 <div className="flex gap-3 justify-start animate-fade-in">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full blur-sm opacity-40 animate-pulse" />
-                    <Avatar className="h-10 w-10 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] relative bg-gradient-to-br from-violet-500 to-fuchsia-500">
-                      <AvatarFallback className="bg-transparent">
-                        <Bot className="h-5 w-5 text-white" />
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
-                  <div className="rounded-xl px-5 py-4 bg-white border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin text-violet-500" />
-                      <Sparkles className="h-3 w-3 text-fuchsia-500 animate-pulse" />
-                      <span className="text-sm font-semibold text-foreground/60">Thinking...</span>
-                    </div>
+                  <Avatar className="h-8 w-8 border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary to-secondary">
+                    <AvatarFallback className="bg-transparent">
+                      <Bot className="h-4 w-4 text-white" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="rounded-lg px-4 py-3 bg-white border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
                   </div>
                 </div>
               )}
 
               {messages.length === 1 && !loading && (
-                <div className="space-y-3 mt-6">
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-violet-500" />
-                    <p className="text-sm font-bold text-foreground/80">
-                      Quick Start - Try these:
-                    </p>
-                  </div>
-                  <div className="grid gap-3">
+                <div className="space-y-2 mt-4">
+                  <p className="text-sm font-bold text-foreground/70">
+                    Try asking:
+                  </p>
+                  <div className="grid gap-2">
                     {exampleQuestions.map((question, idx) => (
                       <Button
                         key={idx}
                         variant="outline"
-                        className="justify-start text-left h-auto py-3 px-4 border-[3px] border-foreground bg-white shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 transition-all"
+                        className="justify-start text-left h-auto py-2 px-3 border-[3px] border-foreground bg-white shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
                         onClick={() => setInput(question)}
                       >
-                        <Sparkles className="h-4 w-4 mr-2 text-violet-500 shrink-0" />
-                        <span className="text-sm font-medium">{question}</span>
+                        <span className="text-sm">{question}</span>
                       </Button>
                     ))}
                   </div>
@@ -377,42 +327,37 @@ const AIAssistant = () => {
             </div>
           </ScrollArea>
 
-          <CardContent className="border-t-[3px] border-foreground p-4 bg-gradient-to-r from-violet-50 to-fuchsia-50">
+          <CardContent className="border-t-[3px] border-foreground p-4 bg-white">
             <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Ask me anything about hair color..."
-                  className="border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] focus:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] transition-all pr-12 font-medium"
-                  disabled={loading}
-                  maxLength={2000}
-                />
-                <Sparkles className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-violet-400 animate-pulse" />
-              </div>
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Ask me anything about hair color..."
+                className="flex-1 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+                disabled={loading}
+                maxLength={2000}
+              />
               <Button
                 onClick={sendMessage}
                 disabled={loading || !input.trim() || input.trim().length < 3}
-                className="border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 transition-all bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white h-10 w-10 p-0"
+                className="border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all bg-primary text-primary-foreground"
+                size="icon"
               >
                 {loading ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <Send className="h-5 w-5" />
+                  <Send className="h-4 w-4" />
                 )}
               </Button>
             </div>
-            <div className="flex items-center justify-between mt-3 px-1">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse border border-foreground" />
-                <p className="text-xs font-bold text-foreground/70">
-                  💡 Be specific: mention hair level, condition & desired results
-                </p>
-              </div>
-              <Badge variant="outline" className="border-2 border-foreground font-mono text-xs">
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-xs font-semibold text-foreground/60">
+                💡 Be specific for best results
+              </p>
+              <p className="text-xs font-mono text-foreground/60">
                 {input.length}/2000
-              </Badge>
+              </p>
             </div>
           </CardContent>
         </Card>
