@@ -202,8 +202,8 @@ const Appointments = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <header className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -212,7 +212,7 @@ const Appointments = () => {
               </Button>
               <div className="flex items-center gap-2">
                 <CalendarIcon className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold">My Appointments</h1>
+                <h1 className="text-2xl font-display font-bold gradient-text">My Appointments</h1>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -246,7 +246,7 @@ const Appointments = () => {
                 className="flex-1"
               />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-48">
+                <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
@@ -263,9 +263,9 @@ const Appointments = () => {
             <div className="grid lg:grid-cols-3 gap-6">
           {/* Calendar Section */}
           <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle>Calendar</CardTitle>
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader className="border-b-[2px] border-border">
+                <CardTitle className="font-display">Calendar</CardTitle>
                 <CardDescription>Select a date to view appointments</CardDescription>
               </CardHeader>
               <CardContent>
@@ -278,9 +278,9 @@ const Appointments = () => {
               </CardContent>
             </Card>
 
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle>Quick Stats</CardTitle>
+            <Card className="mt-6 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader className="border-b-[2px] border-border">
+                <CardTitle className="font-display">Quick Stats</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between items-center">
@@ -303,9 +303,9 @@ const Appointments = () => {
 
           {/* Appointments List */}
           <div className="lg:col-span-2 space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Today's Appointments</CardTitle>
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader className="border-b-[2px] border-border">
+                <CardTitle className="font-display">Today's Appointments</CardTitle>
               </CardHeader>
               <CardContent>
                 {filteredAppointments(todayAppointments).length === 0 ? (
@@ -319,7 +319,7 @@ const Appointments = () => {
                      {filteredAppointments(todayAppointments).map((apt) => (
                       <div
                         key={apt.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 transition-colors group"
+                        className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
                       >
                         <div 
                           className="flex items-center gap-4 flex-1 cursor-pointer"
@@ -360,9 +360,9 @@ const Appointments = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Upcoming Appointments</CardTitle>
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader className="border-b-[2px] border-border">
+                <CardTitle className="font-display">Upcoming Appointments</CardTitle>
               </CardHeader>
               <CardContent>
                 {filteredAppointments(upcomingAppointments).length === 0 ? (
@@ -376,7 +376,7 @@ const Appointments = () => {
                      {filteredAppointments(upcomingAppointments).slice(0, 10).map((apt) => (
                       <div
                         key={apt.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 transition-colors group"
+                        className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
                       >
                         <div 
                           className="flex items-center gap-4 flex-1 cursor-pointer"
