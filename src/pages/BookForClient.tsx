@@ -6,8 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { ArrowLeft, Calendar as CalendarIcon, Clock, Loader2, UserPlus } from "lucide-react";
+import { ArrowLeft, Calendar as CalendarIcon, Clock, Loader2, UserPlus, User } from "lucide-react";
 import { format, setHours, setMinutes, addHours } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -23,7 +25,11 @@ const BookForClient = () => {
   const [blockedDates, setBlockedDates] = useState<Date[]>([]);
 
   // Form state
+  const [clientMode, setClientMode] = useState<"existing" | "new">("existing");
   const [selectedClient, setSelectedClient] = useState("");
+  const [newClientName, setNewClientName] = useState("");
+  const [newClientEmail, setNewClientEmail] = useState("");
+  const [newClientPhone, setNewClientPhone] = useState("");
   const [selectedService, setSelectedService] = useState<any>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState("");
@@ -147,7 +153,37 @@ const BookForClient = () => {
   };
 
   const handleSubmit = async () => {
-    if (!selectedClient) {
+    let clientId = selectedClient;
+
+    // If creating new client, validate and create
+    if (clientMode === "new") {
+      if (!newClientName.trim()) {
+        toast.error("Please enter client name");
+        return;
+      }
+
+      try {
+        // Create new client profile
+        const { data: newClient, error: clientError } = await supabase
+          .from("client_profiles")
+          .insert({
+            preferred_stylist_id: stylistProfile.id,
+            full_name: newClientName,
+            email: newClientEmail || null,
+            phone: newClientPhone || null,
+          })
+          .select()
+          .single();
+
+        if (clientError) throw clientError;
+        clientId = newClient.id;
+      } catch (error) {
+        console.error("Error creating client:", error);
+        toast.error("Error creating client profile");
+        setSubmitting(false);
+        return;
+      }
+    } else if (!selectedClient) {
       toast.error("Please select a client");
       return;
     }
@@ -212,7 +248,7 @@ const BookForClient = () => {
         .from("appointments")
         .insert({
           stylist_id: stylistProfile.id,
-          client_id: selectedClient,
+          client_id: clientId,
           appointment_date: appointmentDate.toISOString(),
           service_type: selectedService.service_name,
           service_id: selectedService.id,
@@ -266,28 +302,69 @@ const BookForClient = () => {
           <CardContent className="space-y-6">
             {/* Client Selection */}
             <div className="space-y-2">
-              <Label>Select Client *</Label>
-              {clients.length === 0 ? (
-                <div className="p-4 text-center bg-muted rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-2">No clients found</p>
-                  <Button size="sm" onClick={() => navigate("/clients")}>
-                    Add Client First
-                  </Button>
-                </div>
-              ) : (
-                <Select value={selectedClient} onValueChange={setSelectedClient}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choose a client" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover z-50">
-                    {clients.map((client) => (
-                      <SelectItem key={client.id} value={client.id}>
-                        {client.full_name || client.user?.full_name || client.email || "Unnamed Client"}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
+              <Label>Client *</Label>
+              <Tabs value={clientMode} onValueChange={(v) => setClientMode(v as "existing" | "new")}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="existing">Existing Client</TabsTrigger>
+                  <TabsTrigger value="new">New Client</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="existing" className="space-y-2 mt-4">
+                  {clients.length === 0 ? (
+                    <div className="p-4 text-center bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground mb-2">No clients found</p>
+                      <Button size="sm" onClick={() => navigate("/clients")}>
+                        Add Client First
+                      </Button>
+                    </div>
+                  ) : (
+                    <Select value={selectedClient} onValueChange={setSelectedClient}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose a client" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-popover z-50">
+                        {clients.map((client) => (
+                          <SelectItem key={client.id} value={client.id}>
+                            {client.full_name || client.user?.full_name || client.email || "Unnamed Client"}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="new" className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="newClientName">Full Name *</Label>
+                    <Input
+                      id="newClientName"
+                      placeholder="Client's full name"
+                      value={newClientName}
+                      onChange={(e) => setNewClientName(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="newClientEmail">Email (Optional)</Label>
+                    <Input
+                      id="newClientEmail"
+                      type="email"
+                      placeholder="client@example.com"
+                      value={newClientEmail}
+                      onChange={(e) => setNewClientEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="newClientPhone">Phone (Optional)</Label>
+                    <Input
+                      id="newClientPhone"
+                      type="tel"
+                      placeholder="(555) 123-4567"
+                      value={newClientPhone}
+                      onChange={(e) => setNewClientPhone(e.target.value)}
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
 
             {/* Service Selection */}
@@ -406,7 +483,14 @@ const BookForClient = () => {
             {/* Submit Button */}
             <Button 
               onClick={handleSubmit} 
-              disabled={submitting || !selectedClient || !selectedService || !selectedDate || !selectedTime}
+              disabled={
+                submitting || 
+                (clientMode === "existing" && !selectedClient) ||
+                (clientMode === "new" && !newClientName.trim()) ||
+                !selectedService || 
+                !selectedDate || 
+                !selectedTime
+              }
               className="w-full"
               size="lg"
             >
