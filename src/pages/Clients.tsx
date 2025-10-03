@@ -185,32 +185,33 @@ export default function Clients() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="mb-6">
-        <Button
-          variant="ghost"
-          onClick={() => navigate(-1)}
-          className="gap-2"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </Button>
-      </div>
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-4xl font-display font-bold mb-2">My Clients</h1>
-          <p className="text-muted-foreground">Manage your client profiles and information</p>
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="container mx-auto py-8 px-4">
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Add Client
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div>
+            <h1 className="text-4xl font-display font-bold mb-2 gradient-text">My Clients</h1>
+            <p className="text-muted-foreground">Manage your client profiles and information</p>
+          </div>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
+                <Plus className="h-4 w-4" />
+                Add Client
+              </Button>
+            </DialogTrigger>
+          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle>Add New Client</DialogTitle>
+              <DialogTitle className="text-2xl gradient-text">Add New Client</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -276,122 +277,135 @@ export default function Clients() {
         </Dialog>
       </div>
 
-      {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
-        <SearchInput
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder="Search by name, email, or phone..."
-          className="flex-1"
-        />
-        <Select value={sortBy} onValueChange={(value: "name" | "recent") => setSortBy(value)}>
-          <SelectTrigger className="w-full sm:w-48">
-            <Filter className="h-4 w-4 mr-2" />
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="recent">Most Recent</SelectItem>
-            <SelectItem value="name">Name (A-Z)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        {/* Search and Filters */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search by name, email, or phone..."
+            className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+          />
+          <Select value={sortBy} onValueChange={(value: "name" | "recent") => setSortBy(value)}>
+            <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+              <Filter className="h-4 w-4 mr-2" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="recent">Most Recent</SelectItem>
+              <SelectItem value="name">Name (A-Z)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      {filteredClients.length === 0 ? (
-        searchQuery || sortBy !== "recent" ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-semibold mb-2">No clients match your search</h3>
-              <p className="text-muted-foreground mb-4">
-                Try adjusting your filters or search terms
-              </p>
-              <Button variant="outline" onClick={() => { setSearchQuery(""); setSortBy("recent"); }}>
-                Clear Filters
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-semibold mb-2">No clients yet</h3>
-              <p className="text-muted-foreground mb-4">
-                Start adding client profiles to keep track of their hair information
-              </p>
-              <Button onClick={() => setIsDialogOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Your First Client
-              </Button>
-            </CardContent>
-          </Card>
-        )
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredClients.map((client) => (
-            <Card key={client.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  {client.full_name || "Unnamed Client"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {client.email && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span>{client.email}</span>
-                  </div>
-                )}
-                {client.phone && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span>{client.phone}</span>
-                  </div>
-                )}
-                {client.hair_type && (
-                  <div className="text-sm">
-                    <span className="font-semibold">Hair Type:</span> {client.hair_type}
-                  </div>
-                )}
-                {client.allergies && (
-                  <div className="text-sm">
-                    <span className="font-semibold">Allergies:</span> {client.allergies}
-                  </div>
-                )}
-                {client.notes && (
-                  <div className="text-sm text-muted-foreground mb-3">
-                    {client.notes}
-                  </div>
-                )}
-                {client.email && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    onClick={() => {
-                      setSelectedClient(client);
-                      setInviteDialogOpen(true);
-                    }}
-                  >
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    Invite to App
-                  </Button>
-                )}
+        {filteredClients.length === 0 ? (
+          searchQuery || sortBy !== "recent" ? (
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
+              <CardContent className="py-12 text-center">
+                <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
+                <h3 className="text-lg font-display font-bold mb-2">No clients match your search</h3>
+                <p className="text-muted-foreground mb-4">
+                  Try adjusting your filters or search terms
+                </p>
+                <Button 
+                  variant="outline" 
+                  onClick={() => { setSearchQuery(""); setSortBy("recent"); }}
+                  className="border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                >
+                  Clear Filters
+                </Button>
               </CardContent>
             </Card>
-          ))}
-        </div>
-      )}
+          ) : (
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
+              <CardContent className="py-12 text-center">
+                <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
+                <h3 className="text-lg font-display font-bold mb-2">No clients yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Start adding client profiles to keep track of their hair information
+                </p>
+                <Button 
+                  onClick={() => setIsDialogOpen(true)}
+                  className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Your First Client
+                </Button>
+              </CardContent>
+            </Card>
+          )
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredClients.map((client) => (
+              <Card 
+                key={client.id} 
+                className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-y-[-4px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] transition-all duration-300 bg-gradient-to-br from-card via-card to-secondary/5"
+              >
+                <CardHeader className="border-b-[3px] border-foreground bg-secondary/10">
+                  <CardTitle className="flex items-center gap-2 font-display">
+                    <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground">
+                      <User className="h-5 w-5 text-secondary-foreground" />
+                    </div>
+                    {client.full_name || "Unnamed Client"}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 pt-4">
+                  {client.email && (
+                    <div className="flex items-center gap-2 text-sm p-2 bg-primary/5 rounded-lg border-[2px] border-primary/20">
+                      <Mail className="h-4 w-4 text-primary" />
+                      <span className="truncate">{client.email}</span>
+                    </div>
+                  )}
+                  {client.phone && (
+                    <div className="flex items-center gap-2 text-sm p-2 bg-accent/5 rounded-lg border-[2px] border-accent/20">
+                      <Phone className="h-4 w-4 text-accent" />
+                      <span>{client.phone}</span>
+                    </div>
+                  )}
+                  {client.hair_type && (
+                    <div className="text-sm p-2 bg-muted rounded-lg border-[2px] border-border">
+                      <span className="font-semibold text-secondary">Hair Type:</span> {client.hair_type}
+                    </div>
+                  )}
+                  {client.allergies && (
+                    <div className="text-sm p-2 bg-destructive/5 rounded-lg border-[2px] border-destructive/20">
+                      <span className="font-semibold text-destructive">Allergies:</span> {client.allergies}
+                    </div>
+                  )}
+                  {client.notes && (
+                    <div className="text-sm text-muted-foreground p-2 bg-muted/50 rounded-lg border-[2px] border-border italic">
+                      {client.notes}
+                    </div>
+                  )}
+                  {client.email && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full mt-4 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                      onClick={() => {
+                        setSelectedClient(client);
+                        setInviteDialogOpen(true);
+                      }}
+                    >
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Invite to App
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
-      {selectedClient && (
-        <InviteClientDialog
-          open={inviteDialogOpen}
-          onOpenChange={setInviteDialogOpen}
-          clientEmail={selectedClient.email || ""}
-          clientName={selectedClient.full_name || ""}
-          stylistName={stylistName}
-        />
-      )}
+        {selectedClient && (
+          <InviteClientDialog
+            open={inviteDialogOpen}
+            onOpenChange={setInviteDialogOpen}
+            clientEmail={selectedClient.email || ""}
+            clientName={selectedClient.full_name || ""}
+            stylistName={stylistName}
+          />
+        )}
+      </div>
     </div>
   );
 }
