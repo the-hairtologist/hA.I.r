@@ -135,6 +135,47 @@ export type Database = {
         }
         Relationships: []
       }
+      client_invitations: {
+        Row: {
+          accepted: boolean | null
+          accepted_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          stylist_id: string
+          token: string
+        }
+        Insert: {
+          accepted?: boolean | null
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          stylist_id: string
+          token?: string
+        }
+        Update: {
+          accepted?: boolean | null
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          stylist_id?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_invitations_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_profiles: {
         Row: {
           allergies: string | null
@@ -272,6 +313,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      formula_access_log: {
+        Row: {
+          access_type: string
+          accessed_at: string
+          accessed_by: string | null
+          formula_id: string | null
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string
+          accessed_by?: string | null
+          formula_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string
+          accessed_by?: string | null
+          formula_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formula_access_log_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "formulas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       formulas: {
         Row: {
@@ -907,6 +986,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_client_invitation: {
+        Args: {
+          client_email: string
+          client_full_name: string
+          client_phone?: string
+          client_user_id: string
+          consent_to_medical_info?: boolean
+          invitation_token: string
+        }
+        Returns: string
+      }
+      anonymize_old_client_data: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       assign_user_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
