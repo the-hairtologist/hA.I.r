@@ -8,8 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, ArrowLeft } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, ArrowLeft, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
+import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 
 interface PortfolioPhoto {
   id: string;
@@ -32,6 +35,12 @@ const Portfolio = () => {
   const [isBeforeAfter, setIsBeforeAfter] = useState(false);
   const [beforePhoto, setBeforePhoto] = useState<File | null>(null);
   const [beforePhotoPreview, setBeforePhotoPreview] = useState<string>("");
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    title: string;
+    description: string;
+    onConfirm: () => void;
+  }>({ open: false, title: "", description: "", onConfirm: () => {} });
 
   useEffect(() => {
     checkUserAndLoadPhotos();
@@ -82,6 +91,9 @@ const Portfolio = () => {
       setPhotos(data || []);
     }
   };
+
+  // Real-time updates
+  useRealtimeUpdates("portfolio_photos", () => loadPhotos(stylistProfileId), stylistProfileId);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, isBefore: boolean = false) => {
     const file = e.target.files?.[0];
@@ -176,20 +188,30 @@ const Portfolio = () => {
   };
 
   const handleDelete = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from("portfolio_photos")
-        .delete()
-        .eq("id", id);
+    const photo = photos.find((p) => p.id === id);
+    setConfirmDialog({
+      open: true,
+      title: "Delete Photo",
+      description: photo?.is_before_after 
+        ? "This will permanently delete this before & after photo set." 
+        : "This will permanently delete this photo.",
+      onConfirm: async () => {
+        try {
+          const { error } = await supabase
+            .from("portfolio_photos")
+            .delete()
+            .eq("id", id);
 
-      if (error) throw error;
+          if (error) throw error;
 
-      toast.success("Photo deleted");
-      await loadPhotos(stylistProfileId);
-    } catch (error) {
-      console.error("Delete error:", error);
-      toast.error("Failed to delete photo");
-    }
+          toast.success("Photo deleted");
+          await loadPhotos(stylistProfileId);
+        } catch (error) {
+          console.error("Delete error:", error);
+          toast.error("Failed to delete photo");
+        }
+      },
+    });
   };
 
   const movePhoto = async (id: string, direction: "up" | "down") => {
@@ -223,8 +245,22 @@ const Portfolio = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex justify-center items-center min-h-screen">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="container mx-auto p-6 max-w-6xl">
+          <div className="mb-6">
+            <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Button>
+          </div>
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2 font-display">My Portfolio</h1>
+            <p className="text-muted-foreground">Showcase your best work to attract more clients</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <PortfolioSkeleton key={i} />
+            ))}
+          </div>
         </div>
       </DashboardLayout>
     );
@@ -445,7 +481,7 @@ const Portfolio = () => {
                           onClick={() => handleDelete(photo.id)}
                           className="flex-1"
                         >
-                          <X className="h-4 w-4" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
@@ -455,6 +491,16 @@ const Portfolio = () => {
             </div>
           )}
         </div>
+
+        <ConfirmDialog
+          open={confirmDialog.open}
+          onOpenChange={(open) => setConfirmDialog({ ...confirmDialog, open })}
+          onConfirm={confirmDialog.onConfirm}
+          title={confirmDialog.title}
+          description={confirmDialog.description}
+          confirmText="Delete"
+          variant="destructive"
+        />
       </div>
     </DashboardLayout>
   );

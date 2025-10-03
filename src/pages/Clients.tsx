@@ -7,9 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft, UserPlus } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteClientDialog } from "@/components/InviteClientDialog";
+import { SearchInput } from "@/components/SearchInput";
+import { ClientCardSkeleton } from "@/components/LoadingSkeleton";
+import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
+import { useDebounce } from "@/hooks/useDebounce";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useMemo } from "react";
+import { EmptyState } from "@/components/EmptyState";
 
 interface ClientProfile {
   id: string;
@@ -31,6 +38,9 @@ export default function Clients() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<ClientProfile | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 300);
+  const [sortBy, setSortBy] = useState<"name" | "recent">("recent");
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -95,6 +105,9 @@ export default function Clients() {
     }
   };
 
+  // Real-time updates
+  useRealtimeUpdates("client_profiles", loadClients, stylistId || undefined);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!stylistId) return;
@@ -129,10 +142,44 @@ export default function Clients() {
     }
   };
 
+  // Filter and sort clients
+  const filteredClients = useMemo(() => {
+    let filtered = clients;
+
+    // Search filter with debounced value
+    if (debouncedSearch) {
+      filtered = filtered.filter(
+        (client) =>
+          client.full_name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          client.email?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          client.phone?.includes(debouncedSearch)
+      );
+    }
+
+    // Sort
+    if (sortBy === "name") {
+      filtered = [...filtered].sort((a, b) =>
+        (a.full_name || "").localeCompare(b.full_name || "")
+      );
+    }
+
+    return filtered;
+  }, [clients, debouncedSearch, sortBy]);
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="container mx-auto py-8 px-4">
+        <div className="mb-6">
+          <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[...Array(6)].map((_, i) => (
+            <ClientCardSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -229,7 +276,27 @@ export default function Clients() {
         </Dialog>
       </div>
 
-      {clients.length === 0 ? (
+      {/* Search and Filters */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by name, email, or phone..."
+          className="flex-1"
+        />
+        <Select value={sortBy} onValueChange={(value: "name" | "recent") => setSortBy(value)}>
+          <SelectTrigger className="w-full sm:w-48">
+            <Filter className="h-4 w-4 mr-2" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="recent">Most Recent</SelectItem>
+            <SelectItem value="name">Name (A-Z)</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {filteredClients.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />

@@ -282,4 +282,12 @@ All colors MUST be HSL.
     border-right: 6px solid transparent;
     border-top: 8px solid hsl(var(--foreground));
   }
+
+  /* Mobile touch-friendly sizing */
+  @media (max-width: 640px) {
+    button:not(.no-touch-size),
+    a[role="button"]:not(.no-touch-size) {
+      min-height: 44px;
+    }
+  }
 }

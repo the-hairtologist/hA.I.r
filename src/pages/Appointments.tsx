@@ -9,11 +9,16 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2, CalendarDays, UserPlus } from "lucide-react";
+import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2, CalendarDays, UserPlus, Filter } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/CalendarView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { SearchInput } from "@/components/SearchInput";
+import { AppointmentSkeleton } from "@/components/LoadingSkeleton";
+import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -24,6 +29,14 @@ const Appointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    title: string;
+    description: string;
+    onConfirm: () => void;
+  }>({ open: false, title: "", description: "", onConfirm: () => {} });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   useEffect(() => {
     loadData();
@@ -74,6 +87,9 @@ const Appointments = () => {
     }
   };
 
+  // Real-time updates
+  useRealtimeUpdates("appointments", loadData, stylistProfile?.id);
+
   const toggleAvailability = async () => {
     try {
       const { error } = await supabase
@@ -92,24 +108,28 @@ const Appointments = () => {
   };
 
   const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
-    const action = newStatus === "cancelled" ? "cancel" : newStatus;
-    if (!confirm(`Are you sure you want to ${action} this appointment?`)) return;
+    setConfirmDialog({
+      open: true,
+      title: `${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} Appointment`,
+      description: `Are you sure you want to ${newStatus} this appointment?`,
+      onConfirm: async () => {
+        try {
+          const { error } = await supabase
+            .from("appointments")
+            .update({ status: newStatus })
+            .eq("id", appointmentId);
 
-    try {
-      const { error } = await supabase
-        .from("appointments")
-        .update({ status: newStatus })
-        .eq("id", appointmentId);
+          if (error) throw error;
 
-      if (error) throw error;
-
-      toast.success(`Appointment ${newStatus}`);
-      setDetailsOpen(false);
-      loadData();
-    } catch (error: any) {
-      console.error("Error updating appointment:", error);
-      toast.error("Error updating appointment");
-    }
+          toast.success(`Appointment ${newStatus}`);
+          setDetailsOpen(false);
+          loadData();
+        } catch (error: any) {
+          console.error("Error updating appointment:", error);
+          toast.error("Error updating appointment");
+        }
+      },
+    });
   };
 
   const getStatusBadge = (status: string) => {
@@ -130,10 +150,45 @@ const Appointments = () => {
     (apt) => format(new Date(apt.appointment_date), "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") && apt.status !== "cancelled"
   );
 
+  // Filter appointments
+  const filteredAppointments = (list: any[]) => {
+    let filtered = list;
+
+    // Search filter
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (apt) =>
+          apt.client?.user?.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          apt.service_type?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((apt) => apt.status === statusFilter);
+    }
+
+    return filtered;
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
+        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="h-6 w-6 text-primary" />
+              <h1 className="text-2xl font-bold">My Appointments</h1>
+            </div>
+          </div>
+        </header>
+        <main className="container mx-auto px-4 py-8">
+          <div className="space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <AppointmentSkeleton key={i} />
+            ))}
+          </div>
+        </main>
       </div>
     );
   }
@@ -174,6 +229,29 @@ const Appointments = () => {
           </TabsList>
 
           <TabsContent value="list">
+            {/* Search and Filters */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
+              <SearchInput
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search by client name or service..."
+                className="flex-1"
+              />
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full sm:w-48">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="scheduled">Scheduled</SelectItem>
+                  <SelectItem value="confirmed">Confirmed</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="grid lg:grid-cols-3 gap-6">
           {/* Calendar Section */}
           <div className="lg:col-span-1">
@@ -222,11 +300,15 @@ const Appointments = () => {
                 <CardTitle>Today's Appointments</CardTitle>
               </CardHeader>
               <CardContent>
-                {todayAppointments.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">No appointments today</p>
+                {filteredAppointments(todayAppointments).length === 0 ? (
+                  <p className="text-muted-foreground text-center py-8">
+                    {searchQuery || statusFilter !== "all"
+                      ? "No matching appointments"
+                      : "No appointments today"}
+                  </p>
                 ) : (
                   <div className="space-y-3">
-                    {todayAppointments.map((apt) => (
+                    {filteredAppointments(todayAppointments).map((apt) => (
                       <div
                         key={apt.id}
                         className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 cursor-pointer transition-colors"
@@ -259,11 +341,15 @@ const Appointments = () => {
                 <CardTitle>Upcoming Appointments</CardTitle>
               </CardHeader>
               <CardContent>
-                {upcomingAppointments.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">No upcoming appointments</p>
+                {filteredAppointments(upcomingAppointments).length === 0 ? (
+                  <p className="text-muted-foreground text-center py-8">
+                    {searchQuery || statusFilter !== "all"
+                      ? "No matching appointments"
+                      : "No upcoming appointments"}
+                  </p>
                 ) : (
                   <div className="space-y-3">
-                    {upcomingAppointments.slice(0, 10).map((apt) => (
+                    {filteredAppointments(upcomingAppointments).slice(0, 10).map((apt) => (
                       <div
                         key={apt.id}
                         className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 cursor-pointer transition-colors"
@@ -386,6 +472,16 @@ const Appointments = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={confirmDialog.open}
+        onOpenChange={(open) => setConfirmDialog({ ...confirmDialog, open })}
+        onConfirm={confirmDialog.onConfirm}
+        title={confirmDialog.title}
+        description={confirmDialog.description}
+        confirmText="Confirm"
+        variant={confirmDialog.title.toLowerCase().includes("cancel") ? "destructive" : "default"}
+      />
     </div>
   );
 };
