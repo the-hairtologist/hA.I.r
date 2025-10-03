@@ -8,13 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { ArrowLeft, Clock, Calendar as CalendarIcon, Save, Loader2, Plus, Trash2, X, CalendarDays, CalendarRange } from "lucide-react";
 import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, addDays, startOfYear, endOfYear } from "date-fns";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
+import { Textarea } from "@/components/ui/textarea";
 
 interface DaySchedule {
   enabled: boolean;
@@ -37,6 +38,12 @@ const ScheduleManagement = () => {
   const [rangeReason, setRangeReason] = useState("");
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [selectedDatesInMonth, setSelectedDatesInMonth] = useState<Date[]>([]);
+  const [scheduleOverrides, setScheduleOverrides] = useState<any[]>([]);
+  const [overrideDialogOpen, setOverrideDialogOpen] = useState(false);
+  const [overrideLabel, setOverrideLabel] = useState("");
+  const [overrideDateRange, setOverrideDateRange] = useState<DateRange | undefined>();
+  const [overrideSchedule, setOverrideSchedule] = useState<Record<string, DaySchedule> | null>(null);
+  const [editingOverride, setEditingOverride] = useState<any>(null);
 
   const [schedule, setSchedule] = useState<Record<string, DaySchedule>>({
     monday: { enabled: true, startTime: "09:00", endTime: "17:00" },
@@ -60,6 +67,7 @@ const ScheduleManagement = () => {
 
   useEffect(() => {
     loadData();
+    loadScheduleOverrides();
   }, []);
 
   const loadData = async () => {
@@ -103,6 +111,32 @@ const ScheduleManagement = () => {
     }
   };
 
+  const loadScheduleOverrides = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data: stylist } = await supabase
+        .from("stylist_profiles")
+        .select("id")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (!stylist) return;
+
+      const { data, error } = await supabase
+        .from("stylist_schedule_overrides")
+        .select("*")
+        .eq("stylist_id", stylist.id)
+        .order("start_date");
+
+      if (error) throw error;
+      setScheduleOverrides(data || []);
+    } catch (error) {
+      console.error("Error loading schedule overrides:", error);
+    }
+  };
+
   const handleDayToggle = (day: string) => {
     setSchedule({
       ...schedule,
@@ -129,12 +163,87 @@ const ScheduleManagement = () => {
 
       setStylistProfile({ ...stylistProfile, weekly_schedule: schedule as any });
       toast.success("Schedule saved successfully!");
+      loadScheduleOverrides();
     } catch (error: any) {
       console.error("Error saving schedule:", error);
       toast.error("Failed to save schedule");
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleSaveOverride = async () => {
+    if (!overrideDateRange?.from || !overrideDateRange?.to || !overrideSchedule || !stylistProfile) {
+      toast.error("Please complete all fields");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const overrideData = {
+        stylist_id: stylistProfile.id,
+        start_date: format(overrideDateRange.from, 'yyyy-MM-dd'),
+        end_date: format(overrideDateRange.to, 'yyyy-MM-dd'),
+        weekly_schedule: overrideSchedule as any,
+        label: overrideLabel || null,
+      };
+
+      if (editingOverride) {
+        const { error } = await supabase
+          .from("stylist_schedule_overrides")
+          .update(overrideData)
+          .eq("id", editingOverride.id);
+
+        if (error) throw error;
+        toast.success("Schedule override updated!");
+      } else {
+        const { error } = await supabase
+          .from("stylist_schedule_overrides")
+          .insert(overrideData);
+
+        if (error) throw error;
+        toast.success("Schedule override created!");
+      }
+
+      setOverrideDialogOpen(false);
+      setOverrideLabel("");
+      setOverrideDateRange(undefined);
+      setOverrideSchedule(null);
+      setEditingOverride(null);
+      loadScheduleOverrides();
+    } catch (error) {
+      console.error("Error saving override:", error);
+      toast.error("Failed to save schedule override");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteOverride = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("stylist_schedule_overrides")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+      toast.success("Schedule override deleted!");
+      loadScheduleOverrides();
+    } catch (error) {
+      console.error("Error deleting override:", error);
+      toast.error("Failed to delete schedule override");
+    }
+  };
+
+  const handleEditOverride = (override: any) => {
+    setEditingOverride(override);
+    setOverrideLabel(override.label || "");
+    setOverrideDateRange({
+      from: new Date(override.start_date),
+      to: new Date(override.end_date),
+    });
+    setOverrideSchedule(override.weekly_schedule);
+    setOverrideDialogOpen(true);
   };
 
   const toggleGeneralAvailability = async () => {
@@ -333,10 +442,14 @@ const ScheduleManagement = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-4">
+          <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-5">
             <TabsTrigger value="availability" className="gap-2">
               <Clock className="h-4 w-4" />
               Weekly
+            </TabsTrigger>
+            <TabsTrigger value="overrides" className="gap-2">
+              <CalendarIcon className="h-4 w-4" />
+              Overrides
             </TabsTrigger>
             <TabsTrigger value="blocked" className="gap-2">
               <X className="h-4 w-4" />
@@ -481,6 +594,224 @@ const ScheduleManagement = () => {
                 >
                   Disable Weekends
                 </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Schedule Overrides Tab */}
+          <TabsContent value="overrides" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Schedule Overrides</CardTitle>
+                    <CardDescription>Set different working hours for specific date ranges (holidays, seasonal hours, etc.)</CardDescription>
+                  </div>
+                  <Dialog open={overrideDialogOpen} onOpenChange={(open) => {
+                    setOverrideDialogOpen(open);
+                    if (!open) {
+                      setEditingOverride(null);
+                      setOverrideLabel("");
+                      setOverrideDateRange(undefined);
+                      setOverrideSchedule(null);
+                    }
+                  }}>
+                    <DialogTrigger asChild>
+                      <Button>
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Override
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>{editingOverride ? 'Edit' : 'Add'} Schedule Override</DialogTitle>
+                        <DialogDescription>
+                          Set custom working hours for a specific date range
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label>Label (Optional)</Label>
+                          <Input
+                            placeholder="e.g., Summer Hours, Holiday Season"
+                            value={overrideLabel}
+                            onChange={(e) => setOverrideLabel(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Date Range *</Label>
+                          <Calendar
+                            mode="range"
+                            selected={overrideDateRange}
+                            onSelect={setOverrideDateRange}
+                            numberOfMonths={2}
+                            className="border rounded-md pointer-events-auto"
+                            disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Working Hours for This Period *</Label>
+                          {!overrideSchedule ? (
+                            <div className="space-y-2">
+                              <p className="text-sm text-muted-foreground">
+                                Choose a template to start with:
+                              </p>
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setOverrideSchedule(schedule)}
+                                >
+                                  Use Current Schedule
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setOverrideSchedule({
+                                    monday: { enabled: true, startTime: "09:00", endTime: "17:00" },
+                                    tuesday: { enabled: true, startTime: "09:00", endTime: "17:00" },
+                                    wednesday: { enabled: true, startTime: "09:00", endTime: "17:00" },
+                                    thursday: { enabled: true, startTime: "09:00", endTime: "17:00" },
+                                    friday: { enabled: true, startTime: "09:00", endTime: "17:00" },
+                                    saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+                                    sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+                                  })}
+                                >
+                                  Standard Hours
+                                </Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-3 border rounded-lg p-4">
+                              <div className="flex justify-between items-center">
+                                <h4 className="font-semibold">Custom Schedule</h4>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setOverrideSchedule(null)}
+                                >
+                                  Reset
+                                </Button>
+                              </div>
+                              {days.map(({ key, label }) => {
+                                const daySchedule = overrideSchedule[key];
+                                return (
+                                  <div key={key} className="flex items-center gap-4">
+                                    <div className="w-28">
+                                      <span className="font-medium">{label}</span>
+                                    </div>
+                                    <Switch
+                                      checked={daySchedule.enabled}
+                                      onCheckedChange={(checked) => {
+                                        setOverrideSchedule({
+                                          ...overrideSchedule,
+                                          [key]: { ...daySchedule, enabled: checked }
+                                        });
+                                      }}
+                                    />
+                                    {daySchedule.enabled && (
+                                      <>
+                                        <input
+                                          type="time"
+                                          value={daySchedule.startTime}
+                                          onChange={(e) => {
+                                            setOverrideSchedule({
+                                              ...overrideSchedule,
+                                              [key]: { ...daySchedule, startTime: e.target.value }
+                                            });
+                                          }}
+                                          className="px-3 py-1 border rounded-md bg-background text-sm"
+                                        />
+                                        <span className="text-sm">to</span>
+                                        <input
+                                          type="time"
+                                          value={daySchedule.endTime}
+                                          onChange={(e) => {
+                                            setOverrideSchedule({
+                                              ...overrideSchedule,
+                                              [key]: { ...daySchedule, endTime: e.target.value }
+                                            });
+                                          }}
+                                          className="px-3 py-1 border rounded-md bg-background text-sm"
+                                        />
+                                      </>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => setOverrideDialogOpen(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={handleSaveOverride}
+                          disabled={saving || !overrideDateRange?.from || !overrideDateRange?.to || !overrideSchedule}
+                        >
+                          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : editingOverride ? 'Update' : 'Create'}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {scheduleOverrides.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <CalendarIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p className="font-semibold mb-1">No schedule overrides set</p>
+                    <p className="text-sm">Create overrides for special hours during holidays, vacations, seasonal changes, etc.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {scheduleOverrides.map((override) => (
+                      <Card key={override.id} className="border-2">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              {override.label && (
+                                <h4 className="font-semibold mb-1">{override.label}</h4>
+                              )}
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {format(new Date(override.start_date), 'MMM d, yyyy')} - {format(new Date(override.end_date), 'MMM d, yyyy')}
+                              </p>
+                              <div className="text-xs space-y-1">
+                                {Object.entries(override.weekly_schedule as Record<string, DaySchedule>).map(([day, daySchedule]) => (
+                                  daySchedule.enabled && (
+                                    <div key={day} className="flex items-center gap-2">
+                                      <span className="capitalize font-medium w-24">{day}:</span>
+                                      <span>{daySchedule.startTime} - {daySchedule.endTime}</span>
+                                    </div>
+                                  )
+                                ))}
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEditOverride(override)}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteOverride(override.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

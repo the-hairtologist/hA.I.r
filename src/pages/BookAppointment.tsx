@@ -27,6 +27,7 @@ const BookAppointment = () => {
   const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
   const [stylistServices, setStylistServices] = useState<any[]>([]);
   const [blockedDates, setBlockedDates] = useState<Date[]>([]);
+  const [scheduleOverrides, setScheduleOverrides] = useState<any[]>([]);
 
   // Generate time slots based on stylist availability
   const generateTimeSlots = (startTime: string, endTime: string): string[] => {
@@ -66,6 +67,7 @@ const BookAppointment = () => {
     if (selectedStylist) {
       loadStylistServices();
       loadBlockedDates();
+      loadScheduleOverrides();
     }
   }, [selectedStylist]);
 
@@ -151,22 +153,52 @@ const BookAppointment = () => {
     }
   };
 
+  const loadScheduleOverrides = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("stylist_schedule_overrides")
+        .select("*")
+        .eq("stylist_id", selectedStylist);
+
+      if (error) throw error;
+      setScheduleOverrides(data || []);
+    } catch (error) {
+      console.error("Error loading schedule overrides:", error);
+    }
+  };
+
+  const getEffectiveSchedule = (date: Date) => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    
+    // Check for override
+    const override = scheduleOverrides.find(o => 
+      dateStr >= o.start_date && dateStr <= o.end_date
+    );
+    
+    if (override) {
+      return override.weekly_schedule;
+    }
+    
+    // Return default schedule
+    const stylist = stylists.find(s => s.id === selectedStylist);
+    return stylist?.weekly_schedule;
+  };
+
   const updateAvailableTimeSlots = () => {
     if (!selectedStylist || !selectedDate) {
       setAvailableTimeSlots([]);
       return;
     }
 
-    const stylist = stylists.find(s => s.id === selectedStylist);
-    if (!stylist || !stylist.weekly_schedule) {
+    const effectiveSchedule = getEffectiveSchedule(selectedDate);
+    if (!effectiveSchedule) {
       setAvailableTimeSlots([]);
       return;
     }
 
     // Get day of week (lowercase)
     const dayOfWeek = format(selectedDate, 'EEEE').toLowerCase();
-    const schedule = stylist.weekly_schedule as any;
-    const daySchedule = schedule[dayOfWeek];
+    const daySchedule = effectiveSchedule[dayOfWeek];
 
     if (!daySchedule || !daySchedule.enabled) {
       setAvailableTimeSlots([]);

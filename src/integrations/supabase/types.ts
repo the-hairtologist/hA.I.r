@@ -710,6 +710,47 @@ export type Database = {
           },
         ]
       }
+      stylist_schedule_overrides: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          is_recurring: boolean | null
+          label: string | null
+          start_date: string
+          stylist_id: string
+          weekly_schedule: Json
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          is_recurring?: boolean | null
+          label?: string | null
+          start_date: string
+          stylist_id: string
+          weekly_schedule: Json
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          is_recurring?: boolean | null
+          label?: string | null
+          start_date?: string
+          stylist_id?: string
+          weekly_schedule?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stylist_schedule_overrides_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stylist_services: {
         Row: {
           created_at: string

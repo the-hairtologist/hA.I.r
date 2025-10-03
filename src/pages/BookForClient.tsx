@@ -23,6 +23,7 @@ const BookForClient = () => {
   const [services, setServices] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
   const [blockedDates, setBlockedDates] = useState<Date[]>([]);
+  const [scheduleOverrides, setScheduleOverrides] = useState<any[]>([]);
 
   // Form state
   const [clientMode, setClientMode] = useState<"existing" | "new">("existing");
@@ -96,12 +97,36 @@ const BookForClient = () => {
 
       const dates = (blockedData || []).map(d => new Date(d.blocked_date));
       setBlockedDates(dates);
+
+      // Load schedule overrides
+      const { data: overridesData } = await supabase
+        .from("stylist_schedule_overrides")
+        .select("*")
+        .eq("stylist_id", stylist.id);
+
+      setScheduleOverrides(overridesData || []);
     } catch (error) {
       console.error("Error loading data:", error);
       toast.error("Error loading data");
     } finally {
       setLoading(false);
     }
+  };
+
+  const getEffectiveSchedule = (date: Date) => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    
+    // Check for override
+    const override = scheduleOverrides.find(o => 
+      dateStr >= o.start_date && dateStr <= o.end_date
+    );
+    
+    if (override) {
+      return override.weekly_schedule;
+    }
+    
+    // Return default schedule
+    return stylistProfile?.weekly_schedule;
   };
 
   const generateTimeSlots = (startTime: string, endTime: string): string[] => {
@@ -129,14 +154,19 @@ const BookForClient = () => {
   };
 
   const updateAvailableTimeSlots = () => {
-    if (!selectedDate || !stylistProfile?.weekly_schedule) {
+    if (!selectedDate) {
+      setAvailableTimeSlots([]);
+      return;
+    }
+
+    const effectiveSchedule = getEffectiveSchedule(selectedDate);
+    if (!effectiveSchedule) {
       setAvailableTimeSlots([]);
       return;
     }
 
     const dayOfWeek = format(selectedDate, 'EEEE').toLowerCase();
-    const schedule = stylistProfile.weekly_schedule as any;
-    const daySchedule = schedule[dayOfWeek];
+    const daySchedule = effectiveSchedule[dayOfWeek];
 
     if (!daySchedule || !daySchedule.enabled) {
       setAvailableTimeSlots([]);
