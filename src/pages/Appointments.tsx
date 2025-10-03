@@ -19,6 +19,8 @@ import { SearchInput } from "@/components/SearchInput";
 import { AppointmentSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RebookDialog } from "@/components/RebookDialog";
+import { Repeat } from "lucide-react";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -37,6 +39,8 @@ const Appointments = () => {
   }>({ open: false, title: "", description: "", onConfirm: () => {} });
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
+  const [rebookAppointment, setRebookAppointment] = useState<any>(null);
 
   useEffect(() => {
     loadData();
@@ -312,16 +316,18 @@ const Appointments = () => {
                   </p>
                 ) : (
                   <div className="space-y-3">
-                    {filteredAppointments(todayAppointments).map((apt) => (
+                     {filteredAppointments(todayAppointments).map((apt) => (
                       <div
                         key={apt.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 cursor-pointer transition-colors"
-                        onClick={() => {
-                          setSelectedAppointment(apt);
-                          setDetailsOpen(true);
-                        }}
+                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 transition-colors group"
                       >
-                        <div className="flex items-center gap-4">
+                        <div 
+                          className="flex items-center gap-4 flex-1 cursor-pointer"
+                          onClick={() => {
+                            setSelectedAppointment(apt);
+                            setDetailsOpen(true);
+                          }}
+                        >
                           <div className="bg-primary/10 p-3 rounded-lg">
                             <Clock className="h-5 w-5 text-primary" />
                           </div>
@@ -332,7 +338,21 @@ const Appointments = () => {
                             </p>
                           </div>
                         </div>
-                        {getStatusBadge(apt.status)}
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(apt.status)}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setRebookAppointment(apt);
+                              setRebookDialogOpen(true);
+                            }}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Repeat className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -353,16 +373,18 @@ const Appointments = () => {
                   </p>
                 ) : (
                   <div className="space-y-3">
-                    {filteredAppointments(upcomingAppointments).slice(0, 10).map((apt) => (
+                     {filteredAppointments(upcomingAppointments).slice(0, 10).map((apt) => (
                       <div
                         key={apt.id}
-                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 cursor-pointer transition-colors"
-                        onClick={() => {
-                          setSelectedAppointment(apt);
-                          setDetailsOpen(true);
-                        }}
+                        className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5 transition-colors group"
                       >
-                        <div className="flex items-center gap-4">
+                        <div 
+                          className="flex items-center gap-4 flex-1 cursor-pointer"
+                          onClick={() => {
+                            setSelectedAppointment(apt);
+                            setDetailsOpen(true);
+                          }}
+                        >
                           <div className="bg-primary/10 p-3 rounded-lg">
                             <User className="h-5 w-5 text-primary" />
                           </div>
@@ -373,7 +395,21 @@ const Appointments = () => {
                             </p>
                           </div>
                         </div>
-                        {getStatusBadge(apt.status)}
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(apt.status)}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setRebookAppointment(apt);
+                              setRebookDialogOpen(true);
+                            }}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Repeat className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -472,6 +508,22 @@ const Appointments = () => {
                   </Button>
                 </div>
               )}
+
+              {selectedAppointment.status === "completed" && (
+                <div className="pt-4">
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      setRebookAppointment(selectedAppointment);
+                      setRebookDialogOpen(true);
+                      setDetailsOpen(false);
+                    }}
+                  >
+                    <Repeat className="h-4 w-4 mr-2" />
+                    Rebook Client
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </DialogContent>
@@ -485,6 +537,13 @@ const Appointments = () => {
         description={confirmDialog.description}
         confirmText="Confirm"
         variant={confirmDialog.title.toLowerCase().includes("cancel") ? "destructive" : "default"}
+      />
+
+      <RebookDialog
+        open={rebookDialogOpen}
+        onOpenChange={setRebookDialogOpen}
+        appointment={rebookAppointment}
+        onSuccess={loadData}
       />
     </div>
   );
