@@ -345,13 +345,13 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-8 md:p-12 relative min-h-[300px]">
+          <div className="bg-blue-600 p-6 md:p-8 relative">
             <div className="window-scrollbar"></div>
             
             <div className="max-w-3xl">
-              <div className="flex items-center gap-6 mb-6">
+              <div className="flex items-center gap-4 mb-4">
                 {userProfile?.gender && (
-                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0">
+                  <div className="w-16 h-16 md:w-20 md:h-20 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0">
                     <img 
                       src={
                         userProfile.gender === 'male' ? avatarMale :
@@ -363,18 +363,13 @@ const Dashboard = () => {
                     />
                   </div>
                 )}
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                  <div className="w-8 h-3 bg-pink-400 rotate-45"></div>
-                  <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
-                </div>
               </div>
               
-              <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
+              <h2 className="text-4xl md:text-5xl font-display font-black mb-4 text-pink-400 uppercase leading-tight">
                 Welcome back, {user?.user_metadata?.full_name || "there"}!
               </h2>
               
-              <p className="text-lg md:text-xl font-medium text-pink-200 mb-8 max-w-2xl">
+              <p className="text-base md:text-lg font-medium text-pink-200 mb-6 max-w-2xl">
                 {userRole === "stylist" 
                   ? "Ready to create some color magic today? Let's make beautiful hair transformations happen." 
                   : "Your hair journey continues. Discover new styles, book appointments, and keep track of your favorite looks."}
