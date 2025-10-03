@@ -38,11 +38,11 @@ const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <SubscriptionProvider>
-        <RoleSwitchProtection />
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <RoleSwitchProtection />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Index />} />
