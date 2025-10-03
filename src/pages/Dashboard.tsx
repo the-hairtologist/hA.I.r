@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings, GripVertical } from "lucide-react";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
+import { OnboardingTour } from "@/components/OnboardingTour";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { RecentReviews } from "@/components/dashboard/RecentReviews";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { TodoList } from "@/components/dashboard/TodoList";
+import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import avatarMale from "@/assets/avatar-male-lego.png";
@@ -78,11 +80,13 @@ const Dashboard = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [stats, setStats] = useState<any>({});
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [recentReviews, setRecentReviews] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
+    "checklist",
     "quick-actions",
     "stats", 
     "todos",
@@ -106,8 +110,34 @@ const Dashboard = () => {
     if (userRole && profile) {
       loadDashboardData();
       loadLayoutPreferences();
+      
+      // Check if we should show onboarding
+      const onboardingComplete = localStorage.getItem('onboarding_complete');
+      if (!onboardingComplete && user) {
+        setTimeout(() => setShowOnboarding(true), 1000);
+      }
+      
+      // Check profile completion
+      checkProfileCompletion();
     }
   }, [userRole, profile]);
+
+  const checkProfileCompletion = () => {
+    if (!profile || !user) return;
+    
+    const basicIncomplete = !profile.full_name || !profile.phone;
+    
+    if (userRole === "stylist" && profile.stylist_profile) {
+      const stylistIncomplete = !profile.stylist_profile.business_name || 
+                                !profile.stylist_profile.specialty || 
+                                !profile.stylist_profile.location;
+      if (basicIncomplete || stylistIncomplete) {
+        setShowProfileCompletion(true);
+      }
+    } else if (basicIncomplete) {
+      setShowProfileCompletion(true);
+    }
+  };
 
   const loadLayoutPreferences = async () => {
     try {
@@ -508,6 +538,17 @@ const Dashboard = () => {
         return <QuickActions key={sectionId} userRole={userRole || ""} />;
       case "stats":
         return <DashboardStats key={sectionId} stats={stats} userRole={userRole || ""} />;
+      case "checklist":
+        return (
+          <WelcomeChecklist
+            key={sectionId}
+            userRole={userRole as "stylist" | "client"}
+            profileComplete={!!profile?.full_name && !!profile?.phone}
+            hasClients={stats.totalClients > 0}
+            hasAppointments={stats.totalAppointments > 0}
+            hasPortfolio={false}
+          />
+        );
       case "todos":
         return (
           <div key={sectionId} className="mb-8">
@@ -658,6 +699,12 @@ const Dashboard = () => {
           onOpenChange={setShowProfileCompletion}
           userRole={userRole}
           userId={user?.id}
+        />
+
+        <OnboardingTour
+          open={showOnboarding}
+          onOpenChange={setShowOnboarding}
+          userRole={userRole as "stylist" | "client"}
         />
       </div>
     </DashboardLayout>

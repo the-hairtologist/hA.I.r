@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, MapPin, Star, Calendar, Globe, ExternalLink, Award, Loader2 } from "lucide-react";
+import { TrustBadge } from "@/components/TrustBadge";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 
@@ -269,6 +270,16 @@ const StylistDiscovery = () => {
                           </div>
                         )}
                       </CardDescription>
+                      {/* Trust badges */}
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        <TrustBadge type="verified" />
+                        {stylist.average_rating >= 4.5 && stylist.total_reviews >= 5 && (
+                          <TrustBadge type="top-rated" />
+                        )}
+                        {stylist.years_experience >= 5 && (
+                          <TrustBadge type="experienced" />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </CardHeader>

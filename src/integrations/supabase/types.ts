@@ -41,11 +41,14 @@ export type Database = {
       appointments: {
         Row: {
           appointment_date: string
+          cancellation_reason: string | null
+          cancelled_at: string | null
           client_id: string
           created_at: string
           duration_minutes: number | null
           id: string
           notes: string | null
+          reminder_sent: boolean | null
           service_id: string | null
           service_type: string
           status: string | null
@@ -54,11 +57,14 @@ export type Database = {
         }
         Insert: {
           appointment_date: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           client_id: string
           created_at?: string
           duration_minutes?: number | null
           id?: string
           notes?: string | null
+          reminder_sent?: boolean | null
           service_id?: string | null
           service_type: string
           status?: string | null
@@ -67,11 +73,14 @@ export type Database = {
         }
         Update: {
           appointment_date?: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           client_id?: string
           created_at?: string
           duration_minutes?: number | null
           id?: string
           notes?: string | null
+          reminder_sent?: boolean | null
           service_id?: string | null
           service_type?: string
           status?: string | null
