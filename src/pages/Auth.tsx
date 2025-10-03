@@ -311,10 +311,18 @@ const Auth = () => {
                   <Label>I am a...</Label>
                   <Tabs value={userType} onValueChange={(v) => setUserType(v as "stylist" | "client")} className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="client">Client</TabsTrigger>
-                      <TabsTrigger value="stylist">Stylist</TabsTrigger>
+                      <TabsTrigger value="client">Client (Free)</TabsTrigger>
+                      <TabsTrigger value="stylist">Stylist ($15/mo)</TabsTrigger>
                     </TabsList>
                   </Tabs>
+                  {userType === "stylist" && (
+                    <div className="p-3 rounded-lg border-2 border-primary/20 bg-primary/5 space-y-1">
+                      <p className="text-xs font-semibold text-primary">💼 Professional Account</p>
+                      <p className="text-xs text-muted-foreground">
+                        7-day free trial, then $15/month for full stylist features
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Creating account..." : "Create Account"}
