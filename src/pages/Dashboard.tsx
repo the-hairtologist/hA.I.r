@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings } from "lucide-react";
+import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings, GripVertical } from "lucide-react";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -16,6 +16,60 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import avatarMale from "@/assets/avatar-male-lego.png";
 import avatarFemale from "@/assets/avatar-female-lego.png";
 import avatarNeutral from "@/assets/avatar-neutral-lego.png";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
+interface SortableSectionProps {
+  id: string;
+  children: React.ReactNode;
+}
+
+const SortableSection = ({ id, children }: SortableSectionProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className="relative group">
+      <div
+        {...attributes}
+        {...listeners}
+        className="absolute -left-8 top-4 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
+      >
+        <div className="w-6 h-6 rounded bg-secondary/20 hover:bg-secondary/40 flex items-center justify-center border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+          <GripVertical className="h-4 w-4 text-secondary" />
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -28,6 +82,21 @@ const Dashboard = () => {
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [recentReviews, setRecentReviews] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [sectionOrder, setSectionOrder] = useState<string[]>([
+    "quick-actions",
+    "stats", 
+    "todos",
+    "activity",
+    "reviews",
+    "features"
+  ]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   useEffect(() => {
     checkUser();
@@ -36,8 +105,66 @@ const Dashboard = () => {
   useEffect(() => {
     if (userRole && profile) {
       loadDashboardData();
+      loadLayoutPreferences();
     }
   }, [userRole, profile]);
+
+  const loadLayoutPreferences = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data, error } = await supabase
+        .from("dashboard_layout")
+        .select("section_order")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (error && error.code !== "PGRST116") {
+        throw error;
+      }
+
+      if (data?.section_order) {
+        setSectionOrder(data.section_order as string[]);
+      }
+    } catch (error: any) {
+      console.error("Error loading layout:", error);
+    }
+  };
+
+  const saveLayoutPreferences = async (newOrder: string[]) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { error } = await supabase
+        .from("dashboard_layout")
+        .upsert({
+          user_id: session.user.id,
+          section_order: newOrder,
+        });
+
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Error saving layout:", error);
+      toast.error("Failed to save layout");
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setSectionOrder((items) => {
+        const oldIndex = items.indexOf(active.id as string);
+        const newIndex = items.indexOf(over.id as string);
+        const newOrder = arrayMove(items, oldIndex, newIndex);
+        saveLayoutPreferences(newOrder);
+        toast.success("Layout saved!");
+        return newOrder;
+      });
+    }
+  };
 
   const checkUser = async () => {
     try {
@@ -372,9 +499,60 @@ const Dashboard = () => {
 
   const features = userRole === "stylist" ? stylistFeatures : clientFeatures;
 
+  const renderSection = (sectionId: string) => {
+    switch (sectionId) {
+      case "quick-actions":
+        return <QuickActions key={sectionId} userRole={userRole || ""} />;
+      case "stats":
+        return <DashboardStats key={sectionId} stats={stats} userRole={userRole || ""} />;
+      case "todos":
+        return (
+          <div key={sectionId} className="mb-8">
+            <TodoList />
+          </div>
+        );
+      case "activity":
+        return (
+          <div key={sectionId} className="mb-8">
+            <RecentActivity activities={recentActivities} />
+          </div>
+        );
+      case "reviews":
+        return userRole === "stylist" ? (
+          <div key={sectionId} className="mb-8">
+            <RecentReviews reviews={recentReviews} />
+          </div>
+        ) : null;
+      case "features":
+        return (
+          <div key={sectionId} className="mb-8">
+            <h3 className="text-3xl font-display font-bold mb-6 flex items-center gap-3 text-foreground">
+              <Sparkles className="h-7 w-7 text-primary" />
+              Explore More Features
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((feature, index) => (
+                <FeatureCard
+                  key={feature.route}
+                  title={feature.title}
+                  description={feature.description}
+                  icon={feature.icon}
+                  route={feature.route}
+                  gradient={feature.gradient}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 pl-12">
         <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative">
           <div className="window-titlebar">
             <span className="text-background font-mono text-sm font-bold">
@@ -440,44 +618,36 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <QuickActions userRole={userRole || ""} />
-
-        <DashboardStats stats={stats} userRole={userRole || ""} />
-
-        <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          <RecentActivity activities={recentActivities} />
-          {userRole === "stylist" ? (
-            <RecentReviews reviews={recentReviews} />
-          ) : (
-            <TodoList />
-          )}
+        <div className="mb-6 bg-primary/5 p-3 rounded-lg border-2 border-primary/20">
+          <p className="text-sm font-bold text-primary text-center flex items-center justify-center gap-2">
+            <GripVertical className="h-4 w-4" />
+            Hover over sections and drag the handle to rearrange your dashboard!
+          </p>
         </div>
 
-        {userRole === "stylist" && (
-          <div className="mb-8">
-            <TodoList />
-          </div>
-        )}
-
-        <div className="mb-8">
-          <h3 className="text-3xl font-display font-bold mb-6 flex items-center gap-3 text-foreground">
-            <Sparkles className="h-7 w-7 text-primary" />
-            Explore More Features
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <FeatureCard
-                key={feature.route}
-                title={feature.title}
-                description={feature.description}
-                icon={feature.icon}
-                route={feature.route}
-                gradient={feature.gradient}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={sectionOrder}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-8">
+              {sectionOrder.map((sectionId) => {
+                const content = renderSection(sectionId);
+                if (!content) return null;
+                
+                return (
+                  <SortableSection key={sectionId} id={sectionId}>
+                    {content}
+                  </SortableSection>
+                );
+              })}
+            </div>
+          </SortableContext>
+        </DndContext>
 
         <ProfileCompletionDialog
           open={showProfileCompletion}

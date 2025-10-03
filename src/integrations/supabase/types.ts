@@ -246,6 +246,30 @@ export type Database = {
           },
         ]
       }
+      dashboard_layout: {
+        Row: {
+          created_at: string
+          id: string
+          section_order: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          section_order?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          section_order?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       formulas: {
         Row: {
           client_id: string
