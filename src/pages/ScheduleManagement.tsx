@@ -11,7 +11,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { ArrowLeft, Clock, Calendar as CalendarIcon, Save, Loader2, Plus, Trash2, X, CalendarDays, CalendarRange } from "lucide-react";
+import { ArrowLeft, Clock, Calendar as CalendarIcon, Save, Loader2, Plus, Trash2, X, CalendarDays, CalendarRange, Info, Sparkles, Edit2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, addDays, startOfYear, endOfYear } from "date-fns";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
@@ -44,6 +45,71 @@ const ScheduleManagement = () => {
   const [overrideDateRange, setOverrideDateRange] = useState<DateRange | undefined>();
   const [overrideSchedule, setOverrideSchedule] = useState<Record<string, DaySchedule> | null>(null);
   const [editingOverride, setEditingOverride] = useState<any>(null);
+  const [selectedPreset, setSelectedPreset] = useState<string>("");
+
+  // Preset templates for common scenarios
+  const presetTemplates = {
+    summer: {
+      label: "Summer Hours (Extended)",
+      schedule: {
+        monday: { enabled: true, startTime: "08:00", endTime: "19:00" },
+        tuesday: { enabled: true, startTime: "08:00", endTime: "19:00" },
+        wednesday: { enabled: true, startTime: "08:00", endTime: "19:00" },
+        thursday: { enabled: true, startTime: "08:00", endTime: "19:00" },
+        friday: { enabled: true, startTime: "08:00", endTime: "19:00" },
+        saturday: { enabled: true, startTime: "09:00", endTime: "17:00" },
+        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+      }
+    },
+    holiday: {
+      label: "Holiday Hours (Reduced)",
+      schedule: {
+        monday: { enabled: true, startTime: "10:00", endTime: "15:00" },
+        tuesday: { enabled: true, startTime: "10:00", endTime: "15:00" },
+        wednesday: { enabled: true, startTime: "10:00", endTime: "15:00" },
+        thursday: { enabled: true, startTime: "10:00", endTime: "15:00" },
+        friday: { enabled: true, startTime: "10:00", endTime: "15:00" },
+        saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+      }
+    },
+    weekend: {
+      label: "Weekend Special",
+      schedule: {
+        monday: { enabled: false, startTime: "09:00", endTime: "17:00" },
+        tuesday: { enabled: false, startTime: "09:00", endTime: "17:00" },
+        wednesday: { enabled: false, startTime: "09:00", endTime: "17:00" },
+        thursday: { enabled: false, startTime: "09:00", endTime: "17:00" },
+        friday: { enabled: false, startTime: "09:00", endTime: "17:00" },
+        saturday: { enabled: true, startTime: "08:00", endTime: "18:00" },
+        sunday: { enabled: true, startTime: "09:00", endTime: "17:00" },
+      }
+    },
+    earlybird: {
+      label: "Early Bird Hours",
+      schedule: {
+        monday: { enabled: true, startTime: "07:00", endTime: "15:00" },
+        tuesday: { enabled: true, startTime: "07:00", endTime: "15:00" },
+        wednesday: { enabled: true, startTime: "07:00", endTime: "15:00" },
+        thursday: { enabled: true, startTime: "07:00", endTime: "15:00" },
+        friday: { enabled: true, startTime: "07:00", endTime: "15:00" },
+        saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+      }
+    },
+    evening: {
+      label: "Evening Hours",
+      schedule: {
+        monday: { enabled: true, startTime: "12:00", endTime: "20:00" },
+        tuesday: { enabled: true, startTime: "12:00", endTime: "20:00" },
+        wednesday: { enabled: true, startTime: "12:00", endTime: "20:00" },
+        thursday: { enabled: true, startTime: "12:00", endTime: "20:00" },
+        friday: { enabled: true, startTime: "12:00", endTime: "20:00" },
+        saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+      }
+    }
+  };
 
   const [schedule, setSchedule] = useState<Record<string, DaySchedule>>({
     monday: { enabled: true, startTime: "09:00", endTime: "17:00" },
@@ -135,6 +201,23 @@ const ScheduleManagement = () => {
     } catch (error) {
       console.error("Error loading schedule overrides:", error);
     }
+  };
+
+  const applyPreset = (presetKey: string) => {
+    const preset = presetTemplates[presetKey as keyof typeof presetTemplates];
+    if (preset) {
+      setOverrideSchedule(preset.schedule);
+      toast.success(`Applied ${preset.label} template`);
+    }
+  };
+
+  const getOverridesForDate = (date: Date) => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    return scheduleOverrides.filter(override => {
+      const start = format(new Date(override.start_date), 'yyyy-MM-dd');
+      const end = format(new Date(override.end_date), 'yyyy-MM-dd');
+      return dateStr >= start && dateStr <= end;
+    });
   };
 
   const handleDayToggle = (day: string) => {
@@ -600,12 +683,31 @@ const ScheduleManagement = () => {
 
           {/* Schedule Overrides Tab */}
           <TabsContent value="overrides" className="space-y-6">
+            {/* Help Card */}
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="pt-6">
+                <div className="flex gap-3">
+                  <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">What are Schedule Overrides?</p>
+                    <p className="text-sm text-muted-foreground">
+                      Use overrides to temporarily change your working hours for specific periods like holidays, vacations, or seasonal schedules. 
+                      These will override your regular weekly schedule, and clients will automatically see the adjusted availability.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>Schedule Overrides</CardTitle>
-                    <CardDescription>Set different working hours for specific date ranges (holidays, seasonal hours, etc.)</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-primary" />
+                      Schedule Overrides
+                    </CardTitle>
+                    <CardDescription>Set different working hours for specific date ranges</CardDescription>
                   </div>
                   <Dialog open={overrideDialogOpen} onOpenChange={(open) => {
                     setOverrideDialogOpen(open);
@@ -614,6 +716,7 @@ const ScheduleManagement = () => {
                       setOverrideLabel("");
                       setOverrideDateRange(undefined);
                       setOverrideSchedule(null);
+                      setSelectedPreset("");
                     }
                   }}>
                     <DialogTrigger asChild>
@@ -652,10 +755,36 @@ const ScheduleManagement = () => {
                         <div className="space-y-2">
                           <Label>Working Hours for This Period *</Label>
                           {!overrideSchedule ? (
-                            <div className="space-y-2">
-                              <p className="text-sm text-muted-foreground">
-                                Choose a template to start with:
-                              </p>
+                            <div className="space-y-3">
+                              <div className="p-4 bg-muted/50 rounded-lg space-y-3">
+                                <p className="text-sm font-medium flex items-center gap-2">
+                                  <Sparkles className="h-4 w-4 text-primary" />
+                                  Quick Start with Presets
+                                </p>
+                                <Select value={selectedPreset} onValueChange={(value) => {
+                                  setSelectedPreset(value);
+                                  applyPreset(value);
+                                }}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Choose a preset template..." />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {Object.entries(presetTemplates).map(([key, preset]) => (
+                                      <SelectItem key={key} value={key}>
+                                        {preset.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="relative">
+                                <div className="absolute inset-0 flex items-center">
+                                  <span className="w-full border-t" />
+                                </div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                  <span className="bg-background px-2 text-muted-foreground">Or start from scratch</span>
+                                </div>
+                              </div>
                               <div className="grid grid-cols-2 gap-2">
                                 <Button
                                   variant="outline"
@@ -675,7 +804,7 @@ const ScheduleManagement = () => {
                                     sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
                                   })}
                                 >
-                                  Standard Hours
+                                  Standard Business Hours
                                 </Button>
                               </div>
                             </div>
@@ -950,10 +1079,12 @@ const ScheduleManagement = () => {
                     modifiers={{
                       blocked: blockedDatesArray,
                       selected: selectedDatesInMonth,
+                      hasOverride: (date) => getOverridesForDate(date).length > 0,
                     }}
                     modifiersClassNames={{
                       blocked: "bg-destructive/20 text-destructive line-through",
                       selected: "bg-primary text-primary-foreground",
+                      hasOverride: "bg-accent/30 border-accent",
                     }}
                     onDayClick={toggleDateSelection}
                     className={cn("rounded-md border pointer-events-auto")}
@@ -967,6 +1098,10 @@ const ScheduleManagement = () => {
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-destructive/20 rounded line-through"></div>
                       <span className="text-sm">Already blocked</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-accent/30 border-2 border-accent rounded"></div>
+                      <span className="text-sm">Has schedule override</span>
                     </div>
                   </div>
 

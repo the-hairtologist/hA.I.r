@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { ArrowLeft, Calendar as CalendarIcon, Clock, Loader2, UserPlus, User } from "lucide-react";
+import { ArrowLeft, Calendar as CalendarIcon, Clock, Loader2, UserPlus, User, Info } from "lucide-react";
 import { format, setHours, setMinutes, addHours } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -472,6 +472,23 @@ const BookForClient = () => {
             {/* Time Selection */}
             <div className="space-y-2">
               <Label>Select Time *</Label>
+              {selectedDate && (() => {
+                const dateStr = format(selectedDate, 'yyyy-MM-dd');
+                const override = scheduleOverrides.find(o => 
+                  dateStr >= o.start_date && dateStr <= o.end_date
+                );
+                return override ? (
+                  <div className="mb-2 p-3 bg-accent/20 border border-accent rounded-lg">
+                    <p className="text-xs font-semibold flex items-center gap-1">
+                      <Info className="h-3 w-3" />
+                      {override.label || "Special Hours"}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Adjusted hours for this period
+                    </p>
+                  </div>
+                ) : null;
+              })()}
               {!selectedDate ? (
                 <div className="p-4 bg-muted/50 rounded-md text-sm text-muted-foreground">
                   ⬆️ Select a date first

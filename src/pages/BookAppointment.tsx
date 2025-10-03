@@ -565,6 +565,23 @@ const BookAppointment = () => {
                 <CardDescription className="text-foreground/80 font-medium">Pick your preferred time slot</CardDescription>
               </CardHeader>
               <CardContent>
+                {selectedDate && (() => {
+                  const dateStr = format(selectedDate, 'yyyy-MM-dd');
+                  const override = scheduleOverrides.find(o => 
+                    dateStr >= o.start_date && dateStr <= o.end_date
+                  );
+                  return override ? (
+                    <div className="mb-3 p-3 bg-accent/90 border-2 border-foreground rounded-lg">
+                      <p className="text-xs font-bold text-foreground flex items-center gap-1">
+                        <CalendarIcon className="h-3 w-3" />
+                        {override.label || "Special Hours"}
+                      </p>
+                      <p className="text-xs text-foreground/80 mt-1">
+                        This stylist has adjusted hours for this period
+                      </p>
+                    </div>
+                  ) : null;
+                })()}
                 {!selectedStylist || !selectedDate ? (
                   <p className="text-sm text-muted-foreground text-center py-4">
                     Select a stylist and date first
