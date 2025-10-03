@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { MobileNav } from "@/components/MobileNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Scissors, User, LogOut } from "lucide-react";
@@ -136,10 +137,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </header>
 
           {/* Main Content */}
-          <main className="flex-1 overflow-auto">
+          <main className="flex-1 overflow-auto pb-16 md:pb-0">
             {children}
           </main>
         </div>
+        
+        <MobileNav userRole={userRole || undefined} />
       </div>
     </SidebarProvider>
   );
