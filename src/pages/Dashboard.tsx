@@ -393,7 +393,7 @@ const Dashboard = () => {
                 )}
               </div>
               
-              <h2 className="text-4xl md:text-6xl font-display font-black mb-6 text-primary-foreground uppercase leading-tight">
+              <h2 className="text-4xl md:text-6xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
                 Welcome back, {user?.user_metadata?.full_name || "there"}!
               </h2>
               
