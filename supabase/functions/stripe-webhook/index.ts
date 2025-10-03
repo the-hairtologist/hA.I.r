@@ -1,9 +1,9 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
-import Stripe from 'https://esm.sh/stripe@17.4.0'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import Stripe from 'https://esm.sh/stripe@14.21.0'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2023-10-16',
 })
 
 const cryptoProvider = Stripe.createSubtleCryptoProvider()
@@ -92,7 +92,8 @@ serve(async (request) => {
       status: 200,
     })
   } catch (err) {
-    console.error('Webhook error:', err.message)
-    return new Response(`Webhook Error: ${err.message}`, { status: 400 })
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+    console.error('Webhook error:', errorMessage)
+    return new Response(`Webhook Error: ${errorMessage}`, { status: 400 })
   }
 })
