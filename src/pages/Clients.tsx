@@ -433,12 +433,12 @@ export default function Clients() {
                       <span className="font-semibold text-destructive">Allergies:</span> {client.allergies}
                     </div>
                   )}
-                  {client.notes && (
-                    <div className="text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
-                      <span className="font-semibold text-secondary">Notes: </span>
-                      <span className="text-foreground">{client.notes}</span>
-                    </div>
-                  )}
+                  <div className="text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
+                    <span className="font-semibold text-secondary">Notes: </span>
+                    <span className="text-foreground">
+                      {client.notes || <span className="text-muted-foreground italic">No notes</span>}
+                    </span>
+                  </div>
                   <div className="flex gap-2 mt-4">
                     <Button
                       variant="outline"
