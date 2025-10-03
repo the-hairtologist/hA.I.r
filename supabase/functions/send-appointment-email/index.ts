@@ -98,7 +98,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const emailResponse = await resend.emails.send({
-      from: "hA.I.r <onboarding@resend.dev>",
+      from: "hA.I.r <noreply@ha.i.ry>",
       to: [clientUser.email],
       subject,
       html,
