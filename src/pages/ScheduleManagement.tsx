@@ -11,9 +11,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { ArrowLeft, Clock, Calendar as CalendarIcon, Save, Loader2, Plus, Trash2, X } from "lucide-react";
-import { format } from "date-fns";
+import { ArrowLeft, Clock, Calendar as CalendarIcon, Save, Loader2, Plus, Trash2, X, CalendarDays, CalendarRange } from "lucide-react";
+import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, addDays, startOfYear, endOfYear } from "date-fns";
 import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
 
 interface DaySchedule {
   enabled: boolean;
@@ -31,6 +32,11 @@ const ScheduleManagement = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [reason, setReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [rangeReason, setRangeReason] = useState("");
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [selectedDatesInMonth, setSelectedDatesInMonth] = useState<Date[]>([]);
 
   const [schedule, setSchedule] = useState<Record<string, DaySchedule>>({
     monday: { enabled: true, startTime: "09:00", endTime: "17:00" },
@@ -205,7 +211,99 @@ const ScheduleManagement = () => {
     }
   };
 
+  const handleBlockDateRange = async () => {
+    if (!dateRange?.from) {
+      toast.error("Please select a date range");
+      return;
+    }
+
+    const endDate = dateRange.to || dateRange.from;
+    const dates = eachDayOfInterval({ start: dateRange.from, end: endDate });
+
+    setSubmitting(true);
+    try {
+      const datesToInsert = dates.map(date => ({
+        stylist_id: stylistProfile.id,
+        blocked_date: format(date, 'yyyy-MM-dd'),
+        reason: rangeReason.trim() || null,
+      }));
+
+      const { error } = await supabase
+        .from("stylist_blocked_dates")
+        .insert(datesToInsert);
+
+      if (error) throw error;
+
+      toast.success(`${dates.length} date(s) blocked successfully!`);
+      setRangeDialogOpen(false);
+      setDateRange(undefined);
+      setRangeReason("");
+      loadData();
+    } catch (error: any) {
+      console.error("Error blocking date range:", error);
+      toast.error("Error blocking dates");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleBlockMultipleDates = async () => {
+    if (selectedDatesInMonth.length === 0) {
+      toast.error("Please select at least one date");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const datesToInsert = selectedDatesInMonth.map(date => ({
+        stylist_id: stylistProfile.id,
+        blocked_date: format(date, 'yyyy-MM-dd'),
+        reason: reason.trim() || null,
+      }));
+
+      const { error } = await supabase
+        .from("stylist_blocked_dates")
+        .insert(datesToInsert);
+
+      if (error) throw error;
+
+      toast.success(`${selectedDatesInMonth.length} date(s) blocked successfully!`);
+      setSelectedDatesInMonth([]);
+      setReason("");
+      loadData();
+    } catch (error: any) {
+      console.error("Error blocking dates:", error);
+      toast.error("Error blocking dates");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const blockedDatesArray = blockedDates.map(bd => new Date(bd.blocked_date));
+  
+  const isDateBlocked = (date: Date) => {
+    return blockedDatesArray.some(
+      blocked => format(blocked, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+    );
+  };
+
+  const isDateSelected = (date: Date) => {
+    return selectedDatesInMonth.some(
+      selected => format(selected, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+    );
+  };
+
+  const toggleDateSelection = (date: Date) => {
+    if (isDateBlocked(date)) return;
+    
+    if (isDateSelected(date)) {
+      setSelectedDatesInMonth(selectedDatesInMonth.filter(
+        d => format(d, 'yyyy-MM-dd') !== format(date, 'yyyy-MM-dd')
+      ));
+    } else {
+      setSelectedDatesInMonth([...selectedDatesInMonth, date]);
+    }
+  };
 
   if (loading) {
     return (
@@ -235,14 +333,22 @@ const ScheduleManagement = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+          <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-4">
             <TabsTrigger value="availability" className="gap-2">
               <Clock className="h-4 w-4" />
-              Weekly Schedule
+              Weekly
             </TabsTrigger>
             <TabsTrigger value="blocked" className="gap-2">
               <X className="h-4 w-4" />
               Blocked Dates
+            </TabsTrigger>
+            <TabsTrigger value="month" className="gap-2">
+              <CalendarDays className="h-4 w-4" />
+              Month View
+            </TabsTrigger>
+            <TabsTrigger value="year" className="gap-2">
+              <CalendarRange className="h-4 w-4" />
+              Year View
             </TabsTrigger>
           </TabsList>
 
@@ -478,6 +584,210 @@ const ScheduleManagement = () => {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="month" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Monthly Schedule View</CardTitle>
+                <CardDescription>Select multiple dates in a month to block at once</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <Button
+                    variant="outline"
+                    onClick={() => setCurrentMonth(addMonths(currentMonth, -1))}
+                  >
+                    Previous Month
+                  </Button>
+                  <h3 className="text-lg font-semibold">
+                    {format(currentMonth, 'MMMM yyyy')}
+                  </h3>
+                  <Button
+                    variant="outline"
+                    onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                  >
+                    Next Month
+                  </Button>
+                </div>
+
+                <div className="space-y-4">
+                  <Calendar
+                    mode="single"
+                    month={currentMonth}
+                    onMonthChange={setCurrentMonth}
+                    modifiers={{
+                      blocked: blockedDatesArray,
+                      selected: selectedDatesInMonth,
+                    }}
+                    modifiersClassNames={{
+                      blocked: "bg-destructive/20 text-destructive line-through",
+                      selected: "bg-primary text-primary-foreground",
+                    }}
+                    onDayClick={toggleDateSelection}
+                    className={cn("rounded-md border pointer-events-auto")}
+                  />
+
+                  <div className="bg-muted/50 p-4 rounded-lg space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-primary rounded"></div>
+                      <span className="text-sm">Selected dates ({selectedDatesInMonth.length})</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-destructive/20 rounded line-through"></div>
+                      <span className="text-sm">Already blocked</span>
+                    </div>
+                  </div>
+
+                  {selectedDatesInMonth.length > 0 && (
+                    <div className="space-y-4 p-4 border rounded-lg">
+                      <div>
+                        <Label htmlFor="month-reason">Reason (Optional)</Label>
+                        <Input
+                          id="month-reason"
+                          placeholder="e.g., Vacation, Holiday"
+                          value={reason}
+                          onChange={(e) => setReason(e.target.value)}
+                          className="mt-2"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setSelectedDatesInMonth([]);
+                            setReason("");
+                          }}
+                          className="flex-1"
+                        >
+                          Clear Selection
+                        </Button>
+                        <Button
+                          onClick={handleBlockMultipleDates}
+                          disabled={submitting}
+                          className="flex-1"
+                        >
+                          {submitting ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Blocking...
+                            </>
+                          ) : (
+                            <>Block {selectedDatesInMonth.length} Date(s)</>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="year" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Year View - Block Date Ranges</CardTitle>
+                <CardDescription>Perfect for planning vacations and extended time off</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <Dialog open={rangeDialogOpen} onOpenChange={setRangeDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="w-full">
+                      <CalendarRange className="h-4 w-4 mr-2" />
+                      Block Date Range
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Block a Date Range</DialogTitle>
+                      <DialogDescription>
+                        Select start and end dates for your time off
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>Select Date Range</Label>
+                        <Calendar
+                          mode="range"
+                          selected={dateRange}
+                          onSelect={setDateRange}
+                          numberOfMonths={2}
+                          disabled={blockedDatesArray}
+                          className={cn("rounded-md border pointer-events-auto")}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="range-reason">Reason (Optional)</Label>
+                        <Input
+                          id="range-reason"
+                          placeholder="e.g., Summer Vacation, Conference"
+                          value={rangeReason}
+                          onChange={(e) => setRangeReason(e.target.value)}
+                        />
+                      </div>
+                      <Button
+                        onClick={handleBlockDateRange}
+                        disabled={submitting || !dateRange?.from}
+                        className="w-full"
+                      >
+                        {submitting ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Blocking...
+                          </>
+                        ) : (
+                          "Block Date Range"
+                        )}
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {Array.from({ length: 12 }, (_, i) => {
+                    const monthDate = addMonths(startOfYear(new Date()), i);
+                    const monthStart = startOfMonth(monthDate);
+                    const monthEnd = endOfMonth(monthDate);
+                    const blockedInMonth = blockedDates.filter(bd => {
+                      const date = new Date(bd.blocked_date);
+                      return date >= monthStart && date <= monthEnd;
+                    }).length;
+
+                    return (
+                      <Card key={i} className="hover:shadow-md transition-shadow">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="text-base">
+                            {format(monthDate, 'MMMM yyyy')}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Blocked dates:</span>
+                              <Badge variant={blockedInMonth > 0 ? "default" : "outline"}>
+                                {blockedInMonth}
+                              </Badge>
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full"
+                              onClick={() => {
+                                setCurrentMonth(monthDate);
+                                document.querySelector('[value="month"]')?.dispatchEvent(new Event('click', { bubbles: true }));
+                              }}
+                            >
+                              View Month
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </main>
