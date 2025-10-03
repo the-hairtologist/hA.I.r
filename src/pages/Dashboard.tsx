@@ -84,8 +84,10 @@ const Dashboard = () => {
 
       setUserProfile(profileData);
 
+      // CRITICAL: Profile completion is MANDATORY - block all features until complete
       if (!profileData?.full_name) {
         setShowProfileCompletion(true);
+        return; // Stop loading dashboard data until profile is complete
       }
     } catch (error: any) {
       toast.error("Error loading dashboard");
@@ -311,18 +313,46 @@ const Dashboard = () => {
 
   const clientFeatures = [
     {
-      title: "My Color Formulas",
-      description: "Your custom formulas saved forever—bring them to any salon, anywhere",
-      icon: Sparkles,
-      route: "/my-formulas",
+      title: "Find Your Stylist",
+      description: "Discover top-rated stylists near you—browse portfolios, read reviews, and find your perfect match",
+      icon: Users,
+      route: "/stylists",
+      gradient: "from-cyan-400 to-blue-500",
+    },
+    {
+      title: "Book Appointment",
+      description: "Schedule your next color session—pick your stylist, choose your service, and secure your spot",
+      icon: Calendar,
+      route: "/book-appointment",
+      gradient: "from-blue-400 to-indigo-500",
+    },
+    {
+      title: "My Appointments",
+      description: "Track all your bookings—view upcoming sessions, reschedule if needed, and never miss a color day",
+      icon: Calendar,
+      route: "/my-appointments",
       gradient: "from-purple-400 to-pink-500",
     },
     {
+      title: "My Color Formulas",
+      description: "Your custom formulas saved forever—bring them to any salon, anywhere",
+      icon: Scissors,
+      route: "/my-formulas",
+      gradient: "from-red-400 to-orange-500",
+    },
+    {
+      title: "Messages",
+      description: "Stay connected with your stylist—chat about your next look, share inspiration, and get expert guidance",
+      icon: MessageSquare,
+      route: "/messages",
+      gradient: "from-yellow-300 to-orange-400",
+    },
+    {
       title: "Hair Care Library",
-      description: "Unlock expert tips on maintaining your color and keeping your hair healthy",
+      description: "Master your hair care routine—learn techniques, discover trends, and unlock pro tips for gorgeous hair",
       icon: BookOpen,
       route: "/knowledge",
-      gradient: "from-blue-400 to-cyan-500",
+      gradient: "from-green-400 to-emerald-500",
     },
   ];
 

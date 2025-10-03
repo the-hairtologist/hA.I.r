@@ -174,7 +174,9 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
 
       toast.success("Profile completed! Welcome to hA.I.r!");
       onOpenChange(false);
-      navigate("/dashboard");
+      
+      // Reload the page to refresh all data with the new profile
+      window.location.reload();
     } catch (error: any) {
       console.error("Error completing profile:", error);
       toast.error("Failed to save profile");
@@ -184,7 +186,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent 
         className="max-w-2xl max-h-[90vh] overflow-y-auto" 
         onInteractOutside={(e) => e.preventDefault()}
@@ -198,6 +200,11 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           <DialogDescription>
             Let's set up your profile to get the most out of hA.I.r
           </DialogDescription>
+          <div className="mt-2 p-3 bg-primary/10 border border-primary/20 rounded-lg">
+            <p className="text-xs text-foreground font-medium">
+              🔒 Profile completion is required to access all features
+            </p>
+          </div>
         </DialogHeader>
 
         <div className="space-y-6">
