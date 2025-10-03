@@ -76,10 +76,9 @@ serve(async (request) => {
 
       // Send confirmation email
       try {
-        await supabase.functions.invoke('send-appointment-email', {
+        await supabase.functions.invoke('send-appointment-confirmation', {
           body: {
             appointmentId: appointment.id,
-            type: 'confirmation',
           },
         })
       } catch (emailError) {
@@ -91,7 +90,7 @@ serve(async (request) => {
       headers: { 'Content-Type': 'application/json' },
       status: 200,
     })
-  } catch (err) {
+  } catch (err: any) {
     console.error('Webhook error:', err.message)
     return new Response(`Webhook Error: ${err.message}`, { status: 400 })
   }

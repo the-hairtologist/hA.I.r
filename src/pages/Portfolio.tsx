@@ -1,0 +1,453 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { DashboardLayout } from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+
+interface PortfolioPhoto {
+  id: string;
+  photo_url: string;
+  caption: string | null;
+  is_before_after: boolean;
+  before_photo_url: string | null;
+  display_order: number;
+}
+
+const Portfolio = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [photos, setPhotos] = useState<PortfolioPhoto[]>([]);
+  const [stylistProfileId, setStylistProfileId] = useState<string>("");
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
+  const [newPhotoPreview, setNewPhotoPreview] = useState<string>("");
+  const [caption, setCaption] = useState("");
+  const [isBeforeAfter, setIsBeforeAfter] = useState(false);
+  const [beforePhoto, setBeforePhoto] = useState<File | null>(null);
+  const [beforePhotoPreview, setBeforePhotoPreview] = useState<string>("");
+
+  useEffect(() => {
+    checkUserAndLoadPhotos();
+  }, []);
+
+  const checkUserAndLoadPhotos = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/auth");
+        return;
+      }
+
+      // Get stylist profile
+      const { data: profile } = await supabase
+        .from("stylist_profiles")
+        .select("id")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (!profile) {
+        toast.error("Stylist profile not found");
+        navigate("/dashboard");
+        return;
+      }
+
+      setStylistProfileId(profile.id);
+      await loadPhotos(profile.id);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error loading portfolio");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadPhotos = async (profileId: string) => {
+    const { data, error } = await supabase
+      .from("portfolio_photos")
+      .select("*")
+      .eq("stylist_id", profileId)
+      .order("display_order");
+
+    if (error) {
+      console.error("Error loading photos:", error);
+      toast.error("Failed to load photos");
+    } else {
+      setPhotos(data || []);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, isBefore: boolean = false) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be less than 5MB");
+      return;
+    }
+
+    if (isBefore) {
+      setBeforePhoto(file);
+      const preview = URL.createObjectURL(file);
+      setBeforePhotoPreview(preview);
+    } else {
+      setNewPhoto(file);
+      const preview = URL.createObjectURL(file);
+      setNewPhotoPreview(preview);
+    }
+  };
+
+  const uploadPhoto = async (file: File, path: string): Promise<string> => {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `${path}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("hair-photos")
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from("hair-photos")
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
+  const handleUpload = async () => {
+    if (!newPhoto) {
+      toast.error("Please select a photo");
+      return;
+    }
+
+    if (isBeforeAfter && !beforePhoto) {
+      toast.error("Please select a before photo");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const afterUrl = await uploadPhoto(newPhoto, "portfolio");
+      let beforeUrl = null;
+
+      if (isBeforeAfter && beforePhoto) {
+        beforeUrl = await uploadPhoto(beforePhoto, "portfolio");
+      }
+
+      const { error } = await supabase
+        .from("portfolio_photos")
+        .insert({
+          stylist_id: stylistProfileId,
+          photo_url: afterUrl,
+          caption: caption || null,
+          is_before_after: isBeforeAfter,
+          before_photo_url: beforeUrl,
+          display_order: photos.length,
+        });
+
+      if (error) throw error;
+
+      toast.success("Photo uploaded successfully!");
+      setNewPhoto(null);
+      setNewPhotoPreview("");
+      setBeforePhoto(null);
+      setBeforePhotoPreview("");
+      setCaption("");
+      setIsBeforeAfter(false);
+      await loadPhotos(stylistProfileId);
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      toast.error("Failed to upload photo");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("portfolio_photos")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Photo deleted");
+      await loadPhotos(stylistProfileId);
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Failed to delete photo");
+    }
+  };
+
+  const movePhoto = async (id: string, direction: "up" | "down") => {
+    const currentIndex = photos.findIndex(p => p.id === id);
+    if (currentIndex === -1) return;
+    
+    const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= photos.length) return;
+
+    try {
+      const photo1 = photos[currentIndex];
+      const photo2 = photos[newIndex];
+
+      await supabase
+        .from("portfolio_photos")
+        .update({ display_order: photo2.display_order })
+        .eq("id", photo1.id);
+
+      await supabase
+        .from("portfolio_photos")
+        .update({ display_order: photo1.display_order })
+        .eq("id", photo2.id);
+
+      await loadPhotos(stylistProfileId);
+    } catch (error) {
+      console.error("Reorder error:", error);
+      toast.error("Failed to reorder photos");
+    }
+  };
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex justify-center items-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <DashboardLayout>
+      <div className="container mx-auto p-6 max-w-6xl animate-fade-in">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 font-display">My Portfolio</h1>
+          <p className="text-muted-foreground">Showcase your best work to attract more clients</p>
+        </div>
+
+        {/* Upload Section */}
+        <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-purple-400 to-pink-400">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <Upload className="h-5 w-5" />
+              Upload New Photo
+            </CardTitle>
+            <CardDescription className="text-foreground/80 font-medium">
+              Add photos to your portfolio gallery
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center space-x-2 bg-white/20 p-3 rounded-lg">
+              <Switch
+                checked={isBeforeAfter}
+                onCheckedChange={setIsBeforeAfter}
+                id="before-after"
+              />
+              <Label htmlFor="before-after" className="text-foreground font-medium">
+                This is a before & after photo
+              </Label>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {isBeforeAfter && (
+                <div className="space-y-2">
+                  <Label className="text-foreground font-medium">Before Photo</Label>
+                  <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-white/10 hover:bg-white/20 transition-colors">
+                    {beforePhotoPreview ? (
+                      <div className="relative">
+                        <img src={beforePhotoPreview} alt="Before preview" className="w-full h-48 object-cover rounded-lg" />
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          className="absolute top-2 right-2"
+                          onClick={() => {
+                            setBeforePhoto(null);
+                            setBeforePhotoPreview("");
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <Label htmlFor="before-photo" className="cursor-pointer flex flex-col items-center gap-2 text-foreground">
+                        <ImageIcon className="h-12 w-12" />
+                        <span className="font-medium">Click to upload before photo</span>
+                        <Input
+                          id="before-photo"
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleFileSelect(e, true)}
+                        />
+                      </Label>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label className="text-foreground font-medium">{isBeforeAfter ? "After Photo" : "Photo"}</Label>
+                <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-white/10 hover:bg-white/20 transition-colors">
+                  {newPhotoPreview ? (
+                    <div className="relative">
+                      <img src={newPhotoPreview} alt="Photo preview" className="w-full h-48 object-cover rounded-lg" />
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        className="absolute top-2 right-2"
+                        onClick={() => {
+                          setNewPhoto(null);
+                          setNewPhotoPreview("");
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Label htmlFor="new-photo" className="cursor-pointer flex flex-col items-center gap-2 text-foreground">
+                      <ImageIcon className="h-12 w-12" />
+                      <span className="font-medium">Click to upload {isBeforeAfter ? "after" : ""} photo</span>
+                      <Input
+                        id="new-photo"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleFileSelect(e, false)}
+                      />
+                    </Label>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="caption" className="text-foreground font-medium">Caption (Optional)</Label>
+              <Textarea
+                id="caption"
+                placeholder="Describe the style, technique, or products used..."
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                rows={3}
+                className="bg-white/20 border-2 border-foreground text-foreground placeholder:text-foreground/60"
+              />
+            </div>
+
+            <Button
+              onClick={handleUpload}
+              disabled={uploading || !newPhoto || (isBeforeAfter && !beforePhoto)}
+              className="w-full"
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload Photo
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Gallery */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4 font-display">Your Gallery ({photos.length} photos)</h2>
+          {photos.length === 0 ? (
+            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
+              <CardContent className="pt-6 text-center">
+                <ImageIcon className="h-12 w-12 mx-auto mb-4 text-foreground/60" />
+                <p className="text-foreground/80 font-medium">No photos yet. Upload your first photo to get started!</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {photos.map((photo, index) => (
+                <Card key={photo.id} className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-white">
+                  <CardContent className="p-4">
+                    <div className="relative">
+                      {photo.is_before_after && photo.before_photo_url ? (
+                        <div className="grid grid-cols-2 gap-2 mb-2">
+                          <div>
+                            <p className="text-xs font-bold mb-1 text-center">BEFORE</p>
+                            <img
+                              src={photo.before_photo_url}
+                              alt="Before"
+                              className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
+                            />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold mb-1 text-center">AFTER</p>
+                            <img
+                              src={photo.photo_url}
+                              alt="After"
+                              className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <img
+                          src={photo.photo_url}
+                          alt="Portfolio"
+                          className="w-full h-48 object-cover rounded-lg mb-2 border-2 border-foreground"
+                        />
+                      )}
+                      {photo.caption && (
+                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{photo.caption}</p>
+                      )}
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => movePhoto(photo.id, "up")}
+                          disabled={index === 0}
+                          className="flex-1"
+                        >
+                          <ArrowUp className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => movePhoto(photo.id, "down")}
+                          disabled={index === photos.length - 1}
+                          className="flex-1"
+                        >
+                          <ArrowDown className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDelete(photo.id)}
+                          className="flex-1"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+};
+
+export default Portfolio;

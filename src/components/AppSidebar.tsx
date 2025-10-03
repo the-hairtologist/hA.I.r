@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   User,
   PiggyBank,
+  Image,
 } from "lucide-react";
 import {
   Sidebar,
@@ -36,13 +37,14 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const stylistItems = [
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500" },
     { title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-blue-500 to-cyan-500" },
-    { title: "Formulas", url: "/formulas", icon: Sparkles, gradient: "from-violet-500 to-purple-500" },
+    { title: "Portfolio", url: "/portfolio", icon: Image, gradient: "from-orange-500 to-red-500" },
     { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-pink-500 to-rose-500" },
     { title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
     { title: "Schedule", url: "/schedule", icon: Settings, gradient: "from-blue-500 to-indigo-500" },
   ];
 
   const stylistSecondaryItems = [
+    { title: "Formulas", url: "/formulas", icon: Sparkles, gradient: "from-violet-500 to-purple-500" },
     { title: "Payments", url: "/payments", icon: DollarSign, gradient: "from-amber-500 to-orange-500" },
     { title: "Commissions", url: "/commissions", icon: PiggyBank, gradient: "from-green-500 to-emerald-500" },
     { title: "Knowledge", url: "/knowledge", icon: BookOpen, gradient: "from-indigo-500 to-purple-500" },

@@ -427,6 +427,50 @@ export type Database = {
           },
         ]
       }
+      portfolio_photos: {
+        Row: {
+          before_photo_url: string | null
+          caption: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_before_after: boolean | null
+          photo_url: string
+          stylist_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          before_photo_url?: string | null
+          caption?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_before_after?: boolean | null
+          photo_url: string
+          stylist_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          before_photo_url?: string | null
+          caption?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_before_after?: boolean | null
+          photo_url?: string
+          stylist_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_photos_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

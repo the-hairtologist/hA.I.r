@@ -23,6 +23,7 @@ import ScheduleManagement from "./pages/ScheduleManagement";
 import Services from "./pages/Services";
 import AccountSettings from "./pages/AccountSettings";
 import AIAssistant from "./pages/AIAssistant";
+import Portfolio from "./pages/Portfolio";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -89,6 +90,11 @@ const App = () => (
           <Route path="/schedule" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
               <ScheduleManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/portfolio" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Portfolio />
             </ProtectedRoute>
           } />
           <Route path="/services" element={
