@@ -1008,11 +1008,23 @@ export type Database = {
         }
         Returns: undefined
       }
+      get_client_profile_id: {
+        Args: { _user_id: string }
+        Returns: string
+      }
+      get_stylist_profile_id: {
+        Args: { _user_id: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      stylist_has_client_access: {
+        Args: { _client_id: string; _stylist_user_id: string }
         Returns: boolean
       }
     }
