@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { SubscriptionGate } from "@/components/SubscriptionGate";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -34,10 +36,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+      <SubscriptionProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Index />} />
@@ -73,52 +76,72 @@ const App = () => (
           {/* Stylist-Only Routes */}
           <Route path="/formulas" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <Formulas />
+              <SubscriptionGate feature="formulas">
+                <Formulas />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/appointments" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <Appointments />
+              <SubscriptionGate feature="appointments">
+                <Appointments />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/commissions" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <Commissions />
+              <SubscriptionGate feature="commissions">
+                <Commissions />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/payments" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <Payments />
+              <SubscriptionGate feature="payments">
+                <Payments />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/schedule" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <ScheduleManagement />
+              <SubscriptionGate feature="schedule">
+                <ScheduleManagement />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/portfolio" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <Portfolio />
+              <SubscriptionGate feature="portfolio">
+                <Portfolio />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/clients" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <Clients />
+              <SubscriptionGate feature="clients">
+                <Clients />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/book-for-client" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <BookForClient />
+              <SubscriptionGate feature="appointments">
+                <BookForClient />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/services" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <Services />
+              <SubscriptionGate feature="services">
+                <Services />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/ai-assistant" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
-              <AIAssistant />
+              <SubscriptionGate feature="ai-assistant">
+                <AIAssistant />
+              </SubscriptionGate>
             </ProtectedRoute>
           } />
           
@@ -153,8 +176,9 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+        </TooltipProvider>
+      </SubscriptionProvider>
+    </QueryClientProvider>
   </ErrorBoundary>
 );
 

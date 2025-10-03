@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings, GripVertical } from "lucide-react";
+import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings, GripVertical, CreditCard } from "lucide-react";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { OnboardingTour } from "@/components/OnboardingTour";
+import { StylistSubscriptionPrompt } from "@/components/StylistSubscriptionPrompt";
+import { SubscriptionManagementCard } from "@/components/SubscriptionManagementCard";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
@@ -74,17 +77,21 @@ const SortableSection = ({ id, children }: SortableSectionProps) => {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false);
   const [stats, setStats] = useState<any>({});
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [recentReviews, setRecentReviews] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
+    "subscription",
     "checklist",
     "quick-actions",
     "stats", 
@@ -118,8 +125,29 @@ const Dashboard = () => {
       
       // Check profile completion
       checkProfileCompletion();
+      
+      // Show subscription prompt for stylists without subscription
+      if (userRole === "stylist" && !subscriptionLoading && !subscribed && !inTrial) {
+        const promptDismissed = localStorage.getItem('subscription_prompt_dismissed');
+        if (!promptDismissed) {
+          setTimeout(() => setShowSubscriptionPrompt(true), 2000);
+        }
+      }
     }
-  }, [userRole, profile]);
+  }, [userRole, profile, subscribed, inTrial, subscriptionLoading]);
+
+  useEffect(() => {
+    // Handle subscription callback
+    const subscriptionStatus = searchParams.get('subscription');
+    if (subscriptionStatus === 'success') {
+      toast.success("Subscription activated! Welcome to Stylist Pro 🎉");
+      checkSubscription();
+      searchParams.delete('subscription');
+    } else if (subscriptionStatus === 'cancelled') {
+      toast.info("Subscription cancelled. You can subscribe anytime!");
+      searchParams.delete('subscription');
+    }
+  }, [searchParams]);
 
   const checkProfileCompletion = () => {
     if (!profile || !user || !userProfile) return;
@@ -534,6 +562,12 @@ const Dashboard = () => {
 
   const renderSection = (sectionId: string) => {
     switch (sectionId) {
+      case "subscription":
+        // Only show subscription card for stylists
+        if (userRole === "stylist") {
+          return <SubscriptionManagementCard key={sectionId} />;
+        }
+        return null;
       case "quick-actions":
         return <QuickActions key={sectionId} userRole={userRole || ""} />;
       case "stats":
@@ -701,6 +735,16 @@ const Dashboard = () => {
           open={showOnboarding}
           onOpenChange={setShowOnboarding}
           userRole={userRole as "stylist" | "client"}
+        />
+
+        <StylistSubscriptionPrompt
+          open={showSubscriptionPrompt}
+          onOpenChange={(open) => {
+            setShowSubscriptionPrompt(open);
+            if (!open) {
+              localStorage.setItem('subscription_prompt_dismissed', 'true');
+            }
+          }}
         />
       </div>
     </DashboardLayout>

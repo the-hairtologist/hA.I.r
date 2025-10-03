@@ -1,0 +1,150 @@
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+
+interface SubscriptionContextType {
+  subscribed: boolean;
+  inTrial: boolean;
+  loading: boolean;
+  productId: string | null;
+  subscriptionEnd: string | null;
+  checkSubscription: () => Promise<void>;
+  isFeatureAllowed: (feature: string) => boolean;
+}
+
+const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
+
+const STYLIST_PRODUCT_ID = "prod_TAdxnWWlueCL0Y";
+
+// Features that require subscription for stylists
+const PREMIUM_FEATURES = [
+  "clients",
+  "appointments",
+  "formulas", 
+  "ai-assistant",
+  "payments",
+  "commissions",
+  "services",
+  "schedule",
+  "portfolio",
+  "messages"
+];
+
+export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
+  const [subscribed, setSubscribed] = useState(false);
+  const [inTrial, setInTrial] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [productId, setProductId] = useState<string | null>(null);
+  const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  const checkSubscription = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setSubscribed(false);
+        setLoading(false);
+        return;
+      }
+
+      // Check user role
+      const { data: rolesData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id);
+
+      const isStylist = rolesData?.some(r => r.role === "stylist");
+      setUserRole(isStylist ? "stylist" : "client");
+
+      // Clients don't need subscriptions
+      if (!isStylist) {
+        setSubscribed(true);
+        setLoading(false);
+        return;
+      }
+
+      // Check subscription status for stylists
+      const { data, error } = await supabase.functions.invoke("check-subscription", {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (error) throw error;
+
+      setSubscribed(data.subscribed || false);
+      setInTrial(data.in_trial || false);
+      setProductId(data.product_id);
+      setSubscriptionEnd(data.subscription_end);
+    } catch (error) {
+      console.error("Error checking subscription:", error);
+      setSubscribed(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isFeatureAllowed = (feature: string): boolean => {
+    // Clients have access to all features
+    if (userRole === "client") return true;
+    
+    // Stylists need subscription for premium features
+    if (userRole === "stylist") {
+      if (PREMIUM_FEATURES.includes(feature)) {
+        return subscribed || inTrial;
+      }
+      return true;
+    }
+    
+    return false;
+  };
+
+  useEffect(() => {
+    checkSubscription();
+
+    // Check subscription on auth state change
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setTimeout(() => {
+          checkSubscription();
+        }, 0);
+      } else {
+        setSubscribed(false);
+        setUserRole(null);
+        setLoading(false);
+      }
+    });
+
+    // Refresh subscription status periodically (every 2 minutes)
+    const interval = setInterval(checkSubscription, 120000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <SubscriptionContext.Provider
+      value={{
+        subscribed,
+        inTrial,
+        loading,
+        productId,
+        subscriptionEnd,
+        checkSubscription,
+        isFeatureAllowed,
+      }}
+    >
+      {children}
+    </SubscriptionContext.Provider>
+  );
+};
+
+export const useSubscription = () => {
+  const context = useContext(SubscriptionContext);
+  if (context === undefined) {
+    throw new Error("useSubscription must be used within a SubscriptionProvider");
+  }
+  return context;
+};
