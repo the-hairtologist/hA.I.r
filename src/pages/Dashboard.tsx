@@ -376,12 +376,25 @@ const Dashboard = () => {
               </p>
               
               <div className="flex gap-4 flex-wrap">
-                <div className="px-6 py-3 bg-pink-500 text-white font-display font-bold text-lg border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-transform cursor-pointer">
+                <Button
+                  onClick={() => {
+                    if (userRole === "stylist") {
+                      navigate("/appointments");
+                    } else {
+                      navigate("/stylists");
+                    }
+                  }}
+                  className="px-6 py-3 bg-pink-500 text-white font-display font-bold text-lg border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-transform"
+                >
                   LET'S GO!
-                </div>
-                <div className="px-6 py-3 bg-transparent text-pink-300 font-display font-bold text-lg border-4 border-pink-400 hover:bg-pink-500 hover:text-white transition-colors cursor-pointer">
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/knowledge")}
+                  className="px-6 py-3 bg-transparent text-pink-300 font-display font-bold text-lg border-4 border-pink-400 hover:bg-pink-500 hover:text-white transition-colors"
+                >
                   MAYBE LATER
-                </div>
+                </Button>
               </div>
             </div>
           </div>
