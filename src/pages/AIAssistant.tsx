@@ -8,7 +8,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { ArrowLeft, Send, Sparkles, Loader2, User, Bot, Trash2 } from "lucide-react";
+import { ArrowLeft, Send, Sparkles, Loader2, User, Bot, Trash2, BookmarkPlus } from "lucide-react";
+import { SaveFormulaDialog } from "@/components/SaveFormulaDialog";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -22,6 +23,8 @@ const AIAssistant = () => {
   const [loading, setLoading] = useState(false);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [selectedFormulaText, setSelectedFormulaText] = useState("");
 
   useEffect(() => {
     loadStylistProfile();
@@ -221,16 +224,34 @@ const AIAssistant = () => {
                     </Avatar>
                   )}
                   
-                  <div
-                    className={`rounded-lg px-4 py-3 max-w-[80%] ${
-                      message.role === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
-                    }`}
-                  >
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">
-                      {message.content}
-                    </p>
+                  <div className="flex flex-col gap-2 max-w-[80%]">
+                    <div
+                      className={`rounded-lg px-4 py-3 ${
+                        message.role === 'user'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted'
+                      }`}
+                    >
+                      <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                        {message.content}
+                      </p>
+                    </div>
+                    
+                    {/* Save as Formula button for AI messages */}
+                    {message.role === 'assistant' && index > 0 && message.content.length > 50 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedFormulaText(message.content);
+                          setSaveDialogOpen(true);
+                        }}
+                        className="self-start gap-2 text-xs h-8"
+                      >
+                        <BookmarkPlus className="h-3 w-3" />
+                        Save as Formula
+                      </Button>
+                    )}
                   </div>
 
                   {message.role === 'user' && (
@@ -312,6 +333,16 @@ const AIAssistant = () => {
           </CardContent>
         </Card>
       </main>
+
+      {/* Save Formula Dialog */}
+      {stylistProfile && (
+        <SaveFormulaDialog
+          open={saveDialogOpen}
+          onOpenChange={setSaveDialogOpen}
+          formulaText={selectedFormulaText}
+          stylistId={stylistProfile.id}
+        />
+      )}
     </div>
   );
 };
