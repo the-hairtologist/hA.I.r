@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { UserPlus, Loader2 } from "lucide-react";
 import { z } from "zod";
@@ -54,6 +55,8 @@ export const AddClientDialog = ({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
+  const [allergies, setAllergies] = useState("");
+  const [medicalConsent, setMedicalConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -62,6 +65,8 @@ export const AddClientDialog = ({
     setEmail("");
     setPhone("");
     setNotes("");
+    setAllergies("");
+    setMedicalConsent(false);
     setErrors({});
   };
 
@@ -100,6 +105,8 @@ export const AddClientDialog = ({
           email: validatedData.email,
           phone: validatedData.phone || null,
           notes: validatedData.notes || null,
+          allergies: allergies || null,
+          medical_info_consent: medicalConsent,
           preferred_stylist_id: stylistId,
         })
         .select()
@@ -227,6 +234,41 @@ export const AddClientDialog = ({
               {notes.length}/500
             </p>
           </div>
+
+          {/* Allergies */}
+          <div className="space-y-2">
+            <Label htmlFor="allergies">Allergies (Optional)</Label>
+            <Textarea
+              id="allergies"
+              placeholder="Any hair product allergies or sensitivities..."
+              value={allergies}
+              onChange={(e) => setAllergies(e.target.value)}
+              rows={2}
+              maxLength={500}
+            />
+          </div>
+
+          {/* Medical Consent */}
+          {allergies.trim() && (
+            <div className="flex items-start space-x-2 p-3 border rounded-lg bg-muted/50">
+              <Checkbox
+                id="medical-consent"
+                checked={medicalConsent}
+                onCheckedChange={(checked) => setMedicalConsent(checked as boolean)}
+              />
+              <div className="space-y-1">
+                <Label 
+                  htmlFor="medical-consent" 
+                  className="text-sm font-normal cursor-pointer leading-none"
+                >
+                  I consent to sharing allergy information with my stylist
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  This information will only be visible to your assigned stylist for safety purposes
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex gap-2 pt-2">

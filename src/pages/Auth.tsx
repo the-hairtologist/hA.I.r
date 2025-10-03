@@ -63,13 +63,11 @@ const Auth = () => {
 
       if (data.user) {
         try {
-          // Create role and profile in sequence to avoid race condition
-          const { error: roleError } = await supabase
-            .from("user_roles")
-            .insert({
-              user_id: data.user.id,
-              role: userType,
-            });
+          // Use secure function to assign role (prevents privilege escalation)
+          const { error: roleError } = await supabase.rpc('assign_user_role', {
+            _user_id: data.user.id,
+            _role: userType,
+          });
 
           if (roleError) throw roleError;
 

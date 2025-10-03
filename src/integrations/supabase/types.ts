@@ -143,6 +143,7 @@ export type Database = {
           full_name: string | null
           hair_type: string | null
           id: string
+          medical_info_consent: boolean | null
           notes: string | null
           phone: string | null
           preferred_stylist_id: string | null
@@ -156,6 +157,7 @@ export type Database = {
           full_name?: string | null
           hair_type?: string | null
           id?: string
+          medical_info_consent?: boolean | null
           notes?: string | null
           phone?: string | null
           preferred_stylist_id?: string | null
@@ -169,6 +171,7 @@ export type Database = {
           full_name?: string | null
           hair_type?: string | null
           id?: string
+          medical_info_consent?: boolean | null
           notes?: string | null
           phone?: string | null
           preferred_stylist_id?: string | null
@@ -904,6 +907,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_user_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
