@@ -332,7 +332,7 @@ const AIAssistant = () => {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about hair color..."
-                className="flex-1 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-white"
+                className="flex-1 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-white placeholder:text-black"
                 disabled={loading}
                 maxLength={2000}
               />
@@ -350,10 +350,10 @@ const AIAssistant = () => {
               </Button>
             </div>
             <div className="flex items-center justify-between mt-2">
-              <p className="text-xs font-semibold text-foreground/60">
+              <p className="text-xs font-bold text-black">
                 💡 Be specific for best results
               </p>
-              <p className="text-xs font-mono text-foreground/60">
+              <p className="text-xs font-mono font-bold text-black">
                 {input.length}/2000
               </p>
             </div>
