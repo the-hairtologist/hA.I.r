@@ -17,3 +17,9 @@ verify_jwt = false
 
 [functions.seed-knowledge-base]
 verify_jwt = false
+
+[functions.create-appointment-checkout]
+verify_jwt = true
+
+[functions.stripe-webhook]
+verify_jwt = false
