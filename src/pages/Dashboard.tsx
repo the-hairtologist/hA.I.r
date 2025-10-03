@@ -371,8 +371,8 @@ const Dashboard = () => {
               
               <p className="text-base md:text-lg font-medium text-pink-200 mb-6 max-w-2xl">
                 {userRole === "stylist" 
-                  ? "Ready to create some color magic today? Let's make beautiful hair transformations happen." 
-                  : "Your hair journey continues. Discover new styles, book appointments, and keep track of your favorite looks."}
+                  ? "Every masterpiece starts with a vision—grab your brush, trust your instincts, and let's turn some heads today! 💫" 
+                  : "Your next iconic look is just a booking away. Ready to discover the transformation you've been dreaming of? ✨"}
               </p>
               
               <div className="flex gap-4 flex-wrap">
