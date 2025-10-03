@@ -42,14 +42,15 @@ const Knowledge = () => {
         return;
       }
 
-      // Check if user is a stylist
-      const { data: roleData } = await supabase
+      // Check if user has stylist role (users can have multiple roles)
+      const { data: roles } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", session.user.id)
-        .single();
+        .eq("user_id", session.user.id);
 
-      if (roleData?.role !== "stylist") {
+      const isStylist = roles?.some(r => r.role === "stylist");
+      
+      if (!isStylist) {
         toast.error("This feature is only available for stylists");
         navigate("/dashboard");
       }
