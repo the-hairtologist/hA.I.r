@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2, CalendarDays } from "lucide-react";
+import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2, CalendarDays, UserPlus } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/CalendarView";
@@ -153,6 +153,13 @@ const Appointments = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
+              <Button 
+                onClick={() => navigate("/book-for-client")}
+                variant="default"
+              >
+                <UserPlus className="h-4 w-4 mr-2" />
+                Book for Client
+              </Button>
               <div className="flex items-center gap-2">
                 <Label htmlFor="availability">Accepting Bookings</Label>
                 <Switch

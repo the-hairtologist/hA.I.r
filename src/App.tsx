@@ -121,11 +121,6 @@ const App = () => (
           } />
           
           {/* Client-Only Routes */}
-          <Route path="/book" element={
-            <ProtectedRoute allowedRoles={["client"]}>
-              <BookAppointment />
-            </ProtectedRoute>
-          } />
           <Route path="/book-appointment" element={
             <ProtectedRoute allowedRoles={["client"]}>
               <BookAppointment />
