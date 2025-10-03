@@ -314,11 +314,12 @@ const AIAssistant = () => {
                 </ToggleGroupItem>
               </ToggleGroup>
               <HelpTooltip 
-                side="bottom"
-                content={chatMode === "temporary" 
-                  ? "Temporary mode: Your conversations only last for this session. Once you leave or refresh this page, your chat history will be cleared." 
-                  : "Save History mode: Your conversations are saved to your account and will persist across sessions. You can come back anytime to continue your chat."
-                } 
+                title="Chat Modes"
+                content={`📝 Temporary Chat
+Your conversations only last for this session. Once you leave or refresh this page, your chat history will be cleared. Perfect for quick questions!
+
+💾 Save History
+Your conversations are saved to your account and will persist across sessions. You can come back anytime to continue your chat. Great for ongoing projects!`}
               />
             </div>
           </div>
