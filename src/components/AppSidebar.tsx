@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Calendar,
@@ -13,6 +14,8 @@ import {
   PiggyBank,
   Image,
   UserPlus,
+  CalendarCheck,
+  ChevronDown,
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,8 +26,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface AppSidebarProps {
   userRole?: string;
@@ -34,15 +45,22 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const { state } = useSidebar();
   const location = useLocation();
   const collapsed = state === "collapsed";
+  const [appointmentsOpen, setAppointmentsOpen] = useState(
+    location.pathname.includes("/appointments") || location.pathname.includes("/book-for-client")
+  );
 
   const stylistItems = [
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500" },
-    { title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-blue-500 to-cyan-500" },
     { title: "Clients", url: "/clients", icon: Users, gradient: "from-green-500 to-emerald-500" },
     { title: "Portfolio", url: "/portfolio", icon: Image, gradient: "from-orange-500 to-red-500" },
     { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-pink-500 to-rose-500" },
     { title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
     { title: "Schedule", url: "/schedule", icon: Settings, gradient: "from-blue-500 to-indigo-500" },
+  ];
+
+  const appointmentSubItems = [
+    { title: "View Appointments", url: "/appointments", icon: CalendarCheck },
+    { title: "Book for Client", url: "/book-for-client", icon: UserPlus },
   ];
 
   const stylistSecondaryItems = [
@@ -84,6 +102,41 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              {userRole === "stylist" && (
+                <Collapsible
+                  open={appointmentsOpen}
+                  onOpenChange={setAppointmentsOpen}
+                  className="group/collapsible"
+                >
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton tooltip="Appointments">
+                        <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500">
+                          <Calendar className="h-4 w-4 text-white" />
+                        </div>
+                        {!collapsed && <span className="ml-2">Appointments</span>}
+                        {!collapsed && (
+                          <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                        )}
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {appointmentSubItems.map((subItem) => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <SidebarMenuSubButton asChild>
+                              <NavLink to={subItem.url} className={getNavClassName(subItem.url)}>
+                                <subItem.icon className="h-4 w-4" />
+                                {!collapsed && <span>{subItem.title}</span>}
+                              </NavLink>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              )}
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>

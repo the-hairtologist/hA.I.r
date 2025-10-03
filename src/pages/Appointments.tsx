@@ -153,13 +153,6 @@ const Appointments = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Button 
-                onClick={() => navigate("/book-for-client")}
-                variant="default"
-              >
-                <UserPlus className="h-4 w-4 mr-2" />
-                Book for Client
-              </Button>
               <div className="flex items-center gap-2">
                 <Label htmlFor="availability">Accepting Bookings</Label>
                 <Switch
