@@ -302,18 +302,19 @@ const AIAssistant = () => {
               <ToggleGroup type="single" value={chatMode} onValueChange={handleModeChange}>
                 <ToggleGroupItem 
                   value="temporary" 
-                  className="border-2 border-foreground font-semibold data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] data-[state=on]:shadow-none data-[state=on]:translate-x-[2px] data-[state=on]:translate-y-[2px]"
+                  className="border-2 border-foreground font-semibold bg-white hover:bg-secondary/20 data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] data-[state=on]:shadow-none data-[state=on]:translate-x-[2px] data-[state=on]:translate-y-[2px] transition-all"
                 >
                   Temporary Chat
                 </ToggleGroupItem>
                 <ToggleGroupItem 
                   value="saved" 
-                  className="border-2 border-foreground font-semibold data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] data-[state=on]:shadow-none data-[state=on]:translate-x-[2px] data-[state=on]:translate-y-[2px]"
+                  className="border-2 border-foreground font-semibold bg-white hover:bg-secondary/20 data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] data-[state=on]:shadow-none data-[state=on]:translate-x-[2px] data-[state=on]:translate-y-[2px] transition-all"
                 >
                   Save History
                 </ToggleGroupItem>
               </ToggleGroup>
               <HelpTooltip 
+                side="bottom"
                 content={chatMode === "temporary" 
                   ? "Temporary mode: Your conversations only last for this session. Once you leave or refresh this page, your chat history will be cleared." 
                   : "Save History mode: Your conversations are saved to your account and will persist across sessions. You can come back anytime to continue your chat."
