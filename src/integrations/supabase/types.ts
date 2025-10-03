@@ -115,32 +115,41 @@ export type Database = {
         Row: {
           allergies: string | null
           created_at: string
+          email: string | null
+          full_name: string | null
           hair_type: string | null
           id: string
           notes: string | null
+          phone: string | null
           preferred_stylist_id: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           allergies?: string | null
           created_at?: string
+          email?: string | null
+          full_name?: string | null
           hair_type?: string | null
           id?: string
           notes?: string | null
+          phone?: string | null
           preferred_stylist_id?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           allergies?: string | null
           created_at?: string
+          email?: string | null
+          full_name?: string | null
           hair_type?: string | null
           id?: string
           notes?: string | null
+          phone?: string | null
           preferred_stylist_id?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {

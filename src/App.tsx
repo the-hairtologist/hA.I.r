@@ -24,6 +24,7 @@ import Services from "./pages/Services";
 import AccountSettings from "./pages/AccountSettings";
 import AIAssistant from "./pages/AIAssistant";
 import Portfolio from "./pages/Portfolio";
+import Clients from "./pages/Clients";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -95,6 +96,11 @@ const App = () => (
           <Route path="/portfolio" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
               <Portfolio />
+            </ProtectedRoute>
+          } />
+          <Route path="/clients" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Clients />
             </ProtectedRoute>
           } />
           <Route path="/services" element={
