@@ -373,13 +373,13 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-8 md:p-12 relative min-h-[300px]">
+          <div className="bg-primary p-8 md:p-12 relative min-h-[300px]">
             <div className="window-scrollbar"></div>
             
               <div className="max-w-3xl">
               <div className="flex items-center gap-6 mb-6">
                 {userProfile?.gender && (
-                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0">
+                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-secondary rounded-2xl overflow-hidden bg-accent shadow-[4px_4px_0px_0px_hsl(var(--secondary)/0.8)] flex-shrink-0">
                     <img 
                       src={
                         userProfile.gender === 'male' ? avatarMale :
@@ -393,21 +393,21 @@ const Dashboard = () => {
                 )}
               </div>
               
-              <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
+              <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-secondary uppercase leading-tight">
                 Welcome back, {user?.user_metadata?.full_name || "there"}!
               </h2>
               
-              <p className="text-lg md:text-xl font-medium text-pink-200 mb-8 max-w-2xl">
+              <p className="text-lg md:text-xl font-medium text-primary-foreground/90 mb-8 max-w-2xl">
                 {userRole === "stylist" 
                   ? "Ready to create some color magic today? Let's make beautiful hair transformations happen." 
                   : "Your hair journey continues. Discover new styles, book appointments, and keep track of your favorite looks."}
               </p>
               
               <div className="flex gap-4 flex-wrap">
-                <div className="px-6 py-3 bg-pink-500 text-white font-display font-bold text-lg border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-transform cursor-pointer">
+                <div className="px-6 py-3 bg-secondary text-secondary-foreground font-display font-bold text-lg border-4 border-foreground hover:translate-x-1 hover:translate-y-1 transition-transform cursor-pointer shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
                   LET'S GO!
                 </div>
-                <div className="px-6 py-3 bg-transparent text-pink-300 font-display font-bold text-lg border-4 border-pink-400 hover:bg-pink-500 hover:text-white transition-colors cursor-pointer">
+                <div className="px-6 py-3 bg-transparent text-secondary font-display font-bold text-lg border-4 border-secondary hover:bg-secondary hover:text-secondary-foreground transition-colors cursor-pointer">
                   MAYBE LATER
                 </div>
               </div>

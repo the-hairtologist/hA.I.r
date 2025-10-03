@@ -34,10 +34,10 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const collapsed = state === "collapsed";
 
   const stylistItems = [
-    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500" },
-    { title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-blue-500 to-cyan-500" },
-    { title: "Formulas", url: "/formulas", icon: Sparkles, gradient: "from-violet-500 to-purple-500" },
-    { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-pink-500 to-rose-500" },
+    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-blue-500 to-cyan-500" },
+    { title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-cyan-500 to-blue-400" },
+    { title: "Formulas", url: "/formulas", icon: Sparkles, gradient: "from-green-500 to-emerald-500" },
+    { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-blue-600 to-cyan-600" },
     { title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
     { title: "Schedule", url: "/schedule", icon: Settings, gradient: "from-blue-500 to-indigo-500" },
   ];
@@ -50,12 +50,12 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   ];
 
   const clientItems = [
-    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500" },
-    { title: "Find Stylists", url: "/stylists", icon: Users, gradient: "from-blue-500 to-cyan-500" },
-    { title: "My Appointments", url: "/my-appointments", icon: Calendar, gradient: "from-pink-500 to-rose-500" },
-    { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-violet-500 to-purple-500" },
+    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-blue-500 to-cyan-500" },
+    { title: "Find Stylists", url: "/stylists", icon: Users, gradient: "from-cyan-500 to-blue-400" },
+    { title: "My Appointments", url: "/my-appointments", icon: Calendar, gradient: "from-blue-600 to-cyan-600" },
+    { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-green-500 to-emerald-500" },
     { title: "My Formulas", url: "/my-formulas", icon: Sparkles, gradient: "from-emerald-500 to-teal-500" },
-    { title: "Knowledge", url: "/knowledge", icon: BookOpen, gradient: "from-indigo-500 to-purple-500" },
+    { title: "Knowledge", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-indigo-500" },
   ];
 
   const mainItems = userRole === "stylist" ? stylistItems : clientItems;
