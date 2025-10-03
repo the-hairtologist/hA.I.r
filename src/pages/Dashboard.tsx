@@ -618,10 +618,11 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-6 bg-primary/5 p-3 rounded-lg border-2 border-primary/20">
-          <p className="text-sm font-bold text-primary text-center flex items-center justify-center gap-2">
-            <GripVertical className="h-4 w-4" />
+        <div className="mb-6 bg-secondary border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] p-4 rounded-lg animate-fade-in">
+          <p className="text-base font-display font-bold text-secondary-foreground text-center flex items-center justify-center gap-2">
+            <GripVertical className="h-5 w-5 animate-pulse" />
             Hover over sections and drag the handle to rearrange your dashboard!
+            <GripVertical className="h-5 w-5 animate-pulse" />
           </p>
         </div>
 
