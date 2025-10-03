@@ -9,35 +9,47 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    --foreground: 20 14% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 20 14% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 20 14% 10%;
 
-    /* Electric pop colors - VIBRANT! */
-    --primary: 210 100% 50%;
+    /* Vibrant, fun color palette */
+    --primary: 270 85% 60%;
     --primary-foreground: 0 0% 100%;
+    --primary-glow: 270 100% 75%;
 
-    --secondary: 48 100% 50%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 340 90% 65%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 92%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 140 100% 40%;
+    --accent: 190 95% 55%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 100% 50%;
+    --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 10%;
-    --input: 0 0% 90%;
-    --ring: 210 100% 50%;
+    --border: 220 13% 91%;
+    --input: 220 13% 95%;
+    --ring: 270 85% 60%;
 
     --radius: 1rem;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(270 85% 60%), hsl(340 90% 65%));
+    --gradient-accent: linear-gradient(135deg, hsl(190 95% 55%), hsl(270 85% 60%));
+    --gradient-hero: linear-gradient(135deg, hsl(270 85% 60%) 0%, hsl(340 90% 65%) 50%, hsl(40 95% 60%) 100%);
+    
+    /* Shadows */
+    --shadow-soft: 0 2px 8px -2px hsl(270 85% 60% / 0.1);
+    --shadow-medium: 0 8px 16px -4px hsl(270 85% 60% / 0.15);
+    --shadow-large: 0 20px 40px -8px hsl(270 85% 60% / 0.2);
+    --shadow-glow: 0 0 30px hsl(270 85% 60% / 0.3);
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 5%;
@@ -50,33 +62,45 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 8%;
+    --background: 240 10% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 10%;
+    --card: 240 10% 10%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 10%;
+    --popover: 240 10% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 210 100% 55%;
+    --primary: 270 85% 65%;
     --primary-foreground: 0 0% 100%;
+    --primary-glow: 270 100% 75%;
 
-    --secondary: 48 100% 55%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 340 90% 70%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 18%;
+    --muted: 240 10% 16%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 140 100% 45%;
+    --accent: 190 95% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 100% 55%;
+    --destructive: 0 85% 65%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 210 100% 55%;
+    --border: 240 10% 20%;
+    --input: 240 10% 16%;
+    --ring: 270 85% 65%;
+    
+    /* Gradients for dark mode */
+    --gradient-primary: linear-gradient(135deg, hsl(270 85% 65%), hsl(340 90% 70%));
+    --gradient-accent: linear-gradient(135deg, hsl(190 95% 60%), hsl(270 85% 65%));
+    --gradient-hero: linear-gradient(135deg, hsl(270 85% 65%) 0%, hsl(340 90% 70%) 50%, hsl(40 95% 65%) 100%);
+    
+    /* Shadows for dark mode */
+    --shadow-soft: 0 2px 8px -2px hsl(270 85% 65% / 0.2);
+    --shadow-medium: 0 8px 16px -4px hsl(270 85% 65% / 0.3);
+    --shadow-large: 0 20px 40px -8px hsl(270 85% 65% / 0.4);
+    --shadow-glow: 0 0 40px hsl(270 100% 75% / 0.4);
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 210 100% 55%;
@@ -95,6 +119,10 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "liga" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   @keyframes fade-in {
@@ -122,12 +150,47 @@ All colors MUST be HSL.
   }
 
   .hover-scale {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .hover-scale:hover {
-    transform: scale(1.02) translateY(-2px);
-    box-shadow: 0 8px 20px -6px hsl(var(--primary) / 0.3);
+    transform: scale(1.03) translateY(-4px) rotate(-1deg);
+    box-shadow: var(--shadow-large);
+  }
+  
+  /* Smooth transitions */
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Bounce animation */
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce 3s ease-in-out infinite;
+  }
+  
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Glass effect */
+  .glass-effect {
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
   }
 
   /* Retro window chrome effect */
