@@ -42,14 +42,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       setUser(session.user);
 
       // Get user role
-      const { data: roleData } = await supabase
+      const { data: roleData, error: roleError } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", session.user.id)
         .single();
 
+      console.log("User role fetch:", { roleData, roleError, userId: session.user.id });
+
       if (roleData) {
         setUserRole(roleData.role);
+        console.log("User role set to:", roleData.role);
+      } else {
+        console.log("No role found for user");
       }
     } catch (error: any) {
       toast.error("Error loading user data");
