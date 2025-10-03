@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteClientDialog } from "@/components/InviteClientDialog";
 import { SearchInput } from "@/components/SearchInput";
@@ -41,6 +41,16 @@ export default function Clients() {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [sortBy, setSortBy] = useState<"name" | "recent">("recent");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    full_name: "",
+    email: "",
+    phone: "",
+    hair_type: "",
+    allergies: "",
+    notes: "",
+  });
+  const [clientFormulas, setClientFormulas] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -140,6 +150,62 @@ export default function Clients() {
       console.error("Error adding client:", error);
       toast.error("Failed to add client");
     }
+  };
+
+  const handleEditClient = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedClient) return;
+
+    try {
+      const { error } = await supabase
+        .from("client_profiles")
+        .update({
+          full_name: editFormData.full_name,
+          email: editFormData.email,
+          phone: editFormData.phone,
+          hair_type: editFormData.hair_type,
+          allergies: editFormData.allergies,
+          notes: editFormData.notes,
+        })
+        .eq("id", selectedClient.id);
+
+      if (error) throw error;
+
+      toast.success("Client updated successfully!");
+      setEditDialogOpen(false);
+      loadClients();
+    } catch (error) {
+      console.error("Error updating client:", error);
+      toast.error("Failed to update client");
+    }
+  };
+
+  const openEditDialog = async (client: ClientProfile) => {
+    setSelectedClient(client);
+    setEditFormData({
+      full_name: client.full_name || "",
+      email: client.email || "",
+      phone: client.phone || "",
+      hair_type: client.hair_type || "",
+      allergies: client.allergies || "",
+      notes: client.notes || "",
+    });
+
+    // Load formulas for this client
+    try {
+      const { data: formulas } = await supabase
+        .from("formulas")
+        .select("*")
+        .eq("client_id", client.id)
+        .order("created_at", { ascending: false });
+
+      setClientFormulas(formulas || []);
+    } catch (error) {
+      console.error("Error loading formulas:", error);
+      setClientFormulas([]);
+    }
+
+    setEditDialogOpen(true);
   };
 
   // Filter and sort clients
@@ -338,7 +404,8 @@ export default function Clients() {
             {filteredClients.map((client) => (
               <Card 
                 key={client.id} 
-                className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-y-[-4px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] transition-all duration-300 bg-gradient-to-br from-card via-card to-secondary/5"
+                className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-y-[-4px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] transition-all duration-300 bg-gradient-to-br from-card via-card to-secondary/5 cursor-pointer"
+                onClick={() => openEditDialog(client)}
               >
                 <CardHeader className="border-b-[3px] border-foreground bg-secondary/10">
                   <CardTitle className="flex items-center gap-2 font-display">
@@ -376,20 +443,35 @@ export default function Clients() {
                       {client.notes}
                     </div>
                   )}
-                  {client.email && (
+                  <div className="flex gap-2 mt-4">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full mt-4 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
-                      onClick={() => {
-                        setSelectedClient(client);
-                        setInviteDialogOpen(true);
+                      className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditDialog(client);
                       }}
                     >
-                      <UserPlus className="h-4 w-4 mr-2" />
-                      Invite to App
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit
                     </Button>
-                  )}
+                    {client.email && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedClient(client);
+                          setInviteDialogOpen(true);
+                        }}
+                      >
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Invite
+                      </Button>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -405,6 +487,141 @@ export default function Clients() {
             stylistName={stylistName}
           />
         )}
+
+        {/* Edit Client Dialog */}
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+            <DialogHeader>
+              <DialogTitle className="text-2xl gradient-text">Edit Client Profile</DialogTitle>
+            </DialogHeader>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Client Info Form */}
+              <div>
+                <h3 className="text-lg font-display font-bold mb-4 text-secondary">Client Information</h3>
+                <form onSubmit={handleEditClient} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="edit_full_name">Full Name *</Label>
+                    <Input
+                      id="edit_full_name"
+                      required
+                      value={editFormData.full_name}
+                      onChange={(e) => setEditFormData({ ...editFormData, full_name: e.target.value })}
+                      placeholder="Client's full name"
+                      className="border-[2px] border-foreground"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit_email">Email</Label>
+                    <Input
+                      id="edit_email"
+                      type="email"
+                      value={editFormData.email}
+                      onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
+                      placeholder="client@example.com"
+                      className="border-[2px] border-foreground"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit_phone">Phone</Label>
+                    <Input
+                      id="edit_phone"
+                      type="tel"
+                      value={editFormData.phone}
+                      onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
+                      placeholder="(555) 123-4567"
+                      className="border-[2px] border-foreground"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit_hair_type">Hair Type</Label>
+                    <Input
+                      id="edit_hair_type"
+                      value={editFormData.hair_type}
+                      onChange={(e) => setEditFormData({ ...editFormData, hair_type: e.target.value })}
+                      placeholder="e.g., 3C Curly, Fine Straight"
+                      className="border-[2px] border-foreground"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit_allergies">Allergies</Label>
+                    <Textarea
+                      id="edit_allergies"
+                      value={editFormData.allergies}
+                      onChange={(e) => setEditFormData({ ...editFormData, allergies: e.target.value })}
+                      placeholder="Any known allergies or sensitivities"
+                      className="border-[2px] border-foreground"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit_notes">Notes</Label>
+                    <Textarea
+                      id="edit_notes"
+                      value={editFormData.notes}
+                      onChange={(e) => setEditFormData({ ...editFormData, notes: e.target.value })}
+                      placeholder="Additional notes about the client"
+                      className="border-[2px] border-foreground"
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                  >
+                    Save Changes
+                  </Button>
+                </form>
+              </div>
+
+              {/* Formulas List */}
+              <div>
+                <h3 className="text-lg font-display font-bold mb-4 text-primary flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Hair Formulas ({clientFormulas.length})
+                </h3>
+                
+                {clientFormulas.length === 0 ? (
+                  <div className="text-center py-8 border-[3px] border-dashed border-muted rounded-lg bg-muted/5">
+                    <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">No formulas yet</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                    {clientFormulas.map((formula) => (
+                      <Card 
+                        key={formula.id}
+                        className="border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-card to-primary/5"
+                      >
+                        <CardContent className="p-4 space-y-2">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1">
+                              <p className="font-semibold text-sm mb-1 text-primary">
+                                {formula.color_line || "Custom Formula"}
+                              </p>
+                              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(formula.created_at).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                          {formula.formula_text && (
+                            <p className="text-sm bg-background/50 p-2 rounded border border-border">
+                              {formula.formula_text}
+                            </p>
+                          )}
+                          {formula.result_notes && (
+                            <p className="text-xs text-muted-foreground italic">
+                              {formula.result_notes}
+                            </p>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
