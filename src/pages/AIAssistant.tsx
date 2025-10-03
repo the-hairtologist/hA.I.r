@@ -214,7 +214,7 @@ const AIAssistant = () => {
                   <CardTitle className="font-display text-lg">
                     AI Color Expert
                   </CardTitle>
-                  <p className="text-xs font-semibold text-foreground/60">
+                  <p className="text-xs font-bold text-black">
                     Ask me anything about hair color
                   </p>
                 </div>
