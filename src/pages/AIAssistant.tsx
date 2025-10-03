@@ -187,7 +187,7 @@ const AIAssistant = () => {
                   <h1 className="text-2xl font-display font-bold text-foreground">
                     AI Chat Assistant
                   </h1>
-                  <p className="text-xs font-semibold text-foreground/60">
+                  <p className="text-xs font-bold text-black">
                     Get instant expert advice
                   </p>
                 </div>
