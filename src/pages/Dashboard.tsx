@@ -10,6 +10,7 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { RecentReviews } from "@/components/dashboard/RecentReviews";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
+import { TodoList } from "@/components/dashboard/TodoList";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import avatarMale from "@/assets/avatar-male-lego.png";
@@ -445,8 +446,18 @@ const Dashboard = () => {
 
         <div className="grid lg:grid-cols-2 gap-6 mb-8">
           <RecentActivity activities={recentActivities} />
-          {userRole === "stylist" && <RecentReviews reviews={recentReviews} />}
+          {userRole === "stylist" ? (
+            <RecentReviews reviews={recentReviews} />
+          ) : (
+            <TodoList />
+          )}
         </div>
+
+        {userRole === "stylist" && (
+          <div className="mb-8">
+            <TodoList />
+          </div>
+        )}
 
         <div className="mb-8">
           <h3 className="text-3xl font-display font-bold mb-6 flex items-center gap-3 text-foreground">
