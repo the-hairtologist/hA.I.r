@@ -298,9 +298,10 @@ const Formulas = () => {
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-r from-primary to-secondary border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 font-display font-bold text-base">
+                  <Plus className="h-5 w-5" />
                   New Formula
+                  <Sparkles className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
