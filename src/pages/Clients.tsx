@@ -428,19 +428,15 @@ export default function Clients() {
                       <span>{client.phone}</span>
                     </div>
                   )}
-                  {client.hair_type && (
-                    <div className="text-sm p-2 bg-muted rounded-lg border-[2px] border-border">
-                      <span className="font-semibold text-secondary">Hair Type:</span> {client.hair_type}
-                    </div>
-                  )}
                   {client.allergies && (
                     <div className="text-sm p-2 bg-destructive/5 rounded-lg border-[2px] border-destructive/20">
                       <span className="font-semibold text-destructive">Allergies:</span> {client.allergies}
                     </div>
                   )}
                   {client.notes && (
-                    <div className="text-sm text-muted-foreground p-2 bg-muted/50 rounded-lg border-[2px] border-border italic">
-                      {client.notes}
+                    <div className="text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
+                      <span className="font-semibold text-secondary">Notes: </span>
+                      <span className="text-foreground">{client.notes}</span>
                     </div>
                   )}
                   <div className="flex gap-2 mt-4">
