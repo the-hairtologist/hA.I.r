@@ -41,20 +41,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       setUser(session.user);
 
-      // Get user role
-      const { data: roleData, error: roleError } = await supabase
+      // Get user roles (may have multiple)
+      const { data: rolesData } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", session.user.id)
-        .single();
+        .eq("user_id", session.user.id);
 
-      console.log("User role fetch:", { roleData, roleError, userId: session.user.id });
-
-      if (roleData) {
-        setUserRole(roleData.role);
-        console.log("User role set to:", roleData.role);
-      } else {
-        console.log("No role found for user");
+      // Prioritize stylist role if user has both roles
+      if (rolesData && rolesData.length > 0) {
+        const stylistRole = rolesData.find(r => r.role === "stylist");
+        const primaryRole = stylistRole ? "stylist" : rolesData[0].role;
+        setUserRole(primaryRole);
       }
     } catch (error: any) {
       toast.error("Error loading user data");

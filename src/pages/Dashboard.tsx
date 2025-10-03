@@ -47,18 +47,20 @@ const Dashboard = () => {
 
       setUser(session.user);
 
-      // Get user role
-      const { data: roleData } = await supabase
+      // Get user roles (may have multiple)
+      const { data: rolesData } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", session.user.id)
-        .single();
+        .eq("user_id", session.user.id);
 
-      if (roleData) {
-        setUserRole(roleData.role);
+      if (rolesData && rolesData.length > 0) {
+        // Prioritize stylist role if user has both roles
+        const stylistRole = rolesData.find(r => r.role === "stylist");
+        const primaryRole = stylistRole ? "stylist" : rolesData[0].role;
+        setUserRole(primaryRole);
 
         // Get appropriate profile
-        if (roleData.role === "stylist") {
+        if (primaryRole === "stylist") {
           const { data: stylistProfile } = await supabase
             .from("stylist_profiles")
             .select("*")
