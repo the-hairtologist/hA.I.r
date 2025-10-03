@@ -152,6 +152,10 @@ const Dashboard = () => {
   const checkProfileCompletion = () => {
     if (!profile || !user || !userProfile) return;
     
+    // Don't show if already completed before
+    const profileCompleted = localStorage.getItem('profile_completed');
+    if (profileCompleted === 'true') return;
+    
     // Check basic profile from profiles table
     const basicIncomplete = !userProfile.full_name;
     

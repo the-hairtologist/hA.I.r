@@ -172,6 +172,9 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
         if (stylistError) throw stylistError;
       }
 
+      // Mark profile as completed in localStorage to prevent repeated prompts
+      localStorage.setItem('profile_completed', 'true');
+      
       toast.success("Profile completed! Welcome to hA.I.r!");
       onOpenChange(false);
       navigate("/dashboard");

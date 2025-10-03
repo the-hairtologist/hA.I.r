@@ -72,10 +72,18 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
       if (error) throw error;
 
-      setSubscribed(data.subscribed || false);
-      setInTrial(data.in_trial || false);
+      const isSubscribed = data.subscribed || false;
+      const isInTrial = data.in_trial || false;
+      
+      setSubscribed(isSubscribed);
+      setInTrial(isInTrial);
       setProductId(data.product_id);
       setSubscriptionEnd(data.subscription_end);
+      
+      // Clear subscription prompt dismissal if user becomes subscribed
+      if (isSubscribed || isInTrial) {
+        localStorage.removeItem('subscription_prompt_dismissed');
+      }
     } catch (error) {
       console.error("Error checking subscription:", error);
       setSubscribed(false);
