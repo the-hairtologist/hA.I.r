@@ -40,11 +40,10 @@ const Index = () => {
               <div className="window-scrollbar"></div>
               
               <div className="max-w-4xl mx-auto relative z-10">
-                <div className="flex items-center justify-center gap-4 mb-8">
-                  <Scissors className="h-12 w-12 text-secondary" />
-                  <div className="text-5xl">✨</div>
-                  <div className="w-12 h-12 border-4 border-secondary rotate-45"></div>
-                  <div className="text-5xl">🎨</div>
+                <div className="flex items-center justify-center gap-6 mb-10">
+                  <Scissors className="h-14 w-14 text-secondary" />
+                  <Sparkles className="h-14 w-14 text-secondary" />
+                  <div className="w-14 h-14 border-4 border-secondary rotate-45"></div>
                 </div>
                 
                 <h2 className="text-5xl md:text-7xl font-display font-black mb-8 text-primary-foreground uppercase leading-tight">

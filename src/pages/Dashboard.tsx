@@ -361,7 +361,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative">
+        <div className="mb-12 window-frame bg-gradient-to-br from-primary via-accent to-secondary relative">
           <div className="window-titlebar">
             <span className="text-background font-mono text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
@@ -373,43 +373,52 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-8 md:p-12 relative min-h-[300px]">
+          <div className="bg-primary p-8 md:p-12 relative min-h-[300px]">
             <div className="window-scrollbar"></div>
             
-              <div className="max-w-3xl">
-              <div className="flex items-center gap-6 mb-6">
+            <div className="max-w-3xl">
+              <div className="flex items-center gap-6 mb-8">
                 {userProfile?.gender && (
-                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-pink-400 rounded-2xl overflow-hidden bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.8)] flex-shrink-0">
+                  <div className="w-20 h-20 md:w-24 md:h-24 border-4 border-secondary rounded-2xl overflow-hidden bg-accent shadow-[4px_4px_0px_0px_hsl(var(--secondary))] flex-shrink-0">
                     <img 
                       src={
                         userProfile.gender === 'male' ? avatarMale :
                         userProfile.gender === 'female' ? avatarFemale :
                         avatarNeutral
                       } 
-                      alt="Your Lego avatar"
+                      alt="Your avatar"
                       className="w-full h-full object-cover"
                     />
                   </div>
                 )}
               </div>
               
-              <h2 className="text-5xl md:text-7xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
+              <h2 className="text-4xl md:text-6xl font-display font-black mb-6 text-primary-foreground uppercase leading-tight">
                 Welcome back, {user?.user_metadata?.full_name || "there"}!
               </h2>
               
-              <p className="text-lg md:text-xl font-medium text-pink-200 mb-8 max-w-2xl">
+              <p className="text-lg md:text-xl font-medium text-primary-foreground/90 mb-8 max-w-2xl">
                 {userRole === "stylist" 
                   ? "Ready to create some color magic today? Let's make beautiful hair transformations happen." 
                   : "Your hair journey continues. Discover new styles, book appointments, and keep track of your favorite looks."}
               </p>
               
               <div className="flex gap-4 flex-wrap">
-                <div className="px-6 py-3 bg-pink-500 text-white font-display font-bold text-lg border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-transform cursor-pointer">
-                  LET'S GO!
-                </div>
-                <div className="px-6 py-3 bg-transparent text-pink-300 font-display font-bold text-lg border-4 border-pink-400 hover:bg-pink-500 hover:text-white transition-colors cursor-pointer">
-                  MAYBE LATER
-                </div>
+                <Button 
+                  size="lg"
+                  className="px-8 py-6 bg-secondary text-secondary-foreground font-display font-bold text-lg border-4 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 transition-all uppercase"
+                  onClick={() => navigate("/formulas")}
+                >
+                  {userRole === "stylist" ? "Create Formula" : "View My Formulas"}
+                </Button>
+                <Button 
+                  variant="outline"
+                  size="lg"
+                  className="px-8 py-6 bg-transparent text-primary-foreground font-display font-bold text-lg border-4 border-secondary hover:bg-secondary hover:text-secondary-foreground transition-all uppercase"
+                  onClick={() => navigate("/appointments")}
+                >
+                  {userRole === "stylist" ? "View Schedule" : "Book Appointment"}
+                </Button>
               </div>
             </div>
           </div>
