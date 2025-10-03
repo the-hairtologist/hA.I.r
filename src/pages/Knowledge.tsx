@@ -15,9 +15,10 @@ const Knowledge = () => {
   const [resources, setResources] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [userRole, setUserRole] = useState<string>("");
 
   useEffect(() => {
-    checkAccess();
+    checkUserRole();
     loadResources();
     seedIfEmpty();
   }, []);
@@ -34,7 +35,7 @@ const Knowledge = () => {
     }
   };
 
-  const checkAccess = async () => {
+  const checkUserRole = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -42,21 +43,17 @@ const Knowledge = () => {
         return;
       }
 
-      // Check if user has stylist role (users can have multiple roles)
+      // Check user roles to determine what content to show
       const { data: roles } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", session.user.id);
 
       const isStylist = roles?.some(r => r.role === "stylist");
-      
-      if (!isStylist) {
-        toast.error("This feature is only available for stylists");
-        navigate("/dashboard");
-      }
+      setUserRole(isStylist ? "stylist" : "client");
     } catch (error: any) {
-      console.error("Error checking access:", error);
-      navigate("/dashboard");
+      console.error("Error checking role:", error);
+      setUserRole("client"); // Default to client view
     }
   };
 
@@ -77,14 +74,21 @@ const Knowledge = () => {
     }
   };
 
-  const categories = Array.from(new Set(resources.map(r => r.category).filter(Boolean)));
+  // Define role-specific categories
+  const stylistCategories = ["Color Theory", "Techniques", "Formulation", "Business"];
+  const clientCategories = ["Aftercare", "Product Tips", "Color Maintenance", "Extension Care", "Hair Health"];
 
+  const roleCategories = userRole === "stylist" ? stylistCategories : clientCategories;
+  
   const filteredResources = resources.filter(resource => {
     const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          resource.content.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "all" || resource.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesRole = !resource.category || roleCategories.includes(resource.category);
+    return matchesSearch && matchesCategory && matchesRole;
   });
+
+  const categories = Array.from(new Set(filteredResources.map(r => r.category).filter(Boolean)));
 
   if (loading) {
     return (
@@ -116,10 +120,16 @@ const Knowledge = () => {
           <CardHeader>
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="h-5 w-5 text-primary" />
-              <CardTitle className="text-2xl">Professional Hair Styling Resources</CardTitle>
+              <CardTitle className="text-2xl">
+                {userRole === "stylist" 
+                  ? "Professional Hair Styling Resources" 
+                  : "Hair Care Guide"}
+              </CardTitle>
             </div>
             <CardDescription className="text-base">
-              Expand your expertise with curated color theory, techniques, and industry best practices
+              {userRole === "stylist"
+                ? "Expand your expertise with curated color theory, techniques, and industry best practices"
+                : "Expert tips to keep your hair healthy, vibrant, and styled perfectly"}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -206,14 +216,26 @@ const Knowledge = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5" />
-              Pro Tips
+              {userRole === "stylist" ? "Pro Tips" : "Quick Tips"}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
-            <p>• Bookmark important articles for quick reference during client consultations</p>
-            <p>• Stay updated with the latest color trends and techniques</p>
-            <p>• Apply color theory principles to create custom formulas</p>
-            <p>• Share knowledge with clients to build trust and expertise</p>
+            {userRole === "stylist" ? (
+              <>
+                <p>• Bookmark important articles for quick reference during client consultations</p>
+                <p>• Stay updated with the latest color trends and techniques</p>
+                <p>• Apply color theory principles to create custom formulas</p>
+                <p>• Share knowledge with clients to build trust and expertise</p>
+              </>
+            ) : (
+              <>
+                <p>• Follow aftercare instructions from your stylist for best results</p>
+                <p>• Use sulfate-free products to protect color-treated hair</p>
+                <p>• Wait 48 hours before washing newly colored hair</p>
+                <p>• Schedule regular trims every 6-8 weeks to maintain healthy ends</p>
+                <p>• Protect your hair from heat damage with thermal protection sprays</p>
+              </>
+            )}
           </CardContent>
         </Card>
       </main>

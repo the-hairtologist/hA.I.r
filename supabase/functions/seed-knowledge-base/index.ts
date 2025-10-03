@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const sampleKnowledge = [
+  // Stylist Resources
   {
     title: "Understanding Hair Color Levels",
     category: "Color Theory",
@@ -69,32 +70,8 @@ Pro Tips:
     is_free: true,
   },
   {
-    title: "Color Correction Fundamentals",
-    category: "Advanced",
-    content: `Color correction requires careful analysis and patience:
-
-Assessment Steps:
-1. Identify underlying pigment
-2. Determine hair porosity and damage
-3. Establish realistic goals
-4. Plan the correction process
-
-Common Scenarios:
-• Removing Unwanted Warmth: Use ash or cool tones
-• Fixing Uneven Color: Spot treatment before overall application
-• Lightening Dark Color: May require multiple sessions
-• Brassiness: Toner application with proper shade selection
-
-Always:
-✓ Do a strand test first
-✓ Use bond builders for damaged hair
-✓ Manage client expectations
-✓ Take before photos`,
-    is_free: true,
-  },
-  {
     title: "Developer Strength Selection",
-    category: "Color Theory",
+    category: "Formulation",
     content: `Choosing the right developer volume is critical for results:
 
 Developer Volumes:
@@ -109,6 +86,198 @@ Guidelines:
 - On-scalp bleach: maximum 30 volume
 - Off-scalp bleach: can use 40 volume
 - Always consider hair condition before selecting`,
+    is_free: true,
+  },
+  
+  // Client Resources
+  {
+    title: "Color Aftercare: First 48 Hours",
+    category: "Aftercare",
+    content: `The first two days after coloring are crucial for longevity:
+
+Critical Rules:
+• Wait 48-72 hours before washing
+• Avoid heat styling during this period
+• Don't tie hair tightly (can cause color bleeding)
+• Keep hair dry - avoid rain, swimming, heavy sweating
+• Sleep on a silk or satin pillowcase
+
+Why Wait?
+Your hair cuticles need time to fully close and seal in the color. Washing too soon can cause:
+- Premature color fading
+- Uneven color distribution
+- Loss of vibrancy
+- Reduced color longevity
+
+After 48 hours, use color-safe, sulfate-free products for best results.`,
+    is_free: true,
+  },
+  {
+    title: "Protecting Color-Treated Hair",
+    category: "Color Maintenance",
+    content: `Keep your color vibrant and lasting longer with these essential tips:
+
+Must-Do's:
+✓ Use sulfate-free, color-safe shampoos
+✓ Wash with cool or lukewarm water (hot water opens cuticles)
+✓ Apply UV protection products before sun exposure
+✓ Deep condition weekly
+✓ Limit heat styling to 2-3 times per week
+
+Avoid:
+✗ Chlorine and salt water without protection
+✗ Over-washing (2-3 times per week maximum)
+✗ Hot tools above 350°F without heat protectant
+✗ Harsh clarifying shampoos
+
+Color-Extending Products:
+• Purple shampoo for blonde/silver tones (once weekly)
+• Color-depositing conditioners
+• Leave-in treatments with UV filters
+• Glossing treatments between salon visits`,
+    is_free: true,
+  },
+  {
+    title: "Extension Care Guide",
+    category: "Extension Care",
+    content: `Proper care ensures your extensions stay beautiful and last longer:
+
+Daily Care:
+• Brush 2-3 times daily with a loop brush (start from ends)
+• Use a silk/satin pillowcase or braid before bed
+• Avoid products near bonds/tape
+• Keep extensions moisturized but scalp clean
+
+Washing Tips:
+1. Brush thoroughly before wetting
+2. Wash in downward motions (never scrub)
+3. Use sulfate-free products
+4. Condition from mid-lengths to ends only
+5. Gently squeeze water out - don't wring
+6. Air dry when possible or use cool setting
+
+What to Avoid:
+✗ Sleeping with wet extensions
+✗ Oil-based products near attachment points
+✗ High heat without protection
+✗ Going more than 2 days without brushing
+✗ Swimming without protective measures
+
+Maintenance Schedule:
+• Tape-ins: Move up every 6-8 weeks
+• Sew-ins: Tighten every 6-8 weeks
+• Fusion/keratin: Reapply every 3-4 months`,
+    is_free: true,
+  },
+  {
+    title: "Best Products for Your Hair Type",
+    category: "Product Tips",
+    content: `Choosing the right products makes all the difference:
+
+Fine/Thin Hair:
+• Volumizing shampoos without heavy sulfates
+• Lightweight leave-in sprays
+• Root-lifting sprays
+• Avoid heavy oils and thick conditioners
+
+Thick/Coarse Hair:
+• Moisturizing shampoos and deep conditioners
+• Rich hair masks weekly
+• Anti-frizz serums and oils
+• Smoothing creams for styling
+
+Curly/Textured Hair:
+• Co-washing or gentle cleansers
+• Leave-in conditioners (essential)
+• Curl-defining creams
+• Diffuser attachment for blow-drying
+
+Color-Treated:
+• Sulfate-free, color-safe formulas
+• Purple shampoo for blondes (weekly)
+• Weekly hair masks
+• UV protection products
+
+Heat-Damaged:
+• Bond-building treatments
+• Heat protectants before every styling
+• Protein treatments monthly
+• Trim regularly to remove damage`,
+    is_free: true,
+  },
+  {
+    title: "Hair Health Dos and Don'ts",
+    category: "Hair Health",
+    content: `Essential habits for maintaining healthy, beautiful hair:
+
+DO:
+✓ Trim every 6-8 weeks to prevent split ends
+✓ Use a wide-tooth comb on wet hair
+✓ Apply heat protectant before any hot tools
+✓ Deep condition weekly
+✓ Protect hair from sun, chlorine, and salt water
+✓ Sleep on silk/satin to reduce friction
+✓ Eat a balanced diet rich in proteins and vitamins
+✓ Stay hydrated (water benefits your hair!)
+
+DON'T:
+✗ Brush wet hair aggressively (causes breakage)
+✗ Use heat tools above 400°F
+✗ Tie hair in tight styles while sleeping
+✗ Over-process with chemical treatments
+✗ Wash daily (strips natural oils)
+✗ Use products with harsh sulfates
+✗ Skip heat protectant
+✗ Neglect scalp health
+
+Signs Your Hair Needs Help:
+• Excessive breakage
+• Dull, lifeless appearance
+• Split ends traveling up the shaft
+• Tangles easily
+• Lacks elasticity
+
+If you notice these signs, consult your stylist for a treatment plan!`,
+    is_free: true,
+  },
+  {
+    title: "Extending Time Between Salon Visits",
+    category: "Color Maintenance",
+    content: `Professional tips to keep your look fresh longer:
+
+Between Color Appointments:
+• Use color-depositing shampoos/conditioners
+• Touch up roots with temporary root sprays
+• Apply hair glosses at home
+• Minimize washing frequency
+• Use dry shampoo strategically
+
+For Highlights/Balayage:
+• Purple shampoo maintains tone (blondes)
+• Face-framing highlights fade first - prioritize these
+• Glossing treatments add shine and tone
+• Consider toner touch-ups at 4-6 weeks
+
+For Haircuts:
+• Learn to trim your own bangs between cuts
+• Use styling techniques to refresh your look
+• Invest in quality styling tools
+• Try different partings to change appearance
+• Use volumizing products at roots
+
+Money-Saving Tips:
+💡 Book appointments strategically (avoid peak times)
+💡 Maintain healthy hair = less corrective work needed
+💡 Ask your stylist about lower-maintenance options
+💡 Invest in quality home care products
+💡 Learn basic styling skills
+
+When to Never Skip the Salon:
+⚠️ Root touch-ups on all-over color (6-8 weeks)
+⚠️ Color corrections
+⚠️ Major cuts or style changes
+⚠️ Chemical treatments (perms, straightening)
+⚠️ Extension maintenance`,
     is_free: true,
   }
 ];
