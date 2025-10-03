@@ -281,9 +281,8 @@ const Profile = () => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="(555) 123-4567"
-                    pattern="[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}"
-                    title="Please enter a valid phone number"
                   />
+                  <p className="text-xs text-muted-foreground">Optional - for appointment reminders</p>
               </div>
             </CardContent>
           </Card>

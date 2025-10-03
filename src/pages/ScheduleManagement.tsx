@@ -385,7 +385,10 @@ const ScheduleManagement = () => {
   };
 
   const handleRemoveBlockedDate = async (id: string) => {
-    if (!confirm("Remove this blocked date?")) return;
+    const blockedDate = blockedDates.find(d => d.id === id);
+    const dateStr = blockedDate ? format(new Date(blockedDate.blocked_date), 'MMMM d, yyyy') : "this date";
+    
+    if (!confirm(`Unblock ${dateStr}?\n\nClients will be able to book appointments on this date again.`)) return;
 
     try {
       const { error } = await supabase

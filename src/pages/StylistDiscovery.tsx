@@ -196,11 +196,44 @@ const StylistDiscovery = () => {
 
       {/* Local Stylists Grid */}
       <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-4">Stylists in Your Network</h2>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold">Stylists in Your Network</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Browse stylists on hA.I.r who are ready to book
+            </p>
+          </div>
+          {filteredStylists.length > 0 && (
+            <Badge variant="secondary" className="text-sm">
+              {filteredStylists.length} available
+            </Badge>
+          )}
+        </div>
         {filteredStylists.length === 0 ? (
           <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
-            <CardContent className="pt-6 text-center">
-              <p className="text-foreground/80 font-medium">No stylists found matching your criteria</p>
+            <CardContent className="pt-6 pb-8 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white flex items-center justify-center">
+                <Search className="h-8 w-8 text-foreground" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">No stylists found</h3>
+              <p className="text-foreground/80 font-medium mb-4">
+                {searchTerm || locationFilter !== "all" || specialtyFilter !== "all"
+                  ? "Try adjusting your filters or search terms"
+                  : "Be the first to invite a stylist to join!"}
+              </p>
+              {(searchTerm || locationFilter !== "all" || specialtyFilter !== "all") && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setSearchTerm("");
+                    setLocationFilter("all");
+                    setSpecialtyFilter("all");
+                  }}
+                  className="border-2 border-foreground"
+                >
+                  Clear All Filters
+                </Button>
+              )}
             </CardContent>
           </Card>
         ) : (

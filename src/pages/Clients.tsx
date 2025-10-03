@@ -297,18 +297,37 @@ export default function Clients() {
       </div>
 
       {filteredClients.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-lg font-semibold mb-2">No clients yet</h3>
-            <p className="text-muted-foreground mb-4">
-              Start adding client profiles to keep track of their hair information
-            </p>
-          </CardContent>
-        </Card>
+        searchQuery || sortBy !== "recent" ? (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2">No clients match your search</h3>
+              <p className="text-muted-foreground mb-4">
+                Try adjusting your filters or search terms
+              </p>
+              <Button variant="outline" onClick={() => { setSearchQuery(""); setSortBy("recent"); }}>
+                Clear Filters
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <User className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2">No clients yet</h3>
+              <p className="text-muted-foreground mb-4">
+                Start adding client profiles to keep track of their hair information
+              </p>
+              <Button onClick={() => setIsDialogOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Your First Client
+              </Button>
+            </CardContent>
+          </Card>
+        )
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {clients.map((client) => (
+          {filteredClients.map((client) => (
             <Card key={client.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2 } from "lucide-react";
+import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2, Info } from "lucide-react";
+import { HelpTooltip } from "@/components/HelpTooltip";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -141,7 +142,10 @@ const Services = () => {
   };
 
   const handleDelete = async (serviceId: string) => {
-    if (!confirm("Are you sure you want to delete this service?")) return;
+    const service = services.find(s => s.id === serviceId);
+    const serviceName = service?.service_name || "this service";
+    
+    if (!confirm(`Delete "${serviceName}"?\n\nThis action cannot be undone. Clients won't be able to book this service anymore.`)) return;
 
     try {
       const { error } = await supabase
@@ -150,7 +154,7 @@ const Services = () => {
         .eq("id", serviceId);
 
       if (error) throw error;
-      toast.success("Service deleted successfully!");
+      toast.success(`${serviceName} deleted successfully`);
       loadData();
     } catch (error: any) {
       console.error("Error deleting service:", error);
@@ -218,32 +222,38 @@ const Services = () => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
                       <Label htmlFor="duration">Duration (minutes) *</Label>
-                      <Input
-                        id="duration"
-                        type="number"
-                        min="15"
-                        step="15"
-                        value={duration}
-                        onChange={(e) => setDuration(e.target.value)}
-                        required
-                      />
+                      <HelpTooltip content="Typical color services: 2-3 hours. Cuts: 30-60 minutes. Include consultation and styling time." />
                     </div>
+                    <Input
+                      id="duration"
+                      type="number"
+                      min="15"
+                      step="15"
+                      value={duration}
+                      onChange={(e) => setDuration(e.target.value)}
+                      required
+                    />
+                  </div>
 
-                    <div className="space-y-2">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
                       <Label htmlFor="price">Price ($) *</Label>
-                      <Input
-                        id="price"
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        placeholder="0.00"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
-                      />
+                      <HelpTooltip content="Set your price based on your experience, location, and product costs. You can always adjust later." />
                     </div>
+                    <Input
+                      id="price"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0.00"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      required
+                    />
+                  </div>
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -273,15 +283,16 @@ const Services = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        {services.length === 0 ? (
+          {services.length === 0 ? (
           <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-400 to-amber-400">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <DollarSign className="h-16 w-16 text-foreground mb-4" />
               <p className="text-xl font-semibold mb-2 text-foreground font-display">No services yet</p>
-              <p className="text-foreground/80 mb-4 font-medium">Add your first service with pricing</p>
+              <p className="text-foreground/80 mb-1 font-medium text-center max-w-md">Define your service menu with clear pricing</p>
+              <p className="text-sm text-foreground/70 mb-4 text-center max-w-md">This helps clients know what you offer and book with confidence</p>
               <Button onClick={() => setDialogOpen(true)} className="border-2 border-foreground">
                 <Plus className="h-4 w-4 mr-2" />
-                Add Service
+                Add Your First Service
               </Button>
             </CardContent>
           </Card>

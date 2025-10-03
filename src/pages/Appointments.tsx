@@ -108,10 +108,14 @@ const Appointments = () => {
   };
 
   const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
+    const appointment = appointments.find(a => a.id === appointmentId);
+    const clientName = appointment?.client?.user?.full_name || "this client";
+    const statusAction = newStatus === "cancelled" ? "cancel" : newStatus;
+    
     setConfirmDialog({
       open: true,
       title: `${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} Appointment`,
-      description: `Are you sure you want to ${newStatus} this appointment?`,
+      description: `${statusAction === "cancel" ? "Are you sure you want to cancel" : `Mark as ${statusAction}`} this appointment with ${clientName}?\n\n${statusAction === "cancel" ? "The client will be notified." : ""}`,
       onConfirm: async () => {
         try {
           const { error } = await supabase

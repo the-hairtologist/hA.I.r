@@ -75,7 +75,11 @@ const MyAppointments = () => {
   };
 
   const cancelAppointment = async (appointmentId: string) => {
-    if (!confirm("Are you sure you want to cancel this appointment?")) return;
+    const apt = appointments.find(a => a.id === appointmentId);
+    const stylistName = apt?.stylist?.user?.full_name || apt?.stylist?.business_name || "this stylist";
+    const dateStr = apt ? format(new Date(apt.appointment_date), "MMMM d 'at' h:mm a") : "";
+    
+    if (!confirm(`Cancel appointment with ${stylistName} on ${dateStr}?\n\nYou may be subject to the stylist's cancellation policy.`)) return;
 
     try {
       const { error } = await supabase
@@ -85,7 +89,7 @@ const MyAppointments = () => {
 
       if (error) throw error;
 
-      toast.success("Appointment cancelled");
+      toast.success("Appointment cancelled successfully");
       setDetailsOpen(false);
       loadData();
     } catch (error: any) {

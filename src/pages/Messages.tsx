@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { MessageSquare, ArrowLeft, Send, Upload, Video, Loader2, User, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
+import { KeyboardShortcutHint } from "@/components/KeyboardShortcut";
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -25,6 +26,24 @@ const Messages = () => {
   const [userRole, setUserRole] = useState<string>("");
   const [newConversationOpen, setNewConversationOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Enter to send message (if not shift+enter for newline)
+      if (e.key === "Enter" && !e.shiftKey && selectedConversation && messageText.trim()) {
+        e.preventDefault();
+        handleSendMessage();
+      }
+      // Escape to close conversation
+      if (e.key === "Escape" && selectedConversation) {
+        setSelectedConversation(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [selectedConversation, messageText]);
 
   useEffect(() => {
     loadData();
@@ -335,9 +354,14 @@ const Messages = () => {
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto space-y-2">
               {conversations.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <MessageSquare className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No conversations yet</p>
+                <div className="text-center py-8">
+                  <MessageSquare className="h-12 w-12 mx-auto mb-3 text-foreground/40" />
+                  <p className="text-sm font-semibold text-foreground mb-1">No conversations yet</p>
+                  <p className="text-xs text-foreground/70 mb-3">Start chatting with stylists or clients</p>
+                  <Button size="sm" variant="outline" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
+                    <Plus className="h-3 w-3 mr-2" />
+                    Start a Chat
+                  </Button>
                 </div>
               ) : (
                 conversations.map((conv) => (
@@ -382,10 +406,17 @@ const Messages = () => {
           {/* Chat Area */}
           <Card className="flex-1 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
             {!selectedConversation ? (
-              <div className="flex-1 flex items-center justify-center text-muted-foreground">
-                <div className="text-center">
-                  <MessageSquare className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p>Select a conversation to start chatting</p>
+              <div className="flex-1 flex items-center justify-center">
+                <div className="text-center max-w-sm">
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
+                    <MessageSquare className="h-10 w-10 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">Ready to Connect?</h3>
+                  <p className="text-white/80 mb-4">Select a conversation or start a new chat to begin messaging</p>
+                  <Button onClick={() => setNewConversationOpen(true)} className="bg-white text-primary hover:bg-white/90">
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Conversation
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -453,6 +484,9 @@ const Messages = () => {
 
                 {/* Message Input */}
                 <div className="border-t p-4">
+                  <div className="mb-2 px-1">
+                    <KeyboardShortcutHint shortcut="Enter" description="Send message" />
+                  </div>
                   <div className="flex gap-2">
                     <Input
                       type="file"
@@ -479,7 +513,7 @@ const Messages = () => {
                       )}
                     </Button>
                     <Textarea
-                      placeholder="Type your message..."
+                      placeholder="Type your message... (Shift+Enter for new line)"
                       value={messageText}
                       onChange={(e) => setMessageText(e.target.value)}
                       onKeyDown={(e) => {
