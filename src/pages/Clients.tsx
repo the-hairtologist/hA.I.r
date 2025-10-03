@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface ClientProfile {
@@ -134,6 +134,16 @@ export default function Clients() {
 
   return (
     <div className="container mx-auto py-8 px-4">
+      <div className="mb-6">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </Button>
+      </div>
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-4xl font-display font-bold mb-2">My Clients</h1>
