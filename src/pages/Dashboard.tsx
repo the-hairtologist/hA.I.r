@@ -11,7 +11,6 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { RecentReviews } from "@/components/dashboard/RecentReviews";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
-import { TodoList } from "@/components/dashboard/TodoList";
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -123,14 +122,15 @@ const Dashboard = () => {
   }, [userRole, profile]);
 
   const checkProfileCompletion = () => {
-    if (!profile || !user) return;
+    if (!profile || !user || !userProfile) return;
     
-    const basicIncomplete = !profile.full_name || !profile.phone;
+    // Check basic profile from profiles table
+    const basicIncomplete = !userProfile.full_name;
     
-    if (userRole === "stylist" && profile.stylist_profile) {
-      const stylistIncomplete = !profile.stylist_profile.business_name || 
-                                !profile.stylist_profile.specialty || 
-                                !profile.stylist_profile.location;
+    if (userRole === "stylist") {
+      // Check stylist-specific fields
+      const stylistIncomplete = !profile.business_name || 
+                                !profile.color_line;
       if (basicIncomplete || stylistIncomplete) {
         setShowProfileCompletion(true);
       }
@@ -543,18 +543,14 @@ const Dashboard = () => {
           <WelcomeChecklist
             key={sectionId}
             userRole={userRole as "stylist" | "client"}
-            profileComplete={!!profile?.full_name && !!profile?.phone}
+            profileComplete={!!userProfile?.full_name}
             hasClients={stats.totalClients > 0}
             hasAppointments={stats.totalAppointments > 0}
             hasPortfolio={false}
           />
         );
       case "todos":
-        return (
-          <div key={sectionId} className="mb-8">
-            <TodoList />
-          </div>
-        );
+        return null; // TodoList component will be added in the future
       case "activity":
         return (
           <div key={sectionId} className="mb-8">
