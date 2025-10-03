@@ -8,10 +8,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { ArrowLeft, Send, Sparkles, Loader2, User, Bot, Trash2, BookmarkPlus, Zap, Star } from "lucide-react";
+import { ArrowLeft, Send, Sparkles, Loader2, User, Bot, Trash2, BookmarkPlus } from "lucide-react";
 import { SaveFormulaDialog } from "@/components/SaveFormulaDialog";
 import { cn } from "@/lib/utils";
 import { HelpTooltip } from "@/components/HelpTooltip";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -27,6 +28,7 @@ const AIAssistant = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [selectedFormulaText, setSelectedFormulaText] = useState("");
+  const [chatMode, setChatMode] = useState<"temporary" | "saved">("temporary");
 
   useEffect(() => {
     loadStylistProfile();
@@ -38,6 +40,13 @@ const AIAssistant = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    // Load saved messages when switching to saved mode
+    if (chatMode === "saved" && stylistProfile) {
+      loadSavedMessages();
+    }
+  }, [chatMode, stylistProfile]);
 
   const loadStylistProfile = async () => {
     try {
@@ -67,6 +76,60 @@ const AIAssistant = () => {
     }
   };
 
+  const loadSavedMessages = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data: savedMessages, error } = await supabase
+        .from("ai_chat_messages")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+
+      if (savedMessages && savedMessages.length > 0) {
+        setMessages(savedMessages.map(msg => ({
+          role: msg.role as 'user' | 'assistant',
+          content: msg.content
+        })));
+        toast.success("Chat history loaded");
+      } else {
+        // Add welcome message if no history
+        setMessages([{
+          role: 'assistant',
+          content: `Hi! I'm your personal AI Hair Color Assistant. I can help you with:\n\n✨ **Formula consultations** - Get expert advice on color formulations\n🔧 **Troubleshooting** - Fix color issues and challenges\n💡 **Technique guidance** - Learn best practices and application methods\n👥 **Client consultations** - Interpret requests and set expectations\n\nWhat can I help you with today?`
+        }]);
+      }
+    } catch (error: any) {
+      console.error("Error loading saved messages:", error);
+      toast.error("Failed to load chat history");
+    }
+  };
+
+  const saveMessageToDb = async (message: Message) => {
+    if (chatMode !== "saved") return;
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { error } = await supabase
+        .from("ai_chat_messages")
+        .insert({
+          user_id: session.user.id,
+          role: message.role,
+          content: message.content
+        });
+
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Error saving message:", error);
+      // Don't show toast for save errors to avoid interrupting conversation
+    }
+  };
+
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
@@ -92,6 +155,9 @@ const AIAssistant = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setLoading(true);
+
+    // Save user message if in saved mode
+    await saveMessageToDb(userMessage);
 
     try {
       console.log('🤖 Sending message to AI assistant...');
@@ -131,6 +197,9 @@ const AIAssistant = () => {
 
       setMessages(prev => [...prev, assistantMessage]);
       
+      // Save assistant message if in saved mode
+      await saveMessageToDb(assistantMessage);
+      
     } catch (error: any) {
       console.error("❌ Error sending message:", error);
       
@@ -143,13 +212,48 @@ const AIAssistant = () => {
     }
   };
 
-  const clearChat = () => {
+  const clearChat = async () => {
+    if (chatMode === "saved") {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
+        const { error } = await supabase
+          .from("ai_chat_messages")
+          .delete()
+          .eq("user_id", session.user.id);
+
+        if (error) throw error;
+        toast.success("Chat history cleared from database");
+      } catch (error: any) {
+        console.error("Error clearing chat history:", error);
+        toast.error("Failed to clear chat history");
+        return;
+      }
+    }
+
     setMessages([{
       role: 'assistant',
       content: `Hi! I'm your personal AI Hair Color Assistant. I can help you with:\n\n✨ **Formula consultations** - Get expert advice on color formulations\n🔧 **Troubleshooting** - Fix color issues and challenges\n💡 **Technique guidance** - Learn best practices and application methods\n👥 **Client consultations** - Interpret requests and set expectations\n\nWhat can I help you with today?`
     }]);
     setInput("");
-    toast.success("Chat cleared");
+    if (chatMode === "temporary") {
+      toast.success("Chat cleared");
+    }
+  };
+
+  const handleModeChange = (value: string) => {
+    if (!value) return;
+    
+    const newMode = value as "temporary" | "saved";
+    
+    if (newMode === "saved" && messages.length > 1) {
+      toast.info("Switching to saved mode. Your current chat will be saved.");
+    } else if (newMode === "temporary" && chatMode === "saved") {
+      toast.info("Switching to temporary mode. Future messages won't be saved.");
+    }
+    
+    setChatMode(newMode);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -195,13 +299,26 @@ const AIAssistant = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="border-2 border-foreground font-semibold bg-white">
-                Temporary Chat
-              </Badge>
-              <Badge variant="outline" className="border-2 border-foreground font-semibold bg-white">
-                Session Only
-              </Badge>
-              <HelpTooltip content="Your conversations are temporary and only last for this session. Once you leave or refresh this page, your chat history will be cleared. For saving client formulas permanently, use the Formula Generator instead." />
+              <ToggleGroup type="single" value={chatMode} onValueChange={handleModeChange}>
+                <ToggleGroupItem 
+                  value="temporary" 
+                  className="border-2 border-foreground font-semibold data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] data-[state=on]:shadow-none data-[state=on]:translate-x-[2px] data-[state=on]:translate-y-[2px]"
+                >
+                  Temporary Chat
+                </ToggleGroupItem>
+                <ToggleGroupItem 
+                  value="saved" 
+                  className="border-2 border-foreground font-semibold data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] data-[state=on]:shadow-none data-[state=on]:translate-x-[2px] data-[state=on]:translate-y-[2px]"
+                >
+                  Save History
+                </ToggleGroupItem>
+              </ToggleGroup>
+              <HelpTooltip 
+                content={chatMode === "temporary" 
+                  ? "Temporary mode: Your conversations only last for this session. Once you leave or refresh this page, your chat history will be cleared." 
+                  : "Save History mode: Your conversations are saved to your account and will persist across sessions. You can come back anytime to continue your chat."
+                } 
+              />
             </div>
           </div>
         </div>

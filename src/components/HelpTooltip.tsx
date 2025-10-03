@@ -18,10 +18,10 @@ export const HelpTooltip = ({ content, side = "top" }: HelpTooltipProps) => {
         <TooltipTrigger asChild>
           <button
             type="button"
-            className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-muted hover:bg-muted/80 transition-colors"
+            className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-secondary/20 hover:bg-secondary/30 transition-colors ring-2 ring-secondary"
             aria-label="Help"
           >
-            <Info className="h-3 w-3 text-muted-foreground" />
+            <Info className="h-3.5 w-3.5 text-secondary" />
           </button>
         </TooltipTrigger>
         <TooltipContent side={side} className="max-w-xs">
