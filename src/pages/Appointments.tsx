@@ -13,6 +13,7 @@ import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle,
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/CalendarView";
+import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { SearchInput } from "@/components/SearchInput";
@@ -30,7 +31,7 @@ const Appointments = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
+  const [viewMode, setViewMode] = useState<"list" | "calendar" | "week">("list");
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
     title: string;
@@ -230,10 +231,11 @@ const Appointments = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar")} className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar" | "week")} className="space-y-6">
+          <TabsList className="grid w-full max-w-3xl grid-cols-3">
             <TabsTrigger value="list">List View</TabsTrigger>
             <TabsTrigger value="calendar">Calendar View</TabsTrigger>
+            <TabsTrigger value="week">Week View</TabsTrigger>
           </TabsList>
 
           <TabsContent value="list">
@@ -423,6 +425,17 @@ const Appointments = () => {
           <TabsContent value="calendar">
             <CalendarView 
               appointments={appointments}
+              onAppointmentClick={(apt) => {
+                setSelectedAppointment(apt);
+                setDetailsOpen(true);
+              }}
+            />
+          </TabsContent>
+
+          <TabsContent value="week">
+            <WeeklyScheduleView
+              appointments={appointments}
+              stylistSchedule={stylistProfile?.weekly_schedule}
               onAppointmentClick={(apt) => {
                 setSelectedAppointment(apt);
                 setDetailsOpen(true);
