@@ -661,7 +661,7 @@ const Dashboard = () => {
               </h2>
               
               {/* Weekly Schedule View for Stylists */}
-              {userRole === "stylist" && weekAppointments.length > 0 && (
+              {userRole === "stylist" && (
                 <div className="bg-card rounded-lg overflow-hidden">
                   <WeeklyScheduleView
                     appointments={weekAppointments}
@@ -669,12 +669,6 @@ const Dashboard = () => {
                     onAppointmentClick={(apt) => navigate("/appointments")}
                   />
                 </div>
-              )}
-
-              {userRole === "stylist" && weekAppointments.length === 0 && (
-                <p className="text-base md:text-lg font-medium text-pink-200">
-                  No appointments scheduled this week. Time to fill your calendar! 📅
-                </p>
               )}
 
               {userRole === "client" && (
