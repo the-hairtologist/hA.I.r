@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +28,8 @@ interface ClientPost {
 
 const ClientDiscovery = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { isStylist, loading: roleLoading } = useUserRole(user?.id);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<ClientPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<ClientPost[]>([]);
@@ -33,8 +37,10 @@ const ClientDiscovery = () => {
   const [stylistProfileId, setStylistProfileId] = useState<string | null>(null);
 
   useEffect(() => {
-    checkUserAndLoadPosts();
-  }, []);
+    if (!roleLoading) {
+      checkUserAndLoadPosts();
+    }
+  }, [roleLoading, isStylist]);
 
   useEffect(() => {
     filterPosts();
@@ -42,19 +48,12 @@ const ClientDiscovery = () => {
 
   const checkUserAndLoadPosts = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      if (!user) {
         navigate("/auth");
         return;
       }
 
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id)
-        .single();
-
-      if (roleData?.role !== "stylist") {
+      if (!isStylist) {
         toast.error("Only stylists can access this page");
         navigate("/dashboard");
         return;
@@ -63,7 +62,7 @@ const ClientDiscovery = () => {
       const { data: stylistProfile } = await supabase
         .from("stylist_profiles")
         .select("id")
-        .eq("user_id", session.user.id)
+        .eq("user_id", user.id)
         .single();
 
       if (stylistProfile) {
@@ -122,7 +121,7 @@ const ClientDiscovery = () => {
     toast.success("Contact feature coming soon! For now, the client will be notified of your interest.");
   };
 
-  if (loading) {
+  if (loading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />

@@ -84,15 +84,17 @@ export function useProfile(userId?: string): UseProfileReturn {
       if (profileError) throw profileError;
       setProfile(profileData);
 
-      // Fetch user role
-      const { data: roleData } = await supabase
+      // Fetch ALL user roles (not just one)
+      const { data: rolesData } = await supabase
         .from('user_roles')
         .select('role')
-        .eq('user_id', userId)
-        .single();
+        .eq('user_id', userId);
 
-      // Fetch role-specific profile
-      if (roleData?.role === 'stylist') {
+      const roles = rolesData?.map(r => r.role) || [];
+
+      // Fetch role-specific profiles
+      // Check for stylist role
+      if (roles.includes('stylist')) {
         const { data: stylistData, error: stylistError } = await supabase
           .from('stylist_profiles')
           .select('*')
@@ -103,7 +105,10 @@ export function useProfile(userId?: string): UseProfileReturn {
           log.warn('Stylist profile not found', 'useProfile', stylistError);
         }
         setStylistProfile(stylistData);
-      } else if (roleData?.role === 'client') {
+      }
+      
+      // Check for client role
+      if (roles.includes('client')) {
         const { data: clientData, error: clientError } = await supabase
           .from('client_profiles')
           .select('*')
@@ -116,7 +121,7 @@ export function useProfile(userId?: string): UseProfileReturn {
         setClientProfile(clientData);
       }
 
-      log.info('Profile loaded successfully', 'useProfile', { userId });
+      log.info('Profile loaded successfully', 'useProfile', { userId, roles });
     } catch (err) {
       const error = err as Error;
       setError(error);
