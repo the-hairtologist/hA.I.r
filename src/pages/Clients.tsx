@@ -268,16 +268,25 @@ export default function Clients() {
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-4xl font-display font-bold mb-2 gradient-text">My Clients</h1>
+            <h1 className="text-4xl font-display font-bold mb-2 gradient-text">Clients & Formulas</h1>
             <p className="text-muted-foreground">Manage your client profiles, formulas, and preferences</p>
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
-                <Plus className="h-4 w-4" />
-                Add Client
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline"
+              onClick={() => navigate("/formulas")}
+              className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+            >
+              <FileText className="h-4 w-4" />
+              View All Formulas
+            </Button>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
+                  <Plus className="h-4 w-4" />
+                  Add Client
+                </Button>
+              </DialogTrigger>
           <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
               <DialogTitle className="text-2xl gradient-text">Add a New Client</DialogTitle>
@@ -344,7 +353,8 @@ export default function Clients() {
             </form>
           </DialogContent>
         </Dialog>
-      </div>
+          </div>
+        </div>
 
         {/* Search and Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">

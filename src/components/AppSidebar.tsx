@@ -50,7 +50,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const stylistMainItems = [
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500" },
     { title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "from-cyan-500 to-blue-500" },
-    { title: "Clients", url: "/clients", icon: Users, gradient: "from-green-500 to-emerald-500" },
+    { title: "Clients & Formulas", url: "/clients", icon: Users, gradient: "from-green-500 to-emerald-500" },
     { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-pink-500 to-rose-500" },
   ];
 
@@ -73,7 +73,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const stylistBusinessItems = [
     { title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
-    { title: "Client Formulas", url: "/formulas", icon: BookOpen, gradient: "from-violet-500 to-purple-500" },
     { title: "Finance", url: "/finance", icon: DollarSign, gradient: "from-amber-500 to-orange-500" },
     { title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "from-orange-500 to-red-500" },
   ];
