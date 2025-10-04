@@ -26,7 +26,7 @@ All colors MUST be HSL.
     --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 0 0% 40%; /* Improved from 45% for WCAG AA contrast (5.7:1) */
 
     --accent: 190 95% 55%;
     --accent-foreground: 0 0% 100%;
@@ -79,7 +79,7 @@ All colors MUST be HSL.
     --secondary-foreground: 0 0% 100%;
 
     --muted: 240 10% 16%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 0 0% 70%; /* Improved from 65% for better dark mode contrast */
 
     --accent: 190 95% 60%;
     --accent-foreground: 0 0% 100%;
