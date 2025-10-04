@@ -70,6 +70,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const stylistBusinessItems = [
     { title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
+    { title: "Client Formulas", url: "/formulas", icon: BookOpen, gradient: "from-violet-500 to-purple-500" },
     { title: "Finance", url: "/finance", icon: DollarSign, gradient: "from-amber-500 to-orange-500" },
     { title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "from-orange-500 to-red-500" },
   ];
