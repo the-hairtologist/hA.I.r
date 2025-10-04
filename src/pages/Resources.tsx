@@ -44,10 +44,9 @@ const Resources = () => {
       const { data: roleData } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", session.user.id)
-        .single();
+        .eq("user_id", session.user.id);
 
-      setUserRole(roleData?.role || "client");
+      setUserRole(roleData?.[0]?.role || "client");
     } catch (error: any) {
       console.error("Error checking role:", error);
     } finally {

@@ -37,15 +37,18 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
         return;
       }
 
-      // Check user role
+      // Check user role - handle users with multiple roles
       const { data: roleData } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", session.user.id)
-        .single();
+        .eq("user_id", session.user.id);
 
-      if (roleData && allowedRoles.includes(roleData.role as "stylist" | "client")) {
-        setIsAuthorized(true);
+      if (roleData && roleData.length > 0) {
+        // Check if user has any of the allowed roles
+        const userHasAllowedRole = roleData.some(r => 
+          allowedRoles.includes(r.role as "stylist" | "client")
+        );
+        setIsAuthorized(userHasAllowedRole);
       } else {
         setIsAuthorized(false);
       }

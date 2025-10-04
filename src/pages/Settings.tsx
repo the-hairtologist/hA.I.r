@@ -46,14 +46,13 @@ const Settings = () => {
 
       setUserEmail(session.user.email || "");
 
-      // Get user role
+      // Get user role (may have multiple, use first)
       const { data: roleData } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", session.user.id)
-        .single();
+        .eq("user_id", session.user.id);
 
-      const role = roleData?.role || "client";
+      const role = roleData?.[0]?.role || "client";
       setUserRole(role);
 
       // Get profile data
