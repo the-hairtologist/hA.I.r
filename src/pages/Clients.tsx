@@ -266,7 +266,7 @@ export default function Clients() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <h1 className="text-4xl font-display font-bold mb-2 gradient-text">My Clients</h1>
-            <p className="text-muted-foreground">Manage your client profiles and information</p>
+            <p className="text-muted-foreground">Everyone you've worked your magic on, all in one place</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -277,7 +277,7 @@ export default function Clients() {
             </DialogTrigger>
           <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-2xl gradient-text">Add New Client</DialogTitle>
+              <DialogTitle className="text-2xl gradient-text">Add a New Client</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -287,7 +287,7 @@ export default function Clients() {
                   required
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                  placeholder="Client's full name"
+                  placeholder="What do they go by?"
                 />
               </div>
               <div className="space-y-2">
@@ -325,7 +325,7 @@ export default function Clients() {
                   id="allergies"
                   value={formData.allergies}
                   onChange={(e) => setFormData({ ...formData, allergies: e.target.value })}
-                  placeholder="Any known allergies or sensitivities"
+                  placeholder="Anything that makes them react? (PPD, ammonia, etc.)"
                 />
               </div>
               <div className="space-y-2">
@@ -334,7 +334,7 @@ export default function Clients() {
                   id="notes"
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Additional notes about the client"
+                  placeholder="Anything worth remembering for next time?"
                 />
               </div>
               <Button type="submit" className="w-full">Add Client</Button>
@@ -348,7 +348,7 @@ export default function Clients() {
           <SearchInput
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search by name, email, or phone..."
+            placeholder="Looking for someone? Search by name, email, or phone"
             className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
           />
           <Select value={sortBy} onValueChange={(value: "name" | "recent") => setSortBy(value)}>
@@ -368,9 +368,9 @@ export default function Clients() {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
               <CardContent className="py-12 text-center">
                 <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                <h3 className="text-lg font-display font-bold mb-2">No clients match your search</h3>
+                <h3 className="text-lg font-display font-bold mb-2">Can't find who you're looking for?</h3>
                 <p className="text-muted-foreground mb-4">
-                  Try adjusting your filters or search terms
+                  Try tweaking your search or clearing the filters
                 </p>
                 <Button 
                   variant="outline" 
@@ -385,9 +385,9 @@ export default function Clients() {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
               <CardContent className="py-12 text-center">
                 <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                <h3 className="text-lg font-display font-bold mb-2">No clients yet</h3>
+                <h3 className="text-lg font-display font-bold mb-2">Your client list is waiting</h3>
                 <p className="text-muted-foreground mb-4">
-                  Start adding client profiles to keep track of their hair information
+                  Add your first client to keep track of their hair history, allergies, and preferences
                 </p>
                 <Button 
                   onClick={() => setIsDialogOpen(true)}
@@ -488,13 +488,13 @@ export default function Clients() {
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-2xl gradient-text">Edit Client Profile</DialogTitle>
+              <DialogTitle className="text-2xl gradient-text">Update Client Info</DialogTitle>
             </DialogHeader>
             
             <div className="grid md:grid-cols-2 gap-6">
               {/* Client Info Form */}
               <div>
-                <h3 className="text-lg font-display font-bold mb-4 text-secondary">Client Information</h3>
+                <h3 className="text-lg font-display font-bold mb-4 text-secondary">Their Details</h3>
                 <form onSubmit={handleEditClient} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="edit_full_name">Full Name *</Label>
@@ -503,7 +503,7 @@ export default function Clients() {
                       required
                       value={editFormData.full_name}
                       onChange={(e) => setEditFormData({ ...editFormData, full_name: e.target.value })}
-                      placeholder="Client's full name"
+                      placeholder="What do they go by?"
                       className="border-[2px] border-foreground"
                     />
                   </div>
@@ -545,7 +545,7 @@ export default function Clients() {
                       id="edit_allergies"
                       value={editFormData.allergies}
                       onChange={(e) => setEditFormData({ ...editFormData, allergies: e.target.value })}
-                      placeholder="Any known allergies or sensitivities"
+                      placeholder="Anything that makes them react? (PPD, ammonia, etc.)"
                       className="border-[2px] border-foreground"
                     />
                   </div>
@@ -555,7 +555,7 @@ export default function Clients() {
                       id="edit_notes"
                       value={editFormData.notes}
                       onChange={(e) => setEditFormData({ ...editFormData, notes: e.target.value })}
-                      placeholder="Additional notes about the client"
+                      placeholder="Anything worth remembering for next time?"
                       className="border-[2px] border-foreground"
                     />
                   </div>
@@ -572,13 +572,13 @@ export default function Clients() {
               <div>
                 <h3 className="text-lg font-display font-bold mb-4 text-primary flex items-center gap-2">
                   <FileText className="h-5 w-5" />
-                  Hair Formulas ({clientFormulas.length})
+                  Their Formulas ({clientFormulas.length})
                 </h3>
                 
                 {clientFormulas.length === 0 ? (
                   <div className="text-center py-8 border-[3px] border-dashed border-muted rounded-lg bg-muted/5">
                     <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">No formulas yet</p>
+                    <p className="text-sm text-muted-foreground">No formulas saved yet</p>
                   </div>
                 ) : (
                   <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">

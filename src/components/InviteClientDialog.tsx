@@ -68,10 +68,10 @@ export const InviteClientDialog = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5" />
-            Invite Client to App
+            Invite to Your Client Portal
           </DialogTitle>
           <DialogDescription>
-            Send an invitation email to {clientName || "your client"} to create their account and access their formulas and appointment history.
+            Send {clientName || "them"} an invite to create their account—they'll be able to see their formulas and book appointments with you.
           </DialogDescription>
         </DialogHeader>
 
@@ -82,10 +82,10 @@ export const InviteClientDialog = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="custom-message">Custom Message (Optional)</Label>
+            <Label htmlFor="custom-message">Add a Personal Touch (Optional)</Label>
             <Textarea
               id="custom-message"
-              placeholder="Add a personal note to the invitation..."
+              placeholder="Hey! Looking forward to working with you..."
               value={customMessage}
               onChange={(e) => setCustomMessage(e.target.value)}
               rows={4}
