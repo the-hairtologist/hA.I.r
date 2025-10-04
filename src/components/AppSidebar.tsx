@@ -52,8 +52,20 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   ];
 
   const stylistSchedulingItems = [
-    { title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-blue-500 to-cyan-500" },
-    { title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "from-blue-500 to-indigo-500" },
+    { 
+      title: "Appointments", 
+      url: "/appointments", 
+      icon: Calendar, 
+      gradient: "from-blue-500 to-cyan-500",
+      description: "View & manage bookings"
+    },
+    { 
+      title: "Schedule", 
+      url: "/schedule", 
+      icon: CalendarRange, 
+      gradient: "from-blue-500 to-indigo-500",
+      description: "Set working hours"
+    },
   ];
 
   const stylistBusinessItems = [
@@ -128,7 +140,12 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                         <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
                           <item.icon className="h-4 w-4 text-white" />
                         </div>
-                        {!collapsed && <span className="ml-2">{item.title}</span>}
+                        {!collapsed && (
+                          <div className="ml-2 flex flex-col">
+                            <span className="text-sm font-medium">{item.title}</span>
+                            <span className="text-[10px] text-muted-foreground">{item.description}</span>
+                          </div>
+                        )}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
