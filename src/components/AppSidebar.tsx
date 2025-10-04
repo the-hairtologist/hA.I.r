@@ -70,7 +70,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   ];
 
   const stylistToolsItems = [
-    { title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-indigo-500" },
+    { title: "AI Assistant", url: "/knowledge", icon: Sparkles, gradient: "from-purple-500 to-pink-500" },
     { title: "Integrations", url: "/integrations", icon: Building2, gradient: "from-orange-500 to-amber-500" },
   ];
 
@@ -84,7 +84,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const clientToolsItems = [
     { title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
-    { title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-indigo-500" },
+    { title: "AI Assistant", url: "/knowledge", icon: Sparkles, gradient: "from-purple-500 to-pink-500" },
   ];
 
   // Determine which items to show based on role

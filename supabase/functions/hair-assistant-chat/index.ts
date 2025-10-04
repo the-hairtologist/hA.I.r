@@ -12,27 +12,26 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, stylistProfile } = await req.json();
+    const { message, mode, conversationHistory } = await req.json();
     
     // Input validation
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+    if (!message || typeof message !== 'string') {
       return new Response(
-        JSON.stringify({ error: 'Invalid messages format' }),
+        JSON.stringify({ error: 'Invalid message format' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     // Check message length
-    const lastMessage = messages[messages.length - 1];
-    if (!lastMessage?.content || lastMessage.content.length > 2000) {
+    if (message.length > 2000) {
       return new Response(
-        JSON.stringify({ error: 'Message too long or empty' }),
+        JSON.stringify({ error: 'Message too long (max 2000 characters)' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     // Rate limiting check - limit conversation history
-    if (messages.length > 50) {
+    if (conversationHistory && conversationHistory.length > 50) {
       return new Response(
         JSON.stringify({ error: 'Conversation too long. Please start a new chat.' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -44,49 +43,79 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log('Processing chat request with', messages.length, 'messages');
+    console.log('Processing chat request in mode:', mode);
 
-    // Build context-aware system prompt
-    const systemPrompt = `You are an expert AI Hair Color Assistant with 25+ years of professional salon experience. Your role is to provide personalized guidance to hair stylists.
+    // Build mode-specific system prompt
+    const formulaPrompt = `You are an expert AI Hair Color Formula Generator with 25+ years of professional salon experience.
 
-STYLIST PROFILE:
-${stylistProfile ? `
-- Name: ${stylistProfile.business_name || 'Professional Stylist'}
-- Specialty: ${stylistProfile.specialty || 'Hair Color'}
-- Experience: ${stylistProfile.years_experience || 'Professional'} years
-- Preferred Color Line: ${stylistProfile.color_line || 'Professional brands'}
-` : 'Professional Hair Stylist'}
+YOUR ROLE: Generate precise, professional hair color formulas with exact measurements and ratios.
 
-YOUR CAPABILITIES:
-1. **Formula Consultation**: Provide detailed color formulation advice
-2. **Troubleshooting**: Help fix color issues (banding, patchiness, unwanted tones)
-3. **Technique Guidance**: Suggest application methods and timing
-4. **Client Consultation**: Help interpret client requests and set realistic expectations
-5. **Product Recommendations**: Suggest products within their preferred color line
-6. **Color Theory**: Explain undertones, levels, and color correction strategies
+FORMULA FORMAT:
+1. **Current Hair Assessment**: Analyze starting level, undertones, condition
+2. **Desired Result**: Describe target color and level
+3. **Formula Components**: 
+   - Exact product measurements (grams/oz)
+   - Developer strength and ratio (e.g., 1:1, 1:2)
+   - Any toners or additives needed
+4. **Processing Time**: Specific timing with checkpoints
+5. **Application Technique**: Sectioning and application method
+6. **Expected Result**: Realistic outcome description
+7. **Important Notes**: Warnings, strand test recommendations
 
-IMPORTANT GUIDELINES:
-- Always acknowledge that results vary based on individual hair chemistry
-- Recommend strand tests and patch tests before full application
-- Be specific with measurements (grams, ounces, ratios)
-- Consider hair condition, porosity, and previous treatments
-- Provide step-by-step instructions when giving formulas
-- Ask clarifying questions when needed (current level, desired result, hair history)
-- Use professional terminology but explain complex concepts clearly
+GUIDELINES:
+- Always provide exact measurements and ratios
+- Consider hair porosity and previous treatments
+- Recommend strand tests for major changes
+- Use professional color theory principles
+- Be specific about developer volumes (10, 20, 30, 40)
+- Account for lifting limitations and undertone neutralization
 
-FORMULA FORMAT (when providing formulas):
-1. Current Hair Assessment
-2. Desired Result
-3. Formula Components with exact measurements
-4. Developer strength and ratio
-5. Processing time
-6. Application technique
-7. Expected result
-8. Potential challenges
+Always emphasize that these are professional recommendations and results may vary based on individual hair chemistry.`;
 
-Always be supportive, professional, and emphasize that these are expert suggestions that should be adapted to each unique client.`;
+    const stepByStepPrompt = `You are an expert AI Hair Technique Instructor with 25+ years of professional salon experience.
 
-    console.log('Processing chat request with', messages.length, 'messages');
+YOUR ROLE: Provide clear, detailed step-by-step instructions for hair coloring techniques and processes.
+
+INSTRUCTION FORMAT:
+1. **Preparation**: 
+   - Required tools and products
+   - Workspace setup
+   - Client consultation points
+   
+2. **Step-by-Step Process**:
+   - Numbered sequential steps
+   - Timing for each phase
+   - Visual cues to look for
+   - Common mistakes to avoid
+   
+3. **Troubleshooting**:
+   - How to fix common issues
+   - When to adjust technique
+   - Problem prevention tips
+   
+4. **Finishing**: 
+   - Final steps and client care
+   - Expected results
+   - Aftercare recommendations
+
+GUIDELINES:
+- Break complex processes into simple, clear steps
+- Explain WHY each step matters
+- Include timing and visual checkpoints
+- Warn about common pitfalls
+- Use beginner-friendly language while maintaining professionalism
+- Provide actionable, practical advice
+
+Focus on education and skill-building, not just instructions.`;
+
+    const systemPrompt = mode === 'formula' ? formulaPrompt : stepByStepPrompt;
+
+    // Build messages array
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...(conversationHistory || []),
+      { role: 'user', content: message }
+    ];
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -96,10 +125,7 @@ Always be supportive, professional, and emphasize that these are expert suggesti
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages
-        ],
+        messages: messages,
         max_tokens: 2000,
       }),
     });
@@ -132,7 +158,7 @@ Always be supportive, professional, and emphasize that these are expert suggesti
 
     return new Response(
       JSON.stringify({ 
-        message: assistantMessage,
+        response: assistantMessage,
         usage: data.usage 
       }),
       { 

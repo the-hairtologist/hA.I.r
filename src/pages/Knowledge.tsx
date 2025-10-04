@@ -1,18 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Search, Tag, TrendingUp, Loader2, ExternalLink } from "lucide-react";
+import { BookOpen, Search, Tag, TrendingUp, Loader2, ExternalLink, Sparkles, Send } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 
 const Knowledge = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [aiMode, setAiMode] = useState<"formula" | "stepbystep">("formula");
+  const [aiMessages, setAiMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
+  const [aiInput, setAiInput] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [aiMessages]);
 
   useEffect(() => {
     checkUserRole();
@@ -129,6 +145,35 @@ const Knowledge = () => {
     },
   ];
 
+  const handleAiSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!aiInput.trim() || aiLoading) return;
+
+    const userMessage = aiInput.trim();
+    setAiInput("");
+    setAiMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    setAiLoading(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("hair-assistant-chat", {
+        body: {
+          message: userMessage,
+          mode: aiMode,
+          conversationHistory: aiMessages
+        }
+      });
+
+      if (error) throw error;
+
+      setAiMessages(prev => [...prev, { role: "assistant", content: data.response }]);
+    } catch (error: any) {
+      console.error("AI Error:", error);
+      toast.error("Failed to get AI response. Please try again.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const articles = userRole === "stylist" ? stylistArticles : clientArticles;
 
   const filteredArticles = articles.filter(
@@ -155,6 +200,113 @@ const Knowledge = () => {
       />
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* AI Assistant Section */}
+        <Card className="mb-8 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <CardHeader className="border-b-[2px] border-border">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <CardTitle>AI Hair Assistant</CardTitle>
+            </div>
+            <CardDescription>
+              Get instant help with formulas or step-by-step guidance
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <Tabs value={aiMode} onValueChange={(v) => setAiMode(v as "formula" | "stepbystep")}>
+              <div className="border-b-[2px] border-border px-4 pt-4">
+                <TabsList className="grid w-full grid-cols-2 mb-4">
+                  <TabsTrigger value="formula" className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    Formula Generation
+                  </TabsTrigger>
+                  <TabsTrigger value="stepbystep" className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Step-by-Step Guide
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="formula" className="m-0">
+                <div className="px-4 py-2">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Ask me to generate a custom hair color formula based on your requirements
+                  </p>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="stepbystep" className="m-0">
+                <div className="px-4 py-2">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Get detailed step-by-step instructions for techniques and processes
+                  </p>
+                </div>
+              </TabsContent>
+            </Tabs>
+
+            {/* Chat Messages */}
+            <ScrollArea className="h-[400px] px-4">
+              <div className="space-y-4 py-4">
+                {aiMessages.length === 0 && (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p className="text-sm">
+                      {aiMode === "formula" 
+                        ? "Ask me to create a formula. Example: 'Create a formula for balayage on level 6 hair'"
+                        : "Ask me for guidance. Example: 'How do I apply toner after bleaching?'"}
+                    </p>
+                  </div>
+                )}
+                
+                {aiMessages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-lg p-3 ${
+                        msg.role === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted"
+                      }`}
+                    >
+                      <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                    </div>
+                  </div>
+                ))}
+                
+                {aiLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted rounded-lg p-3">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+            </ScrollArea>
+
+            {/* Input Form */}
+            <form onSubmit={handleAiSubmit} className="border-t-[2px] border-border p-4">
+              <div className="flex gap-2">
+                <Input
+                  value={aiInput}
+                  onChange={(e) => setAiInput(e.target.value)}
+                  placeholder={
+                    aiMode === "formula"
+                      ? "Describe the formula you need..."
+                      : "Ask for step-by-step help..."
+                  }
+                  disabled={aiLoading}
+                  className="flex-1"
+                />
+                <Button type="submit" disabled={aiLoading || !aiInput.trim()} size="icon">
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+
         {/* Search Bar */}
         <div className="mb-8">
           <div className="relative max-w-2xl mx-auto">
