@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +36,7 @@ export const SaveFormulaDialog = ({
   formulaText,
   stylistId,
 }: SaveFormulaDialogProps) => {
+  const navigate = useNavigate();
   const [clients, setClients] = useState<any[]>([]);
   const [selectedClient, setSelectedClient] = useState("");
   const [colorLine, setColorLine] = useState("");
@@ -99,7 +101,7 @@ export const SaveFormulaDialog = ({
         description: "You can find it in your Formula History",
         action: {
           label: "View Formulas",
-          onClick: () => window.location.href = "/formulas",
+          onClick: () => navigate("/formulas"),
         },
       });
       
