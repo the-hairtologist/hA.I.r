@@ -64,7 +64,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const stylistToolsItems = [
     { title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-indigo-500" },
-    { title: "Resources", url: "/resources", icon: Sparkles, gradient: "from-violet-500 to-fuchsia-500" },
     { title: "Integrations", url: "/integrations", icon: Building2, gradient: "from-orange-500 to-amber-500" },
   ];
 
@@ -79,7 +78,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const clientToolsItems = [
     { title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
     { title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-indigo-500" },
-    { title: "Resources", url: "/resources", icon: Sparkles, gradient: "from-indigo-500 to-purple-500" },
   ];
 
   // Determine which items to show based on role
@@ -176,12 +174,12 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Help">
+                <SidebarMenuButton asChild tooltip="Help & Support">
                   <NavLink to="/resources" className={getNavClassName("/resources")}>
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500">
                       <HelpCircle className="h-4 w-4 text-white" />
                     </div>
-                    {!collapsed && <span className="ml-2">Help</span>}
+                    {!collapsed && <span className="ml-2">Help & Support</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
