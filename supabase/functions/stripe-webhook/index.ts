@@ -114,6 +114,19 @@ serve(async (request) => {
         console.error('[STRIPE-WEBHOOK] Failed to send confirmation email:', emailError)
       }
 
+      // Send confirmation SMS
+      try {
+        await supabase.functions.invoke('send-sms-notification', {
+          body: {
+            appointmentId: appointment.id,
+            notificationType: 'confirmation',
+          },
+        })
+        console.log('[STRIPE-WEBHOOK] Confirmation SMS sent')
+      } catch (smsError) {
+        console.error('[STRIPE-WEBHOOK] Failed to send confirmation SMS:', smsError)
+      }
+
       console.log('[STRIPE-WEBHOOK] Webhook processing completed successfully')
     }
 

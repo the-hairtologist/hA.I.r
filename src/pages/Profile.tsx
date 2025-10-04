@@ -282,7 +282,9 @@ const Profile = () => {
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="(555) 123-4567"
                   />
-                  <p className="text-xs text-muted-foreground">Optional - for appointment reminders</p>
+                  <p className="text-xs text-muted-foreground">
+                    📱 Required for SMS appointment reminders and updates
+                  </p>
               </div>
             </CardContent>
           </Card>

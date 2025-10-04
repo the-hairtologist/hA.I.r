@@ -148,7 +148,7 @@ export const QuickAppointmentDialog = ({
 
       const appointmentDate = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
 
-      const { error } = await supabase
+      const { data: newAppointment, error } = await supabase
         .from("appointments")
         .insert({
           client_id: selectedClient,
@@ -159,9 +159,24 @@ export const QuickAppointmentDialog = ({
           duration_minutes: selectedServiceData.duration_minutes || 90,
           status: "scheduled",
           notes: notes.trim() || null,
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Send SMS notification
+      try {
+        await supabase.functions.invoke('send-sms-notification', {
+          body: {
+            appointmentId: newAppointment.id,
+            notificationType: 'confirmation',
+          },
+        });
+      } catch (smsError) {
+        console.error("SMS notification failed:", smsError);
+        // Don't block success if SMS fails
+      }
 
       toast.success("Appointment created successfully!");
       onOpenChange(false);

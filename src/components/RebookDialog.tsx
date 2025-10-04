@@ -169,7 +169,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
     try {
       const appointmentDateTime = new Date(`${format(proposedDate, "yyyy-MM-dd")}T${selectedTime}:00`);
 
-      const { error } = await supabase.from("appointments").insert({
+      const { data: newAppointment, error } = await supabase.from("appointments").insert({
         stylist_id: appointment.stylist_id,
         client_id: appointment.client_id,
         service_type: appointment.service_type,
@@ -177,9 +177,23 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
         duration_minutes: appointment.duration_minutes,
         status: "scheduled",
         notes: `Rebooked from ${format(new Date(appointment.appointment_date), "MMM d, yyyy")}`,
-      });
+      })
+      .select()
+      .single();
 
       if (error) throw error;
+
+      // Send SMS notification for the rebooked appointment
+      try {
+        await supabase.functions.invoke('send-sms-notification', {
+          body: {
+            appointmentId: newAppointment.id,
+            notificationType: 'confirmation',
+          },
+        });
+      } catch (smsError) {
+        console.error("SMS notification failed:", smsError);
+      }
 
       toast.success(
         <div className="flex items-center gap-2">

@@ -130,6 +130,20 @@ const Appointments = () => {
 
           if (error) throw error;
 
+          // Send SMS notification for cancellation
+          if (newStatus === "cancelled") {
+            try {
+              await supabase.functions.invoke('send-sms-notification', {
+                body: {
+                  appointmentId: appointmentId,
+                  notificationType: 'cancellation',
+                },
+              });
+            } catch (smsError) {
+              console.error("SMS notification failed:", smsError);
+            }
+          }
+
           toast.success(`Appointment ${newStatus}`);
           setDetailsOpen(false);
           loadData();

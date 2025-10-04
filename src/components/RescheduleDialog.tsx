@@ -118,6 +118,18 @@ export const RescheduleDialog = ({ open, onOpenChange, appointment, onSuccess }:
 
       if (error) throw error;
 
+      // Send SMS notification for reschedule
+      try {
+        await supabase.functions.invoke('send-sms-notification', {
+          body: {
+            appointmentId: appointment.id,
+            notificationType: 'reschedule',
+          },
+        });
+      } catch (smsError) {
+        console.error("SMS notification failed:", smsError);
+      }
+
       toast.success("Appointment rescheduled successfully!");
       onSuccess();
       onOpenChange(false);
