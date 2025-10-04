@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileNav } from "@/components/MobileNav";
@@ -23,44 +24,18 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
 
-  useEffect(() => {
-    checkUser();
-  }, []);
+  // Prioritize stylist role if user has both roles
+  const userRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
+  const loading = authLoading || roleLoading || (user && roles.length === 0);
 
-  const checkUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-
-      setUser(session.user);
-
-      // Get user roles (may have multiple)
-      const { data: rolesData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      // Prioritize stylist role if user has both roles
-      if (rolesData && rolesData.length > 0) {
-        const stylistRole = rolesData.find(r => r.role === "stylist");
-        const primaryRole = stylistRole ? "stylist" : rolesData[0].role;
-        setUserRole(primaryRole);
-      }
-    } catch (error: any) {
-      toast.error("Error loading user data");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Redirect if not authenticated
+  if (!authLoading && !user) {
+    navigate("/auth");
+    return null;
+  }
 
   const handleSignOut = async () => {
     try {

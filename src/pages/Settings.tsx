@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,6 +16,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const Settings = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  
   const [loading, setLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
   const [userEmail, setUserEmail] = useState("");
@@ -70,12 +75,12 @@ const Settings = () => {
       }
 
       // Get stylist-specific data
-      if (role === "stylist") {
+      if (primaryRole === "stylist") {
         const { data: stylistProfile } = await supabase
           .from("stylist_profiles")
           .select("*")
-          .eq("user_id", session.user.id)
-          .single();
+          .eq("user_id", sessionUser.id)
+          .maybeSingle();
 
         if (stylistProfile) {
           setBusinessName(stylistProfile.business_name || "");

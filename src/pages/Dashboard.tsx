@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings, GripVertical, CreditCard } from "lucide-react";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { OnboardingTour } from "@/components/OnboardingTour";
@@ -80,7 +82,10 @@ const SortableSection = ({ id, children }: SortableSectionProps) => {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { user: authUser, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
+  
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -118,8 +123,17 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    checkUser();
-  }, []);
+    // Wait for auth and roles to be fully loaded
+    if (!authLoading && !roleLoading && authUser && roles.length > 0) {
+      // Prioritize stylist role if user has both roles
+      const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
+      setUserRole(primaryRole);
+      setUser(authUser);
+      checkUser(authUser, primaryRole);
+    } else if (!authLoading && !authUser) {
+      navigate("/auth");
+    }
+  }, [authLoading, roleLoading, authUser, roles]);
 
   useEffect(() => {
     if (userRole && profile) {
@@ -237,52 +251,35 @@ const Dashboard = () => {
     }
   };
 
-  const checkUser = async () => {
+  const checkUser = async (sessionUser: any, primaryRole: string) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
+      if (!sessionUser) {
         navigate("/auth");
         return;
       }
 
-      setUser(session.user);
-
-      // Get user roles (may have multiple)
-      const { data: rolesData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      if (rolesData && rolesData.length > 0) {
-        // Prioritize stylist role if user has both roles
-        const stylistRole = rolesData.find(r => r.role === "stylist");
-        const primaryRole = stylistRole ? "stylist" : rolesData[0].role;
-        setUserRole(primaryRole);
-
-        // Get appropriate profile
-        if (primaryRole === "stylist") {
-          const { data: stylistProfile } = await supabase
-            .from("stylist_profiles")
-            .select("*")
-            .eq("user_id", session.user.id)
-            .single();
-          setProfile(stylistProfile);
-        } else {
-          const { data: clientProfile } = await supabase
-            .from("client_profiles")
-            .select("*")
-            .eq("user_id", session.user.id)
-            .single();
-          setProfile(clientProfile);
-        }
+      // Get appropriate profile
+      if (primaryRole === "stylist") {
+        const { data: stylistProfile } = await supabase
+          .from("stylist_profiles")
+          .select("*")
+          .eq("user_id", sessionUser.id)
+          .maybeSingle();
+        setProfile(stylistProfile);
+      } else {
+        const { data: clientProfile } = await supabase
+          .from("client_profiles")
+          .select("*")
+          .eq("user_id", sessionUser.id)
+          .maybeSingle();
+        setProfile(clientProfile);
       }
 
       // Check if profile needs completion
       const { data: profileData } = await supabase
         .from("profiles")
         .select("full_name, gender")
-        .eq("id", session.user.id)
+        .eq("id", sessionUser.id)
         .maybeSingle();
 
       setUserProfile(profileData);
