@@ -35,15 +35,27 @@ const Finance = () => {
         return;
       }
 
-      const { data: stylist } = await supabase
+      console.log("Finance: Loading stylist profile for user:", session.user.id);
+
+      const { data: stylist, error: stylistError } = await supabase
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
+
+      console.log("Finance: Stylist profile query result:", { stylist, stylistError });
+
+      if (stylistError) {
+        console.error("Error fetching stylist profile:", stylistError);
+        toast.error("Failed to load stylist profile");
+        navigate("/dashboard");
+        return;
+      }
 
       if (!stylist) {
-        toast.error("Stylist profile not found");
-        navigate("/dashboard");
+        console.warn("Finance: No stylist profile found for user");
+        toast.error("Stylist profile not found. Please complete your profile first.");
+        navigate("/settings");
         return;
       }
 

@@ -46,11 +46,18 @@ const Services = () => {
         return;
       }
 
-      const { data: stylist } = await supabase
+      const { data: stylist, error: stylistError } = await supabase
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
+
+      if (stylistError) {
+        console.error("Error fetching stylist profile:", stylistError);
+        toast.error("Failed to load stylist profile");
+        navigate("/dashboard");
+        return;
+      }
 
       if (!stylist) {
         toast.error("Stylist profile not found");
