@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, BookOpen } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -15,6 +17,9 @@ import { toast } from "sonner";
 
 const Knowledge = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
   const [aiMode, setAiMode] = useState<"formula" | "stepbystep">("formula");
@@ -64,8 +69,14 @@ const Knowledge = () => {
   }, [aiMessages]);
 
   useEffect(() => {
-    checkUserRole();
-  }, []);
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
+      const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
+      setUserRole(primaryRole);
+      setLoading(false);
+    } else if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [authLoading, roleLoading, user, roles]);
 
   useEffect(() => {
     if (userRole === "stylist") {
@@ -74,24 +85,7 @@ const Knowledge = () => {
   }, [userRole]);
 
   const checkUserRole = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      setUserRole(roleData?.[0]?.role || "client");
-    } catch (error: any) {
-      console.error("Error checking role:", error);
-    } finally {
-      setLoading(false);
-    }
+    // This function is now handled by the useEffect above with useUserRole hook
   };
 
   const loadSavedFormulas = async () => {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,9 @@ interface ClientPost {
 
 const ClientRequests = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<ClientPost[]>([]);
   const [clientProfileId, setClientProfileId] = useState<string | null>(null);
@@ -44,34 +49,26 @@ const ClientRequests = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    checkUserAndLoadPosts();
-  }, []);
-
-  const checkUserAndLoadPosts = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id)
-        .single();
-
-      if (roleData?.role !== "client") {
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
+      const isClient = roles.includes('client');
+      if (!isClient) {
         toast.error("Only clients can access this page");
         navigate("/dashboard");
         return;
       }
+      checkUserAndLoadPosts(user);
+    } else if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [authLoading, roleLoading, user, roles]);
 
+  const checkUserAndLoadPosts = async (sessionUser: any) => {
+    try {
       const { data: clientProfile } = await supabase
         .from("client_profiles")
         .select("id")
-        .eq("user_id", session.user.id)
-        .single();
+        .eq("user_id", sessionUser.id)
+        .maybeSingle();
 
       if (clientProfile) {
         setClientProfileId(clientProfile.id);

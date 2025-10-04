@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,6 +18,9 @@ import { KeyboardShortcutHint } from "@/components/KeyboardShortcut";
 
 const Messages = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState<any[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<any>(null);
@@ -46,7 +51,17 @@ const Messages = () => {
   }, [selectedConversation, messageText]);
 
   useEffect(() => {
-    loadData();
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
+      const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
+      setUserRole(primaryRole);
+      loadData(user);
+    } else if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [authLoading, roleLoading, user, roles]);
+
+  useEffect(() => {
+    if (!user) return;
     
     // Set up realtime subscription for all messages
     const channel = supabase
@@ -62,11 +77,9 @@ const Messages = () => {
           console.log('Realtime message update:', payload);
           
           // Reload data when any message changes
-          supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-              loadData();
-            }
-          });
+          if (user) {
+            loadData(user);
+          }
         }
       )
       .subscribe();
@@ -74,7 +87,7 @@ const Messages = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (selectedConversation) {
@@ -91,32 +104,24 @@ const Messages = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const loadData = async () => {
+  const loadData = async (sessionUser: any) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      if (!sessionUser) {
         navigate("/auth");
         return;
       }
 
-      // Get user profile and role
+      // Get user profile
       const { data: profile } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", session.user.id)
-        .single();
+        .eq("id", sessionUser.id)
+        .maybeSingle();
 
       setUserProfile(profile);
 
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      setUserRole(roleData?.[0]?.role || "");
-
       // Get conversations
-      await loadConversations(session.user.id);
+      await loadConversations(sessionUser.id);
     } catch (error: any) {
       console.error("Error loading data:", error);
       toast.error("Error loading messages");

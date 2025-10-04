@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,40 +21,33 @@ interface AccessCode {
 }
 
 export default function AccessCodes() {
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  
   const [codes, setCodes] = useState<AccessCode[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    checkAdminAndLoadCodes();
-  }, []);
-
-  const checkAdminAndLoadCodes = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast.error("Please sign in");
-        return;
-      }
-
-      const { data: rolesData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      const adminCheck = rolesData?.some(r => r.role === "admin") || false;
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
+      const adminCheck = roles.includes('admin');
       setIsAdmin(adminCheck);
-
+      
       if (!adminCheck) {
         toast.error("Admin access required");
+        setLoading(false);
         return;
       }
-
-      await loadCodes();
-    } catch (error) {
-      console.error("Error checking admin status:", error);
-      toast.error("Failed to verify admin status");
+      
+      loadCodes();
+    } else if (!authLoading && !user) {
+      toast.error("Please sign in");
+      setLoading(false);
     }
+  }, [authLoading, roleLoading, user, roles]);
+
+  const checkAdminAndLoadCodes = async () => {
+    // This function is now handled by the useEffect above with useUserRole hook
   };
 
   const loadCodes = async () => {

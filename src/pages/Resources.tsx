@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   HelpCircle, 
@@ -24,34 +26,26 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const Resources = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    checkUserRole();
-  }, []);
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
+      const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
+      setUserRole(primaryRole);
+      setLoading(false);
+    } else if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [authLoading, roleLoading, user, roles]);
 
   const checkUserRole = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      setUserRole(roleData?.[0]?.role || "client");
-    } catch (error: any) {
-      console.error("Error checking role:", error);
-    } finally {
-      setLoading(false);
-    }
+    // This function is now handled by the useEffect above with useUserRole hook
   };
 
   const faqCategories = [
