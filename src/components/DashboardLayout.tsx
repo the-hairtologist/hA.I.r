@@ -50,7 +50,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
-        <div className="text-center bg-white p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
+        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
           <div className="relative mb-4">
             <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
             <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
@@ -68,7 +68,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         
         <div className="flex-1 flex flex-col">
           {/* Top Header */}
-          <header className="sticky top-0 z-40 border-b-4 border-foreground bg-white/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+          <header className="sticky top-0 z-40 border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
             <div className="flex h-16 items-center gap-4 px-4">
               <SidebarTrigger className="-ml-1 border-2 border-foreground" />
               
@@ -82,7 +82,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
               <div className="ml-auto flex items-center gap-3">
                 {userRole && (
-                  <Badge variant="secondary" className="hidden sm:flex bg-yellow-300 border-2 border-foreground">
+                  <Badge variant="secondary" className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground">
                     {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
                   </Badge>
                 )}

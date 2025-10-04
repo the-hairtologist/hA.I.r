@@ -96,7 +96,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
             return (
               <div
                 key={activity.id}
-                className="flex items-start gap-4 p-4 rounded-lg border-2 border-foreground bg-white hover:bg-white/90 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
+                className="flex items-start gap-4 p-4 rounded-lg border-2 border-foreground bg-card hover:bg-card/90 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
                 style={{ animationDelay: `${index * 50}ms` }}
                 onClick={() => {
                   if (activity.type === "appointment") navigate("/appointments");

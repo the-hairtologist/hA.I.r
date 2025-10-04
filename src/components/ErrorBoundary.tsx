@@ -50,7 +50,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </p>
               
               {this.state.error && (
-                <details className="text-xs bg-white p-3 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <details className="text-xs bg-card p-3 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                   <summary className="cursor-pointer font-bold text-foreground mb-2">
                     Error Details (for support)
                   </summary>

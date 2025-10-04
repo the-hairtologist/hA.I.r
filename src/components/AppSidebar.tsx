@@ -133,7 +133,7 @@ function SortableNavItem({
               </div>
             )}
             <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient} transition-transform group-hover:scale-110`}>
-              <item.icon className="h-4 w-4 text-white" />
+              <item.icon className="h-4 w-4 text-primary-foreground" />
             </div>
             {!collapsed && (
               <>
@@ -164,7 +164,7 @@ function SortableNavItem({
               </div>
             )}
             <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-              <item.icon className="h-4 w-4 text-white" />
+              <item.icon className="h-4 w-4 text-primary-foreground" />
             </div>
             {!collapsed && (
               <div className="ml-2 flex flex-col">
@@ -403,7 +403,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 <SidebarMenuButton asChild tooltip="Settings" className="min-h-[44px]">
                   <NavLink to="/settings" className={getNavClassName}>
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500">
-                      <Settings className="h-4 w-4 text-white" />
+                      <Settings className="h-4 w-4 text-primary-foreground" />
                     </div>
                     {!collapsed && <span className="ml-2">Settings</span>}
                   </NavLink>
@@ -413,7 +413,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 <SidebarMenuButton asChild tooltip="Help & Support" className="min-h-[44px]">
                   <NavLink to="/resources" className={getNavClassName}>
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500">
-                      <HelpCircle className="h-4 w-4 text-white" />
+                      <HelpCircle className="h-4 w-4 text-primary-foreground" />
                     </div>
                     {!collapsed && <span className="ml-2">Help & Support</span>}
                   </NavLink>

@@ -60,7 +60,7 @@ export const InteractiveCard = ({
         )}
         
         {Icon && (
-          <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+          <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
             <Icon className={cn("h-7 w-7", iconColor)} aria-hidden="true" />
           </div>
         )}

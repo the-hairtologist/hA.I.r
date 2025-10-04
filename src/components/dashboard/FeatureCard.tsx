@@ -42,7 +42,7 @@ export const FeatureCard = ({
             "p-3 rounded-lg bg-gradient-to-br border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
             gradient
           )}>
-            <Icon className="h-6 w-6 text-white" />
+            <Icon className="h-6 w-6 text-primary-foreground" />
           </div>
           <CardTitle className="text-xl font-display group-hover:text-primary transition-colors">{title}</CardTitle>
         </div>

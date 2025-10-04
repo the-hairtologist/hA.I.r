@@ -91,7 +91,7 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
                   <p className="text-sm font-display font-semibold mb-1 text-foreground/80">{stat.label}</p>
                   <p className="text-4xl font-display font-bold text-foreground">{stat.value}</p>
                 </div>
-                <div className="p-3 rounded-lg bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <div className="p-3 rounded-lg bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                   <Icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
               </div>

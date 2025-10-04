@@ -62,8 +62,8 @@ export const ButtonWithFeedback = ({
       onClick={handleClick}
       className={cn(
         "transition-all duration-300",
-        state === 'success' && "bg-green-500 hover:bg-green-600 border-green-600",
-        state === 'error' && "bg-red-500 hover:bg-red-600 border-red-600",
+        state === 'success' && "bg-success hover:bg-success/90 border-success",
+        state === 'error' && "bg-destructive hover:bg-destructive/90 border-destructive",
         state === 'loading' && "opacity-75",
         className
       )}

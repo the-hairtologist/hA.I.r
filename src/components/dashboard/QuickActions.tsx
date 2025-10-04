@@ -227,8 +227,8 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                   className={cn(
                     "relative p-4 rounded-lg border-2 border-foreground transition-all text-left group shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]",
                     isSelected
-                      ? "bg-white"
-                      : "bg-white/60 hover:bg-white"
+                      ? "bg-card"
+                      : "bg-card/60 hover:bg-card"
                   )}
                 >
                   <div className="flex items-start gap-3">
@@ -237,7 +237,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                       action.gradient,
                       !isSelected && "opacity-50"
                     )}>
-                      <Icon className="h-5 w-5 text-white" />
+                      <Icon className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-display font-semibold text-sm mb-1">{action.label}</h4>
@@ -266,7 +266,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                   onDragOver={(e) => handleDragOver(e, action.id)}
                   onDragEnd={handleDragEnd}
                   className={cn(
-                    "group relative rounded-xl border-[3px] border-foreground bg-white transition-all overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1",
+                    "group relative rounded-xl border-[3px] border-foreground bg-card transition-all overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1",
                     draggedItem === action.id && "opacity-50"
                   )}
                   style={{ animationDelay: `${index * 50}ms` }}
@@ -286,7 +286,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                           "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
                           action.gradient
                         )}>
-                          <Icon className="h-6 w-6 text-white" />
+                          <Icon className="h-6 w-6 text-primary-foreground" />
                         </div>
                         <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
                           {action.label}

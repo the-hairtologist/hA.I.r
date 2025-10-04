@@ -125,7 +125,7 @@ export const TodoList = () => {
           </div>
           <div>
             <CardTitle className="font-display text-xl">My Tasks</CardTitle>
-            <p className="text-xs font-bold text-black">
+            <p className="text-xs font-bold text-foreground">
               {incompleteTodos.length} pending • {completedTodos.length} done
             </p>
           </div>
@@ -139,7 +139,7 @@ export const TodoList = () => {
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
             placeholder="Add a new task..."
-            className="flex-1 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-white placeholder:text-black/50"
+            className="flex-1 border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] bg-card placeholder:text-muted-foreground"
             disabled={adding}
             maxLength={200}
           />
@@ -169,7 +169,7 @@ export const TodoList = () => {
               {incompleteTodos.map((todo) => (
                 <div
                   key={todo.id}
-                  className="flex items-start gap-3 p-3 bg-white border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] rounded-lg group hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                  className="flex items-start gap-3 p-3 bg-card border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] rounded-lg group hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   <Checkbox
                     checked={todo.completed}

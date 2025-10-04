@@ -31,7 +31,7 @@ export const LoadingState = ({
 
   return (
     <div className={cn(containerClasses, className)} role="status" aria-live="polite">
-      <div className="text-center bg-white p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
+      <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
         <div className="relative mb-4">
           <Scissors 
             className={cn(sizeClasses[size], "text-primary animate-pulse mx-auto")} 

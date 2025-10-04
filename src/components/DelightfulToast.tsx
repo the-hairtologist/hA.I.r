@@ -21,28 +21,28 @@ interface ToastOptions {
 const toastStyles = {
   success: {
     icon: CheckCircle,
-    className: "border-l-4 border-l-green-500 bg-gradient-to-r from-green-50 to-white",
-    iconColor: "text-green-600"
+    className: "border-l-4 border-l-success bg-gradient-to-r from-success/10 to-background",
+    iconColor: "text-success"
   },
   error: {
     icon: AlertCircle,
-    className: "border-l-4 border-l-red-500 bg-gradient-to-r from-red-50 to-white",
-    iconColor: "text-red-600"
+    className: "border-l-4 border-l-destructive bg-gradient-to-r from-destructive/10 to-background",
+    iconColor: "text-destructive"
   },
   warning: {
     icon: AlertTriangle,
-    className: "border-l-4 border-l-yellow-500 bg-gradient-to-r from-yellow-50 to-white",
-    iconColor: "text-yellow-600"
+    className: "border-l-4 border-l-warning bg-gradient-to-r from-warning/10 to-background",
+    iconColor: "text-warning"
   },
   info: {
     icon: Info,
-    className: "border-l-4 border-l-blue-500 bg-gradient-to-r from-blue-50 to-white",
-    iconColor: "text-blue-600"
+    className: "border-l-4 border-l-info bg-gradient-to-r from-info/10 to-background",
+    iconColor: "text-info"
   },
   celebration: {
     icon: Sparkles,
-    className: "border-l-4 border-l-purple-500 bg-gradient-to-r from-purple-50 via-pink-50 to-white",
-    iconColor: "text-purple-600"
+    className: "border-l-4 border-l-primary bg-gradient-to-r from-primary/10 via-secondary/10 to-background",
+    iconColor: "text-primary"
   }
 };
 
