@@ -27,6 +27,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 
 interface AppSidebarProps {
   userRole?: string;
@@ -158,6 +159,9 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Separator */}
+        <Separator className="my-2" />
 
         {/* Account Section - Sticky Footer */}
         <SidebarGroup className="mt-auto">
