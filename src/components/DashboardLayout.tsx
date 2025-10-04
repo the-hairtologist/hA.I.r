@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { MobileNav } from "@/components/MobileNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Scissors, User, LogOut } from "lucide-react";
+import { Scissors, User, LogOut, HelpCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -127,6 +127,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <DropdownMenuItem onClick={() => navigate("/profile")}>
                       <User className="h-4 w-4 mr-2" />
                       Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      localStorage.removeItem('onboarding_complete');
+                      window.location.reload();
+                    }}>
+                      <HelpCircle className="h-4 w-4 mr-2" />
+                      Restart Tutorial
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="text-destructive">

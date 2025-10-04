@@ -7,7 +7,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Navigation } from "@/components/Navigation";
-import { Settings, ArrowLeft, Download, Trash2, Loader2, FileDown } from "lucide-react";
+import { Settings, ArrowLeft, Download, Trash2, Loader2, FileDown, HelpCircle } from "lucide-react";
 import avatarMale from "@/assets/avatar-male-lego.png";
 import avatarFemale from "@/assets/avatar-female-lego.png";
 import avatarNeutral from "@/assets/avatar-neutral-lego.png";
@@ -386,6 +386,33 @@ const AccountSettings = () => {
                     Export My Data
                   </>
                 )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Restart Tutorial */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Tutorial & Help</CardTitle>
+              <CardDescription>
+                Restart the onboarding tour to learn about hA.I.r features
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                onClick={() => {
+                  localStorage.removeItem('onboarding_complete');
+                  toast.success("Tutorial reset! Redirecting to dashboard...");
+                  setTimeout(() => {
+                    navigate("/dashboard");
+                    window.location.reload();
+                  }, 1000);
+                }}
+                variant="outline"
+                className="w-full"
+              >
+                <HelpCircle className="h-4 w-4 mr-2" />
+                Restart Tutorial
               </Button>
             </CardContent>
           </Card>
