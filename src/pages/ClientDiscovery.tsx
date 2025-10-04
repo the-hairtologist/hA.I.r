@@ -37,28 +37,36 @@ const ClientDiscovery = () => {
   const [stylistProfileId, setStylistProfileId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Wait for both auth and roles to finish loading
-    if (!authLoading && !roleLoading) {
-      checkUserAndLoadPosts();
-    }
-  }, [authLoading, roleLoading, user, isStylist]);
-
-  useEffect(() => {
     filterPosts();
   }, [searchQuery, posts]);
 
+  useEffect(() => {
+    // Only run checks after both auth and roles are fully loaded
+    if (authLoading || roleLoading) {
+      return;
+    }
+
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    // Explicitly check if user has stylist role
+    if (!isStylist) {
+      console.error("Access denied: User is not a stylist", { isStylist, user: user?.id });
+      toast.error("Only stylists can access this page");
+      navigate("/dashboard");
+      return;
+    }
+
+    // If we get here, user is authenticated and is a stylist
+    checkUserAndLoadPosts();
+  }, [authLoading, roleLoading, user, isStylist, navigate]);
+
   const checkUserAndLoadPosts = async () => {
     try {
-      if (!user) {
-        navigate("/auth");
-        return;
-      }
 
-      if (!isStylist) {
-        toast.error("Only stylists can access this page");
-        navigate("/dashboard");
-        return;
-      }
+      if (!user?.id) return;
 
       const { data: stylistProfile } = await supabase
         .from("stylist_profiles")
