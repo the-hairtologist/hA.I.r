@@ -1557,6 +1557,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_stylist_relationship: {
+        Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_stylist_owner: {
+        Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
       redeem_access_code: {
         Args: { _code: string; _user_id: string }
         Returns: boolean
