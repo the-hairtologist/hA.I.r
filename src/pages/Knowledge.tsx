@@ -211,19 +211,33 @@ const Knowledge = () => {
               <CardContent className="space-y-2">
                 <Button
                   variant={aiMode === "formula" ? "default" : "outline"}
-                  className="w-full justify-start"
+                  className="w-full justify-start h-auto py-3 px-4"
                   onClick={() => setAiMode("formula")}
                 >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Formula Generation
+                  <div className="text-left">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Sparkles className="h-4 w-4" />
+                      <span className="font-semibold">Formula Generator</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Get formulas and color approaches
+                    </p>
+                  </div>
                 </Button>
                 <Button
                   variant={aiMode === "stepbystep" ? "default" : "outline"}
-                  className="w-full justify-start"
+                  className="w-full justify-start h-auto py-3 px-4"
                   onClick={() => setAiMode("stepbystep")}
                 >
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Step-by-Step Guide
+                  <div className="text-left">
+                    <div className="flex items-center gap-2 mb-1">
+                      <BookOpen className="h-4 w-4" />
+                      <span className="font-semibold">Color Correction Guide</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Complex fixes & detailed steps
+                    </p>
+                  </div>
                 </Button>
               </CardContent>
             </Card>
@@ -240,7 +254,15 @@ const Knowledge = () => {
                       size="sm"
                       variant="ghost"
                       className="w-full justify-start text-xs h-auto py-2"
-                      onClick={() => setAiInput("Create a balayage formula for level 6 hair going to level 9 blonde")}
+                      onClick={() => setAiInput("What's the best approach for lifting level 5 hair to a warm blonde?")}
+                    >
+                      Blonde Lifting Approach
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="w-full justify-start text-xs h-auto py-2"
+                      onClick={() => setAiInput("I need a balayage formula for natural dimension on level 6 hair")}
                     >
                       Balayage Formula
                     </Button>
@@ -248,17 +270,9 @@ const Knowledge = () => {
                       size="sm"
                       variant="ghost"
                       className="w-full justify-start text-xs h-auto py-2"
-                      onClick={() => setAiInput("I need a color correction formula for brassy level 7 hair")}
+                      onClick={() => setAiInput("Recommend a toner formula for level 9 blonde")}
                     >
-                      Color Correction
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start text-xs h-auto py-2"
-                      onClick={() => setAiInput("Root touch-up formula for dark brown hair")}
-                    >
-                      Root Touch-Up
+                      Toner Recommendation
                     </Button>
                   </>
                 ) : (
@@ -267,25 +281,25 @@ const Knowledge = () => {
                       size="sm"
                       variant="ghost"
                       className="w-full justify-start text-xs h-auto py-2"
-                      onClick={() => setAiInput("How do I apply toner after bleaching?")}
+                      onClick={() => setAiInput("How do I fix brassy orange hair from a failed lift?")}
                     >
-                      Toning Guide
+                      Fix Brassy Hair
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
                       className="w-full justify-start text-xs h-auto py-2"
-                      onClick={() => setAiInput("Show me how to do a root touch-up")}
+                      onClick={() => setAiInput("Step-by-step to remove green tones from blonde hair")}
                     >
-                      Root Touch-Up Steps
+                      Remove Green Tones
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
                       className="w-full justify-start text-xs h-auto py-2"
-                      onClick={() => setAiInput("Best way to section hair for highlights")}
+                      onClick={() => setAiInput("How to correct uneven color and banding")}
                     >
-                      Sectioning Tips
+                      Fix Banding Issues
                     </Button>
                   </>
                 )}
@@ -321,14 +335,14 @@ const Knowledge = () => {
                       ) : (
                         <>
                           <BookOpen className="h-5 w-5 text-primary" />
-                          Step-by-Step Assistant
+                          Color Correction Guide
                         </>
                       )}
                     </CardTitle>
                     <CardDescription className="mt-1">
                       {aiMode === "formula"
-                        ? "Get custom hair color formulas based on your requirements"
-                        : "Receive detailed instructions for techniques and processes"}
+                        ? "Get formulas and guidance for color approaches"
+                        : "Detailed step-by-step instructions for complex color corrections"}
                     </CardDescription>
                   </div>
                 </div>
@@ -347,12 +361,12 @@ const Knowledge = () => {
                     </div>
                     <div className="space-y-2">
                       <p className="text-lg font-medium">
-                        {aiMode === "formula" ? "Ready to create formulas" : "Ready to guide you"}
+                        {aiMode === "formula" ? "Ready to create formulas" : "Ready to solve problems"}
                       </p>
                       <p className="text-sm text-muted-foreground max-w-md">
                         {aiMode === "formula"
-                          ? "Describe the hair color transformation you need and I'll generate a detailed formula"
-                          : "Ask me any question about hair styling techniques and I'll provide step-by-step guidance"}
+                          ? "Tell me what color result you're aiming for and I'll suggest formulas and approaches"
+                          : "Describe the color problem you're facing and I'll guide you through the correction process step by step"}
                       </p>
                     </div>
                   </div>
