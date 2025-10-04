@@ -467,7 +467,7 @@ const Integrations = () => {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500">
-                <Zap className="h-6 w-6 text-white" />
+                <Zap className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
                 <h1 className="text-4xl font-bold gradient-text">Integrations</h1>
@@ -527,7 +527,7 @@ const Integrations = () => {
                     <div className={`absolute inset-0 bg-gradient-to-br ${integration.gradient} opacity-5 group-hover:opacity-10 transition-opacity`} />
                     <CardHeader className="pb-3">
                       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${integration.gradient} flex items-center justify-center mb-2`}>
-                        <Icon className="h-6 w-6 text-white" />
+                        <Icon className="h-6 w-6 text-primary-foreground" />
                       </div>
                       <CardTitle className="text-base">{integration.name}</CardTitle>
                     </CardHeader>
@@ -546,7 +546,7 @@ const Integrations = () => {
                           <DialogContent className="sm:max-w-md">
                             <DialogHeader>
                               <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${integration.gradient} flex items-center justify-center mb-4`}>
-                                <Icon className="h-6 w-6 text-white" />
+                                <Icon className="h-6 w-6 text-primary-foreground" />
                               </div>
                               <DialogTitle>Connect {integration.name}</DialogTitle>
                               <DialogDescription>
@@ -682,7 +682,7 @@ const Integrations = () => {
                 <CardHeader>
                   <div className="flex items-start justify-between mb-3">
                     <div className={`p-3 rounded-xl bg-gradient-to-br ${integration.gradient}`}>
-                      <Icon className="h-6 w-6 text-white" />
+                      <Icon className="h-6 w-6 text-primary-foreground" />
                     </div>
                     {getStatusBadge(integration.status)}
                   </div>
@@ -723,7 +723,7 @@ const Integrations = () => {
                     <DialogContent className="sm:max-w-md">
                       <DialogHeader>
                         <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${integration.gradient} flex items-center justify-center mb-4`}>
-                          <Icon className="h-6 w-6 text-white" />
+                          <Icon className="h-6 w-6 text-primary-foreground" />
                         </div>
                         <DialogTitle>Connect {integration.name}</DialogTitle>
                         <DialogDescription>

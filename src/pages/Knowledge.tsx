@@ -236,7 +236,7 @@ const Knowledge = () => {
                 onClick={() => setAiMode("formula")}
                 className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
                   aiMode === "formula"
-                    ? "bg-gradient-to-r from-primary to-secondary text-white border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
                     : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
                 style={{ border: "3px solid" }}
@@ -248,7 +248,7 @@ const Knowledge = () => {
                 onClick={() => handleFeatureClick("formula")}
                 className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
               >
-                <HelpCircle className="h-3.5 w-3.5 text-white" />
+                <HelpCircle className="h-3.5 w-3.5 text-accent-foreground" />
               </button>
             </div>
             <div className="relative group">
@@ -256,7 +256,7 @@ const Knowledge = () => {
                 onClick={() => setAiMode("stepbystep")}
                 className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
                   aiMode === "stepbystep"
-                    ? "bg-gradient-to-r from-accent to-primary text-white border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
                     : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
                 style={{ border: "3px solid" }}
@@ -268,7 +268,7 @@ const Knowledge = () => {
                 onClick={() => handleFeatureClick("stepbystep")}
                 className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
               >
-                <HelpCircle className="h-3.5 w-3.5 text-white" />
+                <HelpCircle className="h-3.5 w-3.5 text-accent-foreground" />
               </button>
             </div>
           </div>
@@ -345,7 +345,7 @@ const Knowledge = () => {
                     <div className="window-control bg-[hsl(40_95%_60%)]"></div>
                     <div className="window-control bg-accent"></div>
                   </div>
-                  <h2 className="text-white font-display font-bold text-sm flex items-center gap-2">
+                  <h2 className="text-primary-foreground font-display font-bold text-sm flex items-center gap-2">
                     {aiMode === "formula" ? (
                       <>
                         <Sparkles className="h-4 w-4" />
@@ -368,9 +368,9 @@ const Knowledge = () => {
                     <div className="relative animate-bounce-gentle">
                       <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)] border-4 border-foreground">
                         {aiMode === "formula" ? (
-                          <Sparkles className="h-12 w-12 text-white" />
+                          <Sparkles className="h-12 w-12 text-primary-foreground" />
                         ) : (
-                          <BookOpen className="h-12 w-12 text-white" />
+                          <BookOpen className="h-12 w-12 text-primary-foreground" />
                         )}
                       </div>
                       <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center animate-pulse border-3 border-foreground">
@@ -398,7 +398,7 @@ const Knowledge = () => {
                         <div
                           className={`max-w-[80%] rounded-2xl px-5 py-4 border-3 ${
                             msg.role === "user"
-                              ? "bg-gradient-to-r from-primary to-secondary text-white border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]"
+                              ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]"
                               : "bg-background border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]"
                           }`}
                           style={{ border: "3px solid" }}
@@ -410,7 +410,7 @@ const Knowledge = () => {
                                 setFormulaToSave(msg.content);
                                 setShowSaveDialog(true);
                               }}
-                              className="mt-4 retro-button bg-gradient-to-r from-secondary to-accent text-white px-4 py-2 rounded-lg font-display font-bold text-sm flex items-center gap-2"
+                              className="mt-4 retro-button bg-gradient-to-r from-secondary to-accent text-secondary-foreground px-4 py-2 rounded-lg font-display font-bold text-sm flex items-center gap-2"
                             >
                               <Save className="h-4 w-4" />
                               Save Formula
@@ -451,7 +451,7 @@ const Knowledge = () => {
                   <button
                     type="submit" 
                     disabled={aiLoading || !aiInput.trim()} 
-                    className="retro-button bg-gradient-to-r from-primary to-accent text-white px-6 rounded-xl font-display font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="retro-button bg-gradient-to-r from-primary to-accent text-primary-foreground px-6 rounded-xl font-display font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     <Send className="h-4 w-4" />
                     Send

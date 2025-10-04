@@ -10,7 +10,7 @@ const NotFound = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
-      <div className="text-center max-w-md mx-auto p-8 bg-white border-[3px] border-foreground rounded-xl shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
+      <div className="text-center max-w-md mx-auto p-8 bg-card border-[3px] border-foreground rounded-xl shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
         <div className="text-6xl mb-4 animate-wiggle">✂️</div>
         <h1 className="mb-4 text-6xl font-bold font-display text-foreground">404</h1>
         <p className="mb-6 text-xl text-foreground/80 font-medium">Oops! This page got a bad haircut and disappeared.</p>

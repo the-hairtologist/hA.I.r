@@ -207,7 +207,7 @@ const StylistDiscovery = () => {
         {filteredStylists.length === 0 ? (
           <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
             <CardContent className="pt-6 pb-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card flex items-center justify-center">
                 <Search className="h-8 w-8 text-foreground" />
               </div>
               <h3 className="text-lg font-bold text-foreground mb-2">No stylists found</h3>
@@ -241,7 +241,7 @@ const StylistDiscovery = () => {
               }`}>
                 <CardHeader>
                   <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-full bg-white border-2 border-foreground flex items-center justify-center text-2xl overflow-hidden shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                    <div className="w-16 h-16 rounded-full bg-card border-2 border-foreground flex items-center justify-center text-2xl overflow-hidden shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                       {stylist.business_name?.charAt(0).toUpperCase() || '?'}
                     </div>
                     <div className="flex-1">
@@ -271,7 +271,7 @@ const StylistDiscovery = () => {
 
                 <CardContent className="space-y-3">
                   {stylist.specialty && (
-                    <Badge variant="secondary" className="bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">{stylist.specialty}</Badge>
+                    <Badge variant="secondary" className="bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">{stylist.specialty}</Badge>
                   )}
 
                   {stylist.bio && (
@@ -377,7 +377,7 @@ const StylistDiscovery = () => {
                           <CardDescription className="flex items-center gap-1 mt-1 text-foreground/80 font-medium">
                             {stylist.businessName}
                             {stylist.source && (
-                              <Badge variant="outline" className="ml-2 text-xs bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                              <Badge variant="outline" className="ml-2 text-xs bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                                 <Globe className="h-3 w-3 mr-1" />
                                 {stylist.source}
                               </Badge>
@@ -389,7 +389,7 @@ const StylistDiscovery = () => {
 
                     <CardContent className="space-y-3">
                       {stylist.specialty && (
-                        <Badge variant="secondary" className="bg-white border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">{stylist.specialty}</Badge>
+                        <Badge variant="secondary" className="bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">{stylist.specialty}</Badge>
                       )}
 
                       {stylist.certifications && stylist.certifications.length > 0 && (
@@ -397,7 +397,7 @@ const StylistDiscovery = () => {
                           <Award className="h-4 w-4 text-foreground mt-0.5 flex-shrink-0" />
                           <div className="flex flex-wrap gap-1">
                             {stylist.certifications.map((cert, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs bg-white border-2 border-foreground">
+                              <Badge key={idx} variant="outline" className="text-xs bg-card border-2 border-foreground">
                                 {cert}
                               </Badge>
                             ))}

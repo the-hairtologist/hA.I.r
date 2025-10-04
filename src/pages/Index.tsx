@@ -76,7 +76,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-base sm:text-xl px-8 sm:px-12 py-4 sm:py-6 font-display font-black bg-pink-500 text-white hover:bg-pink-600 border-2 sm:border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-all hover:scale-105 uppercase group"
+                  className="text-base sm:text-xl px-8 sm:px-12 py-4 sm:py-6 font-display font-black bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 sm:border-4 border-secondary hover:translate-x-1 hover:translate-y-1 transition-all hover:scale-105 uppercase group"
                   aria-label="Start your free trial"
                 >
                   Start Free
@@ -88,8 +88,8 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-6">
             <article className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in">
-              <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                <Scissors className="h-7 w-7 text-blue-600" aria-hidden="true" />
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <Scissors className="h-7 w-7 text-info" aria-hidden="true" />
               </div>
               <h2 className="font-display font-bold text-xl mb-2 text-foreground">AI Formulas in Seconds</h2>
               <p className="text-foreground/80 text-sm font-medium">
@@ -98,8 +98,8 @@ const Index = () => {
             </article>
 
             <article className="p-6 border-[3px] border-foreground rounded-xl bg-green-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--accent))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in" style={{animationDelay: '100ms'}}>
-              <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                <Calendar className="h-7 w-7 text-green-600" aria-hidden="true" />
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <Calendar className="h-7 w-7 text-success" aria-hidden="true" />
               </div>
               <h2 className="font-display font-bold text-xl mb-2 text-foreground">Never Miss a Booking</h2>
               <p className="text-foreground/80 text-sm font-medium">
@@ -108,8 +108,8 @@ const Index = () => {
             </article>
 
             <article className="p-6 border-[3px] border-foreground rounded-xl bg-yellow-300 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--secondary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in" style={{animationDelay: '200ms'}}>
-              <div className="bg-white border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                <MessageSquare className="h-7 w-7 text-yellow-600" aria-hidden="true" />
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <MessageSquare className="h-7 w-7 text-warning" aria-hidden="true" />
               </div>
               <h2 className="font-display font-bold text-xl mb-2 text-foreground">Build Loyalty on Autopilot</h2>
               <p className="text-foreground/80 text-sm font-medium">

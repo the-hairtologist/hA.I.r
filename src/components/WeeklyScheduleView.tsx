@@ -184,7 +184,7 @@ export const WeeklyScheduleView = ({
                 variant="default" 
                 size="sm" 
                 onClick={() => setSelectedDay(null)}
-                className="h-5 text-[10px] px-2 bg-secondary hover:bg-secondary/90 text-white border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                className="h-5 text-[10px] px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
               >
                 View Week
               </Button>
@@ -279,7 +279,7 @@ export const WeeklyScheduleView = ({
                         {dayAppointments.map((apt) => (
                           <div
                             key={apt.id}
-                            className="absolute inset-x-0 top-0 rounded-md p-1 cursor-pointer hover:opacity-90 transition-all hover:shadow-lg border border-white/20 group overflow-hidden"
+                            className="absolute inset-x-0 top-0 rounded-md p-1 cursor-pointer hover:opacity-90 transition-all hover:shadow-lg border border-border/20 group overflow-hidden"
                             style={{
                               backgroundColor: getServiceColor(apt.service_type),
                               height: `${calculateAppointmentHeight(apt.duration_minutes || 90)}px`,
@@ -287,14 +287,14 @@ export const WeeklyScheduleView = ({
                             }}
                             onClick={() => onAppointmentClick?.(apt)}
                           >
-                            <div className="text-[9px] font-bold text-white truncate leading-tight">
+                            <div className="text-[9px] font-bold text-primary-foreground truncate leading-tight">
                               {apt.client?.user?.full_name}
                             </div>
-                            <div className="text-[8px] text-white/90 truncate leading-tight">
+                            <div className="text-[8px] text-primary-foreground/90 truncate leading-tight">
                               {apt.service_type}
                             </div>
                             {apt.duration_minutes && apt.duration_minutes >= 60 && (
-                              <div className="text-[7px] text-white/70 leading-tight">
+                              <div className="text-[7px] text-primary-foreground/70 leading-tight">
                                 {format(parseISO(apt.appointment_date), 'h:mm a')}
                               </div>
                             )}

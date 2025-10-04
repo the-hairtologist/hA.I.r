@@ -247,7 +247,7 @@ const Services = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <header role="banner" className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+      <header role="banner" className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -492,7 +492,7 @@ const Services = () => {
                         <div>
                           ⏱️ {service.duration_minutes} min service
                           {service.buffer_time_minutes !== null && (
-                            <span className="ml-2 text-xs bg-white/50 text-foreground px-2 py-0.5 rounded-full border border-foreground/20">
+                            <span className="ml-2 text-xs bg-card/50 text-foreground px-2 py-0.5 rounded-full border border-foreground/20">
                               + {service.buffer_time_minutes} min buffer
                             </span>
                           )}
@@ -515,10 +515,10 @@ const Services = () => {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(service)} className="border-2 border-foreground bg-white hover:bg-white/90">
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(service)} className="border-2 border-foreground bg-card hover:bg-card/90">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(service.id)} className="border-2 border-foreground bg-white hover:bg-white/90">
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(service.id)} className="border-2 border-foreground bg-card hover:bg-card/90">
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>

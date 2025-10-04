@@ -197,7 +197,7 @@ const Auth = () => {
         Skip to main content
       </a>
       <main id="main-content" role="main" aria-label="Authentication">
-        <Card className="w-full max-w-md border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-white">
+        <Card className="w-full max-w-md border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
         <CardHeader className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Scissors className="h-8 w-8 text-primary" />

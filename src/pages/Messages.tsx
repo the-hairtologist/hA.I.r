@@ -332,7 +332,7 @@ const Messages = () => {
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
-      <header className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+      <header className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
             <Button
               variant="ghost"
@@ -419,12 +419,12 @@ const Messages = () => {
             {!selectedConversation ? (
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center max-w-sm">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
-                    <MessageSquare className="h-10 w-10 text-white" />
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-card/20 flex items-center justify-center">
+                    <MessageSquare className="h-10 w-10 text-primary-foreground" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Ready to Connect?</h3>
-                  <p className="text-white/80 mb-4">Select a conversation or start a new chat to begin messaging</p>
-                  <Button onClick={() => setNewConversationOpen(true)} className="bg-white text-primary hover:bg-white/90">
+                  <h3 className="text-xl font-bold text-primary-foreground mb-2">Ready to Connect?</h3>
+                  <p className="text-primary-foreground/80 mb-4">Select a conversation or start a new chat to begin messaging</p>
+                  <Button onClick={() => setNewConversationOpen(true)} className="bg-card text-primary hover:bg-card/90">
                     <Plus className="h-4 w-4 mr-2" />
                     New Conversation
                   </Button>

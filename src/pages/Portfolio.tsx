@@ -297,7 +297,7 @@ const Portfolio = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center space-x-2 bg-white/20 p-3 rounded-lg">
+            <div className="flex items-center space-x-2 bg-card/20 p-3 rounded-lg">
               <Switch
                 checked={isBeforeAfter}
                 onCheckedChange={setIsBeforeAfter}
@@ -312,7 +312,7 @@ const Portfolio = () => {
               {isBeforeAfter && (
                 <div className="space-y-2">
                   <Label className="text-foreground font-medium">Before Photo</Label>
-                  <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-white/10 hover:bg-white/20 transition-colors">
+                  <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-card/10 hover:bg-card/20 transition-colors">
                     {beforePhotoPreview ? (
                       <div className="relative">
                         <img src={beforePhotoPreview} alt="Before preview" className="w-full h-48 object-cover rounded-lg" />
@@ -347,7 +347,7 @@ const Portfolio = () => {
 
               <div className="space-y-2">
                 <Label className="text-foreground font-medium">{isBeforeAfter ? "After Photo" : "Photo"}</Label>
-                <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-white/10 hover:bg-white/20 transition-colors">
+                <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-card/10 hover:bg-card/20 transition-colors">
                   {newPhotoPreview ? (
                     <div className="relative">
                       <img src={newPhotoPreview} alt="Photo preview" className="w-full h-48 object-cover rounded-lg" />
@@ -388,7 +388,7 @@ const Portfolio = () => {
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 rows={3}
-                className="bg-white/20 border-2 border-foreground text-foreground placeholder:text-foreground/60"
+                className="bg-card/20 border-2 border-foreground text-foreground placeholder:text-foreground/60"
               />
             </div>
 
@@ -425,7 +425,7 @@ const Portfolio = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {photos.map((photo, index) => (
-                <Card key={photo.id} className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-white">
+                <Card key={photo.id} className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all bg-card">
                   <CardContent className="p-4">
                     <div className="relative">
                       {photo.is_before_after && photo.before_photo_url ? (

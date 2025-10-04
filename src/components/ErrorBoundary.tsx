@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <Card className="max-w-md w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-red-400">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-full bg-white border-2 border-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <div className="w-12 h-12 rounded-full bg-card border-2 border-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                   <AlertTriangle className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
