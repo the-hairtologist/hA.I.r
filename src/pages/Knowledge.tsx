@@ -231,14 +231,13 @@ const Knowledge = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Ask me to generate a custom hair color formula based on your requirements
                   </p>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-2">
                     <Button 
                       size="sm" 
                       variant="outline"
                       onClick={() => {
                         setAiInput("Create a balayage formula for level 6 hair going to level 9 blonde");
                       }}
-                      className="flex-1"
                     >
                       <Sparkles className="h-3 w-3 mr-1" />
                       Balayage Example
@@ -249,7 +248,6 @@ const Knowledge = () => {
                       onClick={() => {
                         setAiInput("I need a color correction formula for brassy level 7 hair");
                       }}
-                      className="flex-1"
                     >
                       <Sparkles className="h-3 w-3 mr-1" />
                       Color Correction
@@ -263,14 +261,13 @@ const Knowledge = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Get detailed step-by-step instructions for techniques and processes
                   </p>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-2">
                     <Button 
                       size="sm" 
                       variant="outline"
                       onClick={() => {
                         setAiInput("How do I apply toner after bleaching?");
                       }}
-                      className="flex-1"
                     >
                       <BookOpen className="h-3 w-3 mr-1" />
                       Toning Guide
@@ -281,7 +278,6 @@ const Knowledge = () => {
                       onClick={() => {
                         setAiInput("Show me how to do a root touch-up");
                       }}
-                      className="flex-1"
                     >
                       <BookOpen className="h-3 w-3 mr-1" />
                       Root Touch-Up
