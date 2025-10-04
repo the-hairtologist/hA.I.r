@@ -1396,6 +1396,30 @@ export type Database = {
           },
         ]
       }
+      user_sidebar_preferences: {
+        Row: {
+          created_at: string
+          id: string
+          sidebar_order: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          sidebar_order?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          sidebar_order?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       public_stylist_profiles: {
