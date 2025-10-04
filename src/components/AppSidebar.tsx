@@ -14,7 +14,6 @@ import {
   Search,
   LayoutDashboard,
   BookOpen,
-  ChevronDown,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -29,11 +28,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 interface AppSidebarProps {
   userRole?: string;
@@ -93,9 +87,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const businessItems = userRole === "stylist" ? stylistBusinessItems : [];
   const toolsItems = userRole === "stylist" ? stylistToolsItems : clientToolsItems;
 
-  // Check if scheduling group has active items
-  const hasActiveScheduling = schedulingItems.some(item => location.pathname === item.url);
-
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarContent>
@@ -122,35 +113,28 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Scheduling Section (Stylist Only) - Collapsible */}
+        {/* Scheduling Section (Stylist Only) - Always Visible */}
         {userRole === "stylist" && schedulingItems.length > 0 && (
           <SidebarGroup>
-            <Collapsible defaultOpen={hasActiveScheduling} className="group/collapsible">
-              <SidebarGroupLabel asChild>
-                <CollapsibleTrigger className="flex w-full items-center justify-between hover:bg-muted/50 px-2 py-1.5 rounded-md transition-colors">
-                  <span className={collapsed ? "sr-only" : ""}>Scheduling</span>
-                  {!collapsed && <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />}
-                </CollapsibleTrigger>
-              </SidebarGroupLabel>
-              <CollapsibleContent>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {schedulingItems.map((item) => (
-                      <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild tooltip={item.title}>
-                          <NavLink to={item.url} className={getNavClassName}>
-                            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-                              <item.icon className="h-4 w-4 text-white" />
-                            </div>
-                            {!collapsed && <span className="ml-2">{item.title}</span>}
-                          </NavLink>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </CollapsibleContent>
-            </Collapsible>
+            <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+              Scheduling
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {schedulingItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild tooltip={item.title}>
+                      <NavLink to={item.url} className={getNavClassName}>
+                        <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+                          <item.icon className="h-4 w-4 text-white" />
+                        </div>
+                        {!collapsed && <span className="ml-2">{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
           </SidebarGroup>
         )}
 
