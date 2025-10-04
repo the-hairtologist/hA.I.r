@@ -1,0 +1,214 @@
+{
+  "app": {
+    "name": "hA.I.r",
+    "tagline": "Professional Hair Salon Management",
+    "version": "1.0.0",
+    "build": 1
+  },
+  "ios": {
+    "appStore": {
+      "name": "hA.I.r - Hair Salon Management",
+      "subtitle": "Connect stylists with clients seamlessly",
+      "promotionalText": "The all-in-one platform for hair professionals and their clients. Manage appointments, track formulas, and grow your business.",
+      "description": "hA.I.r is the premier hair salon management platform designed for modern stylists and their clients.\n\n🎨 FOR STYLISTS:\n• Manage client appointments with intelligent scheduling\n• Save and organize custom hair formulas\n• Build a stunning digital portfolio\n• Track payments and financial insights\n• Communicate directly with clients\n• AI-powered hair consultation assistant\n• Subscription management made easy\n\n✨ FOR CLIENTS:\n• Discover and book top stylists in your area\n• View stylist portfolios and reviews\n• Keep track of your hair history and formulas\n• Receive appointment reminders via SMS\n• Direct messaging with your stylist\n• Save favorite stylists for quick rebooking\n\n💼 BUSINESS FEATURES:\n• Comprehensive client management\n• Automated appointment confirmations\n• Secure payment processing via Stripe\n• Calendar integration (Google Calendar)\n• Access code system for controlled onboarding\n• Professional booking workflow\n\n🔒 PRIVACY & SECURITY:\n• GDPR and CCPA compliant\n• Encrypted data storage\n• Secure authentication\n• Full data export and deletion options\n\n🤖 AI-POWERED INSIGHTS:\n• Smart formula suggestions\n• Personalized stylist recommendations\n• Hair care advice chatbot\n• Intelligent search and filtering\n\nWhether you're a seasoned stylist building your clientele or a client looking for the perfect hair professional, hA.I.r streamlines the entire hair care experience.\n\nJoin thousands of stylists and clients already using hA.I.r to transform their hair care journey.",
+      "keywords": "hair, salon, stylist, hairstylist, appointment, booking, beauty, haircare, formula, color, balayage, highlights, hair color, client management, business, schedule, beauty business, hair professional, hair appointment, salon booking",
+      "supportURL": "https://hair.app/support",
+      "marketingURL": "https://hair.app",
+      "privacyPolicyURL": "https://hair.app/privacy",
+      "category": {
+        "primary": "Lifestyle",
+        "secondary": "Business"
+      },
+      "contentRating": "4+",
+      "pricing": {
+        "free": true,
+        "inAppPurchases": true
+      },
+      "screenshots": {
+        "required": {
+          "iPhone_6.7": "1290x2796 pixels",
+          "iPhone_6.5": "1242x2688 pixels",
+          "iPhone_5.5": "1242x2208 pixels",
+          "iPad_12.9_3rd": "2048x2732 pixels",
+          "iPad_12.9_2nd": "2048x2732 pixels"
+        },
+        "notes": [
+          "Minimum 3 screenshots, maximum 10 per device",
+          "All screenshots must be in portrait orientation",
+          "No watermarks or branding overlays",
+          "Show actual app functionality"
+        ]
+      },
+      "appIcon": {
+        "size": "1024x1024",
+        "format": "PNG or JPEG",
+        "notes": "No transparency, no rounded corners (applied automatically)"
+      },
+      "appReviewInfo": {
+        "contactEmail": "support@hair.app",
+        "contactPhone": "+1 (555) 123-4567",
+        "notes": "Test account credentials will be provided during submission"
+      }
+    }
+  },
+  "android": {
+    "playStore": {
+      "name": "hA.I.r - Hair Salon Management",
+      "shortDescription": "Professional hair salon management platform connecting stylists and clients",
+      "fullDescription": "Transform Your Hair Business with hA.I.r\n\nhA.I.r is the complete hair salon management solution designed for modern stylists and their clients.\n\n🎨 FOR HAIR PROFESSIONALS:\n✓ Smart Appointment Scheduling - Manage your calendar with ease\n✓ Custom Formula Library - Save and organize client color formulas\n✓ Digital Portfolio - Showcase your best work\n✓ Financial Tracking - Monitor payments and earnings\n✓ Client Communication - Direct messaging built-in\n✓ AI Hair Assistant - Get intelligent consultation support\n✓ Subscription Plans - Grow your business with premium features\n\n✨ FOR CLIENTS:\n✓ Discover Local Stylists - Find top-rated professionals near you\n✓ View Portfolios & Reviews - Make informed decisions\n✓ Hair History Tracking - Keep all your formulas in one place\n✓ SMS Reminders - Never miss an appointment\n✓ Easy Booking - Schedule appointments in seconds\n✓ Secure Messaging - Stay connected with your stylist\n\n💼 BUSINESS TOOLS:\n→ Client Management System\n→ Automated Appointment Notifications\n→ Stripe Payment Integration\n→ Google Calendar Sync\n→ Professional Workflow Management\n→ Access Control for Beta Launch\n\n🔒 PRIVACY FIRST:\n• GDPR & CCPA Compliant\n• Bank-Level Encryption\n• Secure Authentication\n• Complete Data Control\n• Export Your Data Anytime\n\n🤖 AI-POWERED FEATURES:\n• Smart Formula Recommendations\n• Personalized Stylist Matching\n• Hair Care Advice Bot\n• Intelligent Search\n\nWhy Choose hA.I.r?\n→ Built by hair professionals, for hair professionals\n→ Intuitive interface requiring zero training\n→ Mobile-first design for on-the-go management\n→ Regular updates with new features\n→ Dedicated customer support\n→ Free for clients, affordable for stylists\n\nJoin the Revolution\nThousands of stylists and clients are already using hA.I.r to streamline their hair care experience. Whether you're managing a busy salon or looking for your perfect stylist, hA.I.r has everything you need.\n\nDownload now and experience the future of hair care management!",
+      "category": {
+        "primary": "Lifestyle",
+        "tags": ["hair", "salon", "beauty", "appointment", "booking", "business", "professional"]
+      },
+      "contentRating": "Everyone",
+      "graphics": {
+        "featureGraphic": {
+          "size": "1024x500",
+          "format": "PNG or JPEG",
+          "required": true
+        },
+        "icon": {
+          "size": "512x512",
+          "format": "PNG",
+          "required": true
+        },
+        "screenshots": {
+          "phone": {
+            "min": 2,
+            "max": 8,
+            "minSize": "320px",
+            "maxSize": "3840px",
+            "aspectRatio": "16:9 to 9:16"
+          },
+          "7inchTablet": {
+            "min": 1,
+            "max": 8,
+            "optional": true
+          },
+          "10inchTablet": {
+            "min": 1,
+            "max": 8,
+            "optional": true
+          }
+        },
+        "promoVideo": {
+          "youtubeURL": "https://youtube.com/...",
+          "optional": true,
+          "maxLength": "30-120 seconds recommended"
+        }
+      },
+      "storeListingContact": {
+        "email": "support@hair.app",
+        "website": "https://hair.app",
+        "phone": "+1 (555) 123-4567",
+        "privacyPolicy": "https://hair.app/privacy"
+      }
+    }
+  },
+  "marketing": {
+    "valuePropositions": [
+      "Save 10+ hours per week on scheduling and client management",
+      "Never lose a formula again with digital tracking",
+      "Build your portfolio and attract new clients",
+      "Get paid faster with integrated payment processing",
+      "AI-powered insights for better client service"
+    ],
+    "targetAudience": {
+      "primary": "Independent hairstylists and colorists",
+      "secondary": "Salon clients seeking organization",
+      "tertiary": "Salon owners managing multiple stylists"
+    },
+    "competitors": [
+      "StyleSeat",
+      "Vagaro",
+      "Square Appointments",
+      "Booksy",
+      "Schedulicity"
+    ],
+    "differentiators": [
+      "Formula tracking and organization",
+      "AI-powered hair consultation",
+      "Direct stylist-client messaging",
+      "Portfolio showcase features",
+      "Free for clients, affordable for stylists",
+      "Modern, mobile-first design"
+    ],
+    "launchStrategy": {
+      "phase1": "Soft launch with access codes (100 users)",
+      "phase2": "Beta expansion (500 users)",
+      "phase3": "Public launch with app store featuring",
+      "phase4": "Marketing campaigns and influencer partnerships"
+    }
+  },
+  "seo": {
+    "primaryKeywords": [
+      "hair salon app",
+      "stylist booking app",
+      "hair appointment scheduler",
+      "hair formula tracker",
+      "salon management software"
+    ],
+    "secondaryKeywords": [
+      "hairstylist app",
+      "hair color app",
+      "salon booking system",
+      "beauty appointment app",
+      "hair business management"
+    ],
+    "metaTags": {
+      "title": "hA.I.r - Professional Hair Salon Management App",
+      "description": "The complete hair salon management platform for stylists and clients. Manage appointments, track formulas, showcase portfolios, and grow your business.",
+      "ogImage": "https://hair.app/og-image.png",
+      "twitterCard": "summary_large_image"
+    }
+  },
+  "localization": {
+    "supportedLanguages": [
+      "English (US)"
+    ],
+    "plannedLanguages": [
+      "Spanish",
+      "French",
+      "German",
+      "Portuguese"
+    ]
+  },
+  "accessibility": {
+    "features": [
+      "VoiceOver / TalkBack support",
+      "Dynamic text sizing",
+      "High contrast mode",
+      "Keyboard navigation",
+      "Screen reader optimized",
+      "WCAG 2.2 Level AA compliant"
+    ]
+  },
+  "systemRequirements": {
+    "ios": {
+      "minimumVersion": "13.0",
+      "recommendedVersion": "15.0+",
+      "devices": "iPhone, iPad"
+    },
+    "android": {
+      "minimumVersion": "6.0 (API 23)",
+      "recommendedVersion": "10.0+ (API 29+)",
+      "devices": "Phone, Tablet"
+    }
+  },
+  "changelog": {
+    "1.0.0": {
+      "releaseDate": "TBD",
+      "changes": [
+        "Initial release",
+        "Appointment scheduling system",
+        "Formula tracking and management",
+        "Portfolio showcase",
+        "Client-stylist messaging",
+        "Payment integration",
+        "AI hair consultation",
+        "Access code system",
+        "Google Calendar integration"
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "[TEAM_ID].app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2",
+        "paths": [
+          "/dashboard",
+          "/appointments",
+          "/appointments/*",
+          "/stylists",
+          "/stylist/*",
+          "/book-appointment",
+          "/messages",
+          "/formulas",
+          "/settings",
+          "/portfolio/*",
+          "/clients/*"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "[TEAM_ID].app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2"
+    ]
+  }
+}
