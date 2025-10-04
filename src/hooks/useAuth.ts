@@ -48,7 +48,10 @@ export function useAuth(): UseAuthReturn {
         });
 
         // Handle specific auth events
-        if (event === 'SIGNED_OUT') {
+        if (event === 'SIGNED_IN' && session) {
+          // Redirect to dashboard after successful sign in
+          navigate('/dashboard');
+        } else if (event === 'SIGNED_OUT') {
           navigate('/auth');
         }
       }
