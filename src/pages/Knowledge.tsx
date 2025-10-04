@@ -203,171 +203,151 @@ const Knowledge = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <PageHeader
         title="AI Assistant"
         icon={<Sparkles className="h-6 w-6" />}
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Left Sidebar - Mode Selection */}
-          <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Choose Assistant Mode</CardTitle>
-                <CardDescription>Select what you need help with</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Button
-                  variant={aiMode === "formula" ? "default" : "outline"}
-                  className="w-full justify-start h-auto py-3 px-4"
-                  onClick={() => setAiMode("formula")}
-                >
-                  <div className="text-left">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Sparkles className="h-4 w-4" />
-                      <span className="font-semibold">Formula Generator</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Get formulas and color approaches
-                    </p>
-                  </div>
-                </Button>
-                <Button
-                  variant={aiMode === "stepbystep" ? "default" : "outline"}
-                  className="w-full justify-start h-auto py-3 px-4"
-                  onClick={() => setAiMode("stepbystep")}
-                >
-                  <div className="text-left">
-                    <div className="flex items-center gap-2 mb-1">
-                      <BookOpen className="h-4 w-4" />
-                      <span className="font-semibold">Color Correction Guide</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Complex fixes & detailed steps
-                    </p>
-                  </div>
-                </Button>
-              </CardContent>
-            </Card>
+      <main className="container mx-auto px-4 py-6 max-w-6xl">
+        {/* Mode Selection Tabs */}
+        <div className="mb-6">
+          <div className="flex gap-3 p-1.5 bg-muted/50 rounded-xl w-fit mx-auto backdrop-blur-sm">
+            <button
+              onClick={() => setAiMode("formula")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                aiMode === "formula"
+                  ? "bg-background shadow-md text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Sparkles className="h-4 w-4" />
+              Formula Generator
+            </button>
+            <button
+              onClick={() => setAiMode("stepbystep")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                aiMode === "stepbystep"
+                  ? "bg-background shadow-md text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <BookOpen className="h-4 w-4" />
+              Color Correction
+            </button>
+          </div>
+        </div>
 
+        <div className="grid lg:grid-cols-[280px_1fr] gap-6">
+          {/* Left Sidebar - Quick Actions & Features */}
+          <div className="space-y-4">
             {/* Quick Examples */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Quick Examples</CardTitle>
+            <Card className="border-primary/20 shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  Quick Start
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-1.5">
                 {aiMode === "formula" ? (
                   <>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start text-xs h-auto py-2"
+                    <button
                       onClick={() => setAiInput("What's the best approach for lifting level 5 hair to a warm blonde?")}
+                      className="w-full text-left px-3 py-2 rounded-md text-xs hover:bg-primary/10 transition-colors"
                     >
-                      Blonde Lifting Approach
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start text-xs h-auto py-2"
+                      💫 Blonde Lifting
+                    </button>
+                    <button
                       onClick={() => setAiInput("I need a balayage formula for natural dimension on level 6 hair")}
+                      className="w-full text-left px-3 py-2 rounded-md text-xs hover:bg-primary/10 transition-colors"
                     >
-                      Balayage Formula
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start text-xs h-auto py-2"
+                      ✨ Balayage Formula
+                    </button>
+                    <button
                       onClick={() => setAiInput("Recommend a toner formula for level 9 blonde")}
+                      className="w-full text-left px-3 py-2 rounded-md text-xs hover:bg-primary/10 transition-colors"
                     >
-                      Toner Recommendation
-                    </Button>
+                      🎨 Toner Guide
+                    </button>
                   </>
                 ) : (
                   <>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start text-xs h-auto py-2"
+                    <button
                       onClick={() => setAiInput("How do I fix brassy orange hair from a failed lift?")}
+                      className="w-full text-left px-3 py-2 rounded-md text-xs hover:bg-primary/10 transition-colors"
                     >
-                      Fix Brassy Hair
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start text-xs h-auto py-2"
+                      🔧 Fix Brassy Hair
+                    </button>
+                    <button
                       onClick={() => setAiInput("Step-by-step to remove green tones from blonde hair")}
+                      className="w-full text-left px-3 py-2 rounded-md text-xs hover:bg-primary/10 transition-colors"
                     >
-                      Remove Green Tones
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="w-full justify-start text-xs h-auto py-2"
+                      🌿 Remove Green Tones
+                    </button>
+                    <button
                       onClick={() => setAiInput("How to correct uneven color and banding")}
+                      className="w-full text-left px-3 py-2 rounded-md text-xs hover:bg-primary/10 transition-colors"
                     >
-                      Fix Banding Issues
-                    </Button>
+                      📏 Fix Banding
+                    </button>
                   </>
                 )}
               </CardContent>
             </Card>
 
-            {/* Formula History (only for formula mode) */}
+            {/* Formula History */}
             {aiMode === "formula" && savedFormulas.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <History className="h-4 w-4" />
-                    Recent Formulas
+              <Card className="border-primary/20 shadow-sm">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <History className="h-4 w-4 text-primary" />
+                    Saved Formulas
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-1.5">
                   {savedFormulas.map((formula) => (
-                    <div key={formula.id} className="flex items-center justify-between p-2 rounded-md bg-muted/50">
-                      <span className="text-xs truncate flex-1">{formula.formula_name}</span>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-6 w-6 p-0"
+                    <div key={formula.id} className="group flex items-center justify-between p-2 rounded-md hover:bg-muted/50 transition-colors">
+                      <span className="text-xs truncate flex-1 font-medium">{formula.formula_name}</span>
+                      <button
                         onClick={() => handleDeleteFormula(formula.id)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-destructive/10 rounded"
                       >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
+                        <Trash2 className="h-3 w-3 text-destructive" />
+                      </button>
                     </div>
                   ))}
                 </CardContent>
               </Card>
             )}
 
-            {/* Step Progress (only for step-by-step mode) */}
+            {/* Step Progress */}
             {aiMode === "stepbystep" && correctionSteps.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <CheckSquare className="h-4 w-4" />
-                    Progress Tracker
+              <Card className="border-primary/20 shadow-sm">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <CheckSquare className="h-4 w-4 text-primary" />
+                    Progress
                   </CardTitle>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {correctionSteps.filter(s => s.completed).length} of {correctionSteps.length} completed
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <div className="text-xs text-muted-foreground mb-2">
-                    {correctionSteps.filter(s => s.completed).length} of {correctionSteps.length} steps
-                  </div>
                   {correctionSteps.map((step, idx) => (
-                    <div key={idx} className="flex items-start gap-2">
+                    <label key={idx} className="flex items-start gap-2.5 cursor-pointer group">
                       <Checkbox
                         checked={step.completed}
                         onCheckedChange={() => toggleStepCompletion(idx)}
-                        className="mt-1"
+                        className="mt-0.5"
                       />
-                      <span className={`text-xs ${step.completed ? "line-through text-muted-foreground" : ""}`}>
+                      <span className={`text-xs leading-relaxed transition-colors ${
+                        step.completed ? "line-through text-muted-foreground" : "group-hover:text-primary"
+                      }`}>
                         {step.step}
                       </span>
-                    </div>
+                    </label>
                   ))}
                 </CardContent>
               </Card>
@@ -376,67 +356,72 @@ const Knowledge = () => {
           </div>
 
           {/* Main Chat Area */}
-          <div className="lg:col-span-2">
-            <Card className="h-[calc(100vh-220px)] flex flex-col">
-              <CardHeader className="border-b">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      {aiMode === "formula" ? (
-                        <>
-                          <Sparkles className="h-5 w-5 text-primary" />
-                          Formula Generator
-                        </>
-                      ) : (
-                        <>
-                          <BookOpen className="h-5 w-5 text-primary" />
-                          Color Correction Guide
-                        </>
-                      )}
-                    </CardTitle>
-                    <CardDescription className="mt-1">
-                      {aiMode === "formula"
-                        ? "Get formulas and guidance for color approaches"
-                        : "Detailed step-by-step instructions for complex color corrections"}
-                    </CardDescription>
-                  </div>
-                </div>
+          <div>
+            <Card className="h-[calc(100vh-200px)] flex flex-col shadow-lg border-primary/20">
+              <CardHeader className="border-b bg-gradient-to-r from-primary/5 to-accent/5 py-4">
+                <CardTitle className="text-base flex items-center gap-2">
+                  {aiMode === "formula" ? (
+                    <>
+                      <div className="p-1.5 rounded-lg bg-primary/10">
+                        <Sparkles className="h-4 w-4 text-primary" />
+                      </div>
+                      <span>Formula Generator</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="p-1.5 rounded-lg bg-primary/10">
+                        <BookOpen className="h-4 w-4 text-primary" />
+                      </div>
+                      <span>Color Correction Guide</span>
+                    </>
+                  )}
+                </CardTitle>
+                <CardDescription className="text-xs mt-1.5">
+                  {aiMode === "formula"
+                    ? "AI-powered formulas and color approaches tailored to your needs"
+                    : "Step-by-step guidance for complex color corrections"}
+                </CardDescription>
               </CardHeader>
 
               {/* Chat Messages */}
-              <ScrollArea className="flex-1 p-6">
+              <ScrollArea className="flex-1 p-4">
                 {aiMessages.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                      {aiMode === "formula" ? (
-                        <Sparkles className="h-8 w-8 text-primary" />
-                      ) : (
-                        <BookOpen className="h-8 w-8 text-primary" />
-                      )}
+                  <div className="h-full flex flex-col items-center justify-center text-center space-y-4 px-4">
+                    <div className="relative">
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center backdrop-blur-sm">
+                        {aiMode === "formula" ? (
+                          <Sparkles className="h-10 w-10 text-primary" />
+                        ) : (
+                          <BookOpen className="h-10 w-10 text-primary" />
+                        )}
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center animate-pulse">
+                        <span className="text-xs">✨</span>
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <p className="text-lg font-medium">
-                        {aiMode === "formula" ? "Ready to create formulas" : "Ready to solve problems"}
+                    <div className="space-y-2 max-w-md">
+                      <p className="text-base font-semibold">
+                        {aiMode === "formula" ? "Let's Create Your Perfect Formula" : "I'm Here to Help Fix It"}
                       </p>
-                      <p className="text-sm text-muted-foreground max-w-md">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         {aiMode === "formula"
-                          ? "Tell me what color result you're aiming for and I'll suggest formulas and approaches"
-                          : "Describe the color problem you're facing and I'll guide you through the correction process step by step"}
+                          ? "Share your vision and I'll craft precise formulas with professional guidance"
+                          : "Describe what went wrong and I'll walk you through fixing it, step by step"}
                       </p>
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     {aiMessages.map((msg, idx) => (
                       <div
                         key={idx}
-                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
                       >
                         <div
-                          className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                          className={`max-w-[80%] rounded-2xl px-4 py-3 shadow-sm ${
                             msg.role === "user"
                               ? "bg-primary text-primary-foreground"
-                              : "bg-muted"
+                              : "bg-muted/80 backdrop-blur-sm"
                           }`}
                         >
                           <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
@@ -444,14 +429,14 @@ const Knowledge = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="mt-3"
+                              className="mt-3 hover:bg-primary/10"
                               onClick={() => {
                                 setFormulaToSave(msg.content);
                                 setShowSaveDialog(true);
                               }}
                             >
                               <Save className="h-3 w-3 mr-2" />
-                              Save Formula
+                              Save This Formula
                             </Button>
                           )}
                         </div>
@@ -459,10 +444,10 @@ const Knowledge = () => {
                     ))}
                     
                     {aiLoading && (
-                      <div className="flex justify-start">
-                        <div className="bg-muted rounded-2xl px-4 py-3 flex items-center gap-2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          <span className="text-sm text-muted-foreground">Thinking...</span>
+                      <div className="flex justify-start animate-fade-in">
+                        <div className="bg-muted/80 backdrop-blur-sm rounded-2xl px-4 py-3 flex items-center gap-2 shadow-sm">
+                          <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                          <span className="text-sm text-muted-foreground">Crafting your response...</span>
                         </div>
                       </div>
                     )}
@@ -472,20 +457,25 @@ const Knowledge = () => {
               </ScrollArea>
 
               {/* Input Form */}
-              <form onSubmit={handleAiSubmit} className="p-4 border-t bg-muted/30">
-                <div className="flex gap-3">
+              <form onSubmit={handleAiSubmit} className="p-4 border-t bg-gradient-to-r from-muted/30 to-muted/50">
+                <div className="flex gap-2">
                   <Input
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
                     placeholder={
                       aiMode === "formula"
-                        ? "Describe the formula you need..."
-                        : "Ask your question..."
+                        ? "Describe what you want to create..."
+                        : "What color issue are you facing?"
                     }
                     disabled={aiLoading}
-                    className="flex-1"
+                    className="flex-1 border-primary/20 focus-visible:ring-primary/30"
                   />
-                  <Button type="submit" disabled={aiLoading || !aiInput.trim()} size="icon" className="shrink-0">
+                  <Button 
+                    type="submit" 
+                    disabled={aiLoading || !aiInput.trim()} 
+                    size="icon" 
+                    className="shrink-0 shadow-sm hover:shadow-md transition-shadow"
+                  >
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
