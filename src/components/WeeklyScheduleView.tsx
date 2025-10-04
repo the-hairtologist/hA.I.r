@@ -18,17 +18,21 @@ export const WeeklyScheduleView = ({
   onAppointmentClick 
 }: WeeklyScheduleViewProps) => {
   const [currentWeek, setCurrentWeek] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 0 });
   const allWeekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   
   // Filter to only show working days
-  const weekDays = stylistSchedule 
+  const workingDays = stylistSchedule 
     ? allWeekDays.filter(day => {
         const dayName = format(day, 'EEEE').toLowerCase();
         return stylistSchedule[dayName]?.enabled;
       })
     : allWeekDays;
+
+  // Show only selected day or all working days
+  const weekDays = selectedDay ? [selectedDay] : workingDays;
 
   // Find earliest start and latest end time from schedule
   const getScheduleBounds = () => {
@@ -115,7 +119,21 @@ export const WeeklyScheduleView = ({
     <Card className="border-0 shadow-none">
       <CardHeader className="border-b-[2px] border-border px-3 py-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="font-display text-base">Your Weekly Schedule</CardTitle>
+          <div className="flex items-center gap-2">
+            <CardTitle className="font-display text-base">
+              {selectedDay ? format(selectedDay, 'EEEE, MMM d') : 'Your Weekly Schedule'}
+            </CardTitle>
+            {selectedDay && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setSelectedDay(null)}
+                className="h-6 text-xs"
+              >
+                View Week
+              </Button>
+            )}
+          </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={previousWeek} className="border-[2px] h-7 w-7 p-0">
               <ChevronLeft className="h-3 w-3" />
@@ -144,9 +162,15 @@ export const WeeklyScheduleView = ({
                 <div
                   key={day.toISOString()}
                   className={cn(
-                    "p-2 border-r-[2px] border-border text-center",
-                    isSameDay(day, new Date()) && "bg-primary/10"
+                    "p-2 border-r-[2px] border-border text-center cursor-pointer hover:bg-primary/5 transition-colors",
+                    isSameDay(day, new Date()) && "bg-primary/10",
+                    selectedDay && isSameDay(day, selectedDay) && "bg-primary/20"
                   )}
+                  onClick={() => {
+                    if (!selectedDay || !isSameDay(selectedDay, day)) {
+                      setSelectedDay(day);
+                    }
+                  }}
                 >
                   <div className="font-semibold text-xs">{format(day, 'EEE')}</div>
                   <div className="text-[10px] text-muted-foreground">{format(day, 'M/d')}</div>
