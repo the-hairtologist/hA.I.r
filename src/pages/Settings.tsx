@@ -39,34 +39,26 @@ const Settings = () => {
   const [selectedGender, setSelectedGender] = useState("");
 
   useEffect(() => {
-    loadUser();
-  }, []);
+    // Wait for auth and roles to be fully loaded
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
+      const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
+      setUserRole(primaryRole);
+      loadUser(user, primaryRole);
+    } else if (!authLoading && !user) {
+      navigate("/auth");
+    }
+  }, [authLoading, roleLoading, user, roles]);
 
-  const loadUser = async () => {
+  const loadUser = async (sessionUser: any, primaryRole: string) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-
-      setUserEmail(session.user.email || "");
-
-      // Get user role (may have multiple, use first)
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      const role = roleData?.[0]?.role || "client";
-      setUserRole(role);
+      setUserEmail(sessionUser.email || "");
 
       // Get profile data
       const { data: profile } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", session.user.id)
-        .single();
+        .eq("id", sessionUser.id)
+        .maybeSingle();
 
       if (profile) {
         setFullName(profile.full_name || "");
@@ -75,11 +67,11 @@ const Settings = () => {
       }
 
       // Get stylist-specific data
-      if (role === "stylist") {
+      if (primaryRole === "stylist") {
         const { data: stylistProfile } = await supabase
           .from("stylist_profiles")
           .select("*")
-          .eq("user_id", session.user.id)
+          .eq("user_id", sessionUser.id)
           .maybeSingle();
 
         if (stylistProfile) {
@@ -449,7 +441,13 @@ const Settings = () => {
           <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-card border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] rounded-lg p-4 flex items-center gap-4 z-50">
             <p className="text-sm font-medium">You have unsaved changes</p>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => { loadUser(); setHasChanges(false); }}>
+              <Button variant="outline" size="sm" onClick={() => { 
+                if (user && roles.length > 0) {
+                  const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
+                  loadUser(user, primaryRole);
+                }
+                setHasChanges(false); 
+              }}>
                 Cancel
               </Button>
               <Button size="sm" onClick={handleSaveProfile}>
