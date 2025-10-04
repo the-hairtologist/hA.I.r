@@ -44,6 +44,7 @@ const Appointments = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
   const [rebookAppointment, setRebookAppointment] = useState<any>(null);
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
@@ -118,6 +119,12 @@ const Appointments = () => {
   };
 
   const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
+    // Prevent concurrent updates
+    if (updatingStatus) {
+      toast.error("Please wait for the current update to complete");
+      return;
+    }
+    
     const appointment = appointments.find(a => a.id === appointmentId);
     const clientName = appointment?.client?.user?.full_name || "this client";
     const statusAction = newStatus === "cancelled" ? "cancel" : newStatus;
@@ -127,6 +134,7 @@ const Appointments = () => {
       title: `${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} Appointment`,
       description: `${statusAction === "cancel" ? "Are you sure you want to cancel" : `Mark as ${statusAction}`} this appointment with ${clientName}?\n\n${statusAction === "cancel" ? "The client will be notified." : ""}`,
       onConfirm: async () => {
+        setUpdatingStatus(appointmentId);
         try {
           const { error } = await supabase
             .from("appointments")
@@ -155,6 +163,8 @@ const Appointments = () => {
         } catch (error: any) {
           console.error("Error updating appointment:", error);
           toast.error("Error updating appointment");
+        } finally {
+          setUpdatingStatus(null);
         }
       },
     });

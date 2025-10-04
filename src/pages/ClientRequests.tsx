@@ -41,6 +41,7 @@ const ClientRequests = () => {
     location: "",
     preferred_date: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     checkUserAndLoadPosts();
@@ -101,18 +102,41 @@ const ClientRequests = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent double submission
+    if (isSubmitting) {
+      return;
+    }
+    
     if (!clientProfileId) return;
 
+    // Basic validation
+    if (!formData.title.trim() || !formData.description.trim() || !formData.service_type.trim()) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (formData.title.length > 100) {
+      toast.error("Title must be less than 100 characters");
+      return;
+    }
+
+    if (formData.description.length > 1000) {
+      toast.error("Description must be less than 1000 characters");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       if (editingPost) {
         const { error } = await supabase
           .from("client_hair_posts")
           .update({
-            title: formData.title,
-            description: formData.description,
-            service_type: formData.service_type,
-            budget_range: formData.budget_range || null,
-            location: formData.location || null,
+            title: formData.title.trim(),
+            description: formData.description.trim(),
+            service_type: formData.service_type.trim(),
+            budget_range: formData.budget_range.trim() || null,
+            location: formData.location.trim() || null,
             preferred_date: formData.preferred_date || null,
           })
           .eq("id", editingPost.id);
@@ -124,11 +148,11 @@ const ClientRequests = () => {
           .from("client_hair_posts")
           .insert({
             client_id: clientProfileId,
-            title: formData.title,
-            description: formData.description,
-            service_type: formData.service_type,
-            budget_range: formData.budget_range || null,
-            location: formData.location || null,
+            title: formData.title.trim(),
+            description: formData.description.trim(),
+            service_type: formData.service_type.trim(),
+            budget_range: formData.budget_range.trim() || null,
+            location: formData.location.trim() || null,
             preferred_date: formData.preferred_date || null,
           });
 
@@ -150,6 +174,8 @@ const ClientRequests = () => {
     } catch (error: any) {
       console.error("Error:", error);
       toast.error("Failed to save post");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

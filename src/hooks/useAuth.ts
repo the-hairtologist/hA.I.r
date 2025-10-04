@@ -37,7 +37,7 @@ export function useAuth(): UseAuthReturn {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         log.debug('Auth state changed', 'useAuth', { event, userId: session?.user?.id });
         
         setState({
@@ -53,6 +53,8 @@ export function useAuth(): UseAuthReturn {
           navigate('/dashboard');
         } else if (event === 'SIGNED_OUT') {
           navigate('/auth');
+        } else if (event === 'TOKEN_REFRESHED') {
+          log.info('Token refreshed successfully', 'useAuth');
         }
       }
     );
@@ -67,7 +69,29 @@ export function useAuth(): UseAuthReturn {
       });
     });
 
-    return () => subscription.unsubscribe();
+    // Set up automatic token refresh check
+    const refreshInterval = setInterval(async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        // Check if token is about to expire (within 5 minutes)
+        const expiresAt = session.expires_at ? session.expires_at * 1000 : 0;
+        const now = Date.now();
+        const fiveMinutes = 5 * 60 * 1000;
+        
+        if (expiresAt - now < fiveMinutes) {
+          log.info('Token expiring soon, refreshing...', 'useAuth');
+          const { error } = await supabase.auth.refreshSession();
+          if (error) {
+            log.error('Token refresh failed', 'useAuth', { error });
+          }
+        }
+      }
+    }, 60000); // Check every minute
+
+    return () => {
+      subscription.unsubscribe();
+      clearInterval(refreshInterval);
+    };
   }, [navigate]);
 
   const signIn = useCallback(async (email: string, password: string) => {
