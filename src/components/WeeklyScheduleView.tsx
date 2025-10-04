@@ -81,8 +81,8 @@ export const WeeklyScheduleView = ({
   };
 
   const calculateAppointmentHeight = (durationMinutes: number) => {
-    // Each 30-minute slot is 40px
-    return (durationMinutes / 30) * 40;
+    // Each 30-minute slot is 35px
+    return (durationMinutes / 30) * 35;
   };
 
   const isWorkingHours = (day: Date, hour: number, minute: number) => {
@@ -112,22 +112,22 @@ export const WeeklyScheduleView = ({
   };
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-      <CardHeader className="border-b-[2px] border-border">
+    <Card className="border-0 shadow-none">
+      <CardHeader className="border-b-[2px] border-border px-3 py-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="font-display">Weekly Schedule</CardTitle>
+          <CardTitle className="font-display text-base">Your Weekly Schedule</CardTitle>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={previousWeek} className="border-[2px]">
-              <ChevronLeft className="h-4 w-4" />
+            <Button variant="outline" size="sm" onClick={previousWeek} className="border-[2px] h-7 w-7 p-0">
+              <ChevronLeft className="h-3 w-3" />
             </Button>
-            <Button variant="outline" size="sm" onClick={nextWeek} className="border-[2px]">
-              <ChevronRight className="h-4 w-4" />
+            <Button variant="outline" size="sm" onClick={nextWeek} className="border-[2px] h-7 w-7 p-0">
+              <ChevronRight className="h-3 w-3" />
             </Button>
           </div>
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-y-auto max-h-[70vh]">
+        <div className="overflow-y-auto max-h-[50vh]">
           <div className="w-full">
             {/* Header with days */}
             <div 
@@ -148,8 +148,8 @@ export const WeeklyScheduleView = ({
                     isSameDay(day, new Date()) && "bg-primary/10"
                   )}
                 >
-                  <div className="font-semibold text-sm">{format(day, 'EEE')}</div>
-                  <div className="text-xs text-muted-foreground">{format(day, 'M/d')}</div>
+                  <div className="font-semibold text-xs">{format(day, 'EEE')}</div>
+                  <div className="text-[10px] text-muted-foreground">{format(day, 'M/d')}</div>
                 </div>
               ))}
             </div>
@@ -166,7 +166,7 @@ export const WeeklyScheduleView = ({
                   }}
                 >
                   {/* Time label */}
-                  <div className="p-1.5 border-r-[2px] border-border text-[10px] text-muted-foreground font-medium flex items-center">
+                  <div className="p-1 border-r-[2px] border-border text-[9px] text-muted-foreground font-medium flex items-center">
                     {slot.minute === 0 && <span className="font-semibold">{slot.label}</span>}
                   </div>
 
@@ -179,21 +179,21 @@ export const WeeklyScheduleView = ({
                       <div
                         key={`${day.toISOString()}-${slotIndex}`}
                         className={cn(
-                          "relative border-r border-border/30 h-[40px]",
+                          "relative border-r border-border/30 h-[35px]",
                           !isWorking && "bg-muted/20",
                           slot.minute === 0 && "border-t border-border"
                         )}
                       >
                         {!isWorking && slot.minute === 0 && (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-[10px] text-muted-foreground/60 font-medium">OFF</span>
+                            <span className="text-[9px] text-muted-foreground/60 font-medium">OFF</span>
                           </div>
                         )}
                         
                         {dayAppointments.map((apt) => (
                           <div
                             key={apt.id}
-                            className="absolute inset-x-0.5 top-0.5 rounded-md p-1.5 cursor-pointer hover:opacity-90 transition-all hover:-translate-y-0.5 hover:shadow-md border border-white/20 group"
+                            className="absolute inset-x-0.5 top-0.5 rounded-md p-1 cursor-pointer hover:opacity-90 transition-all hover:-translate-y-0.5 hover:shadow-md border border-white/20 group"
                             style={{
                               backgroundColor: getServiceColor(apt.service_type),
                               height: `${calculateAppointmentHeight(apt.duration_minutes || 90) - 4}px`,
@@ -201,14 +201,14 @@ export const WeeklyScheduleView = ({
                             }}
                             onClick={() => onAppointmentClick?.(apt)}
                           >
-                            <div className="text-[11px] font-bold text-white truncate leading-tight">
+                            <div className="text-[10px] font-bold text-white truncate leading-tight">
                               {apt.client?.user?.full_name}
                             </div>
-                            <div className="text-[10px] text-white/90 truncate leading-tight">
+                            <div className="text-[9px] text-white/90 truncate leading-tight">
                               {apt.service_type}
                             </div>
                             {apt.duration_minutes && apt.duration_minutes >= 60 && (
-                              <div className="text-[9px] text-white/70 leading-tight">
+                              <div className="text-[8px] text-white/70 leading-tight">
                                 {format(parseISO(apt.appointment_date), 'h:mm a')}
                               </div>
                             )}
@@ -224,23 +224,19 @@ export const WeeklyScheduleView = ({
         </div>
 
         {/* Legend */}
-        <div className="p-3 border-t-[2px] border-border bg-muted/10">
-          <div className="flex flex-wrap gap-3 text-[11px]">
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded border border-white/30" style={{ backgroundColor: 'hsl(190 95% 55%)' }} />
+        <div className="p-2 border-t-[2px] border-border bg-muted/10">
+          <div className="flex flex-wrap gap-2 text-[10px]">
+            <div className="flex items-center gap-1">
+              <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(190 95% 55%)' }} />
               <span className="text-muted-foreground">Cut & Style</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded border border-white/30" style={{ backgroundColor: 'hsl(270 85% 60%)' }} />
+            <div className="flex items-center gap-1">
+              <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(270 85% 60%)' }} />
               <span className="text-muted-foreground">Color</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded border border-white/30" style={{ backgroundColor: 'hsl(340 90% 65%)' }} />
+            <div className="flex items-center gap-1">
+              <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(340 90% 65%)' }} />
               <span className="text-muted-foreground">Treatment</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded bg-muted/30 border border-border" />
-              <span className="text-muted-foreground">Off Hours</span>
             </div>
           </div>
         </div>

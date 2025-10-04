@@ -656,13 +656,13 @@ const Dashboard = () => {
             <div className="window-scrollbar"></div>
             
             <div className="max-w-3xl">
-              <h2 className="text-4xl md:text-5xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
+              <h2 className="text-4xl md:text-5xl font-display font-black mb-4 text-pink-400 uppercase leading-tight">
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
               {/* Weekly Schedule View for Stylists */}
               {userRole === "stylist" && (
-                <div className="bg-card rounded-lg overflow-hidden">
+                <div className="bg-card rounded-lg overflow-hidden border-2 border-pink-400 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.6)]">
                   <WeeklyScheduleView
                     appointments={weekAppointments}
                     stylistSchedule={profile?.weekly_schedule}
