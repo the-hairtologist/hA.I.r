@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Scissors } from "lucide-react";
 
 interface ProtectedRouteProps {
@@ -9,58 +10,16 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const [loading, setLoading] = useState(true);
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
   const location = useLocation();
 
-  useEffect(() => {
-    checkAuthorization();
-  }, []);
+  const loading = authLoading || roleLoading;
 
-  const checkAuthorization = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        setIsAuthenticated(false);
-        setLoading(false);
-        return;
-      }
+  // Wait for roles to fully load if user exists
+  const isStillLoading = loading || (user && roles.length === 0);
 
-      setIsAuthenticated(true);
-
-      // If no role restriction, allow access
-      if (!allowedRoles || allowedRoles.length === 0) {
-        setIsAuthorized(true);
-        setLoading(false);
-        return;
-      }
-
-      // Check user role - handle users with multiple roles
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
-
-      if (roleData && roleData.length > 0) {
-        // Check if user has any of the allowed roles
-        const userHasAllowedRole = roleData.some(r => 
-          allowedRoles.includes(r.role as "stylist" | "client")
-        );
-        setIsAuthorized(userHasAllowedRole);
-      } else {
-        setIsAuthorized(false);
-      }
-    } catch (error) {
-      console.error("Authorization error:", error);
-      setIsAuthorized(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
+  if (isStillLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
@@ -71,11 +30,21 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
     );
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  if (!isAuthorized) {
+  // If no role restriction, allow access
+  if (!allowedRoles || allowedRoles.length === 0) {
+    return <>{children}</>;
+  }
+
+  // Check if user has any of the allowed roles
+  const userHasAllowedRole = roles.some(role => 
+    allowedRoles.includes(role as "stylist" | "client")
+  );
+
+  if (!userHasAllowedRole) {
     return <Navigate to="/dashboard" replace />;
   }
 
