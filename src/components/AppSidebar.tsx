@@ -22,6 +22,8 @@ import {
   RotateCcw,
   Package,
   Tag,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -68,6 +70,8 @@ interface SortableNavItemProps {
   collapsed: boolean;
   getNavClassName: (props: { isActive: boolean }) => string;
   isEditMode: boolean;
+  expandedItems: Set<string>;
+  toggleExpanded: (id: string) => void;
 }
 
 function SortableNavItem({
@@ -75,6 +79,8 @@ function SortableNavItem({
   collapsed,
   getNavClassName,
   isEditMode,
+  expandedItems,
+  toggleExpanded,
 }: SortableNavItemProps) {
   const location = useLocation();
   const {
@@ -93,38 +99,82 @@ function SortableNavItem({
   };
 
   const hasChildren = item.children && item.children.length > 0;
+  const isExpanded = expandedItems.has(item.id);
   const isParentActive = location.pathname === item.url.split('#')[0];
 
   return (
     <SidebarMenuItem ref={setNodeRef} style={style}>
-      <SidebarMenuButton asChild tooltip={item.title} className="min-h-[44px]">
-        <NavLink to={item.url} className={getNavClassName}>
-          {isEditMode && !collapsed && (
-            <div
-              {...attributes}
-              {...listeners}
-              className="cursor-grab active:cursor-grabbing mr-1 -ml-1"
-              onClick={(e) => e.preventDefault()}
-            >
-              <GripVertical className="h-4 w-4 text-muted-foreground" />
+      <SidebarMenuButton 
+        asChild={!hasChildren} 
+        tooltip={item.title} 
+        className="min-h-[44px]"
+        onClick={hasChildren ? (e) => {
+          e.preventDefault();
+          toggleExpanded(item.id);
+        } : undefined}
+      >
+        {hasChildren ? (
+          <div className={`flex items-center w-full ${isParentActive ? 'bg-primary/10 text-primary font-medium border-l-4 border-primary' : 'hover:bg-muted/50 border-l-4 border-transparent'}`}>
+            {isEditMode && !collapsed && (
+              <div
+                {...attributes}
+                {...listeners}
+                className="cursor-grab active:cursor-grabbing mr-1 -ml-1"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <GripVertical className="h-4 w-4 text-muted-foreground" />
+              </div>
+            )}
+            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+              <item.icon className="h-4 w-4 text-white" />
             </div>
-          )}
-          <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-            <item.icon className="h-4 w-4 text-white" />
+            {!collapsed && (
+              <>
+                <div className="ml-2 flex flex-col flex-1">
+                  <span className="text-sm font-medium">{item.title}</span>
+                  {item.description && (
+                    <span className="text-[10px] text-muted-foreground">
+                      {item.description}
+                    </span>
+                  )}
+                </div>
+                {isExpanded ? (
+                  <ChevronDown className="h-4 w-4 ml-auto" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 ml-auto" />
+                )}
+              </>
+            )}
           </div>
-          {!collapsed && (
-            <div className="ml-2 flex flex-col">
-              <span className="text-sm font-medium">{item.title}</span>
-              {item.description && (
-                <span className="text-[10px] text-muted-foreground">
-                  {item.description}
-                </span>
-              )}
+        ) : (
+          <NavLink to={item.url} className={getNavClassName}>
+            {isEditMode && !collapsed && (
+              <div
+                {...attributes}
+                {...listeners}
+                className="cursor-grab active:cursor-grabbing mr-1 -ml-1"
+                onClick={(e) => e.preventDefault()}
+              >
+                <GripVertical className="h-4 w-4 text-muted-foreground" />
+              </div>
+            )}
+            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+              <item.icon className="h-4 w-4 text-white" />
             </div>
-          )}
-        </NavLink>
+            {!collapsed && (
+              <div className="ml-2 flex flex-col">
+                <span className="text-sm font-medium">{item.title}</span>
+                {item.description && (
+                  <span className="text-[10px] text-muted-foreground">
+                    {item.description}
+                  </span>
+                )}
+              </div>
+            )}
+          </NavLink>
+        )}
       </SidebarMenuButton>
-      {hasChildren && !collapsed && isParentActive && (
+      {hasChildren && !collapsed && isExpanded && (
         <SidebarMenuSub>
           {item.children!.map((child) => (
             <SidebarMenuSubItem key={child.id}>
@@ -147,6 +197,19 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const location = useLocation();
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+
+  const toggleExpanded = (id: string) => {
+    setExpandedItems(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   const getNavClassName = ({ isActive }: { isActive: boolean }) => {
     return isActive
@@ -292,6 +355,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                         collapsed={collapsed}
                         getNavClassName={getNavClassName}
                         isEditMode={isEditMode}
+                        expandedItems={expandedItems}
+                        toggleExpanded={toggleExpanded}
                       />
                     ))}
                   </SidebarMenu>
