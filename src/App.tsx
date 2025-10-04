@@ -30,6 +30,7 @@ import AIAssistant from "./pages/AIAssistant";
 import Portfolio from "./pages/Portfolio";
 import Clients from "./pages/Clients";
 import BookForClient from "./pages/BookForClient";
+import AccessCodes from "./pages/AccessCodes";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -144,6 +145,11 @@ const App = () => (
               <SubscriptionGate feature="ai-assistant">
                 <AIAssistant />
               </SubscriptionGate>
+            </ProtectedRoute>
+          } />
+          <Route path="/access-codes" element={
+            <ProtectedRoute>
+              <AccessCodes />
             </ProtectedRoute>
           } />
           

@@ -8,6 +8,7 @@ interface SubscriptionContextType {
   loading: boolean;
   productId: string | null;
   subscriptionEnd: string | null;
+  hasAccessCode: boolean;
   checkSubscription: () => Promise<void>;
   isFeatureAllowed: (feature: string) => boolean;
 }
@@ -38,6 +39,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [hasAccessCode, setHasAccessCode] = useState(false);
 
   const checkSubscription = async () => {
     try {
@@ -64,6 +66,25 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
       // Admins get full access without subscription checks
       if (adminCheck) {
+        setSubscribed(true);
+        setInTrial(false);
+        setLoading(false);
+        return;
+      }
+
+      // Check if user has a valid access code
+      const { data: accessCodeData } = await supabase
+        .from("access_codes")
+        .select("id")
+        .eq("used_by", session.user.id)
+        .eq("is_active", true)
+        .single();
+      
+      const hasValidAccessCode = !!accessCodeData;
+      setHasAccessCode(hasValidAccessCode);
+
+      // Users with access codes get full access
+      if (hasValidAccessCode) {
         setSubscribed(true);
         setInTrial(false);
         setLoading(false);
@@ -109,6 +130,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const isFeatureAllowed = (feature: string): boolean => {
     // Admins always have full access
     if (isAdmin) return true;
+    
+    // Users with access codes have full access
+    if (hasAccessCode) return true;
     
     // Clients have access to all features
     if (userRole === "client") return true;
@@ -157,6 +181,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         loading,
         productId,
         subscriptionEnd,
+        hasAccessCode,
         checkSubscription,
         isFeatureAllowed,
       }}
