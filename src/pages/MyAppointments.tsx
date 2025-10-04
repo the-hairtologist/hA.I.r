@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { RescheduleDialog } from "@/components/RescheduleDialog";
 import { ReviewDialog } from "@/components/ReviewDialog";
 import { Input } from "@/components/ui/input";
+import PaymentDetailsCard from "@/components/PaymentDetailsCard";
 
 const MyAppointments = () => {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const MyAppointments = () => {
 
       setClientProfile(client);
 
-      // Get appointments
+      // Get appointments with payment and service details
       const { data: appointmentsData } = await supabase
         .from("appointments")
         .select(`
@@ -73,6 +74,24 @@ const MyAppointments = () => {
             id,
             business_name,
             user:profiles(full_name, email, phone)
+          ),
+          service:stylist_services(
+            id,
+            service_name,
+            price,
+            require_deposit,
+            deposit_amount,
+            deposit_type
+          ),
+          payment:payments(
+            id,
+            amount,
+            status,
+            payment_type,
+            is_deposit,
+            remaining_balance,
+            payment_method,
+            created_at
           )
         `)
         .eq("client_id", client.id)
@@ -318,6 +337,14 @@ const MyAppointments = () => {
                 <Label>Status</Label>
                 <div className="mt-2">{getStatusBadge(selectedAppointment.status)}</div>
               </div>
+
+              {/* Payment Details */}
+              {selectedAppointment.payment && selectedAppointment.payment.length > 0 && (
+                <PaymentDetailsCard 
+                  payment={selectedAppointment.payment[0]}
+                  service={selectedAppointment.service}
+                />
+              )}
 
               {selectedAppointment.status === "completed" && (
                 <div className="space-y-3">
