@@ -349,6 +349,79 @@ export type Database = {
         }
         Relationships: []
       }
+      client_hair_posts: {
+        Row: {
+          budget_range: string | null
+          claimed_at: string | null
+          claimed_by_stylist_id: string | null
+          client_id: string
+          created_at: string
+          description: string
+          id: string
+          location: string | null
+          photo_urls: string[] | null
+          preferred_date: string | null
+          service_type: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          budget_range?: string | null
+          claimed_at?: string | null
+          claimed_by_stylist_id?: string | null
+          client_id: string
+          created_at?: string
+          description: string
+          id?: string
+          location?: string | null
+          photo_urls?: string[] | null
+          preferred_date?: string | null
+          service_type: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          budget_range?: string | null
+          claimed_at?: string | null
+          claimed_by_stylist_id?: string | null
+          client_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          location?: string | null
+          photo_urls?: string[] | null
+          preferred_date?: string | null
+          service_type?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_hair_posts_claimed_by_stylist_id_fkey"
+            columns: ["claimed_by_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_hair_posts_claimed_by_stylist_id_fkey"
+            columns: ["claimed_by_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_hair_posts_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_invitations: {
         Row: {
           accepted: boolean | null

@@ -16,6 +16,8 @@ import Appointments from "./pages/Appointments";
 import BookAppointment from "./pages/BookAppointment";
 import StylistDiscovery from "./pages/StylistDiscovery";
 import StylistProfile from "./pages/StylistProfile";
+import ClientRequests from "./pages/ClientRequests";
+import ClientDiscovery from "./pages/ClientDiscovery";
 import Messages from "./pages/Messages";
 import ScheduleManagement from "./pages/ScheduleManagement";
 import Services from "./pages/Services";
@@ -88,6 +90,11 @@ const App = () => (
           } />
           
           {/* Stylist-Only Routes */}
+          <Route path="/client-discovery" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <ClientDiscovery />
+            </ProtectedRoute>
+          } />
           <Route path="/finance" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
               <SubscriptionGate feature="payments">
@@ -130,6 +137,11 @@ const App = () => (
           } />
           
           {/* Client-Only Routes */}
+          <Route path="/client-requests" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <ClientRequests />
+            </ProtectedRoute>
+          } />
           <Route path="/book-appointment" element={
             <ProtectedRoute allowedRoles={["client"]}>
               <BookAppointment />

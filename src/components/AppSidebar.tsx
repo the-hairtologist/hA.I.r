@@ -14,6 +14,8 @@ import {
   Search,
   LayoutDashboard,
   BookOpen,
+  UserPlus,
+  Megaphone,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -47,6 +49,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   // Stylist Navigation
   const stylistMainItems = [
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500" },
+    { title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "from-cyan-500 to-blue-500" },
     { title: "Clients", url: "/clients", icon: Users, gradient: "from-green-500 to-emerald-500" },
     { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-pink-500 to-rose-500" },
   ];
@@ -83,6 +86,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   // Client Navigation
   const clientMainItems = [
     { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500" },
+    { title: "My Requests", url: "/client-requests", icon: Megaphone, gradient: "from-orange-500 to-amber-500" },
     { title: "Find Stylists", url: "/stylists", icon: Search, gradient: "from-blue-500 to-cyan-500" },
     { title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-pink-500 to-rose-500" },
     { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-violet-500 to-purple-500" },
