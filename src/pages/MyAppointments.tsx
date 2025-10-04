@@ -164,7 +164,7 @@ const MyAppointments = () => {
               </div>
             </div>
             <Button 
-              onClick={() => navigate("/book")}
+              onClick={() => navigate("/book-appointment")}
               className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -201,7 +201,7 @@ const MyAppointments = () => {
                 <p className="text-muted-foreground mb-4">
                   {searchTerm ? "No appointments match your search" : "No upcoming appointments scheduled"}
                 </p>
-                <Button onClick={() => navigate("/book")}>
+                <Button onClick={() => navigate("/book-appointment")}>
                   <Plus className="h-4 w-4 mr-2" />
                   Book Appointment
                 </Button>

@@ -117,7 +117,7 @@ const MyFormulas = () => {
               <p className="text-foreground/80 mb-4 font-medium">
                 Your stylist will create custom formulas during your appointments
               </p>
-              <Button onClick={() => navigate("/book")}>
+              <Button onClick={() => navigate("/book-appointment")}>
                 Book Appointment
               </Button>
             </CardContent>
