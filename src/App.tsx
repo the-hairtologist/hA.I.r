@@ -22,6 +22,7 @@ import Services from "./pages/Services";
 import Settings from "./pages/Settings";
 import Finance from "./pages/Finance";
 import Resources from "./pages/Resources";
+import Knowledge from "./pages/Knowledge";
 import Portfolio from "./pages/Portfolio";
 import Clients from "./pages/Clients";
 import AccessCodes from "./pages/AccessCodes";
@@ -63,6 +64,11 @@ const App = () => (
           <Route path="/resources" element={
             <ProtectedRoute>
               <Resources />
+            </ProtectedRoute>
+          } />
+          <Route path="/knowledge" element={
+            <ProtectedRoute>
+              <Knowledge />
             </ProtectedRoute>
           } />
           <Route path="/integrations" element={

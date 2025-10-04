@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calendar, MessageSquare, User, Users } from "lucide-react";
+import { Home, Calendar, MessageSquare, User, Users, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MobileNavProps {
@@ -16,7 +16,7 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
     { icon: Home, label: "Home", path: "/dashboard" },
     { icon: Calendar, label: "Appointments", path: "/appointments" },
     { icon: Users, label: "Clients", path: "/clients" },
-    { icon: MessageSquare, label: "Messages", path: "/messages" },
+    { icon: BookOpen, label: "Knowledge", path: "/knowledge" },
     { icon: User, label: "Settings", path: "/settings" },
   ];
 
@@ -24,7 +24,7 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
     { icon: Home, label: "Home", path: "/dashboard" },
     { icon: Users, label: "Stylists", path: "/stylists" },
     { icon: Calendar, label: "Appointments", path: "/appointments" },
-    { icon: MessageSquare, label: "Messages", path: "/messages" },
+    { icon: BookOpen, label: "Knowledge", path: "/knowledge" },
     { icon: User, label: "Settings", path: "/settings" },
   ];
 

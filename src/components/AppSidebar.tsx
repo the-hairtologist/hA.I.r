@@ -13,6 +13,7 @@ import {
   Building2,
   Search,
   LayoutDashboard,
+  BookOpen,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -62,6 +63,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   ];
 
   const stylistToolsItems = [
+    { title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-indigo-500" },
     { title: "Resources", url: "/resources", icon: Sparkles, gradient: "from-violet-500 to-fuchsia-500" },
     { title: "Integrations", url: "/integrations", icon: Building2, gradient: "from-orange-500 to-amber-500" },
   ];
@@ -76,6 +78,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const clientToolsItems = [
     { title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
+    { title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-indigo-500" },
     { title: "Resources", url: "/resources", icon: Sparkles, gradient: "from-indigo-500 to-purple-500" },
   ];
 

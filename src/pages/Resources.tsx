@@ -72,7 +72,11 @@ const Resources = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Access our comprehensive library of articles, tutorials, and best practices
               </p>
-              <Button className="w-full" variant="outline">
+              <Button 
+                className="w-full" 
+                variant="outline"
+                onClick={() => navigate("/knowledge")}
+              >
                 Browse Knowledge Base
               </Button>
             </CardContent>
