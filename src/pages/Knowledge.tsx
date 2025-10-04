@@ -227,18 +227,66 @@ const Knowledge = () => {
               </div>
 
               <TabsContent value="formula" className="m-0">
-                <div className="px-4 py-2">
-                  <p className="text-sm text-muted-foreground mb-4">
+                <div className="px-4 py-3 bg-primary/5 border-b border-border">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Ask me to generate a custom hair color formula based on your requirements
                   </p>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => {
+                        setAiInput("Create a balayage formula for level 6 hair going to level 9 blonde");
+                      }}
+                      className="flex-1"
+                    >
+                      <Sparkles className="h-3 w-3 mr-1" />
+                      Balayage Example
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => {
+                        setAiInput("I need a color correction formula for brassy level 7 hair");
+                      }}
+                      className="flex-1"
+                    >
+                      <Sparkles className="h-3 w-3 mr-1" />
+                      Color Correction
+                    </Button>
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="stepbystep" className="m-0">
-                <div className="px-4 py-2">
-                  <p className="text-sm text-muted-foreground mb-4">
+                <div className="px-4 py-3 bg-secondary/5 border-b border-border">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Get detailed step-by-step instructions for techniques and processes
                   </p>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => {
+                        setAiInput("How do I apply toner after bleaching?");
+                      }}
+                      className="flex-1"
+                    >
+                      <BookOpen className="h-3 w-3 mr-1" />
+                      Toning Guide
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => {
+                        setAiInput("Show me how to do a root touch-up");
+                      }}
+                      className="flex-1"
+                    >
+                      <BookOpen className="h-3 w-3 mr-1" />
+                      Root Touch-Up
+                    </Button>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
