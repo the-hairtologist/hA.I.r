@@ -75,11 +75,11 @@ const Settings = () => {
       }
 
       // Get stylist-specific data
-      if (primaryRole === "stylist") {
+      if (role === "stylist") {
         const { data: stylistProfile } = await supabase
           .from("stylist_profiles")
           .select("*")
-          .eq("user_id", sessionUser.id)
+          .eq("user_id", session.user.id)
           .maybeSingle();
 
         if (stylistProfile) {
