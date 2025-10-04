@@ -20,10 +20,11 @@ export const passwordSchema = z
 
 export const phoneSchema = z
   .string()
+  .trim()
   .optional()
   .refine(
-    (val) => !val || /^[\d\s\-\+\(\)]+$/.test(val),
-    'Please enter a valid phone number'
+    (val) => !val || /^\+?[\d\s\-\(\)]{10,20}$/.test(val),
+    'Please enter a valid phone number (10-20 digits)'
   );
 
 export const nameSchema = z
@@ -34,9 +35,18 @@ export const nameSchema = z
 
 export const urlSchema = z
   .string()
+  .trim()
   .optional()
   .refine(
-    (val) => !val || /^https?:\/\/.+/.test(val),
+    (val) => {
+      if (!val) return true;
+      try {
+        const url = new URL(val);
+        return ['http:', 'https:'].includes(url.protocol);
+      } catch {
+        return false;
+      }
+    },
     'Please enter a valid URL starting with http:// or https://'
   );
 
@@ -98,8 +108,16 @@ export const clientProfileSchema = z.object({
   email: emailSchema,
   phone: phoneSchema,
   hairType: z.string().max(100).optional(),
-  allergies: z.string().max(500).optional(),
-  notes: z.string().max(1000).optional(),
+  allergies: z.string().trim().max(500, 'Allergies must be less than 500 characters').optional(),
+  notes: z.string().trim().max(1000, 'Notes must be less than 1000 characters').optional(),
+  medicalInfoConsent: z.boolean().optional(),
+});
+
+// ============= Invitation Schemas =============
+
+export const invitationSchema = z.object({
+  email: emailSchema,
+  customMessage: z.string().trim().max(500, 'Message must be less than 500 characters').optional(),
 });
 
 // ============= Appointment Schemas =============
@@ -145,10 +163,44 @@ export const messageSchema = z.object({
 
 export const reviewSchema = z.object({
   stylistId: z.string().uuid('Invalid stylist ID'),
-  rating: z.number().min(1, 'Rating must be at least 1').max(5, 'Rating must be at most 5'),
-  reviewText: z.string().max(1000).optional(),
+  rating: z.number().min(1, 'Rating must be at least 1').max(5, 'Rating must be at most 5').int('Rating must be a whole number'),
+  reviewText: z.string().trim().max(1000, 'Review must be less than 1000 characters').optional(),
   appointmentId: z.string().uuid().optional(),
 });
+
+// ============= Security Validation =============
+
+/**
+ * Sanitizes user input by removing potentially dangerous characters
+ * Use this before displaying user-generated content
+ */
+export const sanitizeText = (input: string): string => {
+  return input
+    .replace(/[<>]/g, '') // Remove HTML brackets
+    .replace(/javascript:/gi, '') // Remove javascript protocol
+    .replace(/on\w+\s*=/gi, '') // Remove event handlers
+    .trim();
+};
+
+/**
+ * Validates that a string doesn't contain SQL injection patterns
+ */
+export const hasSQLInjection = (input: string): boolean => {
+  const sqlPatterns = [
+    /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE)\b)/i,
+    /(--|\;|\/\*|\*\/|xp_)/i,
+    /(\bOR\b.*=.*|1\s*=\s*1)/i,
+  ];
+  return sqlPatterns.some(pattern => pattern.test(input));
+};
+
+/**
+ * Validates UUID format
+ */
+export const isValidUUID = (uuid: string): boolean => {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+};
 
 // ============= Helper Functions =============
 
@@ -204,3 +256,4 @@ export type ServiceInput = z.infer<typeof serviceSchema>;
 export type FormulaInput = z.infer<typeof formulaSchema>;
 export type MessageInput = z.infer<typeof messageSchema>;
 export type ReviewInput = z.infer<typeof reviewSchema>;
+export type InvitationInput = z.infer<typeof invitationSchema>;

@@ -380,9 +380,27 @@ const BookAppointment = () => {
 
       if (checkoutError) throw checkoutError;
 
-      // Redirect to Stripe checkout
+      // Validate and redirect to Stripe checkout securely
       if (checkoutData?.url) {
-        window.location.href = checkoutData.url;
+        // Security: Validate URL is from Stripe before redirecting
+        try {
+          const checkoutUrl = new URL(checkoutData.url);
+          const isStripeUrl = checkoutUrl.hostname === 'checkout.stripe.com' || 
+                             checkoutUrl.hostname.endsWith('.stripe.com');
+          
+          if (!isStripeUrl) {
+            throw new Error("Invalid checkout URL - must be from Stripe");
+          }
+          
+          if (checkoutUrl.protocol !== 'https:') {
+            throw new Error("Checkout URL must use HTTPS");
+          }
+          
+          window.location.href = checkoutData.url;
+        } catch (urlError) {
+          console.error("Checkout URL validation failed:", urlError);
+          throw new Error("Invalid checkout URL received");
+        }
       } else {
         throw new Error("Failed to create checkout session");
       }

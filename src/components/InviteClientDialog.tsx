@@ -33,8 +33,15 @@ export const InviteClientDialog = ({
   const [customMessage, setCustomMessage] = useState("");
 
   const handleSendInvite = async () => {
-    if (!clientEmail) {
-      toast.error("Client email is required");
+    // Validate email format
+    if (!clientEmail || !clientEmail.includes('@')) {
+      toast.error("Valid client email is required");
+      return;
+    }
+
+    // Validate custom message length
+    if (customMessage && customMessage.length > 500) {
+      toast.error("Message must be less than 500 characters");
       return;
     }
 

@@ -13,14 +13,23 @@ const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '';
 let analyticsInitialized = false;
 
 /**
+ * Validates Google Analytics Measurement ID format
+ * Prevents script injection attacks
+ */
+const isValidGA4Id = (id: string): boolean => {
+  const GA4_REGEX = /^G-[A-Z0-9]{10}$/;
+  return GA4_REGEX.test(id);
+};
+
+/**
  * Initialize analytics providers
  * Call this once in your App.tsx or main.tsx
  */
 export const initAnalytics = () => {
   if (analyticsInitialized) return;
 
-  // Google Analytics 4
-  if (GA4_MEASUREMENT_ID && Platform.isWeb) {
+  // Google Analytics 4 - with security validation
+  if (GA4_MEASUREMENT_ID && Platform.isWeb && isValidGA4Id(GA4_MEASUREMENT_ID)) {
     // GA4 script injection
     const script1 = document.createElement('script');
     script1.async = true;
