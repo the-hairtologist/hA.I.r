@@ -18,6 +18,7 @@ const Settings = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   // Profile data
   const [fullName, setFullName] = useState("");
@@ -94,6 +95,44 @@ const Settings = () => {
   };
 
   const handleSaveProfile = async () => {
+    // Prevent double submission
+    if (isSaving) {
+      return;
+    }
+
+    // Validate required fields
+    if (!fullName.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+
+    if (fullName.trim().length > 100) {
+      toast.error("Name must be less than 100 characters");
+      return;
+    }
+
+    if (bio.length > 500) {
+      toast.error("Bio must be less than 500 characters");
+      return;
+    }
+
+    if (businessName.length > 100) {
+      toast.error("Business name must be less than 100 characters");
+      return;
+    }
+
+    if (location.length > 200) {
+      toast.error("Location must be less than 200 characters");
+      return;
+    }
+
+    const yearsExp = yearsExperience ? parseInt(yearsExperience) : 0;
+    if (yearsExp < 0 || yearsExp > 100) {
+      toast.error("Years of experience must be between 0 and 100");
+      return;
+    }
+
+    setIsSaving(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
@@ -102,7 +141,7 @@ const Settings = () => {
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
-          full_name: fullName,
+          full_name: fullName.trim(),
           avatar_url: avatarUrl,
           gender: selectedGender
         })
@@ -115,12 +154,12 @@ const Settings = () => {
         const { error: stylistError } = await supabase
           .from("stylist_profiles")
           .update({
-            business_name: businessName,
-            bio: bio,
-            specialty: specialty,
-            color_line: colorLine,
-            location: location,
-            years_experience: yearsExperience ? parseInt(yearsExperience) : null
+            business_name: businessName.trim() || null,
+            bio: bio.trim() || null,
+            specialty: specialty.trim() || null,
+            color_line: colorLine.trim() || null,
+            location: location.trim() || null,
+            years_experience: yearsExp || null
           })
           .eq("user_id", session.user.id);
 
@@ -132,6 +171,8 @@ const Settings = () => {
     } catch (error: any) {
       console.error("Error saving profile:", error);
       toast.error("Failed to save profile");
+    } finally {
+      setIsSaving(false);
     }
   };
 

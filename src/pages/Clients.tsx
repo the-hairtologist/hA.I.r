@@ -59,6 +59,8 @@ export default function Clients() {
     allergies: "",
     notes: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditSubmitting, setIsEditSubmitting] = useState(false);
 
   useEffect(() => {
     loadStylistProfile();
@@ -120,17 +122,56 @@ export default function Clients() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent double submission
+    if (isSubmitting) {
+      return;
+    }
+    
     if (!stylistId) return;
 
+    // Validate required fields
+    if (!formData.full_name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+
+    // Validate field lengths
+    if (formData.full_name.trim().length > 100) {
+      toast.error("Name must be less than 100 characters");
+      return;
+    }
+
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (formData.email && formData.email.length > 255) {
+      toast.error("Email must be less than 255 characters");
+      return;
+    }
+
+    if (formData.notes.length > 1000) {
+      toast.error("Notes must be less than 1000 characters");
+      return;
+    }
+
+    if (formData.allergies.length > 500) {
+      toast.error("Allergies must be less than 500 characters");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const { error } = await supabase.from("client_profiles").insert({
         preferred_stylist_id: stylistId,
-        full_name: formData.full_name,
-        email: formData.email,
-        phone: formData.phone,
-        hair_type: formData.hair_type,
-        allergies: formData.allergies,
-        notes: formData.notes,
+        full_name: formData.full_name.trim(),
+        email: formData.email.trim() || null,
+        phone: formData.phone.trim() || null,
+        hair_type: formData.hair_type.trim() || null,
+        allergies: formData.allergies.trim() || null,
+        notes: formData.notes.trim() || null,
       });
 
       if (error) throw error;
@@ -149,23 +190,53 @@ export default function Clients() {
     } catch (error) {
       console.error("Error adding client:", error);
       toast.error("Failed to add client");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleEditClient = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent double submission
+    if (isEditSubmitting) {
+      return;
+    }
+    
     if (!selectedClient) return;
 
+    // Validate required fields
+    if (!editFormData.full_name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+
+    if (editFormData.full_name.trim().length > 100) {
+      toast.error("Name must be less than 100 characters");
+      return;
+    }
+
+    if (editFormData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editFormData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (editFormData.notes.length > 1000) {
+      toast.error("Notes must be less than 1000 characters");
+      return;
+    }
+
+    setIsEditSubmitting(true);
     try {
       const { error } = await supabase
         .from("client_profiles")
         .update({
-          full_name: editFormData.full_name,
-          email: editFormData.email,
-          phone: editFormData.phone,
-          hair_type: editFormData.hair_type,
-          allergies: editFormData.allergies,
-          notes: editFormData.notes,
+          full_name: editFormData.full_name.trim(),
+          email: editFormData.email.trim() || null,
+          phone: editFormData.phone.trim() || null,
+          hair_type: editFormData.hair_type.trim() || null,
+          allergies: editFormData.allergies.trim() || null,
+          notes: editFormData.notes.trim() || null,
         })
         .eq("id", selectedClient.id);
 
@@ -177,6 +248,8 @@ export default function Clients() {
     } catch (error) {
       console.error("Error updating client:", error);
       toast.error("Failed to update client");
+    } finally {
+      setIsEditSubmitting(false);
     }
   };
 

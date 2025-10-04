@@ -107,14 +107,42 @@ const Services = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!serviceName || !price || !duration) {
+    // Prevent double submission
+    if (submitting) {
+      return;
+    }
+
+    // Validate required fields
+    if (!serviceName.trim() || !price || !duration) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // Validate field lengths
+    if (serviceName.trim().length > 100) {
+      toast.error("Service name must be less than 100 characters");
+      return;
+    }
+
+    if (description.trim().length > 500) {
+      toast.error("Description must be less than 500 characters");
       return;
     }
 
     const priceNum = parseFloat(price);
     if (isNaN(priceNum) || priceNum <= 0) {
       toast.error("Please enter a valid price");
+      return;
+    }
+
+    if (priceNum > 10000) {
+      toast.error("Price cannot exceed $10,000");
+      return;
+    }
+
+    const durationNum = parseInt(duration);
+    if (durationNum < 15 || durationNum > 480) {
+      toast.error("Duration must be between 15 and 480 minutes");
       return;
     }
 
@@ -139,9 +167,9 @@ const Services = () => {
     try {
       const serviceData = {
         stylist_id: stylistProfile.id,
-        service_name: serviceName,
-        description: description || null,
-        duration_minutes: parseInt(duration),
+        service_name: serviceName.trim(),
+        description: description.trim() || null,
+        duration_minutes: durationNum,
         price: priceNum,
         is_active: isActive,
         require_deposit: requireDeposit,
