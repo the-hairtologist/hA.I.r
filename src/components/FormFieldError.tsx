@@ -4,11 +4,13 @@ import { cn } from "@/lib/utils";
 interface FormFieldErrorProps {
   message: string;
   className?: string;
+  id?: string;
 }
 
-export const FormFieldError = ({ message, className }: FormFieldErrorProps) => {
+export const FormFieldError = ({ message, className, id }: FormFieldErrorProps) => {
   return (
     <div 
+      id={id}
       role="alert"
       aria-live="polite"
       className={cn(

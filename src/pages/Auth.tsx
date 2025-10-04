@@ -193,7 +193,11 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-4">
-      <Card className="w-full max-w-md border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-white">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
+        Skip to main content
+      </a>
+      <main id="main-content" role="main" aria-label="Authentication">
+        <Card className="w-full max-w-md border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-white">
         <CardHeader className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Scissors className="h-8 w-8 text-primary" />
@@ -370,6 +374,7 @@ const Auth = () => {
           </div>
         </DialogContent>
       </Dialog>
+      </main>
     </div>
   );
 };

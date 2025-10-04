@@ -202,7 +202,10 @@ const Services = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-400 via-teal-400 to-blue-500">
-      <header className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
+        Skip to main content
+      </a>
+      <header role="banner" className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -366,7 +369,7 @@ const Services = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main id="main-content" role="main" aria-label="Service Pricing" className="container mx-auto px-4 py-8 max-w-4xl">
           {services.length === 0 ? (
           <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-400 to-amber-400">
             <CardContent className="flex flex-col items-center justify-center py-12">

@@ -646,7 +646,10 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-8 pl-12">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
+        Skip to main content
+      </a>
+      <main id="main-content" role="main" aria-label="Dashboard" className="container mx-auto px-4 py-8 pl-12">
         <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative">
           <div className="window-titlebar">
             <span className="text-background font-mono text-sm font-bold">
@@ -759,7 +762,7 @@ const Dashboard = () => {
             onSuccess={loadDashboardData}
           />
         )}
-      </div>
+      </main>
     </DashboardLayout>
   );
 };

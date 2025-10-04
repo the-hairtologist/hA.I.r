@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -22,9 +22,11 @@ import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RebookDialog } from "@/components/RebookDialog";
 import { Repeat } from "lucide-react";
+import { useGlobalShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 const Appointments = () => {
   const navigate = useNavigate();
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
@@ -94,6 +96,9 @@ const Appointments = () => {
 
   // Real-time updates
   useRealtimeUpdates("appointments", loadData, stylistProfile?.id);
+
+  // Keyboard shortcuts
+  useGlobalShortcuts(searchInputRef);
 
   const toggleAvailability = async () => {
     try {
@@ -218,7 +223,10 @@ const Appointments = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-      <header className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
+        Skip to main content
+      </a>
+      <header role="banner" className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -244,7 +252,7 @@ const Appointments = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main id="main-content" role="main" aria-label="Appointments" className="container mx-auto px-4 py-8">
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar" | "week")} className="space-y-6">
           <TabsList className="grid w-full max-w-3xl grid-cols-3">
             <TabsTrigger value="list">List View</TabsTrigger>
@@ -256,9 +264,10 @@ const Appointments = () => {
             {/* Search and Filters */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
               <SearchInput
+                ref={searchInputRef}
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder="Search by client name or service..."
+                placeholder="Search by client name or service... (Press / or Ctrl+K)"
                 className="flex-1"
               />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
