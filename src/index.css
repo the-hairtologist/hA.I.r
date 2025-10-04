@@ -123,6 +123,19 @@ All colors MUST be HSL.
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    /* Support for iOS safe areas (notch) */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Smooth scrolling for all browsers */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
   @keyframes fade-in {
@@ -283,12 +296,47 @@ All colors MUST be HSL.
     border-top: 8px solid hsl(var(--foreground));
   }
 
-  /* Mobile touch-friendly sizing */
+  /* Mobile touch-friendly sizing - Apple HIG minimum 44x44px */
   @media (max-width: 640px) {
     button:not(.no-touch-size),
     a[role="button"]:not(.no-touch-size) {
       min-height: 44px;
+      min-width: 44px;
     }
+  }
+  
+  /* Better touch handling for all interactive elements */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Prevent text selection on buttons and interactive elements */
+  button,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Performance optimization for animations */
+  .animate-fade-in,
+  .hover-scale,
+  .smooth-transition,
+  .retro-button {
+    will-change: transform, opacity;
+  }
+  
+  /* Better scrolling on mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Screen reader only - hide visually but keep accessible */
