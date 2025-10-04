@@ -15,6 +15,7 @@ import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { RecentReviews } from "@/components/dashboard/RecentReviews";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
+import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import avatarMale from "@/assets/avatar-male-lego.png";
@@ -90,6 +91,7 @@ const Dashboard = () => {
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
   const [recentReviews, setRecentReviews] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [weekAppointments, setWeekAppointments] = useState<any[]>([]);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
     "subscription",
     "checklist",
@@ -318,11 +320,18 @@ const Dashboard = () => {
     // Get week's appointments
     const { data: weekAppts } = await supabase
       .from("appointments")
-      .select("*")
+      .select(`
+        *,
+        client:client_profiles(
+          user:profiles(full_name, email, phone)
+        )
+      `)
       .eq("stylist_id", profile.id)
       .gte("appointment_date", weekStart.toISOString())
       .lte("appointment_date", weekEnd.toISOString())
       .neq("status", "cancelled");
+
+    setWeekAppointments(weekAppts || []);
 
     // Get unread messages
     const { data: messages } = await supabase
@@ -663,35 +672,32 @@ const Dashboard = () => {
                 )}
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-display font-black mb-4 text-pink-400 uppercase leading-tight">
+              <h2 className="text-4xl md:text-5xl font-display font-black mb-6 text-pink-400 uppercase leading-tight">
                 Welcome back, {user?.user_metadata?.full_name || "there"}!
               </h2>
               
-              <p className="text-base md:text-lg font-medium text-pink-200 mb-6 max-w-2xl">
-                {welcomeMessage}
-              </p>
-              
-              <div className="flex gap-4 flex-wrap">
-                <Button
-                  onClick={() => {
-                    if (userRole === "stylist") {
-                      navigate("/appointments");
-                    } else {
-                      navigate("/stylists");
-                    }
-                  }}
-                  className="px-6 py-3 bg-pink-500 text-white font-display font-bold text-lg border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-transform"
-                >
-                  LET'S GO!
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate("/knowledge")}
-                  className="px-6 py-3 bg-transparent text-pink-300 font-display font-bold text-lg border-4 border-pink-400 hover:bg-pink-500 hover:text-white transition-colors"
-                >
-                  MAYBE LATER
-                </Button>
-              </div>
+              {/* Weekly Schedule View for Stylists */}
+              {userRole === "stylist" && weekAppointments.length > 0 && (
+                <div className="bg-card rounded-lg overflow-hidden">
+                  <WeeklyScheduleView
+                    appointments={weekAppointments}
+                    stylistSchedule={profile?.weekly_schedule}
+                    onAppointmentClick={(apt) => navigate("/appointments")}
+                  />
+                </div>
+              )}
+
+              {userRole === "stylist" && weekAppointments.length === 0 && (
+                <p className="text-base md:text-lg font-medium text-pink-200">
+                  No appointments scheduled this week. Time to fill your calendar! 📅
+                </p>
+              )}
+
+              {userRole === "client" && (
+                <p className="text-base md:text-lg font-medium text-pink-200">
+                  Ready to book your next transformation? ✨
+                </p>
+              )}
             </div>
           </div>
         </div>
