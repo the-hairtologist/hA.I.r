@@ -146,7 +146,7 @@ const Resources = () => {
         },
         {
           question: "I'm not receiving notifications.",
-          answer: "Check that browser notifications are enabled for this app. In your browser settings, allow notifications for lovableproject.com or your custom domain."
+          answer: "Check that browser notifications are enabled for this app. In your browser settings, allow notifications for hair.app."
         },
         {
           question: "The page is showing an error.",
