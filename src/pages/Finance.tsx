@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { DollarSign, TrendingUp, Loader2, Plus, Copy, ExternalLink, Tag } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
@@ -22,6 +21,7 @@ const Finance = () => {
   const [brands, setBrands] = useState<any[]>([]);
   const [affiliateCodes, setAffiliateCodes] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
+  const [activeView, setActiveView] = useState<"payments" | "commissions" | "affiliate">("payments");
 
   useEffect(() => {
     loadData();
@@ -180,15 +180,29 @@ const Finance = () => {
           </Card>
         </div>
 
-        <Tabs defaultValue="payments" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="payments">Service Payments</TabsTrigger>
-            <TabsTrigger value="commissions">Product Commissions</TabsTrigger>
-            <TabsTrigger value="affiliate">Affiliate Codes</TabsTrigger>
-          </TabsList>
+        {/* View Selector Dropdown */}
+        <div className="mb-6">
+          <Label htmlFor="view-select" className="text-sm font-medium mb-2 block">
+            Select View
+          </Label>
+          <Select value={activeView} onValueChange={(value: any) => setActiveView(value)}>
+            <SelectTrigger 
+              id="view-select"
+              className="w-full md:w-80 bg-background border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] z-50"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-[2px] border-foreground z-50">
+              <SelectItem value="payments">💰 Service Payments</SelectItem>
+              <SelectItem value="commissions">📈 Product Commissions</SelectItem>
+              <SelectItem value="affiliate">🏷️ Affiliate Codes</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-          {/* Payments Tab */}
-          <TabsContent value="payments">
+        <div className="space-y-6">
+          {/* Payments View */}
+          {activeView === "payments" && (
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
                 <CardTitle>Payment History</CardTitle>
@@ -230,10 +244,10 @@ const Finance = () => {
                 )}
               </CardContent>
             </Card>
-          </TabsContent>
+          )}
 
-          {/* Commissions Tab */}
-          <TabsContent value="commissions">
+          {/* Commissions View */}
+          {activeView === "commissions" && (
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
                 <CardTitle>Commission Earnings</CardTitle>
@@ -275,10 +289,10 @@ const Finance = () => {
                 )}
               </CardContent>
             </Card>
-          </TabsContent>
+          )}
 
-          {/* Affiliate Codes Tab */}
-          <TabsContent value="affiliate">
+          {/* Affiliate Codes View */}
+          {activeView === "affiliate" && (
             <div className="grid md:grid-cols-2 gap-6">
               {brands.map((brand) => {
                 const affiliateCode = affiliateCodes.find(c => c.brand_id === brand.id);
@@ -340,8 +354,8 @@ const Finance = () => {
                 );
               })}
             </div>
-          </TabsContent>
-        </Tabs>
+          )}
+        </div>
       </main>
     </div>
   );
