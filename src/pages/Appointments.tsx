@@ -170,34 +170,37 @@ const Appointments = () => {
     return <Badge variant={variants[status] || "default"}>{status}</Badge>;
   };
 
-  // Group appointments by day for the next 14 days
+  // Group appointments by day - only days with appointments
   const getAppointmentsByDay = () => {
     const today = new Date();
-    const next14Days = Array.from({ length: 14 }, (_, i) => {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      return date;
-    });
+    const upcomingApts = appointments.filter(apt => 
+      new Date(apt.appointment_date) >= today && apt.status !== "cancelled"
+    );
 
-    return next14Days
-      .map(date => {
-        const dayAppointments = appointments.filter(apt => {
-          const aptDate = new Date(apt.appointment_date);
-          return format(aptDate, "yyyy-MM-dd") === format(date, "yyyy-MM-dd") && apt.status !== "cancelled";
-        });
+    // Group by date
+    const grouped: Record<string, any[]> = upcomingApts.reduce((acc, apt) => {
+      const dateKey = format(new Date(apt.appointment_date), "yyyy-MM-dd");
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(apt);
+      return acc;
+    }, {} as Record<string, any[]>);
 
-        const dayName = format(date, 'EEEE').toLowerCase();
-        const isWorkingDay = stylistProfile?.weekly_schedule?.[dayName]?.enabled;
-
+    // Convert to array and sort by date
+    return Object.entries(grouped)
+      .map(([dateKey, dayAppointments]) => {
+        const date = new Date(dateKey);
         return {
           date,
           dayName: format(date, 'EEEE, MMM d'),
-          isToday: format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd"),
-          isWorkingDay,
-          appointments: dayAppointments
+          isToday: dateKey === format(today, "yyyy-MM-dd"),
+          appointments: dayAppointments.sort((a, b) => 
+            new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime()
+          )
         };
       })
-      .filter(day => day.appointments.length > 0 || (day.isWorkingDay && day.date >= today));
+      .sort((a, b) => a.date.getTime() - b.date.getTime());
   };
 
   const appointmentsByDay = getAppointmentsByDay();
