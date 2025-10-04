@@ -18,6 +18,9 @@ verify_jwt = false
 [functions.send-appointment-reminder]
 verify_jwt = false
 
+[functions.send-sms-notification]
+verify_jwt = true
+
 [functions.create-checkout]
 verify_jwt = true
 
