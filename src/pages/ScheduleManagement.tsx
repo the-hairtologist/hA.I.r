@@ -19,6 +19,7 @@ import { DateRange } from "react-day-picker";
 import { Textarea } from "@/components/ui/textarea";
 import CalendarSync from "@/components/CalendarSync";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
+import { VacationConflictDialog } from "@/components/VacationConflictDialog";
 
 interface DaySchedule {
   enabled: boolean;
@@ -49,6 +50,9 @@ const ScheduleManagement = () => {
   const [editingOverride, setEditingOverride] = useState<any>(null);
   const [selectedPreset, setSelectedPreset] = useState<string>("");
   const [bufferTime, setBufferTime] = useState<number>(15);
+  const [conflictDialogOpen, setConflictDialogOpen] = useState(false);
+  const [conflictingAppointments, setConflictingAppointments] = useState<any[]>([]);
+  const [pendingBlockAction, setPendingBlockAction] = useState<(() => Promise<void>) | null>(null);
 
   // Preset templates for common scenarios
   const presetTemplates = {
@@ -355,19 +359,67 @@ const ScheduleManagement = () => {
     }
   };
 
+  const checkConflictingAppointments = async (dates: Date[]) => {
+    try {
+      const dateStrings = dates.map(d => format(d, 'yyyy-MM-dd'));
+      
+      const { data: appointments, error } = await supabase
+        .from('appointments')
+        .select(`
+          id,
+          appointment_date,
+          service_type,
+          duration_minutes,
+          client:client_profiles(
+            full_name,
+            email,
+            phone,
+            user:profiles(full_name, email)
+          )
+        `)
+        .eq('stylist_id', stylistProfile.id)
+        .in('status', ['scheduled', 'confirmed'])
+        .gte('appointment_date', format(dates[0], 'yyyy-MM-dd'))
+        .lte('appointment_date', format(dates[dates.length - 1], 'yyyy-MM-dd') + 'T23:59:59');
+
+      if (error) throw error;
+
+      return appointments || [];
+    } catch (error) {
+      console.error("Error checking conflicts:", error);
+      return [];
+    }
+  };
+
   const handleAddBlockedDate = async () => {
     if (!selectedDate) {
       toast.error("Please select a date");
       return;
     }
 
+    // Check for conflicts
+    const conflicts = await checkConflictingAppointments([selectedDate]);
+    
+    if (conflicts.length > 0) {
+      setConflictingAppointments(conflicts);
+      setPendingBlockAction(async () => {
+        await executeBlockDate();
+      });
+      setConflictDialogOpen(true);
+      return;
+    }
+
+    await executeBlockDate();
+  };
+
+  const executeBlockDate = async () => {
     setSubmitting(true);
     try {
       const { error } = await supabase
         .from("stylist_blocked_dates")
         .insert({
           stylist_id: stylistProfile.id,
-          blocked_date: format(selectedDate, 'yyyy-MM-dd'),
+          blocked_date: format(selectedDate!, 'yyyy-MM-dd'),
           reason: reason.trim() || null,
         });
 
@@ -424,6 +476,22 @@ const ScheduleManagement = () => {
     const endDate = dateRange.to || dateRange.from;
     const dates = eachDayOfInterval({ start: dateRange.from, end: endDate });
 
+    // Check for conflicts
+    const conflicts = await checkConflictingAppointments(dates);
+    
+    if (conflicts.length > 0) {
+      setConflictingAppointments(conflicts);
+      setPendingBlockAction(async () => {
+        await executeBlockDateRange(dates);
+      });
+      setConflictDialogOpen(true);
+      return;
+    }
+
+    await executeBlockDateRange(dates);
+  };
+
+  const executeBlockDateRange = async (dates: Date[]) => {
     setSubmitting(true);
     try {
       const datesToInsert = dates.map(date => ({
@@ -457,6 +525,22 @@ const ScheduleManagement = () => {
       return;
     }
 
+    // Check for conflicts
+    const conflicts = await checkConflictingAppointments(selectedDatesInMonth);
+    
+    if (conflicts.length > 0) {
+      setConflictingAppointments(conflicts);
+      setPendingBlockAction(async () => {
+        await executeBlockMultipleDates();
+      });
+      setConflictDialogOpen(true);
+      return;
+    }
+
+    await executeBlockMultipleDates();
+  };
+
+  const executeBlockMultipleDates = async () => {
     setSubmitting(true);
     try {
       const datesToInsert = selectedDatesInMonth.map(date => ({
@@ -1368,6 +1452,22 @@ const ScheduleManagement = () => {
             </TabsContent>
           </Tabs>
         </main>
+
+        {/* Vacation Conflict Dialog */}
+        <VacationConflictDialog
+          open={conflictDialogOpen}
+          onOpenChange={setConflictDialogOpen}
+          conflictingAppointments={conflictingAppointments}
+          blockedDates={selectedDate ? [selectedDate] : dateRange?.from && dateRange?.to 
+            ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
+            : selectedDatesInMonth}
+          onConfirm={async () => {
+            if (pendingBlockAction) {
+              await pendingBlockAction();
+              setPendingBlockAction(null);
+            }
+          }}
+        />
       </div>
     );
   };

@@ -9,6 +9,7 @@ const corsHeaders = {
 interface SMSRequest {
   appointmentId: string;
   notificationType: "confirmation" | "reminder" | "cancellation" | "reschedule";
+  customMessage?: string;
 }
 
 const formatPhoneNumber = (phone: string): string => {
@@ -66,7 +67,7 @@ serve(async (req) => {
   }
 
   try {
-    const { appointmentId, notificationType }: SMSRequest = await req.json();
+    const { appointmentId, notificationType, customMessage }: SMSRequest = await req.json();
     
     console.log(`📱 Sending ${notificationType} SMS for appointment ${appointmentId}`);
 
@@ -125,22 +126,27 @@ serve(async (req) => {
 
     let message = "";
     
-    switch (notificationType) {
-      case "confirmation":
-        message = `Hi ${clientName}! 🎉 Your appointment with ${stylistName} is confirmed for ${formattedDate} at ${formattedTime}. Service: ${appointment.service_type}. See you soon!`;
-        break;
-        
-      case "reminder":
-        message = `Reminder! 📅 You have an appointment tomorrow (${formattedDate}) at ${formattedTime} with ${stylistName} for ${appointment.service_type}. Looking forward to seeing you!`;
-        break;
-        
-      case "cancellation":
-        message = `Your appointment with ${stylistName} on ${formattedDate} at ${formattedTime} has been cancelled. ${appointment.cancellation_reason ? `Reason: ${appointment.cancellation_reason}.` : ""} Please contact us to reschedule.`;
-        break;
-        
-      case "reschedule":
-        message = `Your appointment with ${stylistName} has been rescheduled to ${formattedDate} at ${formattedTime}. Service: ${appointment.service_type}. Reply to confirm or contact us with questions.`;
-        break;
+    // Use custom message if provided, otherwise generate default messages
+    if (customMessage && notificationType === "reschedule") {
+      message = `Hi ${clientName}, ${stylistName} here. ${customMessage}`;
+    } else {
+      switch (notificationType) {
+        case "confirmation":
+          message = `Hi ${clientName}! 🎉 Your appointment with ${stylistName} is confirmed for ${formattedDate} at ${formattedTime}. Service: ${appointment.service_type}. See you soon!`;
+          break;
+          
+        case "reminder":
+          message = `Reminder! 📅 You have an appointment tomorrow (${formattedDate}) at ${formattedTime} with ${stylistName} for ${appointment.service_type}. Looking forward to seeing you!`;
+          break;
+          
+        case "cancellation":
+          message = `Your appointment with ${stylistName} on ${formattedDate} at ${formattedTime} has been cancelled. ${appointment.cancellation_reason ? `Reason: ${appointment.cancellation_reason}.` : ""} Please contact us to reschedule.`;
+          break;
+          
+        case "reschedule":
+          message = `Your appointment with ${stylistName} has been rescheduled to ${formattedDate} at ${formattedTime}. Service: ${appointment.service_type}. Reply to confirm or contact us with questions.`;
+          break;
+      }
     }
 
     const twilioResponse = await sendTwilioSMS(clientPhone, message);
