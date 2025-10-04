@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { HelpCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
@@ -31,6 +32,28 @@ const Knowledge = () => {
   // Color Correction specific state
   const [correctionSteps, setCorrectionSteps] = useState<Array<{ step: string; completed: boolean }>>([]);
   const [currentCorrection, setCurrentCorrection] = useState<any>(null);
+  
+  // Feature info dialog state
+  const [showFeatureInfo, setShowFeatureInfo] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState<"formula" | "stepbystep" | null>(null);
+
+  const featureDescriptions = {
+    formula: {
+      title: "Formula Generator",
+      description: "Get AI-powered hair color formulas instantly. Perfect for creating custom color blends, balayage formulas, and toner recommendations.",
+      benefits: ["Custom color formulas", "Balayage techniques", "Toner recommendations", "Level calculations"]
+    },
+    stepbystep: {
+      title: "Color Correction",
+      description: "Step-by-step guidance for fixing color mishaps. Track your progress with interactive checklists.",
+      benefits: ["Fix brassy tones", "Remove unwanted colors", "Correct uneven color", "Professional troubleshooting"]
+    }
+  };
+
+  const handleFeatureClick = (feature: "formula" | "stepbystep") => {
+    setSelectedFeature(feature);
+    setShowFeatureInfo(true);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -214,93 +237,52 @@ const Knowledge = () => {
         {/* Mode Selection Tabs with Retro Style */}
         <div className="mb-6">
           <div className="flex gap-4 p-2 bg-background rounded-2xl w-fit mx-auto border-4 border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)]">
-            <button
-              onClick={() => setAiMode("formula")}
-              className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
-                aiMode === "formula"
-                  ? "bg-gradient-to-r from-primary to-secondary text-white border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
-                  : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
-              }`}
-              style={{ border: "3px solid" }}
-            >
-              <Sparkles className="h-5 w-5" />
-              Formula Generator
-            </button>
-            <button
-              onClick={() => setAiMode("stepbystep")}
-              className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
-                aiMode === "stepbystep"
-                  ? "bg-gradient-to-r from-accent to-primary text-white border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
-                  : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
-              }`}
-              style={{ border: "3px solid" }}
-            >
-              <BookOpen className="h-5 w-5" />
-              Color Correction
-            </button>
+            <div className="relative group">
+              <button
+                onClick={() => setAiMode("formula")}
+                className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
+                  aiMode === "formula"
+                    ? "bg-gradient-to-r from-primary to-secondary text-white border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
+                }`}
+                style={{ border: "3px solid" }}
+              >
+                <Sparkles className="h-5 w-5" />
+                Formula Generator
+              </button>
+              <button
+                onClick={() => handleFeatureClick("formula")}
+                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
+              >
+                <HelpCircle className="h-3.5 w-3.5 text-white" />
+              </button>
+            </div>
+            <div className="relative group">
+              <button
+                onClick={() => setAiMode("stepbystep")}
+                className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
+                  aiMode === "stepbystep"
+                    ? "bg-gradient-to-r from-accent to-primary text-white border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
+                }`}
+                style={{ border: "3px solid" }}
+              >
+                <BookOpen className="h-5 w-5" />
+                Color Correction
+              </button>
+              <button
+                onClick={() => handleFeatureClick("stepbystep")}
+                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
+              >
+                <HelpCircle className="h-3.5 w-3.5 text-white" />
+              </button>
+            </div>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-[300px_1fr] gap-6">
           {/* Left Sidebar */}
           <div className="space-y-5">
-            {/* Quick Examples */}
-            <div className="window-chrome bg-gradient-to-br from-primary/5 to-accent/5">
-              <div className="p-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-3 h-3 rounded-full bg-secondary"></div>
-                  <div className="w-3 h-3 rounded-full bg-accent"></div>
-                  <div className="w-3 h-3 rounded-full bg-primary"></div>
-                  <h3 className="text-sm font-display font-bold ml-2">⚡ Quick Start</h3>
-                </div>
-                <div className="space-y-2">
-                  {aiMode === "formula" ? (
-                    <>
-                      <button
-                        onClick={() => setAiInput("What's the best approach for lifting level 5 hair to a warm blonde?")}
-                        className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-gradient-to-r from-primary/10 to-secondary/10 hover:from-primary/20 hover:to-secondary/20 transition-all border-2 border-primary/30 hover:border-primary/50"
-                      >
-                        💫 Blonde Lifting
-                      </button>
-                      <button
-                        onClick={() => setAiInput("I need a balayage formula for natural dimension on level 6 hair")}
-                        className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-gradient-to-r from-secondary/10 to-accent/10 hover:from-secondary/20 hover:to-accent/20 transition-all border-2 border-secondary/30 hover:border-secondary/50"
-                      >
-                        ✨ Balayage Formula
-                      </button>
-                      <button
-                        onClick={() => setAiInput("Recommend a toner formula for level 9 blonde")}
-                        className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-gradient-to-r from-accent/10 to-primary/10 hover:from-accent/20 hover:to-primary/20 transition-all border-2 border-accent/30 hover:border-accent/50"
-                      >
-                        🎨 Toner Guide
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => setAiInput("How do I fix brassy orange hair from a failed lift?")}
-                        className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-gradient-to-r from-destructive/10 to-secondary/10 hover:from-destructive/20 hover:to-secondary/20 transition-all border-2 border-destructive/30 hover:border-destructive/50"
-                      >
-                        🔧 Fix Brassy Hair
-                      </button>
-                      <button
-                        onClick={() => setAiInput("Step-by-step to remove green tones from blonde hair")}
-                        className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-gradient-to-r from-accent/10 to-primary/10 hover:from-accent/20 hover:to-primary/20 transition-all border-2 border-accent/30 hover:border-accent/50"
-                      >
-                        🌿 Remove Green Tones
-                      </button>
-                      <button
-                        onClick={() => setAiInput("How to correct uneven color and banding")}
-                        className="w-full text-left px-4 py-3 rounded-lg text-sm font-medium bg-gradient-to-r from-primary/10 to-secondary/10 hover:from-primary/20 hover:to-secondary/20 transition-all border-2 border-primary/30 hover:border-primary/50"
-                      >
-                        📏 Fix Banding
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-
             {/* Formula History */}
             {aiMode === "formula" && savedFormulas.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-secondary/5 to-primary/5">
@@ -514,6 +496,36 @@ const Knowledge = () => {
                 Save
               </Button>
             </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Feature Info Dialog */}
+        <Dialog open={showFeatureInfo} onOpenChange={setShowFeatureInfo}>
+          <DialogContent className="max-w-md border-4 border-foreground shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]">
+            <DialogHeader>
+              <DialogTitle className="font-display text-2xl gradient-text flex items-center gap-2">
+                {selectedFeature === "formula" ? <Sparkles className="h-6 w-6" /> : <BookOpen className="h-6 w-6" />}
+                {selectedFeature && featureDescriptions[selectedFeature].title}
+              </DialogTitle>
+              <DialogDescription className="text-base pt-2">
+                {selectedFeature && featureDescriptions[selectedFeature].description}
+              </DialogDescription>
+            </DialogHeader>
+            {selectedFeature && (
+              <div className="space-y-4 pt-2">
+                <div>
+                  <h4 className="font-display font-bold mb-2 text-sm">What You Can Do:</h4>
+                  <ul className="space-y-2">
+                    {featureDescriptions[selectedFeature].benefits.map((benefit, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-sm">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
           </DialogContent>
         </Dialog>
       </main>
