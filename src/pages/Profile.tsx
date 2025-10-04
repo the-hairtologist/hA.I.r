@@ -215,9 +215,32 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <Navigation userRole={userRole || undefined} userName={fullName} />
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
+        Skip to main content
+      </a>
+      
+      {/* Header */}
+      <header role="banner" className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/dashboard")}
+              aria-label="Back to dashboard"
+              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="flex items-center gap-3">
+              <User className="h-6 w-6 text-primary" />
+              <h1 className="text-2xl md:text-3xl font-display font-bold gradient-text">My Profile</h1>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main id="main-content" role="main" aria-label="Profile" className="container mx-auto px-4 py-8 max-w-2xl">
         <form onSubmit={handleSave} className="space-y-6">
           {/* Basic Information */}
           <Card>

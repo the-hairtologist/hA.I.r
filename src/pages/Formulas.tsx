@@ -722,17 +722,24 @@ const Formulas = () => {
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-4">
-                  <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
-                    <ArrowLeft className="h-4 w-4" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate("/dashboard")}
+                    aria-label="Back to dashboard"
+                    className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back
                   </Button>
                   <div className="flex items-center gap-2">
                     <History className="h-6 w-6 text-primary" />
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Client Formula History</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold gradient-text font-display">Client Formulas</h1>
                   </div>
                 </div>
                 {formulas.length > 0 && (
-                  <Button size="lg" className="gap-2" onClick={() => setDialogOpen(true)}>
-                    <Plus className="h-5 w-5" />
+                  <Button size="default" className="gap-2" onClick={() => setDialogOpen(true)}>
+                    <Plus className="h-4 w-4" />
                     New Formula
                   </Button>
                 )}

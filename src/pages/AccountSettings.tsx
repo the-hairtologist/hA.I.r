@@ -244,9 +244,32 @@ const AccountSettings = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <Navigation userRole={userRole || undefined} />
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
+        Skip to main content
+      </a>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      {/* Header */}
+      <header role="banner" className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/dashboard")}
+              aria-label="Back to dashboard"
+              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="flex items-center gap-3">
+              <Settings className="h-6 w-6 text-primary" />
+              <h1 className="text-2xl md:text-3xl font-display font-bold gradient-text">Account Settings</h1>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content" role="main" aria-label="Account Settings" className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="space-y-6">
           {/* Account Info */}
           <Card>

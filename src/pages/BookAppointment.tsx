@@ -392,15 +392,22 @@ const BookAppointment = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400">
-      <header className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+      <header role="banner" className="border-b-4 border-foreground bg-white/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="border-2 border-foreground">
-              <ArrowLeft className="h-4 w-4" />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/dashboard")}
+              aria-label="Back to dashboard"
+              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
             </Button>
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold font-display">Book Appointment</h1>
+              <h1 className="text-2xl md:text-3xl font-bold gradient-text font-display">Book Appointment</h1>
             </div>
           </div>
         </div>

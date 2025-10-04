@@ -272,8 +272,9 @@ const Portfolio = () => {
         <div className="mb-6">
           <Button
             variant="ghost"
-            onClick={() => navigate(-1)}
-            className="gap-2"
+            onClick={() => navigate("/dashboard")}
+            className="gap-2 hover:bg-secondary/20 hover:-translate-x-1 transition-all"
+            aria-label="Back to dashboard"
           >
             <ArrowLeft className="h-4 w-4" />
             Back
