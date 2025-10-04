@@ -81,8 +81,8 @@ export const WeeklyScheduleView = ({
   };
 
   const calculateAppointmentHeight = (durationMinutes: number) => {
-    // Each 30-minute slot is 35px
-    return (durationMinutes / 30) * 35;
+    // Each 30-minute slot is 32px
+    return (durationMinutes / 30) * 32;
   };
 
   const isWorkingHours = (day: Date, hour: number, minute: number) => {
@@ -127,7 +127,7 @@ export const WeeklyScheduleView = ({
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-y-auto max-h-[45vh]">
+        <div className="overflow-y-auto max-h-[40vh]">
           <div className="w-full">
             {/* Header with days */}
             <div 
@@ -179,7 +179,7 @@ export const WeeklyScheduleView = ({
                       <div
                         key={`${day.toISOString()}-${slotIndex}`}
                         className={cn(
-                          "relative border-r border-border/30 h-[35px]",
+                          "relative border-r border-border/30 h-[32px]",
                           !isWorking && "bg-muted/20",
                           slot.minute === 0 && "border-t border-border"
                         )}
