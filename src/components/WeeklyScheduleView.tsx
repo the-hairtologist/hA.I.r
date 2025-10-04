@@ -20,7 +20,15 @@ export const WeeklyScheduleView = ({
   const [currentWeek, setCurrentWeek] = useState(new Date());
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 0 });
-  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+  const allWeekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+  
+  // Filter to only show working days
+  const weekDays = stylistSchedule 
+    ? allWeekDays.filter(day => {
+        const dayName = format(day, 'EEEE').toLowerCase();
+        return stylistSchedule[dayName]?.enabled;
+      })
+    : allWeekDays;
 
   // Find earliest start and latest end time from schedule
   const getScheduleBounds = () => {
@@ -119,11 +127,17 @@ export const WeeklyScheduleView = ({
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-auto max-h-[70vh]">
-          <div className="min-w-[1200px]">
+        <div className="overflow-y-auto max-h-[70vh]">
+          <div className="w-full">
             {/* Header with days */}
-            <div className="grid grid-cols-8 border-b-[2px] border-border sticky top-0 bg-card z-20">
-              <div className="p-2 border-r-[2px] border-border text-xs font-semibold w-16">
+            <div 
+              className="border-b-[2px] border-border sticky top-0 bg-card z-20"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `80px repeat(${weekDays.length}, 1fr)`
+              }}
+            >
+              <div className="p-2 border-r-[2px] border-border text-xs font-semibold">
                 Time
               </div>
               {weekDays.map((day) => (
@@ -143,9 +157,16 @@ export const WeeklyScheduleView = ({
             {/* Time slots grid */}
             <div className="relative">
               {timeSlots.map((slot, slotIndex) => (
-                <div key={slotIndex} className="grid grid-cols-8 border-b border-border/30">
+                <div 
+                  key={slotIndex} 
+                  className="border-b border-border/30"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: `80px repeat(${weekDays.length}, 1fr)`
+                  }}
+                >
                   {/* Time label */}
-                  <div className="p-1.5 border-r-[2px] border-border text-[10px] text-muted-foreground font-medium w-16 flex items-center">
+                  <div className="p-1.5 border-r-[2px] border-border text-[10px] text-muted-foreground font-medium flex items-center">
                     {slot.minute === 0 && <span className="font-semibold">{slot.label}</span>}
                   </div>
 
