@@ -28,6 +28,7 @@ const BookAppointment = () => {
   const [stylistServices, setStylistServices] = useState<any[]>([]);
   const [blockedDates, setBlockedDates] = useState<Date[]>([]);
   const [scheduleOverrides, setScheduleOverrides] = useState<any[]>([]);
+  const [bufferTime, setBufferTime] = useState<number>(15);
 
   // Generate time slots based on stylist availability
   const generateTimeSlots = (startTime: string, endTime: string): string[] => {
@@ -94,7 +95,7 @@ const BookAppointment = () => {
 
       setClientProfile(client);
 
-      // Get available stylists with their schedules
+      // Get available stylists with their schedules and buffer time
       const { data: stylistsData } = await supabase
         .from("stylist_profiles")
         .select(`
@@ -105,9 +106,13 @@ const BookAppointment = () => {
 
       setStylists(stylistsData || []);
 
-      // Pre-select preferred stylist
+      // Pre-select preferred stylist and load their buffer time
       if (client.preferred_stylist_id) {
         setSelectedStylist(client.preferred_stylist_id);
+        const preferredStylist = stylistsData?.find(s => s.id === client.preferred_stylist_id);
+        if (preferredStylist) {
+          setBufferTime(preferredStylist.buffer_time_minutes || 15);
+        }
       }
     } catch (error: any) {
       console.error("Error loading data:", error);
@@ -184,7 +189,7 @@ const BookAppointment = () => {
     return stylist?.weekly_schedule;
   };
 
-  const updateAvailableTimeSlots = () => {
+  const updateAvailableTimeSlots = async () => {
     if (!selectedStylist || !selectedDate) {
       setAvailableTimeSlots([]);
       return;
@@ -207,7 +212,47 @@ const BookAppointment = () => {
     }
 
     const slots = generateTimeSlots(daySchedule.startTime, daySchedule.endTime);
-    setAvailableTimeSlots(slots);
+    
+    // Filter out slots that conflict with existing appointments (including buffer time)
+    try {
+      const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      const { data: existingAppointments } = await supabase
+        .from("appointments")
+        .select("appointment_date, duration_minutes")
+        .eq("stylist_id", selectedStylist)
+        .neq("status", "cancelled")
+        .gte("appointment_date", `${dateStr}T00:00:00`)
+        .lte("appointment_date", `${dateStr}T23:59:59`);
+
+      if (existingAppointments && existingAppointments.length > 0) {
+        const availableSlots = slots.filter(slot => {
+          const [time, period] = slot.split(" ");
+          const [hours, minutes] = time.split(":").map(Number);
+          const adjustedHours = period === "PM" && hours !== 12 ? hours + 12 : hours === 12 && period === "AM" ? 0 : hours;
+          const slotDate = setMinutes(setHours(selectedDate, adjustedHours), minutes);
+
+          // Check if this slot conflicts with any existing appointment (including buffer)
+          return !existingAppointments.some(appt => {
+            const apptStart = new Date(appt.appointment_date);
+            const apptEnd = new Date(apptStart.getTime() + (appt.duration_minutes + bufferTime) * 60000);
+            const slotEnd = new Date(slotDate.getTime() + ((selectedService?.duration_minutes || 60) + bufferTime) * 60000);
+            
+            // Check for overlap
+            return (slotDate < apptEnd && slotEnd > apptStart);
+          });
+        });
+        
+        setAvailableTimeSlots(availableSlots);
+        if (selectedTime && !availableSlots.includes(selectedTime)) {
+          setSelectedTime("");
+        }
+      } else {
+        setAvailableTimeSlots(slots);
+      }
+    } catch (error) {
+      console.error("Error filtering time slots:", error);
+      setAvailableTimeSlots(slots);
+    }
     
     // Clear selected time if it's not in available slots
     if (selectedTime && !slots.includes(selectedTime)) {

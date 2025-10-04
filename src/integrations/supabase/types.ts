@@ -68,6 +68,57 @@ export type Database = {
         }
         Relationships: []
       }
+      appointment_calendar_events: {
+        Row: {
+          appointment_id: string
+          calendar_connection_id: string
+          error_message: string | null
+          external_event_id: string
+          id: string
+          last_updated_at: string | null
+          provider: string
+          sync_status: string | null
+          synced_at: string | null
+        }
+        Insert: {
+          appointment_id: string
+          calendar_connection_id: string
+          error_message?: string | null
+          external_event_id: string
+          id?: string
+          last_updated_at?: string | null
+          provider: string
+          sync_status?: string | null
+          synced_at?: string | null
+        }
+        Update: {
+          appointment_id?: string
+          calendar_connection_id?: string
+          error_message?: string | null
+          external_event_id?: string
+          id?: string
+          last_updated_at?: string | null
+          provider?: string
+          sync_status?: string | null
+          synced_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_calendar_events_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_calendar_events_calendar_connection_id_fkey"
+            columns: ["calendar_connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -171,6 +222,51 @@ export type Database = {
           record_id?: string | null
           table_name?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      calendar_connections: {
+        Row: {
+          access_token: string | null
+          calendar_id: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          provider: string
+          refresh_token: string | null
+          sync_enabled: boolean | null
+          token_expires_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          calendar_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          provider: string
+          refresh_token?: string | null
+          sync_enabled?: boolean | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          calendar_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          provider?: string
+          refresh_token?: string | null
+          sync_enabled?: boolean | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -557,7 +653,10 @@ export type Database = {
           client_id: string
           created_at: string
           id: string
+          is_deposit: boolean | null
           payment_method: string | null
+          payment_type: string | null
+          remaining_balance: number | null
           status: string | null
           stylist_id: string
         }
@@ -567,7 +666,10 @@ export type Database = {
           client_id: string
           created_at?: string
           id?: string
+          is_deposit?: boolean | null
           payment_method?: string | null
+          payment_type?: string | null
+          remaining_balance?: number | null
           status?: string | null
           stylist_id: string
         }
@@ -577,7 +679,10 @@ export type Database = {
           client_id?: string
           created_at?: string
           id?: string
+          is_deposit?: boolean | null
           payment_method?: string | null
+          payment_type?: string | null
+          remaining_balance?: number | null
           status?: string | null
           stylist_id?: string
         }
@@ -821,6 +926,7 @@ export type Database = {
         Row: {
           average_rating: number | null
           bio: string | null
+          buffer_time_minutes: number | null
           business_name: string | null
           color_line: string | null
           commission_rate: number | null
@@ -838,6 +944,7 @@ export type Database = {
         Insert: {
           average_rating?: number | null
           bio?: string | null
+          buffer_time_minutes?: number | null
           business_name?: string | null
           color_line?: string | null
           commission_rate?: number | null
@@ -855,6 +962,7 @@ export type Database = {
         Update: {
           average_rating?: number | null
           bio?: string | null
+          buffer_time_minutes?: number | null
           business_name?: string | null
           color_line?: string | null
           commission_rate?: number | null
@@ -923,33 +1031,42 @@ export type Database = {
       stylist_services: {
         Row: {
           created_at: string
+          deposit_amount: number | null
+          deposit_type: string | null
           description: string | null
           duration_minutes: number
           id: string
           is_active: boolean | null
           price: number
+          require_deposit: boolean | null
           service_name: string
           stylist_id: string
           updated_at: string
         }
         Insert: {
           created_at?: string
+          deposit_amount?: number | null
+          deposit_type?: string | null
           description?: string | null
           duration_minutes?: number
           id?: string
           is_active?: boolean | null
           price: number
+          require_deposit?: boolean | null
           service_name: string
           stylist_id: string
           updated_at?: string
         }
         Update: {
           created_at?: string
+          deposit_amount?: number | null
+          deposit_type?: string | null
           description?: string | null
           duration_minutes?: number
           id?: string
           is_active?: boolean | null
           price?: number
+          require_deposit?: boolean | null
           service_name?: string
           stylist_id?: string
           updated_at?: string

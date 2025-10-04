@@ -35,6 +35,22 @@ serve(async (req) => {
       throw new Error('Service not found')
     }
 
+    // Calculate payment amount (deposit or full)
+    const fullPrice = parseFloat(service.price)
+    let paymentAmount = fullPrice
+    let isDeposit = false
+    let remainingBalance = 0
+
+    if (service.require_deposit) {
+      isDeposit = true
+      if (service.deposit_type === 'percentage') {
+        paymentAmount = (fullPrice * service.deposit_amount) / 100
+      } else {
+        paymentAmount = parseFloat(service.deposit_amount)
+      }
+      remainingBalance = fullPrice - paymentAmount
+    }
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -43,10 +59,10 @@ serve(async (req) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: service.service_name,
-              description: `Appointment with ${service.stylist.user.full_name} - ${appointmentData.duration_minutes} minutes`,
+              name: `${isDeposit ? 'Deposit for ' : ''}${service.service_name}`,
+              description: `Appointment with ${service.stylist.user.full_name} - ${appointmentData.duration_minutes} minutes${isDeposit ? ` (Balance: $${remainingBalance.toFixed(2)})` : ''}`,
             },
-            unit_amount: Math.round(parseFloat(service.price) * 100), // Convert to cents
+            unit_amount: Math.round(paymentAmount * 100), // Convert to cents
           },
           quantity: 1,
         },
@@ -58,13 +74,19 @@ serve(async (req) => {
       metadata: {
         appointment_data: JSON.stringify(appointmentData),
         client_name: clientName,
+        is_deposit: isDeposit.toString(),
+        remaining_balance: remainingBalance.toFixed(2),
+        full_price: fullPrice.toFixed(2),
       },
     })
 
     return new Response(
       JSON.stringify({ 
         sessionId: session.id, 
-        url: session.url 
+        url: session.url,
+        isDeposit,
+        depositAmount: paymentAmount.toFixed(2),
+        remainingBalance: remainingBalance.toFixed(2),
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

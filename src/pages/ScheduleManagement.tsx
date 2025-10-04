@@ -17,6 +17,7 @@ import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, addDays
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { Textarea } from "@/components/ui/textarea";
+import CalendarSync from "@/components/CalendarSync";
 
 interface DaySchedule {
   enabled: boolean;
@@ -46,6 +47,7 @@ const ScheduleManagement = () => {
   const [overrideSchedule, setOverrideSchedule] = useState<Record<string, DaySchedule> | null>(null);
   const [editingOverride, setEditingOverride] = useState<any>(null);
   const [selectedPreset, setSelectedPreset] = useState<string>("");
+  const [bufferTime, setBufferTime] = useState<number>(15);
 
   // Preset templates for common scenarios
   const presetTemplates = {
@@ -528,7 +530,7 @@ const ScheduleManagement = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-5">
+          <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-6">
             <TabsTrigger value="availability" className="gap-2">
               <Clock className="h-4 w-4" />
               Weekly
@@ -548,6 +550,10 @@ const ScheduleManagement = () => {
             <TabsTrigger value="year" className="gap-2">
               <CalendarRange className="h-4 w-4" />
               Year View
+            </TabsTrigger>
+            <TabsTrigger value="calendar-sync" className="gap-2">
+              <CalendarIcon className="h-4 w-4" />
+              Calendar Sync
             </TabsTrigger>
           </TabsList>
 
@@ -594,6 +600,44 @@ const ScheduleManagement = () => {
                       onCheckedChange={toggleGeneralAvailability}
                     />
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Buffer Time Configuration */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-primary" />
+                  <CardTitle>Buffer Time Between Appointments</CardTitle>
+                </div>
+                <CardDescription>
+                  Set time buffer to allow for cleanup, prep, and avoid back-to-back scheduling
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="bufferTime">
+                    Buffer Time (minutes)
+                  </Label>
+                  <Select
+                    value={bufferTime.toString()}
+                    onValueChange={(value) => setBufferTime(parseInt(value))}
+                  >
+                    <SelectTrigger id="bufferTime">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0">No buffer</SelectItem>
+                      <SelectItem value="15">15 minutes (recommended)</SelectItem>
+                      <SelectItem value="30">30 minutes</SelectItem>
+                      <SelectItem value="45">45 minutes</SelectItem>
+                      <SelectItem value="60">60 minutes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-muted-foreground">
+                    This time will be automatically added between appointments to prevent double-booking
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -1257,6 +1301,16 @@ const ScheduleManagement = () => {
                 </div>
               </CardContent>
             </Card>
+            </TabsContent>
+
+            {/* Calendar Sync Tab */}
+            <TabsContent value="calendar-sync">
+              <CalendarSync />
+          </TabsContent>
+
+          {/* Calendar Sync Tab */}
+          <TabsContent value="calendar-sync">
+            <CalendarSync />
           </TabsContent>
         </Tabs>
       </main>

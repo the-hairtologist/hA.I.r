@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2, Info } from "lucide-react";
 import { HelpTooltip } from "@/components/HelpTooltip";
@@ -27,6 +28,9 @@ const Services = () => {
   const [duration, setDuration] = useState("90");
   const [price, setPrice] = useState("");
   const [isActive, setIsActive] = useState(true);
+  const [requireDeposit, setRequireDeposit] = useState(false);
+  const [depositAmount, setDepositAmount] = useState("");
+  const [depositType, setDepositType] = useState<"fixed" | "percentage">("fixed");
 
   useEffect(() => {
     loadData();
@@ -75,6 +79,9 @@ const Services = () => {
     setDuration("90");
     setPrice("");
     setIsActive(true);
+    setRequireDeposit(false);
+    setDepositAmount("");
+    setDepositType("fixed");
     setEditingService(null);
   };
 
@@ -85,6 +92,9 @@ const Services = () => {
     setDuration(service.duration_minutes.toString());
     setPrice(service.price);
     setIsActive(service.is_active);
+    setRequireDeposit(service.require_deposit || false);
+    setDepositAmount(service.deposit_amount?.toString() || "");
+    setDepositType(service.deposit_type || "fixed");
     setDialogOpen(true);
   };
 
@@ -102,6 +112,23 @@ const Services = () => {
       return;
     }
 
+    // Validate deposit if required
+    if (requireDeposit) {
+      const depositNum = parseFloat(depositAmount);
+      if (isNaN(depositNum) || depositNum <= 0) {
+        toast.error("Please enter a valid deposit amount");
+        return;
+      }
+      if (depositType === "percentage" && depositNum > 100) {
+        toast.error("Percentage must be 100 or less");
+        return;
+      }
+      if (depositType === "fixed" && depositNum > priceNum) {
+        toast.error("Deposit cannot exceed service price");
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
       const serviceData = {
@@ -111,6 +138,9 @@ const Services = () => {
         duration_minutes: parseInt(duration),
         price: priceNum,
         is_active: isActive,
+        require_deposit: requireDeposit,
+        deposit_amount: requireDeposit ? parseFloat(depositAmount) : 0,
+        deposit_type: requireDeposit ? depositType : 'fixed',
       };
 
       if (editingService) {
@@ -265,6 +295,60 @@ const Services = () => {
                     <Label htmlFor="isActive">Service is active and bookable</Label>
                   </div>
 
+                  {/* Deposit Configuration */}
+                  <div className="space-y-4 border-t pt-4">
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        id="requireDeposit"
+                        checked={requireDeposit}
+                        onCheckedChange={setRequireDeposit}
+                      />
+                      <Label htmlFor="requireDeposit" className="flex items-center gap-2">
+                        Require deposit for this service
+                        <HelpTooltip content="Deposits reduce no-shows and secure bookings. Great for new clients or expensive services." />
+                      </Label>
+                    </div>
+
+                    {requireDeposit && (
+                      <div className="ml-6 space-y-4 p-4 bg-muted/50 rounded-lg border-2 border-foreground/10">
+                        <div className="space-y-2">
+                          <Label>Deposit Type</Label>
+                          <Select value={depositType} onValueChange={(value: "fixed" | "percentage") => setDepositType(value)}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="fixed">Fixed Amount ($)</SelectItem>
+                              <SelectItem value="percentage">Percentage (%)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="depositAmount">
+                            Deposit {depositType === "fixed" ? "Amount ($)" : "Percentage (%)"}
+                          </Label>
+                          <Input
+                            id="depositAmount"
+                            type="number"
+                            step={depositType === "fixed" ? "0.01" : "1"}
+                            min="0"
+                            max={depositType === "percentage" ? "100" : undefined}
+                            placeholder={depositType === "fixed" ? "50.00" : "50"}
+                            value={depositAmount}
+                            onChange={(e) => setDepositAmount(e.target.value)}
+                            required={requireDeposit}
+                          />
+                          {depositType === "percentage" && depositAmount && (
+                            <p className="text-sm text-muted-foreground">
+                              = ${((parseFloat(price) || 0) * (parseFloat(depositAmount) / 100)).toFixed(2)} deposit
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <Button type="submit" disabled={submitting} className="w-full">
                     {submitting ? (
                       <>
@@ -313,6 +397,13 @@ const Services = () => {
                       </CardTitle>
                       <CardDescription className="mt-1 text-foreground/80 font-medium">
                         {service.duration_minutes} minutes • ${parseFloat(service.price).toFixed(2)}
+                        {service.require_deposit && (
+                          <span className="ml-2 text-xs bg-yellow-300 text-foreground px-2 py-0.5 rounded-full border-2 border-foreground font-bold">
+                            Requires ${service.deposit_type === 'percentage' 
+                              ? ((parseFloat(service.price) * service.deposit_amount) / 100).toFixed(2)
+                              : parseFloat(service.deposit_amount).toFixed(2)} deposit
+                          </span>
+                        )}
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
