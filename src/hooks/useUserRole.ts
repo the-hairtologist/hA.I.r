@@ -24,11 +24,13 @@ export function useUserRole(userId?: string): UseUserRoleReturn {
 
   const fetchRoles = async () => {
     if (!userId) {
+      setRoles([]);
       setLoading(false);
       return;
     }
 
     try {
+      // Ensure loading is true when we have a userId
       setLoading(true);
 
       log.debug('Fetching user roles', 'useUserRole', { userId });
@@ -57,6 +59,10 @@ export function useUserRole(userId?: string): UseUserRoleReturn {
   };
 
   useEffect(() => {
+    // Set loading to true immediately when userId changes
+    if (userId) {
+      setLoading(true);
+    }
     fetchRoles();
   }, [userId]);
 

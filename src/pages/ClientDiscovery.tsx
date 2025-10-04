@@ -44,7 +44,13 @@ const ClientDiscovery = () => {
     const checkAccess = async () => {
       // Only run checks after both auth and roles are fully loaded
       if (authLoading || roleLoading) {
-        console.log("ClientDiscovery: Still loading", { authLoading, roleLoading });
+        console.log("ClientDiscovery: Still loading", { authLoading, roleLoading, hasUser: !!user, rolesLength: roles.length });
+        return;
+      }
+
+      // Additional safety check: if we have a user but no roles yet, keep waiting
+      if (user && roles.length === 0) {
+        console.log("ClientDiscovery: User exists but roles not loaded yet, waiting...");
         return;
       }
 
