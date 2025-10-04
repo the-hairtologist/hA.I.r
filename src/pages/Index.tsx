@@ -15,34 +15,34 @@ const Index = () => {
         Skip to main content
       </a>
       
-      <header className="container mx-auto px-4 py-6 border-b-4 border-foreground" role="banner">
+      <header className="container mx-auto px-4 py-4 sm:py-6 border-b-4 border-foreground" role="banner">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Scissors className="h-8 w-8 text-primary" />
-            <h1 className="text-3xl font-display font-bold">hA.I.r</h1>
+            <Scissors className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <h1 className="text-xl sm:text-3xl font-display font-bold">hA.I.r</h1>
           </div>
-          <div className="flex gap-3">
-            <Button variant="ghost" onClick={() => navigate("/privacy")} className="text-sm">
+          <div className="flex gap-2 sm:gap-3">
+            <Button variant="ghost" onClick={() => navigate("/privacy")} className="hidden sm:inline-flex text-sm">
               Privacy
             </Button>
-            <Button variant="ghost" onClick={() => navigate("/terms")} className="text-sm">
+            <Button variant="ghost" onClick={() => navigate("/terms")} className="hidden sm:inline-flex text-sm">
               Terms
             </Button>
-            <Button variant="outline" onClick={() => navigate("/auth")}>
+            <Button variant="outline" onClick={() => navigate("/auth")} size="sm" className="sm:h-10">
               Sign In
             </Button>
-            <Button onClick={() => navigate("/auth")}>
+            <Button onClick={() => navigate("/auth")} size="sm" className="hidden sm:inline-flex sm:h-10">
               Get Started
             </Button>
           </div>
         </div>
       </header>
 
-      <main id="main-content" className="container mx-auto px-4 py-20">
-        <div className="max-w-6xl mx-auto mb-16">
-          <div className="window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 mb-16 relative">
+      <main id="main-content" className="container mx-auto px-4 py-8 sm:py-12 md:py-20">
+        <div className="max-w-6xl mx-auto mb-8 sm:mb-16">
+          <div className="window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 mb-8 sm:mb-16 relative">
             <div className="window-titlebar">
-              <span className="text-background font-mono text-sm font-bold">hA.I.r / welcome</span>
+              <span className="text-background font-mono text-xs sm:text-sm font-bold">hA.I.r / welcome</span>
               <div className="window-controls">
                 <div className="window-control bg-background"></div>
                 <div className="window-control bg-background"></div>
@@ -50,33 +50,33 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="bg-blue-600 p-8 md:p-16 relative min-h-[500px] text-center">
-              <div className="window-scrollbar"></div>
+            <div className="bg-blue-600 p-6 sm:p-8 md:p-16 relative min-h-[400px] sm:min-h-[500px] text-center">
+              <div className="window-scrollbar hidden md:block"></div>
               
-              <div className="max-w-4xl mx-auto relative z-10">
-                <div className="flex items-center justify-center gap-4 mb-8">
-                  <Scissors className="h-12 w-12 text-pink-400" />
-                  <div className="text-5xl">✨</div>
-                  <div className="w-12 h-12 border-4 border-pink-400 rotate-45"></div>
-                  <div className="text-5xl">🎨</div>
+              <div className="max-w-4xl mx-auto relative z-10 px-2">
+                <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+                  <Scissors className="h-8 w-8 sm:h-12 sm:w-12 text-pink-400" />
+                  <div className="text-3xl sm:text-5xl">✨</div>
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 sm:border-4 border-pink-400 rotate-45"></div>
+                  <div className="text-3xl sm:text-5xl">🎨</div>
                 </div>
                 
-                <h1 className="text-5xl md:text-7xl font-display font-black mb-8 text-pink-400 uppercase leading-tight">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-black mb-6 sm:mb-8 text-pink-400 uppercase leading-tight px-2">
                   Transform Every Color Service
                 </h1>
                 
-                <p className="text-xl md:text-2xl font-bold text-pink-300 mb-4">
+                <p className="text-lg sm:text-xl md:text-2xl font-bold text-pink-300 mb-3 sm:mb-4">
                   AI-Powered Precision
                 </p>
                 
-                <p className="text-base md:text-lg font-medium text-pink-200 mb-12 max-w-2xl mx-auto">
+                <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mb-8 sm:mb-12 max-w-2xl mx-auto px-2">
                   Stop wasting time on guesswork and inconsistent results. Generate flawless color formulas in seconds, automate your bookings, and deliver the transformations your clients crave—every single time.
                 </p>
                 
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-xl px-12 py-6 font-display font-black bg-pink-500 text-white hover:bg-pink-600 border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-all hover:scale-105 uppercase group"
+                  className="text-base sm:text-xl px-8 sm:px-12 py-4 sm:py-6 font-display font-black bg-pink-500 text-white hover:bg-pink-600 border-2 sm:border-4 border-pink-400 hover:translate-x-1 hover:translate-y-1 transition-all hover:scale-105 uppercase group"
                   aria-label="Start your free trial"
                 >
                   Start Free

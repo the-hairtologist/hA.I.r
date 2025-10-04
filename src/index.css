@@ -335,10 +335,10 @@ All colors MUST be HSL.
     right: 12px;
     top: 60px;
     bottom: 12px;
-    width: 24px;
+    width: 20px;
     background: hsl(var(--foreground) / 0.1);
-    border: 3px solid hsl(var(--foreground));
-    border-radius: 12px;
+    border: 2px solid hsl(var(--foreground));
+    border-radius: 8px;
   }
 
   .window-scrollbar::before {
