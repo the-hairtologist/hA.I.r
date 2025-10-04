@@ -68,6 +68,14 @@ export const updatePasswordSchema = z
     path: ['confirmPassword'],
   });
 
+// Combined auth schema for flexible validation
+export const authSchema = z.object({
+  email: emailSchema,
+  password: passwordSchema,
+  fullName: nameSchema.optional(),
+  userType: z.enum(['stylist', 'client']).optional(),
+});
+
 // ============= Profile Schemas =============
 
 export const profileSchema = z.object({
