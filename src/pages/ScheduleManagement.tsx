@@ -165,6 +165,9 @@ const ScheduleManagement = () => {
         setSchedule(stylist.weekly_schedule as unknown as Record<string, DaySchedule>);
       }
 
+      // Load buffer time
+      setBufferTime(stylist.buffer_time_minutes || 15);
+
       const { data: datesData } = await supabase
         .from("stylist_blocked_dates")
         .select("*")
@@ -242,12 +245,15 @@ const ScheduleManagement = () => {
     try {
       const { error } = await supabase
         .from("stylist_profiles")
-        .update({ weekly_schedule: schedule as any })
+        .update({ 
+          weekly_schedule: schedule as any,
+          buffer_time_minutes: bufferTime 
+        })
         .eq("id", stylistProfile.id);
 
       if (error) throw error;
 
-      setStylistProfile({ ...stylistProfile, weekly_schedule: schedule as any });
+      setStylistProfile({ ...stylistProfile, weekly_schedule: schedule as any, buffer_time_minutes: bufferTime });
       toast.success("Schedule saved successfully!");
       loadScheduleOverrides();
     } catch (error: any) {
@@ -606,39 +612,86 @@ const ScheduleManagement = () => {
             </Card>
 
             {/* Buffer Time Configuration */}
-            <Card>
+            <Card className="border-[3px] border-primary/20 shadow-[4px_4px_0px_0px_hsl(var(--primary)_/_0.2)]">
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" />
                   <CardTitle>Buffer Time Between Appointments</CardTitle>
                 </div>
                 <CardDescription>
-                  Set time buffer to allow for cleanup, prep, and avoid back-to-back scheduling
+                  Prevent burnout and allow time for cleanup, prep, and client notes
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="bufferTime">
-                    Buffer Time (minutes)
-                  </Label>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="bufferTime" className="text-base">
+                      Default Buffer Time
+                    </Label>
+                    <Badge variant="outline" className="text-sm">
+                      {bufferTime} min
+                    </Badge>
+                  </div>
                   <Select
                     value={bufferTime.toString()}
                     onValueChange={(value) => setBufferTime(parseInt(value))}
                   >
-                    <SelectTrigger id="bufferTime">
+                    <SelectTrigger id="bufferTime" className="border-[2px] border-foreground">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="0">No buffer</SelectItem>
-                      <SelectItem value="15">15 minutes (recommended)</SelectItem>
-                      <SelectItem value="30">30 minutes</SelectItem>
-                      <SelectItem value="45">45 minutes</SelectItem>
-                      <SelectItem value="60">60 minutes</SelectItem>
+                      <SelectItem value="0">⚡ No buffer - Back to back</SelectItem>
+                      <SelectItem value="10">🏃 10 minutes - Quick reset</SelectItem>
+                      <SelectItem value="15">✨ 15 minutes - Standard (recommended)</SelectItem>
+                      <SelectItem value="20">🌟 20 minutes - Comfortable</SelectItem>
+                      <SelectItem value="30">😌 30 minutes - Relaxed pace</SelectItem>
+                      <SelectItem value="45">🧘 45 minutes - Extended break</SelectItem>
+                      <SelectItem value="60">☕ 60 minutes - Full break</SelectItem>
                     </SelectContent>
                   </Select>
-                  <p className="text-sm text-muted-foreground">
-                    This time will be automatically added between appointments to prevent double-booking
-                  </p>
+                  
+                  {/* Visual Example */}
+                  <div className="p-3 rounded-lg bg-muted/50 border-2 border-dashed space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase">Example Timeline</p>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                        <span className="text-sm">1:00 PM - Client appointment starts</span>
+                      </div>
+                      <div className="flex items-center gap-2 ml-4">
+                        <span className="text-xs text-muted-foreground">↓ 90 min service</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span className="text-sm">2:30 PM - Service complete</span>
+                      </div>
+                      <div className="flex items-center gap-2 ml-4">
+                        <span className="text-xs text-primary font-medium">↓ {bufferTime} min buffer (cleanup & prep)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                        <span className="text-sm font-medium">{
+                          (() => {
+                            const startTime = new Date('2024-01-01 13:00');
+                            const endTime = new Date(startTime.getTime() + (90 + bufferTime) * 60000);
+                            return `${endTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} - Next available slot`;
+                          })()
+                        }</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <div className="flex gap-2">
+                      <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm text-blue-900 dark:text-blue-100">
+                        <p className="font-medium mb-1">Pro Tip:</p>
+                        <p className="text-xs opacity-90">
+                          Set custom buffer times for specific services in the Services page. For example: color corrections might need 30 min buffer while quick trims only need 10 min.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>

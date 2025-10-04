@@ -136,6 +136,12 @@ const BookAppointment = () => {
       
       // Reset selected service if stylist changes
       setSelectedService(null);
+      
+      // Update buffer time from stylist profile
+      const stylist = stylists.find(s => s.id === selectedStylist);
+      if (stylist) {
+        setBufferTime(stylist.buffer_time_minutes || 15);
+      }
     } catch (error) {
       console.error("Error loading services:", error);
       toast.error("Failed to load services");
@@ -234,8 +240,10 @@ const BookAppointment = () => {
           // Check if this slot conflicts with any existing appointment (including buffer)
           return !existingAppointments.some(appt => {
             const apptStart = new Date(appt.appointment_date);
-            const apptEnd = new Date(apptStart.getTime() + (appt.duration_minutes + bufferTime) * 60000);
-            const slotEnd = new Date(slotDate.getTime() + ((selectedService?.duration_minutes || 60) + bufferTime) * 60000);
+            // Use service-specific buffer if available, otherwise use stylist default
+            const effectiveBuffer = selectedService?.buffer_time_minutes ?? bufferTime;
+            const apptEnd = new Date(apptStart.getTime() + (appt.duration_minutes + effectiveBuffer) * 60000);
+            const slotEnd = new Date(slotDate.getTime() + ((selectedService?.duration_minutes || 60) + effectiveBuffer) * 60000);
             
             // Check for overlap
             return (slotDate < apptEnd && slotEnd > apptStart);
@@ -336,6 +344,9 @@ const BookAppointment = () => {
         setSubmitting(false);
         return;
       }
+
+      // Get effective buffer time (service-specific or stylist default)
+      const effectiveBuffer = selectedService.buffer_time_minutes ?? bufferTime;
 
       // Get user details for Stripe
       const { data: { session } } = await supabase.auth.getSession();
@@ -505,16 +516,23 @@ const BookAppointment = () => {
                         <SelectValue placeholder="Select service" />
                       </SelectTrigger>
                       <SelectContent className="bg-popover z-50 max-h-[300px]">
-                        {stylistServices.map((service) => (
-                          <SelectItem key={service.id} value={service.id}>
-                            <div className="flex flex-col">
-                              <span className="font-medium">{service.service_name}</span>
-                              <span className="text-xs text-muted-foreground">
-                                ${service.price} • {service.duration_minutes} min
-                              </span>
-                            </div>
-                          </SelectItem>
-                        ))}
+                        {stylistServices.map((service) => {
+                          const effectiveBuffer = service.buffer_time_minutes ?? bufferTime;
+                          const totalTime = service.duration_minutes + effectiveBuffer;
+                          return (
+                            <SelectItem key={service.id} value={service.id}>
+                              <div className="flex flex-col">
+                                <span className="font-medium">{service.service_name}</span>
+                                <span className="text-xs text-muted-foreground">
+                                  ${service.price} • {service.duration_minutes} min
+                                  {effectiveBuffer > 0 && (
+                                    <span className="ml-1 opacity-70">+ {effectiveBuffer} min buffer</span>
+                                  )}
+                                </span>
+                              </div>
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   )}
@@ -524,9 +542,24 @@ const BookAppointment = () => {
                         <CheckCircle className="h-3 w-3 text-green-500" />
                         <span className="font-medium">{selectedService.service_name}</span>
                       </div>
-                      <div className="text-sm text-muted-foreground grid grid-cols-2 gap-2">
-                        <div>💵 ${selectedService.price}</div>
-                        <div>⏱️ {selectedService.duration_minutes} min</div>
+                      <div className="text-sm text-muted-foreground space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span>💵 ${selectedService.price}</span>
+                          <span>•</span>
+                          <span>⏱️ {selectedService.duration_minutes} min service</span>
+                        </div>
+                        {(() => {
+                          const effectiveBuffer = selectedService.buffer_time_minutes ?? bufferTime;
+                          if (effectiveBuffer > 0) {
+                            return (
+                              <div className="text-xs bg-muted/50 px-2 py-1 rounded border">
+                                <Clock className="h-3 w-3 inline mr-1" />
+                                Total time block: {selectedService.duration_minutes + effectiveBuffer} min
+                                <span className="opacity-70"> ({selectedService.duration_minutes} min + {effectiveBuffer} min buffer)</span>
+                              </div>
+                            );
+                          }
+                        })()}
                       </div>
                       {selectedService.description && (
                         <p className="text-xs text-muted-foreground mt-2 pt-2 border-t">

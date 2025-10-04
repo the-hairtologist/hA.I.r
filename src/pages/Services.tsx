@@ -31,6 +31,8 @@ const Services = () => {
   const [requireDeposit, setRequireDeposit] = useState(false);
   const [depositAmount, setDepositAmount] = useState("");
   const [depositType, setDepositType] = useState<"fixed" | "percentage">("fixed");
+  const [customBufferTime, setCustomBufferTime] = useState<string>("");
+  const [useCustomBuffer, setUseCustomBuffer] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -82,6 +84,8 @@ const Services = () => {
     setRequireDeposit(false);
     setDepositAmount("");
     setDepositType("fixed");
+    setCustomBufferTime("");
+    setUseCustomBuffer(false);
     setEditingService(null);
   };
 
@@ -95,6 +99,8 @@ const Services = () => {
     setRequireDeposit(service.require_deposit || false);
     setDepositAmount(service.deposit_amount?.toString() || "");
     setDepositType(service.deposit_type || "fixed");
+    setUseCustomBuffer(service.buffer_time_minutes !== null);
+    setCustomBufferTime(service.buffer_time_minutes?.toString() || "");
     setDialogOpen(true);
   };
 
@@ -141,6 +147,7 @@ const Services = () => {
         require_deposit: requireDeposit,
         deposit_amount: requireDeposit ? parseFloat(depositAmount) : 0,
         deposit_type: requireDeposit ? depositType : 'fixed',
+        buffer_time_minutes: useCustomBuffer && customBufferTime ? parseInt(customBufferTime) : null,
       };
 
       if (editingService) {
@@ -298,6 +305,54 @@ const Services = () => {
                     <Label htmlFor="isActive">Service is active and bookable</Label>
                   </div>
 
+                  {/* Buffer Time Configuration */}
+                  <div className="space-y-4 border-t pt-4">
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        id="useCustomBuffer"
+                        checked={useCustomBuffer}
+                        onCheckedChange={setUseCustomBuffer}
+                      />
+                      <Label htmlFor="useCustomBuffer" className="flex items-center gap-2">
+                        Custom buffer time for this service
+                        <HelpTooltip content="Override your default buffer time for this specific service. Useful for services that need more or less prep time." />
+                      </Label>
+                    </div>
+
+                    {useCustomBuffer && (
+                      <div className="ml-6 space-y-3 p-4 bg-muted/50 rounded-lg border-2 border-foreground/10">
+                        <div className="space-y-2">
+                          <Label htmlFor="customBufferTime">
+                            Buffer Time (minutes)
+                          </Label>
+                          <Select value={customBufferTime} onValueChange={setCustomBufferTime}>
+                            <SelectTrigger id="customBufferTime">
+                              <SelectValue placeholder="Select buffer time" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="0">⚡ No buffer</SelectItem>
+                              <SelectItem value="10">🏃 10 minutes</SelectItem>
+                              <SelectItem value="15">✨ 15 minutes</SelectItem>
+                              <SelectItem value="20">🌟 20 minutes</SelectItem>
+                              <SelectItem value="30">😌 30 minutes</SelectItem>
+                              <SelectItem value="45">🧘 45 minutes</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <p className="text-xs text-muted-foreground">
+                            Total time slot: {parseInt(duration) + (parseInt(customBufferTime) || 0)} minutes 
+                            ({duration} min service + {customBufferTime || 0} min buffer)
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {!useCustomBuffer && (
+                      <p className="text-xs text-muted-foreground ml-6">
+                        Using default buffer: {stylistProfile?.buffer_time_minutes || 15} minutes
+                      </p>
+                    )}
+                  </div>
+
                   {/* Deposit Configuration */}
                   <div className="space-y-4 border-t pt-4">
                     <div className="flex items-center gap-2">
@@ -398,15 +453,30 @@ const Services = () => {
                         {service.service_name}
                         {!service.is_active && <span className="text-xs text-foreground/70 font-normal">(Inactive)</span>}
                       </CardTitle>
-                      <CardDescription className="mt-1 text-foreground/80 font-medium">
-                        {service.duration_minutes} minutes • ${parseFloat(service.price).toFixed(2)}
-                        {service.require_deposit && (
-                          <span className="ml-2 text-xs bg-yellow-300 text-foreground px-2 py-0.5 rounded-full border-2 border-foreground font-bold">
-                            Requires ${service.deposit_type === 'percentage' 
-                              ? ((parseFloat(service.price) * service.deposit_amount) / 100).toFixed(2)
-                              : parseFloat(service.deposit_amount).toFixed(2)} deposit
-                          </span>
-                        )}
+                      <CardDescription className="mt-1 text-foreground/80 font-medium space-y-1">
+                        <div>
+                          ⏱️ {service.duration_minutes} min service
+                          {service.buffer_time_minutes !== null && (
+                            <span className="ml-2 text-xs bg-white/50 text-foreground px-2 py-0.5 rounded-full border border-foreground/20">
+                              + {service.buffer_time_minutes} min buffer
+                            </span>
+                          )}
+                          {service.buffer_time_minutes === null && (
+                            <span className="ml-2 text-xs opacity-70">
+                              (using default {stylistProfile?.buffer_time_minutes || 15} min buffer)
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          💰 ${parseFloat(service.price).toFixed(2)}
+                          {service.require_deposit && (
+                            <span className="ml-2 text-xs bg-yellow-300 text-foreground px-2 py-0.5 rounded-full border-2 border-foreground font-bold">
+                              Requires ${service.deposit_type === 'percentage' 
+                                ? ((parseFloat(service.price) * service.deposit_amount) / 100).toFixed(2)
+                                : parseFloat(service.deposit_amount).toFixed(2)} deposit
+                            </span>
+                          )}
+                        </div>
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">

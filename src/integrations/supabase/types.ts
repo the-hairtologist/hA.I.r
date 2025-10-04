@@ -1140,6 +1140,7 @@ export type Database = {
       }
       stylist_services: {
         Row: {
+          buffer_time_minutes: number | null
           created_at: string
           deposit_amount: number | null
           deposit_type: string | null
@@ -1154,6 +1155,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          buffer_time_minutes?: number | null
           created_at?: string
           deposit_amount?: number | null
           deposit_type?: string | null
@@ -1168,6 +1170,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          buffer_time_minutes?: number | null
           created_at?: string
           deposit_amount?: number | null
           deposit_type?: string | null
