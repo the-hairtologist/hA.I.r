@@ -425,18 +425,29 @@ const Appointments = () => {
               </div>
 
               {selectedAppointment.status === "scheduled" && (
-                <div className="flex gap-2 pt-4">
+                <div className="flex gap-3 pt-4">
                   <Button
-                    className="flex-1"
+                    className="flex-1 min-h-[44px]"
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "confirmed")}
+                    disabled={updatingStatus === selectedAppointment.id}
                   >
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Confirm
+                    {updatingStatus === selectedAppointment.id ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Confirming...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Confirm
+                      </>
+                    )}
                   </Button>
                   <Button
                     variant="destructive"
-                    className="flex-1"
+                    className="flex-1 min-h-[44px]"
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "cancelled")}
+                    disabled={updatingStatus === selectedAppointment.id}
                   >
                     <XCircle className="h-4 w-4 mr-2" />
                     Cancel
@@ -445,9 +456,9 @@ const Appointments = () => {
               )}
 
               {selectedAppointment.status === "confirmed" && (
-                <div className="flex gap-2 pt-4">
+                <div className="flex gap-3 pt-4">
                   <Button
-                    className="flex-1"
+                    className="flex-1 min-h-[44px]"
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "completed")}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />

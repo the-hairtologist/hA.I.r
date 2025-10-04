@@ -392,23 +392,25 @@ const ClientRequests = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex gap-2 pt-2">
+                  <div className="flex gap-3 pt-2">
                     <Button
                       variant="outline"
-                      size="sm"
+                      size="default"
                       onClick={() => handleEdit(post)}
-                      className="gap-2"
+                      className="gap-2 min-h-[44px]"
+                      aria-label={`Edit ${post.title}`}
                     >
-                      <Edit className="h-3 w-3" />
+                      <Edit className="h-4 w-4" />
                       Edit
                     </Button>
                     <Button
                       variant="outline"
-                      size="sm"
+                      size="default"
                       onClick={() => handleDelete(post.id)}
-                      className="gap-2 text-destructive hover:text-destructive"
+                      className="gap-2 min-h-[44px] text-destructive hover:text-destructive"
+                      aria-label={`Delete ${post.title}`}
                     >
-                      <Trash2 className="h-3 w-3" />
+                      <Trash2 className="h-4 w-4" />
                       Delete
                     </Button>
                   </div>

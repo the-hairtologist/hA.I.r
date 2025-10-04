@@ -114,7 +114,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
             <SidebarMenu>
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title} className="min-h-[44px]">
                     <NavLink to={item.url} className={getNavClassName}>
                       <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
                         <item.icon className="h-4 w-4 text-white" />
@@ -138,7 +138,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               <SidebarMenu>
                 {schedulingItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title}>
+                    <SidebarMenuButton asChild tooltip={item.title} className="min-h-[44px]">
                       <NavLink to={item.url} className={getNavClassName}>
                         <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
                           <item.icon className="h-4 w-4 text-white" />
@@ -168,7 +168,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               <SidebarMenu>
                 {businessItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title}>
+                    <SidebarMenuButton asChild tooltip={item.title} className="min-h-[44px]">
                       <NavLink to={item.url} className={getNavClassName}>
                         <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
                           <item.icon className="h-4 w-4 text-white" />
@@ -192,7 +192,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
             <SidebarMenu>
               {toolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title} className="min-h-[44px]">
                     <NavLink to={item.url} className={getNavClassName}>
                       <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
                         <item.icon className="h-4 w-4 text-white" />
@@ -214,7 +214,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Settings">
+                <SidebarMenuButton asChild tooltip="Settings" className="min-h-[44px]">
                   <NavLink to="/settings" className={getNavClassName}>
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500">
                       <Settings className="h-4 w-4 text-white" />
@@ -224,7 +224,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Help & Support">
+                <SidebarMenuButton asChild tooltip="Help & Support" className="min-h-[44px]">
                   <NavLink to="/resources" className={getNavClassName}>
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500">
                       <HelpCircle className="h-4 w-4 text-white" />

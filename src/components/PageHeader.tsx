@@ -32,7 +32,7 @@ export const PageHeader = ({ title, icon, actions, backTo = "/dashboard", classN
               size="icon"
               onClick={() => navigate(backTo)}
               aria-label="Go back"
-              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
+              className="min-h-[44px] min-w-[44px] hover:bg-secondary/20 hover:-translate-x-1 transition-all"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
