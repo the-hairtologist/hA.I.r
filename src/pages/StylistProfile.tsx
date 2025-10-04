@@ -38,12 +38,11 @@ const StylistProfile = () => {
 
   const loadStylist = async () => {
     try {
+      // Use public view to prevent exposure of sensitive business data
+      // View only exposes: business_name, bio, specialty, location, years_experience, ratings
       const { data, error } = await supabase
-        .from("stylist_profiles")
-        .select(`
-          *,
-          profiles (full_name, avatar_url, phone, email)
-        `)
+        .from("public_stylist_profiles")
+        .select("*")
         .eq("id", stylistId)
         .single();
 
@@ -95,13 +94,7 @@ const StylistProfile = () => {
             <div className="flex flex-col md:flex-row gap-6">
               {/* Avatar */}
               <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-5xl overflow-hidden border-4 border-white shadow-lg">
-                {stylist.profiles.avatar_url ? (
-                  <img 
-                    src={stylist.profiles.avatar_url} 
-                    alt={stylist.profiles.full_name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
+                {stylist.business_name?.charAt(0).toUpperCase() || (
                   <User className="h-16 w-16 text-primary" />
                 )}
               </div>
@@ -109,11 +102,8 @@ const StylistProfile = () => {
               {/* Info */}
               <div className="flex-1">
                 <h1 className="text-3xl font-bold mb-2">
-                  {stylist.business_name || stylist.profiles.full_name}
+                  {stylist.business_name}
                 </h1>
-                <p className="text-lg text-muted-foreground mb-4">
-                  {stylist.profiles.full_name}
-                </p>
 
                 {/* Rating */}
                 {stylist.total_reviews > 0 && (
@@ -157,13 +147,6 @@ const StylistProfile = () => {
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Award className="h-4 w-4" />
                       <span>{stylist.years_experience} years of experience</span>
-                    </div>
-                  )}
-
-                  {stylist.color_line && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Sparkles className="h-4 w-4" />
-                      <span>Color Line: <strong>{stylist.color_line}</strong></span>
                     </div>
                   )}
                 </div>
