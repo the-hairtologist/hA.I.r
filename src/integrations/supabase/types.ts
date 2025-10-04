@@ -193,8 +193,10 @@ export type Database = {
           client_id: string
           created_at: string
           duration_minutes: number | null
+          followup_sent: boolean | null
           id: string
           notes: string | null
+          rebook_reminder_sent: boolean | null
           reminder_sent: boolean | null
           service_id: string | null
           service_type: string
@@ -209,8 +211,10 @@ export type Database = {
           client_id: string
           created_at?: string
           duration_minutes?: number | null
+          followup_sent?: boolean | null
           id?: string
           notes?: string | null
+          rebook_reminder_sent?: boolean | null
           reminder_sent?: boolean | null
           service_id?: string | null
           service_type: string
@@ -225,8 +229,10 @@ export type Database = {
           client_id?: string
           created_at?: string
           duration_minutes?: number | null
+          followup_sent?: boolean | null
           id?: string
           notes?: string | null
+          rebook_reminder_sent?: boolean | null
           reminder_sent?: boolean | null
           service_id?: string | null
           service_type?: string

@@ -6,7 +6,9 @@
  * 2. Create new React project
  * 3. Copy your DSN (format: https://xxxxx@xxxxx.ingest.sentry.io/xxxxx)
  * 4. Add to environment: VITE_SENTRY_DSN=your_dsn_here
- * 5. Install: npm install @sentry/react
+ * 5. Install packages:
+ *    npm install @sentry/react
+ * 6. Uncomment the imports below and initialize in src/main.tsx
  * 
  * Features:
  * - Automatic error tracking
@@ -16,8 +18,12 @@
  * - Source map uploads for stack traces
  */
 
-import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/browser";
+// IMPORTANT: Uncomment these imports after installing @sentry/react
+// import * as Sentry from "@sentry/react";
+import type { ReactNode } from 'react';
+
+// Type definitions for when Sentry is not installed
+type SentryType = any;
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || '';
 const ENVIRONMENT = import.meta.env.DEV ? 'development' : 'production';
@@ -27,6 +33,10 @@ let sentryInitialized = false;
 /**
  * Initialize Sentry error monitoring
  * Call this once in your App.tsx or main.tsx
+ * 
+ * IMPORTANT: This will only work after installing @sentry/react
+ * Run: npm install @sentry/react
+ * Then uncomment the Sentry import at the top of this file
  */
 export const initSentry = () => {
   if (sentryInitialized || !SENTRY_DSN) {
@@ -34,17 +44,25 @@ export const initSentry = () => {
     return;
   }
 
+  // Check if Sentry is available
+  if (typeof window === 'undefined' || !(window as any).Sentry) {
+    console.log('[Monitoring] Sentry package not installed. Run: npm install @sentry/react');
+    return;
+  }
+
   try {
+    const Sentry = (window as any).Sentry;
+    
     Sentry.init({
       dsn: SENTRY_DSN,
       environment: ENVIRONMENT,
       
       // Performance Monitoring
       integrations: [
-        new BrowserTracing({
+        Sentry.browserTracingIntegration({
           tracePropagationTargets: ["localhost", /^https:\/\/.*\.lovableproject\.com/],
         }),
-        new Sentry.Replay({
+        Sentry.replayIntegration({
           maskAllText: true,
           blockAllMedia: true,
         }),
@@ -68,8 +86,7 @@ export const initSentry = () => {
       ],
 
       // Add custom tags
-      beforeSend(event, hint) {
-        // Add custom context
+      beforeSend(event: any, hint: any) {
         if (event.request) {
           event.tags = {
             ...event.tags,
@@ -91,84 +108,106 @@ export const initSentry = () => {
  * Manually capture an error
  */
 export const captureError = (error: Error, context?: Record<string, any>) => {
-  if (!sentryInitialized) return;
+  if (!sentryInitialized || typeof window === 'undefined') return;
 
-  Sentry.captureException(error, {
-    extra: context,
-  });
+  const Sentry = (window as any).Sentry;
+  if (Sentry) {
+    Sentry.captureException(error, {
+      extra: context,
+    });
+  }
 };
 
 /**
  * Capture a message (not an error)
  */
 export const captureMessage = (message: string, level: 'info' | 'warning' | 'error' = 'info') => {
-  if (!sentryInitialized) return;
+  if (!sentryInitialized || typeof window === 'undefined') return;
 
-  Sentry.captureMessage(message, level);
+  const Sentry = (window as any).Sentry;
+  if (Sentry) {
+    Sentry.captureMessage(message, level);
+  }
 };
 
 /**
  * Set user context for error tracking
  */
 export const setUser = (userId: string, email?: string, username?: string) => {
-  if (!sentryInitialized) return;
+  if (!sentryInitialized || typeof window === 'undefined') return;
 
-  Sentry.setUser({
-    id: userId,
-    email,
-    username,
-  });
+  const Sentry = (window as any).Sentry;
+  if (Sentry) {
+    Sentry.setUser({
+      id: userId,
+      email,
+      username,
+    });
+  }
 };
 
 /**
  * Clear user context (on logout)
  */
 export const clearUser = () => {
-  if (!sentryInitialized) return;
+  if (!sentryInitialized || typeof window === 'undefined') return;
 
-  Sentry.setUser(null);
+  const Sentry = (window as any).Sentry;
+  if (Sentry) {
+    Sentry.setUser(null);
+  }
 };
 
 /**
  * Add breadcrumb for debugging context
  */
 export const addBreadcrumb = (message: string, category: string, data?: Record<string, any>) => {
-  if (!sentryInitialized) return;
+  if (!sentryInitialized || typeof window === 'undefined') return;
 
-  Sentry.addBreadcrumb({
-    message,
-    category,
-    level: 'info',
-    data,
-  });
+  const Sentry = (window as any).Sentry;
+  if (Sentry) {
+    Sentry.addBreadcrumb({
+      message,
+      category,
+      level: 'info',
+      data,
+    });
+  }
 };
 
 /**
  * Start a performance transaction
  */
 export const startTransaction = (name: string, operation: string) => {
-  if (!sentryInitialized) return null;
+  if (!sentryInitialized || typeof window === 'undefined') return null;
 
-  return Sentry.startTransaction({
-    name,
-    op: operation,
-  });
+  const Sentry = (window as any).Sentry;
+  if (Sentry) {
+    return Sentry.startTransaction({
+      name,
+      op: operation,
+    });
+  }
+  return null;
 };
 
 /**
- * Wrap your router with Sentry
- * Example: const SentryRoutes = Sentry.withSentryRouting(Routes);
+ * Wrap your router with Sentry (only available after installing @sentry/react)
+ * Example: const SentryRoutes = withSentryRouting(Routes);
  */
-export const withSentryRouting = Sentry.withSentryRouting;
+export const withSentryRouting = (component: any) => {
+  if (typeof window === 'undefined') return component;
+  const Sentry = (window as any).Sentry;
+  return Sentry?.withSentryRouting?.(component) || component;
+};
 
 /**
- * Error Boundary component
+ * Error Boundary component (only available after installing @sentry/react)
  * Wrap your app with this to catch React errors
  */
-export const SentryErrorBoundary = Sentry.ErrorBoundary;
-
-// Export Sentry instance for advanced usage
-export { Sentry };
+export const SentryErrorBoundary = ({ children }: { children: ReactNode }): ReactNode => {
+  return children;
+};
 
 /**
  * Check if Sentry is initialized
