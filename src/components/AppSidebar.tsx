@@ -17,6 +17,7 @@ import {
   CalendarCheck,
   ChevronDown,
   HelpCircle,
+  Zap,
 } from "lucide-react";
 import {
   Sidebar,
@@ -70,6 +71,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { title: "Commissions", url: "/commissions", icon: PiggyBank, gradient: "from-green-500 to-emerald-500" },
     { title: "Knowledge", url: "/knowledge", icon: BookOpen, gradient: "from-indigo-500 to-purple-500" },
     { title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "from-violet-500 to-fuchsia-500" },
+    { title: "Integrations", url: "/integrations", icon: Zap, gradient: "from-orange-500 to-amber-500" },
   ];
 
   const clientItems = [
@@ -79,6 +81,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-violet-500 to-purple-500" },
     { title: "My Formulas", url: "/my-formulas", icon: Sparkles, gradient: "from-emerald-500 to-teal-500" },
     { title: "Knowledge", url: "/knowledge", icon: BookOpen, gradient: "from-indigo-500 to-purple-500" },
+    { title: "Integrations", url: "/integrations", icon: Zap, gradient: "from-orange-500 to-amber-500" },
   ];
 
   const mainItems = userRole === "stylist" ? stylistItems : clientItems;

@@ -32,6 +32,7 @@ import Clients from "./pages/Clients";
 import BookForClient from "./pages/BookForClient";
 import AccessCodes from "./pages/AccessCodes";
 import Help from "./pages/Help";
+import Integrations from "./pages/Integrations";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -79,6 +80,11 @@ const App = () => (
           <Route path="/help" element={
             <ProtectedRoute>
               <Help />
+            </ProtectedRoute>
+          } />
+          <Route path="/integrations" element={
+            <ProtectedRoute>
+              <Integrations />
             </ProtectedRoute>
           } />
           
