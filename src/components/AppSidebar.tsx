@@ -16,6 +16,7 @@ import {
   UserPlus,
   CalendarCheck,
   ChevronDown,
+  HelpCircle,
 } from "lucide-react";
 import {
   Sidebar,
@@ -189,6 +190,16 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                       <User className="h-4 w-4 text-white" />
                     </div>
                     {!collapsed && <span className="ml-2">Profile</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Help & FAQ">
+                  <NavLink to="/help" className={getNavClassName("/help")}>
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500">
+                      <HelpCircle className="h-4 w-4 text-white" />
+                    </div>
+                    {!collapsed && <span className="ml-2">Help & FAQ</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>

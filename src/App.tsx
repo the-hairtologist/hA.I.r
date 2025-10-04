@@ -31,6 +31,7 @@ import Portfolio from "./pages/Portfolio";
 import Clients from "./pages/Clients";
 import BookForClient from "./pages/BookForClient";
 import AccessCodes from "./pages/AccessCodes";
+import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -73,6 +74,11 @@ const App = () => (
           <Route path="/settings" element={
             <ProtectedRoute>
               <AccountSettings />
+            </ProtectedRoute>
+          } />
+          <Route path="/help" element={
+            <ProtectedRoute>
+              <Help />
             </ProtectedRoute>
           } />
           
