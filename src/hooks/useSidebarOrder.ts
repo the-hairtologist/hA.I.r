@@ -12,10 +12,22 @@ export interface SidebarItem {
   group: string;
 }
 
-export function useSidebarOrder(defaultItems: SidebarItem[]) {
+export interface GroupedItems {
+  [groupName: string]: SidebarItem[];
+}
+
+export function useSidebarOrder(defaultItems: SidebarItem[], groupLabels: { [key: string]: string }) {
   const { user } = useAuth();
   const [items, setItems] = useState<SidebarItem[]>(defaultItems);
   const [isLoading, setIsLoading] = useState(true);
+
+  const groupedItems: GroupedItems = items.reduce((acc, item) => {
+    if (!acc[item.group]) {
+      acc[item.group] = [];
+    }
+    acc[item.group].push(item);
+    return acc;
+  }, {} as GroupedItems);
 
   useEffect(() => {
     if (!user) {
@@ -110,6 +122,8 @@ export function useSidebarOrder(defaultItems: SidebarItem[]) {
 
   return {
     items,
+    groupedItems,
+    groupLabels,
     isLoading,
     saveSidebarOrder,
     resetSidebarOrder,

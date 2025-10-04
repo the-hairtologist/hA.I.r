@@ -158,7 +158,12 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   ];
 
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
-  const { items, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems);
+  
+  const groupLabels = userRole === "stylist" 
+    ? { main: "Main", scheduling: "Scheduling", business: "Business", tools: "Tools" }
+    : { main: "Main", tools: "Tools" };
+  
+  const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -229,35 +234,37 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
           </div>
         )}
 
-        {/* Navigation Items */}
+        {/* Navigation Items - Grouped */}
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <SidebarGroup>
-            <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-              Navigation
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SortableContext
-                items={items.map((item) => item.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                <SidebarMenu>
-                  {items.map((item) => (
-                    <SortableNavItem
-                      key={item.id}
-                      item={item}
-                      collapsed={collapsed}
-                      getNavClassName={getNavClassName}
-                      isEditMode={isEditMode}
-                    />
-                  ))}
-                </SidebarMenu>
-              </SortableContext>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <SortableContext
+            items={items.map((item) => item.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {Object.entries(groupedItems).map(([groupKey, groupItems]) => (
+              <SidebarGroup key={groupKey}>
+                <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+                  {labels[groupKey]}
+                </SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {groupItems.map((item) => (
+                      <SortableNavItem
+                        key={item.id}
+                        item={item}
+                        collapsed={collapsed}
+                        getNavClassName={getNavClassName}
+                        isEditMode={isEditMode}
+                      />
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
+          </SortableContext>
         </DndContext>
 
         {/* Separator */}
