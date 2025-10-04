@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +16,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 
 const Finance = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("payments");
   const [payments, setPayments] = useState<any[]>([]);
   const [commissions, setCommissions] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
@@ -26,6 +28,16 @@ const Finance = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    // Handle hash navigation
+    const hash = location.hash.replace('#', '');
+    if (hash === 'commissions') {
+      setActiveTab('commissions');
+    } else if (hash === 'affiliate') {
+      setActiveTab('affiliate');
+    }
+  }, [location.hash]);
 
   const loadData = async () => {
     try {
@@ -192,7 +204,7 @@ const Finance = () => {
           </Card>
         </div>
 
-        <Tabs defaultValue="payments" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="payments">Service Payments</TabsTrigger>
             <TabsTrigger value="commissions">Product Commissions</TabsTrigger>

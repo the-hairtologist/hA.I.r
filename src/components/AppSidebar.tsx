@@ -20,6 +20,8 @@ import {
   GripVertical,
   Edit3,
   RotateCcw,
+  Package,
+  Tag,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -48,6 +50,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -71,6 +76,7 @@ function SortableNavItem({
   getNavClassName,
   isEditMode,
 }: SortableNavItemProps) {
+  const location = useLocation();
   const {
     attributes,
     listeners,
@@ -85,6 +91,9 @@ function SortableNavItem({
     transition,
     opacity: isDragging ? 0.5 : 1,
   };
+
+  const hasChildren = item.children && item.children.length > 0;
+  const isParentActive = location.pathname === item.url.split('#')[0];
 
   return (
     <SidebarMenuItem ref={setNodeRef} style={style}>
@@ -115,6 +124,20 @@ function SortableNavItem({
           )}
         </NavLink>
       </SidebarMenuButton>
+      {hasChildren && !collapsed && isParentActive && (
+        <SidebarMenuSub>
+          {item.children!.map((child) => (
+            <SidebarMenuSubItem key={child.id}>
+              <SidebarMenuSubButton asChild>
+                <NavLink to={child.url} className={getNavClassName}>
+                  <child.icon className="h-3.5 w-3.5" />
+                  <span>{child.title}</span>
+                </NavLink>
+              </SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+          ))}
+        </SidebarMenuSub>
+      )}
     </SidebarMenuItem>
   );
 }
@@ -140,7 +163,18 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-blue-500 to-cyan-500", description: "View & manage bookings", group: "scheduling" },
     { id: "schedule", title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "from-blue-500 to-indigo-500", description: "Set working hours", group: "scheduling" },
     { id: "services", title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500", group: "business" },
-    { id: "finance", title: "Finance", url: "/finance", icon: DollarSign, gradient: "from-amber-500 to-orange-500", group: "business" },
+    { 
+      id: "finance", 
+      title: "Finance", 
+      url: "/finance", 
+      icon: DollarSign, 
+      gradient: "from-amber-500 to-orange-500", 
+      group: "business",
+      children: [
+        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "from-amber-500 to-orange-500", group: "business" },
+        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "from-amber-500 to-orange-500", group: "business" },
+      ]
+    },
     { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "from-orange-500 to-red-500", group: "business" },
     { id: "ai-assistant", title: "AI Assistant", url: "/knowledge", icon: Sparkles, gradient: "from-purple-500 to-pink-500", group: "tools" },
     { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "from-orange-500 to-amber-500", group: "tools" },
