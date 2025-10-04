@@ -29,7 +29,7 @@ interface ClientPost {
 const ClientDiscovery = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { isStylist, loading: roleLoading } = useUserRole(user?.id);
+  const { isStylist, roles, loading: roleLoading } = useUserRole(user?.id);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<ClientPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<ClientPost[]>([]);
@@ -41,27 +41,49 @@ const ClientDiscovery = () => {
   }, [searchQuery, posts]);
 
   useEffect(() => {
-    // Only run checks after both auth and roles are fully loaded
-    if (authLoading || roleLoading) {
-      return;
-    }
+    const checkAccess = async () => {
+      // Only run checks after both auth and roles are fully loaded
+      if (authLoading || roleLoading) {
+        console.log("ClientDiscovery: Still loading", { authLoading, roleLoading });
+        return;
+      }
 
-    if (!user) {
-      navigate("/auth");
-      return;
-    }
+      console.log("ClientDiscovery: Access check", { 
+        user: user?.id, 
+        isStylist, 
+        roles,
+        authLoading, 
+        roleLoading 
+      });
 
-    // Explicitly check if user has stylist role
-    if (!isStylist) {
-      console.error("Access denied: User is not a stylist", { isStylist, user: user?.id });
-      toast.error("Only stylists can access this page");
-      navigate("/dashboard");
-      return;
-    }
+      if (!user) {
+        console.log("ClientDiscovery: No user, redirecting to auth");
+        navigate("/auth");
+        return;
+      }
 
-    // If we get here, user is authenticated and is a stylist
-    checkUserAndLoadPosts();
-  }, [authLoading, roleLoading, user, isStylist, navigate]);
+      // Check roles array directly for stylist role
+      const hasStylistRole = roles.includes('stylist');
+      
+      if (!hasStylistRole) {
+        console.error("ClientDiscovery: Access denied - not a stylist", { 
+          isStylist, 
+          hasStylistRole,
+          roles, 
+          userId: user?.id 
+        });
+        toast.error("Only stylists can access this page");
+        navigate("/dashboard");
+        return;
+      }
+
+      console.log("ClientDiscovery: Access granted, loading posts");
+      // If we get here, user is authenticated and is a stylist
+      await checkUserAndLoadPosts();
+    };
+
+    checkAccess();
+  }, [authLoading, roleLoading, user, roles, navigate]);
 
   const checkUserAndLoadPosts = async () => {
     try {
