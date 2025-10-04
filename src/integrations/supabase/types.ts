@@ -235,6 +235,7 @@ export type Database = {
       calendar_connections: {
         Row: {
           access_token: string | null
+          access_token_vault_id: string | null
           calendar_id: string | null
           created_at: string | null
           id: string
@@ -242,6 +243,7 @@ export type Database = {
           last_sync_at: string | null
           provider: string
           refresh_token: string | null
+          refresh_token_vault_id: string | null
           sync_enabled: boolean | null
           token_expires_at: string | null
           updated_at: string | null
@@ -249,6 +251,7 @@ export type Database = {
         }
         Insert: {
           access_token?: string | null
+          access_token_vault_id?: string | null
           calendar_id?: string | null
           created_at?: string | null
           id?: string
@@ -256,6 +259,7 @@ export type Database = {
           last_sync_at?: string | null
           provider: string
           refresh_token?: string | null
+          refresh_token_vault_id?: string | null
           sync_enabled?: boolean | null
           token_expires_at?: string | null
           updated_at?: string | null
@@ -263,6 +267,7 @@ export type Database = {
         }
         Update: {
           access_token?: string | null
+          access_token_vault_id?: string | null
           calendar_id?: string | null
           created_at?: string | null
           id?: string
@@ -270,6 +275,7 @@ export type Database = {
           last_sync_at?: string | null
           provider?: string
           refresh_token?: string | null
+          refresh_token_vault_id?: string | null
           sync_enabled?: boolean | null
           token_expires_at?: string | null
           updated_at?: string | null
@@ -1324,6 +1330,13 @@ export type Database = {
         }
         Returns: undefined
       }
+      get_calendar_token: {
+        Args: { p_connection_id: string }
+        Returns: {
+          access_token: string
+          refresh_token: string
+        }[]
+      }
       get_client_profile_id: {
         Args: { _user_id: string }
         Returns: string
@@ -1342,6 +1355,15 @@ export type Database = {
       redeem_access_code: {
         Args: { _code: string; _user_id: string }
         Returns: boolean
+      }
+      store_calendar_token: {
+        Args: {
+          p_access_token: string
+          p_provider: string
+          p_refresh_token?: string
+          p_user_id: string
+        }
+        Returns: string
       }
       stylist_has_client_access: {
         Args: { _client_id: string; _stylist_user_id: string }
