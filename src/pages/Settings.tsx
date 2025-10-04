@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Settings as SettingsIcon, User, Shield, Bell, Loader2, Download, Trash2, RefreshCw } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { validatePhone } from "@/lib/phoneValidation";
+import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ const Settings = () => {
   // Account data
   const [avatarUrl, setAvatarUrl] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
+  const [phoneError, setPhoneError] = useState<string>();
 
   useEffect(() => {
     // Wait for auth and roles to be fully loaded
@@ -108,8 +110,14 @@ const Settings = () => {
       return;
     }
 
-    if (bio.length > 500) {
-      toast.error("Bio must be less than 500 characters");
+    // Validate phone if provided
+    if (phoneError) {
+      toast.error("Please fix phone number error");
+      return;
+    }
+
+    if (bio.length > 1000) {
+      toast.error("Bio must be less than 1000 characters");
       return;
     }
 
@@ -302,12 +310,16 @@ const Settings = () => {
 
                     <div>
                       <Label htmlFor="bio">Bio</Label>
-                      <Textarea
+                      <TextareaWithCounter
                         id="bio"
                         value={bio}
-                        onChange={(e) => { setBio(e.target.value); setHasChanges(true); }}
+                        onValueChange={(value) => {
+                          setBio(value);
+                          setHasChanges(true);
+                        }}
                         placeholder="Tell clients about yourself"
-                        rows={4}
+                        maxLength={1000}
+                        className="min-h-[100px]"
                       />
                     </div>
 

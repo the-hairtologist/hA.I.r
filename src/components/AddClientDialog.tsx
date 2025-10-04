@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { UserPlus, Loader2 } from "lucide-react";
 import { z } from "zod";
+import { validatePhone } from "@/lib/phoneValidation";
+import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
 
 interface AddClientDialogProps {
   open: boolean;
@@ -58,6 +59,7 @@ export const AddClientDialog = ({
   const [allergies, setAllergies] = useState("");
   const [medicalConsent, setMedicalConsent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [phoneError, setPhoneError] = useState<string>();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const resetForm = () => {
@@ -72,6 +74,18 @@ export const AddClientDialog = ({
 
   const handleSubmit = async () => {
     try {
+      // Validate phone if provided
+      if (phone) {
+        const phoneValidation = validatePhone(phone);
+        if (!phoneValidation.valid) {
+          setErrors({ phone: phoneValidation.error || "Invalid phone number" });
+          toast.error("Invalid phone number", {
+            description: phoneValidation.error,
+          });
+          return;
+        }
+      }
+
       // Validate input
       const validatedData = clientSchema.parse({
         full_name: fullName,
@@ -218,33 +232,29 @@ export const AddClientDialog = ({
           {/* Notes */}
           <div className="space-y-2">
             <Label htmlFor="notes">Notes (Optional)</Label>
-            <Textarea
+            <TextareaWithCounter
               id="notes"
               placeholder="Add any special notes about this client..."
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
+              onValueChange={setNotes}
               maxLength={500}
-              className={errors.notes ? "border-destructive" : ""}
+              className="min-h-[80px]"
             />
             {errors.notes && (
               <p className="text-xs text-destructive">{errors.notes}</p>
             )}
-            <p className="text-xs text-muted-foreground">
-              {notes.length}/500
-            </p>
           </div>
 
           {/* Allergies */}
           <div className="space-y-2">
             <Label htmlFor="allergies">Allergies (Optional)</Label>
-            <Textarea
+            <TextareaWithCounter
               id="allergies"
               placeholder="Any hair product allergies or sensitivities..."
               value={allergies}
-              onChange={(e) => setAllergies(e.target.value)}
-              rows={2}
+              onValueChange={setAllergies}
               maxLength={500}
+              className="min-h-[60px]"
             />
           </div>
 

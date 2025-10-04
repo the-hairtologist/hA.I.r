@@ -8,12 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Plus, Search, Calendar, MapPin, DollarSign, Trash2, Edit } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
 
 interface ClientPost {
   id: string;
@@ -293,12 +293,13 @@ const ClientRequests = () => {
                   </div>
                   <div>
                     <Label htmlFor="description">Description *</Label>
-                    <Textarea
+                    <TextareaWithCounter
                       id="description"
                       value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      onValueChange={(value) => setFormData({ ...formData, description: value })}
                       placeholder="Describe your hair goals, current hair condition, and what you're hoping to achieve..."
-                      rows={4}
+                      maxLength={2000}
+                      className="min-h-[100px]"
                       required
                     />
                   </div>
