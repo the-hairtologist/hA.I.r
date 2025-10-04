@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,11 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { SearchInput } from "@/components/SearchInput";
 import { 
   Zap, Calendar, MessageSquare, Instagram, CreditCard, 
   FileText, Star, Cloud, Video, TrendingUp, Mail,
   Check, ExternalLink, Settings, Sparkles, BarChart3,
-  CalendarCheck, Shield
+  CalendarCheck, Shield, Search
 } from "lucide-react";
 
 interface Integration {
@@ -25,6 +26,7 @@ interface Integration {
   gradient: string;
   setupType: "webhook" | "oauth" | "api_key" | "direct";
   benefits: string[];
+  recommended?: boolean;
 }
 
 const integrations: Integration[] = [
@@ -39,6 +41,7 @@ const integrations: Integration[] = [
     gradient: "from-orange-500 to-amber-500",
     setupType: "webhook",
     benefits: ["Automate appointment reminders", "Sync client data", "Connect to any app"],
+    recommended: true,
   },
   // Calendar
   {
@@ -51,6 +54,7 @@ const integrations: Integration[] = [
     gradient: "from-blue-500 to-cyan-500",
     setupType: "oauth",
     benefits: ["Two-way sync", "Auto-updates", "Conflict prevention"],
+    recommended: true,
   },
   {
     id: "outlook-calendar",
@@ -142,6 +146,7 @@ const integrations: Integration[] = [
     gradient: "from-purple-500 via-pink-500 to-orange-500",
     setupType: "oauth",
     benefits: ["Auto-post portfolio", "Client discovery", "Engagement"],
+    recommended: true,
   },
   {
     id: "facebook",
@@ -187,6 +192,7 @@ const integrations: Integration[] = [
     gradient: "from-green-600 to-emerald-600",
     setupType: "oauth",
     benefits: ["Auto-sync payments", "Tax ready", "P&L reports"],
+    recommended: true,
   },
   {
     id: "xero",
@@ -347,10 +353,33 @@ const Integrations = () => {
   const [webhookUrl, setWebhookUrl] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredIntegrations = selectedCategory === "all" 
-    ? integrations 
-    : integrations.filter(int => int.category === selectedCategory);
+  const filteredIntegrations = useMemo(() => {
+    let filtered = selectedCategory === "all" 
+      ? integrations 
+      : integrations.filter(int => int.category === selectedCategory);
+    
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(int => 
+        int.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        int.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  }, [selectedCategory, searchQuery]);
+
+  const recommendedIntegrations = useMemo(() => 
+    integrations.filter(int => int.recommended), 
+    []
+  );
+
+  const stats = useMemo(() => ({
+    available: integrations.filter(i => i.status === "available").length,
+    connected: integrations.filter(i => i.status === "connected").length,
+    comingSoon: integrations.filter(i => i.status === "coming_soon").length,
+  }), []);
 
   const handleConnect = async (integration: Integration) => {
     setIsConnecting(true);
@@ -435,16 +464,173 @@ const Integrations = () => {
       <div className="space-y-8 animate-fade-in">
         {/* Header */}
         <div className="glass-effect p-8 rounded-xl border">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500">
-              <Zap className="h-6 w-6 text-white" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500">
+                <Zap className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-bold gradient-text">Integrations</h1>
+                <p className="text-muted-foreground text-lg">
+                  Connect your favorite tools and automate your workflow
+                </p>
+              </div>
             </div>
-            <h1 className="text-4xl font-bold gradient-text">Integrations</h1>
+            
+            {/* Quick Stats */}
+            <div className="hidden md:flex items-center gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-500">{stats.available}</div>
+                <div className="text-xs text-muted-foreground">Available</div>
+              </div>
+              <div className="h-10 w-px bg-border" />
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-500">{stats.connected}</div>
+                <div className="text-xs text-muted-foreground">Connected</div>
+              </div>
+              <div className="h-10 w-px bg-border" />
+              <div className="text-center">
+                <div className="text-2xl font-bold text-muted-foreground">{stats.comingSoon}</div>
+                <div className="text-xs text-muted-foreground">Coming Soon</div>
+              </div>
+            </div>
           </div>
-          <p className="text-muted-foreground text-lg">
-            Connect your favorite tools and automate your workflow
-          </p>
+
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search integrations..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 bg-background/50"
+            />
+          </div>
         </div>
+
+        {/* Recommended Section */}
+        {!searchQuery && selectedCategory === "all" && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <h2 className="text-2xl font-bold">Recommended for You</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {recommendedIntegrations.map((integration, index) => {
+                const Icon = integration.icon;
+                return (
+                  <Card 
+                    key={integration.id} 
+                    className="hover-scale group relative overflow-hidden cursor-pointer"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-br ${integration.gradient} opacity-5 group-hover:opacity-10 transition-opacity`} />
+                    <CardHeader className="pb-3">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${integration.gradient} flex items-center justify-center mb-2`}>
+                        <Icon className="h-6 w-6 text-white" />
+                      </div>
+                      <CardTitle className="text-base">{integration.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            size="sm" 
+                            className="w-full"
+                            onClick={() => setSelectedIntegration(integration)}
+                          >
+                            Connect
+                          </Button>
+                        </DialogTrigger>
+                        {selectedIntegration?.id === integration.id && (
+                          <DialogContent className="sm:max-w-md">
+                            <DialogHeader>
+                              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${integration.gradient} flex items-center justify-center mb-4`}>
+                                <Icon className="h-6 w-6 text-white" />
+                              </div>
+                              <DialogTitle>Connect {integration.name}</DialogTitle>
+                              <DialogDescription>
+                                {integration.description}
+                              </DialogDescription>
+                            </DialogHeader>
+                            
+                            <div className="space-y-4">
+                              {integration.setupType === "webhook" && (
+                                <div className="space-y-2">
+                                  <Label htmlFor="webhook">Webhook URL</Label>
+                                  <Input 
+                                    id="webhook"
+                                    placeholder="https://hooks.zapier.com/..."
+                                    value={webhookUrl}
+                                    onChange={(e) => setWebhookUrl(e.target.value)}
+                                  />
+                                  <p className="text-xs text-muted-foreground">
+                                    Create a webhook in {integration.name} and paste the URL here
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {integration.setupType === "api_key" && (
+                                <div className="space-y-2">
+                                  <Label htmlFor="apikey">API Key</Label>
+                                  <Input 
+                                    id="apikey"
+                                    type="password"
+                                    placeholder="Enter your API key"
+                                    value={apiKey}
+                                    onChange={(e) => setApiKey(e.target.value)}
+                                  />
+                                  <p className="text-xs text-muted-foreground">
+                                    Get your API key from {integration.name} dashboard
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {integration.setupType === "oauth" && (
+                                <div className="p-4 bg-muted rounded-lg space-y-2">
+                                  <p className="text-sm font-medium">OAuth Authentication</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    You'll be redirected to {integration.name} to authorize access
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {integration.setupType === "direct" && (
+                                <div className="p-4 bg-muted rounded-lg space-y-2">
+                                  <p className="text-sm font-medium">Direct Integration</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    This integration works automatically once activated
+                                  </p>
+                                </div>
+                              )}
+                              
+                              <div className="flex gap-2">
+                                <Button 
+                                  onClick={() => handleConnect(integration)}
+                                  disabled={isConnecting}
+                                  className="flex-1"
+                                >
+                                  {isConnecting ? "Connecting..." : "Connect"}
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="icon"
+                                  onClick={() => window.open(`https://${integration.id}.com`, '_blank')}
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        )}
+                      </Dialog>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Category Filter */}
         <div className="glass-effect rounded-xl border p-2">
@@ -467,12 +653,30 @@ const Integrations = () => {
           </Tabs>
         </div>
 
-        {/* Integrations Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredIntegrations.map((integration) => {
-            const Icon = integration.icon;
-            return (
-              <Card key={integration.id} className="hover-scale group relative overflow-hidden">
+        {/* All Integrations Section */}
+        <div className="space-y-4">
+          {!searchQuery && selectedCategory === "all" && (
+            <h2 className="text-2xl font-bold">All Integrations</h2>
+          )}
+          
+          {searchQuery && (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Search className="h-4 w-4" />
+              <span className="text-sm">
+                {filteredIntegrations.length} result{filteredIntegrations.length !== 1 && 's'} for "{searchQuery}"
+              </span>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredIntegrations.map((integration, index) => {
+              const Icon = integration.icon;
+              return (
+                <Card 
+                  key={integration.id} 
+                  className="hover-scale group relative overflow-hidden animate-fade-in"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${integration.gradient} opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity`} />
                 
                 <CardHeader>
@@ -605,9 +809,10 @@ const Integrations = () => {
         {filteredIntegrations.length === 0 && (
           <div className="text-center py-12">
             <Settings className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-muted-foreground">No integrations found in this category</p>
+            <p className="text-muted-foreground">No integrations found{searchQuery && ` for "${searchQuery}"`}</p>
           </div>
         )}
+        </div>
       </div>
     </DashboardLayout>
   );
