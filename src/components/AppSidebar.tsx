@@ -101,20 +101,27 @@ function SortableNavItem({
   const hasChildren = item.children && item.children.length > 0;
   const isExpanded = expandedItems.has(item.id);
   const isParentActive = location.pathname === item.url.split('#')[0];
+  const isAnyChildActive = hasChildren && item.children?.some(child => 
+    location.pathname + location.hash === child.url || location.pathname === child.url.split('#')[0]
+  );
 
   return (
     <SidebarMenuItem ref={setNodeRef} style={style}>
       <SidebarMenuButton 
         asChild={!hasChildren} 
         tooltip={item.title} 
-        className="min-h-[44px]"
+        className="min-h-[44px] group"
         onClick={hasChildren ? (e) => {
           e.preventDefault();
           toggleExpanded(item.id);
         } : undefined}
       >
         {hasChildren ? (
-          <div className={`flex items-center w-full ${isParentActive ? 'bg-primary/10 text-primary font-medium border-l-4 border-primary' : 'hover:bg-muted/50 border-l-4 border-transparent'}`}>
+          <div className={`flex items-center w-full cursor-pointer transition-all duration-200 ${
+            isParentActive || isAnyChildActive
+              ? 'bg-primary/10 text-primary font-medium border-l-4 border-primary' 
+              : 'hover:bg-muted/50 border-l-4 border-transparent hover:border-primary/20'
+          }`}>
             {isEditMode && !collapsed && (
               <div
                 {...attributes}
@@ -125,7 +132,7 @@ function SortableNavItem({
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
-            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient} transition-transform group-hover:scale-110`}>
               <item.icon className="h-4 w-4 text-white" />
             </div>
             {!collapsed && (
@@ -138,11 +145,9 @@ function SortableNavItem({
                     </span>
                   )}
                 </div>
-                {isExpanded ? (
-                  <ChevronDown className="h-4 w-4 ml-auto" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 ml-auto" />
-                )}
+                <div className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </div>
               </>
             )}
           </div>
@@ -174,19 +179,40 @@ function SortableNavItem({
           </NavLink>
         )}
       </SidebarMenuButton>
-      {hasChildren && !collapsed && isExpanded && (
-        <SidebarMenuSub>
-          {item.children!.map((child) => (
-            <SidebarMenuSubItem key={child.id}>
-              <SidebarMenuSubButton asChild>
-                <NavLink to={child.url} className={getNavClassName}>
-                  <child.icon className="h-3.5 w-3.5" />
-                  <span>{child.title}</span>
-                </NavLink>
-              </SidebarMenuSubButton>
-            </SidebarMenuSubItem>
-          ))}
-        </SidebarMenuSub>
+      {hasChildren && !collapsed && (
+        <div 
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${
+            isExpanded ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <SidebarMenuSub className="mt-1 mb-2 ml-4 space-y-1">
+            {item.children!.map((child) => {
+              const isChildActive = location.pathname + location.hash === child.url;
+              return (
+                <SidebarMenuSubItem key={child.id}>
+                  <SidebarMenuSubButton asChild>
+                    <NavLink 
+                      to={child.url} 
+                      className={`group relative pl-3 py-2 rounded-md transition-all duration-200 ${
+                        isChildActive 
+                          ? 'bg-primary/10 text-primary font-medium' 
+                          : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full transition-all duration-200 ${
+                        isChildActive ? 'bg-primary' : 'bg-transparent group-hover:bg-primary/30'
+                      }`} />
+                      <child.icon className={`h-3.5 w-3.5 transition-transform group-hover:scale-110 ${
+                        isChildActive ? 'text-primary' : ''
+                      }`} />
+                      <span className="ml-2 text-sm">{child.title}</span>
+                    </NavLink>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              );
+            })}
+          </SidebarMenuSub>
+        </div>
       )}
     </SidebarMenuItem>
   );
