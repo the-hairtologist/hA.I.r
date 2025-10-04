@@ -2,13 +2,16 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Search, Tag, TrendingUp, Loader2, ExternalLink, Sparkles, Send } from "lucide-react";
+import { BookOpen, Search, Tag, TrendingUp, Loader2, ExternalLink, Sparkles, Send, Save, Star, CheckSquare, History, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 const Knowledge = () => {
@@ -21,6 +24,16 @@ const Knowledge = () => {
   const [aiInput, setAiInput] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Formula Generator specific state
+  const [savedFormulas, setSavedFormulas] = useState<any[]>([]);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [formulaToSave, setFormulaToSave] = useState("");
+  const [formulaName, setFormulaName] = useState("");
+  
+  // Color Correction specific state
+  const [correctionSteps, setCorrectionSteps] = useState<Array<{ step: string; completed: boolean }>>([]);
+  const [currentCorrection, setCurrentCorrection] = useState<any>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -33,6 +46,12 @@ const Knowledge = () => {
   useEffect(() => {
     checkUserRole();
   }, []);
+
+  useEffect(() => {
+    if (userRole === "stylist") {
+      loadSavedFormulas();
+    }
+  }, [userRole]);
 
   const checkUserRole = async () => {
     try {
@@ -145,6 +164,86 @@ const Knowledge = () => {
     },
   ];
 
+  const loadSavedFormulas = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data, error } = await supabase
+        .from("ai_formulas")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (error) throw error;
+      setSavedFormulas(data || []);
+    } catch (error: any) {
+      console.error("Error loading formulas:", error);
+    }
+  };
+
+  const handleSaveFormula = async () => {
+    if (!formulaName.trim() || !formulaToSave) return;
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { error } = await supabase
+        .from("ai_formulas")
+        .insert({
+          user_id: session.user.id,
+          formula_name: formulaName,
+          prompt: aiMessages[aiMessages.length - 2]?.content || "",
+          formula_content: formulaToSave,
+        });
+
+      if (error) throw error;
+
+      toast.success("Formula saved successfully!");
+      setShowSaveDialog(false);
+      setFormulaName("");
+      setFormulaToSave("");
+      loadSavedFormulas();
+    } catch (error: any) {
+      console.error("Error saving formula:", error);
+      toast.error("Failed to save formula");
+    }
+  };
+
+  const handleDeleteFormula = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("ai_formulas")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Formula deleted");
+      loadSavedFormulas();
+    } catch (error: any) {
+      console.error("Error deleting formula:", error);
+      toast.error("Failed to delete formula");
+    }
+  };
+
+  const parseStepsFromResponse = (response: string) => {
+    const lines = response.split("\n");
+    const steps: Array<{ step: string; completed: boolean }> = [];
+    
+    lines.forEach(line => {
+      if (line.match(/^\d+\.|^Step \d+:|^-/)) {
+        steps.push({
+          step: line.replace(/^\d+\.|^Step \d+:|^-/, "").trim(),
+          completed: false
+        });
+      }
+    });
+    
+    return steps;
+  };
+
   const handleAiSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aiInput.trim() || aiLoading) return;
@@ -166,12 +265,26 @@ const Knowledge = () => {
       if (error) throw error;
 
       setAiMessages(prev => [...prev, { role: "assistant", content: data.response }]);
+      
+      // For step-by-step mode, parse steps
+      if (aiMode === "stepbystep") {
+        const steps = parseStepsFromResponse(data.response);
+        if (steps.length > 0) {
+          setCorrectionSteps(steps);
+        }
+      }
     } catch (error: any) {
       console.error("AI Error:", error);
       toast.error("Failed to get AI response. Please try again.");
     } finally {
       setAiLoading(false);
     }
+  };
+
+  const toggleStepCompletion = (index: number) => {
+    setCorrectionSteps(prev => prev.map((step, i) => 
+      i === index ? { ...step, completed: !step.completed } : step
+    ));
   };
 
   const articles = userRole === "stylist" ? stylistArticles : clientArticles;
@@ -306,6 +419,62 @@ const Knowledge = () => {
               </CardContent>
             </Card>
 
+            {/* Formula History (only for formula mode) */}
+            {aiMode === "formula" && savedFormulas.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <History className="h-4 w-4" />
+                    Recent Formulas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {savedFormulas.map((formula) => (
+                    <div key={formula.id} className="flex items-center justify-between p-2 rounded-md bg-muted/50">
+                      <span className="text-xs truncate flex-1">{formula.formula_name}</span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-6 w-6 p-0"
+                        onClick={() => handleDeleteFormula(formula.id)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Step Progress (only for step-by-step mode) */}
+            {aiMode === "stepbystep" && correctionSteps.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <CheckSquare className="h-4 w-4" />
+                    Progress Tracker
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="text-xs text-muted-foreground mb-2">
+                    {correctionSteps.filter(s => s.completed).length} of {correctionSteps.length} steps
+                  </div>
+                  {correctionSteps.map((step, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <Checkbox
+                        checked={step.completed}
+                        onCheckedChange={() => toggleStepCompletion(idx)}
+                        className="mt-1"
+                      />
+                      <span className={`text-xs ${step.completed ? "line-through text-muted-foreground" : ""}`}>
+                        {step.step}
+                      </span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
             {/* Knowledge Base Link */}
             <Card className="bg-primary/5 border-primary/20">
               <CardContent className="pt-6">
@@ -385,6 +554,20 @@ const Knowledge = () => {
                           }`}
                         >
                           <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                          {msg.role === "assistant" && aiMode === "formula" && idx === aiMessages.length - 1 && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="mt-3"
+                              onClick={() => {
+                                setFormulaToSave(msg.content);
+                                setShowSaveDialog(true);
+                              }}
+                            >
+                              <Save className="h-3 w-3 mr-2" />
+                              Save Formula
+                            </Button>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -424,6 +607,37 @@ const Knowledge = () => {
             </Card>
           </div>
         </div>
+
+        {/* Save Formula Dialog */}
+        <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Save Formula</DialogTitle>
+              <DialogDescription>
+                Give this formula a name to save it to your library
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="formula-name">Formula Name</Label>
+                <Input
+                  id="formula-name"
+                  value={formulaName}
+                  onChange={(e) => setFormulaName(e.target.value)}
+                  placeholder="e.g., Warm Blonde Balayage"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowSaveDialog(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSaveFormula} disabled={!formulaName.trim()}>
+                Save
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Knowledge Base Section - Moved Below */}
         <div className="mt-8 pt-8 border-t">

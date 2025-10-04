@@ -68,6 +68,72 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_corrections: {
+        Row: {
+          correction_steps: Json
+          created_at: string
+          id: string
+          notes: string | null
+          problem_description: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          correction_steps: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          problem_description: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          correction_steps?: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          problem_description?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_formulas: {
+        Row: {
+          created_at: string
+          formula_content: string
+          formula_name: string
+          id: string
+          is_favorite: boolean | null
+          prompt: string
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          formula_content: string
+          formula_name: string
+          id?: string
+          is_favorite?: boolean | null
+          prompt: string
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          formula_content?: string
+          formula_name?: string
+          id?: string
+          is_favorite?: boolean | null
+          prompt?: string
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       appointment_calendar_events: {
         Row: {
           appointment_id: string
