@@ -14,7 +14,6 @@ import {
   Search,
   LayoutDashboard,
   BookOpen,
-  ChevronRight,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -26,13 +25,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface AppSidebarProps {
   userRole?: string;
@@ -75,20 +70,13 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const stylistBusinessItems = [
     { title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500" },
+    { title: "Client Formulas", url: "/formulas", icon: BookOpen, gradient: "from-violet-500 to-purple-500" },
     { title: "Finance", url: "/finance", icon: DollarSign, gradient: "from-amber-500 to-orange-500" },
     { title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "from-orange-500 to-red-500" },
   ];
 
   const stylistToolsItems = [
-    { 
-      title: "AI Assistant", 
-      icon: Sparkles, 
-      gradient: "from-purple-500 to-pink-500",
-      subItems: [
-        { title: "Chat Assistant", url: "/knowledge" },
-        { title: "Formula Generator", url: "/formulas" },
-      ]
-    },
+    { title: "AI Assistant", url: "/knowledge", icon: Sparkles, gradient: "from-purple-500 to-pink-500" },
     { title: "Integrations", url: "/integrations", icon: Building2, gradient: "from-orange-500 to-amber-500" },
   ];
 
@@ -200,58 +188,16 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
           <SidebarGroupContent>
             <SidebarMenu>
               {toolsItems.map((item) => (
-                item.subItems ? (
-                  <Collapsible key={item.title} asChild defaultOpen className="group/collapsible">
-                    <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip={item.title}>
-                          <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-                            <item.icon className="h-4 w-4 text-white" />
-                          </div>
-                          {!collapsed && (
-                            <>
-                              <span className="ml-2">{item.title}</span>
-                              <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                            </>
-                          )}
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      {!collapsed && (
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {item.subItems.map((subItem: any) => (
-                              <SidebarMenuSubItem key={subItem.title}>
-                                <SidebarMenuSubButton asChild>
-                                  <NavLink 
-                                    to={subItem.url}
-                                    className={({ isActive }) => 
-                                      isActive 
-                                        ? "text-primary font-medium" 
-                                        : "text-muted-foreground hover:text-foreground"
-                                    }
-                                  >
-                                    <span className="ml-8">{subItem.title}</span>
-                                  </NavLink>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      )}
-                    </SidebarMenuItem>
-                  </Collapsible>
-                ) : (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild tooltip={item.title}>
-                      <NavLink to={item.url} className={getNavClassName}>
-                        <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-                          <item.icon className="h-4 w-4 text-white" />
-                        </div>
-                        {!collapsed && <span className="ml-2">{item.title}</span>}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <NavLink to={item.url} className={getNavClassName}>
+                      <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+                        <item.icon className="h-4 w-4 text-white" />
+                      </div>
+                      {!collapsed && <span className="ml-2">{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
