@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile-specific optimizations */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  
+  html {
+    /* Prevent text size adjustment on iOS */
+    -webkit-text-size-adjust: 100%;
+    /* Enable smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  body {
+    /* Prevent overscroll bounce on iOS */
+    overscroll-behavior-y: none;
+    /* Ensure proper touch scrolling */
+    touch-action: pan-y;
+  }
+  
+  /* Improve button and input touch interactions */
+  button, input, select, textarea {
+    touch-action: manipulation;
+  }
+  
+  /* Fix iOS Safari bottom bar issue */
+  @supports (-webkit-touch-callout: none) {
+    .min-h-screen {
+      min-height: -webkit-fill-available;
+    }
+  }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
