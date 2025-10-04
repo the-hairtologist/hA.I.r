@@ -1458,9 +1458,13 @@ const ScheduleManagement = () => {
           open={conflictDialogOpen}
           onOpenChange={setConflictDialogOpen}
           conflictingAppointments={conflictingAppointments}
-          blockedDates={selectedDate ? [selectedDate] : dateRange?.from && dateRange?.to 
-            ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
-            : selectedDatesInMonth}
+          blockedDates={
+            selectedDate && selectedDate instanceof Date && !isNaN(selectedDate.getTime())
+              ? [selectedDate]
+              : dateRange?.from && dateRange?.to 
+                ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
+                : selectedDatesInMonth.filter(d => d instanceof Date && !isNaN(d.getTime()))
+          }
           onConfirm={async () => {
             if (pendingBlockAction) {
               await pendingBlockAction();

@@ -107,10 +107,11 @@ export function VacationConflictDialog({
           </div>
           <DialogDescription>
             You have {conflictingAppointments.length} appointment(s) scheduled during{" "}
-            {blockedDates.length === 1 
-              ? format(blockedDates[0], "MMMM d, yyyy")
-              : `${format(blockedDates[0], "MMM d")} - ${format(blockedDates[blockedDates.length - 1], "MMM d, yyyy")}`
-            }. 
+            {blockedDates && blockedDates.length > 0 ? (
+              blockedDates.length === 1 
+                ? format(blockedDates[0], "MMMM d, yyyy")
+                : `${format(blockedDates[0], "MMM d")} - ${format(blockedDates[blockedDates.length - 1], "MMM d, yyyy")}`
+            ) : "the selected dates"}. 
             Select which clients to notify about rescheduling.
           </DialogDescription>
         </DialogHeader>
