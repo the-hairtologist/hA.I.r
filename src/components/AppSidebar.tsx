@@ -120,7 +120,7 @@ function SortableNavItem({
           <div className={`flex items-center w-full cursor-pointer transition-all duration-200 ${
             isParentActive || isAnyChildActive
               ? 'bg-primary/10 text-primary font-medium border-l-4 border-primary' 
-              : 'text-foreground hover:bg-muted/50 border-l-4 border-transparent hover:border-primary/20 hover:text-primary'
+              : 'text-primary hover:bg-muted/50 border-l-4 border-transparent hover:border-primary/20'
           }`}>
             {isEditMode && !collapsed && (
               <div
