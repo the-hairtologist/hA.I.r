@@ -170,40 +170,14 @@ const Appointments = () => {
     return <Badge variant={variants[status] || "default"}>{status}</Badge>;
   };
 
-  // Group appointments by day - only days with appointments
-  const getAppointmentsByDay = () => {
+  // Get today's appointments
+  const todayAppointments = appointments.filter(apt => {
+    const aptDate = new Date(apt.appointment_date);
     const today = new Date();
-    const upcomingApts = appointments.filter(apt => 
-      new Date(apt.appointment_date) >= today && apt.status !== "cancelled"
-    );
-
-    // Group by date
-    const grouped: Record<string, any[]> = upcomingApts.reduce((acc, apt) => {
-      const dateKey = format(new Date(apt.appointment_date), "yyyy-MM-dd");
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(apt);
-      return acc;
-    }, {} as Record<string, any[]>);
-
-    // Convert to array and sort by date
-    return Object.entries(grouped)
-      .map(([dateKey, dayAppointments]) => {
-        const date = new Date(dateKey);
-        return {
-          date,
-          dayName: format(date, 'EEEE, MMM d'),
-          isToday: dateKey === format(today, "yyyy-MM-dd"),
-          appointments: dayAppointments.sort((a, b) => 
-            new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime()
-          )
-        };
-      })
-      .sort((a, b) => a.date.getTime() - b.date.getTime());
-  };
-
-  const appointmentsByDay = getAppointmentsByDay();
+    return format(aptDate, "yyyy-MM-dd") === format(today, "yyyy-MM-dd") && apt.status !== "cancelled";
+  }).sort((a, b) => 
+    new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime()
+  );
 
   // Filter appointments
   const filteredAppointments = (list: any[]) => {
@@ -312,87 +286,70 @@ const Appointments = () => {
               </Select>
             </div>
 
-            {/* Appointments by Working Day */}
-            <div className="space-y-4">
-              {appointmentsByDay.length === 0 ? (
-                <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                  <CardContent className="py-12">
-                    <p className="text-muted-foreground text-center">
-                      {searchQuery || statusFilter !== "all"
-                        ? "No matching appointments"
-                        : "No appointments scheduled"}
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                appointmentsByDay.map((day, dayIndex) => (
-                  <Card key={dayIndex} className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                    <CardHeader className="border-b-[2px] border-border py-3">
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="font-display text-lg flex items-center gap-2">
-                          {day.dayName}
-                          {day.isToday && (
-                            <Badge variant="default" className="text-xs">Today</Badge>
-                          )}
-                        </CardTitle>
-                        {day.appointments.length > 0 && (
-                          <Badge variant="secondary">{day.appointments.length} appointment{day.appointments.length !== 1 ? 's' : ''}</Badge>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-3">
-                      {day.appointments.length === 0 ? (
-                        <p className="text-sm text-muted-foreground text-center py-4">
-                          No appointments scheduled
-                        </p>
-                      ) : (
-                        <div className="space-y-2">
-                          {filteredAppointments(day.appointments).map((apt) => (
-                            <div
-                              key={apt.id}
-                              className="flex items-center justify-between p-3 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
-                            >
-                              <div 
-                                className="flex items-center gap-3 flex-1 cursor-pointer"
-                                onClick={() => {
-                                  setSelectedAppointment(apt);
-                                  setDetailsOpen(true);
-                                }}
-                              >
-                                <div className="bg-primary/10 p-2 rounded-lg">
-                                  <Clock className="h-4 w-4 text-primary" />
-                                </div>
-                                <div className="flex-1">
-                                  <p className="font-semibold text-sm">{apt.client?.user?.full_name}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {format(new Date(apt.appointment_date), "h:mm a")} • {apt.service_type} • {apt.duration_minutes}min
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                {getStatusBadge(apt.status)}
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setRebookAppointment(apt);
-                                    setRebookDialogOpen(true);
-                                  }}
-                                  className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                  <Repeat className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            </div>
-                          ))}
+            {/* Today's Appointments */}
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader className="border-b-[2px] border-border py-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="font-display text-lg">
+                    Today's Schedule - {format(new Date(), 'EEEE, MMMM d')}
+                  </CardTitle>
+                  {todayAppointments.length > 0 && (
+                    <Badge variant="default">{todayAppointments.length} appointment{todayAppointments.length !== 1 ? 's' : ''}</Badge>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                {filteredAppointments(todayAppointments).length === 0 ? (
+                  <p className="text-muted-foreground text-center py-8">
+                    {searchQuery || statusFilter !== "all"
+                      ? "No matching appointments"
+                      : "No appointments scheduled for today"}
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {filteredAppointments(todayAppointments).map((apt) => (
+                      <div
+                        key={apt.id}
+                        className="flex items-center justify-between p-3 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
+                      >
+                        <div 
+                          className="flex items-center gap-3 flex-1 cursor-pointer"
+                          onClick={() => {
+                            setSelectedAppointment(apt);
+                            setDetailsOpen(true);
+                          }}
+                        >
+                          <div className="bg-primary/10 p-2.5 rounded-lg">
+                            <Clock className="h-5 w-5 text-primary" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-semibold">{apt.client?.user?.full_name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {format(new Date(apt.appointment_date), "h:mm a")} • {apt.service_type} • {apt.duration_minutes}min
+                            </p>
+                          </div>
                         </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-            </div>
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(apt.status)}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setRebookAppointment(apt);
+                              setRebookDialogOpen(true);
+                            }}
+                            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Repeat className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="calendar">
