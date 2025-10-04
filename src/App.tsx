@@ -9,33 +9,46 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { SubscriptionGate } from "@/components/SubscriptionGate";
 import { RoleSwitchProtection } from "@/components/RoleSwitchProtection";
 import { CookieConsent } from "@/components/CookieConsent";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import Formulas from "./pages/Formulas";
-import Appointments from "./pages/Appointments";
-import BookAppointment from "./pages/BookAppointment";
-import StylistDiscovery from "./pages/StylistDiscovery";
-import StylistProfile from "./pages/StylistProfile";
-import ClientRequests from "./pages/ClientRequests";
-import ClientDiscovery from "./pages/ClientDiscovery";
-import Messages from "./pages/Messages";
-import ScheduleManagement from "./pages/ScheduleManagement";
-import Services from "./pages/Services";
-import Settings from "./pages/Settings";
-import Finance from "./pages/Finance";
-import Resources from "./pages/Resources";
-import Knowledge from "./pages/Knowledge";
-import Portfolio from "./pages/Portfolio";
-import Clients from "./pages/Clients";
-import AccessCodes from "./pages/AccessCodes";
-import Integrations from "./pages/Integrations";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import CookiePolicy from "./pages/CookiePolicy";
-import NotFound from "./pages/NotFound";
+import { lazy, Suspense } from "react";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+// Lazy load pages for better performance
+const Index = lazy(() => import("./pages/Index"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Formulas = lazy(() => import("./pages/Formulas"));
+const Appointments = lazy(() => import("./pages/Appointments"));
+const BookAppointment = lazy(() => import("./pages/BookAppointment"));
+const StylistDiscovery = lazy(() => import("./pages/StylistDiscovery"));
+const StylistProfile = lazy(() => import("./pages/StylistProfile"));
+const ClientRequests = lazy(() => import("./pages/ClientRequests"));
+const ClientDiscovery = lazy(() => import("./pages/ClientDiscovery"));
+const Messages = lazy(() => import("./pages/Messages"));
+const ScheduleManagement = lazy(() => import("./pages/ScheduleManagement"));
+const Services = lazy(() => import("./pages/Services"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Finance = lazy(() => import("./pages/Finance"));
+const Resources = lazy(() => import("./pages/Resources"));
+const Knowledge = lazy(() => import("./pages/Knowledge"));
+const Portfolio = lazy(() => import("./pages/Portfolio"));
+const Clients = lazy(() => import("./pages/Clients"));
+const AccessCodes = lazy(() => import("./pages/AccessCodes"));
+const Integrations = lazy(() => import("./pages/Integrations"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
-const queryClient = new QueryClient();
+// Optimized QueryClient with caching
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+      gcTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <ErrorBoundary>
@@ -47,7 +60,8 @@ const App = () => (
           <CookieConsent />
           <BrowserRouter>
             <RoleSwitchProtection />
-        <Routes>
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
@@ -166,10 +180,11 @@ const App = () => (
             </ProtectedRoute>
           } />
           
-          {/* 404 Catch-All */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+                {/* 404 Catch-All */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
         </TooltipProvider>
       </SubscriptionProvider>
     </QueryClientProvider>
