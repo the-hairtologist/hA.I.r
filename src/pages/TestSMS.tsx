@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Navigation } from "@/components/Navigation";
-import { MessageSquare, Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { MessageSquare, Send, Loader2, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useNavigate } from "react-router-dom";
 
 const TestSMS = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [appointmentId, setAppointmentId] = useState("");
   const [notificationType, setNotificationType] = useState<"confirmation" | "reminder" | "cancellation" | "reschedule">("confirmation");
@@ -54,7 +55,16 @@ const TestSMS = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <Navigation />
+      <header className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <h1 className="text-2xl font-display font-bold">Test SMS</h1>
+          </div>
+        </div>
+      </header>
 
       <main className="container mx-auto px-4 py-8 max-w-2xl">
         <Card>

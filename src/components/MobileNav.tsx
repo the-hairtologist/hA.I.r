@@ -17,15 +17,15 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
     { icon: Calendar, label: "Appointments", path: "/appointments" },
     { icon: Users, label: "Clients", path: "/clients" },
     { icon: MessageSquare, label: "Messages", path: "/messages" },
-    { icon: User, label: "Profile", path: "/profile" },
+    { icon: User, label: "Settings", path: "/settings" },
   ];
 
   const clientItems = [
     { icon: Home, label: "Home", path: "/dashboard" },
     { icon: Users, label: "Stylists", path: "/stylists" },
-    { icon: Calendar, label: "Appointments", path: "/my-appointments" },
+    { icon: Calendar, label: "Appointments", path: "/appointments" },
     { icon: MessageSquare, label: "Messages", path: "/messages" },
-    { icon: User, label: "Profile", path: "/profile" },
+    { icon: User, label: "Settings", path: "/settings" },
   ];
 
   const items = userRole === "stylist" ? stylistItems : clientItems;

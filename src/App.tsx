@@ -16,22 +16,15 @@ import Appointments from "./pages/Appointments";
 import BookAppointment from "./pages/BookAppointment";
 import StylistDiscovery from "./pages/StylistDiscovery";
 import StylistProfile from "./pages/StylistProfile";
-import MyAppointments from "./pages/MyAppointments";
-import MyFormulas from "./pages/MyFormulas";
-import Commissions from "./pages/Commissions";
-import Payments from "./pages/Payments";
 import Messages from "./pages/Messages";
-import Knowledge from "./pages/Knowledge";
-import Profile from "./pages/Profile";
 import ScheduleManagement from "./pages/ScheduleManagement";
 import Services from "./pages/Services";
-import AccountSettings from "./pages/AccountSettings";
-import AIAssistant from "./pages/AIAssistant";
+import Settings from "./pages/Settings";
+import Finance from "./pages/Finance";
+import Resources from "./pages/Resources";
 import Portfolio from "./pages/Portfolio";
 import Clients from "./pages/Clients";
-import BookForClient from "./pages/BookForClient";
 import AccessCodes from "./pages/AccessCodes";
-import Help from "./pages/Help";
 import Integrations from "./pages/Integrations";
 import NotFound from "./pages/NotFound";
 
@@ -57,29 +50,19 @@ const App = () => (
               <Dashboard />
             </ProtectedRoute>
           } />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          } />
           <Route path="/messages" element={
             <ProtectedRoute>
               <Messages />
             </ProtectedRoute>
           } />
-          <Route path="/knowledge" element={
-            <ProtectedRoute>
-              <Knowledge />
-            </ProtectedRoute>
-          } />
           <Route path="/settings" element={
             <ProtectedRoute>
-              <AccountSettings />
+              <Settings />
             </ProtectedRoute>
           } />
-          <Route path="/help" element={
+          <Route path="/resources" element={
             <ProtectedRoute>
-              <Help />
+              <Resources />
             </ProtectedRoute>
           } />
           <Route path="/integrations" element={
@@ -87,33 +70,22 @@ const App = () => (
               <Integrations />
             </ProtectedRoute>
           } />
+          <Route path="/appointments" element={
+            <ProtectedRoute>
+              <Appointments />
+            </ProtectedRoute>
+          } />
+          <Route path="/formulas" element={
+            <ProtectedRoute>
+              <Formulas />
+            </ProtectedRoute>
+          } />
           
           {/* Stylist-Only Routes */}
-          <Route path="/formulas" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
-              <SubscriptionGate feature="formulas">
-                <Formulas />
-              </SubscriptionGate>
-            </ProtectedRoute>
-          } />
-          <Route path="/appointments" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
-              <SubscriptionGate feature="appointments">
-                <Appointments />
-              </SubscriptionGate>
-            </ProtectedRoute>
-          } />
-          <Route path="/commissions" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
-              <SubscriptionGate feature="commissions">
-                <Commissions />
-              </SubscriptionGate>
-            </ProtectedRoute>
-          } />
-          <Route path="/payments" element={
+          <Route path="/finance" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
               <SubscriptionGate feature="payments">
-                <Payments />
+                <Finance />
               </SubscriptionGate>
             </ProtectedRoute>
           } />
@@ -138,24 +110,10 @@ const App = () => (
               </SubscriptionGate>
             </ProtectedRoute>
           } />
-          <Route path="/book-for-client" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
-              <SubscriptionGate feature="appointments">
-                <BookForClient />
-              </SubscriptionGate>
-            </ProtectedRoute>
-          } />
           <Route path="/services" element={
             <ProtectedRoute allowedRoles={["stylist"]}>
               <SubscriptionGate feature="services">
                 <Services />
-              </SubscriptionGate>
-            </ProtectedRoute>
-          } />
-          <Route path="/ai-assistant" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
-              <SubscriptionGate feature="ai-assistant">
-                <AIAssistant />
               </SubscriptionGate>
             </ProtectedRoute>
           } />
@@ -179,16 +137,6 @@ const App = () => (
           <Route path="/stylist" element={
             <ProtectedRoute allowedRoles={["client"]}>
               <StylistProfile />
-            </ProtectedRoute>
-          } />
-          <Route path="/my-appointments" element={
-            <ProtectedRoute allowedRoles={["client"]}>
-              <MyAppointments />
-            </ProtectedRoute>
-          } />
-          <Route path="/my-formulas" element={
-            <ProtectedRoute allowedRoles={["client"]}>
-              <MyFormulas />
             </ProtectedRoute>
           } />
           
