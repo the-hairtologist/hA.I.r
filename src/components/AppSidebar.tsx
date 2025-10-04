@@ -208,9 +208,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                           <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
                             <item.icon className="h-4 w-4 text-white" />
                           </div>
-                          {!collapsed && <span className="ml-2">{item.title}</span>}
                           {!collapsed && (
-                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                            <>
+                              <span className="ml-2">{item.title}</span>
+                              <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                            </>
                           )}
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
@@ -220,8 +222,15 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                             {item.subItems.map((subItem: any) => (
                               <SidebarMenuSubItem key={subItem.title}>
                                 <SidebarMenuSubButton asChild>
-                                  <NavLink to={subItem.url} className={getNavClassName}>
-                                    <span>{subItem.title}</span>
+                                  <NavLink 
+                                    to={subItem.url}
+                                    className={({ isActive }) => 
+                                      isActive 
+                                        ? "text-primary font-medium" 
+                                        : "text-muted-foreground hover:text-foreground"
+                                    }
+                                  >
+                                    <span className="ml-8">{subItem.title}</span>
                                   </NavLink>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
