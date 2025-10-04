@@ -28,7 +28,7 @@ interface ClientPost {
 
 const ClientDiscovery = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { isStylist, loading: roleLoading } = useUserRole(user?.id);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<ClientPost[]>([]);
@@ -37,10 +37,11 @@ const ClientDiscovery = () => {
   const [stylistProfileId, setStylistProfileId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!roleLoading) {
+    // Wait for both auth and roles to finish loading
+    if (!authLoading && !roleLoading) {
       checkUserAndLoadPosts();
     }
-  }, [roleLoading, isStylist]);
+  }, [authLoading, roleLoading, user, isStylist]);
 
   useEffect(() => {
     filterPosts();
@@ -121,7 +122,7 @@ const ClientDiscovery = () => {
     toast.success("Contact feature coming soon! For now, the client will be notified of your interest.");
   };
 
-  if (loading || roleLoading) {
+  if (loading || roleLoading || authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
