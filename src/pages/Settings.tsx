@@ -9,11 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, Download, Trash2, RefreshCw } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
 import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
+import { DataExport } from "@/components/DataExport";
+import { AccountDeletion } from "@/components/AccountDeletion";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -407,16 +409,9 @@ const Settings = () => {
                   )}
                 </div>
 
-                <div className="pt-4 space-y-3">
-                  <Button variant="outline" onClick={handleExportData} className="w-full">
-                    <Download className="h-4 w-4 mr-2" />
-                    Export My Data
-                  </Button>
-
-                  <Button variant="destructive" onClick={handleDeleteAccount} className="w-full">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete Account
-                  </Button>
+                <div className="pt-4 space-y-4">
+                  <DataExport />
+                  <AccountDeletion />
                 </div>
               </CardContent>
             </Card>

@@ -622,6 +622,36 @@ export type Database = {
         }
         Relationships: []
       }
+      deletion_requests: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          email: string
+          id: string
+          requested_at: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          requested_at?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          requested_at?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       formula_access_log: {
         Row: {
           access_type: string
@@ -952,31 +982,40 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          deleted_at: string | null
           email: string
           full_name: string | null
           gender: string | null
           id: string
           phone: string | null
+          sms_consent: boolean | null
+          sms_consent_date: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           email: string
           full_name?: string | null
           gender?: string | null
           id: string
           phone?: string | null
+          sms_consent?: boolean | null
+          sms_consent_date?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           email?: string
           full_name?: string | null
           gender?: string | null
           id?: string
           phone?: string | null
+          sms_consent?: boolean | null
+          sms_consent_date?: string | null
           updated_at?: string
         }
         Relationships: []

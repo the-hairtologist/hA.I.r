@@ -15,6 +15,14 @@ const Privacy = () => {
           <div className="prose prose-slate dark:prose-invert max-w-none">
             <p className="text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
             
+            <h2>Data Controller Contact</h2>
+            <p>
+              <strong>Company:</strong> hA.I.r™ (Hair Management Platform)<br />
+              <strong>Email:</strong> privacy@hair.app<br />
+              <strong>Data Protection Inquiries:</strong> dpo@hair.app<br />
+              <strong>Address:</strong> [Your Business Address]
+            </p>
+            
             <h2>1. Information We Collect</h2>
             <p>We collect information you provide directly to us when you:</p>
             <ul>
@@ -28,10 +36,11 @@ const Privacy = () => {
             <p>This includes:</p>
             <ul>
               <li>Name and email address</li>
-              <li>Phone number</li>
+              <li>Phone number (with explicit consent for SMS)</li>
               <li>Profile information</li>
               <li>Payment information (processed securely by Stripe)</li>
-              <li>Hair-related information (with your consent)</li>
+              <li>Hair-related information (with explicit consent)</li>
+              <li>Allergy information (with medical consent)</li>
             </ul>
             
             <h2>2. How We Use Your Information</h2>
@@ -72,32 +81,62 @@ const Privacy = () => {
             </ul>
             
             <h2>6. Data Retention</h2>
-            <p>We retain your information for as long as your account is active or as needed to provide services. Old client data (2+ years without appointments) is automatically anonymized.</p>
+            <p>We retain your information as follows:</p>
+            <ul>
+              <li><strong>User Profiles:</strong> Active account + 2 years after inactivity</li>
+              <li><strong>Appointments:</strong> 7 years (tax and legal compliance)</li>
+              <li><strong>Messages:</strong> 2 years</li>
+              <li><strong>Payment Records:</strong> 7 years (legal requirement)</li>
+              <li><strong>Analytics Data:</strong> 26 months (GDPR standard)</li>
+              <li><strong>Inactive Client Data:</strong> Automatically anonymized after 2 years without appointments</li>
+            </ul>
             
             <h2>7. Cookies</h2>
-            <p>We use essential cookies to:</p>
+            <p>We use cookies for essential functionality and, with your consent, for analytics and marketing. You can manage your cookie preferences through our cookie consent banner. See our <a href="/cookie-policy" className="text-primary hover:underline">Cookie Policy</a> for details.</p>
+            
+            <h3>Essential Cookies (Required)</h3>
             <ul>
               <li>Maintain your session</li>
               <li>Remember your preferences</li>
-              <li>Improve site performance</li>
+              <li>Ensure security and authentication</li>
             </ul>
             
-            <h2>8. Third-Party Services</h2>
+            <h3>Optional Cookies (With Consent)</h3>
+            <ul>
+              <li>Analytics: Understand how you use our service</li>
+              <li>Marketing: Show relevant content and advertisements</li>
+            </ul>
+            
+            <h2>8. AI-Powered Features</h2>
+            <p>Our platform uses AI for the following purposes:</p>
+            <ul>
+              <li><strong>Hair Formula Suggestions:</strong> AI analyzes hair type and preferences to suggest formulas</li>
+              <li><strong>Stylist Matching:</strong> Helps clients find suitable stylists based on preferences</li>
+              <li><strong>Chat Assistance:</strong> AI-powered hair consultation chatbot</li>
+            </ul>
+            <p><em>Important: AI recommendations are assistive only. All final decisions are made by users and stylists. No high-risk automated decisions are made without human oversight.</em></p>
+            
+            <h2>9. Third-Party Services</h2>
             <p>We use the following third-party services:</p>
             <ul>
-              <li><strong>Supabase:</strong> Database and authentication</li>
-              <li><strong>Stripe:</strong> Payment processing</li>
-              <li><strong>Twilio:</strong> SMS notifications (with consent)</li>
+              <li><strong>Supabase:</strong> Database, authentication, and hosting (US-based)</li>
+              <li><strong>Stripe:</strong> Payment processing (PCI DSS Level 1 certified)</li>
+              <li><strong>Twilio:</strong> SMS notifications (with explicit consent)</li>
+              <li><strong>Lovable AI:</strong> AI-powered features (Gemini/GPT models)</li>
             </ul>
+            <p>Data transfers to these services are protected by Standard Contractual Clauses (SCCs) and appropriate safeguards.</p>
             
-            <h2>9. Children's Privacy</h2>
-            <p>Our service is not intended for children under 13. We do not knowingly collect information from children under 13.</p>
+            <h2>10. International Data Transfers</h2>
+            <p>Your data may be processed in the United States and other countries. We use Standard Contractual Clauses (SCCs) and appropriate safeguards to protect your data.</p>
             
-            <h2>10. Changes to Privacy Policy</h2>
-            <p>We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page.</p>
+            <h2>11. Children's Privacy</h2>
+            <p>Our service is intended for users 18 years and older. We do not knowingly collect information from individuals under 18. If you believe a minor has provided us with personal information, please contact us immediately at privacy@hair.app.</p>
             
-            <h2>11. Contact Us</h2>
-            <p>If you have questions about this privacy policy, please contact us through the app's support feature.</p>
+            <h2>12. Changes to Privacy Policy</h2>
+            <p>We may update this privacy policy from time to time. Material changes will be notified via email at least 30 days before taking effect.</p>
+            
+            <h2>13. Contact Us</h2>
+            <p>For privacy inquiries: <strong>privacy@hair.app</strong> | Data Protection Officer: <strong>dpo@hair.app</strong></p>
             
             <h2>GDPR Compliance (EU Users)</h2>
             <p>If you are in the European Union, you have additional rights under GDPR:</p>

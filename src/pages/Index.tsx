@@ -22,6 +22,12 @@ const Index = () => {
             <h1 className="text-3xl font-display font-bold">hA.I.r</h1>
           </div>
           <div className="flex gap-3">
+            <Button variant="ghost" onClick={() => navigate("/privacy")} className="text-sm">
+              Privacy
+            </Button>
+            <Button variant="ghost" onClick={() => navigate("/terms")} className="text-sm">
+              Terms
+            </Button>
             <Button variant="outline" onClick={() => navigate("/auth")}>
               Sign In
             </Button>
