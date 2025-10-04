@@ -84,9 +84,25 @@ export const WeeklyScheduleView = ({
     });
   };
 
+  // Check if a time slot is occupied by an ongoing appointment
+  const isSlotOccupied = (day: Date, hour: number, minute: number) => {
+    return appointments.some(apt => {
+      if (apt.status === 'cancelled') return false;
+      
+      const aptDate = parseISO(apt.appointment_date);
+      if (!isSameDay(aptDate, day)) return false;
+      
+      const aptStartMinutes = aptDate.getHours() * 60 + aptDate.getMinutes();
+      const aptEndMinutes = aptStartMinutes + (apt.duration_minutes || 90);
+      const slotMinutes = hour * 60 + minute;
+      
+      return slotMinutes >= aptStartMinutes && slotMinutes < aptEndMinutes;
+    });
+  };
+
   const calculateAppointmentHeight = (durationMinutes: number) => {
-    // Each 30-minute slot is 32px
-    return (durationMinutes / 30) * 32;
+    // Each 30-minute slot is 32px, ensure we fill the entire space
+    return Math.max((durationMinutes / 30) * 32, 32);
   };
 
   const isWorkingHours = (day: Date, hour: number, minute: number) => {
@@ -217,10 +233,10 @@ export const WeeklyScheduleView = ({
                         {dayAppointments.map((apt) => (
                           <div
                             key={apt.id}
-                            className="absolute inset-x-0.5 top-0.5 rounded-md p-1 cursor-pointer hover:opacity-90 transition-all hover:-translate-y-0.5 hover:shadow-md border border-white/20 group"
+                            className="absolute inset-x-0 top-0 rounded-md p-1.5 cursor-pointer hover:opacity-90 transition-all hover:shadow-lg border border-white/20 group overflow-hidden"
                             style={{
                               backgroundColor: getServiceColor(apt.service_type),
-                              height: `${calculateAppointmentHeight(apt.duration_minutes || 90) - 4}px`,
+                              height: `${calculateAppointmentHeight(apt.duration_minutes || 90)}px`,
                               zIndex: 5,
                             }}
                             onClick={() => onAppointmentClick?.(apt)}
