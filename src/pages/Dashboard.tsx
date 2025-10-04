@@ -652,17 +652,17 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-6 md:p-8 relative">
+          <div className="bg-blue-600 p-6 md:p-8 relative overflow-hidden">
             <div className="window-scrollbar"></div>
             
-            <div className="max-w-3xl">
+            <div className="max-w-5xl">
               <h2 className="text-4xl md:text-5xl font-display font-black mb-4 text-pink-400 uppercase leading-tight">
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
               {/* Weekly Schedule View for Stylists */}
               {userRole === "stylist" && (
-                <div className="bg-card rounded-lg overflow-hidden border-2 border-pink-400 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.6)]">
+                <div className="bg-card rounded-lg overflow-hidden border-2 border-pink-400 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.6)] mt-4">
                   <WeeklyScheduleView
                     appointments={weekAppointments}
                     stylistSchedule={profile?.weekly_schedule}
@@ -672,7 +672,7 @@ const Dashboard = () => {
               )}
 
               {userRole === "client" && (
-                <p className="text-base md:text-lg font-medium text-pink-200">
+                <p className="text-base md:text-lg font-medium text-pink-200 mt-2">
                   Ready to book your next transformation? ✨
                 </p>
               )}

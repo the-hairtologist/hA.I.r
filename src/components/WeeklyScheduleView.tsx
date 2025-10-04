@@ -127,7 +127,7 @@ export const WeeklyScheduleView = ({
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-y-auto max-h-[50vh]">
+        <div className="overflow-y-auto max-h-[45vh]">
           <div className="w-full">
             {/* Header with days */}
             <div 
