@@ -13,11 +13,20 @@
     <meta name="theme-color" content="#3b82f6" />
     <meta name="robots" content="index, follow" />
     
-    <!-- Retro Y2K Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <!-- Performance Optimization: Preload Critical Fonts -->
+    <link rel="preload" as="font" href="/fonts/dm-sans-regular.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/space-grotesk-regular.woff2" type="font/woff2" crossorigin>
+    
+    <!-- Performance Optimization: Resource Hints -->
+    <link rel="dns-prefetch" href="https://iyotklwiwyljospfqnoy.supabase.co">
+    <link rel="preconnect" href="https://iyotklwiwyljospfqnoy.supabase.co" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    
+    <!-- Self-hosted Fonts -->
+    <link rel="stylesheet" href="/fonts/fonts.css">
+    
+    
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="hA.I.r - Transform Every Color Service with AI" />
     <meta property="og:description" content="Generate professional color formulas instantly, manage bookings, and deliver flawless results. The AI-powered salon assistant stylists love." />
