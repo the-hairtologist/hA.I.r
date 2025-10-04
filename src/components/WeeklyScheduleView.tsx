@@ -10,12 +10,14 @@ interface WeeklyScheduleViewProps {
   appointments: any[];
   stylistSchedule?: any;
   onAppointmentClick?: (appointment: any) => void;
+  onTimeSlotClick?: (date: Date, hour: number, minute: number) => void;
 }
 
 export const WeeklyScheduleView = ({ 
   appointments, 
   stylistSchedule,
-  onAppointmentClick 
+  onAppointmentClick,
+  onTimeSlotClick
 }: WeeklyScheduleViewProps) => {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
@@ -221,8 +223,14 @@ export const WeeklyScheduleView = ({
                         className={cn(
                           "relative border-r border-border/30 h-[32px]",
                           !isWorking && "bg-muted/20",
-                          slot.minute === 0 && "border-t border-border"
+                          slot.minute === 0 && "border-t border-border",
+                          isWorking && dayAppointments.length === 0 && "hover:bg-accent/10 cursor-pointer transition-colors"
                         )}
+                        onClick={() => {
+                          if (isWorking && dayAppointments.length === 0 && onTimeSlotClick) {
+                            onTimeSlotClick(day, slot.hour, slot.minute);
+                          }
+                        }}
                       >
                         {!isWorking && slot.minute === 0 && (
                           <div className="absolute inset-0 flex items-center justify-center">

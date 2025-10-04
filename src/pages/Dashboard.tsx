@@ -16,6 +16,7 @@ import { RecentReviews } from "@/components/dashboard/RecentReviews";
 import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
+import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import avatarMale from "@/assets/avatar-male-lego.png";
@@ -92,6 +93,12 @@ const Dashboard = () => {
   const [recentReviews, setRecentReviews] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [weekAppointments, setWeekAppointments] = useState<any[]>([]);
+  const [quickAppointmentOpen, setQuickAppointmentOpen] = useState(false);
+  const [quickAppointmentData, setQuickAppointmentData] = useState<{
+    date: Date;
+    hour: number;
+    minute: number;
+  } | null>(null);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
     "subscription",
     "checklist",
@@ -667,6 +674,10 @@ const Dashboard = () => {
                     appointments={weekAppointments}
                     stylistSchedule={profile?.weekly_schedule}
                     onAppointmentClick={(apt) => navigate("/appointments")}
+                    onTimeSlotClick={(date, hour, minute) => {
+                      setQuickAppointmentData({ date, hour, minute });
+                      setQuickAppointmentOpen(true);
+                    }}
                   />
                 </div>
               )}
@@ -734,6 +745,19 @@ const Dashboard = () => {
             }
           }}
         />
+        
+        {/* Quick Appointment Dialog */}
+        {userRole === "stylist" && quickAppointmentData && (
+          <QuickAppointmentDialog
+            open={quickAppointmentOpen}
+            onOpenChange={setQuickAppointmentOpen}
+            selectedDate={quickAppointmentData.date}
+            selectedHour={quickAppointmentData.hour}
+            selectedMinute={quickAppointmentData.minute}
+            stylistId={profile?.id}
+            onSuccess={loadDashboardData}
+          />
+        )}
       </div>
     </DashboardLayout>
   );
