@@ -266,7 +266,7 @@ export default function Clients() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <h1 className="text-4xl font-display font-bold mb-2 gradient-text">My Clients</h1>
-            <p className="text-muted-foreground">Everyone you've worked your magic on, all in one place</p>
+            <p className="text-muted-foreground">Manage your client profiles, formulas, and preferences</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -287,7 +287,7 @@ export default function Clients() {
                   required
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                  placeholder="What do they go by?"
+                  placeholder="Enter client's name"
                 />
               </div>
               <div className="space-y-2">
@@ -320,21 +320,21 @@ export default function Clients() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="allergies">Allergies</Label>
+                <Label htmlFor="allergies">Allergies & Sensitivities</Label>
                 <Textarea
                   id="allergies"
                   value={formData.allergies}
                   onChange={(e) => setFormData({ ...formData, allergies: e.target.value })}
-                  placeholder="Anything that makes them react? (PPD, ammonia, etc.)"
+                  placeholder="PPD, ammonia, or other known sensitivities"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
+                <Label htmlFor="notes">Additional Notes</Label>
                 <Textarea
                   id="notes"
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Anything worth remembering for next time?"
+                  placeholder="Preferences, goals, or important details to remember"
                 />
               </div>
               <Button type="submit" className="w-full">Add Client</Button>
@@ -348,7 +348,7 @@ export default function Clients() {
           <SearchInput
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Looking for someone? Search by name, email, or phone"
+            placeholder="Search by name, email, or phone number"
             className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
           />
           <Select value={sortBy} onValueChange={(value: "name" | "recent") => setSortBy(value)}>
@@ -368,9 +368,9 @@ export default function Clients() {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
               <CardContent className="py-12 text-center">
                 <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                <h3 className="text-lg font-display font-bold mb-2">Can't find who you're looking for?</h3>
+                <h3 className="text-lg font-display font-bold mb-2">No matches found</h3>
                 <p className="text-muted-foreground mb-4">
-                  Try tweaking your search or clearing the filters
+                  Try adjusting your search criteria or clear the filters
                 </p>
                 <Button 
                   variant="outline" 
@@ -385,9 +385,9 @@ export default function Clients() {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
               <CardContent className="py-12 text-center">
                 <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                <h3 className="text-lg font-display font-bold mb-2">Your client list is waiting</h3>
+                <h3 className="text-lg font-display font-bold mb-2">Ready to add your first client?</h3>
                 <p className="text-muted-foreground mb-4">
-                  Add your first client to keep track of their hair history, allergies, and preferences
+                  Keep track of hair profiles, preferences, and formula history all in one place
                 </p>
                 <Button 
                   onClick={() => setIsDialogOpen(true)}
@@ -488,13 +488,13 @@ export default function Clients() {
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-2xl gradient-text">Update Client Info</DialogTitle>
+              <DialogTitle className="text-2xl gradient-text">Edit Client Profile</DialogTitle>
             </DialogHeader>
             
             <div className="grid md:grid-cols-2 gap-6">
               {/* Client Info Form */}
               <div>
-                <h3 className="text-lg font-display font-bold mb-4 text-secondary">Their Details</h3>
+                <h3 className="text-lg font-display font-bold mb-4 text-secondary">Client Information</h3>
                 <form onSubmit={handleEditClient} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="edit_full_name">Full Name *</Label>
@@ -503,7 +503,7 @@ export default function Clients() {
                       required
                       value={editFormData.full_name}
                       onChange={(e) => setEditFormData({ ...editFormData, full_name: e.target.value })}
-                      placeholder="What do they go by?"
+                      placeholder="Enter client's name"
                       className="border-[2px] border-foreground"
                     />
                   </div>
@@ -540,22 +540,22 @@ export default function Clients() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="edit_allergies">Allergies</Label>
+                    <Label htmlFor="edit_allergies">Allergies & Sensitivities</Label>
                     <Textarea
                       id="edit_allergies"
                       value={editFormData.allergies}
                       onChange={(e) => setEditFormData({ ...editFormData, allergies: e.target.value })}
-                      placeholder="Anything that makes them react? (PPD, ammonia, etc.)"
+                      placeholder="PPD, ammonia, or other known sensitivities"
                       className="border-[2px] border-foreground"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="edit_notes">Notes</Label>
+                    <Label htmlFor="edit_notes">Additional Notes</Label>
                     <Textarea
                       id="edit_notes"
                       value={editFormData.notes}
                       onChange={(e) => setEditFormData({ ...editFormData, notes: e.target.value })}
-                      placeholder="Anything worth remembering for next time?"
+                      placeholder="Preferences, goals, or important details to remember"
                       className="border-[2px] border-foreground"
                     />
                   </div>
@@ -572,13 +572,13 @@ export default function Clients() {
               <div>
                 <h3 className="text-lg font-display font-bold mb-4 text-primary flex items-center gap-2">
                   <FileText className="h-5 w-5" />
-                  Their Formulas ({clientFormulas.length})
+                  Formula History ({clientFormulas.length})
                 </h3>
                 
                 {clientFormulas.length === 0 ? (
                   <div className="text-center py-8 border-[3px] border-dashed border-muted rounded-lg bg-muted/5">
                     <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">No formulas saved yet</p>
+                    <p className="text-sm text-muted-foreground">No formulas created yet</p>
                   </div>
                 ) : (
                   <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
