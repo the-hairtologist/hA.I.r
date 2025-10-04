@@ -120,7 +120,7 @@ const StylistDiscovery = () => {
   const filteredStylists = stylists.filter((stylist) => {
     const matchesSearch = 
       stylist.business_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      stylist.profiles.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stylist.profiles?.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       stylist.specialty?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesLocation = locationFilter === "all" || stylist.location === locationFilter;
@@ -248,20 +248,20 @@ const StylistDiscovery = () => {
                 <CardHeader>
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 rounded-full bg-white border-2 border-foreground flex items-center justify-center text-2xl overflow-hidden shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                      {stylist.profiles.avatar_url ? (
+                      {stylist.profiles?.avatar_url ? (
                         <img 
                           src={stylist.profiles.avatar_url} 
-                          alt={stylist.profiles.full_name}
+                          alt={stylist.profiles?.full_name || 'Stylist'}
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        stylist.profiles.full_name?.charAt(0).toUpperCase()
+                        stylist.profiles?.full_name?.charAt(0).toUpperCase() || '?'
                       )}
                     </div>
                     <div className="flex-1">
-                      <CardTitle className="font-display text-foreground">{stylist.business_name || stylist.profiles.full_name}</CardTitle>
+                      <CardTitle className="font-display text-foreground">{stylist.business_name || stylist.profiles?.full_name || 'Unnamed Stylist'}</CardTitle>
                       <CardDescription className="text-foreground/80 font-medium">
-                        {stylist.profiles.full_name}
+                        {stylist.profiles?.full_name}
                         {stylist.total_reviews > 0 && (
                           <div className="flex items-center gap-1 mt-1">
                             <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
