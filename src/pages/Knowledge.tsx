@@ -2,12 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Search, Tag, TrendingUp, Loader2, ExternalLink, Sparkles, Send, Save, Star, CheckSquare, History, Trash2 } from "lucide-react";
+import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, BookOpen } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -18,7 +16,6 @@ const Knowledge = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [aiMode, setAiMode] = useState<"formula" | "stepbystep">("formula");
   const [aiMessages, setAiMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
   const [aiInput, setAiInput] = useState("");
@@ -73,96 +70,6 @@ const Knowledge = () => {
       setLoading(false);
     }
   };
-
-  const stylistArticles = [
-    {
-      title: "Color Theory Fundamentals",
-      category: "Education",
-      description: "Master the basics of color theory for professional hair coloring",
-      tags: ["Color", "Theory", "Basics"],
-      trending: true,
-    },
-    {
-      title: "Balayage Techniques",
-      category: "Techniques",
-      description: "Advanced balayage application methods and sectioning strategies",
-      tags: ["Balayage", "Highlights", "Advanced"],
-      trending: true,
-    },
-    {
-      title: "Client Consultation Best Practices",
-      category: "Business",
-      description: "How to conduct effective color consultations and manage expectations",
-      tags: ["Consultation", "Communication", "Client Management"],
-      trending: false,
-    },
-    {
-      title: "Color Correction Guide",
-      category: "Techniques",
-      description: "Step-by-step approach to fixing common color mistakes",
-      tags: ["Color Correction", "Problem Solving", "Advanced"],
-      trending: false,
-    },
-    {
-      title: "Toner Application Mastery",
-      category: "Techniques",
-      description: "Understanding toners and how to achieve perfect tones",
-      tags: ["Toner", "Blonde", "Technique"],
-      trending: true,
-    },
-    {
-      title: "Product Knowledge: Developer Ratios",
-      category: "Education",
-      description: "Understanding developer volumes and mixing ratios",
-      tags: ["Developer", "Chemistry", "Basics"],
-      trending: false,
-    },
-  ];
-
-  const clientArticles = [
-    {
-      title: "Hair Color Aftercare 101",
-      category: "Care",
-      description: "Essential tips for maintaining your color between salon visits",
-      tags: ["Aftercare", "Maintenance", "Tips"],
-      trending: true,
-    },
-    {
-      title: "Understanding Hair Porosity",
-      category: "Education",
-      description: "Learn how your hair's porosity affects color and treatments",
-      tags: ["Education", "Hair Science", "Care"],
-      trending: false,
-    },
-    {
-      title: "Choosing the Right Shade",
-      category: "Planning",
-      description: "How to work with your stylist to pick the perfect color",
-      tags: ["Color Selection", "Consultation", "Planning"],
-      trending: true,
-    },
-    {
-      title: "Home Hair Care Routine",
-      category: "Care",
-      description: "Building an effective routine to keep your hair healthy",
-      tags: ["Routine", "Products", "Maintenance"],
-      trending: false,
-    },
-    {
-      title: "What to Expect: First Color Appointment",
-      category: "Planning",
-      description: "A guide to your first professional hair coloring experience",
-      tags: ["First Time", "Expectations", "Guide"],
-      trending: true,
-    },
-    {
-      title: "Product Recommendations by Hair Type",
-      category: "Care",
-      description: "Find the best products for your specific hair needs",
-      tags: ["Products", "Recommendations", "Hair Type"],
-      trending: false,
-    },
-  ];
 
   const loadSavedFormulas = async () => {
     try {
@@ -286,15 +193,6 @@ const Knowledge = () => {
       i === index ? { ...step, completed: !step.completed } : step
     ));
   };
-
-  const articles = userRole === "stylist" ? stylistArticles : clientArticles;
-
-  const filteredArticles = articles.filter(
-    (article) =>
-      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
 
   if (loading) {
     return (
@@ -475,18 +373,6 @@ const Knowledge = () => {
               </Card>
             )}
 
-            {/* Knowledge Base Link */}
-            <Card className="bg-primary/5 border-primary/20">
-              <CardContent className="pt-6">
-                <div className="text-center space-y-2">
-                  <BookOpen className="h-8 w-8 mx-auto text-primary" />
-                  <p className="text-sm font-medium">Need Articles?</p>
-                  <p className="text-xs text-muted-foreground">
-                    Browse our knowledge base for detailed guides and tips
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           {/* Main Chat Area */}
@@ -638,76 +524,6 @@ const Knowledge = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-
-        {/* Knowledge Base Section - Moved Below */}
-        <div className="mt-8 pt-8 border-t">
-          <h2 className="text-2xl font-bold mb-6 text-center">Knowledge Base</h2>
-          
-          {/* Search Bar */}
-          <div className="mb-8">
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search articles, guides, and tips..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-
-          {/* Articles Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.map((article, index) => (
-              <Card
-                key={index}
-                className="hover:shadow-lg transition-shadow"
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <Badge variant="outline" className="text-xs">
-                      {article.category}
-                    </Badge>
-                    {article.trending && (
-                      <Badge className="text-xs bg-gradient-to-r from-orange-500 to-red-500">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        Trending
-                      </Badge>
-                    )}
-                  </div>
-                  <CardTitle className="text-lg">{article.title}</CardTitle>
-                  <CardDescription>{article.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {article.tags.map((tag, tagIndex) => (
-                      <Badge key={tagIndex} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  <Button variant="outline" className="w-full" size="sm">
-                    Read Article
-                    <ExternalLink className="h-3 w-3 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {filteredArticles.length === 0 && (
-            <Card className="mt-8">
-              <CardContent className="pt-8 pb-8 text-center">
-                <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-lg font-medium mb-2">No articles found</p>
-                <p className="text-sm text-muted-foreground">
-                  Try adjusting your search query or browse all articles
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
       </main>
     </div>
   );
