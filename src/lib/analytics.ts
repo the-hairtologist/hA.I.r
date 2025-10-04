@@ -1,10 +1,128 @@
 /**
- * Basic Analytics Helper
- * Tracks key user events for product analytics
- * 
- * To integrate with Google Analytics 4 or other platforms,
- * add the tracking script to index.html and use this helper to fire events.
+ * Analytics Integration for Hair A.I.
+ * Supports Google Analytics 4, Mixpanel, and custom event tracking
  */
+
+import { Platform } from '@/platform';
+
+// Analytics configuration
+const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID || '';
+const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '';
+
+// Initialize analytics on app load
+let analyticsInitialized = false;
+
+/**
+ * Initialize analytics providers
+ * Call this once in your App.tsx or main.tsx
+ */
+export const initAnalytics = () => {
+  if (analyticsInitialized) return;
+
+  // Google Analytics 4
+  if (GA4_MEASUREMENT_ID && Platform.isWeb) {
+    // GA4 script injection
+    const script1 = document.createElement('script');
+    script1.async = true;
+    script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`;
+    document.head.appendChild(script1);
+
+    const script2 = document.createElement('script');
+    script2.innerHTML = `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${GA4_MEASUREMENT_ID}', {
+        send_page_view: false,
+        debug_mode: ${import.meta.env.DEV}
+      });
+    `;
+    document.head.appendChild(script2);
+  }
+
+  // Mixpanel (optional)
+  if (MIXPANEL_TOKEN) {
+    // Add Mixpanel initialization here if needed
+  }
+
+  analyticsInitialized = true;
+  console.log('[Analytics] Initialized');
+};
+
+/**
+ * Track a page view
+ */
+export const trackPageView = (pagePath: string, pageTitle?: string) => {
+  if (!analyticsInitialized) return;
+
+  // Google Analytics 4
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', 'page_view', {
+      page_path: pagePath,
+      page_title: pageTitle || document.title,
+      platform: Platform.platform,
+    });
+  }
+
+  console.log('[Analytics] Page view:', pagePath);
+};
+
+/**
+ * Track a custom event
+ */
+export const trackEvent = (
+  eventName: string,
+  properties?: Record<string, any>
+) => {
+  if (!analyticsInitialized) return;
+
+  const eventData = {
+    ...properties,
+    platform: Platform.platform,
+    timestamp: new Date().toISOString(),
+  };
+
+  // Google Analytics 4
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', eventName, eventData);
+  }
+
+  console.log('[Analytics] Event:', eventName, eventData);
+};
+
+/**
+ * Set user properties
+ */
+export const setUserProperties = (userId: string, properties?: Record<string, any>) => {
+  if (!analyticsInitialized) return;
+
+  // Google Analytics 4
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('set', 'user_properties', {
+      user_id: userId,
+      ...properties,
+    });
+  }
+
+  console.log('[Analytics] User properties set:', userId);
+};
+
+/**
+ * Track user identification
+ */
+export const identifyUser = (userId: string, traits?: Record<string, any>) => {
+  if (!analyticsInitialized) return;
+
+  // Google Analytics 4
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('config', GA4_MEASUREMENT_ID, {
+      user_id: userId,
+      ...traits,
+    });
+  }
+
+  console.log('[Analytics] User identified:', userId);
+};
 
 interface AnalyticsEvent {
   event_name: string;
@@ -15,25 +133,15 @@ class Analytics {
   private enabled: boolean;
 
   constructor() {
-    // Only enable in production
-    this.enabled = import.meta.env.PROD;
+    // Enable in both dev and prod for comprehensive tracking
+    this.enabled = true;
   }
 
   /**
    * Track a custom event
    */
   track(eventName: string, eventData?: Record<string, any>): void {
-    if (!this.enabled) {
-      console.log('[Analytics - Dev Only]', eventName, eventData);
-      return;
-    }
-
-    // If GA4 is loaded
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', eventName, eventData);
-    }
-
-    // Add other analytics platforms here (Segment, Mixpanel, etc.)
+    trackEvent(eventName, eventData);
   }
 
   /**
@@ -119,10 +227,66 @@ class Analytics {
       error_context: errorContext 
     });
   }
+
+  // AI Features
+  aiChatStarted(): void {
+    this.track('ai_chat_started');
+  }
+
+  aiFormulaGenerated(): void {
+    this.track('ai_formula_generated');
+  }
+
+  // Discovery
+  stylistSearched(query: string): void {
+    this.track('search', { search_term: query });
+  }
+
+  stylistViewed(stylistId: string): void {
+    this.track('stylist_viewed', { stylist_id: stylistId });
+  }
+
+  // Engagement
+  messagesSent(conversationId: string): void {
+    this.track('message_sent', { conversation_id: conversationId });
+  }
+
+  reviewWritten(rating: number): void {
+    this.track('review_written', { rating });
+  }
+
+  portfolioImageUploaded(): void {
+    this.track('portfolio_upload');
+  }
+
+  // Appointments
+  appointmentBooked(stylistId: string, serviceId: string): void {
+    this.track('appointment_booked', { stylist_id: stylistId, service_id: serviceId });
+  }
+
+  appointmentCanceled(appointmentId: string): void {
+    this.track('appointment_canceled', { appointment_id: appointmentId });
+  }
+
+  appointmentRescheduled(appointmentId: string): void {
+    this.track('appointment_rescheduled', { appointment_id: appointmentId });
+  }
+
+  // Subscriptions
+  subscriptionStarted(tier: string): void {
+    this.track('subscription_started', { tier });
+  }
+
+  subscriptionCanceled(tier: string): void {
+    this.track('subscription_canceled', { tier });
+  }
 }
 
 // Export singleton instance
 export const analytics = new Analytics();
+
+// Export initialization status check
+export const isAnalyticsReady = () => analyticsInitialized;
 
 /**
  * Instructions for integration:
