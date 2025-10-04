@@ -29,6 +29,8 @@ import Portfolio from "./pages/Portfolio";
 import Clients from "./pages/Clients";
 import AccessCodes from "./pages/AccessCodes";
 import Integrations from "./pages/Integrations";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +48,8 @@ const App = () => (
           {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
           
           {/* Shared Protected Routes (Both Roles) */}
           <Route path="/dashboard" element={
