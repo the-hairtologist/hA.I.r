@@ -170,13 +170,37 @@ const Appointments = () => {
     return <Badge variant={variants[status] || "default"}>{status}</Badge>;
   };
 
-  const upcomingAppointments = appointments.filter(
-    (apt) => new Date(apt.appointment_date) >= new Date() && apt.status !== "cancelled"
-  );
+  // Group appointments by day for the next 14 days
+  const getAppointmentsByDay = () => {
+    const today = new Date();
+    const next14Days = Array.from({ length: 14 }, (_, i) => {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      return date;
+    });
 
-  const todayAppointments = appointments.filter(
-    (apt) => format(new Date(apt.appointment_date), "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") && apt.status !== "cancelled"
-  );
+    return next14Days
+      .map(date => {
+        const dayAppointments = appointments.filter(apt => {
+          const aptDate = new Date(apt.appointment_date);
+          return format(aptDate, "yyyy-MM-dd") === format(date, "yyyy-MM-dd") && apt.status !== "cancelled";
+        });
+
+        const dayName = format(date, 'EEEE').toLowerCase();
+        const isWorkingDay = stylistProfile?.weekly_schedule?.[dayName]?.enabled;
+
+        return {
+          date,
+          dayName: format(date, 'EEEE, MMM d'),
+          isToday: format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd"),
+          isWorkingDay,
+          appointments: dayAppointments
+        };
+      })
+      .filter(day => day.appointments.length > 0 || (day.isWorkingDay && day.date >= today));
+  };
+
+  const appointmentsByDay = getAppointmentsByDay();
 
   // Filter appointments
   const filteredAppointments = (list: any[]) => {
@@ -285,163 +309,86 @@ const Appointments = () => {
               </Select>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-6">
-          {/* Calendar Section */}
-          <div className="lg:col-span-1">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader className="border-b-[2px] border-border">
-                <CardTitle className="font-display">Calendar</CardTitle>
-                <CardDescription>Select a date to view appointments</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  className={cn("rounded-md border pointer-events-auto")}
-                />
-              </CardContent>
-            </Card>
-
-            <Card className="mt-6 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader className="border-b-[2px] border-border">
-                <CardTitle className="font-display">Quick Stats</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Today</span>
-                  <Badge>{todayAppointments.length}</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Upcoming</span>
-                  <Badge>{upcomingAppointments.length}</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Status</span>
-                  <Badge variant={stylistProfile?.is_available ? "default" : "secondary"}>
-                    {stylistProfile?.is_available ? "Available" : "Unavailable"}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Appointments List */}
-          <div className="lg:col-span-2 space-y-4">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader className="border-b-[2px] border-border">
-                <CardTitle className="font-display">Today's Appointments</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {filteredAppointments(todayAppointments).length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    {searchQuery || statusFilter !== "all"
-                      ? "No matching appointments"
-                      : "No appointments today"}
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                     {filteredAppointments(todayAppointments).map((apt) => (
-                      <div
-                        key={apt.id}
-                        className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
-                      >
-                        <div 
-                          className="flex items-center gap-4 flex-1 cursor-pointer"
-                          onClick={() => {
-                            setSelectedAppointment(apt);
-                            setDetailsOpen(true);
-                          }}
-                        >
-                          <div className="bg-primary/10 p-3 rounded-lg">
-                            <Clock className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-semibold">{apt.client?.user?.full_name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {format(new Date(apt.appointment_date), "h:mm a")} • {apt.service_type}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {getStatusBadge(apt.status)}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setRebookAppointment(apt);
-                              setRebookDialogOpen(true);
-                            }}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Repeat className="h-4 w-4" />
-                          </Button>
-                        </div>
+            {/* Appointments by Working Day */}
+            <div className="space-y-4">
+              {appointmentsByDay.length === 0 ? (
+                <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                  <CardContent className="py-12">
+                    <p className="text-muted-foreground text-center">
+                      {searchQuery || statusFilter !== "all"
+                        ? "No matching appointments"
+                        : "No appointments scheduled"}
+                    </p>
+                  </CardContent>
+                </Card>
+              ) : (
+                appointmentsByDay.map((day, dayIndex) => (
+                  <Card key={dayIndex} className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                    <CardHeader className="border-b-[2px] border-border py-3">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="font-display text-lg flex items-center gap-2">
+                          {day.dayName}
+                          {day.isToday && (
+                            <Badge variant="default" className="text-xs">Today</Badge>
+                          )}
+                        </CardTitle>
+                        {day.appointments.length > 0 && (
+                          <Badge variant="secondary">{day.appointments.length} appointment{day.appointments.length !== 1 ? 's' : ''}</Badge>
+                        )}
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader className="border-b-[2px] border-border">
-                <CardTitle className="font-display">Upcoming Appointments</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {filteredAppointments(upcomingAppointments).length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    {searchQuery || statusFilter !== "all"
-                      ? "No matching appointments"
-                      : "No upcoming appointments"}
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                     {filteredAppointments(upcomingAppointments).slice(0, 10).map((apt) => (
-                      <div
-                        key={apt.id}
-                        className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
-                      >
-                        <div 
-                          className="flex items-center gap-4 flex-1 cursor-pointer"
-                          onClick={() => {
-                            setSelectedAppointment(apt);
-                            setDetailsOpen(true);
-                          }}
-                        >
-                          <div className="bg-primary/10 p-3 rounded-lg">
-                            <User className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-semibold">{apt.client?.user?.full_name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {format(new Date(apt.appointment_date), "MMM d, h:mm a")} • {apt.service_type}
-                            </p>
-                          </div>
+                    </CardHeader>
+                    <CardContent className="p-3">
+                      {day.appointments.length === 0 ? (
+                        <p className="text-sm text-muted-foreground text-center py-4">
+                          No appointments scheduled
+                        </p>
+                      ) : (
+                        <div className="space-y-2">
+                          {filteredAppointments(day.appointments).map((apt) => (
+                            <div
+                              key={apt.id}
+                              className="flex items-center justify-between p-3 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
+                            >
+                              <div 
+                                className="flex items-center gap-3 flex-1 cursor-pointer"
+                                onClick={() => {
+                                  setSelectedAppointment(apt);
+                                  setDetailsOpen(true);
+                                }}
+                              >
+                                <div className="bg-primary/10 p-2 rounded-lg">
+                                  <Clock className="h-4 w-4 text-primary" />
+                                </div>
+                                <div className="flex-1">
+                                  <p className="font-semibold text-sm">{apt.client?.user?.full_name}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {format(new Date(apt.appointment_date), "h:mm a")} • {apt.service_type} • {apt.duration_minutes}min
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {getStatusBadge(apt.status)}
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setRebookAppointment(apt);
+                                    setRebookDialogOpen(true);
+                                  }}
+                                  className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Repeat className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                        <div className="flex items-center gap-2">
-                          {getStatusBadge(apt.status)}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setRebookAppointment(apt);
-                              setRebookDialogOpen(true);
-                            }}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Repeat className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
             </div>
           </TabsContent>
 
