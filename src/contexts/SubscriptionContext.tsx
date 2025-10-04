@@ -36,6 +36,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [productId, setProductId] = useState<string | null>(null);
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
 
   const checkSubscription = async () => {
@@ -43,6 +44,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         setSubscribed(false);
+        setInTrial(false);
+        setIsAdmin(false);
         setLoading(false);
         return;
       }
@@ -54,7 +57,18 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         .eq("user_id", session.user.id);
 
       const isStylist = rolesData?.some(r => r.role === "stylist");
+      const adminCheck = rolesData?.some(r => r.role === "admin") || false;
+      
       setUserRole(isStylist ? "stylist" : "client");
+      setIsAdmin(adminCheck);
+
+      // Admins get full access without subscription checks
+      if (adminCheck) {
+        setSubscribed(true);
+        setInTrial(false);
+        setLoading(false);
+        return;
+      }
 
       // Clients don't need subscriptions
       if (!isStylist) {
@@ -93,6 +107,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const isFeatureAllowed = (feature: string): boolean => {
+    // Admins always have full access
+    if (isAdmin) return true;
+    
     // Clients have access to all features
     if (userRole === "client") return true;
     

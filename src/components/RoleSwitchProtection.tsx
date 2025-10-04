@@ -25,10 +25,12 @@ export const RoleSwitchProtection = () => {
 
         if (!rolesData || rolesData.length === 0) return;
 
-        // Check if user has stylist role
+        // Check if user has stylist role or admin role
         const isStylist = rolesData.some(r => r.role === "stylist");
+        const isAdmin = rolesData.some(r => r.role === "admin");
         
-        if (isStylist && !subscriptionLoading) {
+        // Admins are exempt from subscription requirements
+        if (isStylist && !isAdmin && !subscriptionLoading) {
           // If they're a stylist but don't have a subscription or trial, downgrade them
           if (!subscribed && !inTrial) {
             // Remove stylist role and profile
