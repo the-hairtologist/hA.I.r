@@ -11,7 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   Zap, Calendar, MessageSquare, Instagram, CreditCard, 
   FileText, Star, Cloud, Video, TrendingUp, Mail,
-  Check, ExternalLink, Settings, Sparkles
+  Check, ExternalLink, Settings, Sparkles, BarChart3,
+  CalendarCheck, Shield
 } from "lucide-react";
 
 interface Integration {
@@ -164,6 +165,17 @@ const integrations: Integration[] = [
     setupType: "oauth",
     benefits: ["Video content", "Viral reach", "Young audience"],
   },
+  {
+    id: "mailchimp",
+    name: "Mailchimp",
+    description: "Email marketing campaigns and automation",
+    icon: Mail,
+    category: "social",
+    status: "available",
+    gradient: "from-yellow-500 to-amber-500",
+    setupType: "api_key",
+    benefits: ["Email campaigns", "Marketing automation", "Client segmentation"],
+  },
   // Accounting
   {
     id: "quickbooks",
@@ -186,6 +198,17 @@ const integrations: Integration[] = [
     gradient: "from-cyan-500 to-blue-600",
     setupType: "oauth",
     benefits: ["Bank reconciliation", "Invoicing", "Real-time data"],
+  },
+  {
+    id: "freshbooks",
+    name: "FreshBooks",
+    description: "Time tracking, invoicing, and expense management",
+    icon: FileText,
+    category: "accounting",
+    status: "available",
+    gradient: "from-blue-500 to-indigo-600",
+    setupType: "oauth",
+    benefits: ["Time tracking", "Professional invoices", "Expense tracking"],
   },
   // Reviews
   {
@@ -210,6 +233,17 @@ const integrations: Integration[] = [
     setupType: "api_key",
     benefits: ["Review alerts", "Response templates", "Business insights"],
   },
+  {
+    id: "trustpilot",
+    name: "Trustpilot",
+    description: "Collect and showcase customer testimonials",
+    icon: Shield,
+    category: "reviews",
+    status: "available",
+    gradient: "from-teal-500 to-cyan-600",
+    setupType: "oauth",
+    benefits: ["Trust building", "Review collection", "SEO boost"],
+  },
   // Storage
   {
     id: "google-drive",
@@ -233,6 +267,29 @@ const integrations: Integration[] = [
     setupType: "oauth",
     benefits: ["File recovery", "Version history", "Team folders"],
   },
+  // Scheduling
+  {
+    id: "calendly",
+    name: "Calendly",
+    description: "Easy scheduling for consultations and appointments",
+    icon: CalendarCheck,
+    category: "scheduling",
+    status: "available",
+    gradient: "from-blue-500 to-cyan-500",
+    setupType: "oauth",
+    benefits: ["Automated scheduling", "Buffer times", "Meeting types"],
+  },
+  {
+    id: "acuity",
+    name: "Acuity Scheduling",
+    description: "Advanced scheduling with intake forms and packages",
+    icon: CalendarCheck,
+    category: "scheduling",
+    status: "available",
+    gradient: "from-purple-500 to-indigo-600",
+    setupType: "oauth",
+    benefits: ["Intake forms", "Package bookings", "Payment integration"],
+  },
   // Analytics
   {
     id: "google-analytics",
@@ -244,6 +301,28 @@ const integrations: Integration[] = [
     gradient: "from-orange-500 to-amber-600",
     setupType: "direct",
     benefits: ["Client behavior", "Marketing insights", "ROI tracking"],
+  },
+  {
+    id: "mixpanel",
+    name: "Mixpanel",
+    description: "Advanced user behavior analytics and insights",
+    icon: BarChart3,
+    category: "analytics",
+    status: "available",
+    gradient: "from-purple-600 to-pink-600",
+    setupType: "api_key",
+    benefits: ["Event tracking", "User journeys", "Retention analysis"],
+  },
+  {
+    id: "tableau",
+    name: "Tableau",
+    description: "Business intelligence and data visualization",
+    icon: BarChart3,
+    category: "analytics",
+    status: "coming_soon",
+    gradient: "from-blue-700 to-indigo-800",
+    setupType: "oauth",
+    benefits: ["Visual dashboards", "Deep insights", "Custom reports"],
   },
 ];
 
@@ -257,6 +336,7 @@ const categories = [
   { id: "accounting", label: "Accounting", icon: FileText },
   { id: "reviews", label: "Reviews", icon: Star },
   { id: "storage", label: "Storage", icon: Cloud },
+  { id: "scheduling", label: "Scheduling", icon: CalendarCheck },
   { id: "analytics", label: "Analytics", icon: TrendingUp },
 ];
 
