@@ -436,6 +436,7 @@ const Appointments = () => {
             <WeeklyScheduleView
               appointments={appointments}
               stylistSchedule={stylistProfile?.weekly_schedule}
+              stylistId={stylistProfile?.id}
               onAppointmentClick={(apt) => {
                 setSelectedAppointment(apt);
                 setDetailsOpen(true);

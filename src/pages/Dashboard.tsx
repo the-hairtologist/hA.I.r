@@ -673,6 +673,7 @@ const Dashboard = () => {
                   <WeeklyScheduleView
                     appointments={weekAppointments}
                     stylistSchedule={profile?.weekly_schedule}
+                    stylistId={profile?.id}
                     onAppointmentClick={(apt) => navigate("/appointments")}
                     onTimeSlotClick={(date, hour, minute) => {
                       setQuickAppointmentData({ date, hour, minute });

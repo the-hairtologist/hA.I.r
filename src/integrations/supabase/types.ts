@@ -842,6 +842,33 @@ export type Database = {
           },
         ]
       }
+      service_type_colors: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          service_type: string
+          stylist_id: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          service_type: string
+          stylist_id: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          service_type?: string
+          stylist_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       stylist_affiliate_codes: {
         Row: {
           affiliate_link: string | null

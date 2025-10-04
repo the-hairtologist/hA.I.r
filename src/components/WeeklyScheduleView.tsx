@@ -1,26 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format, startOfWeek, addDays, addMinutes, isSameDay, parseISO } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WeeklyScheduleViewProps {
   appointments: any[];
   stylistSchedule?: any;
   onAppointmentClick?: (appointment: any) => void;
   onTimeSlotClick?: (date: Date, hour: number, minute: number) => void;
+  stylistId?: string;
 }
 
 export const WeeklyScheduleView = ({ 
   appointments, 
   stylistSchedule,
   onAppointmentClick,
-  onTimeSlotClick
+  onTimeSlotClick,
+  stylistId
 }: WeeklyScheduleViewProps) => {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [serviceColors, setServiceColors] = useState<Record<string, string>>({});
+
+  // Load custom service colors
+  useEffect(() => {
+    if (stylistId) {
+      loadServiceColors();
+    }
+  }, [stylistId]);
+
+  const loadServiceColors = async () => {
+    if (!stylistId) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from("service_type_colors")
+        .select("service_type, color")
+        .eq("stylist_id", stylistId);
+
+      if (error) throw error;
+
+      const colorMap: Record<string, string> = {};
+      data?.forEach(item => {
+        colorMap[item.service_type] = item.color;
+      });
+      setServiceColors(colorMap);
+    } catch (error) {
+      console.error("Error loading service colors:", error);
+    }
+  };
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 0 });
   const allWeekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
@@ -124,13 +156,19 @@ export const WeeklyScheduleView = ({
   };
 
   const getServiceColor = (serviceType: string) => {
-    const colors = {
-      'Cut & Style': 'hsl(190 95% 55%)', // accent
-      'Color': 'hsl(270 85% 60%)', // primary
-      'Treatment': 'hsl(340 90% 65%)', // secondary
-      'Consultation': 'hsl(40 95% 60%)', // warm yellow
+    // Use custom color if available, otherwise use defaults
+    if (serviceColors[serviceType]) {
+      return serviceColors[serviceType];
+    }
+    
+    // Default colors as fallback
+    const defaultColors: Record<string, string> = {
+      'Cut & Style': 'hsl(190 95% 55%)',
+      'Color': 'hsl(270 85% 60%)',
+      'Treatment': 'hsl(340 90% 65%)',
     };
-    return colors[serviceType as keyof typeof colors] || 'hsl(270 85% 60%)';
+    
+    return defaultColors[serviceType] || 'hsl(270 85% 60%)';
   };
 
   return (
@@ -274,18 +312,29 @@ export const WeeklyScheduleView = ({
         {/* Legend */}
         <div className="p-2 border-t-[2px] border-border bg-muted/10">
           <div className="flex flex-wrap gap-2 text-[10px]">
-            <div className="flex items-center gap-1">
-              <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(190 95% 55%)' }} />
-              <span className="text-muted-foreground">Cut & Style</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(270 85% 60%)' }} />
-              <span className="text-muted-foreground">Color</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(340 90% 65%)' }} />
-              <span className="text-muted-foreground">Treatment</span>
-            </div>
+            {Object.entries(serviceColors).length > 0 ? (
+              Object.entries(serviceColors).map(([serviceType, color]) => (
+                <div key={serviceType} className="flex items-center gap-1">
+                  <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: color }} />
+                  <span className="text-muted-foreground">{serviceType}</span>
+                </div>
+              ))
+            ) : (
+              <>
+                <div className="flex items-center gap-1">
+                  <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(190 95% 55%)' }} />
+                  <span className="text-muted-foreground">Cut & Style</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(270 85% 60%)' }} />
+                  <span className="text-muted-foreground">Color</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2.5 h-2.5 rounded border border-white/30" style={{ backgroundColor: 'hsl(340 90% 65%)' }} />
+                  <span className="text-muted-foreground">Treatment</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </CardContent>

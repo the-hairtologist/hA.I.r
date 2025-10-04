@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { Textarea } from "@/components/ui/textarea";
 import CalendarSync from "@/components/CalendarSync";
+import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 
 interface DaySchedule {
   enabled: boolean;
@@ -530,16 +531,16 @@ const ScheduleManagement = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-6">
-            <TabsTrigger value="availability" className="gap-2">
+          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-7">
+            <TabsTrigger value="availability" className="gap-2 text-xs">
               <Clock className="h-4 w-4" />
               Weekly
             </TabsTrigger>
-            <TabsTrigger value="overrides" className="gap-2">
+            <TabsTrigger value="overrides" className="gap-2 text-xs">
               <CalendarIcon className="h-4 w-4" />
               Overrides
             </TabsTrigger>
-            <TabsTrigger value="blocked" className="gap-2">
+            <TabsTrigger value="blocked" className="gap-2 text-xs">
               <X className="h-4 w-4" />
               Blocked Dates
             </TabsTrigger>
@@ -1306,16 +1307,16 @@ const ScheduleManagement = () => {
             {/* Calendar Sync Tab */}
             <TabsContent value="calendar-sync">
               <CalendarSync />
-          </TabsContent>
+            </TabsContent>
 
-          {/* Calendar Sync Tab */}
-          <TabsContent value="calendar-sync">
-            <CalendarSync />
-          </TabsContent>
-        </Tabs>
-      </main>
-    </div>
-  );
-};
+            {/* Service Type Colors Tab */}
+            <TabsContent value="service-colors">
+              <ServiceTypeColorManager stylistId={stylistProfile?.id} />
+            </TabsContent>
+          </Tabs>
+        </main>
+      </div>
+    );
+  };
 
 export default ScheduleManagement;
