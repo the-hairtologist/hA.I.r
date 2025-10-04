@@ -7,4 +7,4 @@ Disallow: /messages
 Disallow: /clients
 Disallow: /formulas
 
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://lovable.app/sitemap.xml
