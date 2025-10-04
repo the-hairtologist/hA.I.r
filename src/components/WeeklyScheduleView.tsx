@@ -22,10 +22,32 @@ export const WeeklyScheduleView = ({
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 0 });
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
-  // Generate time slots from 6 AM to 10 PM in 15-minute intervals
-  const timeSlots = Array.from({ length: 64 }, (_, i) => {
-    const hour = Math.floor(i / 4) + 6;
-    const minute = (i % 4) * 15;
+  // Find earliest start and latest end time from schedule
+  const getScheduleBounds = () => {
+    if (!stylistSchedule) return { start: 8, end: 18 };
+    
+    let earliestHour = 24;
+    let latestHour = 0;
+    
+    Object.values(stylistSchedule).forEach((day: any) => {
+      if (day?.enabled && day?.startTime && day?.endTime) {
+        const [startHour] = day.startTime.split(':').map(Number);
+        const [endHour] = day.endTime.split(':').map(Number);
+        earliestHour = Math.min(earliestHour, startHour);
+        latestHour = Math.max(latestHour, endHour);
+      }
+    });
+    
+    return earliestHour < 24 ? { start: earliestHour, end: latestHour } : { start: 8, end: 18 };
+  };
+
+  const { start: startHour, end: endHour } = getScheduleBounds();
+  
+  // Generate time slots based on working hours (30-minute intervals for compactness)
+  const totalSlots = ((endHour - startHour) * 2);
+  const timeSlots = Array.from({ length: totalSlots }, (_, i) => {
+    const hour = Math.floor(i / 2) + startHour;
+    const minute = (i % 2) * 30;
     return { hour, minute, label: `${hour % 12 || 12}:${minute.toString().padStart(2, '0')} ${hour >= 12 ? 'PM' : 'AM'}` };
   });
 
@@ -51,8 +73,8 @@ export const WeeklyScheduleView = ({
   };
 
   const calculateAppointmentHeight = (durationMinutes: number) => {
-    // Each 15-minute slot is 1 unit, so divide by 15
-    return (durationMinutes / 15) * 60; // 60px per 15-minute slot
+    // Each 30-minute slot is 40px
+    return (durationMinutes / 30) * 40;
   };
 
   const isWorkingHours = (day: Date, hour: number, minute: number) => {
@@ -97,23 +119,23 @@ export const WeeklyScheduleView = ({
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-x-auto">
-          <div className="min-w-[1400px]">
+        <div className="overflow-auto max-h-[70vh]">
+          <div className="min-w-[1200px]">
             {/* Header with days */}
-            <div className="grid grid-cols-8 border-b-[2px] border-border sticky top-0 bg-card z-10">
-              <div className="p-4 border-r-[2px] border-border text-sm font-semibold">
+            <div className="grid grid-cols-8 border-b-[2px] border-border sticky top-0 bg-card z-20">
+              <div className="p-2 border-r-[2px] border-border text-xs font-semibold w-16">
                 Time
               </div>
               {weekDays.map((day) => (
                 <div
                   key={day.toISOString()}
                   className={cn(
-                    "p-4 border-r-[2px] border-border text-center",
+                    "p-2 border-r-[2px] border-border text-center",
                     isSameDay(day, new Date()) && "bg-primary/10"
                   )}
                 >
-                  <div className="font-semibold">{format(day, 'EEE')}</div>
-                  <div className="text-sm text-muted-foreground">{format(day, 'M/d')}</div>
+                  <div className="font-semibold text-sm">{format(day, 'EEE')}</div>
+                  <div className="text-xs text-muted-foreground">{format(day, 'M/d')}</div>
                 </div>
               ))}
             </div>
@@ -121,10 +143,10 @@ export const WeeklyScheduleView = ({
             {/* Time slots grid */}
             <div className="relative">
               {timeSlots.map((slot, slotIndex) => (
-                <div key={slotIndex} className="grid grid-cols-8 border-b border-border/50">
+                <div key={slotIndex} className="grid grid-cols-8 border-b border-border/30">
                   {/* Time label */}
-                  <div className="p-2 border-r-[2px] border-border text-xs text-muted-foreground font-medium">
-                    {slot.minute === 0 && slot.label}
+                  <div className="p-1.5 border-r-[2px] border-border text-[10px] text-muted-foreground font-medium w-16 flex items-center">
+                    {slot.minute === 0 && <span className="font-semibold">{slot.label}</span>}
                   </div>
 
                   {/* Day columns */}
@@ -136,37 +158,39 @@ export const WeeklyScheduleView = ({
                       <div
                         key={`${day.toISOString()}-${slotIndex}`}
                         className={cn(
-                          "relative border-r border-border/50 h-[60px]",
-                          !isWorking && "bg-muted/30",
-                          slot.minute === 0 && "border-t-[2px] border-border"
+                          "relative border-r border-border/30 h-[40px]",
+                          !isWorking && "bg-muted/20",
+                          slot.minute === 0 && "border-t border-border"
                         )}
                       >
                         {!isWorking && slot.minute === 0 && (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-xs text-muted-foreground font-semibold">OFF</span>
+                            <span className="text-[10px] text-muted-foreground/60 font-medium">OFF</span>
                           </div>
                         )}
                         
                         {dayAppointments.map((apt) => (
                           <div
                             key={apt.id}
-                            className="absolute inset-x-1 top-1 rounded-lg p-2 cursor-pointer hover:opacity-90 transition-all hover:-translate-y-0.5 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                            className="absolute inset-x-0.5 top-0.5 rounded-md p-1.5 cursor-pointer hover:opacity-90 transition-all hover:-translate-y-0.5 hover:shadow-md border border-white/20 group"
                             style={{
                               backgroundColor: getServiceColor(apt.service_type),
-                              height: `${calculateAppointmentHeight(apt.duration_minutes || 90) - 8}px`,
+                              height: `${calculateAppointmentHeight(apt.duration_minutes || 90) - 4}px`,
                               zIndex: 5,
                             }}
                             onClick={() => onAppointmentClick?.(apt)}
                           >
-                            <div className="text-xs font-bold text-white truncate">
+                            <div className="text-[11px] font-bold text-white truncate leading-tight">
                               {apt.client?.user?.full_name}
                             </div>
-                            <div className="text-xs text-white/90 truncate">
+                            <div className="text-[10px] text-white/90 truncate leading-tight">
                               {apt.service_type}
                             </div>
-                            <div className="text-xs text-white/80">
-                              {format(parseISO(apt.appointment_date), 'h:mm a')}
-                            </div>
+                            {apt.duration_minutes && apt.duration_minutes >= 60 && (
+                              <div className="text-[9px] text-white/70 leading-tight">
+                                {format(parseISO(apt.appointment_date), 'h:mm a')}
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -179,23 +203,23 @@ export const WeeklyScheduleView = ({
         </div>
 
         {/* Legend */}
-        <div className="p-4 border-t-[2px] border-border bg-muted/20">
-          <div className="flex flex-wrap gap-4 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border-[2px] border-foreground" style={{ backgroundColor: 'hsl(190 95% 55%)' }} />
-              <span>Cut & Style</span>
+        <div className="p-3 border-t-[2px] border-border bg-muted/10">
+          <div className="flex flex-wrap gap-3 text-[11px]">
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded border border-white/30" style={{ backgroundColor: 'hsl(190 95% 55%)' }} />
+              <span className="text-muted-foreground">Cut & Style</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border-[2px] border-foreground" style={{ backgroundColor: 'hsl(270 85% 60%)' }} />
-              <span>Color</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded border border-white/30" style={{ backgroundColor: 'hsl(270 85% 60%)' }} />
+              <span className="text-muted-foreground">Color</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border-[2px] border-foreground" style={{ backgroundColor: 'hsl(340 90% 65%)' }} />
-              <span>Treatment</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded border border-white/30" style={{ backgroundColor: 'hsl(340 90% 65%)' }} />
+              <span className="text-muted-foreground">Treatment</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-muted/30 border-[2px] border-border" />
-              <span>Off Hours</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded bg-muted/30 border border-border" />
+              <span className="text-muted-foreground">Off Hours</span>
             </div>
           </div>
         </div>
