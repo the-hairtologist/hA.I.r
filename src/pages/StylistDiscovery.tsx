@@ -150,8 +150,8 @@ const StylistDiscovery = () => {
     <DashboardLayout>
       <div className="container mx-auto p-6 max-w-7xl animate-fade-in">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Discover Stylists</h1>
-          <p className="text-muted-foreground">Find the perfect hair stylist for your needs</p>
+          <h1 className="text-4xl font-bold mb-2">Find Your Perfect Stylist</h1>
+          <p className="text-muted-foreground">Browse stylists and discover the right match for your hair goals</p>
         </div>
 
       {/* Search and Filters */}
@@ -159,7 +159,7 @@ const StylistDiscovery = () => {
         <div className="relative">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by name or specialty..."
+            placeholder="Search by name, specialty, or expertise"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-9"
@@ -199,9 +199,9 @@ const StylistDiscovery = () => {
       <div className="mb-12">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold">Stylists in Your Network</h2>
+            <h2 className="text-2xl font-bold">Available Stylists</h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Browse stylists on hA.I.r who are ready to book
+              Stylists on hA.I.r ready to accept bookings
             </p>
           </div>
           {filteredStylists.length > 0 && (
@@ -219,8 +219,8 @@ const StylistDiscovery = () => {
               <h3 className="text-lg font-bold text-foreground mb-2">No stylists found</h3>
               <p className="text-foreground/80 font-medium mb-4">
                 {searchTerm || locationFilter !== "all" || specialtyFilter !== "all"
-                  ? "Try adjusting your filters or search terms"
-                  : "Be the first to invite a stylist to join!"}
+                  ? "Try adjusting your search criteria or clearing filters"
+                  : "No stylists have joined hA.I.r yet in this area"}
               </p>
               {(searchTerm || locationFilter !== "all" || specialtyFilter !== "all") && (
                 <Button 

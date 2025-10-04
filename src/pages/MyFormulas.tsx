@@ -104,7 +104,7 @@ const MyFormulas = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-display font-bold mb-2">My Hair Color History</h1>
           <p className="text-foreground/70 font-medium">
-            View all your past color formulas and track your hair transformation
+            View your complete color formula archive and track your hair journey
           </p>
         </div>
 
@@ -113,9 +113,9 @@ const MyFormulas = () => {
           <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-purple-400">
             <CardContent className="text-center py-12">
               <Scissors className="h-16 w-16 text-foreground/70 mx-auto mb-4" />
-              <p className="text-xl font-display font-bold mb-2 text-foreground">No formulas yet</p>
+              <p className="text-xl font-display font-bold mb-2 text-foreground">No formulas saved yet</p>
               <p className="text-foreground/80 mb-4 font-medium">
-                Your stylist will create formulas during your appointments
+                Your stylist will create custom formulas during your appointments
               </p>
               <Button onClick={() => navigate("/book")}>
                 Book Appointment
@@ -201,13 +201,13 @@ const MyFormulas = () => {
         {/* Tips Card */}
         <Card className="mt-8 bg-red-400 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
           <CardHeader>
-            <CardTitle className="text-lg font-display">💡 Pro Tips</CardTitle>
+            <CardTitle className="text-lg font-display">💡 Helpful Tips</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-foreground/80 font-medium">
-            <p>• Share your favorite formulas with your stylist for future appointments</p>
-            <p>• Take progress photos to track your hair journey over time</p>
-            <p>• Note which formulas worked best for your hair type</p>
-            <p>• Discuss any concerns or adjustments with your stylist</p>
+            <p>• Share your favorite formulas with your stylist for consistent results</p>
+            <p>• Take progress photos to document your hair transformation journey</p>
+            <p>• Keep notes on which formulas worked best for your hair type</p>
+            <p>• Discuss any adjustments or concerns with your stylist at your next appointment</p>
           </CardContent>
         </Card>
       </div>

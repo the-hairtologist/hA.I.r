@@ -180,7 +180,7 @@ const MyAppointments = () => {
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search appointments..."
+              placeholder="Search appointments by stylist or service"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-9 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
@@ -192,14 +192,14 @@ const MyAppointments = () => {
         <Card className="mb-6 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
           <CardHeader className="border-b-[2px] border-border">
             <CardTitle className="font-display">Upcoming Appointments</CardTitle>
-            <CardDescription>Your scheduled and confirmed appointments</CardDescription>
+            <CardDescription>Your scheduled and confirmed services</CardDescription>
           </CardHeader>
           <CardContent>
             {filteredUpcoming.length === 0 ? (
               <div className="text-center py-12">
                 <CalendarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <p className="text-muted-foreground mb-4">
-                  {searchTerm ? "No matching appointments found" : "No upcoming appointments"}
+                  {searchTerm ? "No appointments match your search" : "No upcoming appointments scheduled"}
                 </p>
                 <Button onClick={() => navigate("/book")}>
                   <Plus className="h-4 w-4 mr-2" />
