@@ -219,7 +219,7 @@ function SortableNavItem({
                       <child.icon className={`h-4 w-4 flex-shrink-0 ${
                         isChildActive ? 'text-primary' : 'text-muted-foreground'
                       }`} />
-                      <span className="text-sm">{child.title}</span>
+                      <span className="text-sm font-medium truncate">{child.title}</span>
                     </NavLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
