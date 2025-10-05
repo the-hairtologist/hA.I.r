@@ -472,9 +472,27 @@ All colors MUST be HSL.
   /* Mobile touch-friendly sizing - Apple HIG minimum 44x44px */
   @media (max-width: 640px) {
     button:not(.no-touch-size),
-    a[role="button"]:not(.no-touch-size) {
+    a[role="button"]:not(.no-touch-size),
+    [role="tab"]:not(.no-touch-size),
+    [role="menuitem"]:not(.no-touch-size) {
       min-height: 44px;
       min-width: 44px;
+      padding: 0.625rem 1rem; /* 10px 16px */
+    }
+    
+    /* Ensure clickable areas for small icons */
+    button svg:only-child,
+    a svg:only-child {
+      padding: 0.5rem;
+    }
+  }
+  
+  /* Tablet touch targets - slightly smaller but still comfortable */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    button:not(.no-touch-size),
+    a[role="button"]:not(.no-touch-size) {
+      min-height: 40px;
+      min-width: 40px;
     }
   }
   
@@ -497,6 +515,75 @@ All colors MUST be HSL.
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+  
+  /* Optimize scrolling performance */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+  
+  /* GPU acceleration for animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  
+  /* Optimize for different connection speeds */
+  @media (prefers-reduced-data: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      background-image: none !important;
+    }
+  }
+  
+  /* Safe area support for all devices */
+  .safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  .safe-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+  
+  .safe-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  
+  /* Container queries for component-level responsiveness */
+  @supports (container-type: inline-size) {
+    .container-responsive {
+      container-type: inline-size;
+      container-name: responsive-container;
+    }
+  }
+  
+  /* Landscape mode optimizations for mobile */
+  @media (max-width: 1024px) and (orientation: landscape) {
+    body {
+      font-size: 14px; /* Slightly smaller for landscape mobile */
+    }
+    
+    .hide-landscape {
+      display: none !important;
+    }
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    button,
+    a,
+    input {
+      border-width: 2px;
+    }
   }
   
   /* Performance optimization for animations */

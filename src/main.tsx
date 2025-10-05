@@ -14,6 +14,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { initAnalytics } from "./lib/analytics";
 import { addCopyrightNotice, detectSuspiciousActivity, logSuspiciousActivity } from "./lib/ipProtection";
+import { PerformanceMonitor } from "./components/PerformanceMonitor";
 
 // Initialize analytics on app load
 initAnalytics();
@@ -26,4 +27,16 @@ if (detectSuspiciousActivity()) {
   logSuspiciousActivity('Automated tool detected');
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Initialize performance monitoring in development
+if (import.meta.env.DEV) {
+  import('./lib/performanceOptimizer').then(({ observeImages }) => {
+    observeImages();
+  });
+}
+
+createRoot(document.getElementById("root")!).render(
+  <>
+    <PerformanceMonitor />
+    <App />
+  </>
+);
