@@ -276,11 +276,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       title: "Finance", 
       url: "/finance", 
       icon: DollarSign, 
-      gradient: "from-teal-500 to-cyan-500", 
+      gradient: "from-amber-500 to-orange-500", 
       group: "business",
       children: [
-        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "from-teal-500 to-cyan-500", group: "business" },
-        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "from-teal-500 to-cyan-500", group: "business" },
+        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "from-amber-500 to-orange-500", group: "business" },
+        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "from-amber-500 to-orange-500", group: "business" },
       ]
     },
     { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "from-orange-500 to-red-500", group: "business" },
