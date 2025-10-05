@@ -116,7 +116,7 @@ const Knowledge = () => {
 
       <main className="container mx-auto px-4 py-6 max-w-7xl">
         {/* Search Bar */}
-        <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
+        <Card className="mb-8 brutal-card">
           <CardContent className="p-6">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -133,7 +133,7 @@ const Knowledge = () => {
         {/* Quick Access */}
         <div className="grid md:grid-cols-2 gap-4 mb-8">
           <Card 
-            className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400"
+            className="brutal-card cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400"
             onClick={() => navigate("/ai-assistant")}
           >
             <CardContent className="p-6">
@@ -150,7 +150,7 @@ const Knowledge = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
+          <Card className="brutal-border brutal-shadow bg-gradient-to-br from-blue-400 to-cyan-400">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
@@ -176,7 +176,7 @@ const Knowledge = () => {
               {featuredArticles.map((article) => (
                 <Card 
                   key={article.id}
-                  className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400"
+                  className="brutal-card cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400"
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between mb-2">
@@ -206,7 +206,7 @@ const Knowledge = () => {
 
         {/* Category Tabs */}
         <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-          <TabsList className="grid grid-cols-4 mb-6 bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+          <TabsList className="grid grid-cols-4 mb-6 bg-background border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
             {categories.map((cat) => {
               const Icon = cat.icon;
               return (
@@ -224,7 +224,7 @@ const Knowledge = () => {
 
           <TabsContent value={selectedCategory} className="space-y-4">
             {filteredArticles.length === 0 ? (
-              <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
+              <Card className="brutal-card bg-yellow-300">
                 <CardContent className="py-16 text-center">
                   <Search className="h-16 w-16 mx-auto mb-4 text-foreground/60" />
                   <h3 className="text-2xl font-bold mb-2 text-foreground">No articles found</h3>
@@ -236,17 +236,17 @@ const Knowledge = () => {
                 {filteredArticles.map((article) => (
                   <Card 
                     key={article.id}
-                    className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer ${
+                    className={`brutal-card cursor-pointer ${
                       article.featured ? 'bg-gradient-to-br from-green-400 to-blue-400' : 'bg-gradient-to-br from-blue-400 to-purple-400'
                     }`}
                   >
                     <CardHeader>
                       <div className="flex items-start justify-between mb-2">
-                        <Badge variant="secondary" className="bg-background border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                        <Badge variant="secondary" className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                           {article.category}
                         </Badge>
                         {article.featured && (
-                          <Badge className="bg-accent text-accent-foreground border-2 border-foreground">
+                          <Badge className="bg-accent text-accent-foreground border-[3px] border-foreground">
                             Featured
                           </Badge>
                         )}
