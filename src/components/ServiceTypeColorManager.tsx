@@ -134,8 +134,8 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
   return (
     <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
       <CardHeader className="border-b-[2px] border-border">
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex-1">
             <CardTitle className="font-display flex items-center gap-2">
               <Palette className="h-5 w-5" />
               Service Type Colors
@@ -146,7 +146,7 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
           </div>
           <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="border-[2px]">
+              <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Service Type
               </Button>
