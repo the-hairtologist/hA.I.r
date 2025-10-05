@@ -402,11 +402,16 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               variant="outline"
               size="sm"
               onClick={() => {
-                // Trigger keyboard shortcuts dialog
-                const event = new KeyboardEvent('keydown', { key: '?', shiftKey: true });
+                // Trigger keyboard shortcuts dialog by dispatching shift+?
+                const event = new KeyboardEvent('keydown', { 
+                  key: '?', 
+                  shiftKey: true,
+                  bubbles: true 
+                });
                 window.dispatchEvent(event);
               }}
               className="w-full justify-start gap-2 text-xs h-8"
+              aria-label="Show keyboard shortcuts"
             >
               <span className="text-muted-foreground">Press</span>
               <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-muted rounded border">?</kbd>

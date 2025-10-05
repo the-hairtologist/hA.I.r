@@ -17,6 +17,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
+import { useState, useEffect } from "react";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -26,10 +28,24 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { roles, loading: roleLoading } = useUserRole(user?.id);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // Prioritize stylist role if user has both roles
   const userRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
   const loading = authLoading || roleLoading || (user && roles.length === 0);
+
+  // Listen for '?' key press to show keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === '?' && e.shiftKey) {
+        e.preventDefault();
+        setShowShortcuts(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
 
   // Redirect if not authenticated
   if (!authLoading && !user) {
@@ -129,6 +145,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         
         <MobileNav userRole={userRole || undefined} />
       </div>
+      
+      <KeyboardShortcutsDialog 
+        open={showShortcuts} 
+        onOpenChange={setShowShortcuts} 
+      />
     </SidebarProvider>
   );
 }
