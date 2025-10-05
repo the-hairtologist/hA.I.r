@@ -146,10 +146,10 @@ function SortableNavItem({
             </div>
             {!collapsed && (
               <>
-                <div className="ml-2 flex flex-col flex-1">
+                <div className="ml-3 flex flex-col flex-1">
                   <span className="text-sm font-medium">{item.title}</span>
                   {item.description && (
-                    <span className="text-[10px] text-muted-foreground">
+                    <span className="text-[10px] text-muted-foreground leading-tight">
                       {item.description}
                     </span>
                   )}
@@ -181,10 +181,10 @@ function SortableNavItem({
               )}
             </div>
             {!collapsed && (
-              <div className="ml-2 flex flex-col">
+              <div className="ml-3 flex flex-col">
                 <span className="text-sm font-medium">{item.title}</span>
                 {item.description && (
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-[10px] text-muted-foreground leading-tight">
                     {item.description}
                   </span>
                 )}
@@ -207,19 +207,19 @@ function SortableNavItem({
                   <SidebarMenuSubButton asChild>
                     <NavLink 
                       to={child.url} 
-                      className={`group relative pl-3 py-2 rounded-md transition-all duration-200 ${
+                      className={`group relative pl-3 py-2.5 rounded-md transition-all duration-200 flex items-center ${
                         isChildActive 
                           ? 'bg-primary/10 text-primary font-medium' 
-                          : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
+                          : 'hover:bg-muted/50 text-primary hover:text-primary'
                       }`}
                     >
                       <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full transition-all duration-200 ${
                         isChildActive ? 'bg-primary' : 'bg-transparent group-hover:bg-primary/30'
                       }`} />
                       <child.icon className={`h-3.5 w-3.5 transition-transform group-hover:scale-110 ${
-                        isChildActive ? 'text-primary' : ''
+                        isChildActive ? 'text-primary' : 'text-primary'
                       }`} />
-                      <span className="ml-2 text-sm">{child.title}</span>
+                      <span className="ml-3 text-sm">{child.title}</span>
                     </NavLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -257,7 +257,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const getNavClassName = ({ isActive }: { isActive: boolean }) => {
     return isActive
       ? "bg-primary/10 text-primary font-medium border-l-4 border-primary"
-      : "hover:bg-muted/50 border-l-4 border-transparent";
+      : "text-primary hover:bg-muted/50 border-l-4 border-transparent";
   };
 
   // Stylist Navigation with unique IDs
@@ -449,7 +449,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500">
                       <Settings className="h-4 w-4 text-primary-foreground" />
                     </div>
-                    {!collapsed && <span className="ml-2">Settings</span>}
+                    {!collapsed && <span className="ml-3 text-sm font-medium">Settings</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -459,7 +459,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500">
                       <HelpCircle className="h-4 w-4 text-primary-foreground" />
                     </div>
-                    {!collapsed && <span className="ml-2">Help & Support</span>}
+                    {!collapsed && <span className="ml-3 text-sm font-medium">Help & Support</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
