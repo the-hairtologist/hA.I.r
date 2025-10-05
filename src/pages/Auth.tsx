@@ -286,7 +286,7 @@ const Auth = () => {
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-3">
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     <Button
                       type="button"
                       variant="outline"
@@ -312,21 +312,6 @@ const Auth = () => {
                         <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                       </svg>
                       <span className="text-xs">Apple</span>
-                    </Button>
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="border-2 flex flex-col gap-1.5 h-auto py-3 opacity-50 cursor-not-allowed"
-                      disabled={true}
-                    >
-                      <svg className="h-5 w-5" viewBox="0 0 24 24">
-                        <path d="M11.4 24H0L15.6 0h8.4L11.4 24z" fill="#f25022"/>
-                        <path d="M11.4 24H24V11.4H11.4V24z" fill="#00a4ef"/>
-                        <path d="M11.4 11.4H24V0H11.4v11.4z" fill="#7fba00"/>
-                        <path d="M0 24h11.4V12.6L0 24z" fill="#ffb900"/>
-                      </svg>
-                      <span className="text-xs">Microsoft</span>
                     </Button>
                   </div>
                   <p className="text-xs text-center text-muted-foreground">
@@ -381,7 +366,7 @@ const Auth = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-3">
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     <Button
                       type="button"
                       variant="outline"
@@ -407,21 +392,6 @@ const Auth = () => {
                         <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                       </svg>
                       <span className="text-xs">Apple</span>
-                    </Button>
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="border-2 flex flex-col gap-1.5 h-auto py-3 opacity-50 cursor-not-allowed"
-                      disabled={true}
-                    >
-                      <svg className="h-5 w-5" viewBox="0 0 24 24">
-                        <path d="M11.4 24H0L15.6 0h8.4L11.4 24z" fill="#f25022"/>
-                        <path d="M11.4 24H24V11.4H11.4V24z" fill="#00a4ef"/>
-                        <path d="M11.4 11.4H24V0H11.4v11.4z" fill="#7fba00"/>
-                        <path d="M0 24h11.4V12.6L0 24z" fill="#ffb900"/>
-                      </svg>
-                      <span className="text-xs">Microsoft</span>
                     </Button>
                   </div>
                   <p className="text-xs text-center text-muted-foreground">
