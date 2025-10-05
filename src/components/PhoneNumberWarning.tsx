@@ -26,7 +26,7 @@ export const PhoneNumberWarning = ({ phoneNumber, className }: PhoneNumberWarnin
         <Button 
           size="sm" 
           variant="outline"
-          onClick={() => navigate("/account-settings")}
+          onClick={() => navigate("/settings")}
         >
           Add Phone
         </Button>
