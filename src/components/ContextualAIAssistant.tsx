@@ -155,7 +155,7 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
       }}
     >
       <Card className={cn(
-        "border-2 border-border shadow-lg bg-card backdrop-blur-sm transition-all duration-300",
+        "border-0 shadow-none bg-transparent backdrop-blur-none transition-all duration-300",
         isExpanded ? "w-80" : "w-auto"
       )}>
         <CardContent className="p-0">
