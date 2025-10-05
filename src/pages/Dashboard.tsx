@@ -45,6 +45,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { IntegrationSuggestions } from "@/components/IntegrationSuggestions";
 
 interface SortableSectionProps {
   id: string;
@@ -597,7 +598,20 @@ const Dashboard = () => {
         }
         return null;
       case "quick-actions":
-        return <QuickActions key={sectionId} userRole={userRole || ""} />;
+        return (
+          <div key={sectionId} className="space-y-4">
+            {/* Integration Suggestions */}
+            <IntegrationSuggestions
+              context="dashboard"
+              userStats={{
+                appointmentCount: stats.upcomingAppointments || stats.todayAppointments,
+                clientCount: stats.totalClients,
+                messageCount: stats.unreadMessages,
+              }}
+            />
+            <QuickActions userRole={userRole || ""} />
+          </div>
+        );
       case "stats":
         return <DashboardStats key={sectionId} stats={stats} userRole={userRole || ""} />;
       case "checklist":

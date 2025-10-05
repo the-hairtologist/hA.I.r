@@ -82,9 +82,9 @@ const StylistProfile = () => {
   return (
     <DashboardLayout>
       <SEOHead 
-        title={stylist.business_name || "Stylist Profile"}
-        description={stylist.bio || `${stylist.specialty} specialist with ${stylist.years_experience} years of experience in ${stylist.location}`}
-        keywords={`${stylist.business_name}, ${stylist.specialty}, hair stylist, ${stylist.location}, salon`}
+        title={`${stylist.business_name} - Hair Stylist in ${stylist.location} | hA.I.r`}
+        description={stylist.bio || `Professional ${stylist.specialty} specialist with ${stylist.years_experience} years of experience. Book appointments online in ${stylist.location}.`}
+        keywords={`${stylist.business_name}, ${stylist.specialty}, hair stylist ${stylist.location}, salon ${stylist.location}, hair color specialist, book stylist online`}
         url={`/stylist/${stylistId}`}
         type="profile"
       />

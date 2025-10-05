@@ -55,8 +55,6 @@ const StylistDiscovery = () => {
 
   useEffect(() => {
     fetchStylists();
-    // Don't auto-discover on mount to save API calls
-    // User can click "Show Discovered Stylists" button
   }, []);
 
   const discoverMoreStylists = async () => {
@@ -143,14 +141,15 @@ const StylistDiscovery = () => {
   }
 
   return (
-    <DashboardLayout>
+    <>
       <SEOHead 
-        title="Find Professional Hair Stylists"
-        description="Discover talented hair stylists, browse portfolios, read reviews, and book appointments. Connect with certified color specialists and styling experts."
-        keywords="hair stylist, salon, hair color, haircut, beauty, appointments, reviews"
+        title="Find Professional Hair Stylists Near You | hA.I.r"
+        description="Discover certified hair stylists and color specialists. Browse portfolios, read authentic reviews, and book appointments instantly. Find your perfect stylist today."
+        keywords="find hair stylist, hair colorist near me, balayage specialist, color correction expert, salon appointments, hair stylist reviews, certified colorist"
         url="/stylists"
       />
-      <div className="container mx-auto p-6 max-w-7xl animate-fade-in">
+      <DashboardLayout>
+        <div className="container mx-auto p-6 max-w-7xl animate-fade-in">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Find Your Perfect Stylist</h1>
           <p className="text-muted-foreground">Browse stylists and discover the right match for your hair goals</p>
@@ -482,7 +481,8 @@ const StylistDiscovery = () => {
         )}
         </div>
       </div>
-    </DashboardLayout>
+      </DashboardLayout>
+    </>
   );
 };
 
