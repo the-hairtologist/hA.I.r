@@ -174,7 +174,7 @@ export const WeeklyScheduleView = ({
   return (
     <Card className="border-0 shadow-none">
       <CardHeader className="border-b-[2px] border-border px-2 py-1.5">
-        <div className="flex items-center">
+        <div className="flex items-center w-full">
           <div className="flex items-center gap-1.5">
             <CardTitle className="font-display text-sm">
               {selectedDay ? format(selectedDay, 'EEEE, MMM d') : 'Your Weekly Schedule'}
