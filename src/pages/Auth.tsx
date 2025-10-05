@@ -210,7 +210,7 @@ const Auth = () => {
   }, "Update Password");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-4">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
@@ -218,10 +218,12 @@ const Auth = () => {
         <Card className="w-full max-w-md border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
         <CardHeader className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <Scissors className="h-8 w-8 text-primary" />
+            <div className="p-2 rounded-lg bg-primary border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+              <Scissors className="h-8 w-8 text-primary-foreground" />
+            </div>
             <CardTitle className="text-3xl font-bold font-display">hA.I.r</CardTitle>
           </div>
-          <CardDescription>
+          <CardDescription className="text-base font-medium">
             {state.isRecoveryMode ? "Create your new password" : "Your AI-powered salon assistant"}
           </CardDescription>
         </CardHeader>
@@ -258,9 +260,9 @@ const Auth = () => {
             </form>
           ) : (
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-muted border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+              <TabsTrigger value="signin" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-display font-bold">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-display font-bold">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
@@ -338,15 +340,15 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Label>I am a...</Label>
                   <Tabs value={state.userType} onValueChange={(v) => dispatch({ type: "SET_FIELD", field: "userType", value: v as "stylist" | "client" })} className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="client">Client (Free)</TabsTrigger>
-                      <TabsTrigger value="stylist">Stylist ($15/mo)</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-2 bg-muted border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+                      <TabsTrigger value="client" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-display font-bold">Client (Free)</TabsTrigger>
+                      <TabsTrigger value="stylist" className="data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground font-display font-bold">Stylist ($15/mo)</TabsTrigger>
                     </TabsList>
                   </Tabs>
                   {state.userType === "stylist" && (
-                    <div className="p-3 rounded-lg border-2 border-primary/20 bg-primary/5 space-y-1">
-                      <p className="text-xs font-semibold text-primary">💼 Professional Account</p>
-                      <p className="text-xs text-muted-foreground">
+                    <div className="p-3 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+                      <p className="text-xs font-semibold text-foreground">💼 Professional Account</p>
+                      <p className="text-xs text-foreground/80 font-medium">
                         7-day free trial, then $15/month for full stylist features
                       </p>
                     </div>
