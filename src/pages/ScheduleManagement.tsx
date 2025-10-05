@@ -660,6 +660,10 @@ const ScheduleManagement = () => {
               <CalendarIcon className="h-4 w-4" />
               Calendar Sync
             </TabsTrigger>
+            <TabsTrigger value="service-colors" className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Service Colors
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="availability" className="space-y-6">
