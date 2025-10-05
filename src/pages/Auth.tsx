@@ -85,15 +85,8 @@ const Auth = () => {
     }
   ];
 
-  const [currentHookIndex, setCurrentHookIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentHookIndex((prev) => (prev + 1) % hooks.length);
-    }, 5000); // Change every 5 seconds
-
-    return () => clearInterval(interval);
-  }, []);
+  // Pick a random hook on page load
+  const [currentHookIndex] = useState(() => Math.floor(Math.random() * hooks.length));
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -258,45 +251,14 @@ const Auth = () => {
         Skip to main content
       </a>
       <main id="main-content" role="main" aria-label="Authentication" className="w-full max-w-md space-y-6">
-        {/* Rotating Hooks */}
+        {/* Marketing Hook - Random on page load */}
         <div className="text-center space-y-3 mb-8 animate-fade-in">
-          <div className="relative h-28 overflow-hidden">
-            {hooks.map((hook, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-all duration-700 ${
-                  index === currentHookIndex
-                    ? 'opacity-100 translate-y-0'
-                    : index < currentHookIndex
-                    ? 'opacity-0 -translate-y-full'
-                    : 'opacity-0 translate-y-full'
-                }`}
-              >
-                <h2 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
-                  {hook.title}
-                </h2>
-                <p className="text-base text-white/90 drop-shadow-md font-medium">
-                  {hook.subtitle}
-                </p>
-              </div>
-            ))}
-          </div>
-          
-          {/* Indicator Dots */}
-          <div className="flex justify-center gap-2 pt-2">
-            {hooks.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentHookIndex(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentHookIndex
-                    ? 'w-8 bg-white'
-                    : 'w-2 bg-white/50 hover:bg-white/75'
-                }`}
-                aria-label={`Go to hook ${index + 1}`}
-              />
-            ))}
-          </div>
+          <h2 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
+            {hooks[currentHookIndex].title}
+          </h2>
+          <p className="text-base text-white/90 drop-shadow-md font-medium">
+            {hooks[currentHookIndex].subtitle}
+          </p>
         </div>
 
         <Card className="w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
