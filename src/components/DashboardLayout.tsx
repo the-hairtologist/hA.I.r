@@ -110,7 +110,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
+      <div className="min-h-screen flex items-center justify-center bg-[image:var(--gradient-bg-main)]">
         <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in-fast">
           <div className="relative mb-4">
             <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
@@ -124,7 +124,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
+      <div className="min-h-screen flex w-full bg-[image:var(--gradient-bg-main)]">
         <AppSidebar userRole={userRole || undefined} />
         
         <div className="flex-1 flex flex-col">

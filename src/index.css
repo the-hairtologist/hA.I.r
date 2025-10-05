@@ -156,6 +156,19 @@ All colors MUST be HSL.
     --gradient-primary: linear-gradient(135deg, hsl(270 70% 65%) 0%, hsl(340 75% 70%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(190 80% 60%) 0%, hsl(270 70% 65%) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(270 70% 65%) 0%, hsl(340 75% 70%) 50%, hsl(40 80% 65%) 100%);
+    --gradient-bg-main: linear-gradient(135deg, hsl(210 100% 70%) 0%, hsl(270 90% 70%) 50%, hsl(330 90% 70%) 100%);
+    
+    /* Icon background gradients for sidebar */
+    --gradient-purple-pink: linear-gradient(135deg, hsl(270 85% 60%) 0%, hsl(330 85% 65%) 100%);
+    --gradient-cyan-blue: linear-gradient(135deg, hsl(190 95% 55%) 0%, hsl(210 95% 55%) 100%);
+    --gradient-green-emerald: linear-gradient(135deg, hsl(142 76% 50%) 0%, hsl(160 84% 45%) 100%);
+    --gradient-pink-rose: linear-gradient(135deg, hsl(330 85% 65%) 0%, hsl(350 85% 60%) 100%);
+    --gradient-blue-indigo: linear-gradient(135deg, hsl(210 95% 55%) 0%, hsl(240 85% 60%) 100%);
+    --gradient-emerald-teal: linear-gradient(135deg, hsl(160 84% 45%) 0%, hsl(180 84% 42%) 100%);
+    --gradient-amber-orange: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(25 90% 55%) 100%);
+    --gradient-orange-red: linear-gradient(135deg, hsl(25 90% 55%) 0%, hsl(0 85% 60%) 100%);
+    --gradient-violet-purple: linear-gradient(135deg, hsl(258 90% 66%) 0%, hsl(270 85% 60%) 100%);
+    --gradient-gray-slate: linear-gradient(135deg, hsl(220 9% 46%) 0%, hsl(215 16% 47%) 100%);
     
     /* Shadows - Softer, more subtle */
     --shadow-soft: 0 1px 3px 0 hsl(270 85% 60% / 0.05), 0 1px 2px -1px hsl(270 85% 60% / 0.05);
@@ -216,6 +229,19 @@ All colors MUST be HSL.
     --gradient-primary: linear-gradient(135deg, hsl(270 70% 70%) 0%, hsl(340 75% 75%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(190 80% 65%) 0%, hsl(270 70% 70%) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(270 70% 70%) 0%, hsl(340 75% 75%) 50%, hsl(40 80% 70%) 100%);
+    --gradient-bg-main: linear-gradient(135deg, hsl(210 100% 75%) 0%, hsl(270 90% 75%) 50%, hsl(330 90% 75%) 100%);
+    
+    /* Icon background gradients for sidebar - dark mode */
+    --gradient-purple-pink: linear-gradient(135deg, hsl(270 85% 65%) 0%, hsl(330 85% 70%) 100%);
+    --gradient-cyan-blue: linear-gradient(135deg, hsl(190 95% 60%) 0%, hsl(210 95% 60%) 100%);
+    --gradient-green-emerald: linear-gradient(135deg, hsl(142 76% 55%) 0%, hsl(160 84% 50%) 100%);
+    --gradient-pink-rose: linear-gradient(135deg, hsl(330 85% 70%) 0%, hsl(350 85% 65%) 100%);
+    --gradient-blue-indigo: linear-gradient(135deg, hsl(210 95% 60%) 0%, hsl(240 85% 65%) 100%);
+    --gradient-emerald-teal: linear-gradient(135deg, hsl(160 84% 50%) 0%, hsl(180 84% 47%) 100%);
+    --gradient-amber-orange: linear-gradient(135deg, hsl(38 92% 55%) 0%, hsl(25 90% 60%) 100%);
+    --gradient-orange-red: linear-gradient(135deg, hsl(25 90% 60%) 0%, hsl(0 85% 65%) 100%);
+    --gradient-violet-purple: linear-gradient(135deg, hsl(258 90% 71%) 0%, hsl(270 85% 65%) 100%);
+    --gradient-gray-slate: linear-gradient(135deg, hsl(220 9% 51%) 0%, hsl(215 16% 52%) 100%);
     
     /* Shadows for dark mode - Softer, more subtle */
     --shadow-soft: 0 1px 3px 0 hsl(270 85% 65% / 0.1), 0 1px 2px -1px hsl(270 85% 65% / 0.1);

@@ -137,8 +137,8 @@ function SortableNavItem({
               </div>
             )}
             <div className="relative flex-shrink-0">
-              <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
-                <item.icon className="h-5 w-5 text-white" />
+              <div className={`w-9 h-9 rounded-lg ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
+                <item.icon className="h-5 w-5 text-primary-foreground" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
@@ -173,8 +173,8 @@ function SortableNavItem({
               </div>
             )}
             <div className="relative flex-shrink-0">
-              <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
-                <item.icon className="h-5 w-5 text-white" />
+              <div className={`w-9 h-9 rounded-lg ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
+                <item.icon className="h-5 w-5 text-primary-foreground" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
@@ -264,41 +264,41 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   // Stylist Navigation with unique IDs
   const stylistAllItems: SidebarItem[] = [
-    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500", group: "main" },
-    { id: "find-clients", title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "from-cyan-500 to-blue-500", group: "main" },
-    { id: "clients", title: "Clients & Formulas", url: "/clients", icon: Users, gradient: "from-green-500 to-emerald-500", group: "main" },
-    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-pink-500 to-rose-500", group: "main" },
-    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-blue-500 to-cyan-500", description: "View & manage bookings", group: "scheduling" },
-    { id: "schedule", title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "from-blue-500 to-indigo-500", description: "Set working hours", group: "scheduling" },
-    { id: "services", title: "Services", url: "/services", icon: Scissors, gradient: "from-emerald-500 to-teal-500", group: "business" },
+    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main" },
+    { id: "find-clients", title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main" },
+    { id: "clients", title: "Clients & Formulas", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main" },
+    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main" },
+    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "scheduling" },
+    { id: "schedule", title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Set working hours", group: "scheduling" },
+    { id: "services", title: "Services", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business" },
     { 
       id: "finance", 
       title: "Finance", 
       url: "/finance", 
       icon: DollarSign, 
-      gradient: "from-amber-500 to-orange-500", 
+      gradient: "bg-[image:var(--gradient-amber-orange)]", 
       group: "business",
       children: [
-        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "from-amber-500 to-orange-500", group: "business" },
-        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "from-amber-500 to-orange-500", group: "business" },
+        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business" },
+        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business" },
       ]
     },
-    { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "from-orange-500 to-red-500", group: "business" },
-    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-cyan-500", group: "tools" },
-    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "from-purple-500 to-pink-500", group: "tools" },
-    { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "from-orange-500 to-amber-500", group: "tools" },
+    { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "business" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools" },
+    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools" },
+    { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools" },
   ];
 
   // Client Navigation with unique IDs
   const clientAllItems: SidebarItem[] = [
-    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "from-purple-500 to-pink-500", group: "main" },
-    { id: "my-requests", title: "My Requests", url: "/client-requests", icon: Megaphone, gradient: "from-orange-500 to-amber-500", group: "main" },
-    { id: "find-stylists", title: "Find Stylists", url: "/stylists", icon: Search, gradient: "from-blue-500 to-cyan-500", group: "main" },
-    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-pink-500 to-rose-500", group: "main" },
-    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-violet-500 to-purple-500", group: "main" },
-    { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "from-emerald-500 to-teal-500", group: "tools" },
-    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-cyan-500", group: "tools" },
-    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "from-purple-500 to-pink-500", group: "tools" },
+    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main" },
+    { id: "my-requests", title: "My Requests", url: "/client-requests", icon: Megaphone, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "main" },
+    { id: "find-stylists", title: "Find Stylists", url: "/stylists", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main" },
+    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main" },
+    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main" },
+    { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "tools" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools" },
+    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools" },
   ];
 
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
@@ -449,8 +449,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 <SidebarMenuButton asChild tooltip="Settings" className="min-h-[44px]">
                   <NavLink to="/settings" className={getNavClassName}>
                     <div className="relative flex-shrink-0">
-                      <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500 flex items-center justify-center transition-opacity hover:opacity-90">
-                        <Settings className="h-5 w-5 text-white" />
+                      <div className="w-9 h-9 rounded-lg bg-[image:var(--gradient-gray-slate)] flex items-center justify-center transition-opacity hover:opacity-90">
+                        <Settings className="h-5 w-5 text-primary-foreground" />
                       </div>
                     </div>
                     {!collapsed && <span className="text-sm font-medium">Settings</span>}
@@ -461,8 +461,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 <SidebarMenuButton asChild tooltip="Help & Support" className="min-h-[44px]">
                   <NavLink to="/resources" className={getNavClassName}>
                     <div className="relative flex-shrink-0">
-                      <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center transition-opacity hover:opacity-90">
-                        <HelpCircle className="h-5 w-5 text-white" />
+                      <div className="w-9 h-9 rounded-lg bg-[image:var(--gradient-cyan-blue)] flex items-center justify-center transition-opacity hover:opacity-90">
+                        <HelpCircle className="h-5 w-5 text-primary-foreground" />
                       </div>
                     </div>
                     {!collapsed && <span className="text-sm font-medium">Help & Support</span>}
