@@ -17,6 +17,28 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const retryRequest = async <T,>(
+    requestFn: () => Promise<T>,
+    maxRetries = 3
+  ): Promise<T> => {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const result = await requestFn();
+        return result;
+      } catch (error: any) {
+        if (i === maxRetries - 1 || !error?.message?.includes('Load failed')) {
+          throw error;
+        }
+        
+        // Exponential backoff
+        const delay = Math.min(1000 * Math.pow(2, i), 5000);
+        console.warn(`Network error, retrying... (attempt ${i + 1}/${maxRetries})`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    throw new Error('Max retries exceeded');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -28,18 +50,24 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
     setIsSubmitting(true);
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const session = await retryRequest(async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        return session;
+      });
+
       if (!session) {
         toast.error("Please sign in to redeem an access code");
         return;
       }
 
-      const { data, error } = await supabase.rpc('redeem_access_code', {
-        _code: code.trim(),
-        _user_id: session.user.id
+      const result = await retryRequest(async () => {
+        const { data, error } = await supabase.rpc('redeem_access_code', {
+          _code: code.trim(),
+          _user_id: session.user.id
+        });
+        if (error) throw error;
+        return data;
       });
-
-      if (error) throw error;
 
       toast.success("Access code redeemed! You now have full access to all features.");
       setCode("");

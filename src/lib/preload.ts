@@ -45,7 +45,7 @@ export const preloadHighFrequencyPages = async (): Promise<void> => {
 export const preloadRolePages = async (role: "stylist" | "client"): Promise<void> => {
   if (role === "stylist") {
     const stylistPages = [
-      "../pages/Schedule",
+      "../pages/ScheduleManagement",
       "../pages/Services",
       "../pages/Portfolio",
       "../pages/ClientDiscovery",
