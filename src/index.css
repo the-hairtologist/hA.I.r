@@ -157,11 +157,11 @@ All colors MUST be HSL.
     --gradient-accent: linear-gradient(135deg, hsl(190 95% 55%), hsl(270 85% 60%));
     --gradient-hero: linear-gradient(135deg, hsl(270 85% 60%) 0%, hsl(340 90% 65%) 50%, hsl(40 95% 60%) 100%);
     
-    /* Shadows */
-    --shadow-soft: 0 2px 8px -2px hsl(270 85% 60% / 0.1);
-    --shadow-medium: 0 8px 16px -4px hsl(270 85% 60% / 0.15);
-    --shadow-large: 0 20px 40px -8px hsl(270 85% 60% / 0.2);
-    --shadow-glow: 0 0 30px hsl(270 85% 60% / 0.3);
+    /* Shadows - Softer, more subtle */
+    --shadow-soft: 0 1px 3px 0 hsl(270 85% 60% / 0.05), 0 1px 2px -1px hsl(270 85% 60% / 0.05);
+    --shadow-medium: 0 4px 6px -1px hsl(270 85% 60% / 0.08), 0 2px 4px -2px hsl(270 85% 60% / 0.08);
+    --shadow-large: 0 10px 15px -3px hsl(270 85% 60% / 0.1), 0 4px 6px -4px hsl(270 85% 60% / 0.1);
+    --shadow-glow: 0 0 20px hsl(270 85% 60% / 0.15);
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 5%;
@@ -217,11 +217,11 @@ All colors MUST be HSL.
     --gradient-accent: linear-gradient(135deg, hsl(190 95% 60%), hsl(270 85% 65%));
     --gradient-hero: linear-gradient(135deg, hsl(270 85% 65%) 0%, hsl(340 90% 70%) 50%, hsl(40 95% 65%) 100%);
     
-    /* Shadows for dark mode */
-    --shadow-soft: 0 2px 8px -2px hsl(270 85% 65% / 0.2);
-    --shadow-medium: 0 8px 16px -4px hsl(270 85% 65% / 0.3);
-    --shadow-large: 0 20px 40px -8px hsl(270 85% 65% / 0.4);
-    --shadow-glow: 0 0 40px hsl(270 100% 75% / 0.4);
+    /* Shadows for dark mode - Softer, more subtle */
+    --shadow-soft: 0 1px 3px 0 hsl(270 85% 65% / 0.1), 0 1px 2px -1px hsl(270 85% 65% / 0.1);
+    --shadow-medium: 0 4px 6px -1px hsl(270 85% 65% / 0.15), 0 2px 4px -2px hsl(270 85% 65% / 0.15);
+    --shadow-large: 0 10px 15px -3px hsl(270 85% 65% / 0.2), 0 4px 6px -4px hsl(270 85% 65% / 0.2);
+    --shadow-glow: 0 0 20px hsl(270 100% 75% / 0.2);
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 210 100% 55%;
@@ -290,8 +290,23 @@ All colors MUST be HSL.
     }
   }
 
+  @keyframes fade-in-fast {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .animate-fade-in {
     animation: fade-in 0.3s ease-out;
+  }
+
+  .animate-fade-in-fast {
+    animation: fade-in-fast 0.2s ease-out;
   }
 
   @keyframes shimmer {
@@ -301,6 +316,17 @@ All colors MUST be HSL.
     100% {
       background-position: 1000px 0;
     }
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted) / 0.5) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
   }
 
   .hover-scale {
@@ -345,21 +371,36 @@ All colors MUST be HSL.
     box-shadow: 4px 4px 0px hsl(var(--foreground) / 0.2);
   }
 
-  /* Playful button effect */
+  /* Playful button effect with micro-motion */
   .retro-button {
-    border: 2.5px solid hsl(var(--foreground));
-    box-shadow: 3px 3px 0px hsl(var(--foreground) / 0.3);
+    border: 1.5px solid hsl(var(--foreground));
+    box-shadow: var(--shadow-soft);
     transition: all 0.15s ease;
+    position: relative;
+  }
+
+  .retro-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: hsl(var(--primary) / 0.05);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .retro-button:hover::before {
+    opacity: 1;
   }
 
   .retro-button:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 2px 2px 0px hsl(var(--foreground) / 0.3);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
   }
 
   .retro-button:active {
-    transform: translate(3px, 3px);
-    box-shadow: 0px 0px 0px hsl(var(--foreground) / 0.3);
+    transform: translateY(0);
+    box-shadow: var(--shadow-soft);
   }
 
   /* Browser window chrome aesthetic */

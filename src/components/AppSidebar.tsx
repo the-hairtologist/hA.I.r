@@ -27,6 +27,7 @@ import {
   Command,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
+import { NotificationDot } from "@/components/NotificationDot";
 import {
   DndContext,
   closestCenter,
@@ -73,6 +74,7 @@ interface SortableNavItemProps {
   isEditMode: boolean;
   expandedItems: Set<string>;
   toggleExpanded: (id: string) => void;
+  notificationCount?: number;
 }
 
 function SortableNavItem({
@@ -82,6 +84,7 @@ function SortableNavItem({
   isEditMode,
   expandedItems,
   toggleExpanded,
+  notificationCount,
 }: SortableNavItemProps) {
   const location = useLocation();
   const {
@@ -111,7 +114,7 @@ function SortableNavItem({
       <SidebarMenuButton 
         asChild={!hasChildren} 
         tooltip={item.title} 
-        className="min-h-[44px] group"
+        className="min-h-[44px] group relative"
         onClick={hasChildren ? (e) => {
           e.preventDefault();
           toggleExpanded(item.id);
@@ -133,8 +136,13 @@ function SortableNavItem({
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
-            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient} transition-transform group-hover:scale-110`}>
-              <item.icon className="h-4 w-4 text-primary-foreground" />
+            <div className="relative">
+              <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient} transition-transform group-hover:scale-110`}>
+                <item.icon className="h-4 w-4 text-primary-foreground" />
+              </div>
+              {notificationCount !== undefined && notificationCount > 0 && (
+                <NotificationDot count={notificationCount} size="sm" />
+              )}
             </div>
             {!collapsed && (
               <>
@@ -164,8 +172,13 @@ function SortableNavItem({
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
-            <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-              <item.icon className="h-4 w-4 text-primary-foreground" />
+            <div className="relative">
+              <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
+                <item.icon className="h-4 w-4 text-primary-foreground" />
+              </div>
+              {notificationCount !== undefined && notificationCount > 0 && (
+                <NotificationDot count={notificationCount} size="sm" />
+              )}
             </div>
             {!collapsed && (
               <div className="ml-2 flex flex-col">
@@ -225,6 +238,9 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [notifications, setNotifications] = useState<Record<string, number>>({
+    messages: 0,
+  });
 
   const toggleExpanded = (id: string) => {
     setExpandedItems(prev => {
@@ -384,6 +400,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                         isEditMode={isEditMode}
                         expandedItems={expandedItems}
                         toggleExpanded={toggleExpanded}
+                        notificationCount={notifications[item.id]}
                       />
                     ))}
                   </SidebarMenu>

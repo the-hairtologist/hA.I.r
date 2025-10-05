@@ -18,6 +18,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { useState, useEffect } from "react";
 
 interface DashboardLayoutProps {
@@ -108,7 +110,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
-        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
+        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in-fast">
           <div className="relative mb-4">
             <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
             <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
@@ -180,12 +182,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </header>
 
           {/* Main Content */}
-          <main className="flex-1 overflow-auto pb-16 md:pb-0">
-            {children}
-          </main>
+      <main className="flex-1 overflow-auto pb-16 md:pb-0">
+        <div className="container mx-auto p-6 animate-fade-in-fast">
+          <Breadcrumbs />
+          {children}
+        </div>
+      </main>
         </div>
         
         <MobileNav userRole={userRole || undefined} />
+        <FloatingActionButton userRole={userRole || "client"} />
       </div>
       
       <KeyboardShortcutsDialog 

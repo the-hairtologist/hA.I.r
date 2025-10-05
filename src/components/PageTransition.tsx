@@ -8,7 +8,7 @@ interface PageTransitionProps {
 
 export const PageTransition = ({ children, className }: PageTransitionProps) => {
   return (
-    <div className={cn("animate-fade-in", className)}>
+    <div className={cn("animate-fade-in-fast", className)}>
       {children}
     </div>
   );

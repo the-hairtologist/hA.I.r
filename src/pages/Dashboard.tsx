@@ -130,6 +130,11 @@ const Dashboard = () => {
       setUserRole(primaryRole);
       setUser(authUser);
       checkUser(authUser, primaryRole);
+      
+      // Preload role-specific pages
+      import("@/lib/preload").then(({ preloadRolePages }) => {
+        preloadRolePages(primaryRole as "stylist" | "client");
+      });
     } else if (!authLoading && !authUser) {
       navigate("/auth");
     }
@@ -471,7 +476,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
-        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
+        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in-fast">
           <div className="relative mb-4">
             <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
             <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
@@ -646,8 +651,8 @@ const Dashboard = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="container mx-auto px-4 py-8 pl-12">
-        <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative">
+      <main id="main-content" role="main" aria-label="Dashboard" className="pl-12">
+        <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
             <span className="text-background font-mono text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
@@ -663,13 +668,13 @@ const Dashboard = () => {
             <div className="window-scrollbar"></div>
             
             <div className="max-w-4xl pr-8">
-              <h2 className="text-3xl md:text-4xl font-display font-black mb-4 text-pink-400 uppercase leading-tight">
+              <h2 className="text-3xl md:text-4xl font-display font-black mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
               {/* Weekly Schedule View for Stylists */}
               {userRole === "stylist" && (
-                <div className="bg-card rounded-lg overflow-hidden border-2 border-pink-400 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.6)] mt-3">
+                <div className="bg-card rounded-lg overflow-hidden border-2 border-pink-400 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.6)] mt-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
                   <WeeklyScheduleView
                     appointments={weekAppointments}
                     stylistSchedule={profile?.weekly_schedule}
@@ -684,7 +689,7 @@ const Dashboard = () => {
               )}
 
               {userRole === "client" && (
-                <p className="text-base md:text-lg font-medium text-pink-200 mt-2">
+                <p className="text-base md:text-lg font-medium text-pink-200 mt-2 animate-fade-in" style={{ animationDelay: '200ms' }}>
                   Ready to book your next transformation? ✨
                 </p>
               )}
@@ -692,7 +697,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-6 bg-secondary border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] p-4 rounded-lg animate-fade-in">
+        <div className="mb-6 bg-secondary border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] p-4 rounded-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
           <p className="text-base font-display font-bold text-secondary-foreground text-center flex items-center justify-center gap-2">
             <GripVertical className="h-5 w-5 animate-pulse" />
             Hover over sections and drag the handle to rearrange your dashboard!
@@ -710,13 +715,18 @@ const Dashboard = () => {
             strategy={verticalListSortingStrategy}
           >
             <div className="space-y-8">
-              {sectionOrder.map((sectionId) => {
+              {sectionOrder.map((sectionId, index) => {
                 const content = renderSection(sectionId);
                 if (!content) return null;
                 
                 return (
                   <SortableSection key={sectionId} id={sectionId}>
-                    {content}
+                    <div 
+                      className="animate-fade-in" 
+                      style={{ animationDelay: `${(index + 4) * 50}ms` }}
+                    >
+                      {content}
+                    </div>
                   </SortableSection>
                 );
               })}
