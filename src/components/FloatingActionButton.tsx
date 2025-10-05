@@ -18,19 +18,26 @@ interface FloatingActionButtonProps {
 
 export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  
+  // Initialize with visible default position
+  const getDefaultPosition = () => {
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
+    return { 
+      x: window.innerWidth - 96, 
+      y: window.innerHeight - 96 
+    };
+  };
+  
+  const [position, setPosition] = useState(getDefaultPosition);
 
   useEffect(() => {
     const savedPosition = localStorage.getItem('fab-position');
     if (savedPosition) {
       setPosition(JSON.parse(savedPosition));
-    } else {
-      // Default position: bottom-right
-      setPosition({ x: window.innerWidth - 80, y: window.innerHeight - 96 });
     }
   }, []);
 

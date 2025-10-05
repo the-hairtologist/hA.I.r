@@ -22,19 +22,26 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
   const [isExpanded, setIsExpanded] = useState(false);
   const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
   const [loading, setLoading] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  
+  // Initialize with visible default position
+  const getDefaultPosition = () => {
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
+    return { 
+      x: window.innerWidth - 176, 
+      y: window.innerHeight - 96 
+    };
+  };
+  
+  const [position, setPosition] = useState(getDefaultPosition);
 
   useEffect(() => {
     const savedPosition = localStorage.getItem('ai-assistant-position');
     if (savedPosition) {
       setPosition(JSON.parse(savedPosition));
-    } else {
-      // Default position: bottom-right, offset from FAB
-      setPosition({ x: window.innerWidth - 160, y: window.innerHeight - 96 });
     }
   }, []);
 
