@@ -174,7 +174,7 @@ export const WeeklyScheduleView = ({
   return (
     <Card className="border-0 shadow-none">
       <CardHeader className="border-b-[2px] border-border px-2 py-1.5">
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           <div className="flex items-center gap-1.5">
             <CardTitle className="font-display text-sm">
               {selectedDay ? format(selectedDay, 'EEEE, MMM d') : 'Your Weekly Schedule'}
@@ -190,12 +190,12 @@ export const WeeklyScheduleView = ({
               </Button>
             )}
           </div>
-          <div className="flex gap-1">
-            <Button variant="outline" size="sm" onClick={previousWeek} className="border-[2px] h-6 w-6 p-0">
-              <ChevronLeft className="h-3 w-3" />
+          <div className="flex gap-1.5">
+            <Button variant="outline" size="sm" onClick={previousWeek} className="h-7 w-7 p-0 rounded-lg border border-border hover:bg-secondary/20">
+              <ChevronLeft className="h-3.5 w-3.5" />
             </Button>
-            <Button variant="outline" size="sm" onClick={nextWeek} className="border-[2px] h-6 w-6 p-0">
-              <ChevronRight className="h-3 w-3" />
+            <Button variant="outline" size="sm" onClick={nextWeek} className="h-7 w-7 p-0 rounded-lg border border-border hover:bg-secondary/20">
+              <ChevronRight className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
