@@ -22,75 +22,111 @@ const Knowledge = () => {
   const articles = [
     {
       id: 1,
-      title: "Mastering Balayage: From Consultation to Final Look",
+      title: "Behindthechair.com - Industry-Leading Education",
       category: "techniques",
-      description: "A comprehensive guide to creating natural-looking balayage with proper sectioning, placement, and blending techniques.",
-      readTime: "12 min read",
-      type: "article",
+      description: "The #1 platform for professional stylists. Access thousands of color formulas, step-by-step tutorials, and inspiration from top artists worldwide.",
+      type: "platform",
       featured: true,
+      url: "https://behindthechair.com/",
     },
     {
       id: 2,
-      title: "Color Theory for Hair Professionals",
+      title: "Hair Color Formulation and Application - Full Class",
       category: "techniques",
-      description: "Understanding undertones, neutralization, and how to achieve any color result with confidence.",
-      readTime: "8 min read",
-      type: "article",
+      description: "Complete YouTube masterclass covering color theory, formulation techniques, and professional application methods from FreeSalonEducation.",
+      type: "video",
       featured: true,
+      url: "https://www.youtube.com/watch?v=-iIWU0pqyL8",
     },
     {
       id: 3,
-      title: "Building a Six-Figure Salon Business",
-      category: "business",
-      description: "Proven strategies for pricing, marketing, and client retention that successful stylists use.",
-      readTime: "15 min read",
-      type: "article",
-      featured: false,
+      title: "Sam Villa - 86 Free Haircutting Video Tutorials",
+      category: "techniques",
+      description: "Master cutting techniques with 86 free video tutorials covering everything from basic cuts to advanced styling methods.",
+      type: "video",
+      featured: true,
+      url: "https://pros.samvilla.com/blogs/hair-tutorials/best-haircutting-techniques",
     },
     {
       id: 4,
-      title: "2025 Hair Color Trends You Need to Know",
-      category: "trends",
-      description: "The hottest color trends your clients will be asking for this year, from butter blonde to rich espresso.",
-      readTime: "6 min read",
-      type: "article",
+      title: "Hair Love University - Perfect Pricing Method",
+      category: "business",
+      description: "Free training on pricing strategy that has helped thousands of stylists create financial freedom. Learn how to price your services for profitability.",
+      type: "course",
       featured: true,
+      url: "https://hairloveuniversity.com/freebies",
     },
     {
       id: 5,
-      title: "Fixing Common Color Mistakes",
+      title: "Joico Pro Education - 24/7 Learning Platform",
       category: "techniques",
-      description: "Step-by-step solutions for brassy tones, uneven color, over-processing, and more common issues.",
-      readTime: "10 min read",
-      type: "article",
+      description: "Free access to live events, tutorials, and trend information from Joico's comprehensive educational platform.",
+      type: "platform",
       featured: false,
+      url: "https://www.joico.com/pro-education/",
     },
     {
       id: 6,
-      title: "Client Consultation Best Practices",
-      category: "business",
-      description: "How to have effective consultations that set expectations and build trust with new clients.",
-      readTime: "7 min read",
-      type: "article",
+      title: "L'Oréal Professionnel Signature Education",
+      category: "techniques",
+      description: "Best-in-class education programs for every skill level - essential, advanced, expert, and specialist. Comprehensive and customizable learning.",
+      type: "platform",
       featured: false,
+      url: "https://us.lorealprofessionnel.com/pro-resources/loreal-professional-signature-education",
     },
     {
       id: 7,
-      title: "Understanding Hair Damage and How to Prevent It",
-      category: "techniques",
-      description: "Learn the science behind hair damage and how to maintain hair integrity during chemical services.",
-      readTime: "11 min read",
-      type: "article",
+      title: "Milady Training - Trending Techniques Webinar",
+      category: "trends",
+      description: "Free 90-minute webinar covering on-trend cutting and styling techniques, blowout methods, and finishing skills for salon looks.",
+      type: "course",
       featured: false,
+      url: "https://www.miladytraining.com/courses/trending-techniques",
     },
     {
       id: 8,
-      title: "Instagram Marketing for Hair Stylists",
+      title: "Elite Beauty Society Resource Center",
       category: "business",
-      description: "Grow your following and attract dream clients with strategic content that showcases your work.",
-      readTime: "9 min read",
-      type: "article",
+      description: "Free business resources, educational tools, eBooks, and guides specifically designed for beauty professionals.",
+      type: "platform",
       featured: false,
+      url: "https://elitebeautysociety.com/resource-center/",
+    },
+    {
+      id: 9,
+      title: "Cursa - Hair Coloring & Styling Techniques Course",
+      category: "techniques",
+      description: "Free comprehensive online course with certificate covering professional hair coloring and styling techniques.",
+      type: "course",
+      featured: false,
+      url: "https://cursa.app/en/free-course/hair-coloring-and-styling-techniques-ecjb",
+    },
+    {
+      id: 10,
+      title: "BTC University - Quick Tips & Tutorials",
+      category: "techniques",
+      description: "Access quick tips, downloadable resources, and courses on hair color, cutting, and business from industry educators.",
+      type: "platform",
+      featured: false,
+      url: "https://www.btcuniversity.com/tips",
+    },
+    {
+      id: 11,
+      title: "Paul Mitchell eLearning Platform",
+      category: "techniques",
+      description: "Free continuing education courses covering cutting, coloring, styling, and business skills from Paul Mitchell Schools.",
+      type: "platform",
+      featured: false,
+      url: "https://elearning.paulmitchell.com/pages/homepage",
+    },
+    {
+      id: 12,
+      title: "Alison - Fundamentals of Cosmetology",
+      category: "techniques",
+      description: "Free online cosmetology course covering fundamentals with CPD accreditation. Perfect for refreshing core skills.",
+      type: "course",
+      featured: false,
+      url: "https://alison.com/course/fundamentals-of-cosmetology",
     },
   ];
 
@@ -176,14 +212,15 @@ const Knowledge = () => {
               {featuredArticles.map((article) => (
                 <Card 
                   key={article.id}
-                  className="brutal-card cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400"
+                  className="brutal-card cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400 hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all"
+                  onClick={() => window.open(article.url, '_blank')}
                 >
                   <CardHeader>
                     <div className="flex items-start justify-between mb-2">
                       <Badge variant="secondary" className="bg-background border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                        {article.category}
+                        {article.type}
                       </Badge>
-                      <FileText className="h-5 w-5 text-foreground" />
+                      <ExternalLink className="h-5 w-5 text-foreground" />
                     </div>
                     <CardTitle className="text-lg font-display text-foreground">{article.title}</CardTitle>
                     <CardDescription className="text-foreground/80 font-medium">
@@ -192,9 +229,11 @@ const Knowledge = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-foreground/70 font-semibold">{article.readTime}</span>
+                      <Badge className="bg-primary/20 text-foreground border-2 border-foreground">
+                        {article.category}
+                      </Badge>
                       <Button size="sm" variant="outline">
-                        Read →
+                        Visit Free Resource →
                       </Button>
                     </div>
                   </CardContent>
@@ -236,33 +275,37 @@ const Knowledge = () => {
                 {filteredArticles.map((article) => (
                   <Card 
                     key={article.id}
-                    className={`brutal-card cursor-pointer ${
+                    className={`brutal-card cursor-pointer hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all ${
                       article.featured ? 'bg-gradient-to-br from-green-400 to-blue-400' : 'bg-gradient-to-br from-blue-400 to-purple-400'
                     }`}
+                    onClick={() => window.open(article.url, '_blank')}
                   >
                     <CardHeader>
-                      <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2 mb-2">
                         <Badge variant="secondary" className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                          {article.type}
+                        </Badge>
+                        <Badge className="bg-primary/20 text-foreground border-2 border-foreground">
                           {article.category}
                         </Badge>
                         {article.featured && (
-                          <Badge className="bg-accent text-accent-foreground border-[3px] border-foreground">
+                          <Badge className="bg-accent text-accent-foreground border-[3px] border-foreground ml-auto">
                             Featured
                           </Badge>
                         )}
                       </div>
-                      <CardTitle className="font-display text-foreground">{article.title}</CardTitle>
+                      <CardTitle className="font-display text-foreground flex items-center gap-2">
+                        {article.title}
+                        <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                      </CardTitle>
                       <CardDescription className="text-foreground/80 font-medium">
                         {article.description}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-foreground/70 font-semibold">{article.readTime}</span>
-                        <Button size="sm" variant="outline">
-                          Read Article →
-                        </Button>
-                      </div>
+                      <Button size="sm" variant="outline" className="w-full">
+                        Visit Free Resource →
+                      </Button>
                     </CardContent>
                   </Card>
                 ))}
