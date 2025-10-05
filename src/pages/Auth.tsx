@@ -260,9 +260,9 @@ const Auth = () => {
             </form>
           ) : (
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-muted border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
-              <TabsTrigger value="signin" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-display font-bold">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-display font-bold">Sign Up</TabsTrigger>
+            <TabsList className="w-full">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
@@ -340,9 +340,9 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Label>I am a...</Label>
                   <Tabs value={state.userType} onValueChange={(v) => dispatch({ type: "SET_FIELD", field: "userType", value: v as "stylist" | "client" })} className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 bg-muted border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
-                      <TabsTrigger value="client" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-display font-bold">Client (Free)</TabsTrigger>
-                      <TabsTrigger value="stylist" className="data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground font-display font-bold">Stylist ($15/mo)</TabsTrigger>
+                    <TabsList className="w-full">
+                      <TabsTrigger value="client">Client (Free)</TabsTrigger>
+                      <TabsTrigger value="stylist">Stylist ($15/mo)</TabsTrigger>
                     </TabsList>
                   </Tabs>
                   {state.userType === "stylist" && (
