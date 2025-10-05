@@ -1,5 +1,5 @@
 import { Plus, Calendar, Users, Scissors } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,78 @@ interface FloatingActionButtonProps {
 
 export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const buttonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedPosition = localStorage.getItem('fab-position');
+    if (savedPosition) {
+      setPosition(JSON.parse(savedPosition));
+    } else {
+      // Default position: bottom-right
+      setPosition({ x: window.innerWidth - 80, y: window.innerHeight - 96 });
+    }
+  }, []);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isOpen) return; // Don't drag when menu is open
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isOpen) return;
+    setIsDragging(true);
+    const touch = e.touches[0];
+    setDragStart({
+      x: touch.clientX - position.x,
+      y: touch.clientY - position.y
+    });
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      const newX = Math.max(0, Math.min(e.clientX - dragStart.x, window.innerWidth - 80));
+      const newY = Math.max(0, Math.min(e.clientY - dragStart.y, window.innerHeight - 80));
+      setPosition({ x: newX, y: newY });
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      const newX = Math.max(0, Math.min(touch.clientX - dragStart.x, window.innerWidth - 80));
+      const newY = Math.max(0, Math.min(touch.clientY - dragStart.y, window.innerHeight - 80));
+      setPosition({ x: newX, y: newY });
+    };
+
+    const handleEnd = () => {
+      if (isDragging) {
+        setIsDragging(false);
+        localStorage.setItem('fab-position', JSON.stringify(position));
+      }
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleEnd);
+      document.addEventListener('touchmove', handleTouchMove);
+      document.addEventListener('touchend', handleEnd);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleEnd);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, dragStart, position]);
 
   const stylistActions: FloatingAction[] = [
     {
@@ -79,7 +150,17 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
   const actions = userRole === "stylist" ? stylistActions : clientActions;
 
   return (
-    <div className="fixed bottom-20 md:bottom-6 right-6 z-50 flex flex-col-reverse items-end gap-3">
+    <div 
+      ref={buttonRef}
+      className={cn(
+        "fixed z-50 flex flex-col-reverse items-end gap-3",
+        isDragging && "cursor-grabbing"
+      )}
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+      }}
+    >
       {/* Action Items */}
       <div
         className={cn(
@@ -115,15 +196,20 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       {/* Main FAB */}
       <Button
         size="icon"
-        onClick={() => {
-          haptic.tap();
-          setIsOpen(!isOpen);
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        onClick={(e) => {
+          if (!isDragging) {
+            haptic.tap();
+            setIsOpen(!isOpen);
+          }
         }}
         className={cn(
-          "h-14 w-14 rounded-full shadow-xl",
+          "h-14 w-14 rounded-full shadow-xl cursor-grab active:cursor-grabbing",
           "bg-gradient-to-br from-orange-500 to-red-500",
           "hover:scale-110 transition-all duration-200 hover:shadow-2xl",
-          isOpen && "rotate-45"
+          isOpen && "rotate-45",
+          isDragging && "cursor-grabbing scale-110"
         )}
       >
         <Plus className="h-6 w-6 text-white" />

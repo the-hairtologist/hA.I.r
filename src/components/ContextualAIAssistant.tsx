@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, X, Loader2, ChevronUp, ChevronDown } from "lucide-react";
@@ -22,7 +22,78 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
   const [isExpanded, setIsExpanded] = useState(false);
   const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
   const [loading, setLoading] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const buttonRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
+  useEffect(() => {
+    const savedPosition = localStorage.getItem('ai-assistant-position');
+    if (savedPosition) {
+      setPosition(JSON.parse(savedPosition));
+    } else {
+      // Default position: bottom-right, offset from FAB
+      setPosition({ x: window.innerWidth - 160, y: window.innerHeight - 96 });
+    }
+  }, []);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isExpanded) return; // Don't drag when expanded
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isExpanded) return;
+    setIsDragging(true);
+    const touch = e.touches[0];
+    setDragStart({
+      x: touch.clientX - position.x,
+      y: touch.clientY - position.y
+    });
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      const newX = Math.max(0, Math.min(e.clientX - dragStart.x, window.innerWidth - 80));
+      const newY = Math.max(0, Math.min(e.clientY - dragStart.y, window.innerHeight - 80));
+      setPosition({ x: newX, y: newY });
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      const newX = Math.max(0, Math.min(touch.clientX - dragStart.x, window.innerWidth - 80));
+      const newY = Math.max(0, Math.min(touch.clientY - dragStart.y, window.innerHeight - 80));
+      setPosition({ x: newX, y: newY });
+    };
+
+    const handleEnd = () => {
+      if (isDragging) {
+        setIsDragging(false);
+        localStorage.setItem('ai-assistant-position', JSON.stringify(position));
+      }
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleEnd);
+      document.addEventListener('touchmove', handleTouchMove);
+      document.addEventListener('touchend', handleEnd);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleEnd);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, dragStart, position]);
 
   const fetchSuggestions = async () => {
     setLoading(true);
@@ -72,7 +143,17 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-24 md:bottom-6 right-24 z-40 animate-fade-in">
+    <div 
+      ref={buttonRef}
+      className={cn(
+        "fixed z-40 animate-fade-in",
+        isDragging && "cursor-grabbing"
+      )}
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+      }}
+    >
       <Card className={cn(
         "border-2 border-border shadow-lg bg-card backdrop-blur-sm transition-all duration-300",
         isExpanded ? "w-80" : "w-auto"
@@ -81,8 +162,19 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
           {/* Collapsed State */}
           {!isExpanded && (
             <Button
-              onClick={() => setIsExpanded(true)}
-              className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all hover:scale-105 border-0"
+              onMouseDown={handleMouseDown}
+              onTouchStart={handleTouchStart}
+              onClick={(e) => {
+                if (!isDragging) {
+                  setIsExpanded(true);
+                }
+              }}
+              className={cn(
+                "w-14 h-14 rounded-full cursor-grab active:cursor-grabbing",
+                "bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700",
+                "shadow-lg hover:shadow-xl transition-all hover:scale-105 border-0",
+                isDragging && "cursor-grabbing scale-105"
+              )}
             >
               <Sparkles className="h-5 w-5 text-white animate-pulse" />
             </Button>
