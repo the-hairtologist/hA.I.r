@@ -120,9 +120,9 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           setIsOpen(!isOpen);
         }}
         className={cn(
-          "h-14 w-14 rounded-full shadow-xl border-3 border-foreground",
-          "bg-gradient-to-br from-purple-500 to-pink-500",
-          "hover:scale-110 transition-all duration-200",
+          "h-14 w-14 rounded-full shadow-xl",
+          "bg-gradient-to-br from-orange-500 to-red-500",
+          "hover:scale-110 transition-all duration-200 hover:shadow-2xl",
           isOpen && "rotate-45"
         )}
       >
