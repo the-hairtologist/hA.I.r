@@ -121,24 +121,24 @@ function SortableNavItem({
         } : undefined}
       >
         {hasChildren ? (
-          <div className={`flex items-center w-full cursor-pointer transition-all duration-200 ${
+          <div className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
             isParentActive || isAnyChildActive
-              ? 'bg-primary/10 text-primary font-medium border-l-4 border-primary' 
-              : 'text-primary hover:bg-muted/50 border-l-4 border-transparent hover:border-primary/20'
+              ? 'bg-primary/10 text-primary font-medium' 
+              : 'text-foreground hover:bg-muted/50'
           }`}>
             {isEditMode && !collapsed && (
               <div
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing mr-1 -ml-1"
+                className="cursor-grab active:cursor-grabbing"
                 onClick={(e) => e.stopPropagation()}
               >
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
-            <div className="relative">
-              <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient} transition-transform group-hover:scale-110`}>
-                <item.icon className="h-4 w-4 text-primary-foreground" />
+            <div className="relative flex-shrink-0">
+              <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
+                <item.icon className="h-5 w-5 text-white" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
@@ -146,15 +146,15 @@ function SortableNavItem({
             </div>
             {!collapsed && (
               <>
-                <div className="ml-3 flex flex-col flex-1">
-                  <span className="text-sm font-medium">{item.title}</span>
+                <div className="flex flex-col flex-1 min-w-0">
+                  <span className="text-sm font-medium truncate">{item.title}</span>
                   {item.description && (
-                    <span className="text-[10px] text-muted-foreground leading-tight">
+                    <span className="text-[10px] text-muted-foreground leading-tight truncate">
                       {item.description}
                     </span>
                   )}
                 </div>
-                <div className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
+                <div className={`flex-shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
                   <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 </div>
               </>
@@ -166,25 +166,25 @@ function SortableNavItem({
               <div
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing mr-1 -ml-1"
+                className="cursor-grab active:cursor-grabbing"
                 onClick={(e) => e.preventDefault()}
               >
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
-            <div className="relative">
-              <div className={`p-1.5 rounded-lg bg-gradient-to-br ${item.gradient}`}>
-                <item.icon className="h-4 w-4 text-primary-foreground" />
+            <div className="relative flex-shrink-0">
+              <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
+                <item.icon className="h-5 w-5 text-white" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
               )}
             </div>
             {!collapsed && (
-              <div className="ml-3 flex flex-col">
-                <span className="text-sm font-medium">{item.title}</span>
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="text-sm font-medium truncate">{item.title}</span>
                 {item.description && (
-                  <span className="text-[10px] text-muted-foreground leading-tight">
+                  <span className="text-[10px] text-muted-foreground leading-tight truncate">
                     {item.description}
                   </span>
                 )}
@@ -207,19 +207,19 @@ function SortableNavItem({
                   <SidebarMenuSubButton asChild>
                     <NavLink 
                       to={child.url} 
-                      className={`group relative pl-3 py-2.5 rounded-md transition-all duration-200 flex items-center ${
+                      className={`group relative pl-8 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-2 ${
                         isChildActive 
                           ? 'bg-primary/10 text-primary font-medium' 
-                          : 'hover:bg-muted/50 text-primary hover:text-primary'
+                          : 'hover:bg-muted/50 text-foreground'
                       }`}
                     >
-                      <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full transition-all duration-200 ${
+                      <div className={`absolute left-2 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full transition-all duration-200 ${
                         isChildActive ? 'bg-primary' : 'bg-transparent group-hover:bg-primary/30'
                       }`} />
-                      <child.icon className={`h-3.5 w-3.5 transition-transform group-hover:scale-110 ${
-                        isChildActive ? 'text-primary' : 'text-primary'
+                      <child.icon className={`h-4 w-4 flex-shrink-0 ${
+                        isChildActive ? 'text-primary' : 'text-muted-foreground'
                       }`} />
-                      <span className="ml-3 text-sm">{child.title}</span>
+                      <span className="text-sm">{child.title}</span>
                     </NavLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -255,9 +255,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   };
 
   const getNavClassName = ({ isActive }: { isActive: boolean }) => {
-    return isActive
-      ? "bg-primary/10 text-primary font-medium border-l-4 border-primary"
-      : "text-primary hover:bg-muted/50 border-l-4 border-transparent";
+    return `flex items-center gap-3 w-full transition-colors duration-200 px-2 py-2 rounded-md ${
+      isActive
+        ? "bg-primary/10 text-primary font-medium"
+        : "text-foreground hover:bg-muted/50"
+    }`;
   };
 
   // Stylist Navigation with unique IDs
@@ -446,20 +448,24 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Settings" className="min-h-[44px]">
                   <NavLink to="/settings" className={getNavClassName}>
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500">
-                      <Settings className="h-4 w-4 text-primary-foreground" />
+                    <div className="relative flex-shrink-0">
+                      <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-gray-500 to-slate-500 flex items-center justify-center transition-opacity hover:opacity-90">
+                        <Settings className="h-5 w-5 text-white" />
+                      </div>
                     </div>
-                    {!collapsed && <span className="ml-3 text-sm font-medium">Settings</span>}
+                    {!collapsed && <span className="text-sm font-medium">Settings</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Help & Support" className="min-h-[44px]">
                   <NavLink to="/resources" className={getNavClassName}>
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500">
-                      <HelpCircle className="h-4 w-4 text-primary-foreground" />
+                    <div className="relative flex-shrink-0">
+                      <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center transition-opacity hover:opacity-90">
+                        <HelpCircle className="h-5 w-5 text-white" />
+                      </div>
                     </div>
-                    {!collapsed && <span className="ml-3 text-sm font-medium">Help & Support</span>}
+                    {!collapsed && <span className="text-sm font-medium">Help & Support</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
