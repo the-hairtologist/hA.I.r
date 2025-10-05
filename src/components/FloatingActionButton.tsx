@@ -20,44 +20,44 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
   const [isOpen, setIsOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  
-  // Initialize with visible default position
-  const getDefaultPosition = () => {
-    if (typeof window === 'undefined') return { x: 0, y: 0 };
-    return { 
-      x: window.innerWidth - 96, 
-      y: window.innerHeight - 96 
-    };
-  };
-  
-  const [position, setPosition] = useState(getDefaultPosition);
 
   useEffect(() => {
     const savedPosition = localStorage.getItem('fab-position');
     if (savedPosition) {
-      setPosition(JSON.parse(savedPosition));
+      try {
+        setPosition(JSON.parse(savedPosition));
+      } catch (e) {
+        console.error('Failed to parse saved position:', e);
+      }
     }
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (isOpen) return; // Don't drag when menu is open
+    if (isOpen) return;
     setIsDragging(true);
-    setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    });
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (rect) {
+      setDragStart({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    }
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (isOpen) return;
     setIsDragging(true);
     const touch = e.touches[0];
-    setDragStart({
-      x: touch.clientX - position.x,
-      y: touch.clientY - position.y
-    });
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (rect) {
+      setDragStart({
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top
+      });
+    }
   };
 
   useEffect(() => {
@@ -160,13 +160,14 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
     <div 
       ref={buttonRef}
       className={cn(
-        "fixed z-50 flex flex-col-reverse items-end gap-3",
-        isDragging && "cursor-grabbing"
+        "flex flex-col-reverse items-end gap-3",
+        isDragging && "cursor-grabbing",
+        position ? "fixed z-50" : "fixed bottom-20 md:bottom-6 right-6 z-50"
       )}
-      style={{
+      style={position ? {
         left: `${position.x}px`,
         top: `${position.y}px`,
-      }}
+      } : undefined}
     >
       {/* Action Items */}
       <div

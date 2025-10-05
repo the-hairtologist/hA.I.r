@@ -24,44 +24,44 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  
-  // Initialize with visible default position
-  const getDefaultPosition = () => {
-    if (typeof window === 'undefined') return { x: 0, y: 0 };
-    return { 
-      x: window.innerWidth - 176, 
-      y: window.innerHeight - 96 
-    };
-  };
-  
-  const [position, setPosition] = useState(getDefaultPosition);
 
   useEffect(() => {
     const savedPosition = localStorage.getItem('ai-assistant-position');
     if (savedPosition) {
-      setPosition(JSON.parse(savedPosition));
+      try {
+        setPosition(JSON.parse(savedPosition));
+      } catch (e) {
+        console.error('Failed to parse saved position:', e);
+      }
     }
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (isExpanded) return; // Don't drag when expanded
+    if (isExpanded) return;
     setIsDragging(true);
-    setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    });
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (rect) {
+      setDragStart({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    }
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (isExpanded) return;
     setIsDragging(true);
     const touch = e.touches[0];
-    setDragStart({
-      x: touch.clientX - position.x,
-      y: touch.clientY - position.y
-    });
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (rect) {
+      setDragStart({
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top
+      });
+    }
   };
 
   useEffect(() => {
@@ -153,13 +153,14 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
     <div 
       ref={buttonRef}
       className={cn(
-        "fixed z-40 animate-fade-in",
-        isDragging && "cursor-grabbing"
+        "animate-fade-in",
+        isDragging && "cursor-grabbing",
+        position ? "fixed z-40" : "fixed bottom-24 md:bottom-6 right-24 z-40"
       )}
-      style={{
+      style={position ? {
         left: `${position.x}px`,
         top: `${position.y}px`,
-      }}
+      } : undefined}
     >
       <Card className={cn(
         "border-0 shadow-none bg-transparent backdrop-blur-none transition-all duration-300",
