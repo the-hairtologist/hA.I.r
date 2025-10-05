@@ -49,9 +49,9 @@ const Knowledge = () => {
       benefits: ["Custom color formulas", "Balayage techniques", "Toner recommendations", "Level calculations"]
     },
     stepbystep: {
-      title: "Color Correction",
-      description: "Step-by-step guidance for fixing color mishaps. Track your progress with interactive checklists.",
-      benefits: ["Fix brassy tones", "Remove unwanted colors", "Correct uneven color", "Professional troubleshooting"]
+      title: "Step-by-Step Guide",
+      description: "Get guided instructions for any hair technique or problem. Track your progress with interactive checklists.",
+      benefits: ["Color correction techniques", "Styling tutorials", "Treatment processes", "Problem solving guidance"]
     }
   };
 
@@ -268,10 +268,10 @@ const Knowledge = () => {
               >
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
-                  <span className="font-bold text-base">Color Correction</span>
+                  <span className="font-bold text-base">Step-by-Step Guide</span>
                 </div>
                 <span className={`text-xs ${aiMode === "stepbystep" ? "opacity-90" : "text-muted-foreground"}`}>
-                  Fix unwanted tones step-by-step
+                  Get guided help for any technique
                 </span>
               </button>
               <button
@@ -318,7 +318,7 @@ const Knowledge = () => {
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckSquare className="h-4 w-4 text-accent" />
-                    <h3 className="text-sm font-display font-bold">📋 Progress Tracker</h3>
+                    <h3 className="text-sm font-display font-bold">📋 Step Tracker</h3>
                   </div>
                   <div className="text-xs font-semibold text-accent mb-3">
                     {correctionSteps.filter(s => s.completed).length} / {correctionSteps.length} Done
@@ -364,7 +364,7 @@ const Knowledge = () => {
                     ) : (
                       <>
                         <BookOpen className="h-4 w-4" />
-                        Color Correction Guide
+                        Step-by-Step Guide
                       </>
                     )}
                   </h2>
@@ -389,12 +389,12 @@ const Knowledge = () => {
                     </div>
                     <div className="space-y-3 max-w-md">
                       <p className="text-lg font-display font-bold gradient-text">
-                        {aiMode === "formula" ? "Let's Create Magic ✨" : "I Got You! 🔧"}
+                        {aiMode === "formula" ? "Let's Create Magic ✨" : "Let's Break It Down! 📝"}
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {aiMode === "formula"
                           ? "Tell me what look you want (example: \"warm blonde balayage for level 5 hair\") and I'll create a complete color formula with exact measurements, developer ratios, and application tips."
-                          : "Describe the color problem (example: \"brassy orange after lightening\") and I'll walk you through each correction step with products, timing, and techniques to get back on track."}
+                          : "Ask me anything that needs step-by-step guidance (examples: \"how to fix brassy orange tones\", \"how to do a root melt\", \"steps for olaplex treatment\") and I'll walk you through each step with clear instructions."}
                       </p>
                     </div>
                   </div>
