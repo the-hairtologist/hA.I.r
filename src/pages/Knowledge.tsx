@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen, Search, Video, FileText, Lightbulb, TrendingUp, Award, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -241,29 +241,33 @@ const Knowledge = () => {
         )}
 
         {/* Category Tabs */}
-        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-          <TabsList className="grid grid-cols-4 mb-6 h-auto p-1 bg-background border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl gap-1">
+        <div className="w-full">
+          <div className="grid grid-cols-4 mb-6 h-auto p-1 bg-background border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl gap-1">
             {categories.map((cat) => {
               const Icon = cat.icon;
               return (
-                <TabsTrigger 
-                  key={cat.id} 
-                  value={cat.id}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-[3px] data-[state=active]:border-foreground data-[state=active]:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-display font-bold py-3 px-4 text-sm md:text-base rounded-lg transition-all hover:scale-[1.02]"
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`${
+                    selectedCategory === cat.id
+                      ? 'bg-primary text-primary-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]'
+                      : 'bg-transparent text-foreground hover:bg-muted'
+                  } font-display font-bold py-3 px-4 text-sm md:text-base rounded-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2`}
                 >
-                  <Icon className="h-4 w-4 mr-2" />
+                  <Icon className="h-4 w-4" />
                   {cat.label}
-                </TabsTrigger>
+                </button>
               );
             })}
-          </TabsList>
+          </div>
 
-          <TabsContent value={selectedCategory} className="space-y-4">
+          <div className="space-y-4">
             {filteredArticles.length === 0 ? (
               <Card className="brutal-card bg-yellow-300">
                 <CardContent className="py-16 text-center">
                   <Search className="h-16 w-16 mx-auto mb-4 text-foreground/60" />
-                  <h3 className="text-2xl font-bold mb-2 text-foreground">No articles found</h3>
+                  <h3 className="text-2xl font-bold mb-2 text-foreground">No resources found</h3>
                   <p className="text-foreground/80 font-medium">Try adjusting your search or browse all topics</p>
                 </CardContent>
               </Card>
@@ -307,8 +311,8 @@ const Knowledge = () => {
                 ))}
               </div>
             )}
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </main>
     </div>
   );
