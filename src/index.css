@@ -40,7 +40,7 @@
     }
   }
   
-/* Support for dynamic viewport units (mobile browser address bars) */
+  /* Support for dynamic viewport units (mobile browser address bars) */
   .h-screen-safe {
     height: 100vh;
     height: 100dvh;
@@ -49,31 +49,6 @@
   .min-h-screen-safe {
     min-height: 100vh;
     min-height: 100dvh;
-  }
-
-  /* Neobrutalist Design System Utilities */
-  .brutal-border {
-    @apply border-[3px] border-foreground;
-  }
-
-  .brutal-shadow {
-    @apply shadow-[5px_5px_0px_0px_hsl(var(--foreground))];
-  }
-
-  .brutal-shadow-sm {
-    @apply shadow-[3px_3px_0px_0px_hsl(var(--foreground))];
-  }
-
-  .brutal-shadow-hover {
-    @apply hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1;
-  }
-
-  .brutal-card {
-    @apply brutal-border brutal-shadow brutal-shadow-hover transition-all;
-  }
-
-  .brutal-button {
-    @apply brutal-border brutal-shadow-sm hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:shadow-none active:translate-x-[3px] active:translate-y-[3px] transition-all;
   }
   
   /* Responsive text sizing based on device */

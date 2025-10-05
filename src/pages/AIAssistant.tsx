@@ -230,15 +230,16 @@ const Knowledge = () => {
       <main className="container mx-auto px-4 py-6 max-w-6xl">
         {/* Mode Selection Tabs with Retro Style */}
         <div className="mb-6">
-          <div className="flex gap-4 p-2 bg-background rounded-2xl w-fit mx-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+          <div className="flex gap-4 p-2 bg-background rounded-2xl w-fit mx-auto border-4 border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)]">
             <div className="relative group">
               <button
                 onClick={() => setAiMode("formula")}
-                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-[3px] ${
+                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "formula"
-                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-foreground hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
+                style={{ border: "3px solid" }}
               >
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5" />
@@ -250,7 +251,7 @@ const Knowledge = () => {
               </button>
               <button
                 onClick={() => handleFeatureClick("formula")}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:scale-110 transition-transform z-10"
+                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
               >
                 <HelpCircle className="h-3.5 w-3.5 text-accent-foreground" />
               </button>
@@ -258,11 +259,12 @@ const Knowledge = () => {
             <div className="relative group">
               <button
                 onClick={() => setAiMode("stepbystep")}
-                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-[3px] ${
+                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "stepbystep"
-                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-foreground hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
+                style={{ border: "3px solid" }}
               >
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
@@ -274,7 +276,7 @@ const Knowledge = () => {
               </button>
               <button
                 onClick={() => handleFeatureClick("stepbystep")}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:scale-110 transition-transform z-10"
+                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
               >
                 <HelpCircle className="h-3.5 w-3.5 text-accent-foreground" />
               </button>
