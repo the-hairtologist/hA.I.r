@@ -46,6 +46,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { IntegrationSuggestions } from "@/components/IntegrationSuggestions";
+import { PredictiveClientInsights } from "@/components/PredictiveClientInsights";
 
 interface SortableSectionProps {
   id: string;
@@ -111,6 +112,7 @@ const Dashboard = () => {
   } | null>(null);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
     "subscription",
+    "client-insights",
     "kpi-cards",
     "weekly-summary",
     "checklist",
@@ -595,6 +597,11 @@ const Dashboard = () => {
         // Only show subscription card for stylists
         if (userRole === "stylist") {
           return <SubscriptionManagementCard key={sectionId} />;
+        }
+        return null;
+      case "client-insights":
+        if (userRole === "stylist" && profile?.id) {
+          return <PredictiveClientInsights key={sectionId} stylistId={profile.id} />;
         }
         return null;
       case "quick-actions":

@@ -20,6 +20,7 @@ import {
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FloatingActionButton } from "@/components/FloatingActionButton";
+import { ContextualAIAssistant } from "@/components/ContextualAIAssistant";
 import { useState, useEffect } from "react";
 
 interface DashboardLayoutProps {
@@ -192,6 +193,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         
         <MobileNav userRole={userRole || undefined} />
         <FloatingActionButton userRole={userRole || "client"} />
+        <ContextualAIAssistant userRole={userRole} />
       </div>
       
       <KeyboardShortcutsDialog 

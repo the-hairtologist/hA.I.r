@@ -25,6 +25,7 @@ import { Repeat } from "lucide-react";
 import { useGlobalShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { QuickRebookButton } from "@/components/QuickRebookButton";
 import { ContextualAI } from "@/components/ContextualAI";
+import { SmartSchedulingSuggestions } from "@/components/SmartSchedulingSuggestions";
 import { showCelebration } from "@/components/CelebrationToast";
 
 const Appointments = () => {
@@ -307,6 +308,17 @@ const Appointments = () => {
                 }
               }}
             />
+
+            {/* Smart Scheduling Suggestions */}
+            <div className="mb-6">
+              <SmartSchedulingSuggestions
+                stylistId={stylistProfile?.id}
+                onSelectTime={(datetime) => {
+                  toast.success("Time selected! You can now create an appointment for this time.");
+                  setSelectedDate(new Date(datetime));
+                }}
+              />
+            </div>
 
             {/* Search and Filters */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
