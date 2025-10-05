@@ -16,6 +16,7 @@ import { validatePhone } from "@/lib/phoneValidation";
 import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
 import { DataExport } from "@/components/DataExport";
 import { AccountDeletion } from "@/components/AccountDeletion";
+import { PrivacySettings } from "@/components/PrivacySettings";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -419,9 +420,11 @@ const Settings = () => {
 
           {/* Preferences Tab */}
           <TabsContent value="preferences" className="space-y-6">
+            <PrivacySettings userId={user?.id || ''} userRole={userRole} />
+            
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
-                <CardTitle>Preferences</CardTitle>
+                <CardTitle>App Preferences</CardTitle>
                 <CardDescription>Customize your experience</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

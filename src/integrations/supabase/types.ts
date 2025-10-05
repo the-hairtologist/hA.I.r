@@ -345,10 +345,13 @@ export type Database = {
           id: string
           is_active: boolean | null
           last_sync_at: string | null
+          last_token_refresh: string | null
           provider: string
           refresh_token_vault_id: string | null
+          suspicious_activity_detected: boolean | null
           sync_enabled: boolean | null
           token_expires_at: string | null
+          token_refresh_count: number | null
           updated_at: string | null
           user_id: string
         }
@@ -359,10 +362,13 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           last_sync_at?: string | null
+          last_token_refresh?: string | null
           provider: string
           refresh_token_vault_id?: string | null
+          suspicious_activity_detected?: boolean | null
           sync_enabled?: boolean | null
           token_expires_at?: string | null
+          token_refresh_count?: number | null
           updated_at?: string | null
           user_id: string
         }
@@ -373,14 +379,61 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           last_sync_at?: string | null
+          last_token_refresh?: string | null
           provider?: string
           refresh_token_vault_id?: string | null
+          suspicious_activity_detected?: boolean | null
           sync_enabled?: boolean | null
           token_expires_at?: string | null
+          token_refresh_count?: number | null
           updated_at?: string | null
           user_id?: string
         }
         Relationships: []
+      }
+      calendar_token_access_log: {
+        Row: {
+          access_type: string
+          accessed_at: string
+          connection_id: string
+          error_message: string | null
+          id: string
+          ip_address: unknown | null
+          success: boolean
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string
+          connection_id: string
+          error_message?: string | null
+          id?: string
+          ip_address?: unknown | null
+          success?: boolean
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string
+          connection_id?: string
+          error_message?: string | null
+          id?: string
+          ip_address?: unknown | null
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_token_access_log_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       client_hair_posts: {
         Row: {
@@ -1021,6 +1074,8 @@ export type Database = {
           gender: string | null
           id: string
           phone: string | null
+          share_contact_with_clients: boolean | null
+          share_contact_with_stylists: boolean | null
           sms_consent: boolean | null
           sms_consent_date: string | null
           updated_at: string
@@ -1034,6 +1089,8 @@ export type Database = {
           gender?: string | null
           id: string
           phone?: string | null
+          share_contact_with_clients?: boolean | null
+          share_contact_with_stylists?: boolean | null
           sms_consent?: boolean | null
           sms_consent_date?: string | null
           updated_at?: string
@@ -1047,6 +1104,8 @@ export type Database = {
           gender?: string | null
           id?: string
           phone?: string | null
+          share_contact_with_clients?: boolean | null
+          share_contact_with_stylists?: boolean | null
           sms_consent?: boolean | null
           sms_consent_date?: string | null
           updated_at?: string
@@ -1247,6 +1306,7 @@ export type Database = {
           created_at: string
           id: string
           is_available: boolean | null
+          is_public_listing: boolean | null
           location: string | null
           specialty: string | null
           total_reviews: number | null
@@ -1265,6 +1325,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_available?: boolean | null
+          is_public_listing?: boolean | null
           location?: string | null
           specialty?: string | null
           total_reviews?: number | null
@@ -1283,6 +1344,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_available?: boolean | null
+          is_public_listing?: boolean | null
           location?: string | null
           specialty?: string | null
           total_reviews?: number | null
