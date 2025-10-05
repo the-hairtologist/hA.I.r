@@ -69,24 +69,6 @@ const Auth = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(authReducer, initialState);
   const { loading, signIn, signUp, resetPassword, updatePassword } = useAuth();
-  
-  const hooks = [
-    {
-      title: "You don't need another app. You need one that actually gets you.",
-      subtitle: "hA.I.r was built for stylists who do it all — and deserve to do it easier."
-    },
-    {
-      title: "You love your clients. You hate the chaos.",
-      subtitle: "hA.I.r keeps the color, the creativity, and the calm — all in one place."
-    },
-    {
-      title: "What if your booking link cared as much as you do?",
-      subtitle: "Discover hA.I.r — the smarter, calmer way to run your chair."
-    }
-  ];
-
-  // Pick a random hook on page load
-  const [currentHookIndex] = useState(() => Math.floor(Math.random() * hooks.length));
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -250,17 +232,7 @@ const Auth = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Authentication" className="w-full max-w-md space-y-6">
-        {/* Marketing Hook - Random on page load */}
-        <div className="text-center space-y-3 mb-8 animate-fade-in">
-          <h2 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
-            {hooks[currentHookIndex].title}
-          </h2>
-          <p className="text-base text-white/90 drop-shadow-md font-medium">
-            {hooks[currentHookIndex].subtitle}
-          </p>
-        </div>
-
+      <main id="main-content" role="main" aria-label="Authentication" className="w-full max-w-md">
         <Card className="w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
         <CardHeader className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-2">
