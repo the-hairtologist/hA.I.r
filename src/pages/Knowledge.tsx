@@ -234,15 +234,20 @@ const Knowledge = () => {
             <div className="relative group">
               <button
                 onClick={() => setAiMode("formula")}
-                className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
+                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "formula"
                     ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
                     : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
                 style={{ border: "3px solid" }}
               >
-                <Sparkles className="h-5 w-5" />
-                Formula Generator
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  <span className="font-bold text-base">Formula Generator</span>
+                </div>
+                <span className={`text-xs ${aiMode === "formula" ? "opacity-90" : "text-muted-foreground"}`}>
+                  Create custom color formulas instantly
+                </span>
               </button>
               <button
                 onClick={() => handleFeatureClick("formula")}
@@ -254,15 +259,20 @@ const Knowledge = () => {
             <div className="relative group">
               <button
                 onClick={() => setAiMode("stepbystep")}
-                className={`flex items-center gap-2 px-8 py-4 rounded-xl font-display font-bold text-base transition-all border-3 ${
+                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "stepbystep"
                     ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
                     : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
                 style={{ border: "3px solid" }}
               >
-                <BookOpen className="h-5 w-5" />
-                Color Correction
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5" />
+                  <span className="font-bold text-base">Color Correction</span>
+                </div>
+                <span className={`text-xs ${aiMode === "stepbystep" ? "opacity-90" : "text-muted-foreground"}`}>
+                  Fix unwanted tones step-by-step
+                </span>
               </button>
               <button
                 onClick={() => handleFeatureClick("stepbystep")}
@@ -383,8 +393,8 @@ const Knowledge = () => {
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {aiMode === "formula"
-                          ? "Tell me your vision and I'll craft the perfect formula with pro tips"
-                          : "Describe the problem and I'll guide you through fixing it step-by-step"}
+                          ? "Tell me what look you want (example: \"warm blonde balayage for level 5 hair\") and I'll create a complete color formula with exact measurements, developer ratios, and application tips."
+                          : "Describe the color problem (example: \"brassy orange after lightening\") and I'll walk you through each correction step with products, timing, and techniques to get back on track."}
                       </p>
                     </div>
                   </div>
