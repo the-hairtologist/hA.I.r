@@ -718,10 +718,10 @@ const Dashboard = () => {
         </div>
 
         <div className="mb-6 bg-secondary/10 border-2 border-secondary/30 shadow-sm p-3 rounded-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <p className="text-sm font-medium text-secondary-foreground/90 text-center flex items-center justify-center gap-2">
-            <GripVertical className="h-4 w-4 opacity-60" />
+          <p className="text-sm font-medium text-secondary text-center flex items-center justify-center gap-2">
+            <GripVertical className="h-4 w-4 opacity-70" />
             Hover over sections and drag the handle to rearrange your dashboard
-            <GripVertical className="h-4 w-4 opacity-60" />
+            <GripVertical className="h-4 w-4 opacity-70" />
           </p>
         </div>
 
