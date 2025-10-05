@@ -35,26 +35,21 @@ export const KeyboardShortcutsDialog = ({ open, onOpenChange, userRole }: Keyboa
 
         <div className="space-y-4 py-4">
           <div>
-            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Navigation</h3>
+            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Quick Navigation</h3>
             <div className="space-y-2">
-              <KeyboardShortcut keys={[modKey, 'K']} action="Focus search" />
-              <KeyboardShortcut keys={['/']} action="Focus search" />
               <KeyboardShortcut keys={['G', 'D']} action="Go to Dashboard" />
               <KeyboardShortcut keys={['G', 'C']} action="Go to Clients" />
               <KeyboardShortcut keys={['G', 'A']} action="Go to Appointments" />
               <KeyboardShortcut keys={['G', 'M']} action="Go to Messages" />
-              <KeyboardShortcut keys={['Esc']} action="Close dialogs" />
             </div>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Quick Actions</h3>
             <div className="space-y-2">
+              <KeyboardShortcut keys={[modKey, 'K']} action="Search anything" />
               <KeyboardShortcut keys={[modKey, 'N']} action="New appointment" />
               <KeyboardShortcut keys={[modKey, 'Shift', 'C']} action="Add new client" />
-              <KeyboardShortcut keys={['Tab']} action="Navigate between fields" />
-              <KeyboardShortcut keys={['Enter']} action="Submit forms" />
-              <KeyboardShortcut keys={['Space']} action="Toggle checkboxes" />
             </div>
           </div>
 
