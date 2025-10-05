@@ -46,6 +46,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         return;
       }
 
+      // Cmd/Ctrl+K for search - dispatch custom event
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        // Dispatch event that search inputs can listen for
+        window.dispatchEvent(new CustomEvent('global-search-focus'));
+        return;
+      }
+
       // Navigation shortcuts with 'G' key
       if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
         const handleSecondKey = (e2: KeyboardEvent) => {
@@ -63,15 +71,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         setTimeout(() => window.removeEventListener('keydown', handleSecondKey), 2000);
       }
 
-      // Quick actions
+      // Cmd+N - New appointment (navigate to booking page)
       if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
         e.preventDefault();
-        navigate('/appointments');
+        navigate('/book-appointment');
       }
 
+      // Cmd+Shift+C - Add new client
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
         e.preventDefault();
-        navigate('/clients');
+        // Dispatch custom event to open add client dialog
+        window.dispatchEvent(new CustomEvent('open-add-client-dialog'));
       }
     };
 

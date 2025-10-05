@@ -46,6 +46,16 @@ const Appointments = () => {
   const [rebookAppointment, setRebookAppointment] = useState<any>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
+  // Global keyboard shortcut for search focus
+  useEffect(() => {
+    const handleSearchFocus = () => {
+      searchInputRef.current?.focus();
+    };
+
+    window.addEventListener('global-search-focus', handleSearchFocus);
+    return () => window.removeEventListener('global-search-focus', handleSearchFocus);
+  }, []);
+
   useEffect(() => {
     loadData();
   }, []);

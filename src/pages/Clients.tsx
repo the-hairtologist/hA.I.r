@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ interface ClientProfile {
 
 export default function Clients() {
   const navigate = useNavigate();
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [clients, setClients] = useState<ClientProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [stylistId, setStylistId] = useState<string | null>(null);
@@ -95,6 +96,25 @@ export default function Clients() {
       toast.error("Failed to load profile");
     }
   };
+
+  // Listen for keyboard shortcut to open dialog
+  useEffect(() => {
+    const handleOpenDialog = () => {
+      setIsDialogOpen(true);
+    };
+
+    const handleSearchFocus = () => {
+      searchInputRef.current?.focus();
+    };
+
+    window.addEventListener('open-add-client-dialog', handleOpenDialog);
+    window.addEventListener('global-search-focus', handleSearchFocus);
+    
+    return () => {
+      window.removeEventListener('open-add-client-dialog', handleOpenDialog);
+      window.removeEventListener('global-search-focus', handleSearchFocus);
+    };
+  }, []);
 
   const loadClients = async () => {
     if (!stylistId) return;
@@ -442,9 +462,10 @@ export default function Clients() {
         {/* Search and Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
           <SearchInput
+            ref={searchInputRef}
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search by name, email, or phone number"
+            placeholder="Search by name, email, or phone number (Press / or Cmd+K)"
             className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
           />
           <Select value={sortBy} onValueChange={(value: "name" | "recent") => setSortBy(value)}>
