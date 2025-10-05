@@ -24,6 +24,7 @@ import {
   Tag,
   ChevronDown,
   ChevronRight,
+  Command,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -395,7 +396,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         {/* Separator */}
         <Separator className="my-2" />
 
-        {/* Keyboard Shortcuts Hint */}
+        {/* Keyboard Shortcuts */}
         {!collapsed && (
           <div className="px-3 py-2">
             <Button
@@ -410,12 +411,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 });
                 window.dispatchEvent(event);
               }}
-              className="w-full justify-start gap-2 text-xs h-8"
-              aria-label="Show keyboard shortcuts"
+              className="w-full justify-center gap-2 text-xs h-8"
+              aria-label="View keyboard shortcuts"
             >
-              <span className="text-muted-foreground">Press</span>
-              <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-muted rounded border">?</kbd>
-              <span className="text-muted-foreground">for shortcuts</span>
+              <Command className="h-3.5 w-3.5" />
+              <span>Keyboard Shortcuts</span>
             </Button>
           </div>
         )}
