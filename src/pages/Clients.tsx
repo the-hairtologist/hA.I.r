@@ -17,6 +17,8 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useMemo } from "react";
 import { EmptyState } from "@/components/EmptyState";
+import { ContextualAI } from "@/components/ContextualAI";
+import { showCelebration } from "@/components/CelebrationToast";
 
 interface ClientProfile {
   id: string;
@@ -196,17 +198,8 @@ export default function Clients() {
 
       if (error) throw error;
 
-      // Check if this is the first client
-      const isFirstClient = clients.length === 0;
-      
-      if (isFirstClient) {
-        toast.success("🎉 Your first client! This is just the beginning!", {
-          description: "Your client roster is growing!",
-          duration: 5000,
-        });
-      } else {
-        toast.success("Client added successfully!");
-      }
+      // Show celebration
+      showCelebration("client-added", undefined, clients.length + 1);
       setIsDialogOpen(false);
       setFormData({
         full_name: "",
@@ -458,6 +451,17 @@ export default function Clients() {
         </Dialog>
           </div>
         </div>
+
+        {/* Contextual AI Suggestions */}
+        <ContextualAI
+          context="client"
+          data={{ recentFormulas: clientFormulas }}
+          onAction={(action) => {
+            if (action === "organize-formulas") {
+              toast.info("Formula organization feature coming soon!");
+            }
+          }}
+        />
 
         {/* Search and Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">

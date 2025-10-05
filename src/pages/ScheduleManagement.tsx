@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import CalendarSync from "@/components/CalendarSync";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 import { VacationConflictDialog } from "@/components/VacationConflictDialog";
+import { ContextualAI } from "@/components/ContextualAI";
 
 interface DaySchedule {
   enabled: boolean;
@@ -620,6 +621,19 @@ const ScheduleManagement = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
+        {/* Contextual AI Suggestions */}
+        <ContextualAI
+          context="schedule"
+          data={{
+            availableSlots: Object.values(schedule).filter(s => s.enabled).length,
+          }}
+          onAction={(action) => {
+            if (action === "suggest-slots") {
+              toast.info("Schedule optimization suggestions coming soon!");
+            }
+          }}
+        />
+
         <Tabs defaultValue="availability" className="space-y-6">
           <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-7">
             <TabsTrigger value="availability" className="gap-2 text-xs">

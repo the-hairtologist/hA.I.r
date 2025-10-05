@@ -9,10 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic } from "lucide-react";
 import { AddClientDialog } from "@/components/AddClientDialog";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { VoiceInput } from "@/components/VoiceInput";
+import { ContextualAI } from "@/components/ContextualAI";
+import { showCelebration } from "@/components/CelebrationToast";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -128,17 +131,8 @@ const Formulas = () => {
 
         if (error) throw error;
         
-        // Check if this is the first formula
-        const isFirstFormula = formulas.length === 0;
-        
-        if (isFirstFormula) {
-          toast.success("🎉 Your first formula saved! The magic begins!", {
-            description: "Building your formula library, one masterpiece at a time",
-            duration: 5000,
-          });
-        } else {
-          toast.success("Formula saved successfully!");
-        }
+        // Show celebration
+        showCelebration("formula-saved", undefined, formulas.length + 1);
       }
 
       handleCloseDialog();
@@ -210,6 +204,25 @@ const Formulas = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        {/* Contextual AI Suggestions */}
+        {selectedClient && (
+          <ContextualAI
+            context="formula"
+            data={{ clientId: selectedClient }}
+            onAction={(action) => {
+              if (action === "load-last-formula") {
+                const lastFormula = formulas.find(f => f.client_id === selectedClient);
+                if (lastFormula) {
+                  setFormulaText(lastFormula.formula_text || "");
+                  setInstructions(lastFormula.instructions || "");
+                  setColorLine(lastFormula.color_line || "");
+                  toast.success("Last formula loaded!");
+                }
+              }
+            }}
+          />
+        )}
+
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Client Formulas</h1>
@@ -410,10 +423,16 @@ const Formulas = () => {
 
             {/* Formula Text */}
             <div className="space-y-2">
-              <Label htmlFor="formula">Formula *</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="formula">Formula *</Label>
+                <VoiceInput
+                  variant="icon"
+                  onTranscription={(text) => setFormulaText(prev => prev ? `${prev}\n${text}` : text)}
+                />
+              </div>
               <Textarea
                 id="formula"
-                placeholder="Enter the complete formula..."
+                placeholder="Enter the complete formula or use voice input..."
                 value={formulaText}
                 onChange={(e) => setFormulaText(e.target.value)}
                 rows={6}

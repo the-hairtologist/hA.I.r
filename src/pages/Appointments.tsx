@@ -23,6 +23,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RebookDialog } from "@/components/RebookDialog";
 import { Repeat } from "lucide-react";
 import { useGlobalShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { QuickRebookButton } from "@/components/QuickRebookButton";
+import { ContextualAI } from "@/components/ContextualAI";
+import { showCelebration } from "@/components/CelebrationToast";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -174,12 +177,9 @@ const Appointments = () => {
             }
           }
 
-          // Celebration toast for completed appointments
+          // Celebration for completed appointments
           if (newStatus === "completed") {
-            toast.success("🎉 Appointment completed! Another happy client!", {
-              description: "You're doing amazing work!",
-              duration: 4000,
-            });
+            showCelebration("income-secured", `${clientName} - appointment completed!`);
           } else {
             toast.success(`Appointment ${newStatus}`);
           }
@@ -297,6 +297,19 @@ const Appointments = () => {
           </TabsList>
 
           <TabsContent value="list">
+            {/* Contextual AI Suggestions */}
+            <ContextualAI
+              context="appointment"
+              data={{
+                availableSlots: todayAppointments.length,
+              }}
+              onAction={(action) => {
+                if (action === "send-rebook-reminder") {
+                  toast.info("Rebook reminder feature coming soon!");
+                }
+              }}
+            />
+
             {/* Search and Filters */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
               <SearchInput
@@ -374,18 +387,16 @@ const Appointments = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           {getStatusBadge(apt.status)}
-                          <Button
+                          <QuickRebookButton
+                            appointmentId={apt.id}
+                            clientId={apt.client_id}
+                            clientName={apt.client?.user?.full_name || "Client"}
+                            serviceType={apt.service_type}
+                            stylistId={apt.stylist_id}
+                            duration={apt.duration_minutes}
                             variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setRebookAppointment(apt);
-                              setRebookDialogOpen(true);
-                            }}
-                            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Repeat className="h-4 w-4" />
-                          </Button>
+                            className="h-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                          />
                         </div>
                       </div>
                     ))}
