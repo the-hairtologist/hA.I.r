@@ -192,9 +192,9 @@ class Analytics {
   }
 
   /**
-   * Track formula generation
+   * Track formula generation (legacy)
    */
-  formulaGenerated(colorLine?: string): void {
+  formulaGeneratedLegacy(colorLine?: string): void {
     this.track('formula_generated', { color_line: colorLine });
   }
 
@@ -246,6 +246,74 @@ class Analytics {
     this.track('ai_formula_generated');
   }
 
+  // Conversion Events (NEW)
+  profileCompleted(role: string): void {
+    this.track('profile_completed', { role });
+  }
+
+  firstServiceCreated(serviceData: { name: string; price: number; duration: number }): void {
+    this.track('first_service_created', serviceData);
+  }
+
+  firstClientAdded(): void {
+    this.track('first_client_added');
+  }
+
+  subscriptionTrialStarted(source: string = 'dashboard'): void {
+    this.track('subscription_trial_started', { source });
+  }
+
+  subscriptionConverted(plan: string, amount: number): void {
+    this.track('subscription_converted', { 
+      plan, 
+      amount,
+      currency: 'USD',
+      value: amount 
+    });
+  }
+
+  subscriptionCancelled(reason?: string): void {
+    this.track('subscription_cancelled', { reason });
+  }
+
+  appointmentBooked(serviceType: string, amount: number, isFirst: boolean = false): void {
+    this.track(isFirst ? 'first_appointment_booked' : 'appointment_booked', { 
+      serviceType, 
+      amount,
+      currency: 'USD',
+      value: amount 
+    });
+  }
+
+  appointmentCancelled(reason?: string, cancelledBy?: 'client' | 'stylist'): void {
+    this.track('appointment_cancelled', { reason, cancelledBy });
+  }
+
+  appointmentNoShow(): void {
+    this.track('appointment_no_show');
+  }
+
+  appointmentRescheduled(): void {
+    this.track('appointment_rescheduled');
+  }
+
+  formulaGenerated(formulaType: string): void {
+    this.track('formula_generated', { type: formulaType });
+  }
+
+  affiliateCodeUsed(brandName: string, code: string): void {
+    this.track('affiliate_code_used', { brandName, code });
+  }
+
+  commissionEarned(amount: number, productName: string): void {
+    this.track('commission_earned', { 
+      amount, 
+      productName,
+      currency: 'USD',
+      value: amount 
+    });
+  }
+
   // Discovery
   stylistSearched(query: string): void {
     this.track('search', { search_term: query });
@@ -268,16 +336,16 @@ class Analytics {
     this.track('portfolio_upload');
   }
 
-  // Appointments
-  appointmentBooked(stylistId: string, serviceId: string): void {
+  // Legacy appointment tracking methods (use new versions above)
+  appointmentBookedLegacy(stylistId: string, serviceId: string): void {
     this.track('appointment_booked', { stylist_id: stylistId, service_id: serviceId });
   }
 
-  appointmentCanceled(appointmentId: string): void {
+  appointmentCanceledLegacy(appointmentId: string): void {
     this.track('appointment_canceled', { appointment_id: appointmentId });
   }
 
-  appointmentRescheduled(appointmentId: string): void {
+  appointmentRescheduledLegacy(appointmentId: string): void {
     this.track('appointment_rescheduled', { appointment_id: appointmentId });
   }
 

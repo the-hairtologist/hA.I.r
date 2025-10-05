@@ -322,15 +322,15 @@ export const WeeklyScheduleView = ({
             ) : (
               <>
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded border border-white/30" style={{ backgroundColor: 'hsl(190 95% 55%)' }} />
+                  <div className="w-2 h-2 rounded-sm border-2 border-foreground bg-info" />
                   <span className="text-muted-foreground">Cut & Style</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded border border-white/30" style={{ backgroundColor: 'hsl(270 85% 60%)' }} />
+                  <div className="w-2 h-2 rounded-sm border-2 border-foreground bg-secondary" />
                   <span className="text-muted-foreground">Color</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded border border-white/30" style={{ backgroundColor: 'hsl(340 90% 65%)' }} />
+                  <div className="w-2 h-2 rounded-sm border-2 border-foreground bg-accent" />
                   <span className="text-muted-foreground">Treatment</span>
                 </div>
               </>
