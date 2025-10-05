@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ReviewsList } from "@/components/reviews/ReviewsList";
+import { ShareButtons } from "@/components/ShareButtons";
+import { SEOHead } from "@/components/SEOHead";
 import { 
   ArrowLeft, 
   Calendar, 
@@ -21,8 +23,10 @@ import { toast } from "sonner";
 
 const StylistProfile = () => {
   const navigate = useNavigate();
+  const { id: paramId, username } = useParams();
   const [searchParams] = useSearchParams();
-  const stylistId = searchParams.get("id");
+  const queryId = searchParams.get("id");
+  const stylistId = paramId || queryId;
   
   const [loading, setLoading] = useState(true);
   const [stylist, setStylist] = useState<any>(null);
@@ -77,6 +81,13 @@ const StylistProfile = () => {
 
   return (
     <DashboardLayout>
+      <SEOHead 
+        title={stylist.business_name || "Stylist Profile"}
+        description={stylist.bio || `${stylist.specialty} specialist with ${stylist.years_experience} years of experience in ${stylist.location}`}
+        keywords={`${stylist.business_name}, ${stylist.specialty}, hair stylist, ${stylist.location}, salon`}
+        url={`/stylist/${stylistId}`}
+        type="profile"
+      />
       <div className="container mx-auto p-6 max-w-5xl">
         {/* Back Button */}
         <Button 
@@ -151,11 +162,19 @@ const StylistProfile = () => {
                   )}
                 </div>
 
-                {/* Book Button */}
-                <Button onClick={handleBookAppointment} size="lg" className="w-full md:w-auto">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Book Appointment
-                </Button>
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3">
+                  <Button onClick={handleBookAppointment} size="lg" className="flex-1 md:flex-initial">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Book Appointment
+                  </Button>
+                  
+                  <ShareButtons 
+                    url={`/stylist/${stylistId}`}
+                    title={`Check out ${stylist.business_name} on hA.I.r`}
+                    description={stylist.bio || `${stylist.specialty} specialist with ${stylist.years_experience} years of experience`}
+                  />
+                </div>
               </div>
             </div>
 

@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, MapPin, Star, Calendar, Globe, ExternalLink, Award, Loader2 } from "lucide-react";
 import { TrustBadge } from "@/components/TrustBadge";
+import { ShareButtons } from "@/components/ShareButtons";
+import { SEOHead } from "@/components/SEOHead";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 
@@ -142,6 +144,12 @@ const StylistDiscovery = () => {
 
   return (
     <DashboardLayout>
+      <SEOHead 
+        title="Find Professional Hair Stylists"
+        description="Discover talented hair stylists, browse portfolios, read reviews, and book appointments. Connect with certified color specialists and styling experts."
+        keywords="hair stylist, salon, hair color, haircut, beauty, appointments, reviews"
+        url="/stylists"
+      />
       <div className="container mx-auto p-6 max-w-7xl animate-fade-in">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Find Your Perfect Stylist</h1>
@@ -299,7 +307,7 @@ const StylistDiscovery = () => {
                   <Button 
                     variant="outline"
                     className="flex-1" 
-                    onClick={() => navigate(`/stylist?id=${stylist.id}`)}
+                    onClick={() => navigate(`/stylist/${stylist.id}`)}
                   >
                     View Profile
                   </Button>
@@ -310,6 +318,11 @@ const StylistDiscovery = () => {
                     <Calendar className="h-4 w-4 mr-2" />
                     Book
                   </Button>
+                  <ShareButtons 
+                    url={`/stylist/${stylist.id}`}
+                    title={`Check out ${stylist.business_name} on hA.I.r`}
+                    description={stylist.bio || `${stylist.specialty} specialist`}
+                  />
                 </CardFooter>
               </Card>
             ))}

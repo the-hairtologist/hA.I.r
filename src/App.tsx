@@ -169,16 +169,10 @@ const App = () => (
               <BookAppointment />
             </ProtectedRoute>
           } />
-          <Route path="/stylists" element={
-            <ProtectedRoute allowedRoles={["client"]}>
-              <StylistDiscovery />
-            </ProtectedRoute>
-          } />
-          <Route path="/stylist" element={
-            <ProtectedRoute allowedRoles={["client"]}>
-              <StylistProfile />
-            </ProtectedRoute>
-          } />
+          {/* Public Stylist Routes - No auth required for discovery */}
+          <Route path="/stylists" element={<StylistDiscovery />} />
+          <Route path="/stylist/:id" element={<StylistProfile />} />
+          <Route path="/s/:username" element={<StylistProfile />} />
           
                 {/* 404 Catch-All */}
                 <Route path="*" element={<NotFound />} />
