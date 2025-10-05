@@ -252,7 +252,7 @@ const Services = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0 flex-1">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="border-2 border-foreground min-h-[44px] min-w-[44px] flex-shrink-0">
+              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="border-2 border-foreground min-h-[44px] min-w-[44px] flex-shrink-0 hover:bg-muted/50">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div className="flex items-center gap-2 min-w-0">
@@ -262,7 +262,7 @@ const Services = () => {
             </div>
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
-                <Button>
+                <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Service
                 </Button>
@@ -443,7 +443,7 @@ const Services = () => {
                     )}
                   </div>
 
-                  <Button type="submit" disabled={submitting} className="w-full">
+                  <Button type="submit" disabled={submitting} className="w-full border-2 border-foreground min-h-[44px]">
                     {submitting ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -468,7 +468,7 @@ const Services = () => {
               <p className="text-xl font-semibold mb-2 text-foreground font-display">No services yet</p>
               <p className="text-foreground/80 mb-1 font-medium text-center max-w-md">Define your service menu with clear pricing</p>
               <p className="text-sm text-foreground/70 mb-4 text-center max-w-md">This helps clients know what you offer and book with confidence</p>
-              <Button onClick={() => setDialogOpen(true)} className="border-2 border-foreground">
+              <Button onClick={() => setDialogOpen(true)} className="border-2 border-foreground min-h-[44px]">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Your First Service
               </Button>
@@ -516,10 +516,10 @@ const Services = () => {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(service)} className="border-2 border-foreground bg-card hover:bg-card/90">
+                      <Button variant="ghost" size="icon" onClick={() => handleEdit(service)} className="border-2 border-foreground bg-card hover:bg-card/90 min-h-[44px] min-w-[44px]">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(service.id)} className="border-2 border-foreground bg-card hover:bg-card/90">
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(service.id)} className="border-2 border-foreground bg-card hover:bg-card/90 min-h-[44px] min-w-[44px]">
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
