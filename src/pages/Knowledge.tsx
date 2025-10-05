@@ -337,12 +337,12 @@ const Knowledge = () => {
 
           {/* Main Chat Area */}
           <div>
-            <div className="window-frame h-[calc(100vh-200px)] flex flex-col bg-background">
+                <div className="window-frame h-[calc(100vh-200px)] flex flex-col bg-background">
               <div className="window-titlebar bg-gradient-to-r from-primary via-secondary to-accent">
                 <div className="flex items-center gap-3">
                   <div className="window-controls">
                     <div className="window-control bg-destructive"></div>
-                    <div className="window-control bg-[hsl(40_95%_60%)]"></div>
+                    <div className="window-control bg-warning"></div>
                     <div className="window-control bg-accent"></div>
                   </div>
                   <h2 className="text-primary-foreground font-display font-bold text-sm flex items-center gap-2">
