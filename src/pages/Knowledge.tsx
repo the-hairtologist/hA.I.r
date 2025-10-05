@@ -28,6 +28,7 @@ const Knowledge = () => {
       readTime: "12 min read",
       type: "article",
       featured: true,
+      url: "https://www.behindthechair.com/articles/balayage-101-the-ultimate-guide-to-beautiful-balayage/"
     },
     {
       id: 2,
@@ -37,6 +38,7 @@ const Knowledge = () => {
       readTime: "8 min read",
       type: "article",
       featured: true,
+      url: "https://www.matrix.com/blog/hair-color-theory-101"
     },
     {
       id: 3,
@@ -46,6 +48,7 @@ const Knowledge = () => {
       readTime: "15 min read",
       type: "article",
       featured: false,
+      url: "https://www.modernsalon.com/business/management/article/21164543/how-to-build-a-sixfigure-salon-career"
     },
     {
       id: 4,
@@ -55,6 +58,7 @@ const Knowledge = () => {
       readTime: "6 min read",
       type: "article",
       featured: true,
+      url: "https://www.allure.com/gallery/spring-summer-hair-color-trends"
     },
     {
       id: 5,
@@ -64,6 +68,7 @@ const Knowledge = () => {
       readTime: "10 min read",
       type: "article",
       featured: false,
+      url: "https://www.redken.com/blog/hair-care/how-to-fix-hair-color-mistakes"
     },
     {
       id: 6,
@@ -73,6 +78,7 @@ const Knowledge = () => {
       readTime: "7 min read",
       type: "article",
       featured: false,
+      url: "https://www.behindthechair.com/articles/mastering-the-client-consultation/"
     },
     {
       id: 7,
@@ -82,6 +88,7 @@ const Knowledge = () => {
       readTime: "11 min read",
       type: "article",
       featured: false,
+      url: "https://www.olaplex.com/blogs/blog/hair-damage-causes-prevention-repair"
     },
     {
       id: 8,
@@ -91,6 +98,7 @@ const Knowledge = () => {
       readTime: "9 min read",
       type: "article",
       featured: false,
+      url: "https://www.glossgenius.com/blog/instagram-tips-for-hair-stylists"
     },
   ];
 
@@ -174,31 +182,38 @@ const Knowledge = () => {
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               {featuredArticles.map((article) => (
-                <Card 
+                <a
                   key={article.id}
-                  className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400"
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
                 >
-                  <CardHeader>
-                    <div className="flex items-start justify-between mb-2">
-                      <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
-                        {article.category}
-                      </Badge>
-                      <FileText className="h-5 w-5 text-foreground" />
-                    </div>
-                    <CardTitle className="text-lg font-display text-foreground">{article.title}</CardTitle>
-                    <CardDescription className="text-foreground/80 font-medium">
-                      {article.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-foreground/70 font-semibold">{article.readTime}</span>
-                      <Button size="sm" className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background">
-                        Read →
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                  <Card 
+                    className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400 h-full"
+                  >
+                    <CardHeader>
+                      <div className="flex items-start justify-between mb-2">
+                        <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
+                          {article.category}
+                        </Badge>
+                        <ExternalLink className="h-4 w-4 text-foreground" />
+                      </div>
+                      <CardTitle className="text-lg font-display text-foreground">{article.title}</CardTitle>
+                      <CardDescription className="text-foreground/80 font-medium">
+                        {article.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-foreground/70 font-semibold">{article.readTime}</span>
+                        <Button size="sm" className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background pointer-events-none">
+                          Read →
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
               ))}
             </div>
           </div>
@@ -249,35 +264,45 @@ const Knowledge = () => {
               const gradientClass = gradients[index % gradients.length];
               
               return (
-                <Card 
+                <a
                   key={article.id}
-                  className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br ${gradientClass}`}
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
                 >
-                  <CardHeader>
-                    <div className="flex items-start justify-between mb-2">
-                      <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
-                        {article.category}
-                      </Badge>
-                      {article.featured && (
-                        <Badge className="bg-cyan-400 text-foreground border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-cyan-400">
-                          Featured
+                  <Card 
+                    className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br ${gradientClass} h-full`}
+                  >
+                    <CardHeader>
+                      <div className="flex items-start justify-between mb-2">
+                        <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
+                          {article.category}
                         </Badge>
-                      )}
-                    </div>
-                    <CardTitle className="font-display text-foreground">{article.title}</CardTitle>
-                    <CardDescription className="text-foreground/80 font-medium">
-                      {article.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-foreground/70 font-semibold">{article.readTime}</span>
-                      <Button size="sm" className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background">
-                        Read Article →
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                        <div className="flex items-center gap-2">
+                          {article.featured && (
+                            <Badge className="bg-cyan-400 text-foreground border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-cyan-400">
+                              Featured
+                            </Badge>
+                          )}
+                          <ExternalLink className="h-4 w-4 text-foreground" />
+                        </div>
+                      </div>
+                      <CardTitle className="font-display text-foreground">{article.title}</CardTitle>
+                      <CardDescription className="text-foreground/80 font-medium">
+                        {article.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-foreground/70 font-semibold">{article.readTime}</span>
+                        <Button size="sm" className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background pointer-events-none">
+                          Read Article →
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
               );
             })}
           </div>
