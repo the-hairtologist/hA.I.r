@@ -269,30 +269,30 @@ const BookAppointment = () => {
   };
 
   const handleBookAppointment = async () => {
-    // Comprehensive validation with specific error messages
+    // Comprehensive validation with friendly error messages
     if (!selectedStylist) {
-      toast.error("Please select a stylist");
+      toast.error("Pick a stylist to get started! 💇‍♀️");
       return;
     }
 
     if (!selectedService) {
-      toast.error("Please select a service");
+      toast.error("What service would you like? Choose one above! ✨");
       return;
     }
 
     if (!selectedDate) {
-      toast.error("Please select a date");
+      toast.error("When works for you? Pick a date! 📅");
       return;
     }
 
     if (!selectedTime) {
-      toast.error("Please select a time");
+      toast.error("What time? Select your preferred slot! ⏰");
       return;
     }
 
     // Validate notes length
     if (notes.length > 500) {
-      toast.error("Notes must be 500 characters or less");
+      toast.error("Notes are a bit long - keep it under 500 characters 📝");
       return;
     }
 
@@ -308,7 +308,7 @@ const BookAppointment = () => {
         .maybeSingle();
 
       if (blocked) {
-        toast.error("This date is not available. Please choose another date.");
+        toast.error("Oops! That date's blocked. Try another one? 🗓️");
         setSubmitting(false);
         return;
       }
@@ -323,7 +323,7 @@ const BookAppointment = () => {
 
       // Check if appointment is in the past
       if (isBefore(appointmentDate, new Date())) {
-        toast.error("Cannot book appointments in the past. Please select a future date and time.");
+        toast.error("Time travel not yet available! Pick a future date 🚀");
         setSubmitting(false);
         return;
       }
@@ -340,7 +340,7 @@ const BookAppointment = () => {
       if (conflictError) throw conflictError;
 
       if (conflicts && conflicts.length > 0) {
-        toast.error("This time slot is already booked. Please choose a different time.");
+        toast.error("That slot's taken! Pick another time? ⏰");
         setSubmitting(false);
         return;
       }
@@ -406,15 +406,17 @@ const BookAppointment = () => {
       }
     } catch (error: any) {
       console.error("Error booking appointment:", error);
-      toast.error("Error processing payment. Please try again.");
+      toast.error("Oops! Something went wrong. Give it another try? 🔄");
       setSubmitting(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+        <p className="text-lg font-display font-bold gradient-text">Finding amazing stylists for you...</p>
+        <p className="text-sm text-muted-foreground mt-2">This will just take a moment ✨</p>
       </div>
     );
   }
@@ -448,10 +450,18 @@ const BookAppointment = () => {
           <div className="space-y-6">
             <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-foreground">
-                  Select Your Stylist
-                  <Badge variant="secondary" className="text-xs bg-card border-2 border-foreground">Step 1</Badge>
-                </CardTitle>
+                <div className="flex items-center justify-between mb-1">
+                  <CardTitle className="flex items-center gap-2 text-foreground">
+                    Select Your Stylist
+                  </CardTitle>
+                  <div className="flex items-center gap-1 text-xs text-foreground/60">
+                    <span className={`font-mono ${selectedStylist ? 'text-primary font-bold' : ''}`}>1</span>
+                    <span>→</span>
+                    <span className={`font-mono ${selectedService && selectedStylist ? 'text-primary font-bold' : ''}`}>2</span>
+                    <span>→</span>
+                    <span className={`font-mono ${selectedDate && selectedTime ? 'text-primary font-bold' : ''}`}>3</span>
+                  </div>
+                </div>
                 <CardDescription className="text-foreground/80 font-medium">Choose from available stylists</CardDescription>
               </CardHeader>
               <CardContent>

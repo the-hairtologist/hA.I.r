@@ -90,7 +90,17 @@ const Auth = () => {
     });
 
     if (!validation.success) {
-      toast.error(validation.error.errors[0].message);
+      const errorMsg = validation.error.errors[0].message;
+      // Rebrand error messages to be friendly
+      if (errorMsg.includes("email")) {
+        toast.error("Hmm, that email doesn't look quite right 🤔");
+      } else if (errorMsg.includes("password")) {
+        toast.error("Password needs a bit more love (at least 6 characters) 💪");
+      } else if (errorMsg.includes("name")) {
+        toast.error("We'd love to know your name! ✨");
+      } else {
+        toast.error(errorMsg);
+      }
       return;
     }
 
@@ -146,7 +156,15 @@ const Auth = () => {
     });
 
     if (!validation.success) {
-      toast.error(validation.error.errors[0].message);
+      const errorMsg = validation.error.errors[0].message;
+      // Rebrand error messages to be friendly
+      if (errorMsg.includes("email")) {
+        toast.error("Double-check that email for us? 📧");
+      } else if (errorMsg.includes("password")) {
+        toast.error("Oops! Check your password and try again 🔑");
+      } else {
+        toast.error(errorMsg);
+      }
       return;
     }
 
@@ -156,7 +174,7 @@ const Auth = () => {
 
   const handlePasswordReset = createSafeHandler(async () => {
     if (!state.resetEmail) {
-      toast.error("Please enter your email");
+      toast.error("We'll need your email to send the reset link 📬");
       return;
     }
 
@@ -175,12 +193,12 @@ const Auth = () => {
     e.preventDefault();
     
     if (state.newPassword !== state.confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("Hmm, those passwords don't match up 🔐");
       return;
     }
 
     if (state.newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error("Let's make that password a bit stronger (6+ characters) 💪");
       return;
     }
 

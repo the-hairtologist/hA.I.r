@@ -395,6 +395,26 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         {/* Separator */}
         <Separator className="my-2" />
 
+        {/* Keyboard Shortcuts Hint */}
+        {!collapsed && (
+          <div className="px-3 py-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // Trigger keyboard shortcuts dialog
+                const event = new KeyboardEvent('keydown', { key: '?', shiftKey: true });
+                window.dispatchEvent(event);
+              }}
+              className="w-full justify-start gap-2 text-xs h-8"
+            >
+              <span className="text-muted-foreground">Press</span>
+              <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-muted rounded border">?</kbd>
+              <span className="text-muted-foreground">for shortcuts</span>
+            </Button>
+          </div>
+        )}
+
         {/* Account Section - Sticky Footer */}
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>

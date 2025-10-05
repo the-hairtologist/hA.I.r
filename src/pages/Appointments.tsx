@@ -164,7 +164,15 @@ const Appointments = () => {
             }
           }
 
-          toast.success(`Appointment ${newStatus}`);
+          // Celebration toast for completed appointments
+          if (newStatus === "completed") {
+            toast.success("🎉 Appointment completed! Another happy client!", {
+              description: "You're doing amazing work!",
+              duration: 4000,
+            });
+          } else {
+            toast.success(`Appointment ${newStatus}`);
+          }
           setDetailsOpen(false);
           loadData();
         } catch (error: any) {
@@ -317,11 +325,19 @@ const Appointments = () => {
               </CardHeader>
               <CardContent className="p-4">
                 {filteredAppointments(todayAppointments).length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    {searchQuery || statusFilter !== "all"
-                      ? "No matching appointments"
-                      : "No appointments scheduled for today"}
-                  </p>
+                  <div className="py-8 text-center">
+                    <Clock className="h-12 w-12 mx-auto mb-3 text-muted-foreground opacity-50" />
+                    <p className="text-muted-foreground font-medium">
+                      {searchQuery || statusFilter !== "all"
+                        ? "No appointments match your filters"
+                        : "Your schedule is clear today! ☕"}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {searchQuery || statusFilter !== "all"
+                        ? "Try adjusting your search or filters"
+                        : "Time to relax or catch up on other tasks"}
+                    </p>
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     {filteredAppointments(todayAppointments).map((apt) => (

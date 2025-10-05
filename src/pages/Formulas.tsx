@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette } from "lucide-react";
 import { AddClientDialog } from "@/components/AddClientDialog";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -94,7 +94,7 @@ const Formulas = () => {
 
   const handleSaveFormula = async () => {
     if (!selectedClient || !formulaText) {
-      toast.error("Please select a client and enter a formula");
+      toast.error("Pick a client and add your formula magic! ✨");
       return;
     }
 
@@ -127,7 +127,18 @@ const Formulas = () => {
           });
 
         if (error) throw error;
-        toast.success("Formula saved successfully!");
+        
+        // Check if this is the first formula
+        const isFirstFormula = formulas.length === 0;
+        
+        if (isFirstFormula) {
+          toast.success("🎉 Your first formula saved! The magic begins!", {
+            description: "Building your formula library, one masterpiece at a time",
+            duration: 5000,
+          });
+        } else {
+          toast.success("Formula saved successfully!");
+        }
       }
 
       handleCloseDialog();
@@ -224,11 +235,32 @@ const Formulas = () => {
         {/* Formulas List */}
         <div className="grid gap-4">
           {filteredFormulas.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground">No formulas found. Create your first formula!</p>
-              </CardContent>
-            </Card>
+            <div className="py-16 px-4 text-center animate-fade-in">
+              <div className="relative mb-6 inline-block">
+                <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                  <Palette className="h-16 w-16 text-primary" />
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
+                  <span className="text-2xl" role="img" aria-label="magic">🔮</span>
+                </div>
+              </div>
+              <h2 className="text-2xl font-display font-bold mb-2 gradient-text">
+                Your Formula Library Awaits!
+              </h2>
+              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                {searchTerm 
+                  ? "No formulas match your search. Try different keywords or create a new formula!"
+                  : "Start documenting your color formulas and never forget that perfect shade again"}
+              </p>
+              <Button 
+                onClick={() => setDialogOpen(true)}
+                size="lg"
+                className="gap-2 hover-scale"
+              >
+                <Plus className="h-5 w-5" />
+                Create Your First Formula
+              </Button>
+            </div>
           ) : (
             filteredFormulas.map((formula) => (
               <Card key={formula.id}>

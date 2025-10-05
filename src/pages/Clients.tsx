@@ -132,33 +132,33 @@ export default function Clients() {
 
     // Validate required fields
     if (!formData.full_name.trim()) {
-      toast.error("Name is required");
+      toast.error("We'd love to know your client's name! 👤");
       return;
     }
 
     // Validate field lengths
     if (formData.full_name.trim().length > 100) {
-      toast.error("Name must be less than 100 characters");
+      toast.error("That name's a bit long - keep it under 100 characters 📝");
       return;
     }
 
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      toast.error("Please enter a valid email address");
+      toast.error("Hmm, that email doesn't look quite right 📧");
       return;
     }
 
     if (formData.email && formData.email.length > 255) {
-      toast.error("Email must be less than 255 characters");
+      toast.error("Email's too long - keep it under 255 characters ✂️");
       return;
     }
 
     if (formData.notes.length > 1000) {
-      toast.error("Notes must be less than 1000 characters");
+      toast.error("Notes are a bit lengthy - keep it under 1000 characters 📝");
       return;
     }
 
     if (formData.allergies.length > 500) {
-      toast.error("Allergies must be less than 500 characters");
+      toast.error("Allergies field is too long - keep it under 500 characters ✂️");
       return;
     }
 
@@ -176,7 +176,17 @@ export default function Clients() {
 
       if (error) throw error;
 
-      toast.success("Client added successfully!");
+      // Check if this is the first client
+      const isFirstClient = clients.length === 0;
+      
+      if (isFirstClient) {
+        toast.success("🎉 Your first client! This is just the beginning!", {
+          description: "Your client roster is growing!",
+          duration: 5000,
+        });
+      } else {
+        toast.success("Client added successfully!");
+      }
       setIsDialogOpen(false);
       setFormData({
         full_name: "",
@@ -207,22 +217,22 @@ export default function Clients() {
 
     // Validate required fields
     if (!editFormData.full_name.trim()) {
-      toast.error("Name is required");
+      toast.error("We need a name for this client! 👤");
       return;
     }
 
     if (editFormData.full_name.trim().length > 100) {
-      toast.error("Name must be less than 100 characters");
+      toast.error("That name's a bit long - keep it under 100 characters 📝");
       return;
     }
 
     if (editFormData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editFormData.email)) {
-      toast.error("Please enter a valid email address");
+      toast.error("Hmm, that email doesn't look quite right 📧");
       return;
     }
 
     if (editFormData.notes.length > 1000) {
-      toast.error("Notes must be less than 1000 characters");
+      toast.error("Notes are a bit lengthy - keep it under 1000 characters 📝");
       return;
     }
 
@@ -468,22 +478,28 @@ export default function Clients() {
               </CardContent>
             </Card>
           ) : (
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
-              <CardContent className="py-12 text-center">
-                <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                <h3 className="text-lg font-display font-bold mb-2">Ready to add your first client?</h3>
-                <p className="text-muted-foreground mb-4">
-                  Keep track of hair profiles, preferences, and formula history all in one place
-                </p>
-                <Button 
-                  onClick={() => setIsDialogOpen(true)}
-                  className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Your First Client
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="py-16 px-4">
+              <div className="relative mb-6 inline-block">
+                <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                  <User className="h-16 w-16 text-primary" />
+                </div>
+                <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
+                  <span className="text-2xl" role="img" aria-label="sparkles">✨</span>
+                </div>
+              </div>
+              <h3 className="text-2xl font-display font-bold mb-2 gradient-text">Your Client Roster Awaits!</h3>
+              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                Build your dream client list! Track hair profiles, preferences, and formula history all in one beautiful place
+              </p>
+              <Button 
+                onClick={() => setIsDialogOpen(true)}
+                size="lg"
+                className="gap-2 hover-scale border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+              >
+                <UserPlus className="h-5 w-5" />
+                Add Your First Client
+              </Button>
+            </div>
           )
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
