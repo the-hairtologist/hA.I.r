@@ -797,9 +797,6 @@ const Dashboard = () => {
           />
         )}
 
-        {/* Floating Action Button */}
-        <FloatingActionButton userRole={userRole as "stylist" | "client"} />
-
         {/* Notification Manager */}
         {user && userRole && (
           <NotificationManager userId={user.id} userRole={userRole as "stylist" | "client"} />
