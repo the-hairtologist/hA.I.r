@@ -19,6 +19,10 @@ import { FeatureCard } from "@/components/dashboard/FeatureCard";
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
+import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
+import { FloatingActionButton } from "@/components/FloatingActionButton";
+import { WeeklySummaryCard } from "@/components/WeeklySummaryCard";
+import { NotificationManager } from "@/components/NotificationManager";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import avatarMale from "@/assets/avatar-male-lego.png";
@@ -106,6 +110,8 @@ const Dashboard = () => {
   } | null>(null);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
     "subscription",
+    "kpi-cards",
+    "weekly-summary",
     "checklist",
     "quick-actions",
     "stats", 
@@ -768,6 +774,14 @@ const Dashboard = () => {
             stylistId={profile?.id}
             onSuccess={loadDashboardData}
           />
+        )}
+
+        {/* Floating Action Button */}
+        <FloatingActionButton userRole={userRole as "stylist" | "client"} />
+
+        {/* Notification Manager */}
+        {user && userRole && (
+          <NotificationManager userId={user.id} userRole={userRole as "stylist" | "client"} />
         )}
       </main>
     </DashboardLayout>

@@ -101,6 +101,39 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_feedback: {
+        Row: {
+          comment: string | null
+          context_id: string | null
+          context_type: string
+          created_at: string
+          feedback_type: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          context_id?: string | null
+          context_type: string
+          created_at?: string
+          feedback_type: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          context_id?: string | null
+          context_type?: string
+          created_at?: string
+          feedback_type?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_formulas: {
         Row: {
           created_at: string
