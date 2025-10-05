@@ -268,10 +268,10 @@ const Knowledge = () => {
               >
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
-                  <span className="font-bold text-base">Step-by-Step Guide</span>
+                  <span className="font-bold text-base">Step-by-Step Assist</span>
                 </div>
                 <span className={`text-xs ${aiMode === "stepbystep" ? "opacity-90" : "text-muted-foreground"}`}>
-                  Get guided help for any technique
+                  Get guided help for complicated situations
                 </span>
               </button>
               <button
