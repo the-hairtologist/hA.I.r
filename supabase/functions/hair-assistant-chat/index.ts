@@ -1,9 +1,20 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
+/**
+ * Copyright © 2025 hA.I.r. All Rights Reserved.
+ * Proprietary AI Hair Consultation System
+ */
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+// Watermark helper
+const addWatermark = (content: string, userId?: string): string => {
+  const timestamp = new Date().toISOString().split('T')[0];
+  return `${content}\n\n---\n*AI consultation by hA.I.r™ on ${timestamp}${userId ? ' | User: ' + userId.slice(0, 8) : ''} | For professional use only. Not medical advice.*`;
 };
 
 serve(async (req) => {
@@ -13,6 +24,20 @@ serve(async (req) => {
 
   try {
     const { message, mode, conversationHistory } = await req.json();
+    
+    // Get authorization header to extract user ID
+    const authHeader = req.headers.get('authorization');
+    let userId: string | undefined;
+    
+    if (authHeader) {
+      try {
+        const token = authHeader.replace('Bearer ', '');
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.sub;
+      } catch (e) {
+        console.log('Could not extract user ID from token');
+      }
+    }
     
     // Input validation
     if (!message || typeof message !== 'string') {
@@ -167,7 +192,7 @@ Focus on solving problems, not basic coloring. These are challenging situations 
     const data = await response.json();
     console.log('AI response received successfully');
     
-    const assistantMessage = data.choices[0].message.content;
+    const assistantMessage = addWatermark(data.choices[0].message.content, userId);
 
     return new Response(
       JSON.stringify({ 

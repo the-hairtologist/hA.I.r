@@ -90,11 +90,34 @@ const Terms = () => {
             </ul>
             
             <h2>8. Intellectual Property</h2>
+            
+            <h3>Platform Ownership</h3>
+            <p><strong>hA.I.r is proprietary software.</strong> All rights reserved.</p>
+            <ul>
+              <li>All code, algorithms, and software architecture are proprietary and protected</li>
+              <li>All AI models, prompts, and training configurations are trade secrets</li>
+              <li>All UI/UX designs, workflows, and user experiences are copyrighted</li>
+              <li>All business logic, formulas, and calculations are confidential</li>
+              <li>Platform branding, logos, and design elements are trademarked</li>
+            </ul>
+            
+            <h3>User Content</h3>
             <ul>
               <li>You retain ownership of content you upload</li>
               <li>You grant us license to display and process your content</li>
               <li>Portfolio photos may be displayed publicly</li>
               <li>Hair formulas remain confidential to stylist and client</li>
+            </ul>
+            
+            <h3>Restrictions on Use</h3>
+            <p>You expressly agree NOT to:</p>
+            <ul>
+              <li>Copy, reproduce, or replicate any part of the platform</li>
+              <li>Reverse engineer, decompile, or disassemble the software</li>
+              <li>Extract, scrape, or harvest data systematically</li>
+              <li>Create competing or derivative products</li>
+              <li>Remove or alter copyright notices or watermarks</li>
+              <li>Use automated tools to access or interact with the platform</li>
             </ul>
             
             <h2>9. Prohibited Activities</h2>
@@ -104,9 +127,15 @@ const Terms = () => {
               <li>Harass or abuse other users</li>
               <li>Share false or misleading information</li>
               <li>Attempt to bypass security measures</li>
-              <li>Scrape or copy content without permission</li>
+              <li>Scrape, copy, or extract content without permission</li>
               <li>Create fake accounts or reviews</li>
+              <li>Inspect, copy, or replicate source code or algorithms</li>
+              <li>Use the platform to build competing services</li>
+              <li>Share screenshots or documentation of proprietary features</li>
+              <li>Attempt to discover or exploit vulnerabilities</li>
             </ul>
+            
+            <p><strong>Violation of these terms may result in legal action including, but not limited to, civil litigation and criminal prosecution.</strong></p>
             
             <h2>10. Limitation of Liability</h2>
             <p>hA.I.r is a platform connecting stylists and clients. We are not liable for:</p>
