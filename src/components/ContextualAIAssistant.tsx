@@ -72,19 +72,19 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
+    <div className="fixed bottom-24 md:bottom-6 right-24 z-40 animate-fade-in">
       <Card className={cn(
-        "border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary/5 to-accent/5 transition-all duration-300",
-        isExpanded ? "w-80" : "w-16"
+        "border-2 border-border shadow-lg bg-card backdrop-blur-sm transition-all duration-300",
+        isExpanded ? "w-80" : "w-auto"
       )}>
         <CardContent className="p-0">
           {/* Collapsed State */}
           {!isExpanded && (
             <Button
               onClick={() => setIsExpanded(true)}
-              className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] transition-all hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,0.3)]"
+              className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all hover:scale-105 border-0"
             >
-              <Sparkles className="h-6 w-6 text-white animate-pulse" />
+              <Sparkles className="h-5 w-5 text-white animate-pulse" />
             </Button>
           )}
 
