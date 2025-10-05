@@ -1,132 +1,171 @@
 /**
  * Brand Voice & Messaging Guidelines
- * Consistent, delightful messaging across the app
+ * God-Tier Persuasion & Communication Blueprint
+ * 
+ * Built from psychology of influence, empathy, and habit-forming design.
+ * Every word is a behavioral nudge combining logic, emotion, and identity.
  */
 
-// Brand personality traits
+// Brand Archetype: The Mentor-Friend
+// Warm, witty, wise. Not teaching—reminding them they already know.
 export const BRAND_PERSONALITY = {
-  // Professional but friendly
-  tone: 'warm, encouraging, confident',
-  // Empowering language
-  voice: 'clear, action-oriented, supportive',
-  // Visual style
-  visual: 'vibrant, playful, modern',
+  // The calm in their storm
+  tone: 'confident, empathetic, grounded',
+  // Speak to what they feel, not what they do
+  voice: 'conversational, rhythmic, validating',
+  // The exhale after a long day
+  visual: 'relief meets creativity',
+  // Core positioning
+  promise: 'No more chaos. Just clients, color, and calm.',
 };
 
-// Consistent messaging patterns
+// Psychological Levers - Trigger engagement through identity
+export const PSYCHOLOGICAL_LEVERS = {
+  autonomy: "Your chair. Your clients. Your rules.",
+  competence: "You already have the skill—this makes it unstoppable.",
+  belonging: "Built for stylists, not salons.",
+  relief: "No more chasing DMs. Drop one link and breathe.",
+};
+
+// Curiosity Triggers - Mystery + proof without revealing everything
+export const CURIOSITY_TRIGGERS = [
+  "What if your booking link worked harder than you?",
+  "How many hours could you win back if cancellations filled themselves?",
+  "Your clients will think you hired an assistant.",
+  "You bring the color. We handle the chaos.",
+];
+
+// Conversational Flow: Empathy → Agitate → Solution → Vision
+// Short rhythmic sentences. 3-5 words per phrase feels conversational.
 export const MESSAGES = {
-  // Success messages - celebrate wins!
+  // Success messages - relief + validation
   success: {
-    appointmentBooked: "🎉 Appointment booked! Get ready to shine!",
-    appointmentUpdated: "✨ All set! Your appointment has been updated.",
-    appointmentCancelled: "Appointment cancelled. We'll miss you!",
-    profileUpdated: "Looking good! Profile updated successfully.",
-    clientAdded: "🎊 New client added! Time to work some magic.",
-    formulaSaved: "✨ Formula saved! Your secret recipe is secured.",
-    messageSent: "Message sent! They'll love hearing from you.",
-    reviewPosted: "Thanks for sharing! Your review helps stylists shine.",
-    serviceCreated: "Service added! Ready to showcase your skills.",
-    scheduleUpdated: "Schedule updated! Your time, your way.",
+    appointmentBooked: "Locked in. One less thing to track.",
+    appointmentUpdated: "Updated. You're all set.",
+    appointmentCancelled: "Cancelled. Slot's open again.",
+    profileUpdated: "Saved. Looking sharp.",
+    clientAdded: "Added. Their journey starts now.",
+    formulaSaved: "Saved. Your winning recipe is locked in.",
+    messageSent: "Sent. They'll love hearing from you.",
+    reviewPosted: "Posted. Your voice helps the community.",
+    serviceCreated: "Live. Ready for bookings.",
+    scheduleUpdated: "Updated. You're in control.",
   },
 
-  // Error messages - empathetic and helpful
+  // Error messages - empathetic partner, not critic
   errors: {
-    generic: "Oops! Something went wrong. Let's try that again.",
-    network: "Connection hiccup! Check your internet and try again.",
-    notFound: "We couldn't find that. Double-check and try again?",
-    unauthorized: "You'll need to log in first. Quick and easy!",
-    validation: "Almost there! Just fix these details and you're good to go.",
-    conflict: "That time slot is already taken. Pick another?",
+    generic: "Something slipped. Let's give that another shot.",
+    network: "Connection lost. Check your signal and try again.",
+    notFound: "Can't find that. Double-check and we'll look again.",
+    unauthorized: "Need to sign in first. Takes two seconds.",
+    validation: "Almost there. Quick fix and you're good.",
+    conflict: "That slot's taken. Pick another time?",
   },
 
-  // Loading states - keep it light
+  // Loading states - calm confidence
   loading: {
-    generic: "Just a moment...",
-    dashboard: "Loading your dashboard...",
-    appointments: "Gathering your appointments...",
-    clients: "Loading your client list...",
-    formulas: "Fetching your formulas...",
+    generic: "One moment...",
+    dashboard: "Loading your space...",
+    appointments: "Pulling your schedule...",
+    clients: "Loading your roster...",
+    formulas: "Grabbing your formulas...",
     saving: "Saving...",
-    processing: "Processing...",
+    processing: "Working on it...",
   },
 
-  // Empty states - encouraging and actionable
+  // Empty states - identity + relief + vision
   emptyStates: {
     noAppointments: {
-      title: "Your calendar awaits!",
-      description: "No appointments yet. Start booking and watch your business grow!",
-      action: "Book First Appointment",
+      title: "Your calendar is clear.",
+      description: "No chaos. No double-bookings. Just space for your next masterpiece.",
+      action: "Book Your First",
     },
     noClients: {
-      title: "Build your dream team!",
-      description: "Add clients to keep track of their hair journey and preferences.",
-      action: "Add Your First Client",
+      title: "Your roster starts here.",
+      description: "Track their color journey. Remember their preferences. Build loyalty that lasts.",
+      action: "Add First Client",
     },
     noFormulas: {
-      title: "Create color magic!",
-      description: "Save your winning formulas so you can recreate perfection every time.",
-      action: "Create First Formula",
+      title: "Your color genius lives here.",
+      description: "Save winning formulas once. Recreate perfection every time.",
+      action: "Save First Formula",
     },
     noMessages: {
-      title: "Inbox zero achieved!",
-      description: "No messages yet. When clients reach out, you'll see them here.",
+      title: "Inbox: calm.",
+      description: "When clients reach out, you'll see them here. No more lost DMs.",
     },
     noReviews: {
-      title: "Reviews coming soon!",
-      description: "Your amazing work will speak for itself. Client reviews will appear here.",
+      title: "Your work speaks volumes.",
+      description: "Client love notes will land here. They're coming.",
     },
   },
 
-  // Confirmations - clear and friendly
+  // Confirmations - clear, no pressure
   confirmations: {
-    delete: "Are you sure? This can't be undone.",
-    cancel: "Cancel this appointment? They'll be notified.",
-    signOut: "Sign out? We'll be here when you're ready to return!",
-    leave: "Leave without saving? Your changes won't be saved.",
+    delete: "Delete this? Can't undo.",
+    cancel: "Cancel? They'll get a heads up.",
+    signOut: "Sign out? We'll be here when you're back.",
+    leave: "Leave without saving? Changes won't stick.",
   },
 
-  // Tooltips & hints - helpful nudges
+  // Hints - whispered wisdom, not lectures
   hints: {
-    firstTime: "New here? Follow our quick tour to get started!",
-    profileIncomplete: "Complete your profile to unlock all features.",
-    noPhone: "Add your phone number to receive appointment reminders.",
-    noAvatar: "Choose an avatar that represents you!",
+    firstTime: "First time? Two-minute tour. You'll thank us.",
+    profileIncomplete: "Finish your profile. Unlock everything.",
+    noPhone: "Add your number. Never miss a reminder.",
+    noAvatar: "Pick an avatar. Make it yours.",
     tips: {
-      appointment: "💡 Pro tip: Book appointments at least 24 hours in advance.",
-      formula: "💡 Pro tip: Add photos to your formulas for better reference.",
-      client: "💡 Pro tip: Keep detailed notes for better service each visit.",
+      appointment: "Pro move: Book 24 hours ahead. Less scramble.",
+      formula: "Pro move: Add photos. Memory aid for next time.",
+      client: "Pro move: Detailed notes. Better service every visit.",
     },
   },
 };
 
-// Action button labels - action-oriented and clear
+// Action button labels - momentum, not pressure
 export const ACTIONS = {
   primary: {
-    book: "Book Now",
+    book: "Book It",
     create: "Create",
-    save: "Save Changes",
+    save: "Save",
     update: "Update",
     add: "Add",
     send: "Send",
-    confirm: "Confirm",
-    continue: "Continue",
-    finish: "Finish",
-    start: "Get Started",
+    confirm: "Lock It In",
+    continue: "Keep Going",
+    finish: "Done",
+    start: "Start Now",
   },
   secondary: {
     cancel: "Cancel",
-    back: "Go Back",
+    back: "Back",
     skip: "Skip",
-    later: "Maybe Later",
-    dismiss: "Dismiss",
+    later: "Later",
+    dismiss: "Got It",
     close: "Close",
   },
   tertiary: {
     learnMore: "Learn More",
-    viewAll: "View All",
-    seeDetails: "See Details",
+    viewAll: "See All",
+    seeDetails: "Details",
     explore: "Explore",
   },
+};
+
+// Signature Phrases - The Mentor-Friend Voice
+export const SIGNATURE_PHRASES = {
+  empathy: "We see the artist in your hustle.",
+  support: "You make magic. We make it easier.",
+  identity: "Color genius meets calm business.",
+  relief: "Less chaos, more confidence.",
+  vision: "You bring the art. hA.I.r brings the rest.",
+};
+
+// The Persuasion Triad - Every message blends all three
+export const PERSUASION_TRIAD = {
+  logic: "One app for everything.",
+  emotion: "Less chaos, more confidence.",
+  identity: "Built by people who get hair.",
 };
 
 // Helper function to get contextual messages

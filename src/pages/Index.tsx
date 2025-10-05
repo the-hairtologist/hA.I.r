@@ -62,24 +62,24 @@ const Index = () => {
                 </div>
                 
                 <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-black mb-6 sm:mb-8 text-pink-400 uppercase leading-tight px-2">
-                  Transform Every Color Service
+                  For the stylists who do it all—now you don't have to
                 </h1>
                 
                 <p className="text-lg sm:text-xl md:text-2xl font-bold text-pink-300 mb-3 sm:mb-4">
-                  AI-Powered Precision
+                  No more chaos. Just clients, color, and calm.
                 </p>
                 
                 <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mb-8 sm:mb-12 max-w-2xl mx-auto px-2">
-                  Stop wasting time on guesswork and inconsistent results. Generate flawless color formulas in seconds, automate your bookings, and deliver the transformations your clients crave—every single time.
+                  hA.I.r handles bookings, color formulas, and payments—so you can focus on your craft.
                 </p>
                 
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
                   className="text-base sm:text-xl px-8 sm:px-12 py-4 sm:py-6 font-display font-black bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 sm:border-4 border-secondary hover:translate-x-1 hover:translate-y-1 transition-all hover:scale-105 uppercase group"
-                  aria-label="Start your free trial"
+                  aria-label="Try it on your next client"
                 >
-                  Start Free
+                  Try It On Your Next Client
                   <span className="inline-block transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
                 </Button>
               </div>
@@ -91,9 +91,9 @@ const Index = () => {
               <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                 <Scissors className="h-7 w-7 text-info" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">AI Formulas in Seconds</h2>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Color Genius. Zero Guesswork.</h2>
               <p className="text-foreground/80 text-sm font-medium">
-                Upload a photo, describe your vision—get 2-3 professional formulas with precise measurements and step-by-step instructions. Perfect results, zero guesswork.
+                Upload a photo. Get the formula. Perfect results every time. Your brain for other things.
               </p>
             </article>
 
@@ -101,9 +101,9 @@ const Index = () => {
               <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                 <Calendar className="h-7 w-7 text-success" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Never Miss a Booking</h2>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">One Link. Done.</h2>
               <p className="text-foreground/80 text-sm font-medium">
-                Smart scheduling that prevents double-bookings and sends automatic reminders. Clients book 24/7, your calendar stays organized—zero stress.
+                Drop your booking link. Clients book 24/7. No more DM tennis. No double-bookings. Just shows.
               </p>
             </article>
 
@@ -111,9 +111,9 @@ const Index = () => {
               <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                 <MessageSquare className="h-7 w-7 text-warning" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Build Loyalty on Autopilot</h2>
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground">They'll Think You Hired Help.</h2>
               <p className="text-foreground/80 text-sm font-medium">
-                Send video consultations, share formulas instantly, and keep every client conversation organized. Stronger relationships = more repeat bookings.
+                Video consults. Instant formula shares. Every conversation tracked. Loyalty that lasts. All you.
               </p>
             </article>
           </div>
