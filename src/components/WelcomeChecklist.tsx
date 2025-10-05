@@ -32,7 +32,7 @@ export const WelcomeChecklist = ({
     { 
       label: "Complete your profile", 
       completed: profileComplete, 
-      action: () => navigate("/profile"),
+      action: () => navigate("/settings"),
       cta: "Complete Profile"
     },
     { 
@@ -59,7 +59,7 @@ export const WelcomeChecklist = ({
     { 
       label: "Complete your profile", 
       completed: profileComplete, 
-      action: () => navigate("/profile"),
+      action: () => navigate("/settings"),
       cta: "Complete Profile"
     },
     { 

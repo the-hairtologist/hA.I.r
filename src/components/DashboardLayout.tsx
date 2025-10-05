@@ -157,7 +157,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate("/profile")}>
+                    <DropdownMenuItem onClick={() => navigate("/settings")}>
                       <User className="h-4 w-4 mr-2" />
                       Profile
                     </DropdownMenuItem>
