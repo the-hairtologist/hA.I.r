@@ -218,7 +218,6 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                 />
                 <div className="flex-1">
                   <p className="font-semibold">{sc.service_type}</p>
-                  <p className="text-sm text-muted-foreground">{sc.color}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Dialog>
