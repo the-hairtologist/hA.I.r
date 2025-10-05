@@ -165,7 +165,7 @@ const Knowledge = () => {
           </Card>
         </div>
 
-        {/* Featured Articles - Horizontal Row */}
+        {/* Featured Articles */}
         {!searchQuery && (
           <div className="mb-8">
             <h2 className="text-2xl font-display font-bold mb-4 flex items-center gap-2">
@@ -176,26 +176,24 @@ const Knowledge = () => {
               {featuredArticles.map((article) => (
                 <Card 
                   key={article.id}
-                  className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-yellow-orange overflow-hidden"
+                  className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400"
                 >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between mb-3">
+                  <CardHeader>
+                    <div className="flex items-start justify-between mb-2">
                       <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
                         {article.category}
                       </Badge>
+                      <FileText className="h-5 w-5 text-foreground" />
                     </div>
-                    <CardTitle className="text-xl font-display text-foreground mb-2">{article.title}</CardTitle>
-                    <CardDescription className="text-foreground/90 font-medium text-sm leading-relaxed line-clamp-3">
+                    <CardTitle className="text-lg font-display text-foreground">{article.title}</CardTitle>
+                    <CardDescription className="text-foreground/80 font-medium">
                       {article.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-0">
+                  <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-foreground/80 font-bold">{article.readTime}</span>
-                      <Button 
-                        size="sm" 
-                        className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 font-bold hover:bg-background"
-                      >
+                      <span className="text-xs text-foreground/70 font-semibold">{article.readTime}</span>
+                      <Button size="sm" className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background">
                         Read →
                       </Button>
                     </div>
@@ -229,7 +227,7 @@ const Knowledge = () => {
           </div>
         </div>
 
-        {/* All Articles Grid - 2 Columns */}
+        {/* All Articles */}
         {filteredArticles.length === 0 ? (
           <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-300 to-orange-400">
             <CardContent className="py-16 text-center">
@@ -243,20 +241,20 @@ const Knowledge = () => {
             {filteredArticles.map((article, index) => {
               // Cycle through gradient backgrounds
               const gradients = [
-                'bg-gradient-green-blue',
-                'bg-gradient-cyan-blue', 
-                'bg-gradient-blue-purple',
-                'bg-gradient-purple-pink',
+                'from-green-400 to-blue-400',
+                'from-cyan-300 to-blue-500', 
+                'from-blue-400 to-purple-400',
+                'from-purple-400 to-pink-400',
               ];
               const gradientClass = gradients[index % gradients.length];
               
               return (
                 <Card 
                   key={article.id}
-                  className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer overflow-hidden ${gradientClass}`}
+                  className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br ${gradientClass}`}
                 >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between mb-3">
+                  <CardHeader>
+                    <div className="flex items-start justify-between mb-2">
                       <Badge className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] text-foreground font-bold hover:bg-background">
                         {article.category}
                       </Badge>
@@ -266,18 +264,15 @@ const Knowledge = () => {
                         </Badge>
                       )}
                     </div>
-                    <CardTitle className="font-display text-foreground text-2xl mb-3">{article.title}</CardTitle>
-                    <CardDescription className="text-foreground/90 font-medium text-base leading-relaxed">
+                    <CardTitle className="font-display text-foreground">{article.title}</CardTitle>
+                    <CardDescription className="text-foreground/80 font-medium">
                       {article.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-0">
+                  <CardContent>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-foreground/80 font-bold">{article.readTime}</span>
-                      <Button 
-                        size="sm" 
-                        className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 font-bold hover:bg-background"
-                      >
+                      <span className="text-sm text-foreground/70 font-semibold">{article.readTime}</span>
+                      <Button size="sm" className="bg-background text-foreground border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-bold hover:bg-background">
                         Read Article →
                       </Button>
                     </div>
