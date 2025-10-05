@@ -717,11 +717,11 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-6 bg-secondary border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] p-4 rounded-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <p className="text-base font-display font-bold text-secondary-foreground text-center flex items-center justify-center gap-2">
-            <GripVertical className="h-5 w-5 animate-pulse" />
-            Hover over sections and drag the handle to rearrange your dashboard!
-            <GripVertical className="h-5 w-5 animate-pulse" />
+        <div className="mb-6 bg-muted/50 border border-border/50 shadow-sm p-3 rounded-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
+          <p className="text-sm font-medium text-muted-foreground text-center flex items-center justify-center gap-2">
+            <GripVertical className="h-4 w-4 opacity-50" />
+            Hover over sections and drag the handle to rearrange your dashboard
+            <GripVertical className="h-4 w-4 opacity-50" />
           </p>
         </div>
 
