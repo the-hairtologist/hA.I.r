@@ -396,8 +396,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         {/* Separator */}
         <Separator className="my-2" />
 
-        {/* Keyboard Shortcuts */}
-        {!collapsed && (
+        {/* Keyboard Shortcuts - Stylist Only */}
+        {!collapsed && userRole === 'stylist' && (
           <div className="px-3 py-2">
             <Button
               variant="outline"

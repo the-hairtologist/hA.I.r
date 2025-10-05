@@ -34,18 +34,50 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const userRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
   const loading = authLoading || roleLoading || (user && roles.length === 0);
 
-  // Listen for '?' key press to show keyboard shortcuts
+  // Listen for keyboard shortcuts (stylist only)
   useEffect(() => {
+    if (userRole !== 'stylist') return;
+
     const handleKeyPress = (e: KeyboardEvent) => {
+      // Show shortcuts dialog with Shift+?
       if (e.key === '?' && e.shiftKey) {
         e.preventDefault();
         setShowShortcuts(true);
+        return;
+      }
+
+      // Navigation shortcuts with 'G' key
+      if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const handleSecondKey = (e2: KeyboardEvent) => {
+          e2.preventDefault();
+          window.removeEventListener('keydown', handleSecondKey);
+          
+          switch(e2.key.toLowerCase()) {
+            case 'd': navigate('/dashboard'); break;
+            case 'c': navigate('/clients'); break;
+            case 'a': navigate('/appointments'); break;
+            case 'm': navigate('/messages'); break;
+          }
+        };
+        window.addEventListener('keydown', handleSecondKey);
+        setTimeout(() => window.removeEventListener('keydown', handleSecondKey), 2000);
+      }
+
+      // Quick actions
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        navigate('/appointments');
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        navigate('/clients');
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
+  }, [userRole, navigate]);
 
   // Redirect if not authenticated
   if (!authLoading && !user) {
@@ -148,7 +180,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       
       <KeyboardShortcutsDialog 
         open={showShortcuts} 
-        onOpenChange={setShowShortcuts} 
+        onOpenChange={setShowShortcuts}
+        userRole={userRole}
       />
     </SidebarProvider>
   );

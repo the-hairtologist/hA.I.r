@@ -10,11 +10,15 @@ import { Command } from "lucide-react";
 interface KeyboardShortcutsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  userRole?: string;
 }
 
-export const KeyboardShortcutsDialog = ({ open, onOpenChange }: KeyboardShortcutsDialogProps) => {
+export const KeyboardShortcutsDialog = ({ open, onOpenChange, userRole }: KeyboardShortcutsDialogProps) => {
   const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
   const modKey = isMac ? '⌘' : 'Ctrl';
+
+  // Only show for stylists
+  if (userRole !== 'stylist') return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -35,6 +39,10 @@ export const KeyboardShortcutsDialog = ({ open, onOpenChange }: KeyboardShortcut
             <div className="space-y-2">
               <KeyboardShortcut keys={[modKey, 'K']} action="Focus search" />
               <KeyboardShortcut keys={['/']} action="Focus search" />
+              <KeyboardShortcut keys={['G', 'D']} action="Go to Dashboard" />
+              <KeyboardShortcut keys={['G', 'C']} action="Go to Clients" />
+              <KeyboardShortcut keys={['G', 'A']} action="Go to Appointments" />
+              <KeyboardShortcut keys={['G', 'M']} action="Go to Messages" />
               <KeyboardShortcut keys={['Esc']} action="Close dialogs" />
             </div>
           </div>
@@ -42,6 +50,8 @@ export const KeyboardShortcutsDialog = ({ open, onOpenChange }: KeyboardShortcut
           <div>
             <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Quick Actions</h3>
             <div className="space-y-2">
+              <KeyboardShortcut keys={[modKey, 'N']} action="New appointment" />
+              <KeyboardShortcut keys={[modKey, 'Shift', 'C']} action="Add new client" />
               <KeyboardShortcut keys={['Tab']} action="Navigate between fields" />
               <KeyboardShortcut keys={['Enter']} action="Submit forms" />
               <KeyboardShortcut keys={['Space']} action="Toggle checkboxes" />
