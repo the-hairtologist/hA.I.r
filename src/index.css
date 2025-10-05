@@ -14,6 +14,8 @@
     -webkit-text-size-adjust: 100%;
     /* Enable smooth scrolling on iOS */
     -webkit-overflow-scrolling: touch;
+    /* Fix dynamic viewport for mobile browsers (address bar) */
+    height: 100%;
   }
   
   body {
@@ -21,6 +23,9 @@
     overscroll-behavior-y: none;
     /* Ensure proper touch scrolling */
     touch-action: pan-y;
+    /* Fix for mobile browser dynamic viewport */
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for modern browsers */
   }
   
   /* Improve button and input touch interactions */
@@ -32,6 +37,44 @@
   @supports (-webkit-touch-callout: none) {
     .min-h-screen {
       min-height: -webkit-fill-available;
+    }
+  }
+  
+  /* Support for dynamic viewport units (mobile browser address bars) */
+  .h-screen-safe {
+    height: 100vh;
+    height: 100dvh;
+  }
+  
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  
+  /* Responsive text sizing based on device */
+  @media (max-width: 640px) {
+    html {
+      font-size: 14px; /* Slightly smaller base for mobile */
+    }
+  }
+  
+  @media (min-width: 641px) and (max-width: 1024px) {
+    html {
+      font-size: 15px; /* Medium for tablets */
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    html {
+      font-size: 16px; /* Full size for desktop */
+    }
+  }
+  
+  /* High DPI display optimization */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
   }
 }
