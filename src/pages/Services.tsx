@@ -10,8 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2, Info } from "lucide-react";
+import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2, Info, Palette } from "lucide-react";
 import { HelpTooltip } from "@/components/HelpTooltip";
+import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -531,6 +532,20 @@ const Services = () => {
                 )}
               </Card>
             ))}
+          </div>
+        )}
+
+        {/* Service Color Customization */}
+        {stylistProfile && (
+          <div className="mt-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Palette className="h-6 w-6 text-primary" />
+              <h2 className="text-xl font-bold font-display">Service Colors</h2>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Customize the colors that appear in your weekly schedule for each service type.
+            </p>
+            <ServiceTypeColorManager stylistId={stylistProfile.id} />
           </div>
         )}
       </main>
