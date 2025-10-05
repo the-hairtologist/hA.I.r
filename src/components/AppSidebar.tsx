@@ -282,7 +282,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       ]
     },
     { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "from-orange-500 to-red-500", group: "business" },
-    { id: "ai-assistant", title: "AI Assistant", url: "/knowledge", icon: Sparkles, gradient: "from-purple-500 to-pink-500", group: "tools" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-cyan-500", group: "tools" },
+    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "from-purple-500 to-pink-500", group: "tools" },
     { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "from-orange-500 to-amber-500", group: "tools" },
   ];
 
@@ -294,7 +295,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "from-pink-500 to-rose-500", group: "main" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "from-violet-500 to-purple-500", group: "main" },
     { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "from-emerald-500 to-teal-500", group: "tools" },
-    { id: "ai-assistant", title: "AI Assistant", url: "/knowledge", icon: Sparkles, gradient: "from-purple-500 to-pink-500", group: "tools" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "from-blue-500 to-cyan-500", group: "tools" },
+    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "from-purple-500 to-pink-500", group: "tools" },
   ];
 
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
