@@ -640,3 +640,61 @@ All colors MUST be HSL.
     outline-offset: 2px;
   }
 }
+
+/* Brutalist Design System Utilities */
+@layer utilities {
+  /* Brutalist borders - consistent 3px border */
+  .brutal-border {
+    border: 3px solid hsl(var(--foreground));
+  }
+
+  /* Brutalist shadows - 5px offset for cards */
+  .brutal-shadow {
+    box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
+  }
+
+  /* Smaller brutalist shadow for buttons/small elements */
+  .brutal-shadow-sm {
+    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
+  }
+
+  /* Hover effect for brutalist cards */
+  .brutal-shadow-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .brutal-shadow-hover:hover {
+    box-shadow: 7px 7px 0px 0px hsl(var(--primary));
+    transform: translateY(-2px);
+  }
+
+  /* Complete brutalist card styling */
+  .brutal-card {
+    border: 3px solid hsl(var(--foreground));
+    border-radius: var(--radius);
+    box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .brutal-card:hover {
+    box-shadow: 7px 7px 0px 0px hsl(var(--primary));
+    transform: translateY(-2px);
+  }
+
+  /* Complete brutalist button effects */
+  .brutal-button {
+    border: 3px solid hsl(var(--foreground));
+    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .brutal-button:hover {
+    box-shadow: 5px 5px 0px 0px hsl(var(--primary));
+    transform: translateY(-1px);
+  }
+
+  .brutal-button:active {
+    box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
+    transform: translate(2px, 2px);
+  }
+}

@@ -88,6 +88,15 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+      backgroundImage: {
+        'gradient-purple-pink': 'linear-gradient(135deg, rgb(167, 139, 250) 0%, rgb(244, 114, 182) 100%)',
+        'gradient-blue-cyan': 'linear-gradient(135deg, rgb(96, 165, 250) 0%, rgb(103, 232, 249) 100%)',
+        'gradient-yellow-orange': 'linear-gradient(135deg, rgb(253, 224, 71) 0%, rgb(251, 146, 60) 100%)',
+        'gradient-green-blue': 'linear-gradient(135deg, rgb(74, 222, 128) 0%, rgb(96, 165, 250) 100%)',
+        'gradient-blue-purple': 'linear-gradient(135deg, rgb(96, 165, 250) 0%, rgb(167, 139, 250) 100%)',
+        'gradient-pink-orange': 'linear-gradient(135deg, rgb(244, 114, 182) 0%, rgb(251, 146, 60) 100%)',
+        'gradient-cyan-blue': 'linear-gradient(135deg, rgb(103, 232, 249) 0%, rgb(59, 130, 246) 100%)',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
