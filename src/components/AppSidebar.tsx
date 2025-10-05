@@ -411,11 +411,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 });
                 window.dispatchEvent(event);
               }}
-              className="w-full justify-center gap-2 text-xs h-8"
+              className="w-full justify-center gap-2 text-xs h-8 bg-primary/10 border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50 transition-all animate-fade-in"
               aria-label="View keyboard shortcuts"
             >
               <Command className="h-3.5 w-3.5" />
-              <span>Keyboard Shortcuts</span>
+              <span className="font-medium">Keyboard Shortcuts</span>
             </Button>
           </div>
         )}
