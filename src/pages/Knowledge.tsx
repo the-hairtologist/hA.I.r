@@ -206,10 +206,10 @@ const Knowledge = () => {
           <div className="mb-8">
             <h2 className="text-2xl font-display font-bold mb-4 flex items-center gap-2">
               <TrendingUp className="h-6 w-6 text-primary" />
-              Featured Articles
+              Featured Resources
             </h2>
             <div className="grid md:grid-cols-3 gap-4">
-              {featuredArticles.map((article) => (
+              {featuredArticles.slice(0, 3).map((article) => (
                 <Card 
                   key={article.id}
                   className="brutal-card cursor-pointer bg-gradient-to-br from-yellow-300 to-orange-400 hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all"
@@ -220,22 +220,19 @@ const Knowledge = () => {
                       <Badge variant="secondary" className="bg-background border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                         {article.type}
                       </Badge>
-                      <ExternalLink className="h-5 w-5 text-foreground" />
+                      <Badge className="bg-cyan-400 text-foreground border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                        Featured
+                      </Badge>
                     </div>
-                    <CardTitle className="text-lg font-display text-foreground">{article.title}</CardTitle>
-                    <CardDescription className="text-foreground/80 font-medium">
+                    <CardTitle className="text-lg font-display text-foreground line-clamp-2">{article.title}</CardTitle>
+                    <CardDescription className="text-foreground/80 font-medium line-clamp-3">
                       {article.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center justify-between">
-                      <Badge className="bg-primary/20 text-foreground border-2 border-foreground">
-                        {article.category}
-                      </Badge>
-                      <Button size="sm" variant="outline">
-                        Visit Free Resource →
-                      </Button>
-                    </div>
+                    <Button size="sm" variant="outline" className="w-full">
+                      Read →
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -245,14 +242,14 @@ const Knowledge = () => {
 
         {/* Category Tabs */}
         <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-          <TabsList className="grid grid-cols-4 mb-6 bg-background border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+          <TabsList className="grid grid-cols-4 mb-6 h-auto p-1 bg-background border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl gap-1">
             {categories.map((cat) => {
               const Icon = cat.icon;
               return (
                 <TabsTrigger 
                   key={cat.id} 
                   value={cat.id}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-display font-bold"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-[3px] data-[state=active]:border-foreground data-[state=active]:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] font-display font-bold py-3 px-4 text-sm md:text-base rounded-lg transition-all hover:scale-[1.02]"
                 >
                   <Icon className="h-4 w-4 mr-2" />
                   {cat.label}
@@ -275,9 +272,7 @@ const Knowledge = () => {
                 {filteredArticles.map((article) => (
                   <Card 
                     key={article.id}
-                    className={`brutal-card cursor-pointer hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all ${
-                      article.featured ? 'bg-gradient-to-br from-green-400 to-blue-400' : 'bg-gradient-to-br from-blue-400 to-purple-400'
-                    }`}
+                    className="brutal-card cursor-pointer hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all bg-gradient-to-br from-green-400 via-blue-400 to-cyan-400"
                     onClick={() => window.open(article.url, '_blank')}
                   >
                     <CardHeader>
@@ -285,27 +280,28 @@ const Knowledge = () => {
                         <Badge variant="secondary" className="bg-background border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                           {article.type}
                         </Badge>
-                        <Badge className="bg-primary/20 text-foreground border-2 border-foreground">
-                          {article.category}
-                        </Badge>
                         {article.featured && (
-                          <Badge className="bg-accent text-accent-foreground border-[3px] border-foreground ml-auto">
+                          <Badge className="bg-cyan-400 text-foreground border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] ml-auto">
                             Featured
                           </Badge>
                         )}
                       </div>
-                      <CardTitle className="font-display text-foreground flex items-center gap-2">
+                      <CardTitle className="font-display text-foreground line-clamp-2">
                         {article.title}
-                        <ExternalLink className="h-4 w-4 flex-shrink-0" />
                       </CardTitle>
-                      <CardDescription className="text-foreground/80 font-medium">
+                      <CardDescription className="text-foreground/80 font-medium line-clamp-3">
                         {article.description}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button size="sm" variant="outline" className="w-full">
-                        Visit Free Resource →
-                      </Button>
+                      <div className="flex items-center justify-between">
+                        <Badge className="bg-background/50 text-foreground border-2 border-foreground">
+                          {article.category}
+                        </Badge>
+                        <Button size="sm" variant="outline">
+                          Read Article →
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
