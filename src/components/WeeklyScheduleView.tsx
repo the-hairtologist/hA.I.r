@@ -25,11 +25,13 @@ export const WeeklyScheduleView = ({
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [serviceColors, setServiceColors] = useState<Record<string, string>>({});
+  const [allServices, setAllServices] = useState<string[]>([]);
 
-  // Load custom service colors
+  // Load custom service colors and all services
   useEffect(() => {
     if (stylistId) {
       loadServiceColors();
+      loadStylistServices();
     }
   }, [stylistId]);
 
@@ -51,6 +53,25 @@ export const WeeklyScheduleView = ({
       setServiceColors(colorMap);
     } catch (error) {
       console.error("Error loading service colors:", error);
+    }
+  };
+
+  const loadStylistServices = async () => {
+    if (!stylistId) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from("stylist_services")
+        .select("service_name")
+        .eq("stylist_id", stylistId)
+        .eq("is_active", true);
+
+      if (error) throw error;
+
+      const serviceNames = data?.map(s => s.service_name) || [];
+      setAllServices(serviceNames);
+    } catch (error) {
+      console.error("Error loading services:", error);
     }
   };
 
@@ -312,10 +333,10 @@ export const WeeklyScheduleView = ({
         {/* Legend */}
         <div className="p-1.5 border-t-[2px] border-border bg-muted/10">
           <div className="flex flex-wrap gap-1.5 text-[9px]">
-            {Object.entries(serviceColors).length > 0 ? (
-              Object.entries(serviceColors).map(([serviceType, color]) => (
+            {allServices.length > 0 ? (
+              allServices.map((serviceType) => (
                 <div key={serviceType} className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded border border-white/30" style={{ backgroundColor: color }} />
+                  <div className="w-2 h-2 rounded border border-white/30" style={{ backgroundColor: getServiceColor(serviceType) }} />
                   <span className="text-muted-foreground">{serviceType}</span>
                 </div>
               ))
