@@ -264,25 +264,23 @@ const Appointments = () => {
       </a>
       <header role="banner" className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-4 min-w-0">
+              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="min-h-[44px] min-w-[44px] flex-shrink-0">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <div className="flex items-center gap-2">
-                <CalendarIcon className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-display font-bold gradient-text">My Appointments</h1>
+              <div className="flex items-center gap-2 min-w-0">
+                <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
+                <h1 className="text-2xl font-display font-bold gradient-text truncate">My Appointments</h1>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Label htmlFor="availability">Accepting Bookings</Label>
-                <Switch
-                  id="availability"
-                  checked={stylistProfile?.is_available}
-                  onCheckedChange={toggleAvailability}
-                />
-              </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="availability" className="whitespace-nowrap">Accepting Bookings</Label>
+              <Switch
+                id="availability"
+                checked={stylistProfile?.is_available}
+                onCheckedChange={toggleAvailability}
+              />
             </div>
           </div>
         </div>
@@ -290,7 +288,7 @@ const Appointments = () => {
 
       <main id="main-content" role="main" aria-label="Appointments" className="container mx-auto px-4 py-8">
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar" | "week")} className="space-y-6">
-          <TabsList className="grid w-full max-w-3xl grid-cols-3">
+          <TabsList className="w-full max-w-3xl">
             <TabsTrigger value="list">List View</TabsTrigger>
             <TabsTrigger value="calendar">Calendar View</TabsTrigger>
             <TabsTrigger value="week">Week View</TabsTrigger>

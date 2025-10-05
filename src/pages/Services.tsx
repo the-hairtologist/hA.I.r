@@ -249,14 +249,14 @@ const Services = () => {
       </a>
       <header role="banner" className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")} className="border-2 border-foreground">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4 min-w-0 flex-1">
+              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="border-2 border-foreground min-h-[44px] min-w-[44px] flex-shrink-0">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold font-display">Service Pricing</h1>
+              <div className="flex items-center gap-2 min-w-0">
+                <DollarSign className="h-6 w-6 text-primary flex-shrink-0" />
+                <h1 className="text-2xl font-bold font-display truncate">Service Pricing</h1>
               </div>
             </div>
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>

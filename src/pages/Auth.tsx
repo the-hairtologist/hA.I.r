@@ -214,16 +214,16 @@ const Auth = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Authentication">
-        <Card className="w-full max-w-md border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
+      <main id="main-content" role="main" aria-label="Authentication" className="w-full max-w-md">
+        <Card className="w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
         <CardHeader className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-primary border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+            <div className="p-2 rounded-lg bg-primary border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
               <Scissors className="h-8 w-8 text-primary-foreground" />
             </div>
             <CardTitle className="text-3xl font-bold font-display">hA.I.r</CardTitle>
           </div>
-          <CardDescription className="text-base font-medium">
+          <CardDescription className="text-base font-medium text-center">
             {state.isRecoveryMode ? "Create your new password" : "Your AI-powered salon assistant"}
           </CardDescription>
         </CardHeader>

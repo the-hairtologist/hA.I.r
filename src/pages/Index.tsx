@@ -16,22 +16,22 @@ const Index = () => {
       </a>
       
       <header className="container mx-auto px-4 py-4 sm:py-6 border-b-4 border-foreground" role="banner">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Scissors className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <Scissors className="h-6 w-6 sm:h-8 sm:w-8 text-primary flex-shrink-0" />
             <h1 className="text-xl sm:text-3xl font-display font-bold">hA.I.r</h1>
           </div>
-          <div className="flex gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Button variant="ghost" onClick={() => navigate("/privacy")} className="hidden sm:inline-flex text-sm">
               Privacy
             </Button>
             <Button variant="ghost" onClick={() => navigate("/terms")} className="hidden sm:inline-flex text-sm">
               Terms
             </Button>
-            <Button variant="outline" onClick={() => navigate("/auth")} size="sm" className="sm:h-10">
+            <Button variant="outline" onClick={() => navigate("/auth")} size="sm">
               Sign In
             </Button>
-            <Button onClick={() => navigate("/auth")} size="sm" className="hidden sm:inline-flex sm:h-10">
+            <Button onClick={() => navigate("/auth")} size="sm" className="hidden sm:inline-flex">
               Get Started
             </Button>
           </div>
@@ -87,32 +87,32 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <article className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in">
-              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in flex flex-col">
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0">
                 <Scissors className="h-7 w-7 text-info" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">Color Genius. Zero Guesswork.</h2>
-              <p className="text-foreground/80 text-sm font-medium">
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground text-center">Color Genius. Zero Guesswork.</h2>
+              <p className="text-foreground/80 text-sm font-medium text-center">
                 Upload a photo. Get the formula. Perfect results every time. Your brain for other things.
               </p>
             </article>
 
-            <article className="p-6 border-[3px] border-foreground rounded-xl bg-green-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--accent))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in" style={{animationDelay: '100ms'}}>
-              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-green-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--accent))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in flex flex-col" style={{animationDelay: '100ms'}}>
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0">
                 <Calendar className="h-7 w-7 text-success" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">One Link. Done.</h2>
-              <p className="text-foreground/80 text-sm font-medium">
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground text-center">One Link. Done.</h2>
+              <p className="text-foreground/80 text-sm font-medium text-center">
                 Drop your booking link. Clients book 24/7. No more DM tennis. No double-bookings. Just shows.
               </p>
             </article>
 
-            <article className="p-6 border-[3px] border-foreground rounded-xl bg-yellow-300 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--secondary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in" style={{animationDelay: '200ms'}}>
-              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-yellow-300 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--secondary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in flex flex-col" style={{animationDelay: '200ms'}}>
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0">
                 <MessageSquare className="h-7 w-7 text-warning" aria-hidden="true" />
               </div>
-              <h2 className="font-display font-bold text-xl mb-2 text-foreground">They'll Think You Hired Help.</h2>
-              <p className="text-foreground/80 text-sm font-medium">
+              <h2 className="font-display font-bold text-xl mb-2 text-foreground text-center">They'll Think You Hired Help.</h2>
+              <p className="text-foreground/80 text-sm font-medium text-center">
                 Video consults. Instant formula shares. Every conversation tracked. Loyalty that lasts. All you.
               </p>
             </article>

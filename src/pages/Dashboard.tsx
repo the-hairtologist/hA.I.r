@@ -482,13 +482,13 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
-        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in-fast">
-          <div className="relative mb-4">
-            <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-4">
+        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in-fast max-w-md w-full">
+          <div className="relative mb-4 flex items-center justify-center">
+            <Scissors className="h-12 w-12 text-primary animate-pulse" aria-hidden="true" />
             <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
           </div>
-          <p className="text-muted-foreground font-medium" role="status" aria-live="polite">Loading your dashboard...</p>
+          <p className="text-muted-foreground font-medium text-center" role="status" aria-live="polite">Loading your dashboard...</p>
         </div>
       </div>
     );
