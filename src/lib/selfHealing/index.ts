@@ -10,6 +10,8 @@ import { aiMaintenance } from './AIMaintenanceAssistant';
 import { dataIntegrity } from './DataIntegrityChecker';
 import { codeAnalyzer } from './CodeAnalyzer';
 import { performanceOptimizer } from './PerformanceOptimizer';
+import { clientRetentionAI } from '@/lib/ai/ClientRetentionAI';
+import { smartCacheAI } from '@/lib/ai/SmartCacheAI';
 import { logger } from '@/lib/logger';
 
 class SelfHealingSystem {
@@ -145,6 +147,33 @@ class SelfHealingSystem {
       health.metrics || {}
     );
   }
+
+  /**
+   * Get client retention insights
+   */
+  async getClientRetentionInsights(stylistId: string) {
+    const riskScores = await clientRetentionAI.analyzeClientRetention(stylistId);
+    const insights = await clientRetentionAI.getAIRetentionInsights(riskScores);
+    
+    return {
+      riskScores,
+      insights,
+      summary: {
+        total: riskScores.length,
+        atRisk: riskScores.filter(s => s.riskLevel !== 'low').length,
+        critical: riskScores.filter(s => s.riskLevel === 'critical').length
+      }
+    };
+  }
+
+  /**
+   * Optimize caching with AI
+   */
+  async optimizeCache() {
+    const result = await smartCacheAI.optimize();
+    smartCacheAI.cleanup();
+    return result;
+  }
 }
 
 // Export singleton instance
@@ -159,4 +188,6 @@ export {
   dataIntegrity,
   codeAnalyzer,
   performanceOptimizer,
+  clientRetentionAI,
+  smartCacheAI,
 };

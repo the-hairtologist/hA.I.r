@@ -1,9 +1,10 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { SelfHealingMonitor } from "@/components/SelfHealingMonitor";
+import { AIRetentionDashboard } from "@/components/AIRetentionDashboard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Activity, Shield, Zap, Database, Brain, TrendingUp } from "lucide-react";
+import { Activity, Shield, Zap, Database, Brain, TrendingUp, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { selfHealing } from "@/lib/selfHealing";
 
@@ -101,8 +102,12 @@ export default function SystemHealth() {
 
         {/* Main Content */}
         <Tabs defaultValue="monitor" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="monitor">Live Monitor</TabsTrigger>
+            <TabsTrigger value="retention">
+              <Users className="h-4 w-4 mr-2" />
+              AI Retention
+            </TabsTrigger>
             <TabsTrigger value="features">Features</TabsTrigger>
             <TabsTrigger value="docs">Documentation</TabsTrigger>
             <TabsTrigger value="logs">System Logs</TabsTrigger>
@@ -110,6 +115,10 @@ export default function SystemHealth() {
 
           <TabsContent value="monitor">
             <SelfHealingMonitor />
+          </TabsContent>
+
+          <TabsContent value="retention">
+            <AIRetentionDashboard />
           </TabsContent>
 
           <TabsContent value="features" className="space-y-4">
@@ -178,6 +187,36 @@ export default function SystemHealth() {
                       <p className="text-sm text-muted-foreground">
                         Validates data consistency, detects corruption, checks for orphaned records, 
                         and auto-repairs fixable issues. Keeps your data clean and reliable.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center">
+                        <Users className="h-6 w-6 text-orange-500" />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">AI Client Retention System</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Predicts which clients are at risk of not returning. Analyzes visit patterns, 
+                        gaps, and history to suggest personalized retention actions for stylists.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center">
+                        <Zap className="h-6 w-6 text-cyan-500" />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Smart Caching AI</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Learns access patterns and automatically optimizes cache strategy. Preloads 
+                        frequently accessed data and removes stale entries intelligently.
                       </p>
                     </div>
                   </div>
