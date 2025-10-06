@@ -42,10 +42,10 @@ const StylistProfile = () => {
 
   const loadStylist = async () => {
     try {
-      // Use public view to prevent exposure of sensitive business data
-      // View only exposes: business_name, bio, specialty, location, years_experience, ratings
+      // Use safe public view to prevent exposure of sensitive business data
+      // View excludes: commission_rate, color_line, buffer_time_minutes, weekly_schedule
       const { data, error } = await supabase
-        .from("public_stylist_profiles")
+        .from("public_stylist_profiles_safe")
         .select("*")
         .eq("id", stylistId)
         .single();

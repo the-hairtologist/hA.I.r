@@ -292,13 +292,6 @@ export type Database = {
             foreignKeyName: "appointments_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "appointments_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
             referencedRelation: "public_stylist_profiles_safe"
             referencedColumns: ["id"]
           },
@@ -496,13 +489,6 @@ export type Database = {
             foreignKeyName: "client_hair_posts_claimed_by_stylist_id_fkey"
             columns: ["claimed_by_stylist_id"]
             isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "client_hair_posts_claimed_by_stylist_id_fkey"
-            columns: ["claimed_by_stylist_id"]
-            isOneToOne: false
             referencedRelation: "public_stylist_profiles_safe"
             referencedColumns: ["id"]
           },
@@ -554,13 +540,6 @@ export type Database = {
           token?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "client_invitations_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "client_invitations_stylist_id_fkey"
             columns: ["stylist_id"]
@@ -617,13 +596,6 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "client_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "client_milestones_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -690,13 +662,6 @@ export type Database = {
             foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
             columns: ["preferred_stylist_id"]
             isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
-            columns: ["preferred_stylist_id"]
-            isOneToOne: false
             referencedRelation: "public_stylist_profiles_safe"
             referencedColumns: ["id"]
           },
@@ -759,13 +724,6 @@ export type Database = {
             columns: ["brand_id"]
             isOneToOne: false
             referencedRelation: "hair_brands"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "commissions_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -919,13 +877,6 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "client_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "formulas_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1108,13 +1059,6 @@ export type Database = {
             foreignKeyName: "payments_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "payments_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
             referencedRelation: "public_stylist_profiles_safe"
             referencedColumns: ["id"]
           },
@@ -1162,13 +1106,6 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "portfolio_photos_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "portfolio_photos_stylist_id_fkey"
             columns: ["stylist_id"]
@@ -1269,13 +1206,6 @@ export type Database = {
             foreignKeyName: "referral_tracking_referred_stylist_id_fkey"
             columns: ["referred_stylist_id"]
             isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "referral_tracking_referred_stylist_id_fkey"
-            columns: ["referred_stylist_id"]
-            isOneToOne: false
             referencedRelation: "public_stylist_profiles_safe"
             referencedColumns: ["id"]
           },
@@ -1284,13 +1214,6 @@ export type Database = {
             columns: ["referred_stylist_id"]
             isOneToOne: false
             referencedRelation: "stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "referral_tracking_referrer_id_fkey"
-            columns: ["referrer_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1353,13 +1276,6 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "client_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1448,13 +1364,6 @@ export type Database = {
             foreignKeyName: "stylist_affiliate_codes_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "stylist_affiliate_codes_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
             referencedRelation: "public_stylist_profiles_safe"
             referencedColumns: ["id"]
           },
@@ -1490,13 +1399,6 @@ export type Database = {
           stylist_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "stylist_blocked_dates_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "stylist_blocked_dates_stylist_id_fkey"
             columns: ["stylist_id"]
@@ -1617,13 +1519,6 @@ export type Database = {
             foreignKeyName: "stylist_referrals_referred_by_fkey"
             columns: ["referred_by"]
             isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "stylist_referrals_referred_by_fkey"
-            columns: ["referred_by"]
-            isOneToOne: false
             referencedRelation: "public_stylist_profiles_safe"
             referencedColumns: ["id"]
           },
@@ -1632,13 +1527,6 @@ export type Database = {
             columns: ["referred_by"]
             isOneToOne: false
             referencedRelation: "stylist_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "stylist_referrals_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1689,13 +1577,6 @@ export type Database = {
           weekly_schedule?: Json
         }
         Relationships: [
-          {
-            foreignKeyName: "stylist_schedule_overrides_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "stylist_schedule_overrides_stylist_id_fkey"
             columns: ["stylist_id"]
@@ -1759,13 +1640,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "stylist_services_stylist_id_fkey"
-            columns: ["stylist_id"]
-            isOneToOne: false
-            referencedRelation: "public_stylist_profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "stylist_services_stylist_id_fkey"
             columns: ["stylist_id"]
@@ -1864,56 +1738,6 @@ export type Database = {
       }
     }
     Views: {
-      public_stylist_profiles: {
-        Row: {
-          average_rating: number | null
-          bio: string | null
-          business_name: string | null
-          created_at: string | null
-          id: string | null
-          is_available: boolean | null
-          location: string | null
-          specialty: string | null
-          total_reviews: number | null
-          user_id: string | null
-          years_experience: number | null
-        }
-        Insert: {
-          average_rating?: number | null
-          bio?: string | null
-          business_name?: string | null
-          created_at?: string | null
-          id?: string | null
-          is_available?: boolean | null
-          location?: string | null
-          specialty?: string | null
-          total_reviews?: number | null
-          user_id?: string | null
-          years_experience?: number | null
-        }
-        Update: {
-          average_rating?: number | null
-          bio?: string | null
-          business_name?: string | null
-          created_at?: string | null
-          id?: string | null
-          is_available?: boolean | null
-          location?: string | null
-          specialty?: string | null
-          total_reviews?: number | null
-          user_id?: string | null
-          years_experience?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "stylist_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       public_stylist_profiles_safe: {
         Row: {
           average_rating: number | null

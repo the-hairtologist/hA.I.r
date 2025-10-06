@@ -94,12 +94,11 @@ const StylistDiscovery = () => {
 
   const fetchStylists = async () => {
     try {
-      // Use public view for discovery - only exposes safe columns
-      // Authenticated users will see additional details through RLS
+      // Use safe public view - only exposes non-sensitive fields
+      // View already filters for is_public_listing = true AND is_available = true
       const { data, error } = await supabase
-        .from("public_stylist_profiles")
+        .from("public_stylist_profiles_safe")
         .select("*")
-        .eq("is_available", true)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
