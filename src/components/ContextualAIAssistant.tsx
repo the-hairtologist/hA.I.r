@@ -148,15 +148,22 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
   };
 
   useEffect(() => {
+    console.log('[AI Assistant] Route changed to:', location.pathname);
     // Fetch suggestions when route changes
     const timer = setTimeout(() => {
+      console.log('[AI Assistant] Fetching suggestions...');
       fetchSuggestions();
     }, 2000); // Wait 2s after route change
 
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
-  if (!isVisible) return null;
+  console.log('[AI Assistant] Render - isVisible:', isVisible, 'isExpanded:', isExpanded, 'suggestions:', suggestions.length);
+
+  if (!isVisible) {
+    console.log('[AI Assistant] Not visible, returning null');
+    return null;
+  }
 
   return (
     <div 
@@ -164,7 +171,7 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
       className={cn(
         "animate-fade-in",
         dragInfo?.isDragging && "cursor-grabbing",
-        position ? "fixed z-40" : "fixed bottom-24 md:bottom-6 right-24 z-40"
+        position ? "fixed z-[100]" : "fixed bottom-24 md:bottom-6 right-24 z-[100]"
       )}
       style={position ? {
         left: `${position.x}px`,
