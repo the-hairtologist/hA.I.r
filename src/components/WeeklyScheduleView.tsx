@@ -195,19 +195,19 @@ export const WeeklyScheduleView = ({
               variant="outline" 
               size="sm" 
               onClick={previousWeek} 
-              className="border-[2px] h-7 w-7 p-0 flex items-center justify-center"
+              className="border-[2px] border-foreground h-7 w-7 p-0 flex items-center justify-center bg-card hover:bg-muted"
               aria-label="Previous week"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 text-foreground" strokeWidth={3} />
             </Button>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={nextWeek} 
-              className="border-[2px] h-7 w-7 p-0 flex items-center justify-center"
+              className="border-[2px] border-foreground h-7 w-7 p-0 flex items-center justify-center bg-card hover:bg-muted"
               aria-label="Next week"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 text-foreground" strokeWidth={3} />
             </Button>
           </div>
         </div>

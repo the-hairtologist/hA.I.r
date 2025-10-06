@@ -121,15 +121,26 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           haptic.tap();
           setIsOpen(!isOpen);
         }}
+        style={{
+          background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+          border: '2px solid #ffffff',
+        }}
         className={cn(
-          "h-14 w-14 rounded-full shadow-lg relative",
-          "bg-gradient-to-br from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600",
+          "h-14 w-14 rounded-full shadow-lg",
+          "hover:scale-105 active:scale-95",
           "transition-all duration-200",
-          "flex items-center justify-center",
           isOpen && "rotate-45"
         )}
       >
-        <Plus className="h-7 w-7 text-white absolute inset-0 m-auto" strokeWidth={2.5} />
+        <Plus 
+          className="text-white" 
+          size={28}
+          strokeWidth={3}
+          style={{ 
+            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))',
+            display: 'block'
+          }}
+        />
       </Button>
     </div>
   );
