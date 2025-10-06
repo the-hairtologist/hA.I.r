@@ -129,10 +129,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           isOpen && "rotate-45"
         )}
       >
-        <div className="relative flex items-center justify-center">
-          <Scissors className="h-5 w-5 text-primary-foreground" strokeWidth={2} />
-          <Sparkles className="absolute -top-0.5 -right-0.5 h-3 w-3 text-warning" strokeWidth={2.5} />
-        </div>
+        <Plus className="h-6 w-6 text-primary-foreground" strokeWidth={2} />
       </Button>
     </div>
   );
