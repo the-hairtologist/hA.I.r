@@ -52,14 +52,17 @@ export default function AdminUsers() {
     }
   };
 
-  const handleRoleChange = async (userId: string, newRole: 'admin' | 'stylist' | 'client', oldRole: 'admin' | 'stylist' | 'client') => {
+  const handleRoleChange = async (userId: string, newRole: 'admin' | 'stylist' | 'client', oldRole: string) => {
     try {
+      // Type assert oldRole to match the app_role enum
+      const typedOldRole = oldRole as 'admin' | 'stylist' | 'client';
+      
       // Remove old role
       await supabase
         .from('user_roles')
         .delete()
         .eq('user_id', userId)
-        .eq('role', oldRole);
+        .eq('role', typedOldRole);
 
       // Add new role
       const { error } = await supabase
