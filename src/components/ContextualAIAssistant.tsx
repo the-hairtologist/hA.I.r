@@ -163,8 +163,8 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
       } : undefined}
     >
       <Card className={cn(
-        "border-0 shadow-none bg-transparent backdrop-blur-none transition-all duration-300",
-        isExpanded ? "w-80" : "w-auto"
+        "transition-all duration-300",
+        isExpanded ? "w-80 shadow-lg border bg-card" : "border-0 shadow-none bg-transparent"
       )}>
         <CardContent className="p-0">
           {/* Collapsed State */}
