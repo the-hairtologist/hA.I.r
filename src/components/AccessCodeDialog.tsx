@@ -83,7 +83,7 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md brutal-border brutal-shadow-md">
         <DialogHeader>
           <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 border-2 border-primary w-fit">
             <Key className="h-8 w-8 text-primary" />

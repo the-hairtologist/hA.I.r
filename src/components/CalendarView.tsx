@@ -36,7 +36,7 @@ export const CalendarView = ({ appointments, onDateSelect, onAppointmentClick }:
   const emptyDays = Array(startDayOfWeek).fill(null);
 
   return (
-    <Card>
+    <Card className="brutal-border brutal-shadow-sm">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>{format(currentMonth, 'MMMM yyyy')}</CardTitle>

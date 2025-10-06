@@ -100,7 +100,7 @@ export const ContextualAI = ({ context, data, onAction }: ContextualAIProps) => 
 
   return (
     <Card className={cn(
-      "border-2 border-primary/20 bg-primary/5 animate-fade-in-fast",
+      "brutal-border bg-primary/5 animate-fade-in-fast",
       "hover:border-primary/40 transition-all duration-200"
     )}>
       <CardContent className="p-4">

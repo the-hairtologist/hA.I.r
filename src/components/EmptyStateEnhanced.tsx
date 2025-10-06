@@ -41,10 +41,10 @@ export const EmptyStateEnhanced = ({
     >
       {illustration || (
         <div className="relative mb-6">
-          <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full brutal-border brutal-shadow-xs">
             <Icon className="h-16 w-16 text-primary" aria-hidden="true" />
           </div>
-          <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
+          <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full brutal-border">
             <span className="text-2xl" role="img" aria-label="sparkles">✨</span>
           </div>
         </div>

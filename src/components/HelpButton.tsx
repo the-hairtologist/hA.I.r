@@ -80,14 +80,14 @@ export const HelpButton = () => {
         variant="outline"
         size="icon"
         onClick={handleOpen}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] z-50 bg-primary text-primary-foreground"
+        className="fixed bottom-6 right-6 h-14 w-14 rounded-full brutal-border brutal-shadow-xs brutal-hover z-50 bg-primary text-on-surface-primary"
         aria-label="Help & Support"
       >
         <HelpCircle className="h-6 w-6" />
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden border-[3px] border-foreground">
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden brutal-border brutal-shadow-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <HelpCircle className="h-6 w-6 text-primary" />
@@ -119,7 +119,7 @@ export const HelpButton = () => {
                   placeholder="Search help articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 border-[2px] border-foreground"
+                  className="pl-10"
                 />
               </div>
 
@@ -133,7 +133,7 @@ export const HelpButton = () => {
                   filteredArticles.map((article) => (
                     <Card
                       key={article.id}
-                      className="border-[2px] border-border hover:border-primary/40 transition-colors cursor-pointer"
+                      className="brutal-border hover:border-primary/40 transition-colors cursor-pointer"
                       onClick={() => {
                         // TODO: Open article detail or navigate
                         haptic.tap();

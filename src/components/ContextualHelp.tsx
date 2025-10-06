@@ -46,7 +46,7 @@ export const ContextualHelp = ({
       {isOpen && (
         <Card className={cn(
           "absolute z-50 w-80",
-          "border-2 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]",
+          "brutal-border brutal-shadow-md",
           "animate-scale-in",
           positionClasses[position]
         )}>

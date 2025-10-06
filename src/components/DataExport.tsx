@@ -53,7 +53,7 @@ export const DataExport = () => {
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 brutal-border brutal-shadow-sm">
       <div className="space-y-4">
         <div className="flex items-start space-x-3">
           <FileJson className="h-5 w-5 text-primary mt-0.5" />

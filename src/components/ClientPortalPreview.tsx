@@ -57,7 +57,7 @@ export const ClientPortalPreview = ({
   };
 
   return (
-    <Card className={`${className} border-[2px] border-primary/30 bg-gradient-to-br from-primary/5 to-background`}>
+    <Card className={`${className} brutal-border bg-gradient-to-br from-primary/5 to-background`}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
@@ -94,7 +94,7 @@ export const ClientPortalPreview = ({
               variant="outline"
               size="sm"
               onClick={handleShare}
-              className="gap-1 border-[2px] border-foreground"
+              className="gap-1"
             >
               <Share2 className="h-3 w-3" />
               Share
@@ -117,7 +117,7 @@ export const ClientPortalPreview = ({
         <div className="grid grid-cols-2 gap-3">
           <Button
             onClick={handleBooking}
-            className="gap-2 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+            className="gap-2"
           >
             <Calendar className="h-4 w-4" />
             Book Now
@@ -125,7 +125,7 @@ export const ClientPortalPreview = ({
           <Button
             variant="outline"
             onClick={() => toast.info("View availability coming soon!")}
-            className="gap-2 border-[2px] border-foreground"
+            className="gap-2"
           >
             <Clock className="h-4 w-4" />
             View Hours
@@ -133,7 +133,7 @@ export const ClientPortalPreview = ({
         </div>
 
         {/* Coming Soon Features */}
-        <div className="p-4 bg-success/10 rounded-lg border-[2px] border-success/20">
+        <div className="p-4 bg-success/10 rounded-lg brutal-border border-success/20">
           <p className="text-xs font-semibold text-success-foreground mb-2">
             🚀 Coming Soon in Phase 2:
           </p>
