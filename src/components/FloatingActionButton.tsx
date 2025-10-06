@@ -115,32 +115,25 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       </div>
 
       {/* Main FAB */}
-      <div className="relative animate-fade-in">        
-        <Button
-          size="icon"
-          onClick={() => {
-            haptic.tap();
-            setIsOpen(!isOpen);
-          }}
-          className={cn(
-            "relative h-16 w-16 rounded-lg border-[4px] border-foreground",
-            "bg-gradient-to-br from-[#FF6B9D] via-[#C06C84] to-[#6C5B7B]",
-            "shadow-[6px_6px_0px_0px_hsl(var(--foreground))]",
-            "hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))]",
-            "hover:translate-x-[-2px] hover:translate-y-[-2px]",
-            "active:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
-            "active:translate-x-[2px] active:translate-y-[2px]",
-            "transition-all duration-150",
-            "flex items-center justify-center",
-            isOpen && "rotate-45"
-          )}
-        >
-          <div className="relative flex items-center justify-center">
-            <Scissors className="h-6 w-6 text-white pointer-events-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]" strokeWidth={2.5} />
-            <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-[#FFF05A] pointer-events-none drop-shadow-[1px_1px_0px_rgba(0,0,0,0.3)]" strokeWidth={3} />
-          </div>
-        </Button>
-      </div>
+      <Button
+        size="icon"
+        onClick={() => {
+          haptic.tap();
+          setIsOpen(!isOpen);
+        }}
+        className={cn(
+          "h-14 w-14 rounded-full shadow-lg",
+          "bg-primary hover:bg-primary/90",
+          "transition-all duration-200",
+          "flex items-center justify-center",
+          isOpen && "rotate-45"
+        )}
+      >
+        <div className="relative flex items-center justify-center">
+          <Scissors className="h-5 w-5 text-primary-foreground" strokeWidth={2} />
+          <Sparkles className="absolute -top-0.5 -right-0.5 h-3 w-3 text-warning" strokeWidth={2.5} />
+        </div>
+      </Button>
     </div>
   );
 };
