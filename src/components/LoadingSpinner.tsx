@@ -19,7 +19,7 @@ export const LoadingSpinner = ({
   };
 
   return (
-    <div className={cn("flex flex-col items-center justify-center gap-4", className)} role="status">
+    <div className={cn("flex flex-col items-center justify-center gap-4 min-h-screen w-full", className)} role="status">
       <div className="relative">
         <Scissors 
           className={cn(
