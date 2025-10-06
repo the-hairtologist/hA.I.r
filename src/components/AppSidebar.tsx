@@ -114,7 +114,7 @@ function SortableNavItem({
       <SidebarMenuButton 
         asChild={!hasChildren} 
         tooltip={item.title} 
-        className="min-h-[44px] group relative"
+        className="min-h-[44px] group relative p-0"
         onClick={hasChildren ? (e) => {
           e.preventDefault();
           toggleExpanded(item.id);
