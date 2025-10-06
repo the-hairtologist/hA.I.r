@@ -40,10 +40,10 @@ const PublicStylistDirectory = () => {
 
   const fetchStylists = async () => {
     try {
+      // Use the safe public view that excludes sensitive business data
       const { data, error } = await supabase
-        .from("public_stylist_profiles")
+        .from("public_stylist_profiles_safe")
         .select("*")
-        .eq("is_available", true)
         .order("average_rating", { ascending: false, nullsFirst: false })
         .order("total_reviews", { ascending: false, nullsFirst: false })
         .limit(50); // Top 50 stylists for public discovery
