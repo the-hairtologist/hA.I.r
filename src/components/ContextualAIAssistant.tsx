@@ -23,6 +23,7 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
   const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [hasMoved, setHasMoved] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -41,7 +42,8 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isExpanded) return;
-    setIsDragging(true);
+    e.preventDefault();
+    setHasMoved(false);
     const rect = buttonRef.current?.getBoundingClientRect();
     if (rect) {
       setDragStart({
@@ -53,7 +55,7 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (isExpanded) return;
-    setIsDragging(true);
+    setHasMoved(false);
     const touch = e.touches[0];
     const rect = buttonRef.current?.getBoundingClientRect();
     if (rect) {
@@ -66,14 +68,18 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
+      if (dragStart.x === 0 && dragStart.y === 0) return;
+      setHasMoved(true);
+      setIsDragging(true);
       const newX = Math.max(0, Math.min(e.clientX - dragStart.x, window.innerWidth - 80));
       const newY = Math.max(0, Math.min(e.clientY - dragStart.y, window.innerHeight - 80));
       setPosition({ x: newX, y: newY });
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging) return;
+      if (dragStart.x === 0 && dragStart.y === 0) return;
+      setHasMoved(true);
+      setIsDragging(true);
       const touch = e.touches[0];
       const newX = Math.max(0, Math.min(touch.clientX - dragStart.x, window.innerWidth - 80));
       const newY = Math.max(0, Math.min(touch.clientY - dragStart.y, window.innerHeight - 80));
@@ -81,18 +87,17 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
     };
 
     const handleEnd = () => {
-      if (isDragging) {
-        setIsDragging(false);
+      if (isDragging && position) {
         localStorage.setItem('ai-assistant-position', JSON.stringify(position));
       }
+      setIsDragging(false);
+      setDragStart({ x: 0, y: 0 });
     };
 
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleEnd);
-      document.addEventListener('touchmove', handleTouchMove);
-      document.addEventListener('touchend', handleEnd);
-    }
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchmove', handleTouchMove);
+    document.addEventListener('touchend', handleEnd);
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
@@ -173,9 +178,10 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
               onClick={(e) => {
-                if (!isDragging) {
+                if (!hasMoved) {
                   setIsExpanded(true);
                 }
+                setHasMoved(false);
               }}
               className={cn(
                 "w-14 h-14 rounded-full cursor-grab active:cursor-grabbing",
