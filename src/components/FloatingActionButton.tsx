@@ -171,7 +171,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       className={cn(
         "flex flex-col-reverse items-end gap-3",
         dragInfo?.isDragging && "cursor-grabbing",
-        position ? "fixed z-50" : "fixed bottom-28 right-20 md:bottom-6 md:right-6 z-50"
+        position ? "fixed z-50" : "fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50"
       )}
       style={position ? {
         left: `${position.x}px`,
@@ -222,14 +222,15 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           }
         }}
         className={cn(
-          "h-14 w-14 rounded-full shadow-xl cursor-grab active:cursor-grabbing",
+          "h-14 w-14 rounded-full shadow-xl cursor-grab active:cursor-grabbing border-2 border-white/30",
           "bg-gradient-to-br from-orange-500 to-red-500",
           "hover:scale-110 transition-all duration-200 hover:shadow-2xl",
+          "flex items-center justify-center",
           isOpen && "rotate-45",
           dragInfo?.isDragging && "cursor-grabbing scale-110"
         )}
       >
-        <Plus className="h-6 w-6 text-white" />
+        <Plus className="h-6 w-6 text-white pointer-events-none" strokeWidth={3} />
       </Button>
     </div>
   );
