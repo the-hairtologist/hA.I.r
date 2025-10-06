@@ -29,17 +29,17 @@ export const FeatureCard = ({
 
   return (
     <Card
-      className="group transition-all animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 relative overflow-hidden"
+      className="group relative transition-all animate-fade-in brutal-border bg-card overflow-hidden brutal-shadow-xs hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] hover:-translate-y-2 hover:scale-[1.02] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       <div className={cn(
-        "absolute inset-0 bg-gradient-to-br opacity-20",
+        "absolute inset-0 bg-gradient-to-br opacity-15 group-hover:opacity-20 transition-opacity",
         gradient
       )} />
       <CardHeader className="relative">
         <div className="flex items-center gap-3 mb-2">
           <div className={cn(
-            "p-3 rounded-lg bg-gradient-to-br border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+            "p-3 rounded-lg bg-gradient-to-br brutal-border brutal-shadow-xs group-hover:brutal-shadow-sm transition-shadow",
             gradient
           )}>
             <Icon className="h-6 w-6 text-primary-foreground" />
@@ -51,7 +51,7 @@ export const FeatureCard = ({
       <CardContent className="relative">
         <Button 
           variant="outline" 
-          className="w-full font-display"
+          className="w-full font-display brutal-border brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5 transition-all group-hover:border-primary group-hover:text-primary"
           onClick={handleClick}
         >
           Open →
