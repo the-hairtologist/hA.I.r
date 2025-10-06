@@ -162,15 +162,15 @@ const Finance = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-4 py-8 max-w-6xl">
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-6xl">
         {/* Overview Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+            <CardHeader className="pb-2 p-4 sm:p-6">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-primary">
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <div className="text-2xl sm:text-3xl font-bold text-primary">
                 ${totalRevenue.toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">All time earnings</p>
@@ -204,11 +204,11 @@ const Finance = () => {
           </Card>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="payments">Service Payments</TabsTrigger>
-            <TabsTrigger value="commissions">Product Commissions</TabsTrigger>
-            <TabsTrigger value="affiliate">Affiliate Codes</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsTrigger value="payments" className="min-h-[44px] text-xs sm:text-sm px-2 sm:px-4">Service Payments</TabsTrigger>
+            <TabsTrigger value="commissions" className="min-h-[44px] text-xs sm:text-sm px-2 sm:px-4">Product Commissions</TabsTrigger>
+            <TabsTrigger value="affiliate" className="min-h-[44px] text-xs sm:text-sm px-2 sm:px-4">Affiliate Codes</TabsTrigger>
           </TabsList>
 
           {/* Payments Tab */}

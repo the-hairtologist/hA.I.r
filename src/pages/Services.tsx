@@ -248,29 +248,29 @@ const Services = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <header role="banner" className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4 min-w-0 flex-1">
+      <header role="banner" className="border-b-[3px] sm:border-b-4 border-foreground bg-card/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
               <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="border-2 border-foreground min-h-[44px] min-w-[44px] flex-shrink-0 hover:bg-muted/50">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div className="flex items-center gap-2 min-w-0">
-                <DollarSign className="h-6 w-6 text-primary flex-shrink-0" />
-                <h1 className="text-2xl font-bold font-display truncate">Service Pricing</h1>
+                <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
+                <h1 className="text-lg sm:text-2xl font-bold font-display truncate">Service Pricing</h1>
               </div>
             </div>
             <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
-                <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Service
+                <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0 text-sm sm:text-base px-3 sm:px-4">
+                  <Plus className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Add Service</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="w-[calc(100%-2rem)] sm:max-w-md max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>{editingService ? "Edit Service" : "Add New Service"}</DialogTitle>
-                  <DialogDescription>
+                  <DialogTitle className="text-lg sm:text-xl">{editingService ? "Edit Service" : "Add New Service"}</DialogTitle>
+                  <DialogDescription className="text-sm">
                     Define your service offerings and pricing
                   </DialogDescription>
                 </DialogHeader>

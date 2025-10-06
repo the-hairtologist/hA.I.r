@@ -260,29 +260,29 @@ const Settings = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="profile">
-              <User className="h-4 w-4 mr-2" />
-              Profile
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-4xl">
+        <Tabs defaultValue="profile" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsTrigger value="profile" className="min-h-[44px] text-xs sm:text-sm flex-col sm:flex-row gap-1 sm:gap-2 py-2">
+              <User className="h-4 w-4" />
+              <span>Profile</span>
             </TabsTrigger>
-            <TabsTrigger value="account">
-              <Shield className="h-4 w-4 mr-2" />
-              Account
+            <TabsTrigger value="account" className="min-h-[44px] text-xs sm:text-sm flex-col sm:flex-row gap-1 sm:gap-2 py-2">
+              <Shield className="h-4 w-4" />
+              <span>Account</span>
             </TabsTrigger>
-            <TabsTrigger value="preferences">
-              <Bell className="h-4 w-4 mr-2" />
-              Preferences
+            <TabsTrigger value="preferences" className="min-h-[44px] text-xs sm:text-sm flex-col sm:flex-row gap-1 sm:gap-2 py-2">
+              <Bell className="h-4 w-4" />
+              <span>Preferences</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Profile Tab */}
-          <TabsContent value="profile" className="space-y-6">
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle>Profile Information</CardTitle>
-                <CardDescription>
+          <TabsContent value="profile" className="space-y-4 sm:space-y-6">
+            <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Profile Information</CardTitle>
+                <CardDescription className="text-sm">
                   {userRole === "stylist" 
                     ? "Manage your business profile and professional details"
                     : "Manage your personal profile"}
