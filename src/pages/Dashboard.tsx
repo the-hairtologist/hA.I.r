@@ -53,7 +53,6 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { TodoList } from "@/components/dashboard/TodoList";
 import { HelpButton } from "@/components/HelpButton";
-import { AIFeatureShowcase } from "@/components/AIFeatureShowcase";
 
 interface SortableSectionProps {
   id: string;
@@ -120,7 +119,6 @@ const Dashboard = () => {
   } | null>(null);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
     "subscription",
-    "ai-showcase",
     "client-insights",
     "kpi-cards",
     "weekly-summary",
@@ -608,9 +606,6 @@ const Dashboard = () => {
           return <SubscriptionManagementCard key={sectionId} />;
         }
         return null;
-      case "ai-showcase":
-        // AI Feature Showcase - highly visible for all users
-        return <AIFeatureShowcase key={sectionId} />;
       case "client-insights":
         if (userRole === "stylist" && profile?.id) {
           return <PredictiveClientInsights key={sectionId} stylistId={profile.id} />;
