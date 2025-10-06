@@ -146,7 +146,7 @@ function SortableNavItem({
             </div>
             {!collapsed && (
               <>
-                <div className="flex flex-col flex-1 min-w-0 mr-2">
+                <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-sm font-medium truncate">{item.title}</span>
                   {item.description && (
                     <span className="text-[10px] text-muted-foreground leading-tight truncate">
@@ -154,7 +154,7 @@ function SortableNavItem({
                     </span>
                   )}
                 </div>
-                <div className={`flex-shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
+                <div className={`flex-shrink-0 ml-2 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
                   <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 </div>
               </>
