@@ -171,7 +171,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       className={cn(
         "flex flex-col-reverse items-end gap-3",
         dragInfo?.isDragging && "cursor-grabbing",
-        position ? "fixed z-50" : "fixed bottom-20 md:bottom-6 right-6 z-50"
+        position ? "fixed z-50" : "fixed bottom-28 right-20 md:bottom-6 md:right-6 z-50"
       )}
       style={position ? {
         left: `${position.x}px`,

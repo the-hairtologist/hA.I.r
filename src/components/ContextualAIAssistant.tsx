@@ -169,14 +169,15 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
     <div 
       ref={buttonRef}
       className={cn(
-        "animate-fade-in",
+        "animate-fade-in touch-none",
         dragInfo?.isDragging && "cursor-grabbing",
-        position ? "fixed z-[100]" : "fixed bottom-24 md:bottom-6 right-24 z-[100]"
+        position ? "fixed z-[100]" : "fixed bottom-28 right-4 md:bottom-6 md:right-24 z-[100]"
       )}
       style={position ? {
         left: `${position.x}px`,
         top: `${position.y}px`,
-      } : undefined}
+        touchAction: 'none'
+      } : { touchAction: 'auto' }}
     >
       <Card className={cn(
         "transition-all duration-300",
@@ -189,19 +190,22 @@ export const ContextualAIAssistant = ({ userRole, recentData }: ContextualAIAssi
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
               onClick={() => {
+                console.log('[AI Button] Clicked! dragInfo:', dragInfo);
                 // Only expand if we didn't drag
                 if (!dragInfo?.isDragging) {
+                  console.log('[AI Button] Expanding...');
                   setIsExpanded(true);
                 }
               }}
               className={cn(
-                "w-14 h-14 rounded-full cursor-grab active:cursor-grabbing",
+                "w-14 h-14 rounded-full cursor-grab active:cursor-grabbing touch-manipulation",
                 "bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700",
                 "shadow-lg hover:shadow-xl transition-all hover:scale-105 border-0",
                 dragInfo?.isDragging && "cursor-grabbing scale-105"
               )}
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
-              <Sparkles className="h-5 w-5 text-white animate-pulse" />
+              <Sparkles className="h-5 w-5 text-white animate-pulse pointer-events-none" />
             </Button>
           )}
 
