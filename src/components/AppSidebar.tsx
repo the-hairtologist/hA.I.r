@@ -147,9 +147,9 @@ function SortableNavItem({
             {!collapsed && (
               <>
                 <div className="flex flex-col flex-1 min-w-0">
-                  <span className={`text-sm font-medium truncate ${
-                    isParentActive || isAnyChildActive ? 'text-primary' : 'text-foreground'
-                  }`}>{item.title}</span>
+                  <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
+                    {item.title}
+                  </span>
                   {item.description && (
                     <span className="text-[10px] text-muted-foreground leading-tight truncate">
                       {item.description}
@@ -157,9 +157,7 @@ function SortableNavItem({
                   )}
                 </div>
                 <div className={`flex-shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
-                  <ChevronDown className={`h-4 w-4 ${
-                    isParentActive || isAnyChildActive ? 'text-primary' : 'text-muted-foreground'
-                  }`} />
+                  <ChevronDown className={`h-4 w-4 ${item.color || 'text-muted-foreground'}`} />
                 </div>
               </>
             )}
@@ -186,7 +184,9 @@ function SortableNavItem({
             </div>
             {!collapsed && (
               <div className="flex flex-col flex-1 min-w-0">
-                <span className="text-sm font-medium truncate">{item.title}</span>
+                <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
+                  {item.title}
+                </span>
                 {item.description && (
                   <span className="text-[10px] text-muted-foreground leading-tight truncate">
                     {item.description}
@@ -224,9 +224,9 @@ function SortableNavItem({
                           <child.icon className="h-4 w-4 text-white" />
                         </div>
                       </div>
-                      <span className={`text-sm truncate ${
-                        isChildActive ? 'text-primary font-medium' : 'text-foreground'
-                      }`}>{child.title}</span>
+                      <span className={`text-sm truncate ${child.color || 'text-foreground'}`}>
+                        {child.title}
+                      </span>
                     </NavLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -271,13 +271,13 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   // Stylist Navigation with unique IDs
   const stylistAllItems: SidebarItem[] = [
-    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main" },
-    { id: "find-clients", title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main" },
-    { id: "clients", title: "Clients & Formulas", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main" },
-    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main" },
-    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "scheduling" },
-    { id: "schedule", title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Set working hours", group: "scheduling" },
-    { id: "services", title: "Services", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business" },
+    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-500" },
+    { id: "find-clients", title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main", color: "text-cyan-500" },
+    { id: "clients", title: "Clients & Formulas", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main", color: "text-emerald-500" },
+    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-500" },
+    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "scheduling", color: "text-cyan-500" },
+    { id: "schedule", title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Set working hours", group: "scheduling", color: "text-blue-500" },
+    { id: "services", title: "Services", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-500" },
     { 
       id: "finance", 
       title: "Finance", 
@@ -285,27 +285,28 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       icon: DollarSign, 
       gradient: "bg-[image:var(--gradient-amber-orange)]", 
       group: "business",
+      color: "text-amber-500",
       children: [
-        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business" },
-        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business" },
+        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-500" },
+        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-500" },
       ]
     },
-    { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "business" },
-    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools" },
-    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools" },
-    { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools" },
+    { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "business", color: "text-orange-500" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-500" },
+    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-500" },
+    { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools", color: "text-amber-500" },
   ];
 
   // Client Navigation with unique IDs
   const clientAllItems: SidebarItem[] = [
-    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main" },
-    { id: "my-requests", title: "My Requests", url: "/client-requests", icon: Megaphone, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "main" },
-    { id: "find-stylists", title: "Find Stylists", url: "/stylists", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main" },
-    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main" },
-    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main" },
-    { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "tools" },
-    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools" },
-    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools" },
+    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-500" },
+    { id: "my-requests", title: "My Requests", url: "/client-requests", icon: Megaphone, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "main", color: "text-amber-500" },
+    { id: "find-stylists", title: "Find Stylists", url: "/stylists", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main", color: "text-cyan-500" },
+    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-500" },
+    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main", color: "text-violet-500" },
+    { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "tools", color: "text-emerald-500" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-500" },
+    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-500" },
   ];
 
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;

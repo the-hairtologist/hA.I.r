@@ -10,6 +10,7 @@ export interface SidebarItem {
   gradient: string;
   description?: string;
   group: string;
+  color?: string;
   children?: SidebarItem[];
 }
 
