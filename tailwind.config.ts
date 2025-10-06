@@ -151,6 +151,13 @@ export default {
           "90%": { opacity: "0.85", transform: "scale(1.08)" },
           "95%, 100%": { opacity: "1", transform: "scale(1)" },
         },
+        "bounce-attention": {
+          "0%, 90%": { transform: "translateY(0)" },
+          "92%": { transform: "translateY(-8px)" },
+          "94%": { transform: "translateY(0)" },
+          "96%": { transform: "translateY(-4px)" },
+          "98%, 100%": { transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.3s ease-out",
@@ -164,6 +171,7 @@ export default {
         "wiggle": "wiggle 1s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "pulse-subtle": "pulse-subtle 4s ease-in-out infinite",
+        "bounce-attention": "bounce-attention 4s ease-in-out infinite",
       },
     },
   },
