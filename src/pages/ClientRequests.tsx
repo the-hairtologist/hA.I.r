@@ -235,9 +235,9 @@ const ClientRequests = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-4 py-6 max-w-6xl">
-        <div className="mb-6 flex justify-between items-center">
-          <p className="text-muted-foreground">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-6xl">
+        <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Post your hair goals and let stylists find you!
           </p>
           <Dialog open={showDialog} onOpenChange={(open) => {
@@ -255,18 +255,18 @@ const ClientRequests = () => {
             }
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2">
+              <Button className="gap-2 min-h-[44px] w-full sm:w-auto">
                 <Plus className="h-4 w-4" />
                 New Request
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[90vh] overflow-y-auto">
               <form onSubmit={handleSubmit}>
                 <DialogHeader>
-                  <DialogTitle className="font-display text-2xl gradient-text">
+                  <DialogTitle className="font-display text-lg sm:text-2xl gradient-text">
                     {editingPost ? "Edit Request" : "Create New Request"}
                   </DialogTitle>
-                  <DialogDescription>
+                  <DialogDescription className="text-sm">
                     Tell stylists what you're looking for
                   </DialogDescription>
                 </DialogHeader>
@@ -342,17 +342,17 @@ const ClientRequests = () => {
         </div>
 
         {posts.length === 0 ? (
-          <Card className="border-primary/20">
-            <CardContent className="py-12 text-center">
-              <Search className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-display font-bold mb-2">No requests yet</h3>
-              <p className="text-muted-foreground mb-4">
+          <Card className="border-[2px] sm:border-[3px] border-primary/20 shadow-[2px_2px_0px_0px_hsl(var(--foreground)_/_0.1)]">
+            <CardContent className="py-8 sm:py-12 text-center px-4">
+              <Search className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
+              <h3 className="text-lg sm:text-xl font-display font-bold mb-2">No requests yet</h3>
+              <p className="text-sm sm:text-base text-muted-foreground mb-4">
                 Create your first request to connect with stylists!
               </p>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
             {posts.map((post) => (
               <Card key={post.id} className="border-primary/20 hover:border-primary/40 transition-all">
                 <CardHeader>

@@ -461,17 +461,17 @@ const Integrations = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-fade-in">
+      <div className="space-y-4 sm:space-y-8 animate-fade-in">
         {/* Header */}
-        <div className="glass-effect p-8 rounded-xl border">
-          <div className="flex items-center justify-between mb-4">
+        <div className="glass-effect p-4 sm:p-8 rounded-xl border-[2px] sm:border-[3px] border-foreground">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500">
-                <Zap className="h-6 w-6 text-primary-foreground" />
+              <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0">
+                <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
               </div>
-              <div>
-                <h1 className="text-4xl font-bold gradient-text">Integrations</h1>
-                <p className="text-muted-foreground text-lg">
+              <div className="min-w-0">
+                <h1 className="text-2xl sm:text-4xl font-bold gradient-text truncate">Integrations</h1>
+                <p className="text-muted-foreground text-sm sm:text-lg">
                   Connect your favorite tools and automate your workflow
                 </p>
               </div>
@@ -503,7 +503,7 @@ const Integrations = () => {
               placeholder="Search integrations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-12 bg-background/50"
+              className="pl-10 h-11 sm:h-12 bg-background/50 text-base"
             />
           </div>
         </div>
@@ -515,7 +515,7 @@ const Integrations = () => {
               <Sparkles className="h-5 w-5 text-primary" />
               <h2 className="text-2xl font-bold">Recommended for You</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {recommendedIntegrations.map((integration, index) => {
                 const Icon = integration.icon;
                 return (
@@ -525,11 +525,11 @@ const Integrations = () => {
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${integration.gradient} opacity-5 group-hover:opacity-10 transition-opacity`} />
-                    <CardHeader className="pb-3">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${integration.gradient} flex items-center justify-center mb-2`}>
-                        <Icon className="h-6 w-6 text-primary-foreground" />
+                    <CardHeader className="pb-3 p-4 sm:p-6">
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${integration.gradient} flex items-center justify-center mb-2`}>
+                        <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
                       </div>
-                      <CardTitle className="text-base">{integration.name}</CardTitle>
+                      <CardTitle className="text-sm sm:text-base">{integration.name}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <Dialog>
@@ -633,19 +633,19 @@ const Integrations = () => {
         )}
 
         {/* Category Filter */}
-        <div className="glass-effect rounded-xl border p-2">
+        <div className="glass-effect rounded-xl border-[2px] sm:border-[3px] border-foreground p-2">
           <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-            <TabsList className="w-full justify-start overflow-x-auto flex-wrap h-auto gap-2 bg-transparent">
+            <TabsList className="w-full justify-start overflow-x-auto flex-nowrap sm:flex-wrap h-auto gap-2 bg-transparent">
               {categories.map((category) => {
                 const Icon = category.icon;
                 return (
                   <TabsTrigger 
                     key={category.id} 
                     value={category.id}
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground min-h-[44px] text-xs sm:text-sm whitespace-nowrap px-3 sm:px-4"
                   >
-                    <Icon className="h-4 w-4 mr-2" />
-                    {category.label}
+                    <Icon className="h-4 w-4 mr-1 sm:mr-2 flex-shrink-0" />
+                    <span className="hidden xs:inline">{category.label}</span>
                   </TabsTrigger>
                 );
               })}

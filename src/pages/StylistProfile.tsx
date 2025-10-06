@@ -88,31 +88,31 @@ const StylistProfile = () => {
         url={`/stylist/${stylistId}`}
         type="profile"
       />
-      <div className="container mx-auto p-6 max-w-5xl">
+      <div className="container mx-auto p-3 sm:p-6 max-w-5xl">
         {/* Back Button */}
         <Button 
           variant="ghost" 
           onClick={() => navigate("/stylists")}
-          className="mb-6"
+          className="mb-4 sm:mb-6 min-h-[44px]"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Stylists
         </Button>
 
         {/* Profile Header */}
-        <Card className="mb-8">
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row gap-6">
+        <Card className="mb-6 sm:mb-8 border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
+            <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
               {/* Avatar */}
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-5xl overflow-hidden border-4 border-white shadow-lg">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto md:mx-0 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-4xl sm:text-5xl overflow-hidden border-[3px] sm:border-4 border-white shadow-lg flex-shrink-0">
                 {stylist.business_name?.charAt(0).toUpperCase() || (
-                  <User className="h-16 w-16 text-primary" />
+                  <User className="h-12 w-12 sm:h-16 sm:w-16 text-primary" />
                 )}
               </div>
 
               {/* Info */}
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold mb-2">
+              <div className="flex-1 min-w-0 text-center md:text-left">
+                <h1 className="text-2xl sm:text-3xl font-bold mb-2">
                   {stylist.business_name}
                 </h1>
 
@@ -163,17 +163,19 @@ const StylistProfile = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3">
-                  <Button onClick={handleBookAppointment} size="lg" className="flex-1 md:flex-initial">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                  <Button onClick={handleBookAppointment} size="lg" className="w-full sm:flex-1 md:flex-initial min-h-[48px]">
                     <Calendar className="h-4 w-4 mr-2" />
                     Book Appointment
                   </Button>
                   
-                  <ShareButtons 
-                    url={`/stylist/${stylistId}`}
-                    title={`Check out ${stylist.business_name} on hA.I.r`}
-                    description={stylist.bio || `${stylist.specialty} specialist with ${stylist.years_experience} years of experience`}
-                  />
+                  <div className="w-full sm:w-auto">
+                    <ShareButtons 
+                      url={`/stylist/${stylistId}`}
+                      title={`Check out ${stylist.business_name} on hA.I.r`}
+                      description={stylist.bio || `${stylist.specialty} specialist with ${stylist.years_experience} years of experience`}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -192,11 +194,11 @@ const StylistProfile = () => {
         </Card>
 
         {/* Reviews Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Client Reviews</CardTitle>
+        <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl">Client Reviews</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6 pt-0">
             <ReviewsList stylistId={stylistId!} />
           </CardContent>
         </Card>

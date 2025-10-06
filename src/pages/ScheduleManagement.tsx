@@ -604,23 +604,23 @@ const ScheduleManagement = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b-[3px] sm:border-b-4 border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="min-h-[44px] min-w-[44px] flex-shrink-0">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <div className="flex items-center gap-2">
-                <CalendarIcon className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold">Schedule Management</h1>
+              <div className="flex items-center gap-2 min-w-0">
+                <CalendarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
+                <h1 className="text-lg sm:text-2xl font-bold truncate">Schedule Management</h1>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-5xl pb-20 sm:pb-8">
         {/* Contextual AI Suggestions */}
         <ContextualAI
           context="schedule"
@@ -634,37 +634,39 @@ const ScheduleManagement = () => {
           }}
         />
 
-        <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-7">
-            <TabsTrigger value="availability" className="gap-2 text-xs">
-              <Clock className="h-4 w-4" />
-              Weekly
-            </TabsTrigger>
-            <TabsTrigger value="overrides" className="gap-2 text-xs">
-              <CalendarIcon className="h-4 w-4" />
-              Overrides
-            </TabsTrigger>
-            <TabsTrigger value="blocked" className="gap-2 text-xs">
-              <X className="h-4 w-4" />
-              Blocked Dates
-            </TabsTrigger>
-            <TabsTrigger value="month" className="gap-2">
-              <CalendarDays className="h-4 w-4" />
-              Month View
-            </TabsTrigger>
-            <TabsTrigger value="year" className="gap-2">
-              <CalendarRange className="h-4 w-4" />
-              Year View
-            </TabsTrigger>
-            <TabsTrigger value="calendar-sync" className="gap-2">
-              <CalendarIcon className="h-4 w-4" />
-              Calendar Sync
-            </TabsTrigger>
-            <TabsTrigger value="service-colors" className="gap-2">
-              <Sparkles className="h-4 w-4" />
-              Service Colors
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="availability" className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
+            <TabsList className="grid w-full min-w-[600px] sm:min-w-0 max-w-5xl mx-auto grid-cols-7 h-auto">
+              <TabsTrigger value="availability" className="gap-1 sm:gap-2 text-xs flex-col sm:flex-row py-2 min-h-[48px]">
+                <Clock className="h-4 w-4" />
+                <span className="hidden xs:inline">Weekly</span>
+              </TabsTrigger>
+              <TabsTrigger value="overrides" className="gap-1 sm:gap-2 text-xs flex-col sm:flex-row py-2 min-h-[48px]">
+                <CalendarIcon className="h-4 w-4" />
+                <span className="hidden xs:inline">Override</span>
+              </TabsTrigger>
+              <TabsTrigger value="blocked" className="gap-1 sm:gap-2 text-xs flex-col sm:flex-row py-2 min-h-[48px]">
+                <X className="h-4 w-4" />
+                <span className="hidden xs:inline">Blocked</span>
+              </TabsTrigger>
+              <TabsTrigger value="month" className="gap-1 sm:gap-2 text-xs flex-col sm:flex-row py-2 min-h-[48px]">
+                <CalendarDays className="h-4 w-4" />
+                <span className="hidden xs:inline">Month</span>
+              </TabsTrigger>
+              <TabsTrigger value="year" className="gap-1 sm:gap-2 text-xs flex-col sm:flex-row py-2 min-h-[48px]">
+                <CalendarRange className="h-4 w-4" />
+                <span className="hidden xs:inline">Year</span>
+              </TabsTrigger>
+              <TabsTrigger value="calendar-sync" className="gap-1 sm:gap-2 text-xs flex-col sm:flex-row py-2 min-h-[48px]">
+                <CalendarIcon className="h-4 w-4" />
+                <span className="hidden xs:inline">Sync</span>
+              </TabsTrigger>
+              <TabsTrigger value="service-colors" className="gap-1 sm:gap-2 text-xs flex-col sm:flex-row py-2 min-h-[48px]">
+                <Sparkles className="h-4 w-4" />
+                <span className="hidden xs:inline">Colors</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="availability" className="space-y-6">
             <div className="flex justify-end">
