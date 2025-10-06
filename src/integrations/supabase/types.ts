@@ -991,6 +991,44 @@ export type Database = {
         }
         Relationships: []
       }
+      medical_data_access_log: {
+        Row: {
+          access_type: string
+          accessed_at: string
+          accessor_user_id: string | null
+          client_profile_id: string | null
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string
+          accessor_user_id?: string | null
+          client_profile_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string
+          accessor_user_id?: string | null
+          client_profile_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_data_access_log_client_profile_id_fkey"
+            columns: ["client_profile_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           created_at: string
