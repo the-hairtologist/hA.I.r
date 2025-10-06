@@ -80,7 +80,10 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 flex flex-col-reverse items-end gap-3"
+      className="fixed right-4 sm:right-6 md:right-8 z-50 flex flex-col-reverse items-end gap-3"
+      style={{
+        bottom: 'clamp(5rem, 15vh, 8rem)' // Responsive: stays 5rem-8rem from bottom, adapts to viewport height
+      }}
     >
       {/* Action Items */}
       <div
@@ -119,7 +122,8 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         {/* Subtle glow layer */}
         <div 
           className={cn(
-            "absolute inset-0 h-16 w-16 blur-md opacity-40 transition-opacity duration-500",
+            "absolute inset-0 blur-md opacity-40 transition-opacity duration-500",
+            "w-[clamp(3.5rem,8vw,4rem)] h-[clamp(3.5rem,8vw,4rem)]", // Responsive size
             !isOpen && "bg-orange-400",
             isOpen && "bg-destructive"
           )}
@@ -135,7 +139,8 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
             setIsOpen(!isOpen);
           }}
           className={cn(
-            "h-16 w-16 border-2 border-foreground relative",
+            "border-2 border-foreground relative",
+            "w-[clamp(3.5rem,8vw,4rem)] h-[clamp(3.5rem,8vw,4rem)]", // Responsive: 56px-64px
             "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600",
             "hover:from-orange-500 hover:via-orange-600 hover:to-orange-700",
             "shadow-[3px_3px_0px_0px_hsl(var(--foreground)),inset_0_1px_2px_rgba(255,255,255,0.3)]",
@@ -150,7 +155,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           }}
           aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
         >
-          <Plus className="h-7 w-7 text-white drop-shadow-sm" strokeWidth={2.5} />
+          <Plus className="w-[clamp(1.5rem,4vw,1.75rem)] h-[clamp(1.5rem,4vw,1.75rem)] text-white drop-shadow-sm" strokeWidth={2.5} />
         </Button>
       </div>
     </div>
