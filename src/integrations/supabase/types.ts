@@ -1812,6 +1812,19 @@ export type Database = {
       }
     }
     Views: {
+      admin_activity_log: {
+        Row: {
+          action: string | null
+          actor_email: string | null
+          actor_name: string | null
+          created_at: string | null
+          id: string | null
+          new_data: Json | null
+          old_data: Json | null
+          table_name: string | null
+        }
+        Relationships: []
+      }
       public_stylist_profiles_safe: {
         Row: {
           average_rating: number | null
@@ -1916,6 +1929,10 @@ export type Database = {
         Args: { _user_id: string }
         Returns: string
       }
+      grant_admin_role: {
+        Args: { _user_id: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1938,6 +1955,10 @@ export type Database = {
       redeem_access_code: {
         Args: { _code: string; _user_id: string }
         Returns: boolean
+      }
+      revoke_admin_role: {
+        Args: { _user_id: string }
+        Returns: undefined
       }
       store_calendar_token: {
         Args: {
