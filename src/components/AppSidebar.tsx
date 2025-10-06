@@ -26,6 +26,7 @@ import {
   ChevronRight,
   Command,
   Gift,
+  Shield,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NotificationDot } from "@/components/NotificationDot";
@@ -296,6 +297,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "business", color: "text-orange-400 dark:text-orange-300" },
     { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
+    { id: "system-health", title: "System Health", url: "/system-health", icon: Shield, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "tools", color: "text-green-400 dark:text-green-300" },
     { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools", color: "text-amber-400 dark:text-amber-300" },
   ];
 
