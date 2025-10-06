@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MessageSquare, Star, DollarSign, Scissors } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar, MessageSquare, Star, DollarSign, Scissors, ChevronDown, ChevronUp } from "lucide-react";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface Activity {
   id: string;
@@ -19,6 +21,11 @@ interface RecentActivityProps {
 
 export const RecentActivity = ({ activities }: RecentActivityProps) => {
   const navigate = useNavigate();
+  const [showAll, setShowAll] = useState(false);
+
+  // Show only 3 items on mobile, all on desktop
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const displayActivities = (isMobile && !showAll) ? activities.slice(0, 3) : activities;
 
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -71,32 +78,32 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
 
   if (activities.length === 0) {
     return (
-      <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-red-400">
+      <Card className="animate-fade-in brutal-card bg-red-400">
         <CardHeader>
-          <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
+          <CardTitle className="font-display text-foreground text-base lg:text-lg">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-foreground/80 text-center py-8 font-medium">No recent activity</p>
+          <p className="text-foreground/80 text-center py-6 lg:py-8 font-medium text-sm">No recent activity</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-red-400">
+    <Card className="animate-fade-in brutal-card bg-red-400">
       <CardHeader>
-        <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
+        <CardTitle className="font-display text-foreground text-base lg:text-lg">Recent Activity</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
-          {activities.map((activity, index) => {
+        <div className="space-y-2 lg:space-y-3">
+          {displayActivities.map((activity, index) => {
             const Icon = getActivityIcon(activity.type);
             const colorClass = getActivityColor(activity.type);
 
             return (
               <div
                 key={activity.id}
-                className="flex items-start gap-4 p-4 rounded-lg border-2 border-foreground bg-card hover:bg-card/90 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
+                className="flex items-start gap-3 lg:gap-4 p-3 lg:p-4 rounded-lg border-2 border-foreground bg-card hover:bg-card/90 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] lg:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
                 style={{ animationDelay: `${index * 50}ms` }}
                 onClick={() => {
                   if (activity.type === "appointment") navigate("/appointments");
@@ -104,19 +111,19 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                   if (activity.type === "formula") navigate("/formulas");
                 }}
               >
-                <div className={`p-2 rounded-lg ${colorClass} border-2 border-foreground`}>
-                  <Icon className="h-4 w-4" />
+                <div className={`p-1.5 lg:p-2 rounded-lg ${colorClass} border-2 border-foreground`}>
+                  <Icon className="h-3.5 w-3.5 lg:h-4 lg:w-4" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <p className="font-display font-semibold truncate">{activity.title}</p>
-                      <p className="text-sm text-foreground/70 truncate">
+                      <p className="font-display font-semibold truncate text-sm lg:text-base">{activity.title}</p>
+                      <p className="text-xs lg:text-sm text-foreground/70 truncate">
                         {activity.description}
                       </p>
                     </div>
                     {activity.status && (
-                      <Badge variant="secondary" className={getStatusColor(activity.status)}>
+                      <Badge variant="secondary" className={`${getStatusColor(activity.status)} text-xs`}>
                         {activity.status}
                       </Badge>
                     )}
@@ -129,6 +136,25 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
             );
           })}
         </div>
+        
+        {/* Show More/Less button - Mobile only */}
+        {activities.length > 3 && (
+          <Button
+            variant="ghost"
+            className="w-full mt-3 md:hidden text-sm"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? (
+              <>
+                Show Less <ChevronUp className="ml-2 h-4 w-4" />
+              </>
+            ) : (
+              <>
+                Show All ({activities.length - 3} more) <ChevronDown className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

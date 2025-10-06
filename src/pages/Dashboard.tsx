@@ -71,10 +71,11 @@ const SortableSection = ({ id, children }: SortableSectionProps) => {
 
   return (
     <div ref={setNodeRef} style={style} className="relative group">
+      {/* Drag handle - Hidden on mobile */}
       <div
         {...attributes}
         {...listeners}
-        className="absolute -left-8 top-4 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        className="hidden lg:block absolute -left-8 top-4 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
       >
         <div className="w-6 h-6 rounded bg-secondary/20 hover:bg-secondary/40 flex items-center justify-center border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
           <GripVertical className="h-4 w-4 text-secondary" />
@@ -679,9 +680,11 @@ const Dashboard = () => {
         Skip to main content
       </a>
       <main id="main-content" role="main" aria-label="Dashboard" className="px-3 py-3 sm:px-4 lg:pl-12 overflow-x-hidden max-w-full pb-24 lg:pb-8">
-        <div className="mb-6 sm:mb-8 lg:mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast max-w-full">
-          <div className="window-titlebar">
-            <span className="text-background font-mono text-xs sm:text-sm font-bold">
+        {/* Mobile: Compact Hero | Desktop: Full Window Frame */}
+        <div className="mb-4 lg:mb-12 lg:window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast max-w-full rounded-xl lg:rounded-none border-2 lg:border-4 border-foreground">
+          {/* Window titlebar - Desktop only */}
+          <div className="window-titlebar hidden lg:flex">
+            <span className="text-background font-mono text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
             </span>
             <div className="window-controls">
@@ -695,7 +698,7 @@ const Dashboard = () => {
             <div className="window-scrollbar hidden lg:block"></div>
             
             <div className="max-w-4xl pr-0 sm:pr-4 md:pr-8">
-              <h2 className="text-xl sm:text-2xl lg:text-4xl font-display font-black mb-2 sm:mb-3 lg:mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <h2 className="text-lg sm:text-2xl lg:text-4xl font-display font-black mb-2 sm:mb-3 lg:mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
@@ -724,12 +727,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-4 sm:mb-6 bg-muted/50 border border-border/50 shadow-sm p-2.5 sm:p-3 rounded-lg animate-fade-in overflow-x-hidden max-w-full" style={{ animationDelay: '300ms' }}>
-          <p className="text-xs font-medium text-muted-foreground text-center flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
-            <GripVertical className="h-3.5 w-3.5 sm:h-4 sm:w-4 opacity-50 hidden sm:inline" />
-            <span className="hidden sm:inline text-xs">Hover over sections and drag the handle to rearrange your dashboard</span>
-            <span className="sm:hidden text-xs">Tap & hold to rearrange</span>
-            <GripVertical className="h-3.5 w-3.5 sm:h-4 sm:w-4 opacity-50 hidden sm:inline" />
+        {/* Drag instruction - Desktop/Tablet only */}
+        <div className="mb-4 sm:mb-6 bg-muted/50 border border-border/50 shadow-sm p-2.5 sm:p-3 rounded-lg animate-fade-in overflow-x-hidden max-w-full hidden sm:block" style={{ animationDelay: '300ms' }}>
+          <p className="text-xs font-medium text-muted-foreground text-center flex items-center justify-center gap-2 flex-wrap">
+            <GripVertical className="h-4 w-4 opacity-50" />
+            <span className="text-xs">Hover over sections and drag the handle to rearrange your dashboard</span>
+            <GripVertical className="h-4 w-4 opacity-50" />
           </p>
         </div>
 

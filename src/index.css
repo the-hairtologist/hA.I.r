@@ -735,33 +735,58 @@ All colors MUST be HSL.
     transform: translateY(-2px);
   }
 
-  /* Complete brutalist card styling */
+  /* Complete brutalist card styling - Simplified on mobile */
   .brutal-card {
-    border: 3px solid hsl(var(--foreground));
+    border: 2px solid hsl(var(--foreground));
     border-radius: var(--radius);
-    box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
+    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .brutal-card:hover {
-    box-shadow: 7px 7px 0px 0px hsl(var(--primary));
-    transform: translateY(-2px);
+  /* Full brutalist style on tablet+ */
+  @media (min-width: 768px) {
+    .brutal-card {
+      border-width: 3px;
+      box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
+    }
+    
+    .brutal-card:hover {
+      box-shadow: 7px 7px 0px 0px hsl(var(--primary));
+      transform: translateY(-2px);
+    }
   }
 
-  /* Complete brutalist button effects */
+  /* Complete brutalist button effects - Simplified on mobile */
   .brutal-button {
-    border: 3px solid hsl(var(--foreground));
-    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
+    border: 2px solid hsl(var(--foreground));
+    box-shadow: 2px 2px 0px 0px hsl(var(--foreground));
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .brutal-button:hover {
-    box-shadow: 5px 5px 0px 0px hsl(var(--primary));
+    box-shadow: 3px 3px 0px 0px hsl(var(--primary));
     transform: translateY(-1px);
   }
 
   .brutal-button:active {
     box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
-    transform: translate(2px, 2px);
+    transform: translate(1px, 1px);
+  }
+
+  /* Full brutalist style on tablet+ */
+  @media (min-width: 768px) {
+    .brutal-button {
+      border-width: 3px;
+      box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
+    }
+
+    .brutal-button:hover {
+      box-shadow: 5px 5px 0px 0px hsl(var(--primary));
+    }
+
+    .brutal-button:active {
+      box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
+      transform: translate(2px, 2px);
+    }
   }
 }
