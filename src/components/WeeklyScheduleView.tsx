@@ -172,7 +172,7 @@ export const WeeklyScheduleView = ({
   };
 
   return (
-    <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
+    <Card className="overflow-hidden border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
       <CardHeader className="border-b-[2px] border-foreground px-2 sm:px-3 py-2">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="font-display text-sm sm:text-base flex-shrink truncate">
