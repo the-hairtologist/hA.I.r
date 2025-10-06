@@ -20,6 +20,7 @@ import {
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FloatingActionButton } from "@/components/FloatingActionButton";
+import { AIHealthIndicator } from "@/components/AIHealthIndicator";
 import { useState, useEffect } from "react";
 
 interface DashboardLayoutProps {
@@ -141,6 +142,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </button>
 
               <div className="ml-auto flex items-center gap-3">
+                <AIHealthIndicator />
+                
                 {userRole && (
                   <Badge variant="secondary" className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground">
                     {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
