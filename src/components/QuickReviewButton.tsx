@@ -20,10 +20,25 @@ export const QuickReviewButton = ({
   onSuccess,
 }: QuickReviewButtonProps) => {
   const [open, setOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   // Don't show button if required props are missing
   if (!appointmentId || !stylistId || !stylistName) {
     return null;
+  }
+
+  // Hide the button when dialog is open to avoid blocking
+  if (open) {
+    return (
+      <WriteReviewDialog
+        open={open}
+        onOpenChange={setOpen}
+        appointmentId={appointmentId}
+        stylistId={stylistId}
+        stylistName={stylistName}
+        onSuccess={onSuccess}
+      />
+    );
   }
 
   return (
@@ -31,16 +46,19 @@ export const QuickReviewButton = ({
       <Button
         onClick={() => setOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all z-40 group",
+          "fixed bottom-20 right-4 h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all z-30 group",
           "bg-amber-400 hover:bg-amber-500 text-foreground border-2 border-foreground",
+          "hover:scale-110 active:scale-95",
+          isMinimized && "opacity-50 hover:opacity-100",
           className
         )}
         size="icon"
-        aria-label="Add review"
+        aria-label="Write a review"
+        title="Write a review"
       >
         <div className="relative">
-          <Star className="h-6 w-6 fill-current" />
-          <Plus className="h-4 w-4 absolute -bottom-1 -right-1 bg-foreground text-amber-400 rounded-full p-0.5" />
+          <Star className="h-5 w-5 fill-current" />
+          <Plus className="h-3 w-3 absolute -bottom-0.5 -right-0.5 bg-foreground text-amber-400 rounded-full p-0.5" />
         </div>
       </Button>
 
