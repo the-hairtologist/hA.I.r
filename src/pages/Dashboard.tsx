@@ -49,6 +49,8 @@ import { IntegrationSuggestions } from "@/components/IntegrationSuggestions";
 import { PredictiveClientInsights } from "@/components/PredictiveClientInsights";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { OnboardingWizard } from "@/components/OnboardingWizard";
+import { HelpButton } from "@/components/HelpButton";
 
 interface SortableSectionProps {
   id: string;
@@ -100,6 +102,7 @@ const Dashboard = () => {
   const [profile, setProfile] = useState<any>(null);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showOnboardingWizard, setShowOnboardingWizard] = useState(false);
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false);
   const [stats, setStats] = useState<any>({});
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
@@ -160,9 +163,10 @@ const Dashboard = () => {
       loadLayoutPreferences();
       
       // Check if we should show onboarding
-      const onboardingComplete = localStorage.getItem('onboarding_complete');
+      const onboardingComplete = localStorage.getItem('onboarding_completed');
       if (!onboardingComplete && user) {
-        setTimeout(() => setShowOnboarding(true), 1000);
+        // Show new wizard instead of old onboarding tour
+        setTimeout(() => setShowOnboardingWizard(true), 500);
       }
       
       // Check profile completion
@@ -811,6 +815,18 @@ const Dashboard = () => {
         {user && userRole && (
           <NotificationManager userId={user.id} userRole={userRole as "stylist" | "client"} />
         )}
+
+        {/* New Onboarding Wizard */}
+        {userRole && (
+          <OnboardingWizard
+            open={showOnboardingWizard}
+            onComplete={() => setShowOnboardingWizard(false)}
+            userRole={userRole as "stylist" | "client"}
+          />
+        )}
+
+        {/* Help Button */}
+        <HelpButton />
       </main>
     </DashboardLayout>
   );
