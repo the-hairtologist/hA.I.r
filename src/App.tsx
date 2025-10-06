@@ -178,12 +178,13 @@ const App = () => {
               <Referrals />
             </ProtectedRoute>
           } />
+          
+          {/* Admin Routes */}
           <Route path="/access-codes" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin"]}>
               <AccessCodes />
             </ProtectedRoute>
           } />
-          {/* Admin Routes */}
           <Route path="/app-directory" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AppDirectory />
