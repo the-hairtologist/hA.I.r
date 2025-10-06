@@ -693,10 +693,11 @@ const Dashboard = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="pl-12">
+      <main id="main-content" role="main" aria-label="Dashboard" className="pl-12 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-sm font-bold">
+            <span className="text-background font-mono text-xs sm:text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
             </span>
             <div className="window-controls">
@@ -709,8 +710,8 @@ const Dashboard = () => {
           <div className="bg-blue-600 p-4 md:p-6 relative overflow-hidden">
             <div className="window-scrollbar"></div>
             
-            <div className="max-w-4xl pr-8">
-              <h2 className="text-3xl md:text-4xl font-display font-black mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+            <div className="max-w-4xl pr-4 sm:pr-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-black mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
@@ -731,7 +732,7 @@ const Dashboard = () => {
               )}
 
               {userRole === "client" && (
-                <p className="text-base md:text-lg font-medium text-pink-200 mt-2 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mt-2 animate-fade-in" style={{ animationDelay: '200ms' }}>
                   Ready to book your next transformation? ✨
                 </p>
               )}
@@ -740,9 +741,9 @@ const Dashboard = () => {
         </div>
 
         <div className="mb-6 bg-muted/50 border border-border/50 shadow-sm p-3 rounded-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <p className="text-sm font-medium text-muted-foreground text-center flex items-center justify-center gap-2">
+          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center flex items-center justify-center gap-2 flex-wrap">
             <GripVertical className="h-4 w-4 opacity-50" />
-            Hover over sections and drag the handle to rearrange your dashboard
+            <span>Hover over sections and drag the handle to rearrange your dashboard</span>
             <GripVertical className="h-4 w-4 opacity-50" />
           </p>
         </div>
@@ -828,6 +829,7 @@ const Dashboard = () => {
 
         {/* Help Button */}
         <HelpButton />
+        </div>
       </main>
     </DashboardLayout>
   );

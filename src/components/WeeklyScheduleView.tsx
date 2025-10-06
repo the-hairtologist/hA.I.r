@@ -172,11 +172,11 @@ export const WeeklyScheduleView = ({
   };
 
   return (
-    <Card className="border-0 shadow-none">
-      <CardHeader className="border-b-[2px] border-border px-2 py-1.5">
-        <div className="flex items-center w-full">
-          <div className="flex items-center gap-1.5">
-            <CardTitle className="font-display text-sm">
+    <Card className="border-0 shadow-none w-full">
+      <CardHeader className="border-b-[2px] border-border px-2 sm:px-3 py-1.5 sm:py-2">
+        <div className="flex items-center w-full gap-2">
+          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+            <CardTitle className="font-display text-xs sm:text-sm truncate">
               {selectedDay ? format(selectedDay, 'EEEE, MMM d') : 'Your Weekly Schedule'}
             </CardTitle>
             {selectedDay && (
@@ -184,13 +184,13 @@ export const WeeklyScheduleView = ({
                 variant="default" 
                 size="sm" 
                 onClick={() => setSelectedDay(null)}
-                className="h-5 text-[10px] px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                className="h-5 text-[10px] px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0"
               >
                 View Week
               </Button>
             )}
           </div>
-          <div className="flex gap-1 ml-auto">
+          <div className="flex gap-1 flex-shrink-0">
             <Button variant="outline" size="sm" onClick={previousWeek} className="border-[2px] h-6 w-6 p-0">
               <ChevronLeft className="h-3 w-3" />
             </Button>
@@ -201,24 +201,24 @@ export const WeeklyScheduleView = ({
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-y-auto max-h-[50vh]">
-          <div className="w-full">
+        <div className="overflow-x-auto overflow-y-auto" style={{ maxHeight: 'clamp(300px, 40vh, 500px)' }}>
+          <div className="min-w-[280px] sm:min-w-full w-full">
             {/* Header with days */}
             <div 
               className="border-b-[2px] border-border sticky top-0 bg-card z-20"
               style={{
                 display: 'grid',
-                gridTemplateColumns: `60px repeat(${weekDays.length}, 1fr)`
+                gridTemplateColumns: `clamp(50px, 15%, 60px) repeat(${weekDays.length}, minmax(0, 1fr))`
               }}
             >
-              <div className="p-1 border-r-[2px] border-border text-[10px] font-semibold">
+              <div className="p-1 border-r-[2px] border-border text-[9px] sm:text-[10px] font-semibold">
                 Time
               </div>
               {weekDays.map((day) => (
                 <div
                   key={day.toISOString()}
                   className={cn(
-                    "p-1 border-r-[2px] border-border text-center cursor-pointer hover:bg-primary/5 transition-colors",
+                    "p-1 border-r-[2px] border-border text-center cursor-pointer hover:bg-primary/5 transition-colors min-w-0",
                     isSameDay(day, new Date()) && "bg-primary/10",
                     selectedDay && isSameDay(day, selectedDay) && "bg-primary/20"
                   )}
@@ -228,8 +228,8 @@ export const WeeklyScheduleView = ({
                     }
                   }}
                 >
-                  <div className="font-semibold text-[10px]">{format(day, 'EEE')}</div>
-                  <div className="text-[9px] text-muted-foreground">{format(day, 'M/d')}</div>
+                  <div className="font-semibold text-[9px] sm:text-[10px] truncate">{format(day, 'EEE')}</div>
+                  <div className="text-[8px] sm:text-[9px] text-muted-foreground truncate">{format(day, 'M/d')}</div>
                 </div>
               ))}
             </div>
@@ -242,12 +242,12 @@ export const WeeklyScheduleView = ({
                   className="border-b border-border/30"
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: `60px repeat(${weekDays.length}, 1fr)`
+                    gridTemplateColumns: `clamp(50px, 15%, 60px) repeat(${weekDays.length}, minmax(0, 1fr))`
                   }}
                 >
                   {/* Time label */}
-                  <div className="p-0.5 border-r-[2px] border-border text-[8px] text-muted-foreground font-medium flex items-center">
-                    {slot.minute === 0 && <span className="font-semibold">{slot.label}</span>}
+                  <div className="p-0.5 border-r-[2px] border-border text-[7px] sm:text-[8px] text-muted-foreground font-medium flex items-center">
+                    {slot.minute === 0 && <span className="font-semibold truncate">{slot.label}</span>}
                   </div>
 
                   {/* Day columns */}
