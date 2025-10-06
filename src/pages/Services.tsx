@@ -301,7 +301,24 @@ const Services = () => {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Label htmlFor="duration">Duration (minutes) *</Label>
-                      <HelpTooltip content="Typical color services: 2-3 hours. Cuts: 30-60 minutes. Include consultation and styling time." />
+                      <HelpTooltip 
+                        title="Service Duration"
+                        content={{
+                          stylist: "Set realistic service times including consultation, application, processing, and styling. Underestimating leads to rushed work and scheduling conflicts."
+                        }}
+                        examples={[
+                          "Full highlight: 2.5-3 hours",
+                          "Single process color: 1.5-2 hours",
+                          "Women's haircut: 45-60 minutes",
+                          "Men's haircut: 30-45 minutes",
+                          "Balayage: 2-4 hours depending on length"
+                        ]}
+                        tips={[
+                          "Build in time for difficult hair or clients who talk a lot",
+                          "Consider your skill level - it's okay to need more time",
+                          "Include blow dry and styling in your estimate"
+                        ]}
+                      />
                     </div>
                     <Input
                       id="duration"
@@ -317,7 +334,23 @@ const Services = () => {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Label htmlFor="price">Price ($) *</Label>
-                      <HelpTooltip content="Set your price based on your experience, location, and product costs. You can always adjust later." />
+                      <HelpTooltip 
+                        title="Service Pricing"
+                        content={{
+                          stylist: "Your pricing should cover product costs, time, expertise, and overhead (rent, utilities, tools). Don't undervalue your work - clients who only want cheap won't be loyal."
+                        }}
+                        examples={[
+                          "New stylist in small town: $60-80 color",
+                          "Experienced stylist in city: $150-300 color",
+                          "Master stylist in metro: $300-500+ color"
+                        ]}
+                        tips={[
+                          "Price by value, not by how fast you work",
+                          "Consider product costs - premium color costs more",
+                          "Raise prices 10-15% annually as you gain experience",
+                          "Offer new client discounts sparingly - they attract bargain hunters"
+                        ]}
+                      />
                     </div>
                     <Input
                       id="price"
@@ -351,7 +384,22 @@ const Services = () => {
                       />
                       <Label htmlFor="useCustomBuffer" className="flex items-center gap-2">
                         Custom buffer time for this service
-                        <HelpTooltip content="Override your default buffer time for this specific service. Useful for services that need more or less prep time." />
+                        <HelpTooltip 
+                          title="Buffer Time"
+                          content={{
+                            stylist: "Buffer time is the gap between appointments for cleanup, setup, and mental preparation. Different services need different buffers."
+                          }}
+                          examples={[
+                            "Quick trim: 10-15 min buffer",
+                            "Color service: 20-30 min buffer (more cleanup)",
+                            "Complex color correction: 30-45 min buffer"
+                          ]}
+                          tips={[
+                            "Use buffers to prevent running late all day",
+                            "Build in time for client questions and product recommendations",
+                            "Messy services (color, bleach) need longer cleanup"
+                          ]}
+                        />
                       </Label>
                     </div>
 
@@ -399,7 +447,25 @@ const Services = () => {
                       />
                       <Label htmlFor="requireDeposit" className="flex items-center gap-2">
                         Require deposit for this service
-                        <HelpTooltip content="Deposits reduce no-shows and secure bookings. Great for new clients or expensive services." />
+                        <HelpTooltip 
+                          title="Service Deposits"
+                          content={{
+                            stylist: "Deposits protect your time and income. They show client commitment and filter out people who aren't serious. Industry standard is 20-50% or $50-100 minimum.",
+                            client: "Deposits hold your appointment slot and show your stylist you're committed. They're applied to your final service cost and are usually non-refundable within 48 hours of your appointment."
+                          }}
+                          examples={[
+                            "All appointments over 2 hours",
+                            "First-time clients (you don't know their reliability yet)",
+                            "Expensive services (color corrections, extensions)",
+                            "Holiday season bookings (high-demand times)"
+                          ]}
+                          tips={[
+                            "Deposits dramatically reduce no-shows by 60-80%",
+                            "Make it clear: deposit goes toward the service, not extra",
+                            "Have a cancellation policy (48-72 hours notice)",
+                            "Use deposits to filter serious clients from tire-kickers"
+                          ]}
+                        />
                       </Label>
                     </div>
 
