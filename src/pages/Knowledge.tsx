@@ -20,8 +20,61 @@ const Knowledge = () => {
   ];
 
   const articles = [
+    // Client-Focused Articles
     {
       id: 1,
+      title: "Preparing for Your Hair Appointment: A Complete Guide",
+      category: "business",
+      description: "What to do before your appointment, what to bring, and how to ensure the best results from your salon visit.",
+      readTime: "6 min read",
+      type: "article",
+      featured: true,
+      url: "https://www.byrdie.com/how-to-prepare-for-hair-appointment"
+    },
+    {
+      id: 2,
+      title: "How to Communicate Your Hair Goals to Your Stylist",
+      category: "business",
+      description: "Learn how to describe what you want, bring inspiration photos effectively, and set realistic expectations.",
+      readTime: "5 min read",
+      type: "article",
+      featured: true,
+      url: "https://www.allure.com/story/how-to-talk-to-your-hairstylist"
+    },
+    {
+      id: 3,
+      title: "Understanding Hair Color Pricing: Why Does It Cost That?",
+      category: "business",
+      description: "Breaking down what goes into professional color services, from products to time and expertise.",
+      readTime: "7 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.modernsalon.com/hair-color/article/21150567/explaining-hair-color-pricing-to-clients"
+    },
+    {
+      id: 4,
+      title: "Aftercare 101: Making Your Color Last Longer",
+      category: "techniques",
+      description: "Essential tips for maintaining your color, recommended products, and what to avoid after salon visits.",
+      readTime: "8 min read",
+      type: "article",
+      featured: true,
+      url: "https://www.redken.com/blog/hair-color/how-to-maintain-hair-color"
+    },
+    {
+      id: 5,
+      title: "Realistic Expectations: The Truth About Color Transformations",
+      category: "techniques",
+      description: "Why going from dark to platinum takes time, understanding hair health limits, and planning multi-session transformations.",
+      readTime: "10 min read",
+      type: "article",
+      featured: true,
+      url: "https://www.behindthechair.com/articles/managing-client-expectations-for-color-corrections/"
+    },
+    
+    // Stylist Technique Articles
+    {
+      id: 6,
       title: "Mastering Balayage: From Consultation to Final Look",
       category: "techniques",
       description: "A comprehensive guide to creating natural-looking balayage with proper sectioning, placement, and blending techniques.",
@@ -31,37 +84,27 @@ const Knowledge = () => {
       url: "https://www.behindthechair.com/articles/balayage-101-the-ultimate-guide-to-beautiful-balayage/"
     },
     {
-      id: 2,
+      id: 7,
       title: "Color Theory for Hair Professionals",
       category: "techniques",
       description: "Understanding undertones, neutralization, and how to achieve any color result with confidence.",
       readTime: "8 min read",
       type: "article",
-      featured: true,
+      featured: false,
       url: "https://www.matrix.com/blog/hair-color-theory-101"
     },
     {
-      id: 3,
-      title: "Building a Six-Figure Salon Business",
-      category: "business",
-      description: "Proven strategies for pricing, marketing, and client retention that successful stylists use.",
-      readTime: "15 min read",
+      id: 8,
+      title: "Working with Different Hair Textures and Porosity",
+      category: "techniques",
+      description: "How texture and porosity affect color results, processing times, and formula adjustments needed.",
+      readTime: "11 min read",
       type: "article",
       featured: false,
-      url: "https://www.modernsalon.com/business/management/article/21164543/how-to-build-a-sixfigure-salon-career"
+      url: "https://www.redken.com/blog/hair-care/hair-porosity-guide"
     },
     {
-      id: 4,
-      title: "2025 Hair Color Trends You Need to Know",
-      category: "trends",
-      description: "The hottest color trends your clients will be asking for this year, from butter blonde to rich espresso.",
-      readTime: "6 min read",
-      type: "article",
-      featured: true,
-      url: "https://www.allure.com/gallery/spring-summer-hair-color-trends"
-    },
-    {
-      id: 5,
+      id: 9,
       title: "Fixing Common Color Mistakes",
       category: "techniques",
       description: "Step-by-step solutions for brassy tones, uneven color, over-processing, and more common issues.",
@@ -71,17 +114,7 @@ const Knowledge = () => {
       url: "https://www.redken.com/blog/hair-care/how-to-fix-hair-color-mistakes"
     },
     {
-      id: 6,
-      title: "Client Consultation Best Practices",
-      category: "business",
-      description: "How to have effective consultations that set expectations and build trust with new clients.",
-      readTime: "7 min read",
-      type: "article",
-      featured: false,
-      url: "https://www.behindthechair.com/articles/mastering-the-client-consultation/"
-    },
-    {
-      id: 7,
+      id: 10,
       title: "Understanding Hair Damage and How to Prevent It",
       category: "techniques",
       description: "Learn the science behind hair damage and how to maintain hair integrity during chemical services.",
@@ -90,8 +123,60 @@ const Knowledge = () => {
       featured: false,
       url: "https://www.olaplex.com/blogs/blog/hair-damage-causes-prevention-repair"
     },
+    
+    // Stylist Business Articles
     {
-      id: 8,
+      id: 11,
+      title: "The Art of the Consultation: Beyond Just Listening",
+      category: "business",
+      description: "Advanced consultation techniques including reading body language, asking the right questions, and documenting properly.",
+      readTime: "9 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.behindthechair.com/articles/mastering-the-client-consultation/"
+    },
+    {
+      id: 12,
+      title: "Handling Difficult Conversations with Clients",
+      category: "business",
+      description: "How to say no professionally, manage unrealistic expectations, and navigate pricing discussions.",
+      readTime: "8 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.modernsalon.com/business/article/21136755/difficult-client-conversations"
+    },
+    {
+      id: 13,
+      title: "Building a Six-Figure Salon Career",
+      category: "business",
+      description: "Proven strategies for pricing, marketing, and client retention that successful stylists use.",
+      readTime: "15 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.modernsalon.com/business/management/article/21164543/how-to-build-a-sixfigure-salon-career"
+    },
+    {
+      id: 14,
+      title: "Time Management: Booking Strategically for Profit",
+      category: "business",
+      description: "Understanding service timing, building in buffer time, and maximizing your chair time revenue.",
+      readTime: "10 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.glossgenius.com/blog/salon-scheduling-tips"
+    },
+    {
+      id: 15,
+      title: "Client Retention: The First 90 Days",
+      category: "business",
+      description: "Strategies for turning one-time clients into loyal regulars through follow-up and relationship building.",
+      readTime: "12 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.squareup.com/us/en/townsquare/client-retention-strategies-salons"
+    },
+    {
+      id: 16,
       title: "Instagram Marketing for Hair Stylists",
       category: "business",
       description: "Grow your following and attract dream clients with strategic content that showcases your work.",
@@ -100,6 +185,48 @@ const Knowledge = () => {
       featured: false,
       url: "https://www.glossgenius.com/blog/instagram-tips-for-hair-stylists"
     },
+    {
+      id: 17,
+      title: "Photographing Your Work: Portfolio Building",
+      category: "business",
+      description: "Lighting, angles, and editing tips to showcase your work professionally on social media and your website.",
+      readTime: "8 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.behindthechair.com/articles/how-to-photograph-hair/"
+    },
+    {
+      id: 18,
+      title: "Retail Without the Pushy Sales Pitch",
+      category: "business",
+      description: "How to recommend products authentically, increase retail revenue, and help clients maintain their results.",
+      readTime: "7 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.modernsalon.com/business/article/21147826/how-to-boost-retail-sales"
+    },
+    
+    // Trends
+    {
+      id: 19,
+      title: "2025 Hair Color Trends You Need to Know",
+      category: "trends",
+      description: "The hottest color trends your clients will be asking for this year, from butter blonde to rich espresso.",
+      readTime: "6 min read",
+      type: "article",
+      featured: true,
+      url: "https://www.allure.com/gallery/spring-summer-hair-color-trends"
+    },
+    {
+      id: 20,
+      title: "Seasonal Hair Care: Adjusting Services Year-Round",
+      category: "trends",
+      description: "How weather affects hair health and what services to recommend in different seasons.",
+      readTime: "7 min read",
+      type: "article",
+      featured: false,
+      url: "https://www.redken.com/blog/hair-care/seasonal-hair-care-tips"
+    }
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("all");
