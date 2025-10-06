@@ -228,24 +228,24 @@ const Auth = () => {
   }, "Social Sign In");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-3 sm:p-4">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
       <main id="main-content" role="main" aria-label="Authentication" className="w-full max-w-md">
-        <Card className="w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
-        <CardHeader className="text-center space-y-2">
+        <Card className="w-full border-[2px] sm:border-[3px] shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
+        <CardHeader className="text-center space-y-2 p-4 sm:p-6">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-primary border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
-              <Scissors className="h-8 w-8 text-primary-foreground" />
+            <div className="p-2 rounded-lg bg-primary border-[2px] sm:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] sm:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
+              <Scissors className="h-6 w-6 sm:h-8 sm:w-8 text-primary-foreground" />
             </div>
-            <CardTitle className="text-3xl font-bold font-display">hA.I.r</CardTitle>
+            <CardTitle className="text-2xl sm:text-3xl font-bold font-display">hA.I.r</CardTitle>
           </div>
-          <CardDescription className="text-base font-medium text-center">
+          <CardDescription className="text-sm sm:text-base font-medium text-center">
             {state.isRecoveryMode ? "Create your new password" : "Your AI-powered salon assistant"}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6">
           {state.isRecoveryMode ? (
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <div className="space-y-2">
@@ -278,19 +278,19 @@ const Auth = () => {
             </form>
           ) : (
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="w-full">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="w-full grid grid-cols-2 h-auto">
+              <TabsTrigger value="signin" className="text-sm sm:text-base min-h-[44px]">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="text-sm sm:text-base min-h-[44px]">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <Button
                       type="button"
                       variant="outline"
-                      className="border-2 flex flex-col gap-1.5 h-auto py-3 opacity-50 cursor-not-allowed"
+                      className="border-2 flex flex-col gap-1 sm:gap-1.5 h-auto py-2 sm:py-3 opacity-50 cursor-not-allowed min-h-[56px]"
                       disabled={true}
                     >
                       <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -305,16 +305,16 @@ const Auth = () => {
                     <Button
                       type="button"
                       variant="outline"
-                      className="border-2 flex flex-col gap-1.5 h-auto py-3 opacity-50 cursor-not-allowed"
+                      className="border-2 flex flex-col gap-1 sm:gap-1.5 h-auto py-2 sm:py-3 opacity-50 cursor-not-allowed min-h-[56px]"
                       disabled={true}
                     >
-                      <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                      <svg className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                       </svg>
-                      <span className="text-xs">Apple</span>
+                      <span className="text-[10px] sm:text-xs">Apple</span>
                     </Button>
                   </div>
-                  <p className="text-xs text-center text-muted-foreground">
+                  <p className="text-[10px] sm:text-xs text-center text-muted-foreground">
                     Social sign-in coming soon
                   </p>
                 </div>

@@ -94,77 +94,77 @@ export default function AccessCodes() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6 px-2 sm:px-0">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Access Code Management</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Access Code Management</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Manage early access codes for testing users
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
+          <Card className="border-[2px] sm:border-[3px]">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 p-4 sm:p-6">
               <CardTitle className="text-sm font-medium">Total Codes</CardTitle>
               <Key className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{codes.length}</div>
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{codes.length}</div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <Card className="border-[2px] sm:border-[3px]">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 p-4 sm:p-6">
               <CardTitle className="text-sm font-medium">Used Codes</CardTitle>
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{usedCount}</div>
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{usedCount}</div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <Card className="border-[2px] sm:border-[3px]">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 p-4 sm:p-6">
               <CardTitle className="text-sm font-medium">Available</CardTitle>
               <XCircle className="h-4 w-4 text-orange-500" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{availableCount}</div>
+            <CardContent className="p-4 sm:p-6 pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{availableCount}</div>
             </CardContent>
           </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Access Codes</CardTitle>
-            <CardDescription>
+        <Card className="border-[2px] sm:border-[3px]">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl">Access Codes</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Limited to 5 codes for early testing phase
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="p-4 sm:p-6">
+            <div className="space-y-3 sm:space-y-4">
               {codes.map((codeItem) => (
                 <div
                   key={codeItem.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 border-2 rounded-lg hover:bg-muted/50 transition-colors gap-3"
                 >
-                  <div className="space-y-1 flex-1">
-                    <div className="flex items-center gap-3">
-                      <code className="px-3 py-1 bg-muted rounded font-mono text-sm">
+                  <div className="space-y-1 flex-1 w-full">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <code className="px-2 sm:px-3 py-1 bg-muted rounded font-mono text-xs sm:text-sm break-all">
                         {codeItem.code}
                       </code>
                       {codeItem.used_by ? (
-                        <Badge variant="default" className="bg-green-500">Used</Badge>
+                        <Badge variant="default" className="bg-green-500 text-xs">Used</Badge>
                       ) : (
-                        <Badge variant="secondary">Available</Badge>
+                        <Badge variant="secondary" className="text-xs">Available</Badge>
                       )}
                     </div>
                     
                     {codeItem.notes && (
-                      <p className="text-sm text-muted-foreground">{codeItem.notes}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{codeItem.notes}</p>
                     )}
 
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         Created {format(new Date(codeItem.created_at), "MMM d, yyyy")}
@@ -183,6 +183,7 @@ export default function AccessCodes() {
                     size="sm"
                     onClick={() => copyToClipboard(codeItem.code)}
                     disabled={!!codeItem.used_by}
+                    className="min-h-[44px] min-w-[44px] w-full sm:w-auto"
                   >
                     <Copy className="h-4 w-4" />
                   </Button>
