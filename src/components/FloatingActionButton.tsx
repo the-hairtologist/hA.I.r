@@ -137,7 +137,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         >
           <div className="relative flex items-center justify-center">
             <Scissors className="h-6 w-6 text-white pointer-events-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]" strokeWidth={2.5} />
-            <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-[#FFF05A] pointer-events-none drop-shadow-[1px_1px_0px_rgba(0,0,0,0.3)] animate-pulse" strokeWidth={3} />
+            <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-[#FFF05A] pointer-events-none drop-shadow-[1px_1px_0px_rgba(0,0,0,0.3)]" strokeWidth={3} />
           </div>
         </Button>
       </div>
