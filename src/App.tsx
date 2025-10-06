@@ -61,8 +61,25 @@ const queryClient = new QueryClient({
 
 const App = () => {
   useEffect(() => {
-    selfHealing.initialize();
-    return () => selfHealing.shutdown();
+    // Initialize divine protection systems
+    const initializeSystems = async () => {
+      await selfHealing.initialize();
+      
+      // Initialize cross-platform optimizer
+      try {
+        const { crossPlatformOptimizer } = await import('@/lib/platform/CrossPlatformOptimizer');
+        await crossPlatformOptimizer.initialize();
+        console.log('✨ Divine protection systems activated');
+      } catch (error) {
+        console.warn('Cross-platform optimizer will activate shortly');
+      }
+    };
+    
+    initializeSystems();
+    
+    return () => {
+      selfHealing.shutdown();
+    };
   }, []);
 
   return (

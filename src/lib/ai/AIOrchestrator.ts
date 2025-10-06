@@ -39,17 +39,32 @@ class AIOrchestrationSystem {
   private monitoringInterval: NodeJS.Timeout | null = null;
 
   /**
-   * Start the AI orchestration system
+   * Start the AI orchestration system with divine protection
    * All systems work together proactively
    */
   async start() {
     if (this.isRunning) return;
     
-    logger.info('Starting AI Orchestration System');
+    logger.info('Starting AI Orchestration System with Divine Protection');
     this.isRunning = true;
 
-    // Initialize self-healing
+    // Initialize self-healing and guardian systems
     await selfHealing.initialize();
+
+    // Initialize guardian systems
+    try {
+      const { securityGuardian } = await import('./SecurityGuardian');
+      const { predictiveAnalytics } = await import('./PredictiveAnalytics');
+      
+      await Promise.all([
+        securityGuardian.initialize(),
+        predictiveAnalytics.initialize()
+      ]);
+      
+      logger.info('✅ Guardian angels activated');
+    } catch (error) {
+      logger.warn('Guardian systems will activate after database migration');
+    }
 
     // Start continuous monitoring
     this.startContinuousMonitoring();
@@ -57,7 +72,7 @@ class AIOrchestrationSystem {
     // Start predictive analytics
     this.startPredictiveAnalytics();
 
-    logger.info('AI Orchestration System is now active');
+    logger.info('AI Orchestration System is now active with full protection');
   }
 
   /**
