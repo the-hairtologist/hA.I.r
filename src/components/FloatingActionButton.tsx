@@ -122,13 +122,12 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           setIsOpen(!isOpen);
         }}
         className={cn(
-          "h-16 w-16 rounded-full border-[3px] border-foreground",
+          "h-16 w-16 rounded-full border-[3px] border-foreground shadow-xl",
           "bg-orange-500 hover:bg-orange-600",
           "transition-all duration-300 ease-out",
           "flex items-center justify-center",
           "hover:scale-110 active:scale-95",
-          !isOpen && "animate-glow-prominent",
-          isOpen && "rotate-45 bg-destructive hover:bg-destructive/90 shadow-xl"
+          isOpen && "rotate-45 bg-destructive hover:bg-destructive/90"
         )}
         aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
       >
