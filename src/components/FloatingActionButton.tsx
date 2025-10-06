@@ -122,12 +122,13 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           setIsOpen(!isOpen);
         }}
         className={cn(
-          "h-24 w-24 border-[4px] border-foreground relative",
+          "h-16 w-16 border-2 border-foreground relative",
           "bg-orange-500 hover:bg-orange-600",
-          "shadow-[6px_6px_0px_0px_hsl(var(--foreground))]",
-          "transition-all duration-300 ease-out",
+          "shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
+          "transition-all duration-200 ease-out",
           "flex items-center justify-center",
-          "hover:scale-110 hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] active:scale-95 active:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+          "hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[-1px] hover:translate-y-[-1px]",
+          "active:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] active:translate-x-[2px] active:translate-y-[2px]",
           isOpen && "rotate-45 bg-destructive hover:bg-destructive/90"
         )}
         style={{
@@ -135,7 +136,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         }}
         aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
       >
-        <Plus className="h-10 w-10 text-white" strokeWidth={4} />
+        <Plus className="h-7 w-7 text-white" strokeWidth={2.5} />
       </Button>
     </div>
   );
