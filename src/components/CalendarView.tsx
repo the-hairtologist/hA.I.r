@@ -39,13 +39,25 @@ export const CalendarView = ({ appointments, onDateSelect, onAppointmentClick }:
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>{format(currentMonth, 'MMMM yyyy')}</CardTitle>
+          <CardTitle className="font-display text-lg sm:text-xl">{format(currentMonth, 'MMMM yyyy')}</CardTitle>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={previousMonth}>
-              <ChevronLeft className="h-4 w-4" />
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={previousMonth}
+              className="h-9 w-9 sm:h-10 sm:w-10 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+              aria-label="Previous month"
+            >
+              <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
             </Button>
-            <Button variant="outline" size="sm" onClick={nextMonth}>
-              <ChevronRight className="h-4 w-4" />
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={nextMonth}
+              className="h-9 w-9 sm:h-10 sm:w-10 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+              aria-label="Next month"
+            >
+              <ChevronRight className="h-5 w-5" strokeWidth={2.5} />
             </Button>
           </div>
         </div>
@@ -69,11 +81,11 @@ export const CalendarView = ({ appointments, onDateSelect, onAppointmentClick }:
             return (
               <div
                 key={day.toISOString()}
-                className={`
-                  aspect-square border rounded-lg p-2 cursor-pointer transition-all hover:bg-accent/50
-                  ${isToday(day) ? 'border-primary border-2 bg-primary/5' : 'border-border'}
-                  ${!isSameMonth(day, currentMonth) ? 'opacity-50' : ''}
-                `}
+          className={`
+            aspect-square border-2 border-foreground rounded-lg p-2 cursor-pointer transition-all hover:bg-accent/50 hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]
+            ${isToday(day) ? 'border-primary border-[3px] bg-primary/10 shadow-[2px_2px_0px_0px_hsl(var(--primary))]' : 'border-border'}
+            ${!isSameMonth(day, currentMonth) ? 'opacity-60' : ''}
+          `}
                 onClick={() => {
                   onDateSelect?.(day);
                   if (hasAppointments && onAppointmentClick) {
