@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { KeyboardShortcutDiscovery } from "@/components/KeyboardShortcutDiscovery";
+import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { SubscriptionGate } from "@/components/SubscriptionGate";
@@ -60,6 +62,8 @@ const App = () => (
           <Toaster />
           <Sonner />
           <CookieConsent />
+          <KeyboardShortcutDiscovery />
+          <PerformanceOverlay />
           <BrowserRouter>
             <RoleSwitchProtection />
             <Suspense fallback={<LoadingSpinner />}>
