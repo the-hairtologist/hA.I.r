@@ -351,41 +351,41 @@ export default function Clients() {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Clients" className="container mx-auto py-8 px-4">
-        <div className="mb-6">
+      <main id="main-content" role="main" aria-label="Clients" className="container mx-auto py-4 sm:py-6 lg:py-8 px-3 sm:px-4">
+        <div className="mb-4 sm:mb-6">
           <Button
             variant="ghost"
             onClick={() => navigate(-1)}
-            className="gap-2"
+            className="gap-2 -ml-2"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back
+            <span className="hidden sm:inline">Back</span>
           </Button>
         </div>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-4xl font-display font-bold mb-2 gradient-text">Clients & Formulas</h1>
-            <p className="text-muted-foreground">Manage your client profiles, formulas, and preferences</p>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="min-w-0 w-full sm:w-auto">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold mb-1 sm:mb-2 gradient-text">Clients & Formulas</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Manage your client profiles, formulas, and preferences</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <Button 
               variant="outline"
               onClick={() => navigate("/formulas")}
-              className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+              className="gap-2 border-2 lg:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] lg:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all text-xs sm:text-sm flex-1 sm:flex-initial"
             >
-              <FileText className="h-4 w-4" />
-              View All Formulas
+              <FileText className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">View All</span> Formulas
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
-                  <Plus className="h-4 w-4" />
+                <Button className="gap-2 border-2 lg:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] lg:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all text-xs sm:text-sm flex-1 sm:flex-initial">
+                  <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Add Client
                 </Button>
               </DialogTrigger>
-          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+          <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-md max-h-[90vh] overflow-y-auto border-2 lg:border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] lg:shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-2xl gradient-text">Add a New Client</DialogTitle>
+              <DialogTitle className="text-xl sm:text-2xl gradient-text">Add a New Client</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">

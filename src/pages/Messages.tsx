@@ -15,6 +15,7 @@ import { MessageSquare, ArrowLeft, Send, Upload, Video, Loader2, User, Plus } fr
 import { format } from "date-fns";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { KeyboardShortcutHint } from "@/components/KeyboardShortcut";
+import { cn } from "@/lib/utils";
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -332,36 +333,39 @@ const Messages = () => {
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
-      <header className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
+      <header className="border-b-2 lg:border-b-4 border-foreground bg-card/90 backdrop-blur-sm shadow-[0_2px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-4 flex-wrap">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => navigate("/dashboard")}
               aria-label="Back to dashboard"
-              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
+              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all -ml-2"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              <ArrowLeft className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Back</span>
             </Button>
-          <div className="flex items-center gap-2">
-            <MessageSquare className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold font-display">Messages</h1>
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold font-display truncate">Messages</h1>
           </div>
-          <Button size="sm" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
-            <Plus className="h-4 w-4 mr-2" />
-            New Chat
+          <Button size="sm" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground shrink-0 text-xs sm:text-sm">
+            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-2" />
+            <span className="hidden sm:inline">New Chat</span>
           </Button>
         </div>
       </header>
 
       <div className="flex-1 overflow-hidden">
-        <div className="container mx-auto px-4 h-full flex gap-4 py-4">
-          {/* Conversations List */}
-          <Card className="w-80 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
-            <CardHeader>
-              <CardTitle className="font-display text-foreground">Conversations</CardTitle>
-              <CardDescription className="text-foreground/80 font-medium">Your recent chats</CardDescription>
+        <div className="container mx-auto px-2 sm:px-4 h-full flex flex-col lg:flex-row gap-2 sm:gap-4 py-2 sm:py-4">
+          {/* Conversations List - Full screen on mobile when no chat selected */}
+          <Card className={cn(
+            "flex flex-col border-2 lg:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300",
+            selectedConversation ? "hidden lg:flex lg:w-80" : "flex-1 lg:w-80"
+          )}>
+            <CardHeader className="pb-3 sm:pb-4">
+              <CardTitle className="font-display text-foreground text-base sm:text-lg">Conversations</CardTitle>
+              <CardDescription className="text-foreground/80 font-medium text-xs sm:text-sm">Your recent chats</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto space-y-2">
               {conversations.length === 0 ? (
@@ -414,8 +418,11 @@ const Messages = () => {
             </CardContent>
           </Card>
 
-          {/* Chat Area */}
-          <Card className="flex-1 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
+          {/* Chat Area - Full screen on mobile when chat selected */}
+          <Card className={cn(
+            "flex flex-col border-2 lg:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400",
+            selectedConversation ? "flex-1" : "hidden lg:flex lg:flex-1"
+          )}>
             {!selectedConversation ? (
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center max-w-sm">

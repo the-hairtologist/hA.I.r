@@ -263,20 +263,20 @@ const Appointments = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <header role="banner" className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-4 min-w-0">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="min-h-[44px] min-w-[44px] flex-shrink-0">
+      <header role="banner" className="border-b-2 lg:border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[2px_2px_0px_0px_hsl(var(--foreground)_/_0.1)] lg:shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="min-h-[44px] min-w-[44px] flex-shrink-0 -ml-2">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <div className="flex items-center gap-2 min-w-0">
-                <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
-                <h1 className="text-2xl font-display font-bold gradient-text truncate">My Appointments</h1>
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <CalendarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-display font-bold gradient-text truncate">My Appointments</h1>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Label htmlFor="availability" className="whitespace-nowrap">Accepting Bookings</Label>
+            <div className="flex items-center gap-2 shrink-0">
+              <Label htmlFor="availability" className="text-xs sm:text-sm whitespace-nowrap">Accepting Bookings</Label>
               <Switch
                 id="availability"
                 checked={stylistProfile?.is_available}
@@ -287,12 +287,12 @@ const Appointments = () => {
         </div>
       </header>
 
-      <main id="main-content" role="main" aria-label="Appointments" className="container mx-auto px-4 py-8">
-        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar" | "week")} className="space-y-6">
-          <TabsList className="w-full max-w-3xl">
-            <TabsTrigger value="list">List View</TabsTrigger>
-            <TabsTrigger value="calendar">Calendar View</TabsTrigger>
-            <TabsTrigger value="week">Week View</TabsTrigger>
+      <main id="main-content" role="main" aria-label="Appointments" className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8">
+        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar" | "week")} className="space-y-4 sm:space-y-6">
+          <TabsList className="w-full max-w-3xl grid grid-cols-3 h-auto">
+            <TabsTrigger value="list" className="text-xs sm:text-sm py-2">List</TabsTrigger>
+            <TabsTrigger value="calendar" className="text-xs sm:text-sm py-2">Calendar</TabsTrigger>
+            <TabsTrigger value="week" className="text-xs sm:text-sm py-2">Week</TabsTrigger>
           </TabsList>
 
           <TabsContent value="list">
