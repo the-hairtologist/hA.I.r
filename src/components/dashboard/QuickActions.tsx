@@ -209,7 +209,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             variant="ghost"
             size="sm"
             onClick={() => setIsCustomizing(!isCustomizing)}
-            className="gap-2"
+            className="gap-2 -mr-2"
           >
             {isCustomizing ? <X className="h-4 w-4" /> : <Settings2 className="h-4 w-4" />}
             {isCustomizing ? "Done" : "Customize"}
