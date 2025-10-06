@@ -152,6 +152,35 @@ All colors MUST be HSL.
     --duration-base: 200ms;
     --duration-slow: 250ms;
     
+    /* Spacing scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    /* Glassmorphism & Modern Effects */
+    --glass-bg: hsla(var(--background), 0.7);
+    --glass-border: hsla(var(--foreground), 0.1);
+    --glass-blur: 12px;
+    
+    /* Elevation System */
+    --elevation-1: 0 1px 3px hsla(var(--foreground), 0.12);
+    --elevation-2: 0 4px 12px hsla(var(--foreground), 0.15);
+    --elevation-3: 0 8px 24px hsla(var(--foreground), 0.18);
+    --elevation-4: 0 16px 48px hsla(var(--foreground), 0.2);
+    
+    /* Glow Effects */
+    --glow-primary: 0 0 20px hsla(var(--primary), 0.3);
+    --glow-accent: 0 0 20px hsla(var(--accent), 0.3);
+    --glow-success: 0 0 20px hsla(var(--success), 0.3);
+    
+    /* Focus Ring */
+    --focus-ring: 0 0 0 4px hsla(var(--primary), 0.3);
+    --focus-ring-offset: 0 0 0 2px hsl(var(--background));
+    
     /* Gradients - Softer, more subtle */
     --gradient-primary: linear-gradient(135deg, hsl(270 70% 65%) 0%, hsl(340 75% 70%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(190 80% 60%) 0%, hsl(270 70% 65%) 100%);
@@ -335,14 +364,35 @@ All colors MUST be HSL.
     animation: fade-in-fast 0.2s ease-out;
   }
 
-  @keyframes shimmer {
-    0% {
-      background-position: -1000px 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
   }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: var(--glow-primary); }
+  50% { box-shadow: 0 0 30px hsla(var(--primary), 0.5); }
+}
+
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
   .shimmer {
     background: linear-gradient(
@@ -722,5 +772,42 @@ All colors MUST be HSL.
   .brutal-button:active {
     box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
     transform: translate(2px, 2px);
+  }
+
+  /* Glassmorphism Utilities */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-brutal {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 2px solid hsl(var(--foreground) / 0.2);
+  }
+
+  /* Elevation Utilities */
+  .elevation-1 { box-shadow: var(--elevation-1); }
+  .elevation-2 { box-shadow: var(--elevation-2); }
+  .elevation-3 { box-shadow: var(--elevation-3); }
+  .elevation-4 { box-shadow: var(--elevation-4); }
+
+  /* Glow Utilities */
+  .glow-primary { box-shadow: var(--glow-primary); }
+  .glow-accent { box-shadow: var(--glow-accent); }
+  .glow-success { box-shadow: var(--glow-success); }
+  .glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+
+  /* Modern Animations */
+  .float { animation: float 3s ease-in-out infinite; }
+  .slide-up-fade { animation: slide-up-fade 0.4s ease-out; }
+
+  /* Focus States */
+  .focus-ring-brutal:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring-offset), var(--focus-ring);
   }
 }

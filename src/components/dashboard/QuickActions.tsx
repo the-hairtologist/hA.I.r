@@ -187,7 +187,10 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
     .sort((a, b) => selectedActions.indexOf(a.id) - selectedActions.indexOf(b.id));
 
   return (
-    <Card className="mb-8 animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
+    <Card 
+      variant="glass"
+      className="mb-8 animate-fade-in backdrop-blur-xl bg-gradient-to-br from-background/80 to-card/60"
+    >
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -225,10 +228,15 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                   key={action.id}
                   onClick={() => toggleAction(action.id)}
                   className={cn(
-                    "relative p-4 rounded-lg border-2 border-foreground transition-all text-left group shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px]",
+                    "relative p-4 rounded-lg border-2 border-foreground transition-all text-left group",
+                    "shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
+                    "hover:shadow-[4px_4px_0px_0px_hsl(var(--primary))]",
+                    "hover:translate-x-[-1px] hover:translate-y-[-1px]",
+                    "active:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+                    "active:translate-x-[1px] active:translate-y-[1px]",
                     isSelected
-                      ? "bg-card"
-                      : "bg-card/60 hover:bg-card"
+                      ? "bg-card scale-100"
+                      : "bg-card/60 hover:bg-card scale-95 hover:scale-100"
                   )}
                 >
                   <div className="flex items-start gap-3">
@@ -266,8 +274,13 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                   onDragOver={(e) => handleDragOver(e, action.id)}
                   onDragEnd={handleDragEnd}
                   className={cn(
-                    "group relative rounded-xl border-[3px] border-foreground bg-card transition-all overflow-hidden shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:shadow-[6px_6px_0px_0px_hsl(var(--primary))] hover:-translate-y-1",
-                    draggedItem === action.id && "opacity-50"
+                    "group relative rounded-xl border-[3px] border-foreground bg-card transition-all overflow-hidden",
+                    "shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
+                    "hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))]",
+                    "hover:-translate-y-2 hover:scale-[1.02]",
+                    "active:shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
+                    "active:translate-y-0 active:scale-100",
+                    draggedItem === action.id && "opacity-50 scale-95"
                   )}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >

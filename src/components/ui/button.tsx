@@ -15,12 +15,15 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]",
         ghost: "hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] active:scale-[0.98]",
         link: "text-primary underline-offset-4 hover:underline",
+        success: "bg-success text-success-foreground hover:bg-success/90 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]",
+        glass: "glass-brutal backdrop-blur-xl text-foreground hover:bg-background/80 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]",
       },
       size: {
         default: "h-11 px-4 py-2 min-h-[44px]",
         sm: "h-10 rounded-md px-3 min-h-[44px] sm:min-h-[40px]",
         lg: "h-12 rounded-md px-8 min-h-[48px]",
         icon: "h-11 w-11 min-h-[44px] min-w-[44px]",
+        xl: "h-14 rounded-lg px-10 text-base min-h-[56px]",
       },
     },
     defaultVariants: {
