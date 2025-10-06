@@ -6,7 +6,7 @@ import { Scissors } from "lucide-react";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedRoles?: ("stylist" | "client")[];
+  allowedRoles?: ("admin" | "stylist" | "client")[];
 }
 
 export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
@@ -41,7 +41,7 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
 
   // Check if user has any of the allowed roles
   const userHasAllowedRole = roles.some(role => 
-    allowedRoles.includes(role as "stylist" | "client")
+    allowedRoles.includes(role as "admin" | "stylist" | "client")
   );
 
   if (!userHasAllowedRole) {

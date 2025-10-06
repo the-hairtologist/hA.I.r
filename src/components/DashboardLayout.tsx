@@ -8,7 +8,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { MobileNav } from "@/components/MobileNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Scissors, User, LogOut, HelpCircle } from "lucide-react";
+import { Scissors, User, LogOut, HelpCircle, Crown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -141,6 +141,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </button>
 
               <div className="ml-auto flex items-center gap-3">
+                {roles.includes('admin') && (
+                  <Badge className="bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
+                    <Crown className="h-3 w-3 mr-1" />
+                    ADMIN
+                  </Badge>
+                )}
+                
                 {userRole && (
                   <Badge variant="secondary" className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground">
                     {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}

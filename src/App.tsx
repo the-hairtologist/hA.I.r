@@ -43,6 +43,8 @@ const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Referrals = lazy(() => import("./pages/Referrals"));
 const SystemHealth = lazy(() => import("./pages/SystemHealth"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -180,8 +182,19 @@ const App = () => {
               <AccessCodes />
             </ProtectedRoute>
           } />
+          {/* Admin Routes */}
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/users" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminUsers />
+            </ProtectedRoute>
+          } />
           <Route path="/system-health" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin"]}>
               <SystemHealth />
             </ProtectedRoute>
           } />
