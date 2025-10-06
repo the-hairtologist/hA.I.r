@@ -439,18 +439,26 @@ const Messages = () => {
               </div>
             ) : (
               <>
-                <CardHeader className="border-b">
-                  <div className="flex items-center gap-3">
+                <CardHeader className="border-b p-3 sm:p-6">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setSelectedConversation(null)}
+                      className="lg:hidden min-h-[44px] min-w-[44px] -ml-2"
+                    >
+                      <ArrowLeft className="h-5 w-5" />
+                    </Button>
                     <Avatar>
                       <AvatarFallback>
                         <User className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div>
-                      <CardTitle className="text-lg">
+                    <div className="min-w-0 flex-1">
+                      <CardTitle className="text-base sm:text-lg truncate">
                         {selectedConversation.partner?.full_name || selectedConversation.partner?.email}
                       </CardTitle>
-                      <CardDescription className="text-xs">
+                      <CardDescription className="text-xs truncate">
                         {selectedConversation.partner?.email}
                       </CardDescription>
                     </div>
