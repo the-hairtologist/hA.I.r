@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { selfHealing } from "@/lib/selfHealing";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -53,8 +55,14 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <ErrorBoundary>
+const App = () => {
+  useEffect(() => {
+    selfHealing.initialize();
+    return () => selfHealing.shutdown();
+  }, []);
+
+  return (
+    <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <SubscriptionProvider>
         <TooltipProvider>
@@ -197,6 +205,7 @@ const App = () => (
       </SubscriptionProvider>
     </QueryClientProvider>
   </ErrorBoundary>
-);
+  );
+};
 
 export default App;

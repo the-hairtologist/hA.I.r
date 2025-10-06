@@ -796,6 +796,42 @@ export type Database = {
         }
         Relationships: []
       }
+      error_logs: {
+        Row: {
+          action: string
+          attempt_count: number | null
+          component: string
+          context: Json | null
+          created_at: string | null
+          error_message: string
+          error_stack: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          attempt_count?: number | null
+          component: string
+          context?: Json | null
+          created_at?: string | null
+          error_message: string
+          error_stack?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          attempt_count?: number | null
+          component?: string
+          context?: Json | null
+          created_at?: string | null
+          error_message?: string
+          error_stack?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       formula_access_log: {
         Row: {
           access_type: string
@@ -1817,6 +1853,10 @@ export type Database = {
       }
       check_client_milestones: {
         Args: { p_client_id: string; p_stylist_id: string }
+        Returns: undefined
+      }
+      cleanup_old_error_logs: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       generate_referral_code: {
