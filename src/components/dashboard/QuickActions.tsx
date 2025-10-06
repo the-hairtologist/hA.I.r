@@ -197,7 +197,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             <CardTitle className="flex items-center gap-2 text-xl font-display">
               <Sparkles className="h-5 w-5 text-primary" />
               Your Quick Actions
-              <Badge variant="outline" className="ml-2 font-mono">
+              <Badge variant="outline" className="ml-2 font-mono bg-primary/10 border-primary/20">
                 {selectedActions.length}/{allActions.length}
               </Badge>
             </CardTitle>
@@ -276,27 +276,30 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                   className={cn(
                     "group relative rounded-xl brutal-border bg-card transition-all overflow-hidden",
                     "brutal-shadow-xs",
-                    "hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))]",
-                    "hover:-translate-y-2 hover:scale-[1.02]",
+                    "hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))]",
+                    "hover:-translate-y-2 hover:scale-[1.03]",
                     "active:brutal-shadow-sm",
                     "active:translate-y-0 active:scale-100",
-                    draggedItem === action.id && "opacity-50 scale-95"
+                    draggedItem === action.id && "opacity-30 scale-90 rotate-2"
                   )}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
+                  {draggedItem && draggedItem !== action.id && (
+                    <div className="absolute inset-0 border-2 border-dashed border-primary/30 rounded-xl pointer-events-none" />
+                  )}
                   <div className="flex items-start gap-2 p-5 cursor-move">
-                    <GripVertical className="h-5 w-5 text-foreground/30 shrink-0 mt-1" />
+                    <GripVertical className="h-5 w-5 text-foreground/40 shrink-0 mt-1 group-hover:text-primary transition-colors" />
                     <button
                       onClick={() => navigate(action.route)}
                       className="flex-1 text-left"
                     >
                       <div className={cn(
-                        "absolute inset-0 bg-gradient-to-br opacity-10",
+                        "absolute inset-0 bg-gradient-to-br opacity-15 group-hover:opacity-20 transition-opacity",
                         action.gradient
                       )} />
                       <div className="relative">
                         <div className={cn(
-                          "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3 brutal-border brutal-shadow-xs",
+                          "inline-flex p-3 rounded-lg bg-gradient-to-br mb-3 brutal-border brutal-shadow-xs group-hover:brutal-shadow-sm transition-shadow",
                           action.gradient
                         )}>
                           <Icon className="h-6 w-6 text-primary-foreground" />
@@ -314,10 +317,13 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
               );
             })}
             {displayedActions.length === 0 && (
-              <div className="col-span-full text-center py-8">
-                <Plus className="h-8 w-8 text-foreground/60 mx-auto mb-2" />
-                <p className="text-foreground/60 text-sm font-medium">
-                  Click "Customize" to add your favorite shortcuts
+              <div className="col-span-full text-center py-12 px-6">
+                <div className="inline-flex p-4 rounded-2xl bg-primary/10 mb-4 brutal-border brutal-shadow-xs">
+                  <Plus className="h-10 w-10 text-primary" />
+                </div>
+                <h4 className="font-display font-semibold text-base mb-2">No Quick Actions Yet</h4>
+                <p className="text-foreground/70 text-sm max-w-xs mx-auto">
+                  Click <span className="font-semibold text-foreground">"Customize"</span> above to select your favorite shortcuts and boost your productivity
                 </p>
               </div>
             )}
