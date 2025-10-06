@@ -123,13 +123,13 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         }}
         className={cn(
           "h-14 w-14 rounded-full shadow-lg",
-          "bg-primary hover:bg-primary/90",
+          "bg-gradient-to-br from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600",
           "transition-all duration-200",
           "flex items-center justify-center",
           isOpen && "rotate-45"
         )}
       >
-        <Plus className="h-6 w-6 text-primary-foreground" strokeWidth={2} />
+        <Plus className="h-6 w-6 text-white" strokeWidth={2} />
       </Button>
     </div>
   );

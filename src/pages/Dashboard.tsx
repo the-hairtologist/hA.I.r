@@ -685,9 +685,9 @@ const Dashboard = () => {
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
             </span>
             <div className="window-controls">
-              <div className="window-control bg-background"></div>
-              <div className="window-control bg-background"></div>
-              <div className="window-control bg-background"></div>
+              <div className="window-control" style={{ backgroundColor: '#ef4444' }}></div>
+              <div className="window-control" style={{ backgroundColor: '#eab308' }}></div>
+              <div className="window-control" style={{ backgroundColor: '#22c55e' }}></div>
             </div>
           </div>
           
