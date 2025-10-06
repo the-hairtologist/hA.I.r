@@ -149,7 +149,7 @@ export const ReferralSystem = () => {
   return (
     <div className="space-y-6">
       {/* Main Referral Card */}
-      <Card className="border-2 border-primary/20">
+      <Card className="brutal-border border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Gift className="h-5 w-5 text-primary" />

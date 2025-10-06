@@ -21,13 +21,13 @@ export const HelpTooltip = ({ content, title = "Help" }: HelpTooltipProps) => {
       <AlertDialogTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-secondary hover:bg-secondary/90 transition-all border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
+          className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-secondary hover:bg-secondary/90 transition-all brutal-border brutal-shadow-xs brutal-hover"
           aria-label="Help"
         >
           <HelpCircle className="h-4 w-4 text-secondary-foreground" />
         </button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+      <AlertDialogContent className="brutal-border brutal-shadow-md">
         <AlertDialogHeader>
           <AlertDialogTitle className="font-display text-xl">{title}</AlertDialogTitle>
           <AlertDialogDescription className="text-base leading-relaxed whitespace-pre-wrap">
@@ -35,7 +35,7 @@ export const HelpTooltip = ({ content, title = "Help" }: HelpTooltipProps) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction className="border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] bg-secondary text-secondary-foreground">
+          <AlertDialogAction className="brutal-border brutal-shadow-sm brutal-hover bg-secondary text-secondary-foreground">
             Got it!
           </AlertDialogAction>
         </AlertDialogFooter>

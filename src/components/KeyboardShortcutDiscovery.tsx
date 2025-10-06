@@ -47,7 +47,7 @@ export const KeyboardShortcutDiscovery = () => {
   return (
     <Card className={cn(
       "fixed bottom-4 right-4 z-50 max-w-sm",
-      "border-2 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]",
+      "brutal-border brutal-shadow-md",
       "animate-slide-in-right"
     )}>
       <CardContent className="p-4 space-y-3">

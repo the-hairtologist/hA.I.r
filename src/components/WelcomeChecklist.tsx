@@ -88,8 +88,8 @@ export const WelcomeChecklist = ({
   };
 
   return (
-    <Card className="border-[3px] border-primary shadow-[6px_6px_0px_0px_hsl(var(--primary))] bg-gradient-to-br from-primary/5 to-secondary/5 animate-fade-in">
-      <CardHeader className="border-b-[2px] border-primary/20">
+    <Card className="brutal-border border-primary brutal-shadow-md bg-gradient-to-br from-primary/5 to-secondary/5 animate-fade-in">
+      <CardHeader className="brutal-border-b border-primary/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-primary/10">
@@ -118,7 +118,7 @@ export const WelcomeChecklist = ({
           {steps.map((step, index) => (
             <div
               key={index}
-              className="flex items-center justify-between p-3 rounded-lg border-2 border-border hover:border-primary/30 transition-colors"
+              className="flex items-center justify-between p-3 rounded-lg brutal-border hover:border-primary/30 transition-colors"
             >
               <div className="flex items-center gap-3">
                 {step.completed ? (
@@ -143,7 +143,7 @@ export const WelcomeChecklist = ({
           ))}
         </div>
         {completedCount === steps.length && (
-          <div className="mt-4 p-4 rounded-lg bg-primary/10 border-2 border-primary text-center">
+          <div className="mt-4 p-4 rounded-lg bg-primary/10 brutal-border border-primary text-center">
             <p className="font-medium text-primary">🎉 You're all set! Start using hA.I.r to grow your business.</p>
           </div>
         )}

@@ -57,7 +57,7 @@ export const SmartUpsell = ({ currentService, onAddUpsell, className }: SmartUps
   return (
     <Card
       className={cn(
-        "border-[2px] border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5",
+        "brutal-border border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5",
         "animate-fade-in",
         className
       )}
@@ -92,7 +92,7 @@ export const SmartUpsell = ({ currentService, onAddUpsell, className }: SmartUps
                 size="sm"
                 variant="default"
                 onClick={handleAdd}
-                className="h-7 text-xs gap-1 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))]"
+                className="h-7 text-xs gap-1 brutal-shadow-xs brutal-hover"
               >
                 <Sparkles className="h-3 w-3" />
                 Add Service

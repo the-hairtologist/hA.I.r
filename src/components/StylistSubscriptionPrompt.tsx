@@ -79,7 +79,7 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 border-2 border-primary">
+          <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 brutal-border border-primary">
             <Sparkles className="h-12 w-12 text-primary" />
           </div>
           <DialogTitle className="text-2xl font-bold text-center">
@@ -92,7 +92,7 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
 
         <div className="space-y-6">
           {/* Pricing Card */}
-          <div className="border-[3px] border-primary rounded-xl p-6 bg-gradient-to-br from-primary/5 to-secondary/5 shadow-[4px_4px_0px_0px_hsl(var(--primary))]">
+          <div className="brutal-border border-primary rounded-xl p-6 bg-gradient-to-br from-primary/5 to-secondary/5 brutal-shadow-xs">
             <div className="text-center mb-4">
               <div className="text-4xl font-bold text-primary">$15<span className="text-lg text-muted-foreground">/month</span></div>
               <div className="text-sm text-muted-foreground mt-1">7-day free trial included</div>
@@ -117,7 +117,7 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
               return (
                 <div
                   key={index}
-                  className="p-4 rounded-lg border-2 border-border hover:border-primary/30 transition-colors"
+                  className="p-4 rounded-lg brutal-border hover:border-primary/30 transition-colors"
                 >
                   <div className="flex items-start gap-3">
                     <div className="p-2 rounded-lg bg-primary/10">
@@ -134,7 +134,7 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
           </div>
 
           {/* What's Not Included */}
-          <div className="border-2 border-muted rounded-lg p-4 bg-muted/20">
+          <div className="brutal-border border-muted rounded-lg p-4 bg-muted/20">
             <div className="flex items-start gap-2">
               <Lock className="h-5 w-5 text-muted-foreground mt-0.5" />
               <div>

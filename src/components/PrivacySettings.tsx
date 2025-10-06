@@ -112,7 +112,7 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
 
   if (loading) {
     return (
-      <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+      <Card className="brutal-border brutal-shadow-xs">
         <CardContent className="flex items-center justify-center py-8">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </CardContent>
@@ -121,7 +121,7 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
   }
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+    <Card className="brutal-border brutal-shadow-xs">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-primary" />
@@ -134,7 +134,7 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
       <CardContent className="space-y-6">
         {userRole === "stylist" && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between space-x-4 p-4 border-2 border-foreground/10 rounded-lg bg-muted/50">
+            <div className="flex items-center justify-between space-x-4 p-4 brutal-border border-foreground/10 rounded-lg bg-muted/50">
               <div className="flex-1 space-y-1">
                 <div className="flex items-center gap-2">
                   {isPublicListing ? (
@@ -174,7 +174,7 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
           <h4 className="text-sm font-semibold">Contact Information Sharing</h4>
           
           {userRole === "stylist" && (
-            <div className="flex items-center justify-between space-x-4 p-4 border-2 border-foreground/10 rounded-lg">
+            <div className="flex items-center justify-between space-x-4 p-4 brutal-border border-foreground/10 rounded-lg">
               <div className="flex-1 space-y-1">
                 <Label htmlFor="share-with-clients" className="font-medium">
                   Share with Clients
@@ -193,7 +193,7 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
           )}
 
           {userRole === "client" && (
-            <div className="flex items-center justify-between space-x-4 p-4 border-2 border-foreground/10 rounded-lg">
+            <div className="flex items-center justify-between space-x-4 p-4 brutal-border border-foreground/10 rounded-lg">
               <div className="flex-1 space-y-1">
                 <Label htmlFor="share-with-stylists" className="font-medium">
                   Share with Stylists

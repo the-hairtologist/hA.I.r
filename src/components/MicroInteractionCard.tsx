@@ -27,8 +27,8 @@ export const MicroInteractionCard = ({
     <Card
       className={cn(
         "transition-all duration-200",
-        hoverable && "hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5",
-        clickable && "cursor-pointer active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+        hoverable && "hover:brutal-shadow-md hover:-translate-y-0.5",
+        clickable && "cursor-pointer active:translate-y-0.5 active:brutal-shadow-xs",
         isPressed && "scale-[0.99]",
         "animate-fade-in",
         className

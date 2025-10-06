@@ -71,7 +71,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
 
   if (activities.length === 0) {
     return (
-      <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-red-400">
+      <Card className="animate-fade-in brutal-card">
         <CardHeader>
           <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
         </CardHeader>
@@ -83,7 +83,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
   }
 
   return (
-    <Card className="animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-red-400">
+    <Card className="animate-fade-in brutal-card">
       <CardHeader>
         <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
       </CardHeader>
@@ -96,7 +96,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
             return (
               <div
                 key={activity.id}
-                className="flex items-start gap-4 p-4 rounded-lg border-2 border-foreground bg-card hover:bg-card/90 transition-all cursor-pointer animate-fade-in shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--primary))] hover:-translate-y-0.5"
+                className="flex items-start gap-4 p-4 rounded-lg brutal-border bg-card hover:bg-card/90 transition-all cursor-pointer animate-fade-in brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5"
                 style={{ animationDelay: `${index * 50}ms` }}
                 onClick={() => {
                   if (activity.type === "appointment") navigate("/appointments");
@@ -104,7 +104,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                   if (activity.type === "formula") navigate("/formulas");
                 }}
               >
-                <div className={`p-2 rounded-lg ${colorClass} border-2 border-foreground`}>
+                <div className={`p-2 rounded-lg ${colorClass} brutal-border`}>
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="flex-1 min-w-0">

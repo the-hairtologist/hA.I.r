@@ -76,7 +76,7 @@ export const SubscriptionManagementCard = () => {
   }
 
   return (
-    <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))]">
+    <Card className="brutal-border border-primary brutal-shadow-xs">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -101,7 +101,7 @@ export const SubscriptionManagementCard = () => {
       <CardContent className="space-y-4">
         {subscribed ? (
           <>
-            <div className="p-4 rounded-lg border-2 border-border bg-muted/20">
+            <div className="p-4 rounded-lg brutal-border bg-muted/20">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="h-5 w-5 text-primary" />
                 <span className="font-semibold">Stylist Pro</span>
@@ -132,7 +132,7 @@ export const SubscriptionManagementCard = () => {
           </>
         ) : (
           <>
-            <div className="p-4 rounded-lg border-2 border-primary/20 bg-primary/5">
+            <div className="p-4 rounded-lg brutal-border border-primary/20 bg-primary/5">
               <div className="text-2xl font-bold text-primary mb-1">
                 $15<span className="text-sm text-muted-foreground">/month</span>
               </div>

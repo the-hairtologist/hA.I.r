@@ -132,8 +132,8 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
   ];
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-      <CardHeader className="border-b-[2px] border-border">
+    <Card className="brutal-border brutal-shadow-xs">
+      <CardHeader className="brutal-border-b">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex-1">
             <CardTitle className="font-display flex items-center gap-2">
@@ -146,7 +146,7 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
           </div>
           <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
+              <Button className="min-h-[44px] flex-shrink-0">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Service Type
               </Button>
@@ -176,10 +176,10 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                       <button
                         key={preset.value}
                         onClick={() => setNewColor(preset.value)}
-                        className={`h-12 rounded-lg border-2 transition-all hover:scale-105 ${
+                        className={`h-12 rounded-lg brutal-border transition-all hover:scale-105 ${
                           newColor === preset.value
-                            ? "border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
-                            : "border-border"
+                            ? "brutal-shadow-xs"
+                            : ""
                         }`}
                         style={{ backgroundColor: preset.value }}
                         title={preset.name}
@@ -210,10 +210,10 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
             {serviceColors.map((sc) => (
               <div
                 key={sc.id}
-                className="flex items-center gap-4 p-4 border-[2px] border-border rounded-lg hover:bg-accent/5 transition-colors"
+                className="flex items-center gap-4 p-4 brutal-border rounded-lg hover:bg-accent/5 transition-colors"
               >
                 <div
-                  className="w-12 h-12 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0"
+                  className="w-12 h-12 rounded-lg brutal-border brutal-shadow-xs flex-shrink-0"
                   style={{ backgroundColor: sc.color }}
                 />
                 <div className="flex-1">
@@ -222,7 +222,7 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                 <div className="flex items-center gap-2">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="border-[2px]">
+                      <Button variant="outline" size="sm">
                         Change Color
                       </Button>
                     </DialogTrigger>
@@ -236,7 +236,7 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                             <button
                               key={preset.value}
                               onClick={() => updateColor(sc.id, preset.value)}
-                              className="h-12 rounded-lg border-2 border-border hover:border-foreground transition-all hover:scale-105"
+                              className="h-12 rounded-lg brutal-border hover:border-foreground transition-all hover:scale-105"
                               style={{ backgroundColor: preset.value }}
                               title={preset.name}
                             />

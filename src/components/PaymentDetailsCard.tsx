@@ -58,7 +58,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
   const StatusIcon = statusConfig.icon;
 
   return (
-    <Card className={`border-2 ${statusConfig.borderColor} ${statusConfig.bgColor}`}>
+    <Card className="brutal-border brutal-shadow-sm">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

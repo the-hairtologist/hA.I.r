@@ -17,7 +17,7 @@ export const PhoneNumberWarning = ({ phoneNumber, className }: PhoneNumberWarnin
   }
 
   return (
-    <Alert className={className}>
+    <Alert className={`brutal-border brutal-shadow-xs ${className}`}>
       <Phone className="h-4 w-4" />
       <AlertDescription className="flex items-center justify-between">
         <span className="text-sm">

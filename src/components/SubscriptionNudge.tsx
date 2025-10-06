@@ -137,7 +137,7 @@ export const SubscriptionNudge = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg brutal-border brutal-shadow-md">
         <Button
           variant="ghost"
           size="icon"
@@ -149,7 +149,7 @@ export const SubscriptionNudge = ({
         </Button>
 
         <DialogHeader>
-          <div className={`mx-auto mb-4 p-4 rounded-xl bg-${content.urgency ? 'warning' : 'primary'}/10 border-2 border-${content.urgency ? 'warning' : 'primary'}`}>
+          <div className={`mx-auto mb-4 p-4 rounded-xl brutal-border ${content.urgency ? 'bg-warning/10 border-warning' : 'bg-primary/10 border-primary'}`}>
             <Icon className={`h-12 w-12 ${content.iconColor}`} />
           </div>
           
@@ -173,7 +173,7 @@ export const SubscriptionNudge = ({
 
         <div className="space-y-4 pt-4">
           {/* Pricing Highlight */}
-          <div className="border-[3px] border-primary rounded-xl p-6 bg-gradient-to-br from-primary/5 to-secondary/5 shadow-[4px_4px_0px_0px_hsl(var(--primary))]">
+          <div className="brutal-border border-primary rounded-xl p-6 bg-gradient-to-br from-primary/5 to-secondary/5 brutal-shadow-xs">
             <div className="text-center">
               <div className="text-4xl font-bold text-primary">
                 $29

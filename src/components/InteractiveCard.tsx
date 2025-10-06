@@ -38,8 +38,8 @@ export const InteractiveCard = ({
     <Card
       onClick={onClick}
       className={cn(
-        "border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] transition-all duration-300",
-        interactive && onClick && "cursor-pointer hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] active:translate-y-0 active:shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
+        "brutal-border brutal-shadow-sm transition-all duration-300",
+        interactive && onClick && "cursor-pointer hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] active:translate-y-0 active:brutal-shadow-sm",
         `bg-gradient-to-br ${gradient}`,
         className
       )}
@@ -60,7 +60,7 @@ export const InteractiveCard = ({
         )}
         
         {Icon && (
-          <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+          <div className="bg-card brutal-border w-14 h-14 rounded-lg flex items-center justify-center mb-4 brutal-shadow-xs">
             <Icon className={cn("h-7 w-7", iconColor)} aria-hidden="true" />
           </div>
         )}

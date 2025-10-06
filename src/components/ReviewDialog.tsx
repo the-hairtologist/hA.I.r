@@ -72,7 +72,7 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg brutal-border brutal-shadow-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <Sparkles className="h-5 w-5 text-primary" />

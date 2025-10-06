@@ -19,10 +19,10 @@ export const ReviewCard = ({
   createdAt,
 }: ReviewCardProps) => {
   return (
-    <Card className="hover:shadow-md transition-all duration-300 animate-fade-in">
+    <Card className="hover:brutal-shadow-sm transition-all duration-300 animate-fade-in">
       <CardContent className="pt-6">
         <div className="flex items-start gap-4">
-          <Avatar className="h-12 w-12 border-2 border-primary/10">
+          <Avatar className="h-12 w-12 brutal-border border-primary/10">
             <AvatarImage src={clientAvatar} />
             <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20">
               <User className="h-6 w-6 text-primary" />

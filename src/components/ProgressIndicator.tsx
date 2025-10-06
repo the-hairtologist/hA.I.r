@@ -37,9 +37,9 @@ export const ProgressIndicator = ({ steps, currentStep, className }: ProgressInd
                 {/* Step Circle */}
                 <div
                   className={cn(
-                    "relative flex h-12 w-12 items-center justify-center rounded-full border-[3px] transition-all",
-                    isCompleted && "bg-primary border-primary text-primary-foreground shadow-[3px_3px_0px_0px_hsl(var(--primary))]",
-                    isCurrent && "bg-card border-primary text-primary scale-110 shadow-[4px_4px_0px_0px_hsl(var(--primary))] animate-pulse-glow",
+                    "relative flex h-12 w-12 items-center justify-center rounded-full brutal-border transition-all",
+                    isCompleted && "bg-primary border-primary text-primary-foreground brutal-shadow-sm",
+                    isCurrent && "bg-card border-primary text-primary scale-110 brutal-shadow-xs animate-pulse-glow",
                     isUpcoming && "bg-muted border-muted-foreground/30 text-muted-foreground"
                   )}
                   aria-current={isCurrent ? "step" : undefined}

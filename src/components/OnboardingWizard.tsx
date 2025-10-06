@@ -158,7 +158,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="max-w-2xl p-0 gap-0 overflow-hidden border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))]">
+      <DialogContent className="max-w-2xl p-0 gap-0 overflow-hidden brutal-border brutal-shadow-lg">
         {/* Progress Bar */}
         <div className="w-full bg-muted">
           <Progress value={progress} className="h-2 rounded-none" />
@@ -168,7 +168,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
         <div className="p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5">
           <div className="flex flex-col items-center text-center space-y-6">
             {/* Icon */}
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center brutal-border shadow-brutal-lg">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center brutal-border brutal-shadow-sm">
               <Icon className="h-10 w-10 text-on-surface-primary" />
             </div>
 
@@ -199,7 +199,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
 
             {/* Action Preview */}
             {currentStepData.action && currentStep > 0 && (
-              <Card className="w-full border-[2px] border-primary/30">
+              <Card className="w-full brutal-border border-primary/30">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="text-left">
@@ -214,7 +214,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
                         currentStepData.action?.();
                         handleSkip();
                       }}
-                      className="gap-1 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                      className="gap-1 brutal-shadow-xs"
                     >
                       Take Me There
                       <ArrowRight className="h-3 w-3" />
@@ -227,13 +227,13 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between p-6 bg-muted/50 border-t-[2px] border-foreground">
+        <div className="flex items-center justify-between p-6 bg-muted/50 brutal-border-t">
           <div className="flex items-center gap-2">
             {currentStep > 0 && (
               <Button
                 variant="outline"
                 onClick={handleBack}
-                className="gap-1 border-[2px] border-foreground"
+                className="gap-1"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back
@@ -251,7 +251,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
             </Button>
             <Button
               onClick={handleNext}
-              className="gap-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+              className="gap-1 brutal-shadow-sm brutal-hover"
             >
               {currentStep < steps.length - 1 ? (
                 <>

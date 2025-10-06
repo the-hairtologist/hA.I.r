@@ -189,7 +189,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="max-w-2xl max-h-[90vh] overflow-y-auto" 
+        className="max-w-2xl max-h-[90vh] overflow-y-auto brutal-border brutal-shadow-md" 
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >

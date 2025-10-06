@@ -143,7 +143,7 @@ export const RescheduleDialog = ({ open, onOpenChange, appointment, onSuccess }:
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl brutal-border brutal-shadow-md">
         <DialogHeader>
           <DialogTitle>Reschedule Appointment</DialogTitle>
           <DialogDescription>

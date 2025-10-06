@@ -223,7 +223,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg brutal-border brutal-shadow-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-primary" />
@@ -243,7 +243,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
                 <Button
                   key={weeks}
                   variant={selectedWeeks === weeks ? "default" : "outline"}
-                  className={selectedWeeks === weeks ? "border-2 border-primary" : ""}
+                  className={selectedWeeks === weeks ? "brutal-border border-primary" : ""}
                   onClick={() => setSelectedWeeks(weeks)}
                 >
                   {weeks}w

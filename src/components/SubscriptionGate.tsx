@@ -69,9 +69,9 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
     return (
       <>
         <div className="flex items-center justify-center min-h-[400px] p-6">
-          <Card className="max-w-md border-[3px] border-primary shadow-[6px_6px_0px_0px_hsl(var(--primary))]">
+          <Card className="max-w-md brutal-border border-primary brutal-shadow-md">
             <CardHeader className="text-center">
-              <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 border-2 border-primary">
+              <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 brutal-border border-primary">
                 <Lock className="h-12 w-12 text-primary" />
               </div>
               <CardTitle className="text-2xl">Premium Feature</CardTitle>
@@ -80,7 +80,7 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 rounded-lg border-2 border-border bg-muted/20">
+              <div className="p-4 rounded-lg brutal-border bg-muted/20">
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="h-5 w-5 text-primary" />
                   <span className="font-semibold">Stylist Pro - $15/month</span>

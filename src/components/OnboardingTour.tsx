@@ -86,9 +86,9 @@ export const OnboardingTour = ({ open, onOpenChange, userRole }: OnboardingTourP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md border-4 border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))]">
+      <DialogContent className="sm:max-w-md brutal-border brutal-shadow-lg">
         <DialogHeader>
-          <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 border-2 border-primary">
+          <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 brutal-border border-primary">
             <Icon className="h-12 w-12 text-primary" />
           </div>
           <DialogTitle className="text-2xl font-bold text-center">
