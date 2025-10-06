@@ -51,6 +51,7 @@ import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { HelpButton } from "@/components/HelpButton";
+import { TodoList } from "@/components/dashboard/TodoList";
 
 interface SortableSectionProps {
   id: string;
@@ -642,7 +643,7 @@ const Dashboard = () => {
           />
         );
       case "todos":
-        return null; // TodoList component will be added in the future
+        return <TodoList />;
       case "activity":
         return (
           <div key={sectionId} className="mb-8">
