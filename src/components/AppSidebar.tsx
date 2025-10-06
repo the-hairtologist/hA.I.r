@@ -147,7 +147,9 @@ function SortableNavItem({
             {!collapsed && (
               <>
                 <div className="flex flex-col flex-1 min-w-0">
-                  <span className="text-sm font-medium truncate">{item.title}</span>
+                  <span className={`text-sm font-medium truncate ${
+                    isParentActive || isAnyChildActive ? 'text-primary' : 'text-foreground'
+                  }`}>{item.title}</span>
                   {item.description && (
                     <span className="text-[10px] text-muted-foreground leading-tight truncate">
                       {item.description}
@@ -155,7 +157,9 @@ function SortableNavItem({
                   )}
                 </div>
                 <div className={`flex-shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  <ChevronDown className={`h-4 w-4 ${
+                    isParentActive || isAnyChildActive ? 'text-primary' : 'text-muted-foreground'
+                  }`} />
                 </div>
               </>
             )}
@@ -209,8 +213,8 @@ function SortableNavItem({
                       to={child.url} 
                       className={`group relative pl-3 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-3 ${
                         isChildActive 
-                          ? 'bg-primary/10 text-primary font-medium' 
-                          : 'hover:bg-muted/50 text-foreground'
+                          ? 'bg-primary/10' 
+                          : 'hover:bg-muted/50'
                       }`}
                     >
                       <div className="relative flex-shrink-0">
@@ -220,7 +224,9 @@ function SortableNavItem({
                           <child.icon className="h-4 w-4 text-white" />
                         </div>
                       </div>
-                      <span className="text-sm truncate">{child.title}</span>
+                      <span className={`text-sm truncate ${
+                        isChildActive ? 'text-primary font-medium' : 'text-foreground'
+                      }`}>{child.title}</span>
                     </NavLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
