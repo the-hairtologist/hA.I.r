@@ -35,3 +35,27 @@ verify_jwt = true
 
 [functions.smart-scheduling-suggestions]
 verify_jwt = true
+
+[functions.smart-reminder]
+verify_jwt = false
+
+[functions.automated-appointment-followup]
+verify_jwt = false
+
+[functions.voice-to-text]
+verify_jwt = true
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.create-appointment-checkout]
+verify_jwt = true
+
+[functions.send-client-invite]
+verify_jwt = true
+
+[functions.export-user-data]
+verify_jwt = true
+
+[functions.delete-user-data]
+verify_jwt = true

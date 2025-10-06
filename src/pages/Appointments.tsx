@@ -181,6 +181,22 @@ const Appointments = () => {
           // Celebration for completed appointments
           if (newStatus === "completed") {
             showCelebration("income-secured", `${clientName} - appointment completed!`);
+            
+            // Check for milestones (database trigger handles creation)
+            const { data: milestones } = await supabase
+              .from("client_milestones")
+              .select("*")
+              .eq("client_id", selectedAppointment.client_id)
+              .eq("celebrated", false)
+              .order("created_at", { ascending: false })
+              .limit(1);
+
+            if (milestones && milestones.length > 0) {
+              toast.success("🎉 Milestone Unlocked!", {
+                description: `Check the client's profile for their reward!`,
+                duration: 5000,
+              });
+            }
           } else {
             toast.success(`Appointment ${newStatus}`);
           }

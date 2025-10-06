@@ -15,10 +15,12 @@ import { ClientCardSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMemo } from "react";
 import { EmptyState } from "@/components/EmptyState";
 import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
+import { HairMemoryTimeline } from "@/components/HairMemoryTimeline";
 
 interface ClientProfile {
   id: string;
@@ -613,12 +615,20 @@ export default function Clients() {
 
         {/* Edit Client Dialog */}
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-2xl gradient-text">Edit Client Profile</DialogTitle>
+              <DialogTitle className="text-2xl gradient-text">Client Profile</DialogTitle>
             </DialogHeader>
             
-            <div className="grid md:grid-cols-2 gap-6">
+            <Tabs defaultValue="info" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="info">Info & Formulas</TabsTrigger>
+                <TabsTrigger value="timeline">Hair Journey</TabsTrigger>
+                <TabsTrigger value="appointments">Appointments</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="info" className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
               {/* Client Info Form */}
               <div>
                 <h3 className="text-lg font-display font-bold mb-4 text-secondary">Client Information</h3>
@@ -743,6 +753,16 @@ export default function Clients() {
                 )}
               </div>
             </div>
+              </TabsContent>
+              
+              <TabsContent value="timeline">
+                {selectedClient && <HairMemoryTimeline clientId={selectedClient.id} />}
+              </TabsContent>
+              
+              <TabsContent value="appointments">
+                <p className="text-sm text-muted-foreground">Appointment history coming soon</p>
+              </TabsContent>
+            </Tabs>
           </DialogContent>
         </Dialog>
       </main>

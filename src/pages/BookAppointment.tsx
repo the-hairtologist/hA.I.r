@@ -1,17 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, ArrowLeft, Clock, Loader2, CheckCircle } from "lucide-react";
+import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2, CalendarDays, UserPlus, Filter } from "lucide-react";
 import { format, addHours, setHours, setMinutes, isAfter, isBefore, startOfDay } from "date-fns";
 import { cn } from "@/lib/utils";
+import { CalendarView } from "@/components/CalendarView";
+import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { SearchInput } from "@/components/SearchInput";
+import { AppointmentSkeleton } from "@/components/LoadingSkeleton";
+import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { RebookDialog } from "@/components/RebookDialog";
+import { Repeat } from "lucide-react";
+import { useGlobalShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { QuickRebookButton } from "@/components/QuickRebookButton";
+import { ContextualAI } from "@/components/ContextualAI";
+import { SmartSchedulingSuggestions } from "@/components/SmartSchedulingSuggestions";
+import { showCelebration } from "@/components/CelebrationToast";
+import { BookingPageBranding } from "@/components/BookingPageBranding";
 
 const BookAppointment = () => {
   const navigate = useNavigate();
@@ -813,6 +830,11 @@ const BookAppointment = () => {
             </Button>
           </CardContent>
         </Card>
+
+        {/* Powered by hA.I.r Branding */}
+        <div className="mt-8">
+          <BookingPageBranding />
+        </div>
       </main>
     </div>
   );
