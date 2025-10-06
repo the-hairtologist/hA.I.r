@@ -334,7 +334,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   if (isLoading) {
     return (
-      <Sidebar collapsible="icon" className="border-r">
+      <Sidebar collapsible="icon" className="border-r-2 border-foreground hidden lg:flex lg:w-64">
         <SidebarContent className="flex items-center justify-center">
           <div className="text-muted-foreground">Loading...</div>
         </SidebarContent>
@@ -343,8 +343,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r hidden lg:flex">
-      <SidebarContent>
+    <Sidebar collapsible="icon" className="border-r-2 border-foreground hidden lg:flex lg:w-64">
+      <SidebarContent className="gap-0">
         {/* Customize Controls */}
         {!collapsed && (
           <div className="px-3 py-2 border-b">

@@ -122,8 +122,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-[image:var(--gradient-bg-main)] overflow-x-hidden">
+    <SidebarProvider defaultOpen={true}>
+      <div className="min-h-screen flex w-full bg-[image:var(--gradient-bg-main)]">
         {/* Sidebar - Desktop only (1024px+) */}
         <AppSidebar userRole={userRole || undefined} />
         
