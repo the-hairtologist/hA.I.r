@@ -12,10 +12,15 @@ const config: CapacitorConfig = {
     allowMixedContent: true,
     backgroundColor: '#ffffff',
     captureInput: true,
+    // Enable hardware acceleration
+    webContentsDebuggingEnabled: false,
   },
   ios: {
     contentInset: 'automatic',
     backgroundColor: '#ffffff',
+    // Improved scrolling performance
+    scrollEnabled: true,
+    allowsInlineMediaPlayback: true,
   },
   plugins: {
     SplashScreen: {
