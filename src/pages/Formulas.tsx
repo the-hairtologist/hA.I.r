@@ -223,12 +223,12 @@ const Formulas = () => {
           />
         )}
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold">Client Formulas</h1>
-            <p className="text-sm sm:text-base text-muted-foreground">View and manage your client formulas</p>
+            <h1 className="text-3xl font-bold">Client Formulas</h1>
+            <p className="text-muted-foreground">View and manage your client formulas</p>
           </div>
-          <Button onClick={() => setDialogOpen(true)} className="min-h-[44px] w-full sm:w-auto">
+          <Button onClick={() => setDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Formula
           </Button>
@@ -336,12 +336,12 @@ const Formulas = () => {
 
       {/* Add/Edit Formula Dialog */}
       <Dialog open={dialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">
+            <DialogTitle>
               {editingFormula ? "Edit Formula" : "Add New Formula"}
             </DialogTitle>
-            <DialogDescription className="text-sm">
+            <DialogDescription>
               {editingFormula ? "Update the formula details" : "Create a new formula for a client"}
             </DialogDescription>
           </DialogHeader>

@@ -122,51 +122,51 @@ const Knowledge = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-7xl">
+      <main className="container mx-auto px-4 py-6 max-w-7xl">
         {/* Search Bar */}
-        <Card className="mb-6 sm:mb-8 border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
-          <CardContent className="p-4 sm:p-6">
+        <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
+          <CardContent className="p-6">
             <div className="relative">
-              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
                 placeholder="Search articles, guides, and resources..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 sm:pl-12 h-12 sm:h-14 text-base sm:text-lg border-2 border-foreground"
+                className="pl-12 h-14 text-lg border-2 border-foreground"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Quick Access */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 sm:mb-8">
+        <div className="grid md:grid-cols-2 gap-4 mb-8">
           <Card 
-            className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[5px_5px_0px_0px_hsl(var(--primary))] sm:hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400"
+            className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400"
             onClick={() => navigate("/ai-assistant")}
           >
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-background border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] sm:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center flex-shrink-0">
-                  <Lightbulb className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
+                  <Lightbulb className="h-8 w-8 text-primary" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg sm:text-xl font-display font-bold text-foreground mb-1">AI Assistant</h3>
-                  <p className="text-xs sm:text-sm text-foreground/80 font-medium">Get instant answers and custom formulas</p>
+                <div className="flex-1">
+                  <h3 className="text-xl font-display font-bold text-foreground mb-1">AI Assistant</h3>
+                  <p className="text-sm text-foreground/80 font-medium">Get instant answers and custom formulas</p>
                 </div>
-                <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 text-foreground flex-shrink-0" />
+                <ExternalLink className="h-5 w-5 text-foreground" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-background border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] sm:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center flex-shrink-0">
-                  <Video className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
+                  <Video className="h-8 w-8 text-primary" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg sm:text-xl font-display font-bold text-foreground mb-1">Video Tutorials</h3>
-                  <p className="text-xs sm:text-sm text-foreground/80 font-medium">Coming Soon - Watch and learn from experts</p>
+                <div className="flex-1">
+                  <h3 className="text-xl font-display font-bold text-foreground mb-1">Video Tutorials</h3>
+                  <p className="text-sm text-foreground/80 font-medium">Coming Soon - Watch and learn from experts</p>
                 </div>
               </div>
             </CardContent>
@@ -220,22 +220,22 @@ const Knowledge = () => {
         )}
 
         {/* Category Filter Buttons - Brutalist Style */}
-        <div className="mb-6 sm:mb-8">
-          <div className="flex gap-0 border-[2px] sm:border-[3px] border-foreground rounded-xl sm:rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-background">
+        <div className="mb-8">
+          <div className="flex gap-0 border-[3px] border-foreground rounded-2xl overflow-hidden shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-background">
             {categories.map((cat) => {
               const Icon = cat.icon;
               return (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-3 sm:py-4 px-2 sm:px-4 font-display font-bold text-xs sm:text-sm md:text-base transition-all border-r-[2px] sm:border-r-[3px] last:border-r-0 border-foreground min-h-[44px] ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-4 px-4 font-display font-bold text-sm md:text-base transition-all border-r-[3px] last:border-r-0 border-foreground ${
                     selectedCategory === cat.id
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-background text-foreground hover:bg-muted'
                   }`}
                 >
-                  <Icon className="h-4 w-4 flex-shrink-0" />
-                  <span className="hidden xs:inline truncate">{cat.label}</span>
+                  <Icon className="h-4 w-4 md:h-5 md:w-5" />
+                  <span className="hidden sm:inline">{cat.label}</span>
                 </button>
               );
             })}

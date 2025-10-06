@@ -1,10 +1,9 @@
-import { Plus, Calendar, Users, Scissors } from "lucide-react";
+import { Plus, Calendar, Users, Scissors, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
-import { useSidebar } from "@/components/ui/sidebar";
 
 interface FloatingAction {
   label: string;
@@ -20,10 +19,6 @@ interface FloatingActionButtonProps {
 export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const { openMobile } = useSidebar();
-
-  // Don't show FAB when sidebar is open on mobile
-  if (openMobile) return null;
 
   const stylistActions: FloatingAction[] = [
     {
@@ -85,7 +80,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      className="fixed bottom-24 right-3 z-40 flex flex-col-reverse items-end gap-2.5 lg:bottom-6 lg:right-4 lg:z-50"
+      className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 flex flex-col-reverse items-end gap-3"
     >
       {/* Action Items */}
       <div
@@ -100,57 +95,44 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
             className="flex items-center gap-3 animate-fade-in"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <span className="text-sm font-medium bg-card px-3 py-2 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] whitespace-nowrap">
+            <span className="text-sm font-medium bg-card px-3 py-1 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] whitespace-nowrap">
               {action.label}
             </span>
             <Button
               size="icon"
               onClick={action.onClick}
               className={cn(
-                "h-12 w-12 rounded-full shadow-lg border-2 border-white",
-                "bg-gradient-to-br min-h-[48px] min-w-[48px]",
+                "h-12 w-12 rounded-full shadow-lg border-2 border-foreground",
+                "bg-gradient-to-br",
                 action.gradient,
-                "hover:scale-105 active:scale-95 transition-all duration-200",
-                "lg:h-14 lg:w-14 lg:min-h-[56px] lg:min-w-[56px]"
+                "hover:scale-110 transition-all duration-200"
               )}
-              aria-label={action.label}
             >
-              <action.icon className="h-5 w-5 text-white lg:h-6 lg:w-6" strokeWidth={2.5} />
+              <action.icon className="h-5 w-5 text-white" />
             </Button>
           </div>
         ))}
       </div>
 
-      {/* Main FAB - Mobile Optimized */}
+      {/* Main FAB */}
       <Button
         size="icon"
         onClick={() => {
           haptic.tap();
           setIsOpen(!isOpen);
         }}
-        style={{
-          background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-          border: '2px solid #ffffff',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        }}
         className={cn(
-          "h-14 w-14 rounded-full min-h-[56px] min-w-[56px]",
-          "lg:h-16 lg:w-16 lg:min-h-[64px] lg:min-w-[64px]",
-          "hover:scale-105 active:scale-95",
+          "h-14 w-14 rounded-full shadow-lg",
+          "bg-primary hover:bg-primary/90",
           "transition-all duration-200",
           "flex items-center justify-center",
           isOpen && "rotate-45"
         )}
-        aria-label={isOpen ? "Close menu" : "Open quick actions menu"}
       >
-        <Plus 
-          className="text-white" 
-          size={28}
-          strokeWidth={2.5}
-          style={{ 
-            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
-          }}
-        />
+        <div className="relative flex items-center justify-center">
+          <Scissors className="h-5 w-5 text-primary-foreground" strokeWidth={2} />
+          <Sparkles className="absolute -top-0.5 -right-0.5 h-3 w-3 text-warning" strokeWidth={2.5} />
+        </div>
       </Button>
     </div>
   );

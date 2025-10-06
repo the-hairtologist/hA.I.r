@@ -29,33 +29,29 @@ export const FeatureCard = ({
 
   return (
     <Card
-      className="group transition-all animate-fade-in brutal-card relative overflow-hidden"
+      className="group transition-all animate-fade-in border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 relative overflow-hidden"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       <div className={cn(
         "absolute inset-0 bg-gradient-to-br opacity-20",
         gradient
       )} />
-      <CardHeader className="relative pb-3 lg:pb-4">
-        <div className="flex items-center gap-2.5 lg:gap-3 mb-1.5 lg:mb-2">
+      <CardHeader className="relative">
+        <div className="flex items-center gap-3 mb-2">
           <div className={cn(
-            "p-2 lg:p-3 rounded-lg bg-gradient-to-br border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+            "p-3 rounded-lg bg-gradient-to-br border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
             gradient
           )}>
-            <Icon className="h-5 w-5 lg:h-6 lg:w-6 text-primary-foreground" />
+            <Icon className="h-6 w-6 text-primary-foreground" />
           </div>
-          <CardTitle className="text-base lg:text-xl font-display group-hover:text-primary transition-colors leading-tight">
-            {title}
-          </CardTitle>
+          <CardTitle className="text-xl font-display group-hover:text-primary transition-colors">{title}</CardTitle>
         </div>
-        <CardDescription className="text-sm lg:text-base leading-snug lg:leading-relaxed">
-          {description}
-        </CardDescription>
+        <CardDescription className="text-base leading-relaxed">{description}</CardDescription>
       </CardHeader>
-      <CardContent className="relative pt-0">
+      <CardContent className="relative">
         <Button 
           variant="outline" 
-          className="w-full font-display text-sm lg:text-base"
+          className="w-full font-display"
           onClick={handleClick}
         >
           Open →

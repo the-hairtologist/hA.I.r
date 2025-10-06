@@ -121,7 +121,7 @@ function SortableNavItem({
         } : undefined}
       >
         {hasChildren ? (
-          <div className={`flex items-center w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
+          <div className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
             isParentActive || isAnyChildActive
               ? 'bg-primary/10 text-primary font-medium' 
               : 'text-foreground hover:bg-muted/50'
@@ -130,13 +130,13 @@ function SortableNavItem({
               <div
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing mr-2 -ml-1"
+                className="cursor-grab active:cursor-grabbing"
                 onClick={(e) => e.stopPropagation()}
               >
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
-            <div className="relative flex-shrink-0 mr-3">
+            <div className="relative flex-shrink-0">
               <div className={`w-9 h-9 rounded-lg ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
                 <item.icon className="h-5 w-5 text-primary-foreground" />
               </div>
@@ -154,7 +154,7 @@ function SortableNavItem({
                     </span>
                   )}
                 </div>
-                <div className={`flex-shrink-0 ml-2 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
+                <div className={`flex-shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
                   <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 </div>
               </>
@@ -166,13 +166,13 @@ function SortableNavItem({
               <div
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing mr-2 -ml-1"
+                className="cursor-grab active:cursor-grabbing"
                 onClick={(e) => e.preventDefault()}
               >
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
               </div>
             )}
-            <div className="relative flex-shrink-0 mr-3">
+            <div className="relative flex-shrink-0">
               <div className={`w-9 h-9 rounded-lg ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
                 <item.icon className="h-5 w-5 text-primary-foreground" />
               </div>
@@ -255,7 +255,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   };
 
   const getNavClassName = ({ isActive }: { isActive: boolean }) => {
-    return `flex items-center w-full transition-colors duration-200 px-2 py-2 rounded-md ${
+    return `flex items-center gap-3 w-full transition-colors duration-200 px-2 py-2 rounded-md ${
       isActive
         ? "bg-primary/10 text-primary font-medium"
         : "text-foreground hover:bg-muted/50"
@@ -334,7 +334,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   if (isLoading) {
     return (
-      <Sidebar collapsible="icon" className="border-r-2 border-foreground lg:w-64">
+      <Sidebar collapsible="icon" className="border-r">
         <SidebarContent className="flex items-center justify-center">
           <div className="text-muted-foreground">Loading...</div>
         </SidebarContent>
@@ -343,8 +343,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r-2 border-foreground lg:w-64">
-      <SidebarContent className="gap-0">
+    <Sidebar collapsible="icon" className="border-r">
+      <SidebarContent>
         {/* Customize Controls */}
         {!collapsed && (
           <div className="px-3 py-2 border-b">

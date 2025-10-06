@@ -207,34 +207,34 @@ const Resources = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-5xl">
+      <main className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Search Bar */}
-        <Card className="mb-6 sm:mb-8 border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-          <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
+        <Card className="mb-8 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+          <CardContent className="pt-6">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search for help, solutions, or questions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 sm:pl-12 h-11 sm:h-12 text-base border-[2px] border-foreground"
+                className="pl-10 h-12 text-base border-[2px] border-foreground"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Quick Access Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <Card className="border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all cursor-pointer min-h-[44px]"
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
+          <Card className="border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all cursor-pointer"
                 onClick={() => navigate("/knowledge")}>
-            <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
-              <div className="flex flex-col items-center text-center gap-2 sm:gap-3">
-                <div className="p-2 sm:p-3 rounded-lg bg-blue-500/10">
-                  <FileQuestion className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="p-3 rounded-lg bg-blue-500/10">
+                  <FileQuestion className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm sm:text-base">Knowledge Base</p>
+                  <p className="font-semibold">Knowledge Base</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     Articles & guides
                   </p>

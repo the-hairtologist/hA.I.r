@@ -247,7 +247,7 @@ const Portfolio = () => {
       <DashboardLayout>
         <div className="container mx-auto p-6 max-w-6xl">
           <div className="mb-6">
-            <Button variant="outline" onClick={() => navigate(-1)} className="gap-2 min-h-[44px] border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all">
+            <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
               <ArrowLeft className="h-4 w-4" />
               Back
             </Button>
@@ -280,19 +280,19 @@ const Portfolio = () => {
             Back
           </Button>
         </div>
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-4xl font-bold mb-2 font-display">My Portfolio</h1>
-          <p className="text-sm sm:text-base text-muted-foreground">Showcase your best work to attract more clients</p>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 font-display">My Portfolio</h1>
+          <p className="text-muted-foreground">Showcase your best work to attract more clients</p>
         </div>
 
         {/* Upload Section */}
-        <Card className="mb-6 sm:mb-8 border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-purple-400 to-pink-400">
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="flex items-center gap-2 text-foreground text-lg sm:text-xl">
+        <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-purple-400 to-pink-400">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-foreground">
               <Upload className="h-5 w-5" />
               Upload New Photo
             </CardTitle>
-            <CardDescription className="text-foreground/80 font-medium text-sm">
+            <CardDescription className="text-foreground/80 font-medium">
               Add photos to your portfolio gallery
             </CardDescription>
           </CardHeader>

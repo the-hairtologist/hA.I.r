@@ -162,39 +162,39 @@ const Finance = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-6xl">
+      <main className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-            <CardHeader className="pb-2 p-4 sm:p-6">
-              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-primary">
+            <CardContent>
+              <div className="text-3xl font-bold text-primary">
                 ${totalRevenue.toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">All time earnings</p>
             </CardContent>
           </Card>
 
-          <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-            <CardHeader className="pb-2 p-4 sm:p-6">
-              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Service Payments</CardTitle>
+          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Service Payments</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-green-600">
+            <CardContent>
+              <div className="text-3xl font-bold text-green-600">
                 ${totalPayments.toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Client payments</p>
             </CardContent>
           </Card>
 
-          <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-            <CardHeader className="pb-2 p-4 sm:p-6">
-              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">Commissions</CardTitle>
+          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Commissions</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-purple-600">
+            <CardContent>
+              <div className="text-3xl font-bold text-purple-600">
                 ${totalCommissions.toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -204,30 +204,21 @@ const Finance = () => {
           </Card>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
-          <TabsList className="grid w-full grid-cols-3 h-auto p-1">
-            <TabsTrigger value="payments" className="min-h-[44px] text-xs sm:text-sm px-1 sm:px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <span className="hidden sm:inline">Service Payments</span>
-              <span className="sm:hidden">Payments</span>
-            </TabsTrigger>
-            <TabsTrigger value="commissions" className="min-h-[44px] text-xs sm:text-sm px-1 sm:px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <span className="hidden sm:inline">Product Commissions</span>
-              <span className="sm:hidden">Products</span>
-            </TabsTrigger>
-            <TabsTrigger value="affiliate" className="min-h-[44px] text-xs sm:text-sm px-1 sm:px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <span className="hidden sm:inline">Affiliate Codes</span>
-              <span className="sm:hidden">Affiliate</span>
-            </TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="payments">Service Payments</TabsTrigger>
+            <TabsTrigger value="commissions">Product Commissions</TabsTrigger>
+            <TabsTrigger value="affiliate">Affiliate Codes</TabsTrigger>
           </TabsList>
 
           {/* Payments Tab */}
           <TabsContent value="payments">
-            <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">Payment History</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Track service payments from clients</CardDescription>
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader>
+                <CardTitle>Payment History</CardTitle>
+                <CardDescription>Track service payments from clients</CardDescription>
               </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0">
+              <CardContent>
                 {payments.length === 0 ? (
                   <div className="text-center py-12">
                     <DollarSign className="h-16 w-16 text-muted-foreground mx-auto mb-4" />

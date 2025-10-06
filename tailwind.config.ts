@@ -8,11 +8,11 @@ export default {
     container: {
       center: true,
       padding: {
-        DEFAULT: "0.75rem", // 12px mobile-first
-        sm: "1rem",          // 16px
-        md: "1.5rem",        // 24px
-        lg: "2rem",          // 32px
-        xl: "3rem",          // 48px
+        DEFAULT: "1rem",
+        sm: "1.5rem",
+        md: "2rem",
+        lg: "2.5rem",
+        xl: "3rem",
       },
       screens: {
         "2xl": "1400px",

@@ -227,23 +227,23 @@ const Knowledge = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-6xl">
+      <main className="container mx-auto px-4 py-6 max-w-6xl">
         {/* Mode Selection Tabs with Retro Style */}
-        <div className="mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-2 bg-background rounded-xl sm:rounded-2xl w-full sm:w-fit mx-auto border-[3px] sm:border-4 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)]">
+        <div className="mb-6">
+          <div className="flex gap-4 p-2 bg-background rounded-2xl w-fit mx-auto border-4 border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)]">
             <div className="relative group">
               <button
                 onClick={() => setAiMode("formula")}
-                className={`w-full sm:w-auto flex flex-col items-start gap-1 px-4 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-display transition-all border-3 min-h-[60px] ${
+                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "formula"
-                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
+                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
-                style={{ border: "2px solid" }}
+                style={{ border: "3px solid" }}
               >
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span className="font-bold text-sm sm:text-base">Formula Generator</span>
+                  <Sparkles className="h-5 w-5" />
+                  <span className="font-bold text-base">Formula Generator</span>
                 </div>
                 <span className={`text-xs ${aiMode === "formula" ? "opacity-90" : "text-muted-foreground"}`}>
                   Create custom color formulas instantly
@@ -259,16 +259,16 @@ const Knowledge = () => {
             <div className="relative group">
               <button
                 onClick={() => setAiMode("stepbystep")}
-                className={`w-full sm:w-auto flex flex-col items-start gap-1 px-4 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-display transition-all border-3 min-h-[60px] ${
+                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "stepbystep"
-                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
+                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
                 }`}
-                style={{ border: "2px solid" }}
+                style={{ border: "3px solid" }}
               >
                 <div className="flex items-center gap-2">
-                  <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span className="font-bold text-sm sm:text-base">Step-by-Step Assist</span>
+                  <BookOpen className="h-5 w-5" />
+                  <span className="font-bold text-base">Step-by-Step Assist</span>
                 </div>
                 <span className={`text-xs ${aiMode === "stepbystep" ? "opacity-90" : "text-muted-foreground"}`}>
                   Get guided help for complicated situations
@@ -284,9 +284,9 @@ const Knowledge = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[300px_1fr] gap-4 sm:gap-6">
+        <div className="grid lg:grid-cols-[300px_1fr] gap-6">
           {/* Left Sidebar */}
-          <div className="space-y-4 sm:space-y-5 hidden lg:block">
+          <div className="space-y-5">
             {/* Formula History */}
             {aiMode === "formula" && savedFormulas.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-secondary/5 to-primary/5">
@@ -347,7 +347,7 @@ const Knowledge = () => {
 
           {/* Main Chat Area */}
           <div>
-                <div className="window-frame h-[calc(100vh-250px)] sm:h-[calc(100vh-200px)] flex flex-col bg-background">
+                <div className="window-frame h-[calc(100vh-200px)] flex flex-col bg-background">
               <div className="window-titlebar bg-gradient-to-r from-primary via-secondary to-accent">
                 <div className="flex items-center gap-3">
                   <div className="window-controls">

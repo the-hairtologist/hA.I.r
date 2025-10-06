@@ -16,9 +16,6 @@
     -webkit-overflow-scrolling: touch;
     /* Fix dynamic viewport for mobile browsers (address bar) */
     height: 100%;
-    /* Prevent horizontal scroll */
-    overflow-x: hidden;
-    max-width: 100vw;
   }
   
   body {
@@ -29,21 +26,6 @@
     /* Fix for mobile browser dynamic viewport */
     min-height: 100vh;
     min-height: 100dvh; /* Dynamic viewport height for modern browsers */
-    /* Prevent horizontal scroll */
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
-  
-  /* Ensure all children respect viewport width */
-  * {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  /* Prevent images and media from breaking layout */
-  img, video, iframe, embed, object {
-    max-width: 100%;
-    height: auto;
   }
   
   /* Improve button and input touch interactions */
@@ -69,16 +51,16 @@
     min-height: 100dvh;
   }
   
-  /* Responsive text sizing based on device - UNIFIED */
+  /* Responsive text sizing based on device */
   @media (max-width: 640px) {
     html {
-      font-size: 16px; /* Same as desktop for consistency */
+      font-size: 14px; /* Slightly smaller base for mobile */
     }
   }
   
   @media (min-width: 641px) and (max-width: 1024px) {
     html {
-      font-size: 16px; /* Same as desktop for consistency */
+      font-size: 15px; /* Medium for tablets */
     }
   }
   
@@ -513,42 +495,30 @@ All colors MUST be HSL.
     border-top: 8px solid hsl(var(--foreground));
   }
 
-  /* Mobile-first touch-friendly sizing - Apple HIG minimum 44x44px */
-  button:not(.no-touch-size),
-  a[role="button"]:not(.no-touch-size),
-  [role="tab"]:not(.no-touch-size),
-  [role="menuitem"]:not(.no-touch-size),
-  input[type="button"]:not(.no-touch-size),
-  input[type="submit"]:not(.no-touch-size),
-  [role="button"]:not(.no-touch-size) {
-    min-height: 48px;
-    min-width: 48px;
-    padding: 0.75rem 1rem; /* 12px 16px */
-  }
-  
-  /* Ensure clickable areas for small icons on mobile */
-  button svg:only-child,
-  a svg:only-child {
-    padding: 0.5rem;
-  }
-  
-  /* Tablet touch targets - slightly smaller but still comfortable */
-  @media (min-width: 768px) and (max-width: 1023px) {
+  /* Mobile touch-friendly sizing - Apple HIG minimum 44x44px */
+  @media (max-width: 640px) {
     button:not(.no-touch-size),
-    a[role="button"]:not(.no-touch-size) {
+    a[role="button"]:not(.no-touch-size),
+    [role="tab"]:not(.no-touch-size),
+    [role="menuitem"]:not(.no-touch-size) {
       min-height: 44px;
       min-width: 44px;
-      padding: 0.625rem 1rem;
+      padding: 0.625rem 1rem; /* 10px 16px */
+    }
+    
+    /* Ensure clickable areas for small icons */
+    button svg:only-child,
+    a svg:only-child {
+      padding: 0.5rem;
     }
   }
   
-  /* Desktop - standard sizes */
-  @media (min-width: 1024px) {
+  /* Tablet touch targets - slightly smaller but still comfortable */
+  @media (min-width: 641px) and (max-width: 1024px) {
     button:not(.no-touch-size),
     a[role="button"]:not(.no-touch-size) {
       min-height: 40px;
       min-width: 40px;
-      padding: 0.5rem 0.875rem;
     }
   }
   
@@ -623,24 +593,13 @@ All colors MUST be HSL.
   }
   
   /* Landscape mode optimizations for mobile */
-  @media (max-width: 1023px) and (orientation: landscape) {
+  @media (max-width: 1024px) and (orientation: landscape) {
     body {
-      font-size: 15px; /* Slightly smaller for landscape mobile */
+      font-size: 14px; /* Slightly smaller for landscape mobile */
     }
     
     .hide-landscape {
       display: none !important;
-    }
-    
-    /* Reduce vertical spacing in landscape */
-    .space-y-4 {
-      margin-top: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    /* Make headers more compact in landscape */
-    h1, h2, h3 {
-      line-height: 1.1;
     }
   }
   
@@ -735,58 +694,33 @@ All colors MUST be HSL.
     transform: translateY(-2px);
   }
 
-  /* Complete brutalist card styling - Simplified on mobile */
+  /* Complete brutalist card styling */
   .brutal-card {
-    border: 2px solid hsl(var(--foreground));
+    border: 3px solid hsl(var(--foreground));
     border-radius: var(--radius);
-    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
+    box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Full brutalist style on tablet+ */
-  @media (min-width: 768px) {
-    .brutal-card {
-      border-width: 3px;
-      box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
-    }
-    
-    .brutal-card:hover {
-      box-shadow: 7px 7px 0px 0px hsl(var(--primary));
-      transform: translateY(-2px);
-    }
+  .brutal-card:hover {
+    box-shadow: 7px 7px 0px 0px hsl(var(--primary));
+    transform: translateY(-2px);
   }
 
-  /* Complete brutalist button effects - Simplified on mobile */
+  /* Complete brutalist button effects */
   .brutal-button {
-    border: 2px solid hsl(var(--foreground));
-    box-shadow: 2px 2px 0px 0px hsl(var(--foreground));
+    border: 3px solid hsl(var(--foreground));
+    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .brutal-button:hover {
-    box-shadow: 3px 3px 0px 0px hsl(var(--primary));
+    box-shadow: 5px 5px 0px 0px hsl(var(--primary));
     transform: translateY(-1px);
   }
 
   .brutal-button:active {
     box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
-    transform: translate(1px, 1px);
-  }
-
-  /* Full brutalist style on tablet+ */
-  @media (min-width: 768px) {
-    .brutal-button {
-      border-width: 3px;
-      box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
-    }
-
-    .brutal-button:hover {
-      box-shadow: 5px 5px 0px 0px hsl(var(--primary));
-    }
-
-    .brutal-button:active {
-      box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
-      transform: translate(2px, 2px);
-    }
+    transform: translate(2px, 2px);
   }
 }

@@ -149,21 +149,21 @@ const StylistDiscovery = () => {
         url="/stylists"
       />
       <DashboardLayout>
-        <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 max-w-7xl animate-fade-in pb-20 sm:pb-8">
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Find Your Perfect Stylist</h1>
-          <p className="text-sm sm:text-base text-muted-foreground">Browse stylists and discover the right match for your hair goals</p>
+        <div className="container mx-auto p-6 max-w-7xl animate-fade-in">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">Find Your Perfect Stylist</h1>
+          <p className="text-muted-foreground">Browse stylists and discover the right match for your hair goals</p>
         </div>
 
       {/* Search and Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by name, specialty..."
+            placeholder="Search by name, specialty, or expertise"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 h-11 sm:h-12"
+            className="pl-9"
           />
         </div>
 
@@ -197,28 +197,28 @@ const StylistDiscovery = () => {
       </div>
 
       {/* Local Stylists Grid */}
-      <div className="mb-8 sm:mb-12">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+      <div className="mb-12">
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold">Available Stylists</h2>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            <h2 className="text-2xl font-bold">Available Stylists</h2>
+            <p className="text-sm text-muted-foreground mt-1">
               Stylists on hA.I.r ready to accept bookings
             </p>
           </div>
           {filteredStylists.length > 0 && (
-            <Badge variant="secondary" className="text-xs sm:text-sm">
+            <Badge variant="secondary" className="text-sm">
               {filteredStylists.length} available
             </Badge>
           )}
         </div>
         {filteredStylists.length === 0 ? (
-          <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
-            <CardContent className="pt-4 sm:pt-6 pb-6 sm:pb-8 text-center p-4 sm:p-6">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-card flex items-center justify-center">
-                <Search className="h-6 w-6 sm:h-8 sm:w-8 text-foreground" />
+          <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
+            <CardContent className="pt-6 pb-8 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card flex items-center justify-center">
+                <Search className="h-8 w-8 text-foreground" />
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-foreground mb-2">No stylists found</h3>
-              <p className="text-sm sm:text-base text-foreground/80 font-medium mb-3 sm:mb-4">
+              <h3 className="text-lg font-bold text-foreground mb-2">No stylists found</h3>
+              <p className="text-foreground/80 font-medium mb-4">
                 {searchTerm || locationFilter !== "all" || specialtyFilter !== "all"
                   ? "Try adjusting your search criteria or clearing filters"
                   : "No stylists have joined hA.I.r yet in this area"}
@@ -231,7 +231,7 @@ const StylistDiscovery = () => {
                     setLocationFilter("all");
                     setSpecialtyFilter("all");
                   }}
-                  className="border-2 border-foreground min-h-[44px]"
+                  className="border-2 border-foreground"
                 >
                   Clear All Filters
                 </Button>
@@ -239,7 +239,7 @@ const StylistDiscovery = () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredStylists.map((stylist, idx) => (
               <Card key={stylist.id} className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all ${
                 idx % 4 === 0 ? 'bg-blue-400' :

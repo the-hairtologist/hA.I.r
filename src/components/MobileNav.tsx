@@ -31,12 +31,8 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
   const items = userRole === "stylist" ? stylistItems : clientItems;
 
   return (
-    <nav 
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t-2 border-foreground shadow-[0_-2px_8px_rgba(0,0,0,0.1)]" 
-      aria-label="Mobile navigation"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
-    >
-      <div className="flex justify-around items-center h-16 px-2 gap-1 max-w-full">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t-2 border-border shadow-lg" aria-label="Mobile navigation">
+      <div className="flex justify-around items-center h-16 px-2 gap-2">
         {items.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.path);
@@ -46,28 +42,17 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
               key={item.path}
               onClick={() => navigate(item.path)}
               className={cn(
-                "flex flex-col items-center justify-center flex-1 min-h-[56px] gap-1.5 transition-all py-2 px-1 rounded-lg",
-                "active:bg-accent/30",
-                active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                "flex flex-col items-center justify-center flex-1 min-h-[44px] gap-1 transition-all p-2",
+                "hover:bg-accent/50 rounded-lg",
+                active && "text-primary"
               )}
               aria-label={`Navigate to ${item.label}`}
               aria-current={active ? "page" : undefined}
             >
-              <div className="flex items-center justify-center min-h-[28px] min-w-[28px]">
-                <Icon 
-                  className={cn(
-                    "h-6 w-6 transition-transform", 
-                    active && "scale-110"
-                  )} 
-                  strokeWidth={active ? 2.5 : 2}
-                />
+              <div className="flex items-center justify-center min-h-[24px] min-w-[24px]">
+                <Icon className={cn("h-5 w-5", active && "scale-110")} />
               </div>
-              <span className={cn(
-                "text-xs font-medium leading-tight",
-                active && "font-semibold"
-              )}>
-                {item.label}
-              </span>
+              <span className="text-xs font-medium">{item.label}</span>
             </button>
           );
         })}

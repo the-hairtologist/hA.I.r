@@ -13,7 +13,7 @@ const buttonVariants = cva(
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]",
         outline: "border-2 border-foreground bg-background hover:bg-accent hover:text-accent-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] focus-visible:ring-4 focus-visible:ring-accent/50 focus-visible:ring-offset-2 active:scale-[0.99]",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]",
-        ghost: "bg-accent/10 text-foreground hover:bg-accent hover:text-accent-foreground border border-accent/20 hover:border-accent/40 hover:scale-[1.02] active:scale-[0.98] transition-all",
+        ghost: "hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] active:scale-[0.98]",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

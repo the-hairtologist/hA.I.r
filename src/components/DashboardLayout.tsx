@@ -122,42 +122,41 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider>
       <div className="min-h-screen flex w-full bg-[image:var(--gradient-bg-main)]">
-        {/* Sidebar - Desktop only (1024px+) */}
         <AppSidebar userRole={userRole || undefined} />
         
-        <div className="flex-1 flex flex-col w-full max-w-full min-w-0">
-          {/* Mobile-First Top Header */}
-          <header className="sticky top-0 z-40 border-b-2 lg:border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_2px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-            <div className="flex h-14 lg:h-16 items-center gap-2 px-3 lg:px-4 max-w-full">
+        <div className="flex-1 flex flex-col">
+          {/* Top Header */}
+          <header className="sticky top-0 z-40 border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+            <div className="flex h-16 items-center gap-4 px-4">
               <SidebarTrigger className="-ml-1 border-2 border-foreground" />
               
               <button 
                 onClick={() => navigate("/dashboard")}
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity min-h-[44px] min-w-[44px] -ml-1"
-                aria-label="Go to dashboard"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
                 <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-bold font-display">hA.I.r</h1>
+                <h1 className="text-xl font-bold font-display hidden sm:block">hA.I.r</h1>
               </button>
 
-              <div className="ml-auto flex items-center gap-2">
+              <div className="ml-auto flex items-center gap-3">
+                {userRole && (
+                  <Badge variant="secondary" className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground">
+                    {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
+                  </Badge>
+                )}
+                
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="gap-2 border-2 border-foreground h-11 w-11 lg:h-10 lg:w-auto lg:px-3 p-0 lg:p-2"
-                      aria-label="Account menu"
-                    >
-                      <User className="h-5 w-5" />
-                      <span className="hidden lg:inline text-sm max-w-[100px] truncate">
+                    <Button variant="ghost" size="sm" className="gap-2 border-2 border-foreground">
+                      <User className="h-4 w-4" />
+                      <span className="hidden sm:inline">
                         {user?.user_metadata?.full_name || "Account"}
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 z-50">
+                  <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => navigate("/settings")}>
@@ -182,19 +181,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          {/* Main Content - Proper spacing for both mobile & desktop */}
-          <main className="flex-1 overflow-x-hidden overflow-y-auto pb-24 lg:pb-8 w-full max-w-full">
-            <div className="w-full max-w-full px-2 py-2 sm:px-3 sm:py-3 lg:px-6 lg:py-6 animate-fade-in-fast overflow-x-hidden">
-              <Breadcrumbs />
-              {children}
-            </div>
-          </main>
+          {/* Main Content */}
+      <main className="flex-1 overflow-auto pb-16 md:pb-0">
+        <div className="container mx-auto p-6 animate-fade-in-fast">
+          <Breadcrumbs />
+          {children}
+        </div>
+      </main>
         </div>
         
-        {/* Mobile Nav - Hidden on desktop (1024px+) */}
         <MobileNav userRole={userRole || undefined} />
-        
-        {/* FAB - Adaptive positioning */}
         <FloatingActionButton userRole={userRole || "client"} />
       </div>
       

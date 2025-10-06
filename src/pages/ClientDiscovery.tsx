@@ -174,30 +174,30 @@ const ClientDiscovery = () => {
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-6xl pb-20 sm:pb-8">
-        <div className="mb-4 sm:mb-6">
-          <p className="text-sm sm:text-base text-muted-foreground mb-3 sm:mb-4">
+      <main className="container mx-auto px-4 py-6 max-w-6xl">
+        <div className="mb-6">
+          <p className="text-muted-foreground mb-4">
             Browse client requests and grow your business
           </p>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search by service type, location..."
+              placeholder="Search by service type, location, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-11 sm:h-12"
+              className="pl-10"
             />
           </div>
         </div>
 
         {filteredPosts.length === 0 ? (
-          <Card className="border-primary/20 border-[2px] sm:border-[3px]">
-            <CardContent className="py-8 sm:py-12 text-center p-4 sm:p-6">
-              <Search className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-3 sm:mb-4 text-muted-foreground" />
-              <h3 className="text-lg sm:text-xl font-display font-bold mb-2">
+          <Card className="border-primary/20">
+            <CardContent className="py-12 text-center">
+              <Search className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-xl font-display font-bold mb-2">
                 {searchQuery ? "No matching requests" : "No active requests"}
               </h3>
-              <p className="text-sm sm:text-base text-muted-foreground">
+              <p className="text-muted-foreground">
                 {searchQuery
                   ? "Try adjusting your search terms"
                   : "Check back later for new client requests!"}
@@ -205,29 +205,29 @@ const ClientDiscovery = () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-3 sm:gap-4 grid-cols-1 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             {filteredPosts.map((post) => (
               <Card
                 key={post.id}
-                className="border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg border-[2px] sm:border-[3px]"
+                className="border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg"
               >
-                <CardHeader className="p-4 sm:p-6">
+                <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <CardTitle className="font-display text-base sm:text-lg">{post.title}</CardTitle>
-                      <CardDescription className="mt-1 text-sm">
+                      <CardTitle className="font-display">{post.title}</CardTitle>
+                      <CardDescription className="mt-1">
                         {post.service_type}
                       </CardDescription>
                     </div>
-                    <Badge className="bg-accent text-xs">New</Badge>
+                    <Badge className="bg-accent">New</Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6 pt-0">
-                  <p className="text-xs sm:text-sm text-muted-foreground">
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
                     {post.description}
                   </p>
                   
-                  <div className="space-y-2 text-xs sm:text-sm">
+                  <div className="space-y-2 text-sm">
                     {post.client_profiles?.full_name && (
                       <div className="font-medium">
                         Client: {post.client_profiles.full_name}
@@ -235,19 +235,19 @@ const ClientDiscovery = () => {
                     )}
                     {post.budget_range && (
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <DollarSign className="h-4 w-4" />
                         {post.budget_range}
                       </div>
                     )}
                     {post.location && (
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <MapPin className="h-4 w-4" />
                         {post.location}
                       </div>
                     )}
                     {post.preferred_date && (
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                        <Calendar className="h-4 w-4" />
                         Preferred: {format(new Date(post.preferred_date), "MMM d, yyyy")}
                       </div>
                     )}
@@ -258,7 +258,7 @@ const ClientDiscovery = () => {
 
                   <Button
                     onClick={() => handleContactClient(post)}
-                    className="w-full gap-2 min-h-[44px] text-sm sm:text-base"
+                    className="w-full gap-2"
                   >
                     <MessageSquare className="h-4 w-4" />
                     Contact Client

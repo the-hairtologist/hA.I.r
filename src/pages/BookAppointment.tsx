@@ -423,34 +423,35 @@ const BookAppointment = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-orange-400 to-red-400">
-      <header role="banner" className="border-b-[3px] sm:border-b-4 border-foreground bg-card/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="flex items-center gap-2 sm:gap-4">
+      <header role="banner" className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
               onClick={() => navigate("/dashboard")}
               aria-label="Back to dashboard"
-              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all min-h-[44px] min-w-[44px] flex-shrink-0"
+              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
             </Button>
-            <div className="flex items-center gap-2 min-w-0">
-              <CalendarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
-              <h1 className="text-lg sm:text-2xl md:text-3xl font-bold gradient-text font-display truncate">Book Appointment</h1>
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="h-6 w-6 text-primary" />
+              <h1 className="text-2xl md:text-3xl font-bold gradient-text font-display">Book Appointment</h1>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-4xl pb-20 sm:pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+      <main className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="grid md:grid-cols-2 gap-6">
           {/* Left Column - Form */}
-          <div className="space-y-4 sm:space-y-6">
-            <Card className="border-[2px] sm:border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] sm:shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
-              <CardHeader className="p-4 sm:p-6">
+          <div className="space-y-6">
+            <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400">
+              <CardHeader>
                 <div className="flex items-center justify-between mb-1">
-                  <CardTitle className="flex items-center gap-2 text-foreground text-base sm:text-lg">
+                  <CardTitle className="flex items-center gap-2 text-foreground">
                     Select Your Stylist
                   </CardTitle>
                   <div className="flex items-center gap-1 text-xs text-foreground/60">
@@ -461,7 +462,7 @@ const BookAppointment = () => {
                     <span className={`font-mono ${selectedDate && selectedTime ? 'text-primary font-bold' : ''}`}>3</span>
                   </div>
                 </div>
-                <CardDescription className="text-foreground/80 font-medium text-xs sm:text-sm">Choose from available stylists</CardDescription>
+                <CardDescription className="text-foreground/80 font-medium">Choose from available stylists</CardDescription>
               </CardHeader>
               <CardContent>
                 {stylists.length === 0 ? (
