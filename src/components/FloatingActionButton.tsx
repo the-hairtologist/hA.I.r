@@ -122,14 +122,14 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           setIsOpen(!isOpen);
         }}
         className={cn(
-          "h-14 w-14 rounded-full shadow-lg",
+          "h-14 w-14 rounded-full shadow-lg relative",
           "bg-gradient-to-br from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600",
           "transition-all duration-200",
           "flex items-center justify-center",
           isOpen && "rotate-45"
         )}
       >
-        <Plus className="h-6 w-6 text-white" strokeWidth={2} />
+        <Plus className="h-7 w-7 text-white absolute inset-0 m-auto" strokeWidth={2.5} />
       </Button>
     </div>
   );

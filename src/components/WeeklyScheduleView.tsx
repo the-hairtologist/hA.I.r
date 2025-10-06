@@ -191,17 +191,29 @@ export const WeeklyScheduleView = ({
             )}
           </div>
           <div className="flex gap-1 ml-auto">
-            <Button variant="outline" size="sm" onClick={previousWeek} className="border-[2px] h-6 w-6 p-0">
-              <ChevronLeft className="h-3 w-3" />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={previousWeek} 
+              className="border-[2px] h-7 w-7 p-0 flex items-center justify-center"
+              aria-label="Previous week"
+            >
+              <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={nextWeek} className="border-[2px] h-6 w-6 p-0">
-              <ChevronRight className="h-3 w-3" />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={nextWeek} 
+              className="border-[2px] h-7 w-7 p-0 flex items-center justify-center"
+              aria-label="Next week"
+            >
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </CardHeader>
       <CardContent className="p-0 overflow-x-hidden">
-        <div className="overflow-y-auto overflow-x-hidden max-h-[50vh]">
+        <div className="overflow-y-auto overflow-x-hidden max-h-[40vh] sm:max-h-[50vh]">
           <div className="w-full overflow-x-auto">
             {/* Header with days */}
             <div 
