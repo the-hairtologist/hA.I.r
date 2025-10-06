@@ -162,6 +162,14 @@ export default {
           "0%, 100%": { boxShadow: "0 8px 32px rgba(249, 115, 22, 0.3)" },
           "50%": { boxShadow: "0 8px 48px rgba(249, 115, 22, 0.5)" },
         },
+        "glow-prominent": {
+          "0%, 100%": { 
+            boxShadow: "0 8px 32px rgba(249, 115, 22, 0.4), 0 0 0 0 rgba(249, 115, 22, 0.4)" 
+          },
+          "50%": { 
+            boxShadow: "0 8px 48px rgba(249, 115, 22, 0.6), 0 0 0 8px rgba(249, 115, 22, 0)" 
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.3s ease-out",
@@ -177,6 +185,7 @@ export default {
         "pulse-subtle": "pulse-subtle 4s ease-in-out infinite",
         "bounce-attention": "bounce-attention 5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
         "glow-soft": "glow-soft 3s ease-in-out infinite",
+        "glow-prominent": "glow-prominent 2.5s ease-in-out infinite",
       },
     },
   },
