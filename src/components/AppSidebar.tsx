@@ -137,8 +137,8 @@ function SortableNavItem({
               </div>
             )}
             <div className="relative flex-shrink-0">
-              <div className={`w-9 h-9 rounded-lg ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
-                <item.icon className="h-5 w-5 text-primary-foreground" />
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 ${item.gradient}`}>
+                <item.icon className="h-5 w-5 text-white" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
@@ -173,8 +173,8 @@ function SortableNavItem({
               </div>
             )}
             <div className="relative flex-shrink-0">
-              <div className={`w-9 h-9 rounded-lg ${item.gradient} flex items-center justify-center transition-opacity hover:opacity-90`}>
-                <item.icon className="h-5 w-5 text-primary-foreground" />
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 ${item.gradient}`}>
+                <item.icon className="h-5 w-5 text-white" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
@@ -207,19 +207,20 @@ function SortableNavItem({
                   <SidebarMenuSubButton asChild>
                     <NavLink 
                       to={child.url} 
-                      className={`group relative pl-8 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-2 ${
+                      className={`group relative pl-3 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-3 ${
                         isChildActive 
                           ? 'bg-primary/10 text-primary font-medium' 
                           : 'hover:bg-muted/50 text-foreground'
                       }`}
                     >
-                      <div className={`absolute left-2 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full transition-all duration-200 ${
-                        isChildActive ? 'bg-primary' : 'bg-transparent group-hover:bg-primary/30'
-                      }`} />
-                      <child.icon className={`h-4 w-4 flex-shrink-0 ${
-                        isChildActive ? 'text-primary' : 'text-muted-foreground'
-                      }`} />
-                      <span className="text-sm font-medium truncate">{child.title}</span>
+                      <div className="relative flex-shrink-0">
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${child.gradient} ${
+                          isChildActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'
+                        }`}>
+                          <child.icon className="h-4 w-4 text-white" />
+                        </div>
+                      </div>
+                      <span className="text-sm truncate">{child.title}</span>
                     </NavLink>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
