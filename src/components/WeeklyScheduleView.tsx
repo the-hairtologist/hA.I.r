@@ -200,9 +200,9 @@ export const WeeklyScheduleView = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="overflow-y-auto max-h-[50vh]">
-          <div className="w-full">
+      <CardContent className="p-0 overflow-x-hidden">
+        <div className="overflow-y-auto overflow-x-hidden max-h-[50vh]">
+          <div className="w-full overflow-x-auto">
             {/* Header with days */}
             <div 
               className="border-b-[2px] border-border sticky top-0 bg-card z-20"

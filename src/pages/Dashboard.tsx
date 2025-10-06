@@ -678,7 +678,7 @@ const Dashboard = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="pl-12">
+      <main id="main-content" role="main" aria-label="Dashboard" className="pl-2 sm:pl-6 md:pl-12 overflow-x-hidden">
         <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
             <span className="text-background font-mono text-sm font-bold">
@@ -694,7 +694,7 @@ const Dashboard = () => {
           <div className="bg-blue-600 p-4 md:p-6 relative overflow-hidden">
             <div className="window-scrollbar"></div>
             
-            <div className="max-w-4xl pr-8">
+            <div className="max-w-4xl pr-2 sm:pr-4 md:pr-8">
               <h2 className="text-3xl md:text-4xl font-display font-black mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
@@ -724,11 +724,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-6 bg-muted/50 border border-border/50 shadow-sm p-3 rounded-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <p className="text-sm font-medium text-muted-foreground text-center flex items-center justify-center gap-2">
-            <GripVertical className="h-4 w-4 opacity-50" />
-            Hover over sections and drag the handle to rearrange your dashboard
-            <GripVertical className="h-4 w-4 opacity-50" />
+        <div className="mb-6 bg-muted/50 border border-border/50 shadow-sm p-3 rounded-lg animate-fade-in overflow-x-hidden" style={{ animationDelay: '300ms' }}>
+          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
+            <GripVertical className="h-4 w-4 opacity-50 hidden sm:inline" />
+            <span className="hidden sm:inline">Hover over sections and drag the handle to rearrange your dashboard</span>
+            <span className="sm:hidden">Tap & hold to rearrange</span>
+            <GripVertical className="h-4 w-4 opacity-50 hidden sm:inline" />
           </p>
         </div>
 
