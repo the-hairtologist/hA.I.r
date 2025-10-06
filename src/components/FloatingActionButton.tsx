@@ -115,10 +115,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       </div>
 
       {/* Main FAB */}
-      <div className="relative animate-fade-in">
-        {/* Pulsing ring effect */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-secondary animate-ping opacity-75" />
-        
+      <div className="relative animate-fade-in">        
         <Button
           size="icon"
           onClick={() => {
@@ -126,18 +123,21 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
             setIsOpen(!isOpen);
           }}
           className={cn(
-            "relative h-16 w-16 rounded-full border-[3px] border-white",
-            "bg-gradient-to-br from-primary via-primary to-secondary",
-            "shadow-[0_0_20px_hsl(var(--primary)/0.6),0_0_40px_hsl(var(--primary)/0.3)]",
-            "hover:scale-110 hover:shadow-[0_0_30px_hsl(var(--primary)/0.8),0_0_60px_hsl(var(--primary)/0.4)]",
-            "transition-all duration-300",
+            "relative h-16 w-16 rounded-lg border-[4px] border-foreground",
+            "bg-gradient-to-br from-[#FF6B9D] via-[#C06C84] to-[#6C5B7B]",
+            "shadow-[6px_6px_0px_0px_hsl(var(--foreground))]",
+            "hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))]",
+            "hover:translate-x-[-2px] hover:translate-y-[-2px]",
+            "active:shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
+            "active:translate-x-[2px] active:translate-y-[2px]",
+            "transition-all duration-150",
             "flex items-center justify-center",
-            isOpen && "rotate-45 scale-105"
+            isOpen && "rotate-45"
           )}
         >
           <div className="relative flex items-center justify-center">
-            <Scissors className="h-6 w-6 text-white pointer-events-none drop-shadow-lg" strokeWidth={2.5} />
-            <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-warning pointer-events-none drop-shadow-lg animate-pulse" strokeWidth={3} />
+            <Scissors className="h-6 w-6 text-white pointer-events-none drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]" strokeWidth={2.5} />
+            <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-[#FFF05A] pointer-events-none drop-shadow-[1px_1px_0px_rgba(0,0,0,0.3)] animate-pulse" strokeWidth={3} />
           </div>
         </Button>
       </div>
