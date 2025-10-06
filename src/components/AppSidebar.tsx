@@ -121,16 +121,16 @@ function SortableNavItem({
         } : undefined}
       >
         {hasChildren ? (
-          <div className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
+          <div className={`flex items-center w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
             isParentActive || isAnyChildActive
               ? 'bg-primary/10 text-primary font-medium' 
               : 'text-foreground hover:bg-muted/50'
-          }`}>
+          } ${isEditMode && !collapsed ? 'gap-2' : 'gap-3'}`}>
             {isEditMode && !collapsed && (
               <div
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing"
+                className="cursor-grab active:cursor-grabbing flex-shrink-0"
                 onClick={(e) => e.stopPropagation()}
               >
                 <GripVertical className="h-4 w-4 text-muted-foreground" />
@@ -166,7 +166,7 @@ function SortableNavItem({
               <div
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing"
+                className="cursor-grab active:cursor-grabbing flex-shrink-0 mr-1"
                 onClick={(e) => e.preventDefault()}
               >
                 <GripVertical className="h-4 w-4 text-muted-foreground" />

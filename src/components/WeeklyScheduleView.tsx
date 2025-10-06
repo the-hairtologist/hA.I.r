@@ -172,11 +172,11 @@ export const WeeklyScheduleView = ({
   };
 
   return (
-    <Card className="border-0 shadow-none">
-      <CardHeader className="border-b-[2px] border-border px-2 py-1.5">
-        <div className="flex items-center w-full">
-          <div className="flex items-center gap-1.5">
-            <CardTitle className="font-display text-sm">
+    <Card className="border-0 shadow-none overflow-hidden">
+      <CardHeader className="border-b-[2px] border-border px-3 sm:px-4 py-2 sm:py-2.5">
+        <div className="flex items-center justify-between w-full gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <CardTitle className="font-display text-sm sm:text-base truncate">
               {selectedDay ? format(selectedDay, 'EEEE, MMM d') : 'Your Weekly Schedule'}
             </CardTitle>
             {selectedDay && (
@@ -184,37 +184,37 @@ export const WeeklyScheduleView = ({
                 variant="default" 
                 size="sm" 
                 onClick={() => setSelectedDay(null)}
-                className="h-5 text-[10px] px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+                className="h-6 sm:h-7 text-[10px] sm:text-xs px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0"
               >
                 View Week
               </Button>
             )}
           </div>
-          <div className="flex gap-1 ml-auto">
+          <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
             <Button 
               variant="outline" 
               size="sm" 
               onClick={previousWeek} 
-              className="border-[2px] border-foreground h-7 w-7 p-0 flex items-center justify-center bg-card hover:bg-muted"
+              className="border-[2px] border-foreground h-8 w-8 sm:h-9 sm:w-9 p-0 flex items-center justify-center bg-card hover:bg-muted shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] transition-all"
               aria-label="Previous week"
             >
-              <ChevronLeft className="h-4 w-4 text-foreground" strokeWidth={3} />
+              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" strokeWidth={3} />
             </Button>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={nextWeek} 
-              className="border-[2px] border-foreground h-7 w-7 p-0 flex items-center justify-center bg-card hover:bg-muted"
+              className="border-[2px] border-foreground h-8 w-8 sm:h-9 sm:w-9 p-0 flex items-center justify-center bg-card hover:bg-muted shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] transition-all"
               aria-label="Next week"
             >
-              <ChevronRight className="h-4 w-4 text-foreground" strokeWidth={3} />
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" strokeWidth={3} />
             </Button>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0 overflow-x-hidden">
-        <div className="overflow-y-auto overflow-x-hidden max-h-[40vh] sm:max-h-[50vh]">
-          <div className="w-full overflow-x-auto">
+      <CardContent className="p-0">
+        <div className="overflow-auto max-h-[40vh] sm:max-h-[50vh]">
+          <div className="min-w-full inline-block align-top">
             {/* Header with days */}
             <div 
               className="border-b-[2px] border-border sticky top-0 bg-card z-20"
