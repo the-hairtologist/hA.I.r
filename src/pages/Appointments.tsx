@@ -267,8 +267,8 @@ const Appointments = () => {
         <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
             <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="min-h-[44px] min-w-[44px] flex-shrink-0 -ml-2">
-                <ArrowLeft className="h-4 w-4" />
+              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="min-h-[44px] min-w-[44px] flex-shrink-0 -ml-2 border-2 border-foreground">
+                <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <CalendarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />

@@ -22,10 +22,10 @@ const Index = () => {
             <h1 className="text-xl sm:text-3xl font-display font-bold">hA.I.r</h1>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Button variant="ghost" onClick={() => navigate("/privacy")} className="hidden sm:inline-flex text-sm min-h-[44px]">
+            <Button variant="ghost" onClick={() => navigate("/privacy")} className="hidden sm:inline-flex text-sm min-h-[44px] border-2 border-foreground">
               Privacy
             </Button>
-            <Button variant="ghost" onClick={() => navigate("/terms")} className="hidden sm:inline-flex text-sm min-h-[44px]">
+            <Button variant="ghost" onClick={() => navigate("/terms")} className="hidden sm:inline-flex text-sm min-h-[44px] border-2 border-foreground">
               Terms
             </Button>
             <Button variant="outline" onClick={() => navigate("/auth")} size="sm" className="min-h-[44px] text-sm sm:text-base">
