@@ -27,6 +27,7 @@ import { QuickRebookButton } from "@/components/QuickRebookButton";
 import { ContextualAI } from "@/components/ContextualAI";
 import { SmartSchedulingSuggestions } from "@/components/SmartSchedulingSuggestions";
 import { showCelebration } from "@/components/CelebrationToast";
+import { QuickReviewButton } from "@/components/QuickReviewButton";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -580,6 +581,16 @@ const Appointments = () => {
         appointment={rebookAppointment}
         onSuccess={loadData}
       />
+
+      {/* Quick Review Button - shows for completed appointments */}
+      {selectedAppointment?.status === "completed" && selectedAppointment?.stylist_id && (
+        <QuickReviewButton
+          appointmentId={selectedAppointment.id}
+          stylistId={selectedAppointment.stylist_id}
+          stylistName={selectedAppointment.stylist?.business_name || selectedAppointment.stylist?.user?.full_name || "Your Stylist"}
+          onSuccess={loadData}
+        />
+      )}
     </div>
   );
 };
