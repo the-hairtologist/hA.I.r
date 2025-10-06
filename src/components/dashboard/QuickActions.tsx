@@ -192,8 +192,8 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
       className="mb-8 animate-fade-in backdrop-blur-xl bg-gradient-to-br from-background/80 to-card/60"
     >
       <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
             <CardTitle className="flex items-center gap-2 text-xl font-display">
               <Sparkles className="h-5 w-5 text-primary" />
               Your Quick Actions
@@ -206,10 +206,10 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             </p>
           </div>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={() => setIsCustomizing(!isCustomizing)}
-            className="gap-2"
+            className="gap-2 shrink-0 brutal-border brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5 transition-all"
           >
             {isCustomizing ? <X className="h-4 w-4" /> : <Settings2 className="h-4 w-4" />}
             {isCustomizing ? "Done" : "Customize"}
