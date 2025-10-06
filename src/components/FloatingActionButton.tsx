@@ -1,5 +1,5 @@
 import { Plus, Calendar, Users, Scissors } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,94 +18,7 @@ interface FloatingActionButtonProps {
 
 export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
-  const [dragInfo, setDragInfo] = useState<{ isDragging: boolean; startX: number; startY: number; } | null>(null);
-  const buttonRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const savedPosition = localStorage.getItem('fab-position');
-    if (savedPosition) {
-      try {
-        setPosition(JSON.parse(savedPosition));
-      } catch (e) {
-        console.error('Failed to parse saved position:', e);
-      }
-    }
-  }, []);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (isOpen) return;
-    const rect = buttonRef.current?.getBoundingClientRect();
-    if (rect) {
-      setDragInfo({
-        isDragging: false,
-        startX: e.clientX - rect.left,
-        startY: e.clientY - rect.top
-      });
-    }
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (isOpen) return;
-    const touch = e.touches[0];
-    const rect = buttonRef.current?.getBoundingClientRect();
-    if (rect) {
-      setDragInfo({
-        isDragging: false,
-        startX: touch.clientX - rect.left,
-        startY: touch.clientY - rect.top
-      });
-    }
-  };
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!dragInfo) return;
-      
-      if (!dragInfo.isDragging) {
-        setDragInfo({ ...dragInfo, isDragging: true });
-      }
-      
-      const newX = Math.max(0, Math.min(e.clientX - dragInfo.startX, window.innerWidth - 80));
-      const newY = Math.max(0, Math.min(e.clientY - dragInfo.startY, window.innerHeight - 80));
-      setPosition({ x: newX, y: newY });
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!dragInfo) return;
-      
-      if (!dragInfo.isDragging) {
-        setDragInfo({ ...dragInfo, isDragging: true });
-      }
-      
-      const touch = e.touches[0];
-      const newX = Math.max(0, Math.min(touch.clientX - dragInfo.startX, window.innerWidth - 80));
-      const newY = Math.max(0, Math.min(touch.clientY - dragInfo.startY, window.innerHeight - 80));
-      setPosition({ x: newX, y: newY });
-    };
-
-    const handleEnd = () => {
-      if (dragInfo?.isDragging && position) {
-        localStorage.setItem('fab-position', JSON.stringify(position));
-      }
-      setDragInfo(null);
-    };
-
-    if (dragInfo) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleEnd);
-      document.addEventListener('touchmove', handleTouchMove);
-      document.addEventListener('touchend', handleEnd);
-
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleEnd);
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleEnd);
-      };
-    }
-  }, [dragInfo, position]);
 
   const stylistActions: FloatingAction[] = [
     {
@@ -167,16 +80,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      ref={buttonRef}
-      className={cn(
-        "flex flex-col-reverse items-end gap-3",
-        dragInfo?.isDragging && "cursor-grabbing",
-        position ? "fixed z-50" : "fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50"
-      )}
-      style={position ? {
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-      } : undefined}
+      className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 flex flex-col-reverse items-end gap-3"
     >
       {/* Action Items */}
       <div
@@ -213,21 +117,16 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       {/* Main FAB */}
       <Button
         size="icon"
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
         onClick={() => {
-          if (!dragInfo?.isDragging) {
-            haptic.tap();
-            setIsOpen(!isOpen);
-          }
+          haptic.tap();
+          setIsOpen(!isOpen);
         }}
         className={cn(
-          "h-14 w-14 rounded-full shadow-xl cursor-grab active:cursor-grabbing border-2 border-white/30",
+          "h-14 w-14 rounded-full shadow-xl border-2 border-white/30",
           "bg-gradient-to-br from-orange-500 to-red-500",
           "hover:scale-110 transition-all duration-200 hover:shadow-2xl",
           "flex items-center justify-center",
-          isOpen && "rotate-45",
-          dragInfo?.isDragging && "cursor-grabbing scale-110"
+          isOpen && "rotate-45"
         )}
       >
         <Plus className="h-6 w-6 text-white pointer-events-none" strokeWidth={3} />
