@@ -1,4 +1,4 @@
-import { Plus, Calendar, Users, Scissors } from "lucide-react";
+import { Plus, Calendar, Users, Scissors, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -117,7 +117,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       {/* Main FAB */}
       <div className="relative animate-fade-in">
         {/* Pulsing ring effect */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-500 to-red-500 animate-ping opacity-75" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-secondary animate-ping opacity-75" />
         
         <Button
           size="icon"
@@ -127,16 +127,18 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           }}
           className={cn(
             "relative h-16 w-16 rounded-full border-[3px] border-white",
-            "bg-gradient-to-br from-orange-400 via-orange-500 to-red-500",
-            "shadow-[0_0_20px_rgba(249,115,22,0.6),0_0_40px_rgba(249,115,22,0.3)]",
-            "hover:scale-110 hover:shadow-[0_0_30px_rgba(249,115,22,0.8),0_0_60px_rgba(249,115,22,0.4)]",
+            "bg-gradient-to-br from-primary via-primary to-secondary",
+            "shadow-[0_0_20px_hsl(var(--primary)/0.6),0_0_40px_hsl(var(--primary)/0.3)]",
+            "hover:scale-110 hover:shadow-[0_0_30px_hsl(var(--primary)/0.8),0_0_60px_hsl(var(--primary)/0.4)]",
             "transition-all duration-300",
             "flex items-center justify-center",
-            "hover:from-orange-500 hover:via-red-500 hover:to-red-600",
             isOpen && "rotate-45 scale-105"
           )}
         >
-          <Plus className="h-7 w-7 text-white pointer-events-none drop-shadow-lg" strokeWidth={3.5} />
+          <div className="relative flex items-center justify-center">
+            <Scissors className="h-6 w-6 text-white pointer-events-none drop-shadow-lg" strokeWidth={2.5} />
+            <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-warning pointer-events-none drop-shadow-lg animate-pulse" strokeWidth={3} />
+          </div>
         </Button>
       </div>
     </div>
