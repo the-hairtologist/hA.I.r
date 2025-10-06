@@ -332,7 +332,7 @@ export default function Clients() {
     return (
       <div className="container mx-auto py-8 px-4">
         <div className="mb-6">
-          <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
+          <Button variant="outline" onClick={() => navigate(-1)} className="gap-2 min-h-[44px] border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all">
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
@@ -354,9 +354,9 @@ export default function Clients() {
       <main id="main-content" role="main" aria-label="Clients" className="container mx-auto py-4 sm:py-6 lg:py-8 px-3 sm:px-4">
         <div className="mb-4 sm:mb-6">
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => navigate(-1)}
-            className="gap-2 -ml-2"
+            className="gap-2 min-h-[44px] border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Back</span>
