@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
+import { useSidebar } from "@/components/ui/sidebar";
 
 interface FloatingAction {
   label: string;
@@ -19,6 +20,10 @@ interface FloatingActionButtonProps {
 export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { openMobile } = useSidebar();
+
+  // Don't show FAB when sidebar is open on mobile
+  if (openMobile) return null;
 
   const stylistActions: FloatingAction[] = [
     {
@@ -80,7 +85,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      className="fixed bottom-24 right-3 z-[60] flex flex-col-reverse items-end gap-2.5 lg:bottom-6 lg:right-4"
+      className="fixed bottom-24 right-3 z-40 flex flex-col-reverse items-end gap-2.5 lg:bottom-6 lg:right-4 lg:z-50"
     >
       {/* Action Items */}
       <div

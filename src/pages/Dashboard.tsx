@@ -745,7 +745,7 @@ const Dashboard = () => {
             items={sectionOrder}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-6 lg:space-y-8 w-full max-w-full overflow-x-hidden">
+            <div className="space-y-6 lg:space-y-8 w-full max-w-full overflow-x-hidden pb-8 sm:pb-0">
               {sectionOrder.map((sectionId, index) => {
                 const content = renderSection(sectionId);
                 if (!content) return null;
