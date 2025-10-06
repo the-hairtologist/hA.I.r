@@ -50,8 +50,8 @@ import { PredictiveClientInsights } from "@/components/PredictiveClientInsights"
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
-import { HelpButton } from "@/components/HelpButton";
 import { TodoList } from "@/components/dashboard/TodoList";
+import { HelpButton } from "@/components/HelpButton";
 
 interface SortableSectionProps {
   id: string;
