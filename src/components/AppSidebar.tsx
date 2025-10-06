@@ -123,8 +123,8 @@ function SortableNavItem({
         {hasChildren ? (
           <div className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
             isParentActive || isAnyChildActive
-              ? 'bg-primary/10 text-primary font-medium' 
-              : 'text-foreground hover:bg-muted/50'
+              ? 'bg-primary/10' 
+              : 'hover:bg-muted/50'
           }`}>
             {isEditMode && !collapsed && (
               <div
