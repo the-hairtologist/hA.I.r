@@ -41,15 +41,18 @@ export function useAutoSave<T>({
       try {
         await onSave(debouncedData);
         lastSavedData.current = debouncedData;
-        toast.success("Auto-saved successfully", {
-          duration: 2000,
-          position: "top-right",
+        // Subtle auto-save notification
+        toast.success("Draft saved", {
+          duration: 1500,
+          position: "bottom-right",
+          className: "text-xs"
         });
       } catch (error) {
         console.error("Auto-save failed:", error);
-        toast.error("Auto-save failed", {
+        toast.error("Draft save failed", {
+          description: "Your changes are still in the form",
           duration: 3000,
-          position: "top-right",
+          position: "bottom-right",
         });
       } finally {
         if (isMounted.current) {

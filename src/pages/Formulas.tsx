@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic } from "lucide-react";
 import { AddClientDialog } from "@/components/AddClientDialog";
+import { useKeyboardShortcut, SHORTCUTS } from "@/hooks/useKeyboardShortcut";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { VoiceInput } from "@/components/VoiceInput";
@@ -39,6 +40,13 @@ const Formulas = () => {
   useEffect(() => {
     loadData();
   }, []);
+  
+  // Keyboard shortcut: Ctrl+N to open new formula dialog
+  useKeyboardShortcut(() => {
+    if (!dialogOpen) {
+      setDialogOpen(true);
+    }
+  }, { ...SHORTCUTS.NEW });
 
   const loadData = async () => {
     try {
@@ -237,6 +245,13 @@ const Formulas = () => {
           </Button>
         </div>
 
+        {/* Keyboard shortcut hint */}
+        <div className="flex justify-end">
+          <p className="text-xs text-muted-foreground">
+            Press <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">Ctrl</kbd> + <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">N</kbd> to add new formula
+          </p>
+        </div>
+
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -276,6 +291,9 @@ const Formulas = () => {
                 <Plus className="h-5 w-5" />
                 Create Your First Formula
               </Button>
+              <p className="text-xs text-muted-foreground mt-4">
+                <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">Ctrl</kbd> + <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">N</kbd> for quick access
+              </p>
             </div>
           ) : (
             filteredFormulas.map((formula) => (

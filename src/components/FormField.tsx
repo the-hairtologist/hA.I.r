@@ -16,6 +16,8 @@ interface FormFieldProps extends Omit<InputProps, 'error'> {
   helperText?: string;
   textarea?: boolean;
   textareaRows?: number;
+  showCharCount?: boolean;
+  maxLength?: number;
 }
 
 export const FormField = ({ 
@@ -27,11 +29,16 @@ export const FormField = ({
   textareaRows = 3,
   className,
   id,
+  showCharCount,
+  maxLength,
   ...props 
 }: FormFieldProps) => {
   const fieldId = id || `field-${label.toLowerCase().replace(/\s+/g, '-')}`;
   const errorId = `${fieldId}-error`;
   const helperId = helperText ? `${fieldId}-helper` : undefined;
+  
+  const currentLength = (props.value as string)?.length || 0;
+  const showCount = showCharCount && maxLength;
 
   return (
     <div className="space-y-2">
@@ -69,11 +76,25 @@ export const FormField = ({
         />
       )}
       
-      {helperText && !error && (
-        <p id={helperId} className="text-xs text-muted-foreground">
-          {helperText}
-        </p>
-      )}
+      <div className="flex items-center justify-between gap-2">
+        {helperText && !error && (
+          <p id={helperId} className="text-xs text-muted-foreground flex-1">
+            {helperText}
+          </p>
+        )}
+        
+        {showCount && (
+          <span 
+            className={cn(
+              "text-xs",
+              currentLength > maxLength! ? "text-destructive" : "text-muted-foreground"
+            )}
+            aria-live="polite"
+          >
+            {currentLength} / {maxLength}
+          </span>
+        )}
+      </div>
       
       {error && <FormFieldError message={error} id={errorId} />}
     </div>

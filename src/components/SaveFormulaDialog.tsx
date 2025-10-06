@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Save, Loader2, UserPlus } from "lucide-react";
 import { AddClientDialog } from "./AddClientDialog";
+import { cn } from "@/lib/utils";
 
 interface SaveFormulaDialogProps {
   open: boolean;
@@ -202,8 +203,17 @@ export const SaveFormulaDialog = ({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
+                maxLength={500}
                 className="resize-none"
               />
+              <div className="flex justify-end">
+                <span className={cn(
+                  "text-xs",
+                  notes.length > 500 ? "text-destructive" : "text-muted-foreground"
+                )}>
+                  {notes.length} / 500
+                </span>
+              </div>
             </div>
 
             {/* Actions */}

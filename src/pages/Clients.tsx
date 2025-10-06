@@ -495,13 +495,22 @@ export default function Clients() {
                 <p className="text-muted-foreground mb-4">
                   Try adjusting your search criteria or clear the filters
                 </p>
-                <Button 
-                  variant="outline" 
-                  onClick={() => { setSearchQuery(""); setSortBy("recent"); }}
-                  className="border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
-                >
-                  Clear Filters
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => { setSearchQuery(""); setSortBy("recent"); }}
+                    className="border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                  >
+                    Clear Filters
+                  </Button>
+                  <Button 
+                    onClick={() => setIsDialogOpen(true)}
+                    className="gap-2"
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    Add New Client
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ) : (
