@@ -127,6 +127,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           "transition-all duration-300 ease-out",
           "flex items-center justify-center",
           "hover:scale-110 active:scale-95",
+          !isOpen && "animate-pulse-glow",
           isOpen && "rotate-45 bg-destructive hover:bg-destructive/90"
         )}
         aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
