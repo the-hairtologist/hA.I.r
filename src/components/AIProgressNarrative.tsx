@@ -86,7 +86,7 @@ export const AIProgressNarrative = ({ stage, className }: AIProgressNarrativePro
         </div>
         <Progress 
           value={Math.min(progress, stageProgress[stage])} 
-          className="h-2 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+          className="h-2 brutal-border brutal-shadow-xs"
         />
       </div>
 

@@ -82,8 +82,8 @@ export const AIFeedbackPrompt = ({
   return (
     <Card
       className={cn(
-        "border-[2px] border-foreground bg-gradient-to-br from-secondary/5 to-background",
-        "animate-fade-in shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
+        "brutal-border bg-gradient-to-br from-secondary/5 to-background",
+        "animate-fade-in brutal-shadow-sm",
         className
       )}
     >
@@ -108,7 +108,7 @@ export const AIFeedbackPrompt = ({
                 size="sm"
                 onClick={() => handleFeedback("positive")}
                 disabled={submitting}
-                className="flex-1 gap-2 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))]"
+                className="flex-1 gap-2 brutal-shadow-xs brutal-hover"
               >
                 <ThumbsUp className="h-4 w-4" />
                 Yes
@@ -119,7 +119,7 @@ export const AIFeedbackPrompt = ({
                 size="sm"
                 onClick={() => handleFeedback("negative")}
                 disabled={submitting}
-                className="flex-1 gap-2 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))]"
+                className="flex-1 gap-2 brutal-shadow-xs brutal-hover"
               >
                 <ThumbsDown className="h-4 w-4" />
                 Not quite
@@ -137,7 +137,7 @@ export const AIFeedbackPrompt = ({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Your feedback helps us improve..."
-              className="min-h-[80px] border-[2px] border-foreground"
+              className="min-h-[80px]"
             />
             
             <div className="flex gap-2">
@@ -158,7 +158,7 @@ export const AIFeedbackPrompt = ({
                 size="sm"
                 onClick={handleSubmitComment}
                 disabled={submitting}
-                className="flex-1 border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                className="flex-1"
               >
                 Submit Feedback
               </Button>

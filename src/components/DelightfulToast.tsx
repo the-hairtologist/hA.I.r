@@ -56,7 +56,7 @@ export const toast = {
       duration: options?.duration || 3000,
       action: options?.action,
       icon: <Icon className={config.iconColor} />,
-      className: `${config.className} border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]`,
+      className: `${config.className} brutal-border brutal-shadow-sm`,
     });
   },
 
@@ -69,7 +69,7 @@ export const toast = {
       duration: options?.duration || 4000,
       action: options?.action,
       icon: <Icon className={config.iconColor} />,
-      className: `${config.className} border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]`,
+      className: `${config.className} brutal-border brutal-shadow-sm`,
     });
   },
 
@@ -82,7 +82,7 @@ export const toast = {
       duration: options?.duration || 3500,
       action: options?.action,
       icon: <Icon className={config.iconColor} />,
-      className: `${config.className} border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]`,
+      className: `${config.className} brutal-border brutal-shadow-sm`,
     });
   },
 
@@ -95,7 +95,7 @@ export const toast = {
       duration: options?.duration || 3000,
       action: options?.action,
       icon: <Icon className={config.iconColor} />,
-      className: `${config.className} border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]`,
+      className: `${config.className} brutal-border brutal-shadow-sm`,
     });
   },
 
@@ -108,7 +108,7 @@ export const toast = {
       duration: options?.duration || 4000,
       action: options?.action,
       icon: <Icon className={`${config.iconColor} animate-pulse-glow`} />,
-      className: `${config.className} border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] animate-wiggle`,
+      className: `${config.className} brutal-border brutal-shadow-xs animate-wiggle`,
     });
   },
 

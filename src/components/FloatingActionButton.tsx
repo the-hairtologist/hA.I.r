@@ -98,14 +98,14 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
             className="flex items-center gap-3 animate-fade-in"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <span className="text-sm font-medium bg-card px-3 py-1 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] whitespace-nowrap">
+            <span className="text-sm font-medium bg-card px-3 py-1 rounded-lg brutal-border brutal-shadow-xs whitespace-nowrap">
               {action.label}
             </span>
             <Button
               size="icon"
               onClick={action.onClick}
               className={cn(
-                "h-12 w-12 rounded-full shadow-lg border-2 border-foreground",
+                "h-12 w-12 rounded-full brutal-border brutal-shadow-sm",
                 "bg-gradient-to-br",
                 action.gradient,
                 "hover:scale-110 transition-all duration-200"
@@ -139,19 +139,18 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
             setIsOpen(!isOpen);
           }}
           className={cn(
-            "border-2 border-foreground relative",
+            "brutal-border relative",
             "w-[clamp(3.5rem,8vw,4rem)] h-[clamp(3.5rem,8vw,4rem)]", // Responsive: 56px-64px
             "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600",
             "hover:from-orange-500 hover:via-orange-600 hover:to-orange-700",
-            "shadow-[3px_3px_0px_0px_hsl(var(--foreground)),inset_0_1px_2px_rgba(255,255,255,0.3)]",
+            "brutal-shadow-sm brutal-hover",
             "transition-all duration-200 ease-out",
             "flex items-center justify-center",
-            "hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground)),inset_0_1px_2px_rgba(255,255,255,0.3)] hover:translate-x-[-1px] hover:translate-y-[-1px]",
-            "active:shadow-[1px_1px_0px_0px_hsl(var(--foreground)),inset_0_1px_2px_rgba(255,255,255,0.3)] active:translate-x-[2px] active:translate-y-[2px]",
             isOpen && "rotate-45 from-destructive via-destructive to-destructive/90"
           )}
           style={{
-            clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)"
+            clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+            boxShadow: "inset 0 1px 2px rgba(255,255,255,0.3), var(--tw-shadow)"
           }}
           aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
         >
