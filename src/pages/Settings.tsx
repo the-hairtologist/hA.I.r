@@ -18,6 +18,7 @@ import { DataExport } from "@/components/DataExport";
 import { AccountDeletion } from "@/components/AccountDeletion";
 import { PrivacySettings } from "@/components/PrivacySettings";
 import { HelpTooltip } from "@/components/HelpTooltip";
+import { AICommandCenter } from "@/components/AICommandCenter";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -263,7 +264,7 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="profile">
               <User className="h-4 w-4 mr-2" />
               Profile
@@ -275,6 +276,10 @@ const Settings = () => {
             <TabsTrigger value="preferences">
               <Bell className="h-4 w-4 mr-2" />
               Preferences
+            </TabsTrigger>
+            <TabsTrigger value="ai">
+              <SettingsIcon className="h-4 w-4 mr-2" />
+              AI Systems
             </TabsTrigger>
           </TabsList>
 
@@ -528,6 +533,11 @@ const Settings = () => {
                 </Button>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* AI Systems Tab */}
+          <TabsContent value="ai" className="space-y-6">
+            <AICommandCenter />
           </TabsContent>
         </Tabs>
 

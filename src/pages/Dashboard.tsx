@@ -53,8 +53,6 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { TodoList } from "@/components/dashboard/TodoList";
 import { HelpButton } from "@/components/HelpButton";
-import { useAIOrchestration } from "@/hooks/useAIOrchestration";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface SortableSectionProps {
   id: string;
@@ -99,7 +97,6 @@ const Dashboard = () => {
   const { user: authUser, loading: authLoading } = useAuth();
   const { roles, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
-  const { suggestions } = useAIOrchestration();
   
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
@@ -611,28 +608,7 @@ const Dashboard = () => {
         }
         return null;
       case "ai-insights":
-        // AI suggestions card
-        if (suggestions.length > 0) {
-          return (
-            <Card key={sectionId} className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <Sparkles className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-sm mb-2">AI Insights</h3>
-                    <ul className="space-y-1">
-                      {suggestions.map((suggestion, index) => (
-                        <li key={index} className="text-sm text-muted-foreground">
-                          {suggestion}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        }
+        // AI insights moved to banner component
         return null;
       case "client-insights":
         if (userRole === "stylist" && profile?.id) {

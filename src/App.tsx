@@ -43,7 +43,6 @@ const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Referrals = lazy(() => import("./pages/Referrals"));
 const SystemHealth = lazy(() => import("./pages/SystemHealth"));
-const AITestDashboard = lazy(() => import("./pages/AITestDashboard"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -184,11 +183,6 @@ const App = () => {
           <Route path="/system-health" element={
             <ProtectedRoute>
               <SystemHealth />
-            </ProtectedRoute>
-          } />
-          <Route path="/ai-test" element={
-            <ProtectedRoute>
-              <AITestDashboard />
             </ProtectedRoute>
           } />
           

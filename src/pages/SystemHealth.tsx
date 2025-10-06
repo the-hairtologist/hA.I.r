@@ -1,7 +1,6 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { SelfHealingMonitor } from "@/components/SelfHealingMonitor";
 import { AIRetentionDashboard } from "@/components/AIRetentionDashboard";
-import { AICommandCenter } from "@/components/AICommandCenter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -102,9 +101,8 @@ export default function SystemHealth() {
         </div>
 
         {/* Main Content */}
-        <Tabs defaultValue="ai" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="ai">AI Command</TabsTrigger>
+        <Tabs defaultValue="monitor" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="monitor">Live Monitor</TabsTrigger>
             <TabsTrigger value="retention">
               <Users className="h-4 w-4 mr-2" />
@@ -114,10 +112,6 @@ export default function SystemHealth() {
             <TabsTrigger value="docs">Documentation</TabsTrigger>
             <TabsTrigger value="logs">System Logs</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="ai">
-            <AICommandCenter />
-          </TabsContent>
 
           <TabsContent value="monitor">
             <SelfHealingMonitor />
