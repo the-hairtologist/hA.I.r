@@ -206,10 +206,10 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             </p>
           </div>
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
             onClick={() => setIsCustomizing(!isCustomizing)}
-            className="gap-2 shrink-0 brutal-border brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5 transition-all"
+            className="gap-2 shrink-0"
           >
             {isCustomizing ? <X className="h-4 w-4" /> : <Settings2 className="h-4 w-4" />}
             {isCustomizing ? "Done" : "Customize"}
