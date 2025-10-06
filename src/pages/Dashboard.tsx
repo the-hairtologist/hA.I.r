@@ -678,10 +678,10 @@ const Dashboard = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="px-2 sm:px-4 lg:pl-12 overflow-x-hidden max-w-full">
-        <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
+      <main id="main-content" role="main" aria-label="Dashboard" className="px-3 py-3 sm:px-4 lg:pl-12 overflow-x-hidden max-w-full pb-24 lg:pb-8">
+        <div className="mb-6 sm:mb-8 lg:mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast max-w-full">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-sm font-bold">
+            <span className="text-background font-mono text-xs sm:text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
             </span>
             <div className="window-controls">
@@ -691,17 +691,17 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-4 md:p-6 relative overflow-hidden">
-            <div className="window-scrollbar"></div>
+          <div className="bg-blue-600 p-3 sm:p-4 md:p-6 relative overflow-hidden">
+            <div className="window-scrollbar hidden lg:block"></div>
             
-            <div className="max-w-4xl pr-2 sm:pr-4 md:pr-8">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-black mb-3 sm:mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+            <div className="max-w-4xl pr-0 sm:pr-4 md:pr-8">
+              <h2 className="text-xl sm:text-2xl lg:text-4xl font-display font-black mb-2 sm:mb-3 lg:mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
               {/* Weekly Schedule View for Stylists */}
               {userRole === "stylist" && (
-                <div className="bg-card rounded-lg overflow-hidden border-2 border-pink-400 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.6)] mt-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="bg-card rounded-lg overflow-hidden border-2 border-pink-400 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.6)] mt-2 sm:mt-3 animate-fade-in max-w-full" style={{ animationDelay: '200ms' }}>
                   <WeeklyScheduleView
                     appointments={weekAppointments}
                     stylistSchedule={profile?.weekly_schedule}
@@ -716,7 +716,7 @@ const Dashboard = () => {
               )}
 
               {userRole === "client" && (
-                <p className="text-base md:text-lg font-medium text-pink-200 mt-2 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <p className="text-sm sm:text-base lg:text-lg font-medium text-pink-200 mt-2 animate-fade-in leading-relaxed" style={{ animationDelay: '200ms' }}>
                   Ready to book your next transformation? ✨
                 </p>
               )}
@@ -724,12 +724,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-6 bg-muted/50 border border-border/50 shadow-sm p-3 rounded-lg animate-fade-in overflow-x-hidden" style={{ animationDelay: '300ms' }}>
-          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
-            <GripVertical className="h-4 w-4 opacity-50 hidden sm:inline" />
-            <span className="hidden sm:inline">Hover over sections and drag the handle to rearrange your dashboard</span>
-            <span className="sm:hidden">Tap & hold to rearrange</span>
-            <GripVertical className="h-4 w-4 opacity-50 hidden sm:inline" />
+        <div className="mb-4 sm:mb-6 bg-muted/50 border border-border/50 shadow-sm p-2.5 sm:p-3 rounded-lg animate-fade-in overflow-x-hidden max-w-full" style={{ animationDelay: '300ms' }}>
+          <p className="text-xs font-medium text-muted-foreground text-center flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
+            <GripVertical className="h-3.5 w-3.5 sm:h-4 sm:w-4 opacity-50 hidden sm:inline" />
+            <span className="hidden sm:inline text-xs">Hover over sections and drag the handle to rearrange your dashboard</span>
+            <span className="sm:hidden text-xs">Tap & hold to rearrange</span>
+            <GripVertical className="h-3.5 w-3.5 sm:h-4 sm:w-4 opacity-50 hidden sm:inline" />
           </p>
         </div>
 
@@ -742,7 +742,7 @@ const Dashboard = () => {
             items={sectionOrder}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-8">
+            <div className="space-y-6 lg:space-y-8 w-full max-w-full overflow-x-hidden">
               {sectionOrder.map((sectionId, index) => {
                 const content = renderSection(sectionId);
                 if (!content) return null;
@@ -750,7 +750,7 @@ const Dashboard = () => {
                 return (
                   <SortableSection key={sectionId} id={sectionId}>
                     <div 
-                      className="animate-fade-in" 
+                      className="animate-fade-in w-full max-w-full" 
                       style={{ animationDelay: `${(index + 4) * 50}ms` }}
                     >
                       {content}

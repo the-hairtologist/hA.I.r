@@ -1,4 +1,4 @@
-import { Plus, Calendar, Users, Scissors, Sparkles } from "lucide-react";
+import { Plus, Calendar, Users, Scissors } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -80,7 +80,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      className="fixed bottom-20 right-4 z-50 flex flex-col-reverse items-end gap-3"
+      className="fixed bottom-[88px] right-4 z-50 flex flex-col-reverse items-end gap-3 lg:bottom-6"
     >
       {/* Action Items */}
       <div
@@ -95,26 +95,27 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
             className="flex items-center gap-3 animate-fade-in"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <span className="text-sm font-medium bg-card px-3 py-1 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] whitespace-nowrap">
+            <span className="text-sm font-medium bg-card px-3 py-2 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] whitespace-nowrap">
               {action.label}
             </span>
             <Button
               size="icon"
               onClick={action.onClick}
               className={cn(
-                "h-12 w-12 rounded-full shadow-lg border-2 border-foreground",
-                "bg-gradient-to-br",
+                "h-14 w-14 rounded-full shadow-lg border-2 border-white",
+                "bg-gradient-to-br min-h-[56px] min-w-[56px]",
                 action.gradient,
-                "hover:scale-110 transition-all duration-200"
+                "hover:scale-105 active:scale-95 transition-all duration-200"
               )}
+              aria-label={action.label}
             >
-              <action.icon className="h-5 w-5 text-white" />
+              <action.icon className="h-6 w-6 text-white" strokeWidth={2.5} />
             </Button>
           </div>
         ))}
       </div>
 
-      {/* Main FAB */}
+      {/* Main FAB - Mobile Optimized */}
       <Button
         size="icon"
         onClick={() => {
@@ -123,22 +124,24 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         }}
         style={{
           background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-          border: '2px solid #ffffff',
+          border: '3px solid #ffffff',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
         }}
         className={cn(
-          "h-14 w-14 rounded-full shadow-lg",
+          "h-16 w-16 rounded-full min-h-[64px] min-w-[64px]",
           "hover:scale-105 active:scale-95",
           "transition-all duration-200",
+          "flex items-center justify-center",
           isOpen && "rotate-45"
         )}
+        aria-label={isOpen ? "Close menu" : "Open quick actions menu"}
       >
         <Plus 
           className="text-white" 
-          size={28}
+          size={32}
           strokeWidth={3}
           style={{ 
-            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))',
-            display: 'block'
+            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
           }}
         />
       </Button>

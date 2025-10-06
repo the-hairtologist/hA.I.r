@@ -123,40 +123,40 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-[image:var(--gradient-bg-main)]">
+      <div className="min-h-screen flex w-full bg-[image:var(--gradient-bg-main)] overflow-x-hidden">
         <AppSidebar userRole={userRole || undefined} />
         
-        <div className="flex-1 flex flex-col">
-          {/* Top Header */}
-          <header className="sticky top-0 z-40 border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-            <div className="flex h-16 items-center gap-2 sm:gap-4 px-2 sm:px-4">
+        <div className="flex-1 flex flex-col w-full max-w-full">
+          {/* Mobile-First Top Header */}
+          <header className="sticky top-0 z-40 border-b-2 lg:border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_2px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+            <div className="flex h-14 lg:h-16 items-center gap-2 px-3 lg:px-4 max-w-full">
               <SidebarTrigger className="-ml-1 border-2 border-foreground hidden lg:flex" />
               
               <button 
                 onClick={() => navigate("/dashboard")}
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity mr-auto lg:mr-0"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity min-h-[44px] min-w-[44px] -ml-1"
+                aria-label="Go to dashboard"
               >
-                <Scissors className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                <h1 className="text-lg sm:text-xl font-bold font-display">hA.I.r</h1>
+                <Scissors className="h-6 w-6 text-primary" />
+                <h1 className="text-xl font-bold font-display">hA.I.r</h1>
               </button>
 
-              <div className="ml-auto flex items-center gap-2 sm:gap-3">
-                {userRole && (
-                  <Badge variant="secondary" className="hidden md:flex bg-warning text-warning-foreground border-2 border-foreground text-xs">
-                    {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
-                  </Badge>
-                )}
-                
+              <div className="ml-auto flex items-center gap-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-1 sm:gap-2 border-2 border-foreground h-9 px-2 sm:px-3">
-                      <User className="h-4 w-4" />
-                      <span className="hidden md:inline text-sm max-w-[100px] truncate">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="gap-2 border-2 border-foreground h-11 w-11 lg:h-10 lg:w-auto lg:px-3 p-0 lg:p-2"
+                      aria-label="Account menu"
+                    >
+                      <User className="h-5 w-5" />
+                      <span className="hidden lg:inline text-sm max-w-[100px] truncate">
                         {user?.user_metadata?.full_name || "Account"}
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuContent align="end" className="w-56 z-50">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => navigate("/settings")}>
@@ -181,13 +181,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          {/* Main Content */}
-      <main className="flex-1 overflow-auto pb-16 lg:pb-0">
-        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 animate-fade-in-fast">
-          <Breadcrumbs />
-          {children}
-        </div>
-      </main>
+          {/* Mobile-First Main Content */}
+          <main className="flex-1 overflow-auto pb-20 lg:pb-4 w-full max-w-full">
+            <div className="w-full max-w-full px-3 py-3 lg:px-6 lg:py-6 animate-fade-in-fast">
+              <Breadcrumbs />
+              {children}
+            </div>
+          </main>
         </div>
         
         <MobileNav userRole={userRole || undefined} />
