@@ -52,7 +52,7 @@ export default function AdminUsers() {
     }
   };
 
-  const handleRoleChange = async (userId: string, newRole: 'admin' | 'stylist' | 'client', oldRole: string) => {
+  const handleRoleChange = async (userId: string, newRole: 'admin' | 'stylist' | 'client', oldRole: 'admin' | 'stylist' | 'client') => {
     try {
       // Remove old role
       await supabase
