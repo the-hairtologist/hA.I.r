@@ -678,7 +678,7 @@ const Dashboard = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="pl-2 sm:pl-6 md:pl-12 overflow-x-hidden">
+      <main id="main-content" role="main" aria-label="Dashboard" className="px-2 sm:px-4 lg:pl-12 overflow-x-hidden max-w-full">
         <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
             <span className="text-background font-mono text-sm font-bold">
@@ -695,7 +695,7 @@ const Dashboard = () => {
             <div className="window-scrollbar"></div>
             
             <div className="max-w-4xl pr-2 sm:pr-4 md:pr-8">
-              <h2 className="text-3xl md:text-4xl font-display font-black mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-black mb-3 sm:mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               

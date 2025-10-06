@@ -129,29 +129,29 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex-1 flex flex-col">
           {/* Top Header */}
           <header className="sticky top-0 z-40 border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-            <div className="flex h-16 items-center gap-4 px-4">
-              <SidebarTrigger className="-ml-1 border-2 border-foreground" />
+            <div className="flex h-16 items-center gap-2 sm:gap-4 px-2 sm:px-4">
+              <SidebarTrigger className="-ml-1 border-2 border-foreground hidden lg:flex" />
               
               <button 
                 onClick={() => navigate("/dashboard")}
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity mr-auto lg:mr-0"
               >
-                <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-bold font-display hidden sm:block">hA.I.r</h1>
+                <Scissors className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <h1 className="text-lg sm:text-xl font-bold font-display">hA.I.r</h1>
               </button>
 
-              <div className="ml-auto flex items-center gap-3">
+              <div className="ml-auto flex items-center gap-2 sm:gap-3">
                 {userRole && (
-                  <Badge variant="secondary" className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground">
+                  <Badge variant="secondary" className="hidden md:flex bg-warning text-warning-foreground border-2 border-foreground text-xs">
                     {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
                   </Badge>
                 )}
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-2 border-2 border-foreground">
+                    <Button variant="ghost" size="sm" className="gap-1 sm:gap-2 border-2 border-foreground h-9 px-2 sm:px-3">
                       <User className="h-4 w-4" />
-                      <span className="hidden sm:inline">
+                      <span className="hidden md:inline text-sm max-w-[100px] truncate">
                         {user?.user_metadata?.full_name || "Account"}
                       </span>
                     </Button>
@@ -182,8 +182,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </header>
 
           {/* Main Content */}
-      <main className="flex-1 overflow-auto pb-16 md:pb-0">
-        <div className="container mx-auto p-6 animate-fade-in-fast">
+      <main className="flex-1 overflow-auto pb-16 lg:pb-0">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 animate-fade-in-fast">
           <Breadcrumbs />
           {children}
         </div>

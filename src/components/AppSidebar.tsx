@@ -343,7 +343,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" className="border-r hidden lg:flex">
       <SidebarContent>
         {/* Customize Controls */}
         {!collapsed && (

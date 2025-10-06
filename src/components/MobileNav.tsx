@@ -31,7 +31,7 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
   const items = userRole === "stylist" ? stylistItems : clientItems;
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t-2 border-border shadow-lg" aria-label="Mobile navigation">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t-2 border-border shadow-lg" aria-label="Mobile navigation">
       <div className="flex justify-around items-center h-16 px-2 gap-2">
         {items.map((item) => {
           const Icon = item.icon;
