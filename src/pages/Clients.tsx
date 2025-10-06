@@ -21,6 +21,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
 import { HairMemoryTimeline } from "@/components/HairMemoryTimeline";
+import { HelpTooltip } from "@/components/HelpTooltip";
 
 interface ClientProfile {
   id: string;
@@ -391,7 +392,15 @@ export default function Clients() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="full_name">Full Name *</Label>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="full_name">Full Name *</Label>
+                  <HelpTooltip
+                    title="Client Name"
+                    content={{
+                      stylist: "Their full name so you can easily find them. First and last name helps avoid confusion with clients who have similar names."
+                    }}
+                  />
+                </div>
                 <Input
                   id="full_name"
                   required
@@ -421,7 +430,21 @@ export default function Clients() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="hair_type">Hair Type</Label>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="hair_type">Hair Type</Label>
+                  <HelpTooltip
+                    title="Hair Type & Texture"
+                    content={{
+                      stylist: "Document their natural texture and porosity. This helps you formulate correctly and remember their hair characteristics between visits."
+                    }}
+                    examples={[
+                      "3C Curly, High Porosity",
+                      "Fine Straight, Low Porosity",
+                      "Coarse Wavy, Medium Porosity",
+                      "Type 4 Coily, Color-Treated"
+                    ]}
+                  />
+                </div>
                 <Input
                   id="hair_type"
                   value={formData.hair_type}
@@ -430,7 +453,21 @@ export default function Clients() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="allergies">Allergies & Sensitivities</Label>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="allergies">Allergies & Sensitivities</Label>
+                  <HelpTooltip
+                    title="Allergies & Sensitivities"
+                    content={{
+                      stylist: "CRITICAL safety information. Always ask about PPD, ammonia, and fragrance sensitivities. Document any past reactions to products or chemicals."
+                    }}
+                    tips={[
+                      "Ask: 'Have you ever had a reaction to hair color?'",
+                      "Note if they've had patch tests before",
+                      "Include scalp sensitivities (dry, oily, sensitive)",
+                      "Better to over-document than miss something!"
+                    ]}
+                  />
+                </div>
                 <Textarea
                   id="allergies"
                   value={formData.allergies}
@@ -439,7 +476,21 @@ export default function Clients() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="notes">Additional Notes</Label>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="notes">Additional Notes</Label>
+                  <HelpTooltip
+                    title="Client Notes"
+                    content={{
+                      stylist: "Your personal notes about the client. What they like, don't like, goals, lifestyle, preferences - anything that helps you give them better service."
+                    }}
+                    examples={[
+                      "Prefers warm tones, hates brass",
+                      "Works from home, low-maintenance preferred",
+                      "Getting married in 6 months - growing hair out",
+                      "Budget-conscious, books every 12 weeks"
+                    ]}
+                  />
+                </div>
                 <Textarea
                   id="notes"
                   value={formData.notes}

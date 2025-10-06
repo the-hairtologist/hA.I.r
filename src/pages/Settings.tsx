@@ -17,6 +17,7 @@ import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
 import { DataExport } from "@/components/DataExport";
 import { AccountDeletion } from "@/components/AccountDeletion";
 import { PrivacySettings } from "@/components/PrivacySettings";
+import { HelpTooltip } from "@/components/HelpTooltip";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -302,7 +303,20 @@ const Settings = () => {
                 {userRole === "stylist" && (
                   <>
                     <div>
-                      <Label htmlFor="businessName">Business Name</Label>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Label htmlFor="businessName">Business Name</Label>
+                        <HelpTooltip
+                          title="Business Name"
+                          content={{
+                            stylist: "Your salon or studio name that clients will see. If you work independently, you can use your name or create a brand name."
+                          }}
+                          examples={[
+                            "The Color Studio",
+                            "Sarah's Hair Lounge",
+                            "Mane Street Salon"
+                          ]}
+                        />
+                      </div>
                       <Input
                         id="businessName"
                         value={businessName}
@@ -312,7 +326,21 @@ const Settings = () => {
                     </div>
 
                     <div>
-                      <Label htmlFor="bio">Bio</Label>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Label htmlFor="bio">Bio</Label>
+                        <HelpTooltip
+                          title="Professional Bio"
+                          content={{
+                            stylist: "Your bio is your first impression. Share your experience, what you love about hair, and what makes you unique. Keep it friendly and authentic!"
+                          }}
+                          tips={[
+                            "Mention your years of experience",
+                            "Share what you specialize in",
+                            "Add a personal touch - why do you love hair?",
+                            "Keep it conversational, not formal"
+                          ]}
+                        />
+                      </div>
                       <TextareaWithCounter
                         id="bio"
                         value={bio}
@@ -320,7 +348,7 @@ const Settings = () => {
                           setBio(value);
                           setHasChanges(true);
                         }}
-                        placeholder="Tell clients about yourself"
+                        placeholder="e.g., I'm a color specialist with 8 years behind the chair. I love creating natural-looking highlights and helping clients maintain healthy hair!"
                         maxLength={1000}
                         className="min-h-[100px]"
                       />
@@ -328,7 +356,22 @@ const Settings = () => {
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="specialty">Specialty</Label>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Label htmlFor="specialty">Specialty</Label>
+                          <HelpTooltip
+                            title="Your Specialty"
+                            content={{
+                              stylist: "What do you do best? This helps clients find you when searching for specific services."
+                            }}
+                            examples={[
+                              "Balayage & Dimensional Color",
+                              "Color Correction Specialist",
+                              "Curly Hair Expert",
+                              "Extensions & Length",
+                              "Men's Cuts & Styling"
+                            ]}
+                          />
+                        </div>
                         <Input
                           id="specialty"
                           value={specialty}
@@ -338,7 +381,22 @@ const Settings = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="colorLine">Color Line</Label>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Label htmlFor="colorLine">Color Line</Label>
+                          <HelpTooltip
+                            title="Preferred Color Line"
+                            content={{
+                              stylist: "The professional color brand you use. This matters to clients who have preferences or allergies to certain brands."
+                            }}
+                            examples={[
+                              "Redken",
+                              "Wella Professionals",
+                              "Schwarzkopf",
+                              "L'Oréal Professional",
+                              "Pulp Riot"
+                            ]}
+                          />
+                        </div>
                         <Input
                           id="colorLine"
                           value={colorLine}
@@ -350,7 +408,20 @@ const Settings = () => {
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="location">Location</Label>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Label htmlFor="location">Location</Label>
+                          <HelpTooltip
+                            title="Your Location"
+                            content={{
+                              stylist: "Where you work. This helps clients nearby find you. You can include neighborhood or general area - no need for full address."
+                            }}
+                            examples={[
+                              "Downtown Seattle, WA",
+                              "Brooklyn, NY",
+                              "Austin, TX - Domain Area"
+                            ]}
+                          />
+                        </div>
                         <Input
                           id="location"
                           value={location}
@@ -360,7 +431,20 @@ const Settings = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="yearsExperience">Years of Experience</Label>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Label htmlFor="yearsExperience">Years of Experience</Label>
+                          <HelpTooltip
+                            title="Experience Level"
+                            content={{
+                              stylist: "How long you've been doing hair professionally. Be honest - all experience levels are valuable!"
+                            }}
+                            tips={[
+                              "Count from when you got licensed",
+                              "New stylists (0-2 years) often attract clients looking for good prices",
+                              "Experienced stylists (5+ years) can charge premium rates"
+                            ]}
+                          />
+                        </div>
                         <Input
                           id="yearsExperience"
                           type="number"
