@@ -8,6 +8,8 @@ import { errorRecovery, withRecovery } from './ErrorRecovery';
 import { healthMonitor } from './HealthMonitor';
 import { aiMaintenance } from './AIMaintenanceAssistant';
 import { dataIntegrity } from './DataIntegrityChecker';
+import { codeAnalyzer } from './CodeAnalyzer';
+import { performanceOptimizer } from './PerformanceOptimizer';
 import { logger } from '@/lib/logger';
 
 class SelfHealingSystem {
@@ -75,6 +77,13 @@ class SelfHealingSystem {
     // Check health
     await healthMonitor.checkNow();
 
+    // Run code analysis
+    const codeIssues = await codeAnalyzer.analyzeCodebase();
+    const autoFixedCode = await codeAnalyzer.autoFix(codeIssues);
+
+    // Run performance optimization
+    const optimizations = await performanceOptimizer.optimize();
+
     // Check data integrity
     const issues = await dataIntegrity.runFullCheck();
     const orphans = await dataIntegrity.checkOrphanedRecords();
@@ -86,14 +95,29 @@ class SelfHealingSystem {
       await dataIntegrity.autoFix(allIssues);
     }
 
-    // Generate report
-    const report = await dataIntegrity.generateReport();
-    logger.info('Maintenance report generated', 'SelfHealingSystem', { report });
+    // Generate comprehensive report
+    const dataReport = await dataIntegrity.generateReport();
+    const codeReport = await codeAnalyzer.generateReport();
+
+    logger.info('Maintenance complete', 'SelfHealingSystem', {
+      codeIssues: codeIssues.length,
+      dataIssues: allIssues.length,
+      optimizations: optimizations.length
+    });
 
     return {
-      issuesFound: allIssues.length,
-      issuesFixed: allIssues.filter(i => i.autoFixable).length,
-      report,
+      issuesFound: allIssues.length + codeIssues.length,
+      issuesFixed: allIssues.filter(i => i.autoFixable).length + autoFixedCode,
+      codeHealth: {
+        score: codeReport.score,
+        issues: codeReport.issues,
+        recommendations: codeReport.recommendations
+      },
+      performance: {
+        optimizations: optimizations.filter(o => o.applied),
+        recommendations: performanceOptimizer.getRecommendations()
+      },
+      dataReport,
     };
   }
 
@@ -133,4 +157,6 @@ export {
   healthMonitor,
   aiMaintenance,
   dataIntegrity,
+  codeAnalyzer,
+  performanceOptimizer,
 };

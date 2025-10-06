@@ -9,8 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, AlertTriangle, CheckCircle, Wrench, Zap, TrendingUp } from 'lucide-react';
-import { selfHealing, healthMonitor, dataIntegrity } from '@/lib/selfHealing';
+import { Activity, AlertTriangle, CheckCircle, Wrench, Zap, TrendingUp, Code, Brain } from 'lucide-react';
+import { selfHealing, healthMonitor, dataIntegrity, codeAnalyzer } from '@/lib/selfHealing';
 import { toast } from 'sonner';
 
 export const SelfHealingMonitor = () => {
@@ -36,7 +36,7 @@ export const SelfHealingMonitor = () => {
 
     try {
       const result = await selfHealing.runMaintenance();
-      toast.success(`Maintenance complete: ${result.issuesFixed} issues fixed`);
+      toast.success(`Maintenance complete: ${result.issuesFixed} issues fixed. Code Health: ${result.codeHealth.score}/100`);
       await loadStatus();
     } catch (error) {
       toast.error('Maintenance failed');
@@ -65,6 +65,12 @@ export const SelfHealingMonitor = () => {
     await healthMonitor.checkNow();
     await loadStatus();
     toast.success('Health check complete');
+  };
+
+  const runCodeAnalysis = async () => {
+    toast.info('Analyzing code quality...');
+    const issues = await codeAnalyzer.analyzeCodebase();
+    toast.success(`Found ${issues.length} potential improvements`);
   };
 
   if (!status) {
@@ -168,8 +174,9 @@ export const SelfHealingMonitor = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="health">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="health">Health</TabsTrigger>
+              <TabsTrigger value="code">Code</TabsTrigger>
               <TabsTrigger value="recovery">Recovery</TabsTrigger>
               <TabsTrigger value="actions">Actions</TabsTrigger>
             </TabsList>
@@ -200,6 +207,38 @@ export const SelfHealingMonitor = () => {
               <p className="text-sm text-muted-foreground">
                 {status.health.message}
               </p>
+            </TabsContent>
+
+            <TabsContent value="code" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Code className="h-5 w-5" />
+                    Code Analysis
+                  </CardTitle>
+                  <CardDescription>AI-powered code quality monitoring</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="text-sm text-muted-foreground">
+                    <p className="mb-2">🔍 Automatically detects:</p>
+                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <li>Large files that need splitting</li>
+                      <li>Repeated database queries</li>
+                      <li>Performance bottlenecks</li>
+                      <li>Complex state management</li>
+                      <li>Missing caching opportunities</li>
+                    </ul>
+                  </div>
+                  <Button
+                    onClick={runCodeAnalysis}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Brain className="mr-2 h-4 w-4" />
+                    Analyze Code
+                  </Button>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="recovery" className="space-y-4">
