@@ -115,29 +115,44 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       </div>
 
       {/* Main FAB */}
-      <Button
-        size="icon"
-        onClick={() => {
-          haptic.tap();
-          setIsOpen(!isOpen);
-        }}
-        className={cn(
-          "h-16 w-16 border-2 border-foreground relative",
-          "bg-orange-500 hover:bg-orange-600",
-          "shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
-          "transition-all duration-200 ease-out",
-          "flex items-center justify-center",
-          "hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[-1px] hover:translate-y-[-1px]",
-          "active:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] active:translate-x-[2px] active:translate-y-[2px]",
-          isOpen && "rotate-45 bg-destructive hover:bg-destructive/90"
-        )}
-        style={{
-          clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)"
-        }}
-        aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
-      >
-        <Plus className="h-7 w-7 text-white" strokeWidth={2.5} />
-      </Button>
+      <div className="relative">
+        {/* Subtle glow layer */}
+        <div 
+          className={cn(
+            "absolute inset-0 h-16 w-16 blur-md opacity-40 transition-opacity duration-500",
+            !isOpen && "bg-orange-400",
+            isOpen && "bg-destructive"
+          )}
+          style={{
+            clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)"
+          }}
+          aria-hidden="true"
+        />
+        <Button
+          size="icon"
+          onClick={() => {
+            haptic.tap();
+            setIsOpen(!isOpen);
+          }}
+          className={cn(
+            "h-16 w-16 border-2 border-foreground relative",
+            "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600",
+            "hover:from-orange-500 hover:via-orange-600 hover:to-orange-700",
+            "shadow-[3px_3px_0px_0px_hsl(var(--foreground)),inset_0_1px_2px_rgba(255,255,255,0.3)]",
+            "transition-all duration-200 ease-out",
+            "flex items-center justify-center",
+            "hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground)),inset_0_1px_2px_rgba(255,255,255,0.3)] hover:translate-x-[-1px] hover:translate-y-[-1px]",
+            "active:shadow-[1px_1px_0px_0px_hsl(var(--foreground)),inset_0_1px_2px_rgba(255,255,255,0.3)] active:translate-x-[2px] active:translate-y-[2px]",
+            isOpen && "rotate-45 from-destructive via-destructive to-destructive/90"
+          )}
+          style={{
+            clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)"
+          }}
+          aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
+        >
+          <Plus className="h-7 w-7 text-white drop-shadow-sm" strokeWidth={2.5} />
+        </Button>
+      </div>
     </div>
   );
 };
