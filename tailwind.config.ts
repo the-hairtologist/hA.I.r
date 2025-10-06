@@ -146,6 +146,11 @@ export default {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: "0.8", transform: "scale(1.05)" },
         },
+        "pulse-subtle": {
+          "0%, 85%": { opacity: "1", transform: "scale(1)" },
+          "90%": { opacity: "0.85", transform: "scale(1.08)" },
+          "95%, 100%": { opacity: "1", transform: "scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.3s ease-out",
@@ -158,6 +163,7 @@ export default {
         "bounce-gentle": "bounce-gentle 3s ease-in-out infinite",
         "wiggle": "wiggle 1s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "pulse-subtle": "pulse-subtle 4s ease-in-out infinite",
       },
     },
   },
