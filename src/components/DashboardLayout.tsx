@@ -124,9 +124,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-[image:var(--gradient-bg-main)] overflow-x-hidden">
+        {/* Sidebar - Desktop only (1024px+) */}
         <AppSidebar userRole={userRole || undefined} />
         
-        <div className="flex-1 flex flex-col w-full max-w-full">
+        <div className="flex-1 flex flex-col w-full max-w-full min-w-0">
           {/* Mobile-First Top Header */}
           <header className="sticky top-0 z-40 border-b-2 lg:border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_2px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
             <div className="flex h-14 lg:h-16 items-center gap-2 px-3 lg:px-4 max-w-full">
@@ -181,8 +182,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          {/* Mobile-First Main Content */}
-          <main className="flex-1 overflow-auto pb-20 lg:pb-4 w-full max-w-full">
+          {/* Main Content - Proper spacing for both mobile & desktop */}
+          <main className="flex-1 overflow-auto pb-20 lg:pb-6 w-full max-w-full">
             <div className="w-full max-w-full px-3 py-3 lg:px-6 lg:py-6 animate-fade-in-fast">
               <Breadcrumbs />
               {children}
@@ -190,7 +191,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </main>
         </div>
         
+        {/* Mobile Nav - Hidden on desktop (1024px+) */}
         <MobileNav userRole={userRole || undefined} />
+        
+        {/* FAB - Adaptive positioning */}
         <FloatingActionButton userRole={userRole || "client"} />
       </div>
       

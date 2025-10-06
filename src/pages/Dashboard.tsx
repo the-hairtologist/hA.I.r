@@ -679,7 +679,7 @@ const Dashboard = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="px-3 py-3 sm:px-4 lg:pl-12 overflow-x-hidden max-w-full pb-24 lg:pb-8">
+      <main id="main-content" role="main" aria-label="Dashboard" className="px-3 py-3 sm:px-4 lg:pl-12 overflow-x-hidden max-w-full">
         {/* Mobile: Compact Hero | Desktop: Full Window Frame */}
         <div className="mb-4 lg:mb-12 lg:window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast max-w-full rounded-xl lg:rounded-none border-2 lg:border-4 border-foreground">
           {/* Window titlebar - Desktop only */}
