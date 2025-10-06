@@ -193,19 +193,19 @@ export const WeeklyScheduleView = ({
               variant="outline" 
               size="icon"
               onClick={previousWeek} 
-              className="border-[2px] border-foreground h-9 w-9 sm:h-10 sm:w-10 bg-card hover:bg-muted shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+              className="border-[3px] border-foreground h-10 w-10 sm:h-11 sm:w-11 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
               aria-label="Previous week"
             >
-              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" strokeWidth={3} />
+              <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={3} />
             </Button>
             <Button 
               variant="outline" 
               size="icon"
               onClick={nextWeek} 
-              className="border-[2px] border-foreground h-9 w-9 sm:h-10 sm:w-10 bg-card hover:bg-muted shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+              className="border-[3px] border-foreground h-10 w-10 sm:h-11 sm:w-11 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
               aria-label="Next week"
             >
-              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" strokeWidth={3} />
+              <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={3} />
             </Button>
           </div>
         </div>
