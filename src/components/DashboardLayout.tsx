@@ -131,7 +131,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Mobile-First Top Header */}
           <header className="sticky top-0 z-40 border-b-2 lg:border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_2px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
             <div className="flex h-14 lg:h-16 items-center gap-2 px-3 lg:px-4 max-w-full">
-              <SidebarTrigger className="-ml-1 border-2 border-foreground hidden lg:flex" />
+              <SidebarTrigger className="-ml-1 border-2 border-foreground" />
               
               <button 
                 onClick={() => navigate("/dashboard")}
