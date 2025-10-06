@@ -30,6 +30,8 @@ import {
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NotificationDot } from "@/components/NotificationDot";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import {
   DndContext,
   closestCenter,
@@ -244,6 +246,8 @@ function SortableNavItem({
 export function AppSidebar({ userRole }: AppSidebarProps) {
   const { state } = useSidebar();
   const location = useLocation();
+  const { user } = useAuth();
+  const { isAdmin } = useUserRole(user?.id);
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
@@ -272,7 +276,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   };
 
   // Stylist Navigation with unique IDs
-  const stylistAllItems: SidebarItem[] = [
+  const stylistBaseItems: SidebarItem[] = [
     { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
     { id: "find-clients", title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "clients", title: "Clients & Formulas", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main", color: "text-emerald-400 dark:text-emerald-300" },
@@ -297,9 +301,15 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "business", color: "text-orange-400 dark:text-orange-300" },
     { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
-    { id: "system-health", title: "System Health", url: "/system-health", icon: Shield, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "tools", color: "text-green-400 dark:text-green-300" },
     { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools", color: "text-amber-400 dark:text-amber-300" },
   ];
+
+  // Admin-only items
+  const adminItems: SidebarItem[] = isAdmin ? [
+    { id: "system-health", title: "System Health", url: "/system-health", icon: Shield, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "admin", color: "text-green-400 dark:text-green-300" },
+  ] : [];
+
+  const stylistAllItems = [...stylistBaseItems, ...adminItems];
 
   // Client Navigation with unique IDs
   const clientAllItems: SidebarItem[] = [
@@ -316,7 +326,9 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
   
   const groupLabels = userRole === "stylist" 
-    ? { main: "Main", scheduling: "Scheduling", business: "Business", tools: "Tools" }
+    ? isAdmin 
+      ? { main: "Main", scheduling: "Scheduling", business: "Business", tools: "Tools", admin: "Admin" }
+      : { main: "Main", scheduling: "Scheduling", business: "Business", tools: "Tools" }
     : { main: "Main", tools: "Tools" };
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);

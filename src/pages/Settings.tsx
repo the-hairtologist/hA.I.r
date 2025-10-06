@@ -264,7 +264,7 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className={`grid w-full ${roles.includes('admin') ? 'grid-cols-4' : 'grid-cols-3'}`}>
             <TabsTrigger value="profile">
               <User className="h-4 w-4 mr-2" />
               Profile
@@ -277,10 +277,12 @@ const Settings = () => {
               <Bell className="h-4 w-4 mr-2" />
               Preferences
             </TabsTrigger>
-            <TabsTrigger value="ai">
-              <SettingsIcon className="h-4 w-4 mr-2" />
-              AI Systems
-            </TabsTrigger>
+            {roles.includes('admin') && (
+              <TabsTrigger value="ai">
+                <SettingsIcon className="h-4 w-4 mr-2" />
+                AI Systems
+              </TabsTrigger>
+            )}
           </TabsList>
 
           {/* Profile Tab */}
@@ -535,10 +537,12 @@ const Settings = () => {
             </Card>
           </TabsContent>
 
-          {/* AI Systems Tab */}
-          <TabsContent value="ai" className="space-y-6">
-            <AICommandCenter />
-          </TabsContent>
+          {/* AI Systems Tab - Admin Only */}
+          {roles.includes('admin') && (
+            <TabsContent value="ai" className="space-y-6">
+              <AICommandCenter />
+            </TabsContent>
+          )}
         </Tabs>
 
         {hasChanges && (
