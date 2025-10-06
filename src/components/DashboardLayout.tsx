@@ -20,6 +20,7 @@ import {
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FloatingActionButton } from "@/components/FloatingActionButton";
+import { RoleSwitcher } from "@/components/RoleSwitcher";
 import { useState, useEffect } from "react";
 
 interface DashboardLayoutProps {
@@ -29,11 +30,18 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  const { roles, loading: roleLoading, isAdmin } = useUserRole(user?.id);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  
+  // Admin view switcher - allows admin to preview different role experiences
+  type ViewMode = "admin" | "stylist" | "client";
+  const [adminViewMode, setAdminViewMode] = useState<ViewMode>("admin");
 
-  // Prioritize stylist role if user has both roles
-  const userRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
+  // Determine actual user role
+  const actualUserRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
+  
+  // If admin is previewing a role, use that view, otherwise use actual role
+  const userRole = isAdmin && adminViewMode !== "admin" ? adminViewMode : actualUserRole;
   const loading = authLoading || roleLoading || (user && roles.length === 0);
 
   // Listen for keyboard shortcuts (stylist only)
@@ -141,14 +149,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </button>
 
               <div className="ml-auto flex items-center gap-3">
-                {roles.includes('admin') && (
-                  <Badge className="bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
-                    <Crown className="h-3 w-3 mr-1" />
-                    ADMIN
-                  </Badge>
+                {isAdmin && (
+                  <>
+                    <RoleSwitcher 
+                      currentView={adminViewMode}
+                      onViewChange={setAdminViewMode}
+                    />
+                    <Badge className="bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
+                      <Crown className="h-3 w-3 mr-1" />
+                      ADMIN
+                    </Badge>
+                  </>
                 )}
                 
-                {userRole && (
+                {userRole && !isAdmin && (
                   <Badge variant="secondary" className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground">
                     {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
                   </Badge>
