@@ -556,6 +556,64 @@ export type Database = {
           },
         ]
       }
+      client_milestones: {
+        Row: {
+          celebrated: boolean | null
+          client_id: string
+          created_at: string
+          discount_amount: number | null
+          discount_code: string | null
+          id: string
+          milestone_type: string
+          milestone_value: number
+          stylist_id: string
+        }
+        Insert: {
+          celebrated?: boolean | null
+          client_id: string
+          created_at?: string
+          discount_amount?: number | null
+          discount_code?: string | null
+          id?: string
+          milestone_type: string
+          milestone_value: number
+          stylist_id: string
+        }
+        Update: {
+          celebrated?: boolean | null
+          client_id?: string
+          created_at?: string
+          discount_amount?: number | null
+          discount_code?: string | null
+          id?: string
+          milestone_type?: string
+          milestone_value?: number
+          stylist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_milestones_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_milestones_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_milestones_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_profiles: {
         Row: {
           allergies: string | null
@@ -1112,6 +1170,68 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_tracking: {
+        Row: {
+          created_at: string
+          id: string
+          is_qualified: boolean | null
+          qualified_at: string | null
+          referral_code: string
+          referred_stylist_id: string
+          referrer_id: string
+          signup_date: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_qualified?: boolean | null
+          qualified_at?: string | null
+          referral_code: string
+          referred_stylist_id: string
+          referrer_id: string
+          signup_date?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_qualified?: boolean | null
+          qualified_at?: string | null
+          referral_code?: string
+          referred_stylist_id?: string
+          referrer_id?: string
+          signup_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_tracking_referred_stylist_id_fkey"
+            columns: ["referred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_tracking_referred_stylist_id_fkey"
+            columns: ["referred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_tracking_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_tracking_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           appointment_id: string | null
@@ -1359,6 +1479,68 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stylist_referrals: {
+        Row: {
+          created_at: string
+          id: string
+          referral_code: string
+          referred_by: string | null
+          reward_tier: string | null
+          stylist_id: string
+          successful_referrals: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referral_code: string
+          referred_by?: string | null
+          reward_tier?: string | null
+          stylist_id: string
+          successful_referrals?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referral_code?: string
+          referred_by?: string | null
+          reward_tier?: string | null
+          stylist_id?: string
+          successful_referrals?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stylist_referrals_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stylist_referrals_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stylist_referrals_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stylist_referrals_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1629,6 +1811,14 @@ export type Database = {
           _user_id: string
         }
         Returns: undefined
+      }
+      check_client_milestones: {
+        Args: { p_client_id: string; p_stylist_id: string }
+        Returns: undefined
+      }
+      generate_referral_code: {
+        Args: { stylist_name: string }
+        Returns: string
       }
       get_calendar_token: {
         Args: { p_connection_id: string }

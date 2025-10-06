@@ -38,6 +38,7 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Referrals = lazy(() => import("./pages/Referrals"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -156,6 +157,11 @@ const App = () => (
               <SubscriptionGate feature="services">
                 <Services />
               </SubscriptionGate>
+            </ProtectedRoute>
+          } />
+          <Route path="/referrals" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <Referrals />
             </ProtectedRoute>
           } />
           <Route path="/access-codes" element={

@@ -25,6 +25,7 @@ import {
   ChevronDown,
   ChevronRight,
   Command,
+  Gift,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NotificationDot } from "@/components/NotificationDot";
@@ -278,6 +279,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "scheduling", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "schedule", title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Set working hours", group: "scheduling", color: "text-blue-400 dark:text-blue-300" },
     { id: "services", title: "Services", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300" },
+    { id: "referrals", title: "Referrals", url: "/referrals", icon: Gift, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "business", color: "text-purple-400 dark:text-purple-300" },
     { 
       id: "finance", 
       title: "Finance", 
