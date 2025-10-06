@@ -32,10 +32,11 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
 
   return (
     <nav 
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t-3 border-foreground shadow-[0_-2px_8px_rgba(0,0,0,0.1)] safe-area-pb" 
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t-2 border-foreground shadow-[0_-2px_8px_rgba(0,0,0,0.1)]" 
       aria-label="Mobile navigation"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
-      <div className="flex justify-around items-center h-20 px-1 gap-1 max-w-full">
+      <div className="flex justify-around items-center h-16 px-2 gap-1 max-w-full">
         {items.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.path);

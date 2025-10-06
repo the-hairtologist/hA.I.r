@@ -183,8 +183,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </header>
 
           {/* Main Content - Proper spacing for both mobile & desktop */}
-          <main className="flex-1 overflow-auto pb-20 lg:pb-6 w-full max-w-full">
-            <div className="w-full max-w-full px-3 py-3 lg:px-6 lg:py-6 animate-fade-in-fast">
+          <main className="flex-1 overflow-x-hidden overflow-y-auto pb-20 lg:pb-6 w-full max-w-full">
+            <div className="w-full max-w-full px-2 py-2 sm:px-3 sm:py-3 lg:px-6 lg:py-6 animate-fade-in-fast overflow-x-hidden">
               <Breadcrumbs />
               {children}
             </div>

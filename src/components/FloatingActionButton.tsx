@@ -80,7 +80,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      className="fixed bottom-[88px] right-4 z-50 flex flex-col-reverse items-end gap-3 lg:bottom-6"
+      className="fixed bottom-24 right-3 z-[60] flex flex-col-reverse items-end gap-2.5 lg:bottom-6 lg:right-4"
     >
       {/* Action Items */}
       <div
@@ -102,14 +102,15 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
               size="icon"
               onClick={action.onClick}
               className={cn(
-                "h-14 w-14 rounded-full shadow-lg border-2 border-white",
-                "bg-gradient-to-br min-h-[56px] min-w-[56px]",
+                "h-12 w-12 rounded-full shadow-lg border-2 border-white",
+                "bg-gradient-to-br min-h-[48px] min-w-[48px]",
                 action.gradient,
-                "hover:scale-105 active:scale-95 transition-all duration-200"
+                "hover:scale-105 active:scale-95 transition-all duration-200",
+                "lg:h-14 lg:w-14 lg:min-h-[56px] lg:min-w-[56px]"
               )}
               aria-label={action.label}
             >
-              <action.icon className="h-6 w-6 text-white" strokeWidth={2.5} />
+              <action.icon className="h-5 w-5 text-white lg:h-6 lg:w-6" strokeWidth={2.5} />
             </Button>
           </div>
         ))}
@@ -124,11 +125,12 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         }}
         style={{
           background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-          border: '3px solid #ffffff',
+          border: '2px solid #ffffff',
           boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
         }}
         className={cn(
-          "h-16 w-16 rounded-full min-h-[64px] min-w-[64px]",
+          "h-14 w-14 rounded-full min-h-[56px] min-w-[56px]",
+          "lg:h-16 lg:w-16 lg:min-h-[64px] lg:min-w-[64px]",
           "hover:scale-105 active:scale-95",
           "transition-all duration-200",
           "flex items-center justify-center",
@@ -138,8 +140,8 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       >
         <Plus 
           className="text-white" 
-          size={32}
-          strokeWidth={3}
+          size={28}
+          strokeWidth={2.5}
           style={{ 
             filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
           }}

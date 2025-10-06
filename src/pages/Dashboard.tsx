@@ -679,9 +679,9 @@ const Dashboard = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="px-3 py-3 sm:px-4 lg:pl-12 overflow-x-hidden max-w-full">
+      <main id="main-content" role="main" aria-label="Dashboard" className="max-w-full overflow-x-hidden">
         {/* Mobile: Compact Hero | Desktop: Full Window Frame */}
-        <div className="mb-4 lg:mb-12 lg:window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast max-w-full rounded-xl lg:rounded-none border-2 lg:border-4 border-foreground">
+        <div className="mb-3 sm:mb-4 lg:mb-12 lg:window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast w-full rounded-lg sm:rounded-xl lg:rounded-none border-2 lg:border-4 border-foreground">
           {/* Window titlebar - Desktop only */}
           <div className="window-titlebar hidden lg:flex">
             <span className="text-background font-mono text-sm font-bold">
@@ -697,8 +697,8 @@ const Dashboard = () => {
           <div className="bg-blue-600 p-3 sm:p-4 md:p-6 relative overflow-hidden">
             <div className="window-scrollbar hidden lg:block"></div>
             
-            <div className="max-w-4xl pr-0 sm:pr-4 md:pr-8">
-              <h2 className="text-lg sm:text-2xl lg:text-4xl font-display font-black mb-2 sm:mb-3 lg:mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+            <div className="max-w-4xl pr-0 sm:pr-4 md:pr-8 w-full">
+              <h2 className="text-base sm:text-lg md:text-2xl lg:text-4xl font-display font-black mb-2 sm:mb-3 lg:mb-4 text-pink-400 uppercase leading-tight animate-fade-in break-words" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
