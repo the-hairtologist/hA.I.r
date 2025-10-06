@@ -44,9 +44,9 @@ const Index = () => {
             <div className="window-titlebar">
               <span className="text-background font-mono text-xs sm:text-sm font-bold">hA.I.r / welcome</span>
               <div className="window-controls">
-                <div className="window-control bg-background"></div>
-                <div className="window-control bg-background"></div>
-                <div className="window-control bg-background"></div>
+                <div className="window-control" style={{ backgroundColor: '#ef4444' }}></div>
+                <div className="window-control" style={{ backgroundColor: '#eab308' }}></div>
+                <div className="window-control" style={{ backgroundColor: '#22c55e' }}></div>
               </div>
             </div>
             

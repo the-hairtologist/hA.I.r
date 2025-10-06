@@ -51,16 +51,16 @@
     min-height: 100dvh;
   }
   
-  /* Responsive text sizing based on device */
+  /* Responsive text sizing based on device - UNIFIED */
   @media (max-width: 640px) {
     html {
-      font-size: 14px; /* Slightly smaller base for mobile */
+      font-size: 16px; /* Same as desktop for consistency */
     }
   }
   
   @media (min-width: 641px) and (max-width: 1024px) {
     html {
-      font-size: 15px; /* Medium for tablets */
+      font-size: 16px; /* Same as desktop for consistency */
     }
   }
   
