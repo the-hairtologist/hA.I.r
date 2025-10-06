@@ -158,6 +158,10 @@ export default {
           "95%": { transform: "translateY(-5px)" },
           "100%": { transform: "translateY(0)" },
         },
+        "glow-soft": {
+          "0%, 100%": { boxShadow: "0 8px 32px rgba(249, 115, 22, 0.3)" },
+          "50%": { boxShadow: "0 8px 48px rgba(249, 115, 22, 0.5)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.3s ease-out",
@@ -172,6 +176,7 @@ export default {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "pulse-subtle": "pulse-subtle 4s ease-in-out infinite",
         "bounce-attention": "bounce-attention 5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
+        "glow-soft": "glow-soft 3s ease-in-out infinite",
       },
     },
   },
