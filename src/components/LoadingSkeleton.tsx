@@ -49,13 +49,82 @@ export const PortfolioSkeleton = () => (
 export const DashboardStatsSkeleton = () => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     {[...Array(4)].map((_, i) => (
-      <Card key={i} className="animate-fade-in shimmer" style={{ animationDelay: `${i * 50}ms` }}>
+      <Card key={i} className="animate-fade-in shimmer brutal-border brutal-shadow-xs" style={{ animationDelay: `${i * 50}ms` }}>
         <CardHeader>
           <Skeleton className="h-4 w-24 mb-2 shimmer" />
           <Skeleton className="h-8 w-16 shimmer" />
         </CardHeader>
       </Card>
     ))}
+  </div>
+);
+
+export const QuickActionsSkeleton = () => (
+  <Card className="mb-8 animate-fade-in shimmer brutal-border backdrop-blur-xl bg-gradient-to-br from-background/80 to-card/60">
+    <CardHeader className="pb-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <Skeleton className="h-5 w-5 rounded shimmer" />
+            <Skeleton className="h-6 w-48 shimmer" />
+            <Skeleton className="h-5 w-16 shimmer" />
+          </div>
+          <Skeleton className="h-4 w-64 shimmer" />
+        </div>
+        <Skeleton className="h-9 w-24 shimmer" />
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[...Array(3)].map((_, i) => (
+          <Card key={i} className="brutal-border brutal-shadow-xs shimmer" style={{ animationDelay: `${i * 50}ms` }}>
+            <CardContent className="p-5">
+              <Skeleton className="h-12 w-12 rounded-lg mb-3 shimmer" />
+              <Skeleton className="h-5 w-32 mb-2 shimmer" />
+              <Skeleton className="h-4 w-40 shimmer" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </CardContent>
+  </Card>
+);
+
+export const DashboardFullSkeleton = () => (
+  <div className="space-y-8 animate-fade-in">
+    <QuickActionsSkeleton />
+    <DashboardStatsSkeleton />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <Card className="shimmer brutal-border brutal-shadow-xs">
+        <CardHeader>
+          <Skeleton className="h-6 w-40 shimmer" />
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <Skeleton className="h-10 w-10 rounded-full shimmer" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-full shimmer" />
+                <Skeleton className="h-3 w-3/4 shimmer" />
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+      <Card className="shimmer brutal-border brutal-shadow-xs">
+        <CardHeader>
+          <Skeleton className="h-6 w-40 shimmer" />
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="space-y-2">
+              <Skeleton className="h-4 w-full shimmer" />
+              <Skeleton className="h-3 w-5/6 shimmer" />
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    </div>
   </div>
 );
 
