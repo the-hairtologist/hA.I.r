@@ -11,7 +11,7 @@ interface ProgressiveLoadingStateProps {
 }
 
 export const ProgressiveLoadingState = ({
-  message = "Loading...",
+  message = "Getting everything ready...",
   estimatedDuration = 3000,
   onComplete,
   className,

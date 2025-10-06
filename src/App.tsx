@@ -64,7 +64,7 @@ const App = () => (
           <PerformanceOverlay />
           <BrowserRouter>
             <RoleSwitchProtection />
-            <Suspense fallback={<LoadingSpinner />}>
+            <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
               <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Index />} />

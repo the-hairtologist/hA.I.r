@@ -346,7 +346,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     return (
       <Sidebar collapsible="icon" className="border-r">
         <SidebarContent className="flex items-center justify-center">
-          <div className="text-muted-foreground">Loading...</div>
+          <div className="text-muted-foreground text-sm">Loading menu...</div>
         </SidebarContent>
       </Sidebar>
     );

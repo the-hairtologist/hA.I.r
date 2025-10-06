@@ -18,7 +18,7 @@ export function EnhancedSkeleton({ variant = "brutal", className }: EnhancedSkel
       role="status"
       aria-label="Loading content"
     >
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only">Loading content...</span>
     </div>
   );
 }

@@ -10,7 +10,7 @@ interface LoadingSpinnerProps {
 export const LoadingSpinner = ({ 
   size = "md", 
   className,
-  message = "Loading..."
+  message = "Just a moment..."
 }: LoadingSpinnerProps) => {
   const sizeClasses = {
     sm: "h-6 w-6",

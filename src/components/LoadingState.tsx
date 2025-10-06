@@ -14,7 +14,7 @@ interface LoadingStateProps {
 }
 
 export const LoadingState = ({ 
-  message = "Loading...", 
+  message = "Just a moment...", 
   size = "md",
   fullScreen = false,
   className 

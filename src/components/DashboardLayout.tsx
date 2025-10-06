@@ -115,7 +115,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
             <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
           </div>
-          <p className="text-muted-foreground font-medium" role="status" aria-live="polite">Loading...</p>
+          <p className="text-muted-foreground font-medium" role="status" aria-live="polite">Loading your dashboard...</p>
         </div>
       </div>
     );
