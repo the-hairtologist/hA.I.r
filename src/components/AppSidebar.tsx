@@ -29,6 +29,7 @@ import {
   Shield,
   Crown,
   Activity,
+  Book as BookIcon,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NotificationDot } from "@/components/NotificationDot";
@@ -308,6 +309,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   // Admin-only items
   const adminItems: SidebarItem[] = isAdmin ? [
+    { id: "app-directory", title: "App Directory", url: "/app-directory", icon: BookIcon, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "admin", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "admin-dashboard", title: "Admin Dashboard", url: "/admin/dashboard", icon: Crown, gradient: "bg-[image:var(--gradient-warning)]", group: "admin", color: "text-warning" },
     { id: "admin-users", title: "User Management", url: "/admin/users", icon: Shield, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "admin", color: "text-purple-400 dark:text-purple-300" },
     { id: "system-health", title: "System Health", url: "/system-health", icon: Activity, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "admin", color: "text-green-400 dark:text-green-300" },
