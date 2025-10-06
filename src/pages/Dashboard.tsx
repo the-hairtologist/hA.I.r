@@ -47,6 +47,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { IntegrationSuggestions } from "@/components/IntegrationSuggestions";
 import { PredictiveClientInsights } from "@/components/PredictiveClientInsights";
+import { NotificationEnhancer } from "@/components/NotificationEnhancer";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 interface SortableSectionProps {
   id: string;
@@ -123,6 +125,9 @@ const Dashboard = () => {
     "reviews",
     "features"
   ]);
+
+  // Enable analytics tracking
+  useAnalytics();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -675,6 +680,11 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
+      {/* Enhanced notification system */}
+      {user && userRole && (
+        <NotificationEnhancer userId={user.id} userRole={userRole as "stylist" | "client"} />
+      )}
+      
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
