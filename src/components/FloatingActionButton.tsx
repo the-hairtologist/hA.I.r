@@ -123,7 +123,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         }}
         className={cn(
           "h-14 w-14 rounded-full shadow-xl border-3 border-foreground",
-          "bg-primary hover:bg-primary/90",
+          "bg-orange-500 hover:bg-orange-600",
           "transition-all duration-300 ease-out",
           "flex items-center justify-center",
           "hover:scale-110 active:scale-95",
@@ -131,7 +131,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         )}
         aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
       >
-        <Plus className="h-7 w-7 text-primary-foreground" strokeWidth={3} />
+        <Plus className="h-7 w-7 text-white" strokeWidth={3} />
       </Button>
     </div>
   );
