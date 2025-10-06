@@ -168,8 +168,8 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
         <div className="p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5">
           <div className="flex flex-col items-center text-center space-y-6">
             {/* Icon */}
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <Icon className="h-10 w-10 text-white" />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center brutal-border shadow-brutal-lg">
+              <Icon className="h-10 w-10 text-on-surface-primary" />
             </div>
 
             {/* Title */}

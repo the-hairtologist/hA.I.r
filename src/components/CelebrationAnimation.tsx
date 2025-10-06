@@ -81,7 +81,7 @@ export const CelebrationAnimation = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm animate-fade-in" style={{ backgroundColor: 'var(--brutal-overlay)' }}>
       {showConfetti && (
         <Confetti
           width={window.innerWidth}
@@ -92,7 +92,7 @@ export const CelebrationAnimation = ({
         />
       )}
       
-      <Card className="relative max-w-md w-full mx-4 border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-scale-in bg-gradient-to-br from-primary/10 via-background to-accent/10">
+      <Card className="relative max-w-md w-full mx-4 brutal-border shadow-brutal-2xl animate-scale-in bg-gradient-to-br from-primary/10 via-background to-accent/10">
         <Button
           variant="ghost"
           size="icon"
@@ -121,14 +121,14 @@ export const CelebrationAnimation = ({
                 <span>You've earned a special reward!</span>
               </div>
               
-              <div className="bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 p-6 rounded-lg border-[2px] border-foreground">
+              <div className="bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 p-6 rounded-lg brutal-border-subtle">
                 <div className="space-y-3">
                   <div className="flex items-center justify-center gap-2">
                     <Sparkles className="h-5 w-5 text-primary" />
                     <p className="text-sm font-semibold">Discount Code</p>
                   </div>
                   
-                  <div className="font-mono text-2xl font-bold tracking-wider bg-background px-4 py-3 rounded border-[2px] border-foreground">
+                  <div className="font-mono text-2xl font-bold tracking-wider bg-background px-4 py-3 rounded brutal-border-subtle">
                     {discountCode}
                   </div>
                   
@@ -141,7 +141,7 @@ export const CelebrationAnimation = ({
                   <Button
                     onClick={handleCopyCode}
                     variant="default"
-                    className="w-full border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                    className="w-full brutal-button brutal-hover"
                   >
                     {copied ? "✓ Copied!" : "Copy Code"}
                   </Button>
@@ -153,7 +153,7 @@ export const CelebrationAnimation = ({
           <Button
             onClick={handleClose}
             variant="outline"
-            className="mt-6 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+            className="mt-6 brutal-button"
           >
             Continue
           </Button>

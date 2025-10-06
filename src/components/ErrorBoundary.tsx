@@ -30,10 +30,10 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-          <Card className="max-w-md w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-red-400">
+          <Card className="max-w-md w-full brutal-border shadow-brutal-2xl bg-red-400">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-full bg-card border-2 border-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <div className="w-12 h-12 rounded-full bg-card border-2 border-foreground flex items-center justify-center brutal-shadow-sm">
                   <AlertTriangle className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
@@ -50,7 +50,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </p>
               
               {this.state.error && (
-                <details className="text-xs bg-card p-3 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                <details className="text-xs bg-card p-3 rounded-lg brutal-border-subtle brutal-shadow-sm">
                   <summary className="cursor-pointer font-bold text-foreground mb-2">
                     Error Details (for support)
                   </summary>
@@ -63,14 +63,14 @@ export class ErrorBoundary extends Component<Props, State> {
               <div className="flex gap-2 pt-2">
                 <Button
                   onClick={() => window.location.href = '/dashboard'}
-                  className="flex-1 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 transition-all"
+                  className="flex-1 brutal-button brutal-hover"
                 >
                   Go to Dashboard
                 </Button>
                 <Button
                   onClick={() => window.location.reload()}
                   variant="outline"
-                  className="flex-1 border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:-translate-y-0.5 transition-all"
+                  className="flex-1 brutal-button brutal-hover"
                 >
                   Reload Page
                 </Button>

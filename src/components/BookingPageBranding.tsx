@@ -16,7 +16,7 @@ export const BookingPageBranding = ({ className = "" }: BookingPageBrandingProps
       <CardContent className="p-6 space-y-4">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-            <Sparkles className="h-6 w-6 text-white" />
+            <Sparkles className="h-6 w-6 text-on-surface-primary" />
           </div>
           <div className="flex-1 space-y-2">
             <h3 className="font-semibold text-lg">Powered by hA.I.r</h3>

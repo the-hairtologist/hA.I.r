@@ -110,7 +110,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[image:var(--gradient-bg-main)]">
-        <div className="text-center bg-card p-8 rounded-xl border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in-fast">
+        <div className="text-center bg-card p-8 rounded-xl brutal-border shadow-brutal-2xl animate-fade-in-fast">
           <div className="relative mb-4">
             <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto" aria-hidden="true" />
             <div className="absolute inset-0 h-12 w-12 mx-auto rounded-full border-4 border-primary/20 border-t-primary animate-spin" />

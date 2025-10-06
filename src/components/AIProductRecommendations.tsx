@@ -144,7 +144,7 @@ export const AIProductRecommendations = ({
   );
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+    <Card className="brutal-border shadow-brutal-lg">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>

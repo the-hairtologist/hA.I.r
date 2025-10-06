@@ -87,12 +87,12 @@ export const AIEnhancedEmptyState = ({
 
   return (
     <div className="flex items-center justify-center min-h-[400px] p-4">
-      <Card className="max-w-md w-full border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-muted/30 to-background">
+      <Card className="max-w-md w-full brutal-border shadow-brutal-xl bg-gradient-to-br from-muted/30 to-background">
         <CardContent className="pt-8 pb-6 px-6 text-center space-y-6">
           {/* Icon */}
           <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center border-[3px] border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
-              <Icon className="h-8 w-8 text-white" />
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center brutal-border shadow-brutal-lg-soft">
+              <Icon className="h-8 w-8 text-on-surface-primary" />
             </div>
           </div>
 
@@ -128,7 +128,7 @@ export const AIEnhancedEmptyState = ({
           {actionLabel && onAction && (
             <Button
               onClick={onAction}
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-display border-[3px] border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] transition-all"
+              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-on-surface-primary font-display brutal-border shadow-brutal-lg-soft hover:shadow-brutal-xl-soft transition-all"
             >
               {actionLabel}
             </Button>

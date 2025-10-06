@@ -213,6 +213,41 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 5%;
     --sidebar-border: 0 0% 85%;
     --sidebar-ring: 210 100% 50%;
+    
+    /* ============================================ */
+    /* BRUTAL DESIGN SYSTEM - Standardized Tokens */
+    /* ============================================ */
+    
+    /* Brutal Border Widths */
+    --brutal-border-subtle: 2px;
+    --brutal-border-standard: 3px;
+    --brutal-border-bold: 4px;
+    
+    /* Brutal Shadow System - Consistent offsets */
+    --brutal-shadow-xs: 1px 1px 0px 0px hsl(var(--foreground));
+    --brutal-shadow-sm: 2px 2px 0px 0px hsl(var(--foreground));
+    --brutal-shadow-md: 3px 3px 0px 0px hsl(var(--foreground));
+    --brutal-shadow-lg: 4px 4px 0px 0px hsl(var(--foreground));
+    --brutal-shadow-xl: 6px 6px 0px 0px hsl(var(--foreground));
+    --brutal-shadow-2xl: 8px 8px 0px 0px hsl(var(--foreground));
+    
+    /* Brutal Shadows with Opacity (for subtle variants) */
+    --brutal-shadow-sm-soft: 2px 2px 0px 0px hsl(var(--foreground) / 0.2);
+    --brutal-shadow-md-soft: 3px 3px 0px 0px hsl(var(--foreground) / 0.2);
+    --brutal-shadow-lg-soft: 4px 4px 0px 0px hsl(var(--foreground) / 0.2);
+    --brutal-shadow-xl-soft: 6px 6px 0px 0px hsl(var(--foreground) / 0.3);
+    
+    /* On-Surface Colors (for icons on colored backgrounds) */
+    --on-surface-primary: 0 0% 100%;
+    --on-surface-secondary: 0 0% 100%;
+    --on-surface-accent: 0 0% 100%;
+    --on-surface-success: 0 0% 100%;
+    --on-surface-warning: 0 0% 100%;
+    --on-surface-destructive: 0 0% 100%;
+    --on-surface-muted: 0 0% 20%;
+    
+    /* Brutal Overlay (for modals/dialogs) */
+    --brutal-overlay: hsl(var(--foreground) / 0.5);
   }
 
   .dark {
@@ -719,22 +754,159 @@ All colors MUST be HSL.
 
 /* Brutalist Design System Utilities */
 @layer utilities {
-  /* Brutalist borders - consistent 3px border */
+  /* ============================================ */
+  /* BRUTAL BORDERS */
+  /* ============================================ */
+  .brutal-border-subtle {
+    border-width: var(--brutal-border-subtle);
+    border-style: solid;
+    border-color: hsl(var(--foreground));
+  }
+  
   .brutal-border {
+    border-width: var(--brutal-border-standard);
+    border-style: solid;
+    border-color: hsl(var(--foreground));
+  }
+  
+  .brutal-border-bold {
+    border-width: var(--brutal-border-bold);
+    border-style: solid;
+    border-color: hsl(var(--foreground));
+  }
+
+  /* ============================================ */
+  /* BRUTAL SHADOWS */
+  /* ============================================ */
+  .brutal-shadow-xs {
+    box-shadow: var(--brutal-shadow-xs);
+  }
+  
+  .brutal-shadow-sm {
+    box-shadow: var(--brutal-shadow-sm);
+  }
+  
+  .brutal-shadow {
+    box-shadow: var(--brutal-shadow-md);
+  }
+  
+  .brutal-shadow-md {
+    box-shadow: var(--brutal-shadow-md);
+  }
+  
+  .brutal-shadow-lg {
+    box-shadow: var(--brutal-shadow-lg);
+  }
+  
+  .brutal-shadow-xl {
+    box-shadow: var(--brutal-shadow-xl);
+  }
+  
+  .brutal-shadow-2xl {
+    box-shadow: var(--brutal-shadow-2xl);
+  }
+  
+  /* Soft variants */
+  .brutal-shadow-sm-soft {
+    box-shadow: var(--brutal-shadow-sm-soft);
+  }
+  
+  .brutal-shadow-md-soft {
+    box-shadow: var(--brutal-shadow-md-soft);
+  }
+  
+  .brutal-shadow-lg-soft {
+    box-shadow: var(--brutal-shadow-lg-soft);
+  }
+  
+  .brutal-shadow-xl-soft {
+    box-shadow: var(--brutal-shadow-xl-soft);
+  }
+
+  /* ============================================ */
+  /* BRUTAL HOVER EFFECTS */
+  /* ============================================ */
+  .brutal-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .brutal-hover:hover {
+    box-shadow: var(--brutal-shadow-xl);
+    transform: translateY(-2px);
+  }
+
+  /* ============================================ */
+  /* BRUTAL CARD COMPONENT */
+  /* ============================================ */
+  .brutal-card {
+    border: var(--brutal-border-standard) solid hsl(var(--foreground));
+    border-radius: var(--radius);
+    box-shadow: var(--brutal-shadow-lg);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .brutal-card:hover {
+    box-shadow: var(--brutal-shadow-xl);
+    transform: translateY(-2px);
+  }
+
+  /* ============================================ */
+  /* BRUTAL BUTTON COMPONENT */
+  /* ============================================ */
+  .brutal-button {
+    border: var(--brutal-border-standard) solid hsl(var(--foreground));
+    box-shadow: var(--brutal-shadow-sm);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .brutal-button:hover {
+    box-shadow: var(--brutal-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .brutal-button:active {
+    box-shadow: var(--brutal-shadow-xs);
+    transform: translate(2px, 2px);
+  }
+  
+  /* ============================================ */
+  /* ON-SURFACE TEXT COLORS */
+  /* ============================================ */
+  .text-on-surface-primary {
+    color: hsl(var(--on-surface-primary));
+  }
+  
+  .text-on-surface-secondary {
+    color: hsl(var(--on-surface-secondary));
+  }
+  
+  .text-on-surface-accent {
+    color: hsl(var(--on-surface-accent));
+  }
+  
+  .text-on-surface-success {
+    color: hsl(var(--on-surface-success));
+  }
+  
+  .text-on-surface-warning {
+    color: hsl(var(--on-surface-warning));
+  }
+  
+  .text-on-surface-destructive {
+    color: hsl(var(--on-surface-destructive));
+  }
+  
+  .text-on-surface-muted {
+    color: hsl(var(--on-surface-muted));
+  }
+
+  /* ============================================ */
+  /* LEGACY SUPPORT (will be deprecated) */
+  /* ============================================ */
+  .brutal-border-old {
     border: 3px solid hsl(var(--foreground));
   }
 
-  /* Brutalist shadows - 5px offset for cards */
-  .brutal-shadow {
-    box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
-  }
-
-  /* Smaller brutalist shadow for buttons/small elements */
-  .brutal-shadow-sm {
-    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
-  }
-
-  /* Hover effect for brutalist cards */
   .brutal-shadow-hover {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -744,37 +916,9 @@ All colors MUST be HSL.
     transform: translateY(-2px);
   }
 
-  /* Complete brutalist card styling */
-  .brutal-card {
-    border: 3px solid hsl(var(--foreground));
-    border-radius: var(--radius);
-    box-shadow: 5px 5px 0px 0px hsl(var(--foreground));
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .brutal-card:hover {
-    box-shadow: 7px 7px 0px 0px hsl(var(--primary));
-    transform: translateY(-2px);
-  }
-
-  /* Complete brutalist button effects */
-  .brutal-button {
-    border: 3px solid hsl(var(--foreground));
-    box-shadow: 3px 3px 0px 0px hsl(var(--foreground));
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .brutal-button:hover {
-    box-shadow: 5px 5px 0px 0px hsl(var(--primary));
-    transform: translateY(-1px);
-  }
-
-  .brutal-button:active {
-    box-shadow: 1px 1px 0px 0px hsl(var(--foreground));
-    transform: translate(2px, 2px);
-  }
-
+  /* ============================================ */
   /* Glassmorphism Utilities */
+  /* ============================================ */
   .glass {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));

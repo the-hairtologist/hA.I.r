@@ -183,7 +183,7 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
                   event.type === "milestone" && "bg-gradient-to-br from-primary to-accent animate-pulse"
                 )}
               >
-                {event.type === "appointment" && <Calendar className="h-5 w-5 text-white" />}
+                {event.type === "appointment" && <Calendar className="h-5 w-5 text-on-surface-primary" />}
                 {event.type === "milestone" && <span className="text-xl">🎉</span>}
               </div>
 

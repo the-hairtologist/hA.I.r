@@ -111,7 +111,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
                 "hover:scale-110 transition-all duration-200"
               )}
             >
-              <action.icon className="h-5 w-5 text-white" />
+              <action.icon className="h-5 w-5 text-on-surface-primary" />
             </Button>
           </div>
         ))}
@@ -155,7 +155,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           }}
           aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
         >
-          <Plus className="w-[clamp(1.5rem,4vw,1.75rem)] h-[clamp(1.5rem,4vw,1.75rem)] text-white drop-shadow-sm" strokeWidth={2.5} />
+          <Plus className="w-[clamp(1.5rem,4vw,1.75rem)] h-[clamp(1.5rem,4vw,1.75rem)] text-on-surface-primary drop-shadow-sm" strokeWidth={2.5} />
         </Button>
       </div>
     </div>

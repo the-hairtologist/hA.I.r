@@ -40,7 +40,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
       <CardHeader>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-primary flex items-center justify-center">
-            <TrendingUp className="h-4 w-4 text-white" />
+            <TrendingUp className="h-4 w-4 text-on-surface-primary" />
           </div>
           <div>
             <CardTitle className="text-base font-display">Client Insights</CardTitle>

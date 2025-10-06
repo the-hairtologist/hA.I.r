@@ -78,7 +78,7 @@ export const SmartSchedulingSuggestions = ({
       <CardHeader>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-white" />
+            <Sparkles className="h-4 w-4 text-on-surface-primary" />
           </div>
           <div>
             <CardTitle className="text-base font-display">Smart Scheduling</CardTitle>
