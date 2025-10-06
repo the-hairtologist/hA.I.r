@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen, Search, Video, FileText, Lightbulb, TrendingUp, Award, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useUserRole } from "@/hooks/useUserRole";
 
 
 const Knowledge = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const { isStylist, isClient } = useUserRole();
 
   const categories = [
     { id: "all", label: "All Topics", icon: BookOpen },
@@ -23,65 +25,71 @@ const Knowledge = () => {
     // Client-Focused Articles
     {
       id: 1,
-      title: "Preparing for Your Hair Appointment: A Complete Guide",
+      title: "Preparing for Your Hair Appointment: What to Know",
       category: "business",
       description: "What to do before your appointment, what to bring, and how to ensure the best results from your salon visit.",
       readTime: "6 min read",
       type: "article",
       featured: true,
-      url: "https://www.byrdie.com/how-to-prepare-for-hair-appointment"
+      targetAudience: "client" as const,
+      url: "https://www.allure.com/story/how-to-prepare-for-a-hair-appointment"
     },
     {
       id: 2,
-      title: "How to Communicate Your Hair Goals to Your Stylist",
+      title: "How to Communicate Your Hair Goals",
       category: "business",
-      description: "Learn how to describe what you want, bring inspiration photos effectively, and set realistic expectations.",
+      description: "Learn how to describe what you want, bring inspiration photos effectively, and set realistic expectations with your stylist.",
       readTime: "5 min read",
       type: "article",
       featured: true,
-      url: "https://www.allure.com/story/how-to-talk-to-your-hairstylist"
+      targetAudience: "client" as const,
+      url: "https://www.byrdie.com/how-to-talk-to-your-hairstylist-5184037"
     },
     {
       id: 3,
-      title: "Understanding Hair Color Pricing: Why Does It Cost That?",
+      title: "Understanding Hair Color Pricing",
       category: "business",
-      description: "Breaking down what goes into professional color services, from products to time and expertise.",
+      description: "Why professional color services cost what they do - from products to time and expertise required.",
       readTime: "7 min read",
       type: "article",
       featured: false,
-      url: "https://www.modernsalon.com/hair-color/article/21150567/explaining-hair-color-pricing-to-clients"
+      targetAudience: "both" as const,
+      url: "https://www.modernsalon.com/hair-color"
     },
     {
       id: 4,
-      title: "Aftercare 101: Making Your Color Last Longer",
+      title: "Making Your Color Last: Aftercare Tips",
       category: "techniques",
       description: "Essential tips for maintaining your color, recommended products, and what to avoid after salon visits.",
       readTime: "8 min read",
       type: "article",
       featured: true,
-      url: "https://www.redken.com/blog/hair-color/how-to-maintain-hair-color"
+      targetAudience: "client" as const,
+      url: "https://www.matrix.com/blog/how-to-make-hair-color-last-longer"
     },
     {
       id: 5,
-      title: "Realistic Expectations: The Truth About Color Transformations",
+      title: "Color Transformation Reality Check",
       category: "techniques",
-      description: "Why going from dark to platinum takes time, understanding hair health limits, and planning multi-session transformations.",
+      description: "Why going from dark to platinum takes time, understanding hair health, and planning multi-session transformations.",
       readTime: "10 min read",
       type: "article",
       featured: true,
-      url: "https://www.behindthechair.com/articles/managing-client-expectations-for-color-corrections/"
+      targetAudience: "both" as const,
+      url: "https://www.allure.com/story/realistic-hair-color-expectations"
     },
     
     // Stylist Technique Articles
     {
       id: 6,
-      title: "Mastering Balayage: From Consultation to Final Look",
+      title: "Mastering Balayage Technique",
       category: "techniques",
-      description: "A comprehensive guide to creating natural-looking balayage with proper sectioning, placement, and blending techniques.",
+      description: "Complete guide to creating natural-looking balayage with proper sectioning, placement, and blending.",
       readTime: "12 min read",
       type: "article",
       featured: true,
-      url: "https://www.behindthechair.com/articles/balayage-101-the-ultimate-guide-to-beautiful-balayage/"
+      targetAudience: "stylist" as const,
+      url: "https://www.behindthechair.com/balayage"
     },
     {
       id: 7,
@@ -91,17 +99,19 @@ const Knowledge = () => {
       readTime: "8 min read",
       type: "article",
       featured: false,
-      url: "https://www.matrix.com/blog/hair-color-theory-101"
+      targetAudience: "stylist" as const,
+      url: "https://www.matrix.com/blog/color-theory"
     },
     {
       id: 8,
-      title: "Working with Different Hair Textures and Porosity",
+      title: "Working with Different Hair Textures",
       category: "techniques",
       description: "How texture and porosity affect color results, processing times, and formula adjustments needed.",
       readTime: "11 min read",
       type: "article",
       featured: false,
-      url: "https://www.redken.com/blog/hair-care/hair-porosity-guide"
+      targetAudience: "stylist" as const,
+      url: "https://www.naturallycurly.com/curlreading/hair-color/hair-porosity-guide"
     },
     {
       id: 9,
@@ -111,39 +121,43 @@ const Knowledge = () => {
       readTime: "10 min read",
       type: "article",
       featured: false,
-      url: "https://www.redken.com/blog/hair-care/how-to-fix-hair-color-mistakes"
+      targetAudience: "stylist" as const,
+      url: "https://www.redken.com/blog/how-to-fix-hair-color-mistakes"
     },
     {
       id: 10,
-      title: "Understanding Hair Damage and How to Prevent It",
+      title: "Understanding Hair Damage Prevention",
       category: "techniques",
-      description: "Learn the science behind hair damage and how to maintain hair integrity during chemical services.",
+      description: "The science behind hair damage and how to maintain hair integrity during chemical services.",
       readTime: "11 min read",
       type: "article",
       featured: false,
-      url: "https://www.olaplex.com/blogs/blog/hair-damage-causes-prevention-repair"
+      targetAudience: "stylist" as const,
+      url: "https://www.olaplex.com/blogs/blog/understanding-hair-damage"
     },
     
     // Stylist Business Articles
     {
       id: 11,
-      title: "The Art of the Consultation: Beyond Just Listening",
+      title: "Advanced Consultation Techniques",
       category: "business",
-      description: "Advanced consultation techniques including reading body language, asking the right questions, and documenting properly.",
+      description: "Beyond basic listening - reading body language, asking the right questions, and documenting effectively.",
       readTime: "9 min read",
       type: "article",
       featured: false,
-      url: "https://www.behindthechair.com/articles/mastering-the-client-consultation/"
+      targetAudience: "stylist" as const,
+      url: "https://www.behindthechair.com/articles/consultation-techniques"
     },
     {
       id: 12,
-      title: "Handling Difficult Conversations with Clients",
+      title: "Handling Difficult Client Conversations",
       category: "business",
       description: "How to say no professionally, manage unrealistic expectations, and navigate pricing discussions.",
       readTime: "8 min read",
       type: "article",
       featured: false,
-      url: "https://www.modernsalon.com/business/article/21136755/difficult-client-conversations"
+      targetAudience: "stylist" as const,
+      url: "https://www.modernsalon.com/business/management"
     },
     {
       id: 13,
@@ -153,17 +167,19 @@ const Knowledge = () => {
       readTime: "15 min read",
       type: "article",
       featured: false,
-      url: "https://www.modernsalon.com/business/management/article/21164543/how-to-build-a-sixfigure-salon-career"
+      targetAudience: "stylist" as const,
+      url: "https://www.modernsalon.com/business"
     },
     {
       id: 14,
-      title: "Time Management: Booking Strategically for Profit",
+      title: "Strategic Time Management for Stylists",
       category: "business",
       description: "Understanding service timing, building in buffer time, and maximizing your chair time revenue.",
       readTime: "10 min read",
       type: "article",
       featured: false,
-      url: "https://www.glossgenius.com/blog/salon-scheduling-tips"
+      targetAudience: "stylist" as const,
+      url: "https://www.glossgenius.com/blog/time-management-for-salon-owners"
     },
     {
       id: 15,
@@ -173,7 +189,8 @@ const Knowledge = () => {
       readTime: "12 min read",
       type: "article",
       featured: false,
-      url: "https://www.squareup.com/us/en/townsquare/client-retention-strategies-salons"
+      targetAudience: "stylist" as const,
+      url: "https://www.squareup.com/us/en/townsquare/salon-client-retention"
     },
     {
       id: 16,
@@ -183,63 +200,76 @@ const Knowledge = () => {
       readTime: "9 min read",
       type: "article",
       featured: false,
-      url: "https://www.glossgenius.com/blog/instagram-tips-for-hair-stylists"
+      targetAudience: "stylist" as const,
+      url: "https://www.glossgenius.com/blog/instagram-marketing-for-salons"
     },
     {
       id: 17,
       title: "Photographing Your Work: Portfolio Building",
       category: "business",
-      description: "Lighting, angles, and editing tips to showcase your work professionally on social media and your website.",
+      description: "Lighting, angles, and editing tips to showcase your work professionally on social media.",
       readTime: "8 min read",
       type: "article",
       featured: false,
-      url: "https://www.behindthechair.com/articles/how-to-photograph-hair/"
+      targetAudience: "stylist" as const,
+      url: "https://www.behindthechair.com/articles/how-to-photograph-hair"
     },
     {
       id: 18,
-      title: "Retail Without the Pushy Sales Pitch",
+      title: "Retail Without Being Pushy",
       category: "business",
-      description: "How to recommend products authentically, increase retail revenue, and help clients maintain their results.",
+      description: "How to recommend products authentically, increase retail revenue, and help clients maintain results.",
       readTime: "7 min read",
       type: "article",
       featured: false,
-      url: "https://www.modernsalon.com/business/article/21147826/how-to-boost-retail-sales"
+      targetAudience: "stylist" as const,
+      url: "https://www.modernsalon.com/business/retail-sales"
     },
     
-    // Trends
+    // Trends for Both
     {
       id: 19,
-      title: "2025 Hair Color Trends You Need to Know",
+      title: "2025 Hair Color Trends",
       category: "trends",
-      description: "The hottest color trends your clients will be asking for this year, from butter blonde to rich espresso.",
+      description: "The hottest color trends this year, from butter blonde to rich espresso browns.",
       readTime: "6 min read",
       type: "article",
       featured: true,
-      url: "https://www.allure.com/gallery/spring-summer-hair-color-trends"
+      targetAudience: "both" as const,
+      url: "https://www.allure.com/gallery/hair-color-trends"
     },
     {
       id: 20,
-      title: "Seasonal Hair Care: Adjusting Services Year-Round",
+      title: "Seasonal Hair Care Guide",
       category: "trends",
-      description: "How weather affects hair health and what services to recommend in different seasons.",
+      description: "How weather affects hair health and what to do in different seasons.",
       readTime: "7 min read",
       type: "article",
       featured: false,
-      url: "https://www.redken.com/blog/hair-care/seasonal-hair-care-tips"
+      targetAudience: "both" as const,
+      url: "https://www.redken.com/blog/seasonal-hair-care"
     }
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("all");
 
+  // Filter articles based on role and category
   const filteredArticles = articles.filter((article) => {
     const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
     const matchesSearch = !searchQuery || 
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    
+    // Role-based filtering
+    const matchesRole = 
+      article.targetAudience === "both" ||
+      (isStylist && article.targetAudience === "stylist") ||
+      (isClient && article.targetAudience === "client");
+    
+    return matchesCategory && matchesSearch && matchesRole;
   });
 
-  const featuredArticles = articles.filter(a => a.featured);
+  const featuredArticles = filteredArticles.filter(a => a.featured);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
