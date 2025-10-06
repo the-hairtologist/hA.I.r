@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, BookOpen } from "lucide-react";
+import { LoadingDots } from "@/components/ui/loading-dots";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -199,7 +200,21 @@ const Knowledge = () => {
       }
     } catch (error: any) {
       console.error("AI Error:", error);
-      toast.error("Failed to get AI response. Please try again.");
+      
+      // Provide actionable error message
+      const errorMessage = error.message?.includes("rate limit") 
+        ? "AI service is busy. Please wait a moment and try again."
+        : error.message?.includes("network")
+        ? "Connection issue. Check your internet and try again."
+        : "AI service temporarily unavailable. Please try again.";
+      
+      toast.error(errorMessage, {
+        description: "Your message was saved and you can retry",
+        action: {
+          label: "Retry",
+          onClick: () => handleAiSubmit(new Event('submit') as any)
+        }
+      });
     } finally {
       setAiLoading(false);
     }
@@ -214,7 +229,10 @@ const Knowledge = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
+          <p className="text-sm text-muted-foreground">Loading AI Assistant...</p>
+        </div>
       </div>
     );
   }
@@ -373,7 +391,16 @@ const Knowledge = () => {
 
               {/* Chat Messages */}
               <ScrollArea className="flex-1 p-5 bg-gradient-to-br from-background to-muted/20">
-                {aiMessages.length === 0 ? (
+                {aiLoading && aiMessages.length === 0 ? (
+                  <div className="space-y-4">
+                    <div className="flex justify-start">
+                      <div className="max-w-[80%] rounded-2xl p-4 bg-muted/50 border-2 border-border animate-pulse">
+                        <div className="h-4 w-64 bg-muted-foreground/20 rounded mb-2" />
+                        <div className="h-4 w-48 bg-muted-foreground/20 rounded" />
+                      </div>
+                    </div>
+                  </div>
+                ) : aiMessages.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center space-y-5 px-4">
                     <div className="relative animate-bounce-gentle">
                       <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)] border-4 border-foreground">

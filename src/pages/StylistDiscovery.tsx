@@ -73,6 +73,17 @@ const StylistDiscovery = () => {
 
       if (error) {
         console.error('❌ Discovery error:', error);
+        
+        const errorMessage = error.message?.includes("rate limit")
+          ? "Too many searches. Please wait a moment and try again."
+          : error.message?.includes("network") || error.message?.includes("timeout")
+          ? "Connection issue. Check your internet and try again."
+          : "Discovery service temporarily unavailable.";
+        
+        toast.error(errorMessage, {
+          description: "Try adjusting your search filters",
+          duration: 5000
+        });
         throw error;
       }
       
@@ -133,7 +144,10 @@ const StylistDiscovery = () => {
     return (
       <DashboardLayout>
         <div className="flex justify-center items-center min-h-screen">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
+            <p className="text-sm text-muted-foreground">Loading stylists...</p>
+          </div>
         </div>
       </DashboardLayout>
     );

@@ -68,7 +68,24 @@ export const VoiceInput = ({
       });
     } catch (error) {
       console.error('Error starting recording:', error);
-      toast.error("Could not access microphone");
+      
+      let errorMessage = "Could not access microphone";
+      let errorDescription = "Check microphone permissions in browser settings";
+      
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          errorDescription = "Please allow microphone access to use voice input";
+        } else if (error.name === 'NotFoundError') {
+          errorDescription = "No microphone detected. Please connect a microphone.";
+        } else if (error.name === 'NotReadableError') {
+          errorDescription = "Microphone is being used by another app";
+        }
+      }
+      
+      toast.error(errorMessage, {
+        description: errorDescription,
+        duration: 5000
+      });
     }
   };
 
