@@ -1853,6 +1853,10 @@ export type Database = {
         Args: { _stylist_id: string; _user_id: string }
         Returns: boolean
       }
+      profile_shares_contact_with_stylists: {
+        Args: { _profile_id: string }
+        Returns: boolean
+      }
       redeem_access_code: {
         Args: { _code: string; _user_id: string }
         Returns: boolean
