@@ -15,9 +15,14 @@ import "./index.css";
 import { initAnalytics } from "./lib/analytics";
 import { addCopyrightNotice, detectSuspiciousActivity, logSuspiciousActivity } from "./lib/ipProtection";
 import { PerformanceMonitor } from "./components/PerformanceMonitor";
+import { initMobileOptimizations, setupInputHandlers } from "./lib/mobileOptimizations";
 
 // Initialize analytics on app load
 initAnalytics();
+
+// Initialize mobile optimizations for better performance
+initMobileOptimizations();
+setupInputHandlers();
 
 // Add copyright notice to console
 addCopyrightNotice();

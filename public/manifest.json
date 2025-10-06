@@ -1,0 +1,72 @@
+{
+  "name": "hA.I.r - AI-Powered Salon Assistant",
+  "short_name": "hA.I.r",
+  "description": "Professional color formulas in seconds. AI-powered booking, client management, and formula generation for hair stylists.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["business", "lifestyle", "productivity"],
+  "icons": [
+    {
+      "src": "/placeholder.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Appointment",
+      "short_name": "Appointment",
+      "description": "Book a new appointment",
+      "url": "/book-appointment",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "My Clients",
+      "short_name": "Clients",
+      "description": "View and manage clients",
+      "url": "/clients",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Messages",
+      "short_name": "Messages",
+      "description": "Check messages",
+      "url": "/messages",
+      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/placeholder.svg",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/placeholder.svg",
+      "sizes": "1024x768",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
+    }
+  ],
+  "features": [
+    "AI Formula Generator",
+    "Appointment Booking",
+    "Client Management",
+    "SMS Notifications",
+    "Payment Processing",
+    "Formula History"
+  ],
+  "prefer_related_applications": false
+}
