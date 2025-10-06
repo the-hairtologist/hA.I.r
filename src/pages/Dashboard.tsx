@@ -533,17 +533,17 @@ const Dashboard = () => {
       gradient: "from-red-400 to-orange-500",
     },
     {
-      title: "Payment Tracking",
+      title: "Financial Overview",
       description: "See every dollar you've earned at a glance—no spreadsheets, no confusion, just clarity on your income",
       icon: DollarSign,
-      route: "/payments",
+      route: "/finance",
       gradient: "from-yellow-300 to-orange-400",
     },
     {
-      title: "Commissions",
-      description: "Turn product recommendations into profit—track every commission you've earned from brand partnerships",
+      title: "Referral Program",
+      description: "Turn recommendations into rewards—earn for every stylist you bring to the platform",
       icon: DollarSign,
-      route: "/commissions",
+      route: "/referrals",
       gradient: "from-green-400 to-emerald-500",
     },
     {
@@ -557,18 +557,18 @@ const Dashboard = () => {
 
   const clientFeatures = [
     {
-      title: "My Color Formulas",
-      description: "Your custom formulas stored forever—take them to any salon, anywhere, anytime. Your color, your control",
-      icon: Sparkles,
-      route: "/my-formulas",
-      gradient: "from-purple-400 to-pink-500",
+      title: "My Appointments",
+      description: "View your upcoming appointments and booking history—all in one place",
+      icon: Calendar,
+      route: "/appointments",
+      gradient: "from-blue-400 to-cyan-500",
     },
     {
       title: "Hair Care Library",
       description: "Expert tips on maintaining vibrant color, preventing damage, and keeping your hair healthy between appointments",
       icon: BookOpen,
       route: "/knowledge",
-      gradient: "from-blue-400 to-cyan-500",
+      gradient: "from-purple-400 to-pink-500",
     },
   ];
 
