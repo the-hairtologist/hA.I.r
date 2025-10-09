@@ -40,7 +40,15 @@ class HealthMonitorSystem {
         name: 'Database Connection',
         check: async () => {
           try {
+            // Check if we can connect to Supabase (don't use RLS-protected tables)
+            // Permission denied (42501) actually means the connection works and RLS is protecting data
             const { error } = await supabase.from('profiles').select('id').limit(1);
+            
+            // If error is permission denied, that's actually GOOD - means security is working
+            if (error?.code === '42501') {
+              return true; // Connection works, RLS is protecting data properly
+            }
+            
             return !error;
           } catch {
             return false;
@@ -207,14 +215,29 @@ class HealthMonitorSystem {
       .filter(([_, passed]) => !passed)
       .map(([name]) => name);
 
+    // Filter out non-critical failures
+    const criticalChecks = this.checks
+      .filter(check => check.critical)
+      .map(check => check.name);
+    
+    const actualCriticalFailures = failedChecks.filter(name => 
+      criticalChecks.includes(name)
+    );
+
+    if (actualCriticalFailures.length === 0) {
+      return; // No actual critical failures
+    }
+
     logger.error('Critical health check failures', 'HealthMonitor', {
-      failedChecks,
+      failedChecks: actualCriticalFailures,
     });
 
-    toast.error('System health issue detected. Attempting recovery...');
+    toast.error('System health issue detected. Attempting recovery...', {
+      duration: 3000,
+    });
 
     // Trigger recovery actions
-    this.attemptRecovery(failedChecks);
+    this.attemptRecovery(actualCriticalFailures);
   }
 
   private handlePerformanceDegradation(metrics: HealthMetrics) {
