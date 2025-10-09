@@ -79,6 +79,11 @@ class DataIntegrityChecker {
         .limit(1000);
 
       if (error) {
+        // Permission denied errors are expected for RLS-protected tables when not authenticated
+        if (error.code === '42501') {
+          logger.info(`Skipping ${table} check - RLS protected (expected)`, 'DataIntegrityChecker');
+          return issues;
+        }
         logger.error(`Error fetching ${table}`, 'DataIntegrityChecker', error);
         return issues;
       }
