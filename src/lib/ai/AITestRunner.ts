@@ -8,6 +8,10 @@ import { clientRetentionAI } from './ClientRetentionAI';
 import { smartCacheAI } from './SmartCacheAI';
 import { adaptiveLearningAI } from './AdaptiveLearningAI';
 import { colorSystemValidator } from './ColorSystemValidator';
+import { securityGuardian } from './SecurityGuardian';
+import { predictiveAnalytics } from './PredictiveAnalytics';
+import { crossPlatformOptimizer } from '@/lib/platform/CrossPlatformOptimizer';
+import { selfHealing } from '@/lib/selfHealing';
 import { logger } from '@/lib/logger';
 
 interface TestResult {
@@ -51,6 +55,18 @@ class AITestRunnerSystem {
 
     // Test 7: Color System Validation
     results.push(await this.testColorSystem());
+
+    // Test 8: Security Guardian
+    results.push(await this.testSecurityGuardian());
+
+    // Test 9: Predictive Analytics
+    results.push(await this.testPredictiveAnalytics());
+
+    // Test 10: Cross-Platform Optimizer
+    results.push(await this.testCrossPlatformOptimizer());
+
+    // Test 11: Self-Healing System
+    results.push(await this.testSelfHealing());
 
     const passed = results.filter(r => r.passed).length;
     const failed = results.filter(r => !r.passed).length;
@@ -215,6 +231,95 @@ class AITestRunnerSystem {
     } catch (error) {
       return {
         system: 'Color System',
+        passed: false,
+        message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
+
+  private async testSecurityGuardian(): Promise<TestResult> {
+    try {
+      const status = await securityGuardian.getSecurityStatus();
+      const isSecure = status.status === 'secure' || status.unresolvedThreats === 0;
+      
+      return {
+        system: 'Security Guardian',
+        passed: true, // System is operational
+        message: isSecure 
+          ? '✨ System protected - No threats detected' 
+          : `⚠️ ${status.unresolvedThreats} threats under watch`,
+        details: status
+      };
+    } catch (error) {
+      return {
+        system: 'Security Guardian',
+        passed: false,
+        message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
+
+  private async testPredictiveAnalytics(): Promise<TestResult> {
+    try {
+      const insights = await predictiveAnalytics.generateInsights();
+      
+      return {
+        system: 'Predictive Analytics',
+        passed: true,
+        message: `Generated ${insights.length} predictive insights`,
+        details: { insightCount: insights.length, insights: insights.slice(0, 2) }
+      };
+    } catch (error) {
+      return {
+        system: 'Predictive Analytics',
+        passed: false,
+        message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
+
+  private async testCrossPlatformOptimizer(): Promise<TestResult> {
+    try {
+      const capabilities = crossPlatformOptimizer.getCapabilities();
+      const shouldPreload = crossPlatformOptimizer.shouldPreloadImages();
+      const shouldLazyLoad = crossPlatformOptimizer.shouldUseLazyLoading();
+      
+      return {
+        system: 'Cross-Platform Optimizer',
+        passed: capabilities !== null,
+        message: capabilities 
+          ? `✨ Optimized for ${capabilities.performanceLevel} performance device` 
+          : 'Initializing...',
+        details: { 
+          capabilities, 
+          optimizations: { shouldPreload, shouldLazyLoad }
+        }
+      };
+    } catch (error) {
+      return {
+        system: 'Cross-Platform Optimizer',
+        passed: false,
+        message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
+    }
+  }
+
+  private async testSelfHealing(): Promise<TestResult> {
+    try {
+      const status = selfHealing.getStatus();
+      const isHealthy = status.health.status === 'healthy';
+      
+      return {
+        system: 'Self-Healing System',
+        passed: status.initialized && isHealthy,
+        message: isHealthy 
+          ? '🛡️ All angels active and protecting' 
+          : `⚠️ ${status.health.message}`,
+        details: status
+      };
+    } catch (error) {
+      return {
+        system: 'Self-Healing System',
         passed: false,
         message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
       };
