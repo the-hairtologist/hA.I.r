@@ -1,34 +1,6 @@
 # hA.I.r - AI-Powered Salon Assistant
 # Copyright © 2025 hA.I.r. All Rights Reserved.
 
+# Block all search engine crawlers
 User-agent: *
-Allow: /
-Allow: /auth
-Allow: /stylists
-Allow: /stylist/*
-Allow: /s/*
-Allow: /privacy
-Allow: /terms
-Allow: /cookie-policy
-Disallow: /dashboard
-Disallow: /appointments
-Disallow: /formulas
-Disallow: /clients
-Disallow: /messages
-Disallow: /settings
-Disallow: /finance
-Disallow: /schedule
-Disallow: /portfolio
-Disallow: /services
-Disallow: /client-discovery
-Disallow: /client-requests
-Disallow: /integrations
-Disallow: /knowledge
-Disallow: /resources
-Disallow: /access-codes
-Disallow: /book-appointment
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
-
-Sitemap: https://hair.app/sitemap.xml
+Disallow: /
