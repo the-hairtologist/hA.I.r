@@ -121,14 +121,13 @@ const Auth = () => {
 
       if (roleError) throw roleError;
 
-      // Create stylist profile with license info
+      // Create stylist profile with license info (honor system - defaults to verified)
       const { error: profileError } = await supabase
         .from("stylist_profiles")
         .insert({ 
           user_id: user.id,
           license_number: state.licenseNumber.trim(),
           license_state: state.licenseState.trim(),
-          verification_status: 'pending'
         });
       
       if (profileError) {
@@ -136,8 +135,9 @@ const Auth = () => {
         throw profileError;
       }
 
-      toast.success("Account created! Pending license verification (24-48 hrs)");
-      log.info("User signed up successfully", "Auth", { userType: 'stylist', pendingVerification: true });
+      toast.success("Welcome to hA.I.r! Your account is ready.");
+      setTimeout(() => navigate("/dashboard"), 1500);
+      log.info("User signed up successfully", "Auth", { userType: 'stylist' });
     } catch (error) {
       await supabase.auth.signOut();
       throw error;
@@ -439,9 +439,9 @@ const Auth = () => {
                 </div>
                 
                 <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-blue-200 to-cyan-200 shadow-[3px_3px_0px_0px_hsl(var(--foreground))] space-y-3">
-                  <p className="text-sm font-semibold text-foreground mb-2">📋 License Verification Required</p>
+                  <p className="text-sm font-semibold text-foreground mb-2">📋 Professional License Information</p>
                   <p className="text-xs text-foreground/80 mb-3">
-                    To maintain quality, all stylists must verify their professional license. Your account will be reviewed within 24-48 hours.
+                    By providing your license info, you affirm that you are a licensed cosmetology professional. License details are kept on file for verification purposes.
                   </p>
                   
                   <div className="space-y-2">
@@ -474,7 +474,7 @@ const Auth = () => {
                 <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
                   <p className="text-sm font-semibold text-foreground mb-1">💼 Professional Stylist Account</p>
                   <p className="text-xs text-foreground/80 font-medium">
-                    Join thousands of verified stylists • 7-day free trial, then $15/month
+                    Immediate access • 7-day free trial, then $15/month
                   </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>

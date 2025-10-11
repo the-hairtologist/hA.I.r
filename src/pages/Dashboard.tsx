@@ -53,7 +53,6 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { TodoList } from "@/components/dashboard/TodoList";
 import { HelpButton } from "@/components/HelpButton";
-import { VerificationBanner } from "@/components/VerificationBanner";
 
 interface SortableSectionProps {
   id: string;
@@ -693,14 +692,6 @@ const Dashboard = () => {
       </a>
       <main id="main-content" role="main" aria-label="Dashboard" className="pl-12 w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Verification Banner for Pending Stylists */}
-        {userRole === "stylist" && profile && (
-          <VerificationBanner 
-            status={profile.verification_status || 'pending'} 
-            rejectionReason={profile.rejection_reason}
-          />
-        )}
         
         <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
