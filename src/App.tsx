@@ -59,6 +59,7 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
 const AITestDashboard = lazy(() => import("./pages/AITestDashboard"));
+const AIAdGenerator = lazy(() => import("./pages/AIAdGenerator"));
 const DMCA = lazy(() => import("./pages/DMCA"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
 
@@ -165,6 +166,11 @@ const App = () => {
           <Route path="/integrations" element={
             <ProtectedRoute>
               <Integrations />
+            </ProtectedRoute>
+          } />
+          <Route path="/ai-ad-generator" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <AIAdGenerator />
             </ProtectedRoute>
           } />
           <Route path="/appointments" element={

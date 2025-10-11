@@ -3,6 +3,9 @@ project_id = "iyotklwiwyljospfqnoy"
 [functions.generate-formula]
 verify_jwt = true
 
+[functions.generate-ad]
+verify_jwt = true
+
 [functions.hair-assistant-chat]
 verify_jwt = true
 
