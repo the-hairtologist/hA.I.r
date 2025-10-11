@@ -9,7 +9,10 @@ export const useAnalytics = () => {
   const location = useLocation();
 
   useEffect(() => {
-    analytics.pageView(location.pathname);
+    // Ensure analytics is initialized before tracking
+    if (typeof window !== 'undefined') {
+      analytics.pageView(location.pathname);
+    }
   }, [location.pathname]);
 
   return { analytics };

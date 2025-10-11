@@ -9,6 +9,7 @@ import { selfHealing } from "@/lib/selfHealing";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { DashboardErrorBoundary } from "@/components/DashboardErrorBoundary";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { SubscriptionGate } from "@/components/SubscriptionGate";
 import { RoleSwitchProtection } from "@/components/RoleSwitchProtection";
@@ -68,6 +69,15 @@ const App = () => {
     const initializeSystems = async () => {
       await selfHealing.initialize();
       
+      // Initialize analytics tracking
+      try {
+        const { initAnalytics } = await import('@/lib/analytics');
+        initAnalytics();
+        console.log('📊 Analytics initialized');
+      } catch (error) {
+        console.warn('Analytics initialization failed:', error);
+      }
+      
       // Initialize cross-platform optimizer
       try {
         const { crossPlatformOptimizer } = await import('@/lib/platform/CrossPlatformOptimizer');
@@ -109,7 +119,9 @@ const App = () => {
           {/* Shared Protected Routes (Both Roles) */}
           <Route path="/dashboard" element={
             <ProtectedRoute>
-              <Dashboard />
+              <DashboardErrorBoundary>
+                <Dashboard />
+              </DashboardErrorBoundary>
             </ProtectedRoute>
           } />
           <Route path="/messages" element={
