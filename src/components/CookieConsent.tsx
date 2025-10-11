@@ -27,7 +27,11 @@ export const CookieConsent = () => {
   useEffect(() => {
     const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
     if (!consent) {
-      setShowBanner(true);
+      // Delay showing cookie banner to let users see the app first
+      const timer = setTimeout(() => {
+        setShowBanner(true);
+      }, 3000); // 3 second delay
+      return () => clearTimeout(timer);
     }
   }, []);
 

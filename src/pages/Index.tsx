@@ -50,26 +50,26 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="bg-blue-600 p-6 sm:p-8 md:p-16 relative min-h-[400px] sm:min-h-[500px] text-center">
+            <div className="bg-primary p-6 sm:p-8 md:p-16 relative min-h-[400px] sm:min-h-[500px] text-center">
               <div className="window-scrollbar hidden md:block"></div>
               
               <div className="max-w-4xl mx-auto relative z-10 px-2">
                 <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-                  <Scissors className="h-8 w-8 sm:h-12 sm:w-12 text-pink-400" />
+                  <Scissors className="h-8 w-8 sm:h-12 sm:w-12 text-primary-foreground" />
                   <div className="text-3xl sm:text-5xl">✨</div>
-                  <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 sm:border-4 border-pink-400 rotate-45"></div>
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 border-2 sm:border-4 border-primary-foreground rotate-45"></div>
                   <div className="text-3xl sm:text-5xl">🎨</div>
                 </div>
                 
-                <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-black mb-6 sm:mb-8 text-pink-400 uppercase leading-tight px-2">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-display font-black mb-6 sm:mb-8 text-primary-foreground uppercase leading-tight px-2">
                   For the stylists who do it all—now you don't have to
                 </h1>
                 
-                <p className="text-lg sm:text-xl md:text-2xl font-bold text-pink-300 mb-3 sm:mb-4">
+                <p className="text-lg sm:text-xl md:text-2xl font-bold text-primary-foreground mb-3 sm:mb-4">
                   No more chaos. Just clients, color, and calm.
                 </p>
                 
-                <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mb-8 sm:mb-12 max-w-2xl mx-auto px-2">
+                <p className="text-sm sm:text-base md:text-lg font-medium text-primary-foreground/90 mb-8 sm:mb-12 max-w-2xl mx-auto px-2">
                   hA.I.r handles bookings, color formulas, and payments—so you can focus on your craft.
                 </p>
                 
