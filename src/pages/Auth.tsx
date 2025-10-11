@@ -19,7 +19,6 @@ type AuthState = {
   email: string;
   password: string;
   fullName: string;
-  userType: "stylist" | "client";
   resetEmail: string;
   showResetDialog: boolean;
   resetLoading: boolean;
@@ -39,7 +38,6 @@ const initialState: AuthState = {
   email: "",
   password: "",
   fullName: "",
-  userType: "client",
   resetEmail: "",
   showResetDialog: false,
   resetLoading: false,
@@ -111,37 +109,26 @@ const Auth = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not found after signup");
 
-      // Use secure function to assign role
+      // Assign stylist role only
       const { error: roleError } = await supabase.rpc('assign_user_role', {
         _user_id: user.id,
-        _role: state.userType,
+        _role: 'stylist',
       });
 
       if (roleError) throw roleError;
 
-      // Create appropriate profile
-      if (state.userType === "stylist") {
-        const { error: profileError } = await supabase
-          .from("stylist_profiles")
-          .insert({ user_id: user.id });
-        
-        if (profileError) {
-          await supabase.from("user_roles").delete().eq("user_id", user.id);
-          throw profileError;
-        }
-      } else {
-        const { error: profileError } = await supabase
-          .from("client_profiles")
-          .insert({ user_id: user.id });
-        
-        if (profileError) {
-          await supabase.from("user_roles").delete().eq("user_id", user.id);
-          throw profileError;
-        }
+      // Create stylist profile
+      const { error: profileError } = await supabase
+        .from("stylist_profiles")
+        .insert({ user_id: user.id });
+      
+      if (profileError) {
+        await supabase.from("user_roles").delete().eq("user_id", user.id);
+        throw profileError;
       }
 
       toast.success("Account created successfully! Welcome to hA.I.r!");
-      log.info("User signed up successfully", "Auth", { userType: state.userType });
+      log.info("User signed up successfully", "Auth", { userType: 'stylist' });
     } catch (error) {
       await supabase.auth.signOut();
       throw error;
@@ -242,7 +229,7 @@ const Auth = () => {
             <CardTitle className="text-3xl font-bold font-display">hA.I.r</CardTitle>
           </div>
           <CardDescription className="text-base font-medium text-center">
-            {state.isRecoveryMode ? "Create your new password" : "Your AI-powered salon assistant"}
+            {state.isRecoveryMode ? "Create your new password" : "For Professional Hair Stylists"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -441,22 +428,11 @@ const Auth = () => {
                     minLength={6}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>I am a...</Label>
-                  <Tabs value={state.userType} onValueChange={(v) => dispatch({ type: "SET_FIELD", field: "userType", value: v as "stylist" | "client" })} className="w-full">
-                    <TabsList className="w-full">
-                      <TabsTrigger value="client">Client (Free)</TabsTrigger>
-                      <TabsTrigger value="stylist">Stylist ($15/mo)</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                  {state.userType === "stylist" && (
-                    <div className="p-3 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
-                      <p className="text-xs font-semibold text-foreground">💼 Professional Account</p>
-                      <p className="text-xs text-foreground/80 font-medium">
-                        7-day free trial, then $15/month for full stylist features
-                      </p>
-                    </div>
-                  )}
+                <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))] mb-4">
+                  <p className="text-sm font-semibold text-foreground mb-1">💼 Professional Stylist Account</p>
+                  <p className="text-xs text-foreground/80 font-medium">
+                    Join thousands of stylists managing their salon with AI • 7-day free trial, then $15/month
+                  </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Creating account..." : "Create Account"}

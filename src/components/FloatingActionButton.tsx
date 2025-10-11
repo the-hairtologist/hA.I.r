@@ -74,26 +74,6 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       },
       gradient: "from-purple-500 to-pink-500",
     },
-    {
-      label: "Find Stylist",
-      icon: Users,
-      onClick: () => {
-        haptic.tap();
-        navigate("/stylists");
-        setIsOpen(false);
-      },
-      gradient: "from-blue-500 to-cyan-500",
-    },
-    {
-      label: "Book Appointment",
-      icon: Calendar,
-      onClick: () => {
-        haptic.tap();
-        navigate("/stylists");
-        setIsOpen(false);
-      },
-      gradient: "from-pink-500 to-rose-500",
-    },
   ];
 
   const actions = userRole === "stylist" ? stylistActions : clientActions;

@@ -322,8 +322,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   // Client Navigation with unique IDs
   const clientAllItems: SidebarItem[] = [
     { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "my-requests", title: "My Requests", url: "/client-requests", icon: Megaphone, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "main", color: "text-amber-400 dark:text-amber-300" },
-    { id: "find-stylists", title: "Find Stylists", url: "/stylists", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main", color: "text-violet-400 dark:text-violet-300" },
     { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "tools", color: "text-emerald-400 dark:text-emerald-300" },

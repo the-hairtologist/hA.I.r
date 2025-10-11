@@ -78,17 +78,8 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
     {
       id: "welcome",
       title: "Welcome to Your Hair Journey! ✨",
-      description: "Track every transformation, celebrate milestones, and never forget a perfect formula again.",
+      description: "This platform is currently in stylist-only mode. Client booking features are coming soon after launch!",
       icon: Sparkles,
-    },
-    {
-      id: "find-stylist",
-      title: "Find Your Stylist",
-      description: "Search for your current stylist or discover new ones in your area.",
-      icon: Users,
-      action: () => {
-        window.location.href = "/stylist-discovery";
-      },
     },
     {
       id: "first-appointment",

@@ -110,22 +110,6 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
 
   const allClientActions: ActionButton[] = [
     {
-      id: "book",
-      label: "Book Appointment",
-      description: "Schedule your visit",
-      icon: Calendar,
-      route: "/book-appointment",
-      gradient: "from-blue-500 to-cyan-500",
-    },
-    {
-      id: "discover",
-      label: "Find Stylists",
-      description: "Discover local talent",
-      icon: Users,
-      route: "/stylists",
-      gradient: "from-purple-500 to-pink-500",
-    },
-    {
       id: "messages",
       label: "Messages",
       description: "Chat with stylist",

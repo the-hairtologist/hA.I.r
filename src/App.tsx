@@ -32,8 +32,6 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Formulas = lazy(() => import("./pages/Formulas"));
 const Appointments = lazy(() => import("./pages/Appointments"));
 const BookAppointment = lazy(() => import("./pages/BookAppointment"));
-const StylistDiscovery = lazy(() => import("./pages/StylistDiscovery"));
-const StylistProfile = lazy(() => import("./pages/StylistProfile"));
 const ClientRequests = lazy(() => import("./pages/ClientRequests"));
 const ClientDiscovery = lazy(() => import("./pages/ClientDiscovery"));
 const Messages = lazy(() => import("./pages/Messages"));
@@ -277,10 +275,10 @@ const App = () => {
           } />
           <Route path="/coming-soon" element={<ComingSoon />} />
           
-          {/* Public Stylist Routes - No auth required for discovery */}
-          <Route path="/stylists" element={<StylistDiscovery />} />
-          <Route path="/stylist/:id" element={<StylistProfile />} />
-          <Route path="/s/:username" element={<StylistProfile />} />
+          {/* Public Stylist Routes - Coming Soon */}
+          <Route path="/stylists" element={<ComingSoon />} />
+          <Route path="/stylist/:id" element={<ComingSoon />} />
+          <Route path="/s/:username" element={<ComingSoon />} />
           
           {/* Legal Pages */}
           <Route path="/dmca" element={<DMCA />} />
