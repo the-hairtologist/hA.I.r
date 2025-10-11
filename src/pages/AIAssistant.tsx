@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { HelpCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { AIDisclaimer } from "@/components/AIDisclaimer";
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -391,6 +392,11 @@ const Knowledge = () => {
 
               {/* Chat Messages */}
               <ScrollArea className="flex-1 p-5 bg-gradient-to-br from-background to-muted/20">
+                {/* AI Disclaimer */}
+                <div className="mb-4">
+                  <AIDisclaimer context="chat" />
+                </div>
+                
                 {aiLoading && aiMessages.length === 0 ? (
                   <div className="space-y-4">
                     <div className="flex justify-start">

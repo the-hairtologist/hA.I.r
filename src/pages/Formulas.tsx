@@ -17,6 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { VoiceInput } from "@/components/VoiceInput";
 import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
+import { AIDisclaimer } from "@/components/AIDisclaimer";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -215,6 +216,9 @@ const Formulas = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        {/* AI Disclaimer */}
+        <AIDisclaimer context="formula" />
+
         {/* Contextual AI Suggestions */}
         {selectedClient && (
           <ContextualAI

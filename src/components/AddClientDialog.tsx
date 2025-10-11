@@ -16,6 +16,7 @@ import { UserPlus, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { validatePhone } from "@/lib/phoneValidation";
 import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
+import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 
 interface AddClientDialogProps {
   open: boolean;
@@ -244,6 +245,9 @@ export const AddClientDialog = ({
               <p className="text-xs text-destructive">{errors.notes}</p>
             )}
           </div>
+
+          {/* Medical Disclaimer */}
+          <MedicalDisclaimer context="allergies" className="mb-4" />
 
           {/* Allergies */}
           <div className="space-y-2">
