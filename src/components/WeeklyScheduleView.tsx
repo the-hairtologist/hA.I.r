@@ -317,7 +317,7 @@ export const WeeklyScheduleView = ({
             {Object.entries(serviceColors).length > 0 ? (
               Object.entries(serviceColors).map(([serviceType, color]) => (
                 <div key={serviceType} className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded border border-white/30" style={{ backgroundColor: color }} />
+                  <div className="w-2 h-2 rounded border border-foreground/30" style={{ backgroundColor: color }} />
                   <span className="text-muted-foreground">{serviceType}</span>
                 </div>
               ))

@@ -248,14 +248,14 @@ const Knowledge = () => {
       <main className="container mx-auto px-4 py-6 max-w-6xl">
         {/* Mode Selection Tabs with Retro Style */}
         <div className="mb-6">
-          <div className="flex gap-4 p-2 bg-background rounded-2xl w-fit mx-auto border-4 border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)]">
+          <div className="flex gap-4 p-2 bg-background rounded-2xl w-fit mx-auto border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
             <div className="relative group">
               <button
                 onClick={() => setAiMode("formula")}
                 className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "formula"
-                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
+                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.1)]"
                 }`}
                 style={{ border: "3px solid" }}
               >
@@ -279,8 +279,8 @@ const Knowledge = () => {
                 onClick={() => setAiMode("stepbystep")}
                 className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
                   aiMode === "stepbystep"
-                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]"
+                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.3)] translate-x-0 translate-y-0"
+                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.1)]"
                 }`}
                 style={{ border: "3px solid" }}
               >
@@ -403,7 +403,7 @@ const Knowledge = () => {
                 ) : aiMessages.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center space-y-5 px-4">
                     <div className="relative animate-bounce-gentle">
-                      <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)] border-4 border-foreground">
+                      <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)] border-4 border-foreground">
                         {aiMode === "formula" ? (
                           <Sparkles className="h-12 w-12 text-primary-foreground" />
                         ) : (
@@ -435,8 +435,8 @@ const Knowledge = () => {
                         <div
                           className={`max-w-[80%] rounded-2xl px-5 py-4 border-3 ${
                             msg.role === "user"
-                              ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]"
-                              : "bg-background border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]"
+                              ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.2)]"
+                              : "bg-background border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]"
                           }`}
                           style={{ border: "3px solid" }}
                         >
@@ -459,7 +459,7 @@ const Knowledge = () => {
                     
                     {aiLoading && (
                       <div className="flex justify-start animate-fade-in">
-                        <div className="bg-muted/80 backdrop-blur-sm rounded-2xl px-5 py-3 flex items-center gap-3 border-3 border-accent shadow-[3px_3px_0px_0px_rgba(0,0,0,0.1)]" style={{ border: "3px solid" }}>
+                        <div className="bg-muted/80 backdrop-blur-sm rounded-2xl px-5 py-3 flex items-center gap-3 border-3 border-accent shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.1)]" style={{ border: "3px solid" }}>
                           <Loader2 className="h-5 w-5 animate-spin text-accent" />
                           <span className="text-sm font-medium text-foreground">Crafting magic...</span>
                         </div>
@@ -482,7 +482,7 @@ const Knowledge = () => {
                         : "What's the color issue? 🔧"
                     }
                     disabled={aiLoading}
-                    className="flex-1 border-3 border-foreground rounded-xl font-medium focus-visible:ring-primary/50 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.1)]"
+                    className="flex-1 border-3 border-foreground rounded-xl font-medium focus-visible:ring-primary/50 shadow-[2px_2px_0px_0px_hsl(var(--foreground)_/_0.1)]"
                     style={{ border: "3px solid" }}
                   />
                   <button
@@ -532,7 +532,7 @@ const Knowledge = () => {
 
         {/* Feature Info Dialog */}
         <Dialog open={showFeatureInfo} onOpenChange={setShowFeatureInfo}>
-          <DialogContent className="max-w-md border-4 border-foreground shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]">
+          <DialogContent className="max-w-md border-4 border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground)_/_0.2)]">
             <DialogHeader>
               <DialogTitle className="font-display text-2xl gradient-text flex items-center gap-2">
                 {selectedFeature === "formula" ? <Sparkles className="h-6 w-6" /> : <BookOpen className="h-6 w-6" />}

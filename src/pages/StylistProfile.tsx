@@ -104,7 +104,7 @@ const StylistProfile = () => {
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-6">
               {/* Avatar */}
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-5xl overflow-hidden border-4 border-white shadow-lg">
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-5xl overflow-hidden border-4 border-background shadow-lg">
                 {stylist.business_name?.charAt(0).toUpperCase() || (
                   <User className="h-16 w-16 text-primary" />
                 )}

@@ -117,8 +117,8 @@ export const TodoList = () => {
   const completedTodos = todos.filter(t => t.completed);
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] bg-yellow-200 overflow-hidden">
-      <CardHeader className="border-b-[3px] border-foreground bg-yellow-300 pb-4">
+    <Card className="border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] bg-warning/20 overflow-hidden">
+      <CardHeader className="border-b-[3px] border-foreground bg-warning/30 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
             <ListTodo className="h-5 w-5 text-primary-foreground" />

@@ -34,7 +34,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const Finance = lazy(() => import("./pages/Finance"));
 const Resources = lazy(() => import("./pages/Resources"));
 const Knowledge = lazy(() => import("./pages/Knowledge"));
-const AIAssistant = lazy(() => import("./pages/AIAssistant"));
+const AIKnowledge = lazy(() => import("./pages/AIAssistant"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const Clients = lazy(() => import("./pages/Clients"));
 const AccessCodes = lazy(() => import("./pages/AccessCodes"));
@@ -148,7 +148,7 @@ const App = () => {
           } />
           <Route path="/ai-assistant" element={
             <ProtectedRoute>
-              <AIAssistant />
+              <AIKnowledge />
             </ProtectedRoute>
           } />
           <Route path="/integrations" element={

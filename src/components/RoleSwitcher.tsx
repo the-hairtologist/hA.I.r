@@ -51,7 +51,7 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
           className="gap-2 border-primary/20 hover:border-primary/40"
         >
           <div className={`p-1 rounded ${viewConfig[currentView].gradient}`}>
-            <CurrentIcon className="h-3 w-3 text-white" />
+            <CurrentIcon className="h-3 w-3 text-primary-foreground" />
           </div>
           <span className="text-xs font-medium">{viewConfig[currentView].label}</span>
           <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
@@ -74,7 +74,7 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
               className={`cursor-pointer ${currentView === view ? "bg-muted" : ""}`}
             >
               <div className={`p-1 rounded mr-2 ${viewConfig[view].gradient}`}>
-                <ViewIcon className="h-3 w-3 text-white" />
+                <ViewIcon className="h-3 w-3 text-primary-foreground" />
               </div>
               <span>{viewConfig[view].label}</span>
               {currentView === view && (

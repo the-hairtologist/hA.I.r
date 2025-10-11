@@ -150,7 +150,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
           )}
           style={{
             clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
-            boxShadow: "inset 0 1px 2px rgba(255,255,255,0.3), var(--tw-shadow)"
+            boxShadow: "inset 0 1px 2px hsl(var(--primary-foreground) / 0.3), var(--tw-shadow)"
           }}
           aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
         >

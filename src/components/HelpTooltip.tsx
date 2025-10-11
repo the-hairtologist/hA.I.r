@@ -56,10 +56,10 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
       <AlertDialogTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-purple-500 hover:bg-purple-600 transition-all brutal-border brutal-shadow-xs hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+          className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary hover:bg-primary/90 transition-all brutal-border brutal-shadow-xs hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
           aria-label="Help"
         >
-          <HelpCircle className="h-4 w-4 text-white" />
+          <HelpCircle className="h-4 w-4 text-primary-foreground" />
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent className="brutal-border brutal-shadow-lg max-w-lg">
@@ -98,7 +98,7 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction className="brutal-border brutal-shadow-sm brutal-hover bg-purple-500 text-white hover:bg-purple-600">
+          <AlertDialogAction className="brutal-border brutal-shadow-sm brutal-hover bg-primary text-primary-foreground hover:bg-primary/90">
             Got it!
           </AlertDialogAction>
         </AlertDialogFooter>
