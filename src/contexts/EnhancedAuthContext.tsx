@@ -184,11 +184,15 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
    */
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         console.log("[Auth] State changed:", event);
 
+        // CRITICAL: No async calls in callback - use setTimeout
         if (event === "SIGNED_IN" && session?.user) {
-          await loadAuthData(session.user);
+          setState(prev => ({ ...prev, loading: true }));
+          setTimeout(() => {
+            loadAuthData(session.user);
+          }, 0);
         } else if (event === "SIGNED_OUT") {
           setState({
             user: null,

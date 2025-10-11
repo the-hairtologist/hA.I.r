@@ -37,9 +37,10 @@ export function useAuth(): UseAuthReturn {
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         log.debug('Auth state changed', 'useAuth', { event, userId: session?.user?.id });
         
+        // CRITICAL: Only synchronous state updates in callback
         setState({
           user: session?.user ?? null,
           session: session,
@@ -47,12 +48,11 @@ export function useAuth(): UseAuthReturn {
           isAuthenticated: !!session,
         });
 
-        // Handle specific auth events
+        // Defer navigation with setTimeout to prevent deadlocks
         if (event === 'SIGNED_IN' && session) {
-          // Redirect to dashboard after successful sign in
-          navigate('/dashboard');
+          setTimeout(() => navigate('/dashboard'), 0);
         } else if (event === 'SIGNED_OUT') {
-          navigate('/auth');
+          setTimeout(() => navigate('/auth'), 0);
         } else if (event === 'TOKEN_REFRESHED') {
           log.info('Token refreshed successfully', 'useAuth');
         }

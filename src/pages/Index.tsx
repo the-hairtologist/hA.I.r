@@ -86,6 +86,16 @@ const Index = () => {
             </div>
           </div>
 
+          {/* Trust Signals Banner */}
+          <div className="text-center mb-8 p-4 bg-card/50 border-2 border-foreground rounded-lg">
+            <p className="text-sm font-bold text-foreground mb-1">Trusted by professional stylists</p>
+            <div className="flex items-center justify-center gap-4 text-xs text-foreground/70">
+              <span>🎨 500+ Formulas Generated</span>
+              <span>⭐ 4.9/5 Rating</span>
+              <span>⚡ 24/7 Availability</span>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-6">
             <article className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in flex flex-col">
               <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0">
