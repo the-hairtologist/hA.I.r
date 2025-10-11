@@ -77,6 +77,43 @@
       -moz-osx-font-smoothing: grayscale;
     }
   }
+  
+  /* Safe area insets for iOS notch and home indicator */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Prevent zoom on input focus (iOS Safari) while keeping accessibility */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px; /* iOS won't zoom if font-size is 16px or larger */
+  }
+  
+  /* Improve form input appearance on mobile */
+  input, textarea, select {
+    /* Prevent iOS from adding default styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  /* Focus-visible polyfill for better keyboard navigation */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
@@ -953,5 +990,105 @@ All colors MUST be HSL.
   .focus-ring-brutal:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring-offset), var(--focus-ring);
+  }
+  
+  /* ============================================ */
+  /* Mobile-Specific Utilities */
+  /* ============================================ */
+  
+  /* Safe area spacing for iOS notch/home indicator */
+  .safe-top { padding-top: env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  .safe-left { padding-left: env(safe-area-inset-left); }
+  .safe-right { padding-right: env(safe-area-inset-right); }
+  .safe-x { 
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  .safe-y {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Touch-friendly tap targets (minimum 44x44px for WCAG) */
+  .tap-target {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Larger tap targets for primary actions */
+  .tap-target-lg {
+    min-width: 56px;
+    min-height: 56px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Sticky header with safe area support */
+  .sticky-header-mobile {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding-top: env(safe-area-inset-top);
+    backdrop-filter: blur(8px);
+    background-color: hsl(var(--background) / 0.95);
+  }
+  
+  /* Mobile-optimized modal/dialog */
+  .mobile-modal {
+    position: fixed;
+    inset: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    z-index: 100;
+  }
+  
+  /* Prevent text selection during touch interactions */
+  .touch-none-select {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  
+  /* Smooth momentum scrolling for mobile */
+  .scroll-smooth-mobile {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+  }
+  
+  /* Mobile-optimized card spacing */
+  .mobile-card-spacing {
+    @apply p-4 md:p-6 space-y-3 md:space-y-4;
+  }
+  
+  /* Responsive tap feedback */
+  @media (hover: none) and (pointer: coarse) {
+    .tap-feedback {
+      transition: transform 0.1s ease, opacity 0.1s ease;
+    }
+    
+    .tap-feedback:active {
+      transform: scale(0.97);
+      opacity: 0.8;
+    }
+  }
+  
+  /* Hide on mobile utility */
+  @media (max-width: 640px) {
+    .hide-mobile { display: none !important; }
+  }
+  
+  /* Show only on mobile */
+  .show-mobile { display: none; }
+  @media (max-width: 640px) {
+    .show-mobile { display: block; }
+  }
+  .show-mobile-flex { display: none; }
+  @media (max-width: 640px) {
+    .show-mobile-flex { display: flex; }
   }
 }
