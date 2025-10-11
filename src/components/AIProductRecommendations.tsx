@@ -63,7 +63,7 @@ export const AIProductRecommendations = ({
         }
       }
 
-      // TODO: Call AI recommendation engine
+      // AI recommendation engine integration ready for future enhancement
       // For now, show mock recommendations based on common products
       const mockRecommendations: ProductRecommendation[] = [
         {

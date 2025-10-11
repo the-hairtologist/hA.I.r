@@ -1825,6 +1825,7 @@ export type Database = {
           new_data: Json | null
           old_data: Json | null
           table_name: string | null
+          user_id: string | null
         }
         Relationships: []
       }
@@ -1842,6 +1843,34 @@ export type Database = {
           total_reviews: number | null
           user_id: string | null
           years_experience: number | null
+        }
+        Insert: {
+          average_rating?: number | null
+          bio?: string | null
+          business_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_available?: boolean | null
+          is_public_listing?: boolean | null
+          location?: string | null
+          specialty?: string | null
+          total_reviews?: number | null
+          user_id?: string | null
+          years_experience?: number | null
+        }
+        Update: {
+          average_rating?: number | null
+          bio?: string | null
+          business_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_available?: boolean | null
+          is_public_listing?: boolean | null
+          location?: string | null
+          specialty?: string | null
+          total_reviews?: number | null
+          user_id?: string | null
+          years_experience?: number | null
         }
         Relationships: [
           {

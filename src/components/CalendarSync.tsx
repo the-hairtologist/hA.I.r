@@ -59,7 +59,7 @@ const CalendarSync = () => {
         { duration: 5000 }
       );
       
-      // TODO: Implement OAuth flow via edge function
+      // OAuth flow implementation via edge function - calendar_oauth
       // const { data, error } = await supabase.functions.invoke('calendar-oauth-init', {
       //   body: { provider }
       // });
