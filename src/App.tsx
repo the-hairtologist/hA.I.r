@@ -50,6 +50,8 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
 const AITestDashboard = lazy(() => import("./pages/AITestDashboard"));
+const DMCA = lazy(() => import("./pages/DMCA"));
+const Accessibility = lazy(() => import("./pages/Accessibility"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -261,6 +263,10 @@ const App = () => {
           <Route path="/stylists" element={<StylistDiscovery />} />
           <Route path="/stylist/:id" element={<StylistProfile />} />
           <Route path="/s/:username" element={<StylistProfile />} />
+          
+          {/* Legal Pages */}
+          <Route path="/dmca" element={<DMCA />} />
+          <Route path="/accessibility" element={<Accessibility />} />
           
           {/* Error Pages */}
           <Route path="/500" element={<ServerError />} />
