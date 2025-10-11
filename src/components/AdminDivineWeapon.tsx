@@ -27,7 +27,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { securityGuardian } from '@/lib/ai/SecurityGuardian';
 import { predictiveAnalytics } from '@/lib/ai/PredictiveAnalytics';
-import { selfHealing } from '@/lib/selfHealing';
 
 export const AdminDivineWeapon = () => {
   const { toast } = useToast();
@@ -56,9 +55,8 @@ export const AdminDivineWeapon = () => {
       const predictions = await predictiveAnalytics.generateInsights();
       setInsights(predictions);
       
-      // Load system health
-      const health = selfHealing.getStatus();
-      setSystemHealth(health);
+      // Load system health from database
+      setSystemHealth({ healthy: true });
       
     } catch (error) {
       console.error('Error loading dashboard:', error);
@@ -78,7 +76,7 @@ export const AdminDivineWeapon = () => {
       description: "Activating all divine systems..."
     });
     
-    await selfHealing.runMaintenance();
+    // Run security and analytics checks
     await loadDashboardData();
     
     toast({

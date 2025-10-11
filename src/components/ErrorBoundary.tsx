@@ -2,7 +2,6 @@ import React, { Component, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle } from 'lucide-react';
-import { errorRecovery } from '@/lib/selfHealing';
 
 interface Props {
   children: ReactNode;
@@ -25,16 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
-    
-    // Log to self-healing system
-    errorRecovery.handleError(error, {
-      component: 'ErrorBoundary',
-      action: 'render',
-      errorMessage: error.message,
-      stack: error.stack,
-      timestamp: new Date(),
-      attemptCount: 0,
-    });
+    // Error logged to console for debugging
   }
 
   render() {

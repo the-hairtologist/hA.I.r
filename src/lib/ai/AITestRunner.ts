@@ -11,7 +11,6 @@ import { colorSystemValidator } from './ColorSystemValidator';
 import { securityGuardian } from './SecurityGuardian';
 import { predictiveAnalytics } from './PredictiveAnalytics';
 import { crossPlatformOptimizer } from '@/lib/platform/CrossPlatformOptimizer';
-import { selfHealing } from '@/lib/selfHealing';
 import { logger } from '@/lib/logger';
 
 interface TestResult {
@@ -64,9 +63,6 @@ class AITestRunnerSystem {
 
     // Test 10: Cross-Platform Optimizer
     results.push(await this.testCrossPlatformOptimizer());
-
-    // Test 11: Self-Healing System
-    results.push(await this.testSelfHealing());
 
     const passed = results.filter(r => r.passed).length;
     const failed = results.filter(r => !r.passed).length;
@@ -304,27 +300,6 @@ class AITestRunnerSystem {
     }
   }
 
-  private async testSelfHealing(): Promise<TestResult> {
-    try {
-      const status = selfHealing.getStatus();
-      const isHealthy = status.health.status === 'healthy';
-      
-      return {
-        system: 'Self-Healing System',
-        passed: status.initialized && isHealthy,
-        message: isHealthy 
-          ? '🛡️ All angels active and protecting' 
-          : `⚠️ ${status.health.message}`,
-        details: status
-      };
-    } catch (error) {
-      return {
-        system: 'Self-Healing System',
-        passed: false,
-        message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
-      };
-    }
-  }
 
   /**
    * Run quick health check
