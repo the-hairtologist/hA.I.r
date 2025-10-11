@@ -65,3 +65,9 @@ verify_jwt = true
 
 [functions.analyze-hair-video]
 verify_jwt = true
+
+[functions.text-to-speech]
+verify_jwt = true
+
+[functions.analyze-portfolio]
+verify_jwt = true

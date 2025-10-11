@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
+import { PortfolioInsights } from "@/components/PortfolioInsights";
 
 interface PortfolioPhoto {
   id: string;
@@ -284,6 +285,13 @@ const Portfolio = () => {
           <h1 className="text-4xl font-bold mb-2 font-display">My Portfolio</h1>
           <p className="text-muted-foreground">Showcase your best work to attract more clients</p>
         </div>
+
+        {/* AI Portfolio Insights */}
+        {photos.length > 0 && (
+          <div className="mb-8">
+            <PortfolioInsights stylistId={stylistProfileId} />
+          </div>
+        )}
 
         {/* Upload Section */}
         <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-purple-400 to-pink-400">

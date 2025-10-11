@@ -18,6 +18,7 @@ import { VoiceInput } from "@/components/VoiceInput";
 import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
 import { AIDisclaimer } from "@/components/AIDisclaimer";
+import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -339,11 +340,16 @@ const Formulas = () => {
                     </p>
                   </div>
                   {formula.instructions && (
-                    <div>
+                    <div className="space-y-2">
                       <p className="text-sm font-medium mb-1">Instructions:</p>
                       <p className="text-sm whitespace-pre-wrap text-muted-foreground">
                         {formula.instructions}
                       </p>
+                      <AudioGuidePlayer 
+                        text={formula.instructions}
+                        title={`Instructions for ${formula.client?.full_name || 'Client'}`}
+                        voice="nova"
+                      />
                     </div>
                   )}
                   {formula.result_notes && (
