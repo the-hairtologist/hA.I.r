@@ -1202,6 +1202,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           email: string
+          email_digest_enabled: boolean | null
           full_name: string | null
           gender: string | null
           id: string
@@ -1217,6 +1218,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           email: string
+          email_digest_enabled?: boolean | null
           full_name?: string | null
           gender?: string | null
           id: string
@@ -1232,6 +1234,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           email?: string
+          email_digest_enabled?: boolean | null
           full_name?: string | null
           gender?: string | null
           id?: string
