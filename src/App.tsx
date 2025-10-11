@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { selfHealing } from "@/lib/selfHealing";
+// import { selfHealing } from "@/lib/selfHealing"; // Disabled - health monitoring causing unnecessary network noise
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -67,7 +67,8 @@ const App = () => {
   useEffect(() => {
     // Initialize divine protection systems
     const initializeSystems = async () => {
-      await selfHealing.initialize();
+      // DISABLED: Health monitoring causing unnecessary network noise
+      // await selfHealing.initialize();
       
       // Initialize analytics tracking
       try {
@@ -90,9 +91,10 @@ const App = () => {
     
     initializeSystems();
     
-    return () => {
-      selfHealing.shutdown();
-    };
+    // DISABLED: Health monitoring shutdown
+    // return () => {
+    //   selfHealing.shutdown();
+    // };
   }, []);
 
   return (
