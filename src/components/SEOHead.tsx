@@ -57,16 +57,18 @@ export const SEOHead = ({
     updateMetaTag("twitter:description", description);
     updateMetaTag("twitter:image", image.startsWith('http') ? image : `${window.location.origin}${image}`);
 
-    // Canonical URL
-    if (url) {
-      let canonical = document.querySelector('link[rel="canonical"]');
-      if (!canonical) {
-        canonical = document.createElement("link");
-        canonical.setAttribute("rel", "canonical");
-        document.head.appendChild(canonical);
-      }
-      canonical.setAttribute("href", url.startsWith('http') ? url : `${window.location.origin}${url}`);
+    // Canonical URL - use dynamic origin instead of hardcoded domain
+    const canonicalUrl = url 
+      ? (url.startsWith('http') ? url : `${window.location.origin}${url}`)
+      : window.location.href;
+      
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
     }
+    canonical.setAttribute("href", canonicalUrl);
   }, [title, description, keywords, image, url, type]);
 
   return null;
