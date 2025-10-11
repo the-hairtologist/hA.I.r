@@ -40,15 +40,9 @@ class HealthMonitorSystem {
         name: 'Database Connection',
         check: async () => {
           try {
-            // Check if we can connect to Supabase (don't use RLS-protected tables)
-            // Permission denied (42501) actually means the connection works and RLS is protecting data
-            const { error } = await supabase.from('profiles').select('id').limit(1);
-            
-            // If error is permission denied, that's actually GOOD - means security is working
-            if (error?.code === '42501') {
-              return true; // Connection works, RLS is protecting data properly
-            }
-            
+            // Use auth session check instead of querying tables
+            // This avoids unnecessary 401 errors in network logs
+            const { data, error } = await supabase.auth.getSession();
             return !error;
           } catch {
             return false;
