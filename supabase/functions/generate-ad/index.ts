@@ -12,13 +12,28 @@ serve(async (req) => {
 
   try {
     const { prompt, adType, generateImage } = await req.json();
+    
+    // Input validation
+    if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+      throw new Error("Prompt is required and must be a non-empty string");
+    }
+    
+    if (prompt.length > 1000) {
+      throw new Error("Prompt must be less than 1000 characters");
+    }
+    
+    const validAdTypes = ['social-media', 'landing-page', 'email', 'banner'];
+    if (!validAdTypes.includes(adType)) {
+      throw new Error("Invalid ad type");
+    }
+    
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    console.log("Generating ad:", { prompt, adType, generateImage });
+    console.log("Generating ad:", { prompt: prompt.substring(0, 50) + "...", adType, generateImage });
 
     const results: any = {};
 

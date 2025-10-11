@@ -18,8 +18,15 @@ const AIAdGenerator = () => {
   const [results, setResults] = useState<any>(null);
 
   const handleGenerate = async () => {
-    if (!prompt.trim()) {
+    const trimmedPrompt = prompt.trim();
+    
+    if (!trimmedPrompt) {
       toast.error("Please enter a description for your ad");
+      return;
+    }
+    
+    if (trimmedPrompt.length > 1000) {
+      toast.error("Description must be less than 1000 characters");
       return;
     }
 
@@ -88,7 +95,11 @@ const AIAdGenerator = () => {
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   rows={4}
+                  maxLength={1000}
                 />
+                <p className="text-xs text-muted-foreground">
+                  {prompt.length}/1000 characters
+                </p>
               </div>
 
               <div className="space-y-2">
