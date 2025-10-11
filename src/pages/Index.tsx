@@ -28,10 +28,7 @@ const Index = () => {
             <Button variant="ghost" onClick={() => navigate("/terms")} className="hidden sm:inline-flex text-sm">
               Terms
             </Button>
-            <Button variant="outline" onClick={() => navigate("/auth")} size="sm">
-              Sign In
-            </Button>
-            <Button onClick={() => navigate("/auth")} size="sm" className="hidden sm:inline-flex">
+            <Button onClick={() => navigate("/auth")} size="sm">
               Get Started
             </Button>
           </div>

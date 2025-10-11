@@ -16,7 +16,7 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
     { icon: Home, label: "Home", path: "/dashboard" },
     { icon: Calendar, label: "Appointments", path: "/appointments" },
     { icon: Users, label: "Clients", path: "/clients" },
-    { icon: BookOpen, label: "Knowledge", path: "/knowledge" },
+    { icon: MessageSquare, label: "Messages", path: "/messages" },
     { icon: User, label: "Settings", path: "/settings" },
   ];
 
@@ -24,7 +24,7 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
     { icon: Home, label: "Home", path: "/dashboard" },
     { icon: Users, label: "Stylists", path: "/stylists" },
     { icon: Calendar, label: "Appointments", path: "/appointments" },
-    { icon: BookOpen, label: "Knowledge", path: "/knowledge" },
+    { icon: MessageSquare, label: "Messages", path: "/messages" },
     { icon: User, label: "Settings", path: "/settings" },
   ];
 

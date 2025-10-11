@@ -22,6 +22,16 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   const stylistActions: FloatingAction[] = [
     {
+      label: "AI Assistant",
+      icon: Sparkles,
+      onClick: () => {
+        haptic.tap();
+        navigate("/ai-assistant");
+        setIsOpen(false);
+      },
+      gradient: "from-purple-500 to-pink-500",
+    },
+    {
       label: "New Client",
       icon: Users,
       onClick: () => {
@@ -46,14 +56,24 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       icon: Scissors,
       onClick: () => {
         haptic.tap();
-        navigate("/clients");
+        navigate("/formulas");
         setIsOpen(false);
       },
-      gradient: "from-purple-500 to-pink-500",
+      gradient: "from-amber-500 to-orange-500",
     },
   ];
 
   const clientActions: FloatingAction[] = [
+    {
+      label: "AI Assistant",
+      icon: Sparkles,
+      onClick: () => {
+        haptic.tap();
+        navigate("/ai-assistant");
+        setIsOpen(false);
+      },
+      gradient: "from-purple-500 to-pink-500",
+    },
     {
       label: "Find Stylist",
       icon: Users,
