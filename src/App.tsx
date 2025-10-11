@@ -1,3 +1,12 @@
+/**
+ * hA.I.r - AI-Powered Hair Salon Management Platform
+ * Copyright © 2025 hA.I.r. All Rights Reserved.
+ * 
+ * This software is proprietary and confidential.
+ * Unauthorized copying, modification, distribution, or use is strictly prohibited.
+ * See LICENSE.md for full terms.
+ */
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
