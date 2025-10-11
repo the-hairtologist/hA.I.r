@@ -112,6 +112,39 @@ Please provide 2-3 formula options with complete instructions.`;
           { role: 'user', content: userPrompt }
         ],
         max_tokens: 3000,
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "formula_response",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                formulas: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      formula_name: { type: "string" },
+                      formula_text: { type: "string" },
+                      instructions: { type: "string" },
+                      processing_time: { type: "string" },
+                      expected_result: { type: "string" },
+                      difficulty: { 
+                        type: "string",
+                        enum: ["beginner", "intermediate", "advanced"]
+                      }
+                    },
+                    required: ["formula_name", "formula_text", "instructions", "processing_time", "expected_result", "difficulty"],
+                    additionalProperties: false
+                  }
+                }
+              },
+              required: ["formulas"],
+              additionalProperties: false
+            }
+          }
+        }
       }),
     });
 
@@ -141,31 +174,15 @@ Please provide 2-3 formula options with complete instructions.`;
     
     const aiContent = data.choices[0].message.content;
     
-    // Try to parse JSON from the response
-    let formulas;
-    try {
-      // Extract JSON array from markdown code blocks if present
-      const jsonMatch = aiContent.match(/```json\n?([\s\S]*?)\n?```/) || aiContent.match(/\[([\s\S]*)\]/);
-      const jsonString = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : aiContent;
-      formulas = JSON.parse(jsonString);
-      
-      // Add watermark to each formula
-      formulas = formulas.map((formula: any) => ({
-        ...formula,
-        formula_text: addWatermark(formula.formula_text, userId),
-      }));
-    } catch (parseError) {
-      console.error('JSON parse error:', parseError);
-      // If JSON parsing fails, return the raw content with watermark
-      formulas = [{
-        formula_name: "AI Generated Formula",
-        formula_text: addWatermark(aiContent, userId),
-        instructions: "See formula text for details",
-        processing_time: "30-45 minutes",
-        expected_result: "Professional color result",
-        difficulty: "intermediate"
-      }];
-    }
+    // With structured output, we get guaranteed JSON
+    const parsedData = JSON.parse(aiContent);
+    let formulas = parsedData.formulas;
+    
+    // Add watermark to each formula
+    formulas = formulas.map((formula: any) => ({
+      ...formula,
+      formula_text: addWatermark(formula.formula_text, userId),
+    }));
 
     return new Response(
       JSON.stringify({ formulas }),

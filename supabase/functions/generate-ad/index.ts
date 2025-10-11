@@ -58,9 +58,26 @@ Format as JSON: { "headline": "...", "bodyCopy": "...", "cta": "..." }`;
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: "You are an expert copywriter for beauty and hair salon businesses. Always respond with valid JSON." },
+          { role: "system", content: "You are an expert copywriter for beauty and hair salon businesses." },
           { role: "user", content: copyPrompt }
         ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "ad_copy_response",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                headline: { type: "string", maxLength: 60 },
+                bodyCopy: { type: "string", maxLength: 125 },
+                cta: { type: "string", maxLength: 20 }
+              },
+              required: ["headline", "bodyCopy", "cta"],
+              additionalProperties: false
+            }
+          }
+        }
       }),
     });
 
@@ -73,16 +90,8 @@ Format as JSON: { "headline": "...", "bodyCopy": "...", "cta": "..." }`;
     const copyData = await copyResponse.json();
     const copyContent = copyData.choices?.[0]?.message?.content;
     
-    try {
-      results.copy = JSON.parse(copyContent);
-    } catch (e) {
-      console.error("Failed to parse copy JSON:", copyContent);
-      results.copy = {
-        headline: "Transform Your Look",
-        bodyCopy: "Book with top stylists. AI-powered matching. Perfect results every time.",
-        cta: "Book Now"
-      };
-    }
+    // With structured output, we get guaranteed valid JSON
+    results.copy = JSON.parse(copyContent);
 
     console.log("Generated copy:", results.copy);
 

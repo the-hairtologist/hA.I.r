@@ -62,3 +62,6 @@ verify_jwt = true
 
 [functions.delete-user-data]
 verify_jwt = true
+
+[functions.analyze-hair-video]
+verify_jwt = true

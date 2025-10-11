@@ -8,9 +8,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Search, Calendar, MapPin, DollarSign, MessageSquare } from "lucide-react";
+import { Loader2, Search, Calendar, MapPin, DollarSign, MessageSquare, Video } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { VideoInsights } from "@/components/VideoInsights";
 
 interface ClientPost {
   id: string;
@@ -21,6 +22,8 @@ interface ClientPost {
   location: string | null;
   preferred_date: string | null;
   created_at: string;
+  video_url: string | null;
+  video_analysis: any;
   client_profiles: {
     full_name: string | null;
   } | null;
@@ -226,6 +229,19 @@ const ClientDiscovery = () => {
                   <p className="text-sm text-muted-foreground">
                     {post.description}
                   </p>
+
+                  {/* Video Analysis */}
+                  {post.video_analysis && (
+                    <VideoInsights analysis={post.video_analysis} />
+                  )}
+                  
+                  {/* Video Badge */}
+                  {post.video_url && (
+                    <div className="flex items-center gap-2">
+                      <Video className="h-4 w-4 text-primary" />
+                      <span className="text-sm font-medium text-primary">Includes Video</span>
+                    </div>
+                  )}
                   
                   <div className="space-y-2 text-sm">
                     {post.client_profiles?.full_name && (

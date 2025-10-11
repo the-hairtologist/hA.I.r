@@ -25,9 +25,10 @@ const Knowledge = () => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
   const [aiMode, setAiMode] = useState<"formula" | "stepbystep">("formula");
-  const [aiMessages, setAiMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
+  const [aiMessages, setAiMessages] = useState<Array<{ role: "user" | "assistant"; content: string | any; imageUrls?: string[] }>>([]);
   const [aiInput, setAiInput] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Formula Generator specific state
@@ -175,16 +176,38 @@ const Knowledge = () => {
     if (!aiInput.trim() || aiLoading) return;
 
     const userMessage = aiInput.trim();
+    const messageWithImages = uploadedImages.length > 0 
+      ? { role: "user" as const, content: userMessage, imageUrls: uploadedImages }
+      : { role: "user" as const, content: userMessage };
+    
     setAiInput("");
-    setAiMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    setAiMessages(prev => [...prev, messageWithImages]);
     setAiLoading(true);
 
     try {
+      // Build conversation history with images
+      const historyWithImages = aiMessages.map(msg => {
+        if (msg.imageUrls && msg.imageUrls.length > 0) {
+          return {
+            role: msg.role,
+            content: [
+              { type: 'text', text: typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content) },
+              ...msg.imageUrls.map(url => ({
+                type: 'image_url',
+                image_url: { url }
+              }))
+            ]
+          };
+        }
+        return { role: msg.role, content: msg.content };
+      });
+
       const { data, error } = await supabase.functions.invoke("hair-assistant-chat", {
         body: {
           message: userMessage,
           mode: aiMode,
-          conversationHistory: aiMessages
+          conversationHistory: historyWithImages,
+          images: uploadedImages.length > 0 ? uploadedImages : undefined
         }
       });
 
