@@ -41,6 +41,7 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const ServerError = lazy(() => import("./pages/ServerError"));
 const Referrals = lazy(() => import("./pages/Referrals"));
 const SystemHealth = lazy(() => import("./pages/SystemHealth"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -245,8 +246,11 @@ const App = () => {
           <Route path="/stylist/:id" element={<StylistProfile />} />
           <Route path="/s/:username" element={<StylistProfile />} />
           
-                {/* 404 Catch-All */}
-                <Route path="*" element={<NotFound />} />
+          {/* Error Pages */}
+          <Route path="/500" element={<ServerError />} />
+          
+          {/* 404 Catch-All */}
+          <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </BrowserRouter>

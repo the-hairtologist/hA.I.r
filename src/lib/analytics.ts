@@ -11,6 +11,7 @@ const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '';
 
 // Initialize analytics on app load
 let analyticsInitialized = false;
+let isInitialized = false;
 
 /**
  * Validates Google Analytics Measurement ID format
@@ -29,7 +30,14 @@ export const initAnalytics = () => {
   if (analyticsInitialized) return;
 
   // Google Analytics 4 - with security validation
-  if (GA4_MEASUREMENT_ID && Platform.isWeb && isValidGA4Id(GA4_MEASUREMENT_ID)) {
+  if (!GA4_MEASUREMENT_ID || !isValidGA4Id(GA4_MEASUREMENT_ID)) {
+    console.info('[Analytics] GA4 not configured or invalid. Add VITE_GA4_MEASUREMENT_ID to enable tracking.');
+    analyticsInitialized = true;
+    isInitialized = true;
+    return;
+  }
+
+  if (Platform.isWeb) {
     // GA4 script injection
     const script1 = document.createElement('script');
     script1.async = true;
@@ -54,8 +62,16 @@ export const initAnalytics = () => {
     // Add Mixpanel initialization here if needed
   }
 
+  isInitialized = true;
   analyticsInitialized = true;
-  console.log('[Analytics] Initialized');
+  console.log('[Analytics] Initialized successfully');
+};
+
+/**
+ * Check if analytics is ready
+ */
+export const isAnalyticsReady = (): boolean => {
+  return isInitialized;
 };
 
 /**
@@ -361,9 +377,6 @@ class Analytics {
 
 // Export singleton instance
 export const analytics = new Analytics();
-
-// Export initialization status check
-export const isAnalyticsReady = () => analyticsInitialized;
 
 /**
  * Instructions for integration:
