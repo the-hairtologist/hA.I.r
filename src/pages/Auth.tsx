@@ -19,6 +19,8 @@ type AuthState = {
   email: string;
   password: string;
   fullName: string;
+  licenseNumber: string;
+  licenseState: string;
   resetEmail: string;
   showResetDialog: boolean;
   resetLoading: boolean;
@@ -38,6 +40,8 @@ const initialState: AuthState = {
   email: "",
   password: "",
   fullName: "",
+  licenseNumber: "",
+  licenseState: "",
   resetEmail: "",
   showResetDialog: false,
   resetLoading: false,
@@ -117,18 +121,23 @@ const Auth = () => {
 
       if (roleError) throw roleError;
 
-      // Create stylist profile
+      // Create stylist profile with license info
       const { error: profileError } = await supabase
         .from("stylist_profiles")
-        .insert({ user_id: user.id });
+        .insert({ 
+          user_id: user.id,
+          license_number: state.licenseNumber.trim(),
+          license_state: state.licenseState.trim(),
+          verification_status: 'pending'
+        });
       
       if (profileError) {
         await supabase.from("user_roles").delete().eq("user_id", user.id);
         throw profileError;
       }
 
-      toast.success("Account created successfully! Welcome to hA.I.r!");
-      log.info("User signed up successfully", "Auth", { userType: 'stylist' });
+      toast.success("Account created! Pending license verification (24-48 hrs)");
+      log.info("User signed up successfully", "Auth", { userType: 'stylist', pendingVerification: true });
     } catch (error) {
       await supabase.auth.signOut();
       throw error;
@@ -428,10 +437,44 @@ const Auth = () => {
                     minLength={6}
                   />
                 </div>
-                <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))] mb-4">
+                
+                <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-blue-200 to-cyan-200 shadow-[3px_3px_0px_0px_hsl(var(--foreground))] space-y-3">
+                  <p className="text-sm font-semibold text-foreground mb-2">📋 License Verification Required</p>
+                  <p className="text-xs text-foreground/80 mb-3">
+                    To maintain quality, all stylists must verify their professional license. Your account will be reviewed within 24-48 hours.
+                  </p>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="license-number" className="text-xs">License Number *</Label>
+                    <Input
+                      id="license-number"
+                      type="text"
+                      placeholder="e.g., CA-12345678"
+                      value={state.licenseNumber}
+                      onChange={(e) => dispatch({ type: "SET_FIELD", field: "licenseNumber", value: e.target.value })}
+                      required
+                      className="bg-card"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="license-state" className="text-xs">Issuing State/Province *</Label>
+                    <Input
+                      id="license-state"
+                      type="text"
+                      placeholder="e.g., California, Ontario"
+                      value={state.licenseState}
+                      onChange={(e) => dispatch({ type: "SET_FIELD", field: "licenseState", value: e.target.value })}
+                      required
+                      className="bg-card"
+                    />
+                  </div>
+                </div>
+                
+                <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
                   <p className="text-sm font-semibold text-foreground mb-1">💼 Professional Stylist Account</p>
                   <p className="text-xs text-foreground/80 font-medium">
-                    Join thousands of stylists managing their salon with AI • 7-day free trial, then $15/month
+                    Join thousands of verified stylists • 7-day free trial, then $15/month
                   </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>

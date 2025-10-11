@@ -166,6 +166,14 @@ export default function AdminDashboard() {
         {/* Quick Admin Actions */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Button
+            onClick={() => navigate('/stylist-verification')}
+            className="h-auto flex-col gap-2 p-4"
+            variant="outline"
+          >
+            <Shield className="h-6 w-6" />
+            <span className="text-xs">Stylist Verification</span>
+          </Button>
+          <Button
             onClick={() => navigate('/admin/users')}
             className="h-auto flex-col gap-2 p-4"
             variant="outline"
@@ -178,24 +186,16 @@ export default function AdminDashboard() {
             className="h-auto flex-col gap-2 p-4"
             variant="outline"
           >
-            <Shield className="h-6 w-6" />
+            <Activity className="h-6 w-6" />
             <span className="text-xs">System Health</span>
           </Button>
           <Button
-            onClick={() => navigate('/admin/platform-settings')}
+            onClick={() => navigate('/access-codes')}
             className="h-auto flex-col gap-2 p-4"
             variant="outline"
           >
             <SettingsIcon className="h-6 w-6" />
-            <span className="text-xs">Platform Settings</span>
-          </Button>
-          <Button
-            onClick={() => navigate('/admin/analytics')}
-            className="h-auto flex-col gap-2 p-4"
-            variant="outline"
-          >
-            <TrendingUp className="h-6 w-6" />
-            <span className="text-xs">Analytics</span>
+            <span className="text-xs">Access Codes</span>
           </Button>
         </div>
 
