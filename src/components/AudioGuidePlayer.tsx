@@ -48,10 +48,20 @@ export const AudioGuidePlayer = ({
         body: { text, voice }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Audio generation error:', error);
+        toast.error(error.message || 'Failed to generate audio guide');
+        return null;
+      }
+
+      if (data?.error) {
+        toast.error(data.error);
+        return null;
+      }
 
       if (!data?.audioContent) {
-        throw new Error('No audio content received');
+        toast.error('No audio content received');
+        return null;
       }
 
       // Convert base64 to blob
@@ -67,7 +77,8 @@ export const AudioGuidePlayer = ({
       return url;
     } catch (error: any) {
       console.error('Error generating audio:', error);
-      toast.error('Failed to generate audio guide');
+      const errorMsg = error?.message || 'Failed to generate audio guide';
+      toast.error(errorMsg);
       return null;
     } finally {
       setIsLoading(false);

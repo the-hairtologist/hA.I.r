@@ -20,7 +20,15 @@ serve(async (req) => {
 
     const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
     if (!OPENAI_API_KEY) {
-      throw new Error('OpenAI API key not configured')
+      return new Response(
+        JSON.stringify({ 
+          error: 'Audio guide feature requires OpenAI API key configuration. Please contact support to enable this feature.' 
+        }),
+        {
+          status: 503,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
     }
 
     console.log('Generating speech for text length:', text.length)
