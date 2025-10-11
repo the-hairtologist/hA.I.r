@@ -1,11 +1,27 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import Stripe from 'https://esm.sh/stripe@14.21.0'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
+
+// Input validation schemas
+const uuidSchema = z.string().uuid();
+const appointmentDataSchema = z.object({
+  service_id: uuidSchema,
+  duration_minutes: z.number().int().min(15).max(480),
+  appointment_date: z.string().datetime(),
+  notes: z.string().max(1000).optional(),
+});
+
+const requestSchema = z.object({
+  appointmentData: appointmentDataSchema,
+  clientEmail: z.string().email().max(255),
+  clientName: z.string().min(1).max(255),
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -22,7 +38,21 @@ serve(async (req) => {
       apiVersion: '2023-10-16',
     })
 
-    const { appointmentData, clientEmail, clientName } = await req.json()
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid input', 
+          details: validationResult.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', ')
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const { appointmentData, clientEmail, clientName } = validationResult.data;
 
     // Get service details
     const { data: service, error: serviceError } = await supabase

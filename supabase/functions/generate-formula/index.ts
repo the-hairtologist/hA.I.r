@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 /**
  * Copyright © 2025 hA.I.r. All Rights Reserved.
@@ -10,6 +11,14 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation schema
+const requestSchema = z.object({
+  hairDescription: z.string().min(10).max(2000),
+  colorLine: z.string().max(255).optional(),
+  clientNotes: z.string().max(1000).optional(),
+  imageAnalysis: z.string().max(5000).optional(),
+});
 
 // Watermark helper
 const addWatermark = (content: string, userId?: string): string => {
@@ -23,7 +32,21 @@ serve(async (req) => {
   }
 
   try {
-    const { hairDescription, colorLine, clientNotes, imageAnalysis } = await req.json();
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid input', 
+          details: validationResult.error.issues.map(i => i.message).join(', ')
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const { hairDescription, colorLine, clientNotes, imageAnalysis } = validationResult.data;
     
     // Get authorization header to extract user ID
     const authHeader = req.headers.get('authorization');
