@@ -7,10 +7,6 @@ interface BookingPageBrandingProps {
 }
 
 export const BookingPageBranding = ({ className = "" }: BookingPageBrandingProps) => {
-  const handleLearnMore = () => {
-    window.open("https://hair-ai.com", "_blank");
-  };
-
   return (
     <Card className={`border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 ${className}`}>
       <CardContent className="p-6 space-y-4">
@@ -19,22 +15,15 @@ export const BookingPageBranding = ({ className = "" }: BookingPageBrandingProps
             <Sparkles className="h-6 w-6 text-on-surface-primary" />
           </div>
           <div className="flex-1 space-y-2">
-            <h3 className="font-semibold text-lg">Powered by hA.I.r</h3>
+            <h3 className="font-semibold text-lg">Client Booking - Coming Soon!</h3>
             <p className="text-sm text-muted-foreground">
-              Your stylist uses hA.I.r - the AI-powered salon assistant that creates professional color formulas instantly, manages appointments, and keeps your hair history organized.
+              We're building an amazing client booking experience. Soon your clients will be able to book appointments, make payments, and manage their hair journey—all in one place.
             </p>
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button onClick={handleLearnMore} variant="outline" size="sm" className="w-full">
-            <ExternalLink className="h-4 w-4 mr-2" />
-            Want Your Own AI Assistant?
-          </Button>
-        </div>
-
         <p className="text-xs text-center text-muted-foreground">
-          Join thousands of stylists using AI to grow their business
+          Stay tuned for updates ✨
         </p>
       </CardContent>
     </Card>

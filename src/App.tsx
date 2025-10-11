@@ -62,6 +62,7 @@ const AITestDashboard = lazy(() => import("./pages/AITestDashboard"));
 const AIAdGenerator = lazy(() => import("./pages/AIAdGenerator"));
 const DMCA = lazy(() => import("./pages/DMCA"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
+const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -274,6 +275,8 @@ const App = () => {
               <BookAppointment />
             </ProtectedRoute>
           } />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          
           {/* Public Stylist Routes - No auth required for discovery */}
           <Route path="/stylists" element={<StylistDiscovery />} />
           <Route path="/stylist/:id" element={<StylistProfile />} />

@@ -113,18 +113,32 @@ export const ClientPortalPreview = ({
           )}
         </div>
 
+        {/* Coming Soon Banner */}
+        <div className="p-4 bg-accent/20 rounded-lg brutal-border border-accent/40">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-accent-foreground" />
+            <p className="text-sm font-semibold text-accent-foreground">
+              Client Booking - Coming Soon!
+            </p>
+          </div>
+          <p className="text-xs text-accent-foreground/80">
+            Your clients will soon be able to book appointments, make payments, and manage their hair journey directly from your profile page.
+          </p>
+        </div>
+
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 opacity-60">
           <Button
             onClick={handleBooking}
             className="gap-2"
+            disabled
           >
             <Calendar className="h-4 w-4" />
             Book Now
           </Button>
           <Button
             variant="outline"
-            onClick={() => toast.info("View availability coming soon!")}
+            disabled
             className="gap-2"
           >
             <Clock className="h-4 w-4" />
@@ -132,12 +146,12 @@ export const ClientPortalPreview = ({
           </Button>
         </div>
 
-        {/* Coming Soon Features */}
-        <div className="p-4 bg-success/10 rounded-lg brutal-border border-success/20">
-          <p className="text-xs font-semibold text-success-foreground mb-2">
-            🚀 Coming Soon in Phase 2:
+        {/* Phase 2 Features */}
+        <div className="p-4 bg-primary/10 rounded-lg brutal-border border-primary/20">
+          <p className="text-xs font-semibold text-primary mb-2">
+            📋 Planned Features:
           </p>
-          <ul className="text-xs text-success-foreground/80 space-y-1">
+          <ul className="text-xs text-muted-foreground space-y-1">
             <li>• Public booking page at hair.app/your-name</li>
             <li>• Clients can book without your help</li>
             <li>• Automatic account creation for clients</li>
@@ -149,16 +163,9 @@ export const ClientPortalPreview = ({
 
         {/* CTA */}
         <div className="text-center pt-2">
-          <Button
-            variant="link"
-            className="gap-1 text-primary"
-            onClick={() => {
-              window.open("https://docs.lovable.dev", "_blank");
-            }}
-          >
-            Learn more about client portals
-            <ExternalLink className="h-3 w-3" />
-          </Button>
+          <p className="text-xs text-muted-foreground">
+            We're building something amazing for your clients ✨
+          </p>
         </div>
       </CardContent>
     </Card>
