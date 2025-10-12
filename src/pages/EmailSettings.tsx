@@ -441,7 +441,7 @@ export default function EmailSettings() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="border rounded-lg overflow-hidden bg-white">
+                <div className="border rounded-lg overflow-hidden bg-background">
                   <iframe
                     srcDoc={getPreviewHtml()}
                     className="w-full h-[600px]"

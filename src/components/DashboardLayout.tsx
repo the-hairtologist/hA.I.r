@@ -180,7 +180,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       />
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge className="bg-amber-500 text-white border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
+                          <Badge className="bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
                             <Crown className="h-3 w-3 mr-1" />
                             ADMIN
                           </Badge>

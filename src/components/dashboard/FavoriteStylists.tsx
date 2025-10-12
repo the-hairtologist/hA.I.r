@@ -77,7 +77,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-pink-rose">
-            <Heart className="h-5 w-5 text-white" />
+            <Heart className="h-5 w-5 text-on-surface-primary" />
           </div>
           <span>Your Stylists</span>
         </CardTitle>
@@ -112,7 +112,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                 <div className="flex items-center gap-3 mb-3">
                   <Avatar className="h-12 w-12 brutal-border">
                     <AvatarImage src={stylist.avatar_url} />
-                    <AvatarFallback className="bg-gradient-purple-pink text-white font-bold">
+                    <AvatarFallback className="bg-gradient-purple-pink text-on-surface-primary font-bold">
                       {stylist.business_name?.[0]?.toUpperCase() || stylist.user?.full_name?.[0]?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>

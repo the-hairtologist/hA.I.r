@@ -36,7 +36,7 @@ export function EmptyStateCard({
       <CardHeader className="text-center pb-4">
         <div className="flex justify-center mb-6">
           <div className={`w-20 h-20 rounded-2xl ${gradient} flex items-center justify-center border-[3px] border-foreground shadow-brutal-md`}>
-            <Icon className="h-10 w-10 text-white" />
+            <Icon className="h-10 w-10 text-on-surface-primary" />
           </div>
         </div>
         <CardTitle className="text-3xl font-bold">{title}</CardTitle>

@@ -71,7 +71,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-amber-orange">
-            <Award className="h-5 w-5 text-white" />
+            <Award className="h-5 w-5 text-on-surface-primary" />
           </div>
           <span>Top Services</span>
         </CardTitle>
@@ -96,7 +96,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
               >
                 <div className="flex items-center gap-3">
                   <div 
-                    className={`flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br brutal-border text-white font-display font-bold text-sm ${gradients[index]}`}
+                    className={`flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br brutal-border text-on-surface-primary font-display font-bold text-sm ${gradients[index]}`}
                   >
                     {index + 1}
                   </div>

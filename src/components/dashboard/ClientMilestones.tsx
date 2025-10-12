@@ -102,7 +102,7 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
                 <div className="relative flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3 flex-1">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 shadow-sm">
-                      <Icon className="h-4 w-4 text-white" />
+                      <Icon className="h-4 w-4 text-on-surface-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm">

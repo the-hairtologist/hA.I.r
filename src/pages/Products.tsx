@@ -16,7 +16,7 @@ const Products = () => {
               <div className="flex justify-center mb-6">
                 <div className="relative">
                   <div className="w-28 h-28 rounded-2xl bg-gradient-emerald-teal flex items-center justify-center border-[3px] border-foreground shadow-brutal-lg">
-                    <Package className="h-16 w-16 text-white" />
+                    <Package className="h-16 w-16 text-on-surface-primary" />
                   </div>
                   <div className="absolute -top-3 -right-3">
                     <Sparkles className="h-10 w-10 text-primary animate-pulse drop-shadow-lg" />
@@ -47,7 +47,7 @@ const Products = () => {
               <div className="grid md:grid-cols-3 gap-4 mt-8">
                 <div className="p-4 border-2 border-foreground rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="w-10 h-10 rounded-lg bg-gradient-cyan-blue flex items-center justify-center mb-3">
-                    <Package className="h-5 w-5 text-white" />
+                    <Package className="h-5 w-5 text-on-surface-primary" />
                   </div>
                   <h4 className="font-semibold mb-1">Smart Tracking</h4>
                   <p className="text-xs text-muted-foreground">Real-time stock monitoring</p>
@@ -55,7 +55,7 @@ const Products = () => {
                 
                 <div className="p-4 border-2 border-foreground rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="w-10 h-10 rounded-lg bg-gradient-amber-orange flex items-center justify-center mb-3">
-                    <TrendingUp className="h-5 w-5 text-white" />
+                    <TrendingUp className="h-5 w-5 text-on-surface-primary" />
                   </div>
                   <h4 className="font-semibold mb-1">Usage Analytics</h4>
                   <p className="text-xs text-muted-foreground">See what you use most</p>
@@ -63,7 +63,7 @@ const Products = () => {
                 
                 <div className="p-4 border-2 border-foreground rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="w-10 h-10 rounded-lg bg-gradient-purple-pink flex items-center justify-center mb-3">
-                    <BarChart3 className="h-5 w-5 text-white" />
+                    <BarChart3 className="h-5 w-5 text-on-surface-primary" />
                   </div>
                   <h4 className="font-semibold mb-1">Cost Insights</h4>
                   <p className="text-xs text-muted-foreground">Track your inventory value</p>

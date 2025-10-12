@@ -61,7 +61,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
         <CardTitle className="flex items-center justify-between gap-2 text-lg font-display">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-gradient-purple-pink">
-              <Smile className="h-5 w-5 text-white" />
+              <Smile className="h-5 w-5 text-on-surface-primary" />
             </div>
             <span>Client Sentiment</span>
           </div>

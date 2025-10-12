@@ -52,7 +52,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-pink-rose">
-            <Repeat className="h-5 w-5 text-white" />
+            <Repeat className="h-5 w-5 text-on-surface-primary" />
           </div>
           <span>Client Retention</span>
         </CardTitle>

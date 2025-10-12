@@ -49,7 +49,7 @@ const PaymentMethodsPage = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
                     <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
-                      <CreditCard className="h-6 w-6 text-white" />
+                      <CreditCard className="h-6 w-6 text-on-surface-primary" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">

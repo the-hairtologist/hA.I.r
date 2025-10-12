@@ -73,7 +73,7 @@ export const WeeklyOverview = () => {
                 <div className="relative space-y-2">
                   <div className="flex items-center justify-between">
                     <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.gradient} shadow-sm`}>
-                      <Icon className="h-4 w-4 text-white" />
+                      <Icon className="h-4 w-4 text-on-surface-primary" />
                     </div>
                   </div>
                   <div>

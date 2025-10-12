@@ -160,8 +160,8 @@ export const AISmartNotifications = () => {
 
             {notifications.map(notification => (
               <Card key={notification.id} className="border-l-4" style={{
-                borderLeftColor: notification.priority === 'high' ? '#ef4444' : 
-                                 notification.priority === 'medium' ? '#f59e0b' : '#6b7280'
+                borderLeftColor: notification.priority === 'high' ? 'hsl(var(--destructive))' : 
+                                 notification.priority === 'medium' ? 'hsl(var(--warning))' : 'hsl(var(--muted-foreground))'
               }}>
                 <CardContent className="pt-4">
                   <div className="space-y-2">
