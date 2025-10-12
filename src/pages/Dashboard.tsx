@@ -615,9 +615,8 @@ const Dashboard = () => {
                   <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Your schedule at a glance 📅
                   </p>
-                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] max-h-[600px] animate-fade-in" style={{ animationDelay: '250ms' }}>
-                    <div className="overflow-auto max-h-[600px]">
-                      <WeeklyScheduleView
+                  <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <WeeklyScheduleView
                         appointments={weekAppointments}
                         stylistSchedule={profile?.weekly_schedule}
                         stylistId={profile?.id}
@@ -627,7 +626,6 @@ const Dashboard = () => {
                           setQuickAppointmentOpen(true);
                         }}
                       />
-                    </div>
                   </div>
                 </div>
               )}
@@ -639,8 +637,7 @@ const Dashboard = () => {
                     Ready to book your next transformation? ✨
                   </p>
                   {weekAppointments.length > 0 ? (
-                    <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] max-h-[600px] animate-fade-in mt-3" style={{ animationDelay: '250ms' }}>
-                      <div className="overflow-auto max-h-[600px]">
+                    <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in mt-3" style={{ animationDelay: '250ms' }}>
                         <WeeklyScheduleView
                           appointments={weekAppointments}
                           stylistSchedule={profile?.weekly_schedule}
@@ -648,7 +645,6 @@ const Dashboard = () => {
                           onAppointmentClick={(apt) => navigate("/appointments")}
                           onTimeSlotClick={undefined}
                         />
-                      </div>
                     </div>
                   ) : (
                     <div className="mt-4 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-6 sm:p-8 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
