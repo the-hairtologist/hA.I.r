@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calendar, MessageSquare, User, Users, Sparkles } from "lucide-react";
+import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
@@ -23,13 +23,15 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: Home, 
       label: "Home", 
       path: "/dashboard",
-      gradient: "from-purple-500 to-pink-500"
+      gradient: "from-purple-500 to-pink-500",
+      highlight: false
     },
     { 
       icon: Calendar, 
       label: "Schedule", 
       path: "/appointments",
-      gradient: "from-cyan-500 to-blue-500"
+      gradient: "from-cyan-500 to-blue-500",
+      highlight: false
     },
     { 
       icon: Sparkles, 
@@ -42,14 +44,16 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: Users, 
       label: "Clients", 
       path: "/clients",
-      gradient: "from-emerald-500 to-teal-500"
+      gradient: "from-emerald-500 to-teal-500",
+      highlight: false
     },
     { 
       icon: MessageSquare, 
       label: "Messages", 
       path: "/messages",
       gradient: "from-pink-500 to-rose-500",
-      badge: unreadCount
+      badge: unreadCount,
+      highlight: false
     },
   ];
 
@@ -58,13 +62,15 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: Home, 
       label: "Home", 
       path: "/dashboard",
-      gradient: "from-purple-500 to-pink-500"
+      gradient: "from-purple-500 to-pink-500",
+      highlight: false
     },
     { 
       icon: Users, 
       label: "Find", 
       path: "/stylist-discovery",
-      gradient: "from-cyan-500 to-blue-500"
+      gradient: "from-cyan-500 to-blue-500",
+      highlight: false
     },
     { 
       icon: Sparkles, 
@@ -77,18 +83,59 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: Calendar, 
       label: "Bookings", 
       path: "/appointments",
-      gradient: "from-pink-500 to-rose-500"
+      gradient: "from-pink-500 to-rose-500",
+      highlight: false
     },
     { 
       icon: MessageSquare, 
       label: "Messages", 
       path: "/messages",
       gradient: "from-violet-500 to-purple-500",
-      badge: unreadCount
+      badge: unreadCount,
+      highlight: false
     },
   ];
 
-  const items = userRole === "stylist" ? stylistItems : clientItems;
+  const adminItems = [
+    { 
+      icon: Home, 
+      label: "Home", 
+      path: "/dashboard",
+      gradient: "from-purple-500 to-pink-500",
+      highlight: false
+    },
+    { 
+      icon: Shield, 
+      label: "Command", 
+      path: "/admin/command",
+      gradient: "from-red-500 to-orange-500",
+      highlight: false
+    },
+    { 
+      icon: Users, 
+      label: "Users", 
+      path: "/admin/users",
+      gradient: "from-cyan-500 to-blue-500",
+      highlight: false
+    },
+    { 
+      icon: Activity, 
+      label: "Health", 
+      path: "/system-health",
+      gradient: "from-emerald-500 to-teal-500",
+      highlight: false
+    },
+    { 
+      icon: MessageSquare, 
+      label: "Messages", 
+      path: "/messages",
+      gradient: "from-violet-500 to-purple-500",
+      badge: unreadCount,
+      highlight: false
+    },
+  ];
+
+  const items = userRole === "admin" ? adminItems : userRole === "stylist" ? stylistItems : clientItems;
 
   const handleNavigation = (path: string) => {
     haptic.tap();

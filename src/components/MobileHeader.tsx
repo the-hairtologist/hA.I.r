@@ -70,15 +70,20 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
           scrolled ? "h-14" : "h-16"
         )}
       >
-        {/* Left: Menu button */}
+        {/* Left: Menu button - Enhanced visibility */}
         <Button
           variant="ghost"
           size="icon"
           onClick={handleMenuClick}
-          className="min-w-[44px] min-h-[44px] touch-manipulation"
+          className={cn(
+            "min-w-[44px] min-h-[44px] touch-manipulation",
+            "relative group hover:bg-primary/10 transition-all duration-200"
+          )}
           aria-label="Open navigation menu"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-6 w-6 group-hover:text-primary transition-colors" />
+          {/* Subtle pulse indicator for discoverability */}
+          <div className="absolute inset-0 rounded-md bg-primary/5 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity" />
         </Button>
 
         {/* Center: Logo */}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/components/ui/sidebar";
 
@@ -7,6 +7,7 @@ export const MobileSidebarOverlay = () => {
   const isOpen = openMobile;
   const previousOverflow = useRef<string>('');
   const previousTouchAction = useRef<string>('');
+  const [touchStart, setTouchStart] = useState<number | null>(null);
 
   useEffect(() => {
     // Only apply scroll lock on mobile devices
@@ -37,6 +38,25 @@ export const MobileSidebarOverlay = () => {
     };
   }, [isOpen]);
 
+  // Handle swipe-to-close gesture
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    
+    const touchEnd = e.changedTouches[0].clientX;
+    const swipeDistance = touchStart - touchEnd;
+    
+    // If user swipes right-to-left more than 50px, close sidebar
+    if (swipeDistance > 50) {
+      setOpenMobile(false);
+    }
+    
+    setTouchStart(null);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -46,6 +66,8 @@ export const MobileSidebarOverlay = () => {
         "animate-fade-in touch-manipulation"
       )}
       onClick={() => setOpenMobile(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       aria-label="Close navigation menu"
       role="button"
       tabIndex={0}
