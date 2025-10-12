@@ -28,23 +28,59 @@ const Help = () => {
     },
     {
       question: "How do I create a formula?",
-      answer: "Navigate to a client's profile, click 'New Formula', and either use AI assistance or manually create your formula.",
+      answer: "Navigate to a client's profile, click 'New Formula', and either use AI assistance or manually create your formula with detailed notes and products.",
     },
     {
       question: "How do I manage my appointments?",
-      answer: "Click 'Calendar' in the sidebar to view all appointments. You can click any appointment to view details, reschedule, or cancel.",
+      answer: "Click 'Calendar' in the sidebar to view all appointments. You can click any appointment to view details, reschedule, or cancel. You can also filter by date and status.",
     },
     {
       question: "How do I set my working hours?",
-      answer: "Go to 'Availability' in the sidebar to set your working hours, breaks, and time off.",
+      answer: "Go to 'Availability' in the sidebar to set your working hours, breaks, time off, and vacation days. This helps clients know when you're available for bookings.",
     },
     {
       question: "How do I share my booking page?",
-      answer: "Go to 'My Booking Page' in the Growth & Marketing section to get your unique booking link and share it with clients.",
+      answer: "Go to 'My Booking Page' to get your unique booking link. You can customize it with your branding and share it on social media, your website, or via text/email.",
     },
     {
       question: "How do I track my earnings?",
-      answer: "Visit the 'Finance' page to see your earnings, payments, and commission tracking all in one place.",
+      answer: "Visit the 'Finance' page to see your earnings, payments, pending amounts, and commission tracking all in one place. You can also export reports.",
+    },
+    {
+      question: "How do I manage notifications?",
+      answer: "Click 'Notifications' in the sidebar to view all your notifications. You can also adjust notification preferences in Settings.",
+    },
+    {
+      question: "How do I use the AI Assistant?",
+      answer: "The AI Assistant can help you with formula recommendations, client consultations, and hair care advice. Just describe what you need and it will provide personalized suggestions.",
+    },
+    {
+      question: "How do I build my portfolio?",
+      answer: "Go to 'Portfolio' to upload before/after photos, add descriptions, and showcase your best work. This helps attract new clients and build your brand.",
+    },
+    {
+      question: "How do I invite clients?",
+      answer: "In 'Client Management', click on a client and select 'Invite to Portal'. They'll receive an email to create their account and access their appointments and formulas.",
+    },
+    {
+      question: "How do I integrate with my calendar?",
+      answer: "Visit 'Integrations' to connect with Google Calendar, Outlook, or other calendar apps to sync your appointments automatically.",
+    },
+    {
+      question: "How do I handle cancellations and reschedules?",
+      answer: "Click on any appointment in your Calendar, then select 'Reschedule' or 'Cancel'. Clients will be notified automatically of any changes.",
+    },
+    {
+      question: "What if I forgot my password?",
+      answer: "Click 'Forgot Password' on the login screen. You'll receive an email with instructions to reset your password securely.",
+    },
+    {
+      question: "How do I update my profile information?",
+      answer: "Go to 'My Profile' to update your photo, bio, contact information, specialties, and social media links.",
+    },
+    {
+      question: "How do I refer friends and earn rewards?",
+      answer: "Visit 'Referrals' to get your unique referral link. Share it with other stylists and earn rewards when they sign up!",
     },
   ];
 
