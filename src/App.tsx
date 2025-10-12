@@ -95,9 +95,12 @@ const AnalyticsInitializer = () => {
   return null;
 };
 
-const App = () => {
+const KeyboardShortcutsInitializer = () => {
   useGlobalKeyboardShortcuts();
+  return null;
+};
 
+const App = () => {
   useEffect(() => {
     const initializeSystems = async () => {
       try {
@@ -122,8 +125,9 @@ const App = () => {
           <Sonner />
           <CookieConsent />
           <PerformanceOverlay />
-          <BrowserRouter>
+            <BrowserRouter>
             <AnalyticsInitializer />
+            <KeyboardShortcutsInitializer />
             <ServiceIntegrationTracker />
             <RoleSwitchProtection />
             <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
