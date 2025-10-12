@@ -403,7 +403,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "appointments", title: "My Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main", color: "text-violet-400 dark:text-violet-300" },
     { id: "notifications", title: "Notifications", url: "/notifications", icon: Bell, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "find-stylist", title: "Find a Stylist", url: "/stylist-discovery", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "services", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "find-stylist", title: "Find a Stylist", url: "/stylist-discovery", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "services", color: "text-cyan-400 dark:text-cyan-300", comingSoon: true },
     { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "services", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
     { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
