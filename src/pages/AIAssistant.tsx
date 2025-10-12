@@ -253,7 +253,7 @@ const Knowledge = () => {
               </h2>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <span className="font-semibold text-foreground">Your expert stylist assistant.</span> Get color formulas, step-by-step techniques, corrections, and pro advice instantly.
+              <span className="font-semibold text-foreground">Ask anything hair-related!</span> Get instant color formulas, step-by-step guides for tricky corrections, technique tips, product recommendations, and professional advice—all powered by AI trained on expert hair knowledge.
             </p>
           </div>
         </div>
