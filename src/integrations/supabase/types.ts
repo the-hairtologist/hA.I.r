@@ -2015,6 +2015,7 @@ export type Database = {
           accepts_new_clients: boolean | null
           average_rating: number | null
           bio: string | null
+          booking_instructions: string | null
           booking_link: string | null
           buffer_time_minutes: number | null
           business_email: string | null
@@ -2050,6 +2051,7 @@ export type Database = {
           accepts_new_clients?: boolean | null
           average_rating?: number | null
           bio?: string | null
+          booking_instructions?: string | null
           booking_link?: string | null
           buffer_time_minutes?: number | null
           business_email?: string | null
@@ -2085,6 +2087,7 @@ export type Database = {
           accepts_new_clients?: boolean | null
           average_rating?: number | null
           bio?: string | null
+          booking_instructions?: string | null
           booking_link?: string | null
           buffer_time_minutes?: number | null
           business_email?: string | null

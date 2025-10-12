@@ -84,15 +84,15 @@ const Dashboard = () => {
 
   // Define default dashboard sections based on user role
   const defaultStylistSections: DashboardSection[] = [
-    { id: "kpi-cards", title: "KPI Cards", component: "LiveKPICards", enabled: true },
+    { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-overview", title: "Weekly Overview", component: "WeeklyOverview", enabled: true },
-    { id: "client-sentiment", title: "Client Sentiment", component: "ClientSentimentTracker", enabled: true },
-    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: true },
-    { id: "top-services", title: "Top Services", component: "TopServices", enabled: true },
-    { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: true },
-    { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: true },
-    { id: "quick-tasks", title: "Quick Tasks", component: "QuickTasks", enabled: true },
+    { id: "weekly-overview", title: "This Week", component: "WeeklyOverview", enabled: true },
+    { id: "quick-tasks", title: "Tasks", component: "QuickTasks", enabled: true },
+    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: false },
+    { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: false },
+    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: false },
+    { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: false },
+    { id: "quick-notes", title: "Notes", component: "QuickNotes", enabled: false },
   ];
 
   const defaultClientSections: DashboardSection[] = [
@@ -563,35 +563,35 @@ const Dashboard = () => {
 
         {/* Customize Dashboard Controls */}
         {isEditMode && (
-          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-primary/5 to-accent/5 border-l-4 border-primary rounded-lg animate-fade-in shadow-sm">
-            <div className="flex flex-col gap-3">
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <div className="flex-1">
                 <h3 className="text-sm font-bold text-foreground mb-1 flex items-center gap-2">
-                  <Edit3 className="h-3.5 w-3.5" />
+                  <Edit3 className="h-3.5 w-3.5 text-primary" />
                   Customize Your Dashboard
                 </h3>
                 <p className="text-[11px] sm:text-xs text-muted-foreground">
-                  <span className="hidden sm:inline">Drag sections to reorder • Toggle eye icon to show/hide</span>
+                  <span className="hidden sm:inline">Drag sections to reorder • Click eye icon to show/hide sections</span>
                   <span className="sm:hidden">Long-press to drag • Tap eye to toggle</span>
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
                   onClick={handleReset}
-                  className="gap-1.5 flex-1 sm:flex-none sm:min-w-[90px] h-8 text-xs"
+                  className="text-xs"
                 >
-                  <RotateCcw className="h-3 w-3" />
-                  <span>Reset</span>
+                  <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                  Reset
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   onClick={handleSave}
-                  className="gap-1.5 flex-1 sm:flex-none sm:min-w-[90px] h-8 text-xs"
+                  className="text-xs"
                 >
-                  <Save className="h-3 w-3" />
-                  <span>Done</span>
+                  <Save className="h-3.5 w-3.5 mr-1" />
+                  Done
                 </Button>
               </div>
             </div>
@@ -632,9 +632,14 @@ const Dashboard = () => {
             )}
             
             <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <p className="text-xs sm:text-sm font-medium text-muted-foreground">
-                Your personalized dashboard
-              </p>
+              <div>
+                <p className="text-xs sm:text-sm font-medium text-foreground">
+                  Your personalized dashboard
+                </p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">
+                  Click "Customize Dashboard" to add or remove sections
+                </p>
+              </div>
               <Button 
                 variant="outline" 
                 size="sm" 
