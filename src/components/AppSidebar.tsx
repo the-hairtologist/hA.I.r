@@ -161,7 +161,7 @@ function SortableNavItem({
               )}
               {item.comingSoon && (
                 <div className="absolute -top-1 -right-1">
-                  <span className="inline-flex items-center px-1 py-0.5 rounded text-[8px] font-semibold bg-amber-500 text-white shadow-sm">
+                  <span className="inline-flex items-center px-1 py-0.5 rounded-full text-[7px] font-medium bg-amber-500/80 text-white">
                     SOON
                   </span>
                 </div>
@@ -175,7 +175,7 @@ function SortableNavItem({
                       {item.title}
                     </span>
                     {item.comingSoon && (
-                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500 text-white whitespace-nowrap">
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-amber-500/80 text-white whitespace-nowrap">
                         Coming Soon
                       </span>
                     )}
@@ -213,7 +213,7 @@ function SortableNavItem({
               )}
               {item.comingSoon && (
                 <div className="absolute -top-1 -right-1">
-                  <span className="inline-flex items-center px-1 py-0.5 rounded text-[8px] font-semibold bg-amber-500 text-white shadow-sm">
+                  <span className="inline-flex items-center px-1 py-0.5 rounded-full text-[7px] font-medium bg-amber-500/80 text-white">
                     SOON
                   </span>
                 </div>
@@ -226,7 +226,7 @@ function SortableNavItem({
                     {item.title}
                   </span>
                   {item.comingSoon && (
-                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500 text-white whitespace-nowrap">
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-amber-500/80 text-white whitespace-nowrap">
                       Coming Soon
                     </span>
                   )}
