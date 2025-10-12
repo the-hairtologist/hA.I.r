@@ -23,6 +23,26 @@ import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { HelpButton } from "@/components/HelpButton";
+import { useDashboardLayout, DashboardSection } from "@/hooks/useDashboardLayout";
+import { DraggableSection } from "@/components/dashboard/DraggableSection";
+import { Button } from "@/components/ui/button";
+import { Edit3, RotateCcw, Save } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -48,9 +68,44 @@ const Dashboard = () => {
     hour: number;
     minute: number;
   } | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   // Enable analytics tracking
   useAnalytics();
+
+  // Define default dashboard sections based on user role
+  const defaultStylistSections: DashboardSection[] = [
+    { id: "kpi-cards", title: "KPI Cards", component: "LiveKPICards", enabled: true },
+    { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
+    { id: "weekly-overview", title: "Weekly Overview", component: "WeeklyOverview", enabled: true },
+    { id: "quick-tasks", title: "Quick Tasks", component: "QuickTasks", enabled: true },
+  ];
+
+  const defaultClientSections: DashboardSection[] = [
+    { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
+  ];
+
+  const defaultSections = userRole === "stylist" ? defaultStylistSections : defaultClientSections;
+  
+  const { sections, isLoading: layoutLoading, saveDashboardLayout, resetDashboardLayout, toggleSection } = 
+    useDashboardLayout(defaultSections);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Require 8px movement before drag starts (helps with clicks on mobile)
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150, // 150ms hold before drag starts on touch
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   useEffect(() => {
     // Wait for auth and roles to be fully loaded
@@ -137,16 +192,27 @@ const Dashboard = () => {
     }
   };
 
-  const loadLayoutPreferences = async () => {
-    // Removed - dashboard now has fixed layout for simplicity
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = sections.findIndex((section) => section.id === active.id);
+      const newIndex = sections.findIndex((section) => section.id === over.id);
+      const newOrder = arrayMove(sections, oldIndex, newIndex);
+      saveDashboardLayout(newOrder);
+      toast.success("Dashboard layout updated");
+    }
   };
 
-  const saveLayoutPreferences = async (newOrder: string[]) => {
-    // Removed - dashboard now has fixed layout for simplicity
+  const handleReset = async () => {
+    await resetDashboardLayout();
+    setIsEditMode(false);
+    toast.success("Dashboard layout reset to default");
   };
 
-  const handleDragEnd = (event: any) => {
-    // Removed - drag and drop disabled for simplicity
+  const handleSave = () => {
+    setIsEditMode(false);
+    toast.success("Dashboard layout saved");
   };
 
   const checkUser = async (sessionUser: any, primaryRole: string) => {
@@ -365,9 +431,23 @@ const Dashboard = () => {
     );
   }
 
-  const renderSection = (sectionId: string) => {
-    // Removed - sections now rendered inline for simplicity
-    return null;
+  const renderSection = (section: DashboardSection) => {
+    if (!section.enabled) return null;
+
+    switch (section.component) {
+      case "LiveKPICards":
+        return userRole === "stylist" && profile?.id ? (
+          <LiveKPICards stylistId={profile.id} />
+        ) : null;
+      case "QuickActions":
+        return <QuickActions userRole={userRole || ""} />;
+      case "WeeklyOverview":
+        return userRole === "stylist" ? <WeeklyOverview /> : null;
+      case "QuickTasks":
+        return userRole === "stylist" ? <QuickTasks /> : null;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -428,33 +508,71 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center">
-            Simplified for speed and clarity
+        {/* Customize Dashboard Controls */}
+        <div className="mb-6 flex items-center justify-between animate-fade-in" style={{ animationDelay: '300ms' }}>
+          <p className="text-xs sm:text-sm font-medium text-muted-foreground">
+            {isEditMode ? "Drag sections to reorder, toggle to show/hide" : "Your personalized dashboard"}
           </p>
-        </div>
-
-        <div className="space-y-8">
-          {/* KPI Cards */}
-          {userRole === "stylist" && profile?.id && (
-            <div className="animate-fade-in" style={{ animationDelay: '350ms' }}>
-              <LiveKPICards stylistId={profile.id} />
-            </div>
-          )}
-
-          {/* Quick Actions */}
-          <div className="animate-fade-in" style={{ animationDelay: '400ms' }}>
-            <QuickActions userRole={userRole || ""} />
+          <div className="flex items-center gap-2">
+            {isEditMode ? (
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleReset}
+                  className="gap-2"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  <span className="hidden sm:inline">Reset</span>
+                </Button>
+                <Button 
+                  size="sm" 
+                  onClick={handleSave}
+                  className="gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  <span className="hidden sm:inline">Done</span>
+                </Button>
+              </>
+            ) : (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setIsEditMode(true)}
+                className="gap-2"
+              >
+                <Edit3 className="h-4 w-4" />
+                <span className="hidden sm:inline">Customize</span>
+              </Button>
+            )}
           </div>
-
-          {/* Weekly Overview & Tasks */}
-          {userRole === "stylist" && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" style={{ animationDelay: '450ms' }}>
-              <WeeklyOverview />
-              <QuickTasks />
-            </div>
-          )}
         </div>
+
+        {/* Dashboard Sections */}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={sections.map(s => s.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-6">
+              {sections.map((section, index) => (
+                <DraggableSection
+                  key={section.id}
+                  section={section}
+                  isEditMode={isEditMode}
+                  onToggle={() => toggleSection(section.id)}
+                  animationDelay={`${350 + index * 50}ms`}
+                >
+                  {renderSection(section)}
+                </DraggableSection>
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
 
         <ProfileCompletionDialog
           open={showProfileCompletion}

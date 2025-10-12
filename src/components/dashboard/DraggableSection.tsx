@@ -1,13 +1,26 @@
+import { ReactNode } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
+import { GripVertical, Eye, EyeOff } from "lucide-react";
+import { DashboardSection } from "@/hooks/useDashboardLayout";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface DraggableSectionProps {
-  id: string;
-  children: React.ReactNode;
+  section: DashboardSection;
+  isEditMode: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+  animationDelay?: string;
 }
 
-export const DraggableSection = ({ id, children }: DraggableSectionProps) => {
+export function DraggableSection({
+  section,
+  isEditMode,
+  onToggle,
+  children,
+  animationDelay,
+}: DraggableSectionProps) {
   const {
     attributes,
     listeners,
@@ -15,27 +28,55 @@ export const DraggableSection = ({ id, children }: DraggableSectionProps) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ 
+    id: section.id, 
+    disabled: !isEditMode || !section.enabled 
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.5 : section.enabled ? 1 : 0.5,
+    animationDelay,
   };
 
+  if (!section.enabled && !isEditMode) {
+    return null;
+  }
+
   return (
-    <div ref={setNodeRef} style={style} className="relative group">
-      {/* Drag Handle */}
-      <div
-        {...attributes}
-        {...listeners}
-        className="absolute -left-8 top-4 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
-      >
-        <div className="w-6 h-6 rounded bg-secondary/20 hover:bg-secondary/40 flex items-center justify-center border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-          <GripVertical className="h-4 w-4 text-secondary" />
-        </div>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="animate-fade-in relative"
+    >
+      {isEditMode && (
+        <Card className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 flex items-center gap-2 shadow-lg border-2">
+          <div
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing touch-none"
+          >
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <span className="text-xs font-medium">{section.title}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onToggle}
+            className="h-6 w-6 p-0"
+          >
+            {section.enabled ? (
+              <Eye className="h-3.5 w-3.5" />
+            ) : (
+              <EyeOff className="h-3.5 w-3.5" />
+            )}
+          </Button>
+        </Card>
+      )}
+      <div className={isEditMode ? "pt-6" : ""}>
+        {children}
       </div>
-      {children}
     </div>
   );
-};
+}
