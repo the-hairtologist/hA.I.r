@@ -78,7 +78,7 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="max-w-md" hideClose>
+      <DialogContent className="max-w-md"  onPointerDownOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className="text-2xl font-display text-center">
             Welcome to hA.I.r! 👋

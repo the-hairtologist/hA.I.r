@@ -25,7 +25,7 @@ export const InteractiveOnboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
-  const { userRole } = useUserRole();
+  const { isStylist, isClient } = useUserRole(user?.id);
   const navigate = useNavigate();
   const { celebrate } = useCelebration();
 
@@ -39,7 +39,7 @@ export const InteractiveOnboarding = () => {
     location: "",
   });
 
-  const steps: OnboardingStep[] = userRole === "stylist" 
+  const steps: OnboardingStep[] = isStylist 
     ? [
         {
           id: 0,
@@ -90,7 +90,7 @@ export const InteractiveOnboarding = () => {
   // Check if user needs onboarding
   useEffect(() => {
     checkOnboardingStatus();
-  }, [user, userRole]);
+  }, [user, isStylist, isClient]);
 
   const checkOnboardingStatus = async () => {
     if (!user) return;
@@ -114,7 +114,7 @@ export const InteractiveOnboarding = () => {
 
     if (currentStep === 1) {
       await saveBasicInfo();
-    } else if (currentStep === 2 && userRole === "stylist") {
+    } else if (currentStep === 2 && isStylist) {
       await saveStylistInfo();
     }
 
@@ -215,7 +215,7 @@ export const InteractiveOnboarding = () => {
       setOpen(false);
       
       // Navigate to appropriate page
-      if (userRole === "stylist") {
+      if (isStylist) {
         navigate("/dashboard");
       } else {
         navigate("/stylist-discovery");
@@ -241,7 +241,7 @@ export const InteractiveOnboarding = () => {
           {currentStep === steps.length - 1 && (
             <div className="bg-primary/10 border-2 border-primary rounded-lg p-6 space-y-3">
               <p className="font-medium">🎯 Quick Tips to Get Started:</p>
-              {userRole === "stylist" ? (
+              {isStylist ? (
                 <ul className="text-sm text-left space-y-2">
                   <li>✓ Add your first client from the Clients page</li>
                   <li>✓ Create your service menu</li>
@@ -286,7 +286,7 @@ export const InteractiveOnboarding = () => {
       );
     }
 
-    if (currentStep === 2 && userRole === "stylist") {
+    if (currentStep === 2 && isStylist) {
       return (
         <div className="space-y-4">
           <div className="space-y-2">
@@ -336,7 +336,7 @@ export const InteractiveOnboarding = () => {
   const canProceed = () => {
     if (currentStep === 0 || currentStep === steps.length - 1) return true;
     if (currentStep === 1) return profileData.fullName.trim() !== "";
-    if (currentStep === 2 && userRole === "stylist") return profileData.businessName.trim() !== "";
+    if (currentStep === 2 && isStylist) return profileData.businessName.trim() !== "";
     return true;
   };
 
