@@ -2273,6 +2273,10 @@ export type Database = {
         Args: { _user_id: string }
         Returns: string
       }
+      get_user_stylist_ids: {
+        Args: { _user_id: string }
+        Returns: string[]
+      }
       grant_admin_role: {
         Args: { _user_id: string }
         Returns: undefined
@@ -2286,6 +2290,10 @@ export type Database = {
       }
       has_stylist_relationship: {
         Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_client_connected_to_stylist: {
+        Args: { _client_user_id: string; _stylist_id: string }
         Returns: boolean
       }
       is_stylist_owner: {
