@@ -70,7 +70,9 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
           user_id: user.id,
           dashboard_layout: newLayout as any,
           updated_at: new Date().toISOString(),
-        } as any);
+        } as any, {
+          onConflict: 'user_id'
+        });
 
       if (error) {
         console.error("Error saving dashboard layout:", error);
