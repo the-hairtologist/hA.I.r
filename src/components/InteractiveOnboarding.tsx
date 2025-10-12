@@ -8,9 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
 import { toast } from "@/hooks/use-toast";
-import { Sparkles, User, Briefcase, Calendar, Check } from "lucide-react";
+import { Sparkles, User, Briefcase, Check } from "lucide-react";
 import { useCelebration } from "@/hooks/useCelebration";
 
 interface OnboardingStep {
@@ -25,7 +24,6 @@ export const InteractiveOnboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
-  const { isStylist, isClient } = useUserRole(user?.id);
   const navigate = useNavigate();
   const { celebrate } = useCelebration();
 
@@ -39,58 +37,38 @@ export const InteractiveOnboarding = () => {
     location: "",
   });
 
-  const steps: OnboardingStep[] = isStylist 
-    ? [
-        {
-          id: 0,
-          title: "Welcome to hA.I.r! 🎉",
-          description: "Let's get your profile set up in just 3 quick steps.",
-          icon: <Sparkles className="h-8 w-8 text-primary" />,
-        },
-        {
-          id: 1,
-          title: "Your Basic Info",
-          description: "Tell us a bit about yourself",
-          icon: <User className="h-8 w-8 text-primary" />,
-        },
-        {
-          id: 2,
-          title: "Business Details",
-          description: "Set up your professional profile",
-          icon: <Briefcase className="h-8 w-8 text-primary" />,
-        },
-        {
-          id: 3,
-          title: "You're All Set! 🎊",
-          description: "Ready to start managing your clients",
-          icon: <Check className="h-8 w-8 text-primary" />,
-        },
-      ]
-    : [
-        {
-          id: 0,
-          title: "Welcome to hA.I.r! 🎉",
-          description: "Let's get you started in just 2 quick steps.",
-          icon: <Sparkles className="h-8 w-8 text-primary" />,
-        },
-        {
-          id: 1,
-          title: "Your Basic Info",
-          description: "Tell us a bit about yourself",
-          icon: <User className="h-8 w-8 text-primary" />,
-        },
-        {
-          id: 2,
-          title: "You're All Set! 🎊",
-          description: "Ready to find your perfect stylist",
-          icon: <Check className="h-8 w-8 text-primary" />,
-        },
-      ];
+  // Only stylist onboarding for now (client features coming soon)
+  const steps: OnboardingStep[] = [
+    {
+      id: 0,
+      title: "Welcome to hA.I.r! 🎉",
+      description: "Let's get your profile set up in just 3 quick steps.",
+      icon: <Sparkles className="h-8 w-8 text-primary" />,
+    },
+    {
+      id: 1,
+      title: "Your Basic Info",
+      description: "Tell us a bit about yourself",
+      icon: <User className="h-8 w-8 text-primary" />,
+    },
+    {
+      id: 2,
+      title: "Business Details",
+      description: "Set up your professional profile",
+      icon: <Briefcase className="h-8 w-8 text-primary" />,
+    },
+    {
+      id: 3,
+      title: "You're All Set! 🎊",
+      description: "Ready to start managing your clients",
+      icon: <Check className="h-8 w-8 text-primary" />,
+    },
+  ];
 
   // Check if user needs onboarding
   useEffect(() => {
     checkOnboardingStatus();
-  }, [user, isStylist, isClient]);
+  }, [user]);
 
   const checkOnboardingStatus = async () => {
     if (!user) return;
@@ -114,7 +92,7 @@ export const InteractiveOnboarding = () => {
 
     if (currentStep === 1) {
       await saveBasicInfo();
-    } else if (currentStep === 2 && isStylist) {
+    } else if (currentStep === 2) {
       await saveStylistInfo();
     }
 
@@ -214,12 +192,8 @@ export const InteractiveOnboarding = () => {
       celebrate("milestone", "Welcome aboard! Let's get started! 🚀");
       setOpen(false);
       
-      // Navigate to appropriate page
-      if (isStylist) {
-        navigate("/dashboard");
-      } else {
-        navigate("/stylist-discovery");
-      }
+      // Always navigate to dashboard (client features coming soon)
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error completing onboarding:", error);
     } finally {
@@ -241,19 +215,11 @@ export const InteractiveOnboarding = () => {
           {currentStep === steps.length - 1 && (
             <div className="bg-primary/10 border-2 border-primary rounded-lg p-6 space-y-3">
               <p className="font-medium">🎯 Quick Tips to Get Started:</p>
-              {isStylist ? (
-                <ul className="text-sm text-left space-y-2">
-                  <li>✓ Add your first client from the Clients page</li>
-                  <li>✓ Create your service menu</li>
-                  <li>✓ Schedule your first appointment</li>
-                </ul>
-              ) : (
-                <ul className="text-sm text-left space-y-2">
-                  <li>✓ Browse stylists in your area</li>
-                  <li>✓ Book your first appointment</li>
-                  <li>✓ Track your hair journey</li>
-                </ul>
-              )}
+              <ul className="text-sm text-left space-y-2">
+                <li>✓ Add your first client from the Clients page</li>
+                <li>✓ Create your service menu</li>
+                <li>✓ Schedule your first appointment</li>
+              </ul>
             </div>
           )}
         </div>
@@ -286,7 +252,7 @@ export const InteractiveOnboarding = () => {
       );
     }
 
-    if (currentStep === 2 && isStylist) {
+    if (currentStep === 2) {
       return (
         <div className="space-y-4">
           <div className="space-y-2">
@@ -336,7 +302,7 @@ export const InteractiveOnboarding = () => {
   const canProceed = () => {
     if (currentStep === 0 || currentStep === steps.length - 1) return true;
     if (currentStep === 1) return profileData.fullName.trim() !== "";
-    if (currentStep === 2 && isStylist) return profileData.businessName.trim() !== "";
+    if (currentStep === 2) return profileData.businessName.trim() !== "";
     return true;
   };
 

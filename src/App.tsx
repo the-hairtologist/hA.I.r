@@ -29,6 +29,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
+const StylistDiscovery = lazy(() => import("./pages/StylistDiscovery"));
 const Formulas = lazy(() => import("./pages/Formulas"));
 const Appointments = lazy(() => import("./pages/Appointments"));
 const BookAppointment = lazy(() => import("./pages/BookAppointment"));
@@ -258,6 +259,11 @@ const App = () => {
           } />
           
           {/* Client-Only Routes */}
+          <Route path="/stylist-discovery" element={
+            <ProtectedRoute>
+              <StylistDiscovery />
+            </ProtectedRoute>
+          } />
           <Route path="/client-requests" element={
             <ProtectedRoute allowedRoles={["client"]}>
               <ClientRequests />
