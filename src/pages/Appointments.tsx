@@ -36,6 +36,8 @@ const Appointments = () => {
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
+  const [clientProfile, setClientProfile] = useState<any>(null);
+  const [userRole, setUserRole] = useState<"stylist" | "client" | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -76,50 +78,79 @@ const Appointments = () => {
         return;
       }
 
-      // Get stylist profile
-      const { data: stylist, error: stylistError } = await supabase
+      // Check if user is a stylist
+      const { data: stylist } = await supabase
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", session.user.id)
         .maybeSingle();
 
-      if (stylistError) {
-        console.error("Error fetching stylist profile:", stylistError);
-        toast.error("Failed to load stylist profile");
+      // Check if user is a client
+      const { data: client } = await supabase
+        .from("client_profiles")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      if (stylist) {
+        // Stylist view
+        setUserRole("stylist");
+        setStylistProfile(stylist);
+
+        // Get services
+        const { data: servicesData } = await supabase
+          .from("stylist_services")
+          .select("id")
+          .eq("stylist_id", stylist.id);
+
+        setServices(servicesData || []);
+
+        // Get appointments for this stylist
+        const { data: appointmentsData } = await supabase
+          .from("appointments")
+          .select(`
+            *,
+            client:client_profiles(
+              id,
+              user:profiles(full_name, email, phone)
+            ),
+            stylist:stylist_profiles(
+              business_name,
+              user:profiles(full_name)
+            )
+          `)
+          .eq("stylist_id", stylist.id)
+          .order("appointment_date", { ascending: true });
+
+        setAppointments(appointmentsData || []);
+      } else if (client) {
+        // Client view
+        setUserRole("client");
+        setClientProfile(client);
+
+        // Get appointments for this client
+        const { data: appointmentsData } = await supabase
+          .from("appointments")
+          .select(`
+            *,
+            stylist:stylist_profiles(
+              id,
+              business_name,
+              user:profiles(full_name, email, phone)
+            ),
+            client:client_profiles(
+              id,
+              user:profiles(full_name)
+            )
+          `)
+          .eq("client_id", client.id)
+          .order("appointment_date", { ascending: true });
+
+        setAppointments(appointmentsData || []);
+      } else {
+        toast.error("No profile found");
         navigate("/dashboard");
-        return;
       }
-
-      if (!stylist) {
-        toast.error("Stylist profile not found");
-        navigate("/dashboard");
-        return;
-      }
-
-      setStylistProfile(stylist);
-
-      // Get services
-      const { data: servicesData } = await supabase
-        .from("stylist_services")
-        .select("id")
-        .eq("stylist_id", stylist.id);
-
-      setServices(servicesData || []);
-
-      // Get appointments
-      const { data: appointmentsData } = await supabase
-        .from("appointments")
-        .select(`
-          *,
-          client:client_profiles(
-            id,
-            user:profiles(full_name, email, phone)
-          )
-        `)
-        .eq("stylist_id", stylist.id)
-        .order("appointment_date", { ascending: true });
-
-      setAppointments(appointmentsData || []);
     } catch (error: any) {
       console.error("Error loading data:", error);
       toast.error("Error loading appointments");
@@ -129,7 +160,7 @@ const Appointments = () => {
   };
 
   // Real-time updates
-  useRealtimeUpdates("appointments", loadData, stylistProfile?.id);
+  useRealtimeUpdates("appointments", loadData, stylistProfile?.id || clientProfile?.id);
 
   // Keyboard shortcuts
   useGlobalShortcuts(searchInputRef);
@@ -249,11 +280,20 @@ const Appointments = () => {
 
     // Search filter
     if (searchQuery) {
-      filtered = filtered.filter(
-        (apt) =>
-          apt.client?.user?.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          apt.service_type?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      filtered = filtered.filter((apt) => {
+        if (userRole === "client") {
+          return (
+            apt.stylist?.business_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            apt.stylist?.user?.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            apt.service_type?.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+        } else {
+          return (
+            apt.client?.user?.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            apt.service_type?.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+        }
+      });
     }
 
     // Status filter
@@ -293,31 +333,33 @@ const Appointments = () => {
       </a>
       <header role="banner" className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-4 min-w-0">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                onClick={() => navigate("/dashboard")} 
-                className="min-h-[44px] min-w-[44px] flex-shrink-0 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
-                aria-label="Go back to dashboard"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center gap-2 min-w-0">
-                <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
-                <h1 className="text-2xl font-display font-bold gradient-text truncate">My Appointments</h1>
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-4 min-w-0">
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={() => navigate("/dashboard")} 
+                  className="min-h-[44px] min-w-[44px] flex-shrink-0 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
+                  aria-label="Go back to dashboard"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div className="flex items-center gap-2 min-w-0">
+                  <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
+                  <h1 className="text-2xl font-display font-bold gradient-text truncate">My Appointments</h1>
+                </div>
               </div>
+              {userRole === "stylist" && (
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="availability" className="whitespace-nowrap">Accepting Bookings</Label>
+                  <Switch
+                    id="availability"
+                    checked={stylistProfile?.is_available}
+                    onCheckedChange={toggleAvailability}
+                  />
+                </div>
+              )}
             </div>
-            <div className="flex items-center gap-2">
-              <Label htmlFor="availability" className="whitespace-nowrap">Accepting Bookings</Label>
-              <Switch
-                id="availability"
-                checked={stylistProfile?.is_available}
-                onCheckedChange={toggleAvailability}
-              />
-            </div>
-          </div>
         </div>
       </header>
 
@@ -330,38 +372,42 @@ const Appointments = () => {
           </TabsList>
 
           <TabsContent value="list">
-            {/* Show prerequisite alert if no services */}
-            {services.length === 0 && (
+            {/* Show prerequisite alert if no services (stylist only) */}
+            {userRole === "stylist" && services.length === 0 && (
               <div className="mb-6">
                 <PrerequisiteCheck type="services" />
               </div>
             )}
             
-            {/* Contextual AI Suggestions */}
-            <ContextualAI
-              context="appointment"
-              data={{
-                availableSlots: todayAppointments.length,
-              }}
-              onAction={(action) => {
-                if (action === "send-rebook-reminder") {
-                  toast.info("Rebook reminders are being configured for this feature.", {
-                    description: "Automated reminders will be available soon"
-                  });
-                }
-              }}
-            />
-
-            {/* Smart Scheduling Suggestions */}
-            <div className="mb-6">
-              <SmartSchedulingSuggestions
-                stylistId={stylistProfile?.id}
-                onSelectTime={(datetime) => {
-                  toast.success("Time selected! You can now create an appointment for this time.");
-                  setSelectedDate(new Date(datetime));
+            {/* Contextual AI Suggestions (stylist only) */}
+            {userRole === "stylist" && (
+              <ContextualAI
+                context="appointment"
+                data={{
+                  availableSlots: todayAppointments.length,
+                }}
+                onAction={(action) => {
+                  if (action === "send-rebook-reminder") {
+                    toast.info("Rebook reminders are being configured for this feature.", {
+                      description: "Automated reminders will be available soon"
+                    });
+                  }
                 }}
               />
-            </div>
+            )}
+
+            {/* Smart Scheduling Suggestions (stylist only) */}
+            {userRole === "stylist" && (
+              <div className="mb-6">
+                <SmartSchedulingSuggestions
+                  stylistId={stylistProfile?.id}
+                  onSelectTime={(datetime) => {
+                    toast.success("Time selected! You can now create an appointment for this time.");
+                    setSelectedDate(new Date(datetime));
+                  }}
+                />
+              </div>
+            )}
 
             {/* Search and Filters */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
@@ -369,7 +415,11 @@ const Appointments = () => {
                 ref={searchInputRef}
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder="Search by client name or service... (Press / or Ctrl+K)"
+                placeholder={
+                  userRole === "client"
+                    ? "Search by stylist name or service... (Press / or Ctrl+K)"
+                    : "Search by client name or service... (Press / or Ctrl+K)"
+                }
                 className="flex-1"
               />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -387,8 +437,8 @@ const Appointments = () => {
               </Select>
             </div>
 
-            {/* Bulk Actions Bar */}
-            {selectedAppointments.size > 0 && (
+            {/* Bulk Actions Bar (stylist only) */}
+            {userRole === "stylist" && selectedAppointments.size > 0 && (
               <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
                 <CardContent className="p-4 flex items-center justify-between gap-4">
                   <span className="font-medium">
@@ -494,8 +544,13 @@ const Appointments = () => {
                           <div className="bg-primary/10 p-2.5 rounded-lg">
                             <Clock className="h-5 w-5 text-primary" />
                           </div>
-                          <div className="flex-1">
-                            <p className="font-semibold">{apt.client?.user?.full_name}</p>
+                           <div className="flex-1">
+                            <p className="font-semibold">
+                              {userRole === "client" 
+                                ? (apt.stylist?.business_name || apt.stylist?.user?.full_name)
+                                : apt.client?.user?.full_name
+                              }
+                            </p>
                             <p className="text-sm text-muted-foreground">
                               {format(new Date(apt.appointment_date), "h:mm a")} • {apt.service_type} • {apt.duration_minutes}min
                             </p>
@@ -503,16 +558,29 @@ const Appointments = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           {getStatusBadge(apt.status)}
-                          <QuickRebookButton
-                            appointmentId={apt.id}
-                            clientId={apt.client_id}
-                            clientName={apt.client?.user?.full_name || "Client"}
-                            serviceType={apt.service_type}
-                            stylistId={apt.stylist_id}
-                            duration={apt.duration_minutes}
-                            variant="outline"
-                            className="h-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                          />
+                          {apt.status === "completed" && (
+                            <>
+                              <QuickRebookButton
+                                appointmentId={apt.id}
+                                clientId={userRole === "stylist" ? apt.client_id : clientProfile?.id}
+                                clientName={userRole === "client" ? (apt.stylist?.business_name || apt.stylist?.user?.full_name || "Stylist") : (apt.client?.user?.full_name || "Client")}
+                                serviceType={apt.service_type}
+                                stylistId={apt.stylist_id}
+                                duration={apt.duration_minutes}
+                                variant="outline"
+                                className="h-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                              />
+                              {userRole === "client" && (
+                                <QuickReviewButton
+                                  appointmentId={apt.id}
+                                  stylistId={apt.stylist_id}
+                                  stylistName={apt.stylist?.business_name || apt.stylist?.user?.full_name || "Your Stylist"}
+                                  onSuccess={loadData}
+                                  className="h-8 opacity-0 group-hover:opacity-100 transition-opacity relative"
+                                />
+                              )}
+                            </>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -558,11 +626,27 @@ const Appointments = () => {
           {selectedAppointment && (
             <div className="space-y-4">
               <div>
-                <Label>Client</Label>
-                <p className="text-sm font-medium">{selectedAppointment.client?.user?.full_name}</p>
-                <p className="text-sm text-muted-foreground">{selectedAppointment.client?.user?.email}</p>
-                {selectedAppointment.client?.user?.phone && (
-                  <p className="text-sm text-muted-foreground">{selectedAppointment.client?.user?.phone}</p>
+                <Label>{userRole === "client" ? "Stylist" : "Client"}</Label>
+                <p className="text-sm font-medium">
+                  {userRole === "client"
+                    ? (selectedAppointment.stylist?.business_name || selectedAppointment.stylist?.user?.full_name)
+                    : selectedAppointment.client?.user?.full_name
+                  }
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {userRole === "client"
+                    ? selectedAppointment.stylist?.user?.email
+                    : selectedAppointment.client?.user?.email
+                  }
+                </p>
+                {((userRole === "client" && selectedAppointment.stylist?.user?.phone) ||
+                  (userRole === "stylist" && selectedAppointment.client?.user?.phone)) && (
+                  <p className="text-sm text-muted-foreground">
+                    {userRole === "client" 
+                      ? selectedAppointment.stylist?.user?.phone
+                      : selectedAppointment.client?.user?.phone
+                    }
+                  </p>
                 )}
               </div>
               <div>
@@ -585,49 +669,51 @@ const Appointments = () => {
               </div>
 
               {/* Quick Context Links */}
-              <div className="pt-4 border-t space-y-2">
-                <p className="text-sm font-medium mb-3">Quick Actions</p>
-                <div className="grid gap-2">
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-start gap-2" 
-                    size="sm"
-                    onClick={() => {
-                      navigate(`/clients?view=${selectedAppointment.client_id}`);
-                      setDetailsOpen(false);
-                    }}
-                  >
-                    <User className="h-4 w-4" />
-                    View Client History
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-start gap-2"
-                    size="sm" 
-                    onClick={() => {
-                      navigate(`/formulas?client=${selectedAppointment.client_id}`);
-                      setDetailsOpen(false);
-                    }}
-                  >
-                    <FileText className="h-4 w-4" />
-                    View Client Formulas
-                  </Button>
-                  <Button 
-                    variant="default" 
-                    className="w-full justify-start gap-2"
-                    size="sm" 
-                    onClick={() => {
-                      navigate(`/formulas?new=true&client=${selectedAppointment.client_id}`);
-                      setDetailsOpen(false);
-                    }}
-                  >
-                    <Plus className="h-4 w-4" />
-                    Create New Formula
-                  </Button>
+              {userRole === "stylist" && (
+                <div className="pt-4 border-t space-y-2">
+                  <p className="text-sm font-medium mb-3">Quick Actions</p>
+                  <div className="grid gap-2">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-2" 
+                      size="sm"
+                      onClick={() => {
+                        navigate(`/clients?view=${selectedAppointment.client_id}`);
+                        setDetailsOpen(false);
+                      }}
+                    >
+                      <User className="h-4 w-4" />
+                      View Client History
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start gap-2"
+                      size="sm" 
+                      onClick={() => {
+                        navigate(`/formulas?client=${selectedAppointment.client_id}`);
+                        setDetailsOpen(false);
+                      }}
+                    >
+                      <FileText className="h-4 w-4" />
+                      View Client Formulas
+                    </Button>
+                    <Button 
+                      variant="default" 
+                      className="w-full justify-start gap-2"
+                      size="sm" 
+                      onClick={() => {
+                        navigate(`/formulas?new=true&client=${selectedAppointment.client_id}`);
+                        setDetailsOpen(false);
+                      }}
+                    >
+                      <Plus className="h-4 w-4" />
+                      Create New Formula
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {selectedAppointment.status === "scheduled" && (
+              {userRole === "stylist" && selectedAppointment.status === "scheduled" && (
                 <div className="flex gap-3 pt-4 border-t">
                   <Button
                     className="flex-1 min-h-[44px]"
@@ -658,7 +744,7 @@ const Appointments = () => {
                 </div>
               )}
 
-              {selectedAppointment.status === "confirmed" && (
+              {userRole === "stylist" && selectedAppointment.status === "confirmed" && (
                 <div className="flex gap-3 pt-4">
                   <Button
                     className="flex-1 min-h-[44px]"
@@ -678,7 +764,7 @@ const Appointments = () => {
               )}
 
               {selectedAppointment.status === "completed" && (
-                <div className="pt-4">
+                <div className="pt-4 space-y-2">
                   <Button
                     className="w-full"
                     onClick={() => {
@@ -688,7 +774,30 @@ const Appointments = () => {
                     }}
                   >
                     <Repeat className="h-4 w-4 mr-2" />
-                    Rebook Client
+                    Book Again
+                  </Button>
+                  {userRole === "client" && (
+                    <QuickReviewButton
+                      appointmentId={selectedAppointment.id}
+                      stylistId={selectedAppointment.stylist_id}
+                      stylistName={selectedAppointment.stylist?.business_name || selectedAppointment.stylist?.user?.full_name || "Your Stylist"}
+                      onSuccess={loadData}
+                      className="relative w-full h-10 rounded-lg"
+                    />
+                  )}
+                </div>
+              )}
+
+              {userRole === "client" && ["scheduled", "confirmed"].includes(selectedAppointment.status) && (
+                <div className="pt-4">
+                  <Button
+                    variant="destructive"
+                    className="w-full"
+                    onClick={() => updateAppointmentStatus(selectedAppointment.id, "cancelled")}
+                    disabled={updatingStatus === selectedAppointment.id}
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Cancel Appointment
                   </Button>
                 </div>
               )}
@@ -714,8 +823,8 @@ const Appointments = () => {
         onSuccess={loadData}
       />
 
-      {/* Quick Review Button - shows for completed appointments */}
-      {selectedAppointment?.status === "completed" && selectedAppointment?.stylist_id && (
+      {/* Quick Review Button - shows for completed client appointments */}
+      {userRole === "client" && selectedAppointment?.status === "completed" && selectedAppointment?.stylist_id && (
         <QuickReviewButton
           appointmentId={selectedAppointment.id}
           stylistId={selectedAppointment.stylist_id}

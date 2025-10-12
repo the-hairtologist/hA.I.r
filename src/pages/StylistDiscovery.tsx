@@ -1,94 +1,235 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Search, TrendingUp, Calendar } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, MapPin, Star, Calendar, Phone, Mail, Scissors } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+
+interface StylistProfile {
+  id: string;
+  business_name: string;
+  bio: string;
+  location: string;
+  average_rating: number;
+  total_reviews: number;
+  user: {
+    full_name: string;
+    email: string;
+    phone?: string;
+  };
+}
 
 const StylistDiscovery = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const [stylists, setStylists] = useState<StylistProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"rating" | "reviews" | "name">("rating");
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/auth");
+    } else if (user) {
+      loadStylists();
+    }
+  }, [authLoading, user]);
+
+  const loadStylists = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("stylist_profiles")
+        .select(`
+          id,
+          business_name,
+          bio,
+          location,
+          average_rating,
+          total_reviews,
+          user:profiles!stylist_profiles_user_id_fkey (
+            full_name,
+            email,
+            phone
+          )
+        `)
+        .order("average_rating", { ascending: false });
+
+      if (error) throw error;
+      setStylists(data || []);
+    } catch (error) {
+      console.error("Error loading stylists:", error);
+      toast.error("Failed to load stylists");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredAndSortedStylists = stylists
+    .filter(stylist => 
+      !searchQuery ||
+      stylist.business_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      stylist.user?.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      stylist.location?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortBy === "rating") return (b.average_rating || 0) - (a.average_rating || 0);
+      if (sortBy === "reviews") return (b.total_reviews || 0) - (a.total_reviews || 0);
+      return (a.business_name || a.user?.full_name || "").localeCompare(b.business_name || b.user?.full_name || "");
+    });
+
+  const handleContactStylist = (stylist: StylistProfile) => {
+    navigate(`/messages`, { state: { partnerId: stylist.user } });
+  };
+
+  const handleViewProfile = (stylistId: string) => {
+    navigate(`/stylist/${stylistId}`);
+  };
+
+  if (authLoading || loading) {
+    return <LoadingSpinner message="Loading stylists..." />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <PageHeader
-        title="Find Stylists"
+        title="Find Your Stylist"
         icon={<Search className="h-6 w-6" />}
         backTo="/dashboard"
       />
 
-      <main className="container mx-auto px-4 py-6 max-w-4xl">
-        <Card className="border-[3px] border-primary shadow-[8px_8px_0px_0px_hsl(var(--primary))] bg-gradient-to-br from-blue-400 to-cyan-400">
-          <CardHeader className="text-center pb-4">
-            <div className="mx-auto w-20 h-20 rounded-full bg-background border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] flex items-center justify-center mb-4">
-              <Sparkles className="h-10 w-10 text-primary" />
-            </div>
-            <CardTitle className="text-3xl font-display text-foreground">
-              Stylist Discovery Coming Soon!
-            </CardTitle>
-            <CardDescription className="text-foreground/80 text-lg font-medium pt-2">
-              We're building a powerful directory to help you find the perfect stylist
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent className="space-y-6">
-            <div className="bg-background/90 rounded-xl p-6 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <h3 className="text-xl font-display font-bold mb-4 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                What's Coming
-              </h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">1</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Browse Stylists by Specialty</p>
-                    <p className="text-sm text-muted-foreground">Find experts in balayage, color correction, curly hair, and more</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">2</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">View Portfolios & Reviews</p>
-                    <p className="text-sm text-muted-foreground">See real work, read reviews, and find stylists near you</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">3</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Book Instantly</p>
-                    <p className="text-sm text-muted-foreground">Message stylists and book appointments with a few clicks</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div className="text-center space-y-4 pt-2">
-              <p className="text-sm text-foreground/70 font-medium">
-                In the meantime, ask your stylist to send you an invite!
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button 
-                  onClick={() => navigate("/appointments")}
-                  className="gap-2"
-                >
-                  <Calendar className="h-4 w-4" />
-                  View Appointments
-                </Button>
-                <Button 
-                  onClick={() => navigate("/dashboard")}
-                  variant="outline"
-                  className="gap-2 border-[3px] border-foreground"
-                >
-                  Back to Dashboard
-                </Button>
+      <main className="container mx-auto px-4 py-6 max-w-6xl">
+        {/* Search and Filter Bar */}
+        <Card className="mb-6 border-2 border-foreground shadow-brutal">
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by name, business, or location..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
               </div>
+              <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+                <SelectTrigger className="w-full md:w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="rating">Highest Rated</SelectItem>
+                  <SelectItem value="reviews">Most Reviews</SelectItem>
+                  <SelectItem value="name">Name (A-Z)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
         </Card>
+
+        {/* Results Count */}
+        <div className="mb-4">
+          <p className="text-sm text-muted-foreground">
+            Found {filteredAndSortedStylists.length} stylist{filteredAndSortedStylists.length !== 1 ? 's' : ''}
+          </p>
+        </div>
+
+        {/* Stylists Grid */}
+        {filteredAndSortedStylists.length === 0 ? (
+          <Card className="border-2 border-foreground">
+            <CardContent className="py-12 text-center">
+              <Scissors className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2">No stylists found</h3>
+              <p className="text-muted-foreground">Try adjusting your search criteria</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredAndSortedStylists.map((stylist) => (
+              <Card 
+                key={stylist.id} 
+                className="border-2 border-foreground shadow-brutal hover:shadow-brutal-lg transition-all cursor-pointer"
+                onClick={() => handleViewProfile(stylist.id)}
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <Avatar className="h-16 w-16 border-2 border-foreground">
+                      <AvatarFallback className="text-lg font-bold">
+                        {(stylist.business_name || stylist.user?.full_name || "?").charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg truncate">
+                        {stylist.business_name || stylist.user?.full_name || "Stylist"}
+                      </CardTitle>
+                      {stylist.business_name && (
+                        <CardDescription className="truncate">
+                          {stylist.user?.full_name}
+                        </CardDescription>
+                      )}
+                      {stylist.location && (
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                          <MapPin className="h-3 w-3" />
+                          <span className="truncate">{stylist.location}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Rating and Reviews */}
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+                      <span className="font-semibold">{stylist.average_rating?.toFixed(1) || "New"}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {stylist.total_reviews || 0} review{stylist.total_reviews !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+
+                  {/* Bio */}
+                  {stylist.bio && (
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {stylist.bio}
+                    </p>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex gap-2 pt-2">
+                    <Button 
+                      className="flex-1"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate("/book-appointment", { state: { stylistId: stylist.id } });
+                      }}
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Book
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      className="border-2 border-foreground"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleContactStylist(stylist);
+                      }}
+                    >
+                      <Mail className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
