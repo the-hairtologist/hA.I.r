@@ -46,7 +46,7 @@ export function RebookingPrompt() {
       const twoWeeksAgo = new Date();
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
 
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("rebooking_reminders")
         .select(`
           id,
@@ -68,7 +68,11 @@ export function RebookingPrompt() {
         .gte("sent_at", twoWeeksAgo.toISOString())
         .order("sent_at", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching rebooking reminder:', error);
+      }
 
       if (data) {
         setReminder(data as any);

@@ -33,11 +33,17 @@ export const AIRetentionDashboard = () => {
   const loadStylistId = async () => {
     if (!user) return;
     
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('stylist_profiles')
       .select('id')
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle();
+    
+    if (error) {
+      console.error('Error loading stylist ID:', error);
+      toast.error('Failed to load stylist profile');
+      return;
+    }
     
     if (data) {
       setStylistId(data.id);

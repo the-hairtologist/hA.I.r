@@ -40,9 +40,18 @@ export const QuickRebookButton = ({
         .from("appointments")
         .select("*")
         .eq("id", appointmentId)
-        .single();
+        .maybeSingle();
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        console.error('Error fetching appointment:', fetchError);
+        toast.error('Failed to load appointment details');
+        return;
+      }
+      
+      if (!originalAppt) {
+        toast.error('Appointment not found');
+        return;
+      }
 
       // Calculate suggested date (4-6 weeks from original appointment)
       const originalDate = new Date(originalAppt.appointment_date);
@@ -50,11 +59,15 @@ export const QuickRebookButton = ({
       suggestedDate.setDate(suggestedDate.getDate() + 35); // 5 weeks
 
       // Get stylist's available slots around that date
-      const { data: schedule } = await supabase
+      const { data: schedule, error: scheduleError } = await supabase
         .from("stylist_profiles")
         .select("weekly_schedule")
         .eq("id", stylistId)
-        .single();
+        .maybeSingle();
+      
+      if (scheduleError) {
+        console.error('Error fetching schedule:', scheduleError);
+      }
 
       // Find next available slot
       const dayOfWeek = suggestedDate.getDay();

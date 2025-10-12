@@ -102,11 +102,15 @@ export const AddClientDialog = ({
 
       // Check if email already exists (only if email provided)
       if (validatedData.email) {
-        const { data: existingClient } = await supabase
+        const { data: existingClient, error: checkError } = await supabase
           .from("client_profiles")
           .select("id, user:profiles(full_name)")
           .eq("email", validatedData.email)
-          .single();
+          .maybeSingle();
+
+        if (checkError) {
+          console.error('Error checking email:', checkError);
+        }
 
         if (existingClient) {
           toast.error("Email already exists", {

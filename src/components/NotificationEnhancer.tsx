@@ -109,11 +109,15 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
     // Check for new reviews
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-      const { data: stylistProfile } = await supabase
+      const { data: stylistProfile, error: profileError } = await supabase
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
+
+      if (profileError) {
+        console.error('Error loading stylist profile:', profileError);
+      }
 
       if (stylistProfile) {
         const { data: newReviews } = await supabase
