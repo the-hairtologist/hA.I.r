@@ -117,6 +117,13 @@ export default function AppDirectory() {
       color: "text-yellow-500"
     },
     {
+      title: "Growth Analytics",
+      description: "Track bookings, page views, conversions",
+      icon: TrendingUp,
+      path: "/analytics",
+      color: "text-green-500"
+    },
+    {
       title: "Reviews",
       description: "Client feedback, ratings management",
       icon: Star,

@@ -3,18 +3,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Copy, ExternalLink, Share2, QrCode, Eye } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { Copy, ExternalLink, Share2, QrCode, Eye, Facebook, Twitter, Mail, Instagram } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import QRCode from "qrcode";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const BookingPage = () => {
   const { session } = useAuth();
+  const queryClient = useQueryClient();
   const [isPublic, setIsPublic] = useState(true);
+  const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [bookingInstructions, setBookingInstructions] = useState("");
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [showQrDialog, setShowQrDialog] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const { data: stylistProfile } = useQuery({
     queryKey: ['stylist-profile', session?.user?.id],
@@ -28,6 +36,15 @@ const BookingPage = () => {
     },
     enabled: !!session?.user?.id,
   });
+
+  // Initialize form values when profile loads
+  useEffect(() => {
+    if (stylistProfile) {
+      setIsPublic(stylistProfile.accepts_new_clients ?? true);
+      setWelcomeMessage(stylistProfile.bio || "");
+      setBookingInstructions(stylistProfile.parking_instructions || "");
+    }
+  }, [stylistProfile]);
 
   const bookingUrl = stylistProfile?.id 
     ? `${window.location.origin}/stylist/${stylistProfile.id}/book`
@@ -51,6 +68,83 @@ const BookingPage = () => {
       }
     } else {
       copyToClipboard();
+    }
+  };
+
+  const shareOnFacebook = () => {
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(bookingUrl)}`;
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+  };
+
+  const shareOnTwitter = () => {
+    const text = encodeURIComponent(`Book your next hair appointment with me! 💇‍♀️`);
+    const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(bookingUrl)}&text=${text}`;
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+  };
+
+  const shareViaEmail = () => {
+    const subject = encodeURIComponent("Book Your Next Hair Appointment");
+    const body = encodeURIComponent(
+      `Hi,\n\nI'd love to help you with your hair! You can book an appointment with me using this link:\n\n${bookingUrl}\n\nLooking forward to seeing you!`
+    );
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+
+  const copyInstagramLink = () => {
+    copyToClipboard();
+    toast.success("Link copied! Paste it in your Instagram bio or stories", {
+      duration: 4000,
+    });
+  };
+
+  const generateQrCode = async () => {
+    try {
+      const qrDataUrl = await QRCode.toDataURL(bookingUrl, {
+        width: 512,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF',
+        },
+      });
+      setQrCodeUrl(qrDataUrl);
+      setShowQrDialog(true);
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+      toast.error("Failed to generate QR code");
+    }
+  };
+
+  const downloadQrCode = () => {
+    const link = document.createElement('a');
+    link.href = qrCodeUrl;
+    link.download = 'booking-qr-code.png';
+    link.click();
+  };
+
+  const saveSettings = async () => {
+    if (!stylistProfile?.id) return;
+
+    setIsSaving(true);
+    try {
+      const { error } = await supabase
+        .from('stylist_profiles')
+        .update({
+          accepts_new_clients: isPublic,
+          bio: welcomeMessage,
+          parking_instructions: bookingInstructions,
+        })
+        .eq('id', stylistProfile.id);
+
+      if (error) throw error;
+
+      toast.success("Settings saved successfully!");
+      queryClient.invalidateQueries({ queryKey: ['stylist-profile'] });
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      toast.error("Failed to save settings");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -89,7 +183,7 @@ const BookingPage = () => {
                   Preview Page
                 </a>
               </Button>
-              <Button variant="outline" className="flex-1">
+              <Button onClick={generateQrCode} variant="outline" className="flex-1">
                 <QrCode className="h-4 w-4 mr-2" />
                 Generate QR Code
               </Button>
@@ -117,7 +211,8 @@ const BookingPage = () => {
               <Label>Welcome Message</Label>
               <Textarea
                 placeholder="Welcome! I'm excited to work with you..."
-                defaultValue={stylistProfile?.bio || ""}
+                value={welcomeMessage}
+                onChange={(e) => setWelcomeMessage(e.target.value)}
                 rows={4}
               />
             </div>
@@ -126,11 +221,15 @@ const BookingPage = () => {
               <Label>Booking Instructions</Label>
               <Textarea
                 placeholder="Please arrive 5 minutes early. Parking is available..."
+                value={bookingInstructions}
+                onChange={(e) => setBookingInstructions(e.target.value)}
                 rows={3}
               />
             </div>
 
-            <Button>Save Settings</Button>
+            <Button onClick={saveSettings} disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save Settings"}
+            </Button>
           </CardContent>
         </Card>
 
@@ -144,25 +243,47 @@ const BookingPage = () => {
               Share your booking link on social media
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Button variant="outline" className="justify-start">
-                <ExternalLink className="h-4 w-4 mr-2" />
+              <Button onClick={shareOnFacebook} variant="outline" className="justify-start">
+                <Facebook className="h-4 w-4 mr-2" />
                 Share on Facebook
               </Button>
-              <Button variant="outline" className="justify-start">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Share on Instagram
+              <Button onClick={copyInstagramLink} variant="outline" className="justify-start">
+                <Instagram className="h-4 w-4 mr-2" />
+                Copy for Instagram
               </Button>
-              <Button variant="outline" className="justify-start">
-                <ExternalLink className="h-4 w-4 mr-2" />
+              <Button onClick={shareOnTwitter} variant="outline" className="justify-start">
+                <Twitter className="h-4 w-4 mr-2" />
                 Share on Twitter
               </Button>
-              <Button variant="outline" className="justify-start">
-                <ExternalLink className="h-4 w-4 mr-2" />
+              <Button onClick={shareViaEmail} variant="outline" className="justify-start">
+                <Mail className="h-4 w-4 mr-2" />
                 Email Link
               </Button>
             </div>
           </CardContent>
         </Card>
+
+        {/* QR Code Dialog */}
+        <Dialog open={showQrDialog} onOpenChange={setShowQrDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Booking Page QR Code</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col items-center space-y-4 py-4">
+              {qrCodeUrl && (
+                <>
+                  <img src={qrCodeUrl} alt="QR Code" className="w-64 h-64 border-4 border-primary rounded-lg" />
+                  <p className="text-sm text-muted-foreground text-center">
+                    Clients can scan this QR code to book appointments
+                  </p>
+                  <Button onClick={downloadQrCode} className="w-full">
+                    Download QR Code
+                  </Button>
+                </>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );
