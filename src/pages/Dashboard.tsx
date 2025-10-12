@@ -266,7 +266,7 @@ const Dashboard = () => {
         return;
       }
 
-      // Get appropriate profile
+      // Get appropriate profile based on role
       if (primaryRole === "stylist") {
         const { data: stylistProfile } = await supabase
           .from("stylist_profiles")
@@ -274,13 +274,31 @@ const Dashboard = () => {
           .eq("user_id", sessionUser.id)
           .maybeSingle();
         setProfile(stylistProfile);
-      } else {
+      } else if (primaryRole === "client") {
         const { data: clientProfile } = await supabase
           .from("client_profiles")
           .select("*")
           .eq("user_id", sessionUser.id)
           .maybeSingle();
         setProfile(clientProfile);
+      } else if (primaryRole === "admin" || isAdmin) {
+        // For admins, try to get stylist profile first, then client profile
+        const { data: stylistProfile } = await supabase
+          .from("stylist_profiles")
+          .select("*")
+          .eq("user_id", sessionUser.id)
+          .maybeSingle();
+        
+        if (stylistProfile) {
+          setProfile(stylistProfile);
+        } else {
+          const { data: clientProfile } = await supabase
+            .from("client_profiles")
+            .select("*")
+            .eq("user_id", sessionUser.id)
+            .maybeSingle();
+          setProfile(clientProfile);
+        }
       }
 
       // Check if profile needs completion
@@ -616,9 +634,43 @@ const Dashboard = () => {
 
               {/* Clients */}
               {userRole === "client" && (
-                <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                  Ready to book your next transformation? ✨
-                </p>
+                <>
+                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                    Ready to book your next transformation? ✨
+                  </p>
+                  {weekAppointments.length > 0 ? (
+                    <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] max-h-[600px] animate-fade-in mt-3" style={{ animationDelay: '250ms' }}>
+                      <div className="overflow-auto max-h-[600px]">
+                        <WeeklyScheduleView
+                          appointments={weekAppointments}
+                          stylistSchedule={profile?.weekly_schedule}
+                          stylistId={profile?.id}
+                          onAppointmentClick={(apt) => navigate("/appointments")}
+                          onTimeSlotClick={undefined}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-4 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-6 sm:p-8 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
+                      <div className="max-w-sm mx-auto">
+                        <div className="mb-4">
+                          <span className="text-5xl">📅</span>
+                        </div>
+                        <h3 className="text-lg font-bold text-foreground mb-2">No Upcoming Appointments</h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Book your next appointment to see your schedule here
+                        </p>
+                        <Button 
+                          onClick={() => navigate("/stylist-discovery")}
+                          variant="default"
+                          className="gap-2"
+                        >
+                          Find Your Stylist
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
