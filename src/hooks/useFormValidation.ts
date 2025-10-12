@@ -1,20 +1,53 @@
 /**
  * Enhanced Form Validation Hook
- * Provides real-time validation with debouncing
+ * 
+ * Provides comprehensive form validation with real-time feedback, debouncing,
+ * and field-level validation using Zod schemas.
+ * 
+ * @template T - The type of form values
+ * 
+ * @example
+ * ```tsx
+ * const loginSchema = z.object({
+ *   email: z.string().email(),
+ *   password: z.string().min(6)
+ * });
+ * 
+ * const { values, errors, handleChange, handleSubmit } = useFormValidation({
+ *   schema: loginSchema,
+ *   onSubmit: async (data) => { await login(data); },
+ *   initialValues: { email: '', password: '' }
+ * });
+ * ```
  */
 
 import { useState, useCallback, useEffect } from "react";
 import { z } from "zod";
 import { useDebouncedSearch } from "./useDebouncedSearch";
 
+/**
+ * Configuration options for form validation
+ * @template T - The type of form values
+ */
 interface UseFormValidationOptions<T> {
+  /** Zod schema for validation */
   schema: z.ZodSchema<T>;
+  /** Callback function called on successful form submission */
   onSubmit: (data: T) => void | Promise<void>;
+  /** Initial form values */
   initialValues?: Partial<T>;
+  /** Enable validation on every change (default: true) */
   validateOnChange?: boolean;
+  /** Debounce delay in milliseconds (default: 300) */
   debounceMs?: number;
 }
 
+/**
+ * Form validation hook with real-time feedback
+ * 
+ * @param options - Configuration options
+ * @returns Form state and handler functions
+ */
 export function useFormValidation<T extends Record<string, any>>({
   schema,
   onSubmit,
@@ -34,7 +67,12 @@ export function useFormValidation<T extends Record<string, any>>({
     debounceMs
   );
 
-  // Validate single field
+  /**
+   * Validates a single form field
+   * @param name - Field name
+   * @param value - Field value
+   * @returns Error message or null if valid
+   */
   const validateField = useCallback(
     (name: keyof T, value: any): string | null => {
       try {
@@ -54,7 +92,10 @@ export function useFormValidation<T extends Record<string, any>>({
     [schema]
   );
 
-  // Validate all fields
+  /**
+   * Validates all form fields
+   * @returns True if form is valid, false otherwise
+   */
   const validateAll = useCallback((): boolean => {
     try {
       schema.parse(values);

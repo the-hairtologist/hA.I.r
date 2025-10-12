@@ -1,18 +1,34 @@
 /**
  * Enhanced Error Handling Utility
- * Provides consistent error handling, retry logic, and user-friendly error messages
+ * 
+ * Provides centralized error handling with:
+ * - User-friendly error messages
+ * - Automatic retry logic for network errors
+ * - Error logging and tracking
+ * - Toast notifications
+ * 
+ * @module errorHandler
  */
 
 import { toast } from "sonner";
 import { log } from "./logger";
 import { PostgrestError } from "@supabase/supabase-js";
 
+/**
+ * Application error interface with additional metadata
+ */
 export interface AppError {
+  /** Human-readable error message */
   message: string;
+  /** Error code for programmatic handling */
   code?: string;
+  /** Context where the error occurred */
   context?: string;
+  /** Original error object */
   originalError?: any;
+  /** Whether the operation can be retried */
   retryable?: boolean;
+  /** HTTP status code if applicable */
   statusCode?: number;
 }
 
@@ -46,6 +62,12 @@ const ERROR_MESSAGES: Record<string, string> = {
 
 /**
  * Extracts a user-friendly error message from various error types
+ * 
+ * Handles Supabase errors, PostgreSQL errors, auth errors, and generic errors
+ * by mapping them to user-friendly messages.
+ * 
+ * @param error - Error object of any type
+ * @returns User-friendly error message
  */
 export function getErrorMessage(error: any): string {
   // Handle null/undefined
@@ -76,7 +98,25 @@ export function getErrorMessage(error: any): string {
 }
 
 /**
- * Handles errors consistently across the application
+ * Centralized error handler with logging and user notification
+ * 
+ * @param error - Error object to handle
+ * @param context - Context where error occurred (e.g., "loadClients")
+ * @param options - Configuration options
+ * @returns Structured AppError object
+ * 
+ * @example
+ * ```ts
+ * try {
+ *   await saveData();
+ * } catch (error) {
+ *   handleError(error, 'saveData', { 
+ *     showToast: true,
+ *     retryable: true,
+ *     onRetry: () => saveData()
+ *   });
+ * }
+ * ```
  */
 export function handleError(error: any, context?: string, options?: {
   showToast?: boolean;
@@ -200,7 +240,24 @@ export function createSafeHandler<T extends (...args: any[]) => Promise<void>>(
 }
 
 /**
- * Retry logic for failed operations
+ * Retry logic with exponential backoff
+ * 
+ * Automatically retries failed operations with increasing delays between attempts.
+ * Useful for network requests or transient failures.
+ * 
+ * @template T - Return type of the operation
+ * @param operation - Async function to retry
+ * @param options - Retry configuration
+ * @returns Result of successful operation
+ * @throws Last error if all retries fail
+ * 
+ * @example
+ * ```ts
+ * const data = await withRetry(
+ *   () => fetchData(),
+ *   { maxRetries: 3, delay: 1000, backoff: true }
+ * );
+ * ```
  */
 export async function withRetry<T>(
   operation: () => Promise<T>,
