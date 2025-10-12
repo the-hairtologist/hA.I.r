@@ -1811,6 +1811,33 @@ export type Database = {
           },
         ]
       }
+      stylist_todos: {
+        Row: {
+          completed: boolean
+          created_at: string
+          id: string
+          stylist_id: string
+          task: string
+          updated_at: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          stylist_id: string
+          task: string
+          updated_at?: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          stylist_id?: string
+          task?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       todos: {
         Row: {
           completed: boolean

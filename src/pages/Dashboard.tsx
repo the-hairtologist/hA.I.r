@@ -8,10 +8,13 @@ import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { StylistSubscriptionPrompt } from "@/components/StylistSubscriptionPrompt";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import { DashboardStats } from "@/components/dashboard/DashboardStats";
+import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { WeeklyOverview } from "@/components/dashboard/WeeklyOverview";
+import { QuickTasks } from "@/components/dashboard/QuickTasks";
 import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
-import { WeeklySummaryCard } from "@/components/WeeklySummaryCard";
 import { NotificationManager } from "@/components/NotificationManager";
 import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
@@ -19,7 +22,6 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
-import { TodoList } from "@/components/dashboard/TodoList";
 import { HelpButton } from "@/components/HelpButton";
 
 const Dashboard = () => {
@@ -445,17 +447,13 @@ const Dashboard = () => {
             <QuickActions userRole={userRole || ""} />
           </div>
 
-          {/* Weekly Summary */}
-          {userRole === "stylist" && profile?.id && (
-            <div className="animate-fade-in" style={{ animationDelay: '450ms' }}>
-              <WeeklySummaryCard stylistId={profile.id} />
+          {/* Weekly Overview & Tasks */}
+          {userRole === "stylist" && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" style={{ animationDelay: '450ms' }}>
+              <WeeklyOverview />
+              <QuickTasks />
             </div>
           )}
-
-          {/* Todos */}
-          <div className="animate-fade-in" style={{ animationDelay: '500ms' }}>
-            <TodoList />
-          </div>
         </div>
 
         <ProfileCompletionDialog
