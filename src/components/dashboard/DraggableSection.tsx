@@ -3,7 +3,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Eye, EyeOff } from "lucide-react";
 import { DashboardSection } from "@/hooks/useDashboardLayout";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface DraggableSectionProps {
   section: DashboardSection;
@@ -47,23 +47,24 @@ export function DraggableSection({
     <div
       ref={setNodeRef}
       style={style}
-      className={`animate-fade-in relative group ${
-        isEditMode ? "rounded-lg border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors" : ""
-      }`}
+      className={cn(
+        "animate-fade-in relative group transition-all",
+        isEditMode && "rounded-xl brutal-border brutal-shadow-md hover:brutal-shadow-lg bg-gradient-to-br from-background via-background to-primary/5"
+      )}
     >
       {isEditMode && (
-        <div className="absolute -top-2.5 left-2 right-2 z-10 flex items-center justify-between">
+        <div className="absolute -top-3 left-2 right-2 z-10 flex items-center justify-between gap-2">
           {/* Left side - Drag handle */}
-          <div className="flex items-center gap-1 bg-background/95 backdrop-blur-sm border border-border rounded-md px-1.5 py-0.5 shadow-sm">
+          <div className="flex items-center gap-2 bg-card brutal-border brutal-shadow-sm rounded-lg px-2 py-1.5">
             <div
               {...attributes}
               {...listeners}
-              className="cursor-grab active:cursor-grabbing touch-none p-1 hover:bg-accent rounded transition-colors"
+              className="cursor-grab active:cursor-grabbing touch-none p-1.5 rounded-md bg-gradient-to-br from-primary/20 to-accent/20 hover:from-primary/30 hover:to-accent/30 transition-all hover:scale-110 active:scale-95"
               aria-label="Drag to reorder"
             >
-              <GripVertical className="h-3 w-3 text-muted-foreground" />
+              <GripVertical className="h-4 w-4 text-primary" />
             </div>
-            <span className="text-[10px] font-semibold text-foreground uppercase tracking-wide">
+            <span className="text-[11px] font-display font-bold text-foreground uppercase tracking-wider">
               {section.title}
             </span>
           </div>
@@ -71,19 +72,24 @@ export function DraggableSection({
           {/* Right side - Toggle visibility */}
           <button
             onClick={onToggle}
-            className="bg-background/95 backdrop-blur-sm border border-border rounded-md p-1.5 hover:bg-accent transition-all shadow-sm active:scale-95"
+            className={cn(
+              "brutal-border brutal-shadow-sm rounded-lg p-2 transition-all hover:brutal-shadow-md active:scale-95",
+              section.enabled 
+                ? "bg-gradient-to-br from-success/20 to-success/10 hover:from-success/30 hover:to-success/20" 
+                : "bg-card hover:bg-muted"
+            )}
             aria-label={section.enabled ? "Hide section" : "Show section"}
             title={section.enabled ? "Hide" : "Show"}
           >
             {section.enabled ? (
-              <Eye className="h-3 w-3 text-green-600" />
+              <Eye className="h-4 w-4 text-success" />
             ) : (
-              <EyeOff className="h-3 w-3 text-muted-foreground" />
+              <EyeOff className="h-4 w-4 text-muted-foreground" />
             )}
           </button>
         </div>
       )}
-      <div className={isEditMode ? "pt-4 px-2 pb-2" : ""}>
+      <div className={isEditMode ? "pt-5 px-3 pb-3" : ""}>
         {children}
       </div>
     </div>
