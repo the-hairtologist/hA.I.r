@@ -109,27 +109,8 @@ const Auth = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not found after signup");
 
-      // Assign stylist role only
-      const { error: roleError } = await supabase.rpc('assign_user_role', {
-        _user_id: user.id,
-        _role: 'stylist',
-      });
-
-      if (roleError) throw roleError;
-
-      // Create stylist profile
-      const { error: profileError } = await supabase
-        .from("stylist_profiles")
-        .insert({ 
-          user_id: user.id,
-        });
-      
-      if (profileError) {
-        await supabase.from("user_roles").delete().eq("user_id", user.id);
-        throw profileError;
-      }
-
-      toast.success("Welcome to hA.I.r! Your account is ready.");
+      // User will be prompted to select role after successful signup
+      toast.success("Welcome to hA.I.r! Let's get you set up.");
       setTimeout(() => navigate("/dashboard"), 1500);
       log.info("User signed up successfully", "Auth", { userType: 'stylist' });
     } catch (error) {

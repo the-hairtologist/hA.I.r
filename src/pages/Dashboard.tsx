@@ -23,6 +23,8 @@ import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { HelpButton } from "@/components/HelpButton";
+import { WelcomeChecklist } from "@/components/WelcomeChecklist";
+import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
 import { useDashboardLayout, DashboardSection } from "@/hooks/useDashboardLayout";
 import { DraggableSection } from "@/components/dashboard/DraggableSection";
 import { Button } from "@/components/ui/button";
@@ -138,17 +140,17 @@ const Dashboard = () => {
       // Check profile completion
       checkProfileCompletion();
       
-      // Delayed subscription prompt (after user gets value - 5 appointments)
+      // Delayed subscription prompt (after user gets value - 25 appointments)
       if (userRole === "stylist" && !subscriptionLoading && !subscribed && !inTrial) {
         const promptDismissed = localStorage.getItem('subscription_prompt_dismissed');
         if (!promptDismissed) {
-          // Check appointment count before showing
+          // Check appointment count before showing (increased from 5 to 25)
           supabase
             .from("appointments")
             .select("id", { count: "exact" })
             .eq("stylist_id", profile.id)
             .then(({ count }) => {
-              if ((count || 0) >= 5) {
+              if ((count || 0) >= 25) {
                 setTimeout(() => setShowSubscriptionPrompt(true), 5000);
               }
             });
@@ -185,10 +187,12 @@ const Dashboard = () => {
       const stylistIncomplete = !profile.business_name || 
                                 !profile.color_line;
       if (basicIncomplete || stylistIncomplete) {
-        setShowProfileCompletion(true);
+        // Delay showing by 3 seconds to let user see dashboard first
+        setTimeout(() => setShowProfileCompletion(true), 3000);
       }
     } else if (basicIncomplete) {
-      setShowProfileCompletion(true);
+      // Delay showing by 3 seconds to let user see dashboard first
+      setTimeout(() => setShowProfileCompletion(true), 3000);
     }
   };
 
@@ -544,22 +548,35 @@ const Dashboard = () => {
           </div>
         )}
         
-        {!isEditMode && (
-          <div className="mb-6 flex items-center justify-between gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
-            <p className="text-sm font-medium text-muted-foreground">
-              Your personalized dashboard
-            </p>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setIsEditMode(true)}
-              className="gap-1.5 shrink-0"
-            >
-              <Edit3 className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Customize Dashboard</span>
-              <span className="sm:hidden">Customize</span>
-            </Button>
-          </div>
+        {!isEditMode && stats && (
+          <>
+            {userRole === "stylist" && stats.todayAppointments === 0 && stats.totalClients === 0 && (
+              <div className="mb-6 flex items-center justify-between gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+                <WelcomeChecklist 
+                  userRole="stylist"
+                  profileComplete={!!userProfile?.full_name && !!profile?.business_name && !!profile?.color_line}
+                  hasClients={stats.totalClients > 0}
+                  hasAppointments={stats.upcomingAppointments > 0}
+                  hasPortfolio={false}
+                />
+              </div>
+            )}
+            <div className="mb-6 flex items-center justify-between gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <p className="text-sm font-medium text-muted-foreground">
+                Your personalized dashboard
+              </p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setIsEditMode(true)}
+                className="gap-1.5 shrink-0"
+              >
+                <Edit3 className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Customize Dashboard</span>
+                <span className="sm:hidden">Customize</span>
+              </Button>
+            </div>
+          </>
         )}
 
         {/* Dashboard Sections */}

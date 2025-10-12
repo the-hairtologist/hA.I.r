@@ -111,23 +111,23 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
             </div>
           </Label>
 
-          <div
-            className="flex items-start gap-4 p-6 rounded-lg border-2 border-border bg-muted/50 opacity-60 cursor-not-allowed"
+          <Label
+            htmlFor="client"
+            className={`flex items-start gap-4 p-6 rounded-lg border-2 cursor-pointer transition-all hover:border-primary ${
+              selectedRole === "client" ? "border-primary bg-primary/5" : "border-border"
+            }`}
           >
-            <RadioGroupItem value="client" id="client" className="mt-1" disabled />
+            <RadioGroupItem value="client" id="client" className="mt-1" />
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <User className="h-5 w-5 text-muted-foreground" />
+                <User className="h-5 w-5 text-primary" />
                 <span className="font-semibold text-lg">I'm a Client</span>
-                <span className="text-xs bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 px-2 py-1 rounded border border-yellow-500/30">
-                  Coming Soon
-                </span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Client features are currently in development. For now, please create a stylist account or check back soon!
+                Find stylists, book appointments, and track your hair journey.
               </p>
             </div>
-          </div>
+          </Label>
         </RadioGroup>
 
         <Button

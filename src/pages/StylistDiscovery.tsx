@@ -1,79 +1,97 @@
-import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/components/PageHeader";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scissors } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sparkles, Search, TrendingUp, Calendar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-export default function StylistDiscovery() {
+const StylistDiscovery = () => {
   const navigate = useNavigate();
 
-  // Feature coming soon - redirect stylists, show message for clients
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <PageHeader
-        title="Find Your Stylist"
-        icon={<Scissors className="h-6 w-6" />}
+        title="Find Stylists"
+        icon={<Search className="h-6 w-6" />}
         backTo="/dashboard"
       />
 
-      <div className="container mx-auto px-4 py-16 max-w-2xl">
-        <Card className="border-2 border-foreground shadow-brutal text-center">
-          <CardHeader>
-            <CardTitle className="text-3xl font-display flex items-center justify-center gap-2">
-              <Scissors className="h-8 w-8 text-primary" />
-              Coming Soon!
+      <main className="container mx-auto px-4 py-6 max-w-4xl">
+        <Card className="border-[3px] border-primary shadow-[8px_8px_0px_0px_hsl(var(--primary))] bg-gradient-to-br from-blue-400 to-cyan-400">
+          <CardHeader className="text-center pb-4">
+            <div className="mx-auto w-20 h-20 rounded-full bg-background border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] flex items-center justify-center mb-4">
+              <Sparkles className="h-10 w-10 text-primary" />
+            </div>
+            <CardTitle className="text-3xl font-display text-foreground">
+              Stylist Discovery Coming Soon!
             </CardTitle>
-            <CardDescription className="text-lg mt-4">
-              We're building an amazing client experience
+            <CardDescription className="text-foreground/80 text-lg font-medium pt-2">
+              We're building a powerful directory to help you find the perfect stylist
             </CardDescription>
           </CardHeader>
+          
           <CardContent className="space-y-6">
-            <div className="bg-primary/10 border-2 border-primary rounded-lg p-6 space-y-4">
-              <p className="text-base font-medium">
-                🚀 Client Features in Development:
-              </p>
-              <ul className="text-sm text-left space-y-3">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>Browse and search stylists in your area</span>
+            <div className="bg-background/90 rounded-xl p-6 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <h3 className="text-xl font-display font-bold mb-4 flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-primary" />
+                What's Coming
+              </h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-primary">1</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">Browse Stylists by Specialty</p>
+                    <p className="text-sm text-muted-foreground">Find experts in balayage, color correction, curly hair, and more</p>
+                  </div>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>Book appointments directly online</span>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-primary">2</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">View Portfolios & Reviews</p>
+                    <p className="text-sm text-muted-foreground">See real work, read reviews, and find stylists near you</p>
+                  </div>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>View your complete hair history timeline</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>Post hair requests and get matched with stylists</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>Track your hair care journey and formulas</span>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-primary">3</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">Book Instantly</p>
+                    <p className="text-sm text-muted-foreground">Message stylists and book appointments with a few clicks</p>
+                  </div>
                 </li>
               </ul>
             </div>
 
-            <div className="text-sm text-muted-foreground space-y-2">
-              <p className="font-medium">Currently Available:</p>
-              <p>
-                hA.I.r is currently available for professional hair stylists only. 
-                Client features are being carefully crafted and will be launching soon!
+            <div className="text-center space-y-4 pt-2">
+              <p className="text-sm text-foreground/70 font-medium">
+                In the meantime, ask your stylist to send you an invite!
               </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button 
+                  onClick={() => navigate("/appointments")}
+                  className="gap-2"
+                >
+                  <Calendar className="h-4 w-4" />
+                  View Appointments
+                </Button>
+                <Button 
+                  onClick={() => navigate("/dashboard")}
+                  variant="outline"
+                  className="gap-2 border-[3px] border-foreground"
+                >
+                  Back to Dashboard
+                </Button>
+              </div>
             </div>
-
-            <Button
-              onClick={() => navigate("/dashboard")}
-              className="w-full"
-              size="lg"
-            >
-              Return to Dashboard
-            </Button>
           </CardContent>
         </Card>
-      </div>
+      </main>
     </div>
   );
-}
+};
+
+export default StylistDiscovery;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -25,6 +26,7 @@ interface Step {
 }
 
 export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizardProps) => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
@@ -40,37 +42,28 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
       title: "Complete Your Profile",
       description: "Add your business name, specialty, and location so clients can find you. This takes 30 seconds.",
       icon: Users,
-      action: () => {
-        // Navigate to settings
-        window.location.href = "/settings";
-      },
+      // Action handled by "Take Me There" button in component
     },
     {
       id: "first-client",
       title: "Add Your First Client",
       description: "Import your favorite client to see how the Hair Memory Timeline works. You can add more later!",
       icon: Users,
-      action: () => {
-        window.location.href = "/clients";
-      },
+      // Action handled by "Take Me There" button in component
     },
     {
       id: "schedule",
       title: "Set Your Availability",
       description: "Let clients know when you're available for bookings. Update this anytime in Schedule Management.",
       icon: Calendar,
-      action: () => {
-        window.location.href = "/schedule-management";
-      },
+      // Action handled by "Take Me There" button in component
     },
     {
       id: "referral",
       title: "Earn Free Months! 💰",
       description: "Get your referral code and invite stylist friends. 3 referrals = 1 month free. 10 referrals = 3 months free!",
       icon: Target,
-      action: () => {
-        window.location.href = "/referrals";
-      },
+      // Action handled by "Take Me There" button in component
     },
   ];
 
@@ -86,9 +79,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
       title: "Book Your First Appointment",
       description: "Schedule your next visit and start building your Hair Memory Timeline!",
       icon: Calendar,
-      action: () => {
-        window.location.href = "/appointments";
-      },
+      // Action handled by "Take Me There" button in component
     },
     {
       id: "timeline",
@@ -202,8 +193,18 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
                     <Button
                       size="sm"
                       onClick={() => {
-                        currentStepData.action?.();
-                        handleSkip();
+                        const paths: Record<string, string> = {
+                          profile: "/settings",
+                          "first-client": "/clients",
+                          schedule: "/schedule-management",
+                          referral: "/referrals",
+                          "first-appointment": "/appointments"
+                        };
+                        const path = paths[currentStepData.id];
+                        if (path) {
+                          navigate(path);
+                          handleSkip();
+                        }
                       }}
                       className="gap-1 brutal-shadow-xs"
                     >
