@@ -22,6 +22,7 @@ import { AIDisclaimer } from "@/components/AIDisclaimer";
 import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
 import { FormulaFiltersComponent, FormulaFilters } from "@/components/FormulaFilters";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
+import { cn } from "@/lib/utils";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -587,8 +588,9 @@ const Formulas = () => {
                   )}
                 </CardContent>
               </Card>
-            ))
-          )}
+            );
+          })
+        )}
         </div>
       </div>
 

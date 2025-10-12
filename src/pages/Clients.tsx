@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteClientDialog } from "@/components/InviteClientDialog";
 import { SearchInput } from "@/components/SearchInput";
@@ -22,6 +22,7 @@ import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
 import { HairMemoryTimeline } from "@/components/HairMemoryTimeline";
 import { HelpTooltip } from "@/components/HelpTooltip";
+import { ClientHistoryTimeline } from "@/components/ClientHistoryTimeline";
 
 interface ClientProfile {
   id: string;
@@ -52,6 +53,8 @@ export default function Clients() {
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [sortBy, setSortBy] = useState<"name" | "recent" | "inactive">("recent");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
   const [editFormData, setEditFormData] = useState({
     full_name: "",
     email: "",
@@ -709,6 +712,19 @@ export default function Clients() {
                       <Edit className="h-4 w-4 mr-2" />
                       Edit
                     </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedClientId(client.id);
+                        setHistoryDialogOpen(true);
+                      }}
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      History
+                    </Button>
                     {client.email && (
                       <Button
                         variant="outline"
@@ -891,6 +907,16 @@ export default function Clients() {
                 <p className="text-sm text-muted-foreground">Appointment history coming soon</p>
               </TabsContent>
             </Tabs>
+          </DialogContent>
+        </Dialog>
+
+        {/* Client History Dialog */}
+        <Dialog open={historyDialogOpen} onOpenChange={setHistoryDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Client History</DialogTitle>
+            </DialogHeader>
+            {selectedClientId && <ClientHistoryTimeline clientId={selectedClientId} />}
           </DialogContent>
         </Dialog>
       </main>
