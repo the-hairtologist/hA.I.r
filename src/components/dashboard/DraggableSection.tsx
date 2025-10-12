@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Eye, EyeOff } from "lucide-react";
 import { DashboardSection } from "@/hooks/useDashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface DraggableSectionProps {
   section: DashboardSection;
@@ -45,38 +45,60 @@ export function DraggableSection({
   }
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="animate-fade-in relative"
-    >
-      {isEditMode && (
-        <Card className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 flex items-center gap-2 shadow-lg border-2">
-          <div
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing touch-none"
-          >
-            <GripVertical className="h-4 w-4 text-muted-foreground" />
+    <TooltipProvider>
+      <div
+        ref={setNodeRef}
+        style={style}
+        className={`animate-fade-in relative ${
+          isEditMode ? "rounded-lg border-2 border-dashed border-primary/30 p-4 bg-muted/20" : ""
+        }`}
+      >
+        {isEditMode && (
+          <div className="absolute -top-3 left-3 z-10 flex items-center gap-1.5 bg-background border border-border rounded-md px-2 py-1 shadow-sm">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  {...attributes}
+                  {...listeners}
+                  className="cursor-grab active:cursor-grabbing touch-none p-0.5 hover:bg-accent rounded transition-colors"
+                  aria-label="Drag to reorder section"
+                >
+                  <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p className="text-xs">Drag to reorder</p>
+              </TooltipContent>
+            </Tooltip>
+            
+            <span className="text-xs font-medium text-foreground px-1">{section.title}</span>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onToggle}
+                  className="h-5 w-5 p-0 hover:bg-accent"
+                  aria-label={section.enabled ? "Hide section" : "Show section"}
+                >
+                  {section.enabled ? (
+                    <Eye className="h-3 w-3 text-muted-foreground" />
+                  ) : (
+                    <EyeOff className="h-3 w-3 text-muted-foreground" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p className="text-xs">{section.enabled ? "Hide" : "Show"}</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
-          <span className="text-xs font-medium">{section.title}</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onToggle}
-            className="h-6 w-6 p-0"
-          >
-            {section.enabled ? (
-              <Eye className="h-3.5 w-3.5" />
-            ) : (
-              <EyeOff className="h-3.5 w-3.5" />
-            )}
-          </Button>
-        </Card>
-      )}
-      <div className={isEditMode ? "pt-6" : ""}>
-        {children}
+        )}
+        <div className={isEditMode ? "mt-2" : ""}>
+          {children}
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }

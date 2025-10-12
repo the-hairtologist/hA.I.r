@@ -509,44 +509,58 @@ const Dashboard = () => {
         </div>
 
         {/* Customize Dashboard Controls */}
-        <div className="mb-6 flex items-center justify-between animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <p className="text-xs sm:text-sm font-medium text-muted-foreground">
-            {isEditMode ? "Drag sections to reorder, toggle to show/hide" : "Your personalized dashboard"}
-          </p>
-          <div className="flex items-center gap-2">
-            {isEditMode ? (
-              <>
+        {isEditMode && (
+          <div className="mb-6 p-4 bg-primary/5 border-l-4 border-primary rounded-lg animate-fade-in">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Customize Your Dashboard</h3>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  Drag sections to reorder • Toggle eye icon to show/hide
+                </p>
+                <p className="text-xs text-muted-foreground sm:hidden">
+                  Long-press to drag • Tap eye icon to toggle
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={handleReset}
-                  className="gap-2"
+                  className="gap-2 flex-1 sm:flex-none"
                 >
                   <RotateCcw className="h-4 w-4" />
-                  <span className="hidden sm:inline">Reset</span>
+                  Reset
                 </Button>
                 <Button 
                   size="sm" 
                   onClick={handleSave}
-                  className="gap-2"
+                  className="gap-2 flex-1 sm:flex-none"
                 >
                   <Save className="h-4 w-4" />
-                  <span className="hidden sm:inline">Done</span>
+                  Done
                 </Button>
-              </>
-            ) : (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setIsEditMode(true)}
-                className="gap-2"
-              >
-                <Edit3 className="h-4 w-4" />
-                <span className="hidden sm:inline">Customize</span>
-              </Button>
-            )}
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+        
+        {!isEditMode && (
+          <div className="mb-6 flex items-center justify-between animate-fade-in" style={{ animationDelay: '300ms' }}>
+            <p className="text-sm font-medium text-muted-foreground">
+              Your personalized dashboard
+            </p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setIsEditMode(true)}
+              className="gap-2"
+            >
+              <Edit3 className="h-4 w-4" />
+              <span className="hidden sm:inline">Customize Dashboard</span>
+              <span className="sm:hidden">Customize</span>
+            </Button>
+          </div>
+        )}
 
         {/* Dashboard Sections */}
         <DndContext
