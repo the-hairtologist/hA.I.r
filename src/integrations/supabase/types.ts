@@ -1080,6 +1080,39 @@ export type Database = {
           },
         ]
       }
+      onboarding_progress: {
+        Row: {
+          completed_at: string | null
+          completed_steps: Json | null
+          created_at: string
+          current_step: number | null
+          id: string
+          is_completed: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_steps?: Json | null
+          created_at?: string
+          current_step?: number | null
+          id?: string
+          is_completed?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          completed_steps?: Json | null
+          created_at?: string
+          current_step?: number | null
+          id?: string
+          is_completed?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
@@ -1535,12 +1568,14 @@ export type Database = {
         Row: {
           average_rating: number | null
           bio: string | null
+          booking_link: string | null
           buffer_time_minutes: number | null
           business_name: string | null
           color_line: string | null
           commission_rate: number | null
           created_at: string
           id: string
+          instant_booking_enabled: boolean | null
           is_available: boolean | null
           is_public_listing: boolean | null
           location: string | null
@@ -1554,12 +1589,14 @@ export type Database = {
         Insert: {
           average_rating?: number | null
           bio?: string | null
+          booking_link?: string | null
           buffer_time_minutes?: number | null
           business_name?: string | null
           color_line?: string | null
           commission_rate?: number | null
           created_at?: string
           id?: string
+          instant_booking_enabled?: boolean | null
           is_available?: boolean | null
           is_public_listing?: boolean | null
           location?: string | null
@@ -1573,12 +1610,14 @@ export type Database = {
         Update: {
           average_rating?: number | null
           bio?: string | null
+          booking_link?: string | null
           buffer_time_minutes?: number | null
           business_name?: string | null
           color_line?: string | null
           commission_rate?: number | null
           created_at?: string
           id?: string
+          instant_booking_enabled?: boolean | null
           is_available?: boolean | null
           is_public_listing?: boolean | null
           location?: string | null
