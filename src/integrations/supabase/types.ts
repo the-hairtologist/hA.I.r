@@ -2242,6 +2242,10 @@ export type Database = {
         Args: { _client_id: string }
         Returns: boolean
       }
+      can_view_security_audit: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       check_client_milestones: {
         Args: { p_client_id: string; p_stylist_id: string }
         Returns: undefined
