@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { StatCard } from "@/components/ui/stat-card";
 import { Calendar, MessageSquare, Star, DollarSign, Users, Clock } from "lucide-react";
 import { HelpTooltip } from "@/components/HelpTooltip";
@@ -14,7 +15,7 @@ interface DashboardStatsProps {
   userRole: string;
 }
 
-export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
+export const DashboardStats = memo(({ stats, userRole }: DashboardStatsProps) => {
   const hasNoData = !stats.todayAppointments && !stats.upcomingAppointments && !stats.totalClients;
 
   interface StatItem {
@@ -85,7 +86,10 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
     },
   ];
 
-  const displayStats = userRole === "stylist" ? stylistStats : clientStats;
+  const displayStats = useMemo(
+    () => userRole === "stylist" ? stylistStats : clientStats,
+    [userRole, stats]
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
@@ -111,4 +115,4 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
       ))}
     </div>
   );
-};
+});
