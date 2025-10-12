@@ -55,6 +55,31 @@ const Settings = () => {
   const [location, setLocation] = useState("");
   const [yearsExperience, setYearsExperience] = useState("");
 
+  // New stylist fields
+  const [instagramHandle, setInstagramHandle] = useState("");
+  const [tiktokHandle, setTiktokHandle] = useState("");
+  const [facebookUrl, setFacebookUrl] = useState("");
+  const [businessPhone, setBusinessPhone] = useState("");
+  const [businessEmail, setBusinessEmail] = useState("");
+  const [timezone, setTimezone] = useState("America/New_York");
+  const [preferredComm, setPreferredComm] = useState("app");
+  const [cancellationPolicy, setCancellationPolicy] = useState("");
+  const [depositRequired, setDepositRequired] = useState(false);
+  const [depositPercentage, setDepositPercentage] = useState("0");
+  const [acceptsNewClients, setAcceptsNewClients] = useState(true);
+  const [maxClientsPerDay, setMaxClientsPerDay] = useState("8");
+  const [parkingInstructions, setParkingInstructions] = useState("");
+  const [specialAccommodations, setSpecialAccommodations] = useState("");
+
+  // New client fields
+  const [birthday, setBirthday] = useState("");
+  const [hairGoals, setHairGoals] = useState("");
+  const [preferredTimeOfDay, setPreferredTimeOfDay] = useState("");
+  const [referralSource, setReferralSource] = useState("");
+  const [sensitivityNotes, setSensitivityNotes] = useState("");
+  const [communicationPref, setCommunicationPref] = useState("app");
+  const [specialRequests, setSpecialRequests] = useState("");
+
   // Account data
   const [avatarUrl, setAvatarUrl] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
@@ -103,6 +128,39 @@ const Settings = () => {
           setColorLine(stylistProfile.color_line || "");
           setLocation(stylistProfile.location || "");
           setYearsExperience(stylistProfile.years_experience?.toString() || "");
+          setInstagramHandle(stylistProfile.social_media_instagram || "");
+          setTiktokHandle(stylistProfile.social_media_tiktok || "");
+          setFacebookUrl(stylistProfile.social_media_facebook || "");
+          setBusinessPhone(stylistProfile.business_phone || "");
+          setBusinessEmail(stylistProfile.business_email || "");
+          setTimezone(stylistProfile.timezone || "America/New_York");
+          setPreferredComm(stylistProfile.preferred_communication || "app");
+          setCancellationPolicy(stylistProfile.cancellation_policy || "");
+          setDepositRequired(stylistProfile.deposit_required || false);
+          setDepositPercentage(stylistProfile.deposit_percentage?.toString() || "0");
+          setAcceptsNewClients(stylistProfile.accepts_new_clients ?? true);
+          setMaxClientsPerDay(stylistProfile.max_clients_per_day?.toString() || "8");
+          setParkingInstructions(stylistProfile.parking_instructions || "");
+          setSpecialAccommodations(stylistProfile.special_accommodations || "");
+        }
+      }
+
+      // Get client-specific data
+      if (primaryRole === "client") {
+        const { data: clientProfile } = await supabase
+          .from("client_profiles")
+          .select("*")
+          .eq("user_id", sessionUser.id)
+          .maybeSingle();
+
+        if (clientProfile) {
+          setBirthday(clientProfile.birthday || "");
+          setHairGoals(clientProfile.hair_goals || "");
+          setPreferredTimeOfDay(clientProfile.preferred_time_of_day || "");
+          setReferralSource(clientProfile.referral_source || "");
+          setSensitivityNotes(clientProfile.sensitivity_notes || "");
+          setCommunicationPref(clientProfile.communication_preference || "app");
+          setSpecialRequests(clientProfile.special_requests || "");
         }
       }
     } catch (error: any) {
@@ -176,6 +234,9 @@ const Settings = () => {
 
       // Update stylist profile if applicable
       if (userRole === "stylist") {
+        const depositPct = depositPercentage ? parseFloat(depositPercentage) : 0;
+        const maxClients = maxClientsPerDay ? parseInt(maxClientsPerDay) : 8;
+
         const { error: stylistError } = await supabase
           .from("stylist_profiles")
           .update({
@@ -184,11 +245,43 @@ const Settings = () => {
             specialty: specialty.trim() || null,
             color_line: colorLine.trim() || null,
             location: location.trim() || null,
-            years_experience: yearsExp || null
+            years_experience: yearsExp || null,
+            social_media_instagram: instagramHandle.trim() || null,
+            social_media_tiktok: tiktokHandle.trim() || null,
+            social_media_facebook: facebookUrl.trim() || null,
+            business_phone: businessPhone.trim() || null,
+            business_email: businessEmail.trim() || null,
+            timezone: timezone,
+            preferred_communication: preferredComm,
+            cancellation_policy: cancellationPolicy.trim() || null,
+            deposit_required: depositRequired,
+            deposit_percentage: depositPct,
+            accepts_new_clients: acceptsNewClients,
+            max_clients_per_day: maxClients,
+            parking_instructions: parkingInstructions.trim() || null,
+            special_accommodations: specialAccommodations.trim() || null
           })
           .eq("user_id", session.user.id);
 
         if (stylistError) throw stylistError;
+      }
+
+      // Update client profile if applicable
+      if (userRole === "client") {
+        const { error: clientError } = await supabase
+          .from("client_profiles")
+          .update({
+            birthday: birthday || null,
+            hair_goals: hairGoals.trim() || null,
+            preferred_time_of_day: preferredTimeOfDay || null,
+            referral_source: referralSource.trim() || null,
+            sensitivity_notes: sensitivityNotes.trim() || null,
+            communication_preference: communicationPref,
+            special_requests: specialRequests.trim() || null
+          })
+          .eq("user_id", session.user.id);
+
+        if (clientError) throw clientError;
       }
 
       toast.success("Profile updated successfully");
@@ -522,6 +615,311 @@ const Settings = () => {
                           placeholder="0"
                         />
                       </div>
+                    </div>
+
+                    {/* Social Media Links */}
+                    <div className="pt-4 border-t">
+                      <h3 className="font-semibold mb-3 flex items-center gap-2">
+                        <ExternalLink className="h-4 w-4 text-primary" />
+                        Social Media (Optional)
+                      </h3>
+                      <div className="grid md:grid-cols-3 gap-4">
+                        <div>
+                          <Label htmlFor="instagram">Instagram</Label>
+                          <Input
+                            id="instagram"
+                            value={instagramHandle}
+                            onChange={(e) => { setInstagramHandle(e.target.value); setHasChanges(true); }}
+                            placeholder="@yourhandle"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="tiktok">TikTok</Label>
+                          <Input
+                            id="tiktok"
+                            value={tiktokHandle}
+                            onChange={(e) => { setTiktokHandle(e.target.value); setHasChanges(true); }}
+                            placeholder="@yourhandle"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="facebook">Facebook</Label>
+                          <Input
+                            id="facebook"
+                            value={facebookUrl}
+                            onChange={(e) => { setFacebookUrl(e.target.value); setHasChanges(true); }}
+                            placeholder="Profile URL"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Business Contact */}
+                    <div className="pt-4 border-t">
+                      <h3 className="font-semibold mb-3">Business Contact</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="businessPhone">Business Phone</Label>
+                          <Input
+                            id="businessPhone"
+                            type="tel"
+                            value={businessPhone}
+                            onChange={(e) => { setBusinessPhone(e.target.value); setHasChanges(true); }}
+                            placeholder="(555) 123-4567"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="businessEmail">Business Email</Label>
+                          <Input
+                            id="businessEmail"
+                            type="email"
+                            value={businessEmail}
+                            onChange={(e) => { setBusinessEmail(e.target.value); setHasChanges(true); }}
+                            placeholder="business@example.com"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Booking Preferences */}
+                    <div className="pt-4 border-t">
+                      <h3 className="font-semibold mb-3">Booking Preferences</h3>
+                      <div className="space-y-4">
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="timezone">Timezone</Label>
+                            <Select value={timezone} onValueChange={(value) => { setTimezone(value); setHasChanges(true); }}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="America/New_York">Eastern (ET)</SelectItem>
+                                <SelectItem value="America/Chicago">Central (CT)</SelectItem>
+                                <SelectItem value="America/Denver">Mountain (MT)</SelectItem>
+                                <SelectItem value="America/Los_Angeles">Pacific (PT)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div>
+                            <Label htmlFor="preferredComm">Communication Preference</Label>
+                            <Select value={preferredComm} onValueChange={(value) => { setPreferredComm(value); setHasChanges(true); }}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="app">In-App Messages</SelectItem>
+                                <SelectItem value="email">Email</SelectItem>
+                                <SelectItem value="text">Text/SMS</SelectItem>
+                                <SelectItem value="call">Phone Call</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="maxClientsPerDay">Max Clients Per Day</Label>
+                            <Input
+                              id="maxClientsPerDay"
+                              type="number"
+                              value={maxClientsPerDay}
+                              onChange={(e) => { setMaxClientsPerDay(e.target.value); setHasChanges(true); }}
+                              min="1"
+                              max="20"
+                            />
+                          </div>
+
+                          <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                            <div className="space-y-0.5">
+                              <Label htmlFor="acceptsNewClients" className="font-semibold">Accepting New Clients</Label>
+                              <p className="text-xs text-muted-foreground">Allow new bookings</p>
+                            </div>
+                            <ThemeSwitch
+                              id="acceptsNewClients"
+                              checked={acceptsNewClients}
+                              onCheckedChange={(checked) => { setAcceptsNewClients(checked); setHasChanges(true); }}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-4 p-4 border-2 border-foreground/10 rounded-lg">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <ThemeSwitch
+                                id="depositRequired"
+                                checked={depositRequired}
+                                onCheckedChange={(checked) => { setDepositRequired(checked); setHasChanges(true); }}
+                              />
+                              <Label htmlFor="depositRequired" className="font-semibold">Require Deposit</Label>
+                            </div>
+                            {depositRequired && (
+                              <div className="ml-8">
+                                <Label htmlFor="depositPercentage" className="text-sm">Deposit Percentage</Label>
+                                <Input
+                                  id="depositPercentage"
+                                  type="number"
+                                  value={depositPercentage}
+                                  onChange={(e) => { setDepositPercentage(e.target.value); setHasChanges(true); }}
+                                  placeholder="50"
+                                  min="0"
+                                  max="100"
+                                  className="mt-1 max-w-[120px]"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Policies & Instructions */}
+                    <div className="pt-4 border-t">
+                      <h3 className="font-semibold mb-3">Policies & Client Information</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="cancellationPolicy">Cancellation Policy</Label>
+                          <TextareaWithCounter
+                            id="cancellationPolicy"
+                            value={cancellationPolicy}
+                            onValueChange={(value) => {
+                              setCancellationPolicy(value);
+                              setHasChanges(true);
+                            }}
+                            placeholder="e.g., 24-hour cancellation notice required. No-shows will be charged 50%."
+                            maxLength={500}
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="parkingInstructions">Parking Instructions</Label>
+                          <TextareaWithCounter
+                            id="parkingInstructions"
+                            value={parkingInstructions}
+                            onValueChange={(value) => {
+                              setParkingInstructions(value);
+                              setHasChanges(true);
+                            }}
+                            placeholder="e.g., Free street parking available. Parking garage entrance on 5th Avenue."
+                            maxLength={300}
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="specialAccommodations">Special Accommodations</Label>
+                          <TextareaWithCounter
+                            id="specialAccommodations"
+                            value={specialAccommodations}
+                            onValueChange={(value) => {
+                              setSpecialAccommodations(value);
+                              setHasChanges(true);
+                            }}
+                            placeholder="e.g., Wheelchair accessible, quiet space available for sensory-sensitive clients."
+                            maxLength={300}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Client-specific fields */}
+                {userRole === "client" && (
+                  <>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="birthday">Birthday (Optional)</Label>
+                        <Input
+                          id="birthday"
+                          type="date"
+                          value={birthday}
+                          onChange={(e) => { setBirthday(e.target.value); setHasChanges(true); }}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">We'll send you a birthday treat!</p>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="preferredTimeOfDay">Preferred Appointment Time</Label>
+                        <Select value={preferredTimeOfDay} onValueChange={(value) => { setPreferredTimeOfDay(value); setHasChanges(true); }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select time preference" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="morning">Morning (9 AM - 12 PM)</SelectItem>
+                            <SelectItem value="afternoon">Afternoon (12 PM - 5 PM)</SelectItem>
+                            <SelectItem value="evening">Evening (5 PM - 8 PM)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="hairGoals">Hair Goals</Label>
+                      <TextareaWithCounter
+                        id="hairGoals"
+                        value={hairGoals}
+                        onValueChange={(value) => {
+                          setHairGoals(value);
+                          setHasChanges(true);
+                        }}
+                        placeholder="What are your hair goals? (e.g., grow it long, maintain healthy color, try a new style)"
+                        maxLength={500}
+                      />
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="communicationPref">Communication Preference</Label>
+                        <Select value={communicationPref} onValueChange={(value) => { setCommunicationPref(value); setHasChanges(true); }}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="app">In-App Messages</SelectItem>
+                            <SelectItem value="email">Email</SelectItem>
+                            <SelectItem value="text">Text/SMS</SelectItem>
+                            <SelectItem value="call">Phone Call</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="referralSource">How did you find us?</Label>
+                        <Input
+                          id="referralSource"
+                          value={referralSource}
+                          onChange={(e) => { setReferralSource(e.target.value); setHasChanges(true); }}
+                          placeholder="e.g., Instagram, Friend, Google"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="sensitivityNotes">Sensitivity or Allergy Notes</Label>
+                      <TextareaWithCounter
+                        id="sensitivityNotes"
+                        value={sensitivityNotes}
+                        onValueChange={(value) => {
+                          setSensitivityNotes(value);
+                          setHasChanges(true);
+                        }}
+                        placeholder="Any product sensitivities, allergies, or things your stylist should know?"
+                        maxLength={500}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="specialRequests">Special Requests</Label>
+                      <TextareaWithCounter
+                        id="specialRequests"
+                        value={specialRequests}
+                        onValueChange={(value) => {
+                          setSpecialRequests(value);
+                          setHasChanges(true);
+                        }}
+                        placeholder="Any special requests or preferences for your appointments?"
+                        maxLength={500}
+                      />
                     </div>
                   </>
                 )}
