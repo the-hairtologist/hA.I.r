@@ -569,48 +569,44 @@ const Dashboard = () => {
               
               {/* Stylists and Admins */}
               {(userRole === "stylist" || isAdmin) && (
-                <>
-                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mb-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="space-y-3">
+                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Ready to book your next transformation? ✨
                   </p>
-                  <div className="animate-fade-in" style={{ animationDelay: '250ms' }}>
-                    <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)]">
-                      <WeeklyScheduleView
-                        appointments={weekAppointments}
-                        stylistSchedule={profile?.weekly_schedule}
-                        stylistId={profile?.id}
-                        onAppointmentClick={(apt) => navigate("/appointments")}
-                        onTimeSlotClick={(date, hour, minute) => {
-                          setQuickAppointmentData({ date, hour, minute });
-                          setQuickAppointmentOpen(true);
-                        }}
-                      />
-                    </div>
+                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <WeeklyScheduleView
+                      appointments={weekAppointments}
+                      stylistSchedule={profile?.weekly_schedule}
+                      stylistId={profile?.id}
+                      onAppointmentClick={(apt) => navigate("/appointments")}
+                      onTimeSlotClick={(date, hour, minute) => {
+                        setQuickAppointmentData({ date, hour, minute });
+                        setQuickAppointmentOpen(true);
+                      }}
+                    />
                   </div>
-                </>
+                </div>
               )}
 
               {/* Clients */}
               {userRole === "client" && (
-                <>
-                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mb-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="space-y-3">
+                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Ready to book your next transformation? ✨
                   </p>
-                  <div className="animate-fade-in" style={{ animationDelay: '250ms' }}>
-                    <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)]">
-                      <WeeklyScheduleView
-                        appointments={weekAppointments}
-                        stylistSchedule={profile?.weekly_schedule}
-                        stylistId={profile?.id}
-                        onAppointmentClick={(apt) => navigate("/appointments")}
-                        onTimeSlotClick={(date, hour, minute) => {
-                          setQuickAppointmentData({ date, hour, minute });
-                          setQuickAppointmentOpen(true);
-                        }}
-                      />
-                    </div>
+                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <WeeklyScheduleView
+                      appointments={weekAppointments}
+                      stylistSchedule={profile?.weekly_schedule}
+                      stylistId={profile?.id}
+                      onAppointmentClick={(apt) => navigate("/appointments")}
+                      onTimeSlotClick={(date, hour, minute) => {
+                        setQuickAppointmentData({ date, hour, minute });
+                        setQuickAppointmentOpen(true);
+                      }}
+                    />
                   </div>
-                </>
+                </div>
               )}
             </div>
           </div>
