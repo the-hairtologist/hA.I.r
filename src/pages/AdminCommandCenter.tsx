@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -124,39 +125,40 @@ export default function AdminCommandCenter() {
 
   return (
     <DashboardLayout>
+      <PageHeader
+        title="Admin Command Center"
+        icon={<Crown className="h-6 w-6" />}
+        backTo="/admin/dashboard"
+        actions={
+          <div className="flex gap-2">
+            <Button onClick={runSystemMaintenance} size="sm" className="gap-2">
+              <Zap className="h-4 w-4" />
+              <span className="hidden sm:inline">Maintenance</span>
+            </Button>
+            <Button onClick={loadCommandCenterData} variant="outline" size="sm" className="gap-2">
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline">Refresh</span>
+            </Button>
+          </div>
+        }
+      />
+      
       <div className="space-y-6">
-        {/* Command Center Header */}
-        <div className="relative overflow-hidden rounded-xl border-4 border-foreground bg-gradient-to-br from-primary via-accent to-secondary p-8 shadow-brutal-2xl">
+        {/* God Mode Badge */}
+        <div className="relative overflow-hidden rounded-xl border-4 border-foreground bg-gradient-to-br from-primary via-accent to-secondary p-6 shadow-brutal-2xl">
           <div className="relative z-10">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <Crown className="h-8 w-8 text-warning animate-pulse" />
-                  <h1 className="text-3xl md:text-4xl font-display font-bold text-on-surface-primary">
-                    Admin Command Center
-                  </h1>
-                  <Badge className="bg-warning text-warning-foreground border-2 border-foreground">
-                    GOD MODE
-                  </Badge>
-                </div>
-                <p className="text-on-surface-primary/80">
-                  Complete platform control and visibility
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button onClick={runSystemMaintenance} size="lg" className="gap-2">
-                  <Zap className="h-5 w-5" />
-                  Maintenance
-                </Button>
-                <Button onClick={loadCommandCenterData} variant="outline" size="lg" className="gap-2">
-                  <RefreshCw className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
-                  Refresh
-                </Button>
-              </div>
+            <div className="flex items-center gap-3">
+              <Badge className="bg-warning text-warning-foreground border-2 border-foreground text-lg px-4 py-2">
+                <Crown className="h-4 w-4 mr-2" />
+                GOD MODE
+              </Badge>
+              <p className="text-on-surface-primary font-medium">
+                Complete platform control and visibility
+              </p>
             </div>
           </div>
           <div className="absolute top-0 right-0 opacity-10">
-            <Shield className="h-64 w-64" />
+            <Shield className="h-32 w-32" />
           </div>
         </div>
 

@@ -335,7 +335,12 @@ export default function Clients() {
     return (
       <div className="container mx-auto py-8 px-4">
         <div className="mb-6">
-          <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate(-1)} 
+            className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
+            aria-label="Go back"
+          >
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
@@ -357,9 +362,10 @@ export default function Clients() {
       <main id="main-content" role="main" aria-label="Clients" className="container mx-auto py-8 px-4">
         <div className="mb-6">
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => navigate(-1)}
-            className="gap-2"
+            className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
+            aria-label="Go back"
           >
             <ArrowLeft className="h-4 w-4" />
             Back

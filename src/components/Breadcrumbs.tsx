@@ -20,6 +20,12 @@ const routeLabels: Record<string, string> = {
   "client-requests": "My Requests",
   "client-discovery": "Find Clients",
   formulas: "My Formulas",
+  admin: "Admin",
+  command: "Command Center",
+  users: "User Management",
+  "access-codes": "Access Codes",
+  "system-health": "System Health",
+  "app-directory": "App Directory",
 };
 
 export const Breadcrumbs = () => {
