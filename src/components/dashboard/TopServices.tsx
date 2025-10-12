@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Award, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 interface TopServicesProps {
   stylistId: string;
@@ -53,6 +54,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
       }
     } catch (error) {
       console.error("Error loading top services:", error);
+      toast.error("Failed to load service data");
     } finally {
       setLoading(false);
     }

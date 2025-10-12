@@ -56,11 +56,18 @@ const Portfolio = () => {
       }
 
       // Get stylist profile
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching stylist profile:", error);
+        toast.error("Error loading portfolio");
+        navigate("/dashboard");
+        return;
+      }
 
       if (!profile) {
         toast.error("Stylist profile not found");

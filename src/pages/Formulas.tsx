@@ -94,11 +94,18 @@ const Formulas = () => {
       }
 
       // Get stylist profile
-      const { data: stylist } = await supabase
+      const { data: stylist, error } = await supabase
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching stylist profile:", error);
+        toast.error("Error loading profile");
+        navigate("/dashboard");
+        return;
+      }
 
       if (!stylist) {
         toast.error("Stylist profile not found");

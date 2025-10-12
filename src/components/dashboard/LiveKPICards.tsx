@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Calendar, DollarSign, MessageSquare, TrendingUp } from "lucide-react";
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek } from "date-fns";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface LiveKPICardsProps {
   stylistId: string;
@@ -81,6 +82,7 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
       });
     } catch (error) {
       console.error("Error loading KPIs:", error);
+      toast.error("Failed to load dashboard metrics");
     } finally {
       setLoading(false);
     }

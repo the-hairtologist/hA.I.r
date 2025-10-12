@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
 import { startOfMonth, endOfMonth, format, subMonths } from "date-fns";
+import { toast } from "sonner";
 
 interface RevenueTrendsProps {
   stylistId: string;
@@ -61,6 +62,7 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
       }
     } catch (error) {
       console.error("Error loading revenue:", error);
+      toast.error("Failed to load revenue data");
     } finally {
       setLoading(false);
     }

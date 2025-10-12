@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Smile, Meh, Frown, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface ClientSentimentTrackerProps {
   stylistId: string;
@@ -47,6 +48,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
       }
     } catch (error) {
       console.error("Error loading sentiment:", error);
+      toast.error("Failed to load client feedback data");
     } finally {
       setLoading(false);
     }

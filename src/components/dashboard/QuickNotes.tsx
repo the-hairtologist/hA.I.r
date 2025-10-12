@@ -49,12 +49,24 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
   };
 
   const handleSaveNote = async () => {
-    if (!newNote.trim() || !user?.id) return;
+    if (!user?.id) return;
+    
+    // Validate input
+    const trimmedNote = newNote.trim();
+    if (!trimmedNote) {
+      toast.error("Note cannot be empty");
+      return;
+    }
+    
+    if (trimmedNote.length > 500) {
+      toast.error("Note must be less than 500 characters");
+      return;
+    }
 
     try {
       const { error } = await supabase
         .from("stylist_notes")
-        .insert({ user_id: user.id, content: newNote.trim() });
+        .insert({ user_id: user.id, content: trimmedNote });
 
       if (error) throw error;
 
@@ -75,17 +87,23 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             placeholder="Write your thoughts here..."
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
+            maxLength={500}
             className="min-h-[140px] resize-none bg-white/50 backdrop-blur-sm border-none focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground/60 shadow-none rounded-lg p-4"
           />
-          <Button
-            onClick={handleSaveNote}
-            disabled={!newNote.trim()}
-            size="sm"
-            className="gap-2 bg-gradient-primary text-white hover:opacity-90 transition-opacity brutal-border brutal-shadow-sm"
-          >
-            <Sparkles className="h-4 w-4" />
-            Save Note
-          </Button>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
+              {newNote.length}/500
+            </span>
+            <Button
+              onClick={handleSaveNote}
+              disabled={!newNote.trim()}
+              size="sm"
+              className="gap-2 bg-gradient-primary text-white hover:opacity-90 transition-opacity brutal-border brutal-shadow-sm"
+            >
+              <Sparkles className="h-4 w-4" />
+              Save Note
+            </Button>
+          </div>
         </div>
 
         {loading ? (
@@ -135,17 +153,23 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
               placeholder="Jot down a quick note..."
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
+              maxLength={500}
               className="min-h-[80px] resize-none brutal-border"
             />
-            <Button
-              onClick={handleSaveNote}
-              disabled={!newNote.trim()}
-              size="sm"
-              className="w-full gap-2 brutal-border brutal-shadow-sm hover:brutal-shadow-md transition-shadow"
-            >
-              <Save className="h-4 w-4" />
-              Save Note
-            </Button>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">
+                {newNote.length}/500
+              </span>
+              <Button
+                onClick={handleSaveNote}
+                disabled={!newNote.trim()}
+                size="sm"
+                className="gap-2 brutal-border brutal-shadow-sm hover:brutal-shadow-md transition-shadow"
+              >
+                <Save className="h-4 w-4" />
+                Save Note
+              </Button>
+            </div>
           </div>
 
           {loading ? (
