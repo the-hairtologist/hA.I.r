@@ -301,7 +301,7 @@ const Finance = () => {
                 <Calendar className="h-5 w-5 text-muted-foreground" />
                 <Label className="text-sm font-medium">Time Period:</Label>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
                   { value: "30d", label: "Last 30 Days" },
                   { value: "90d", label: "Last 90 Days" },
@@ -324,7 +324,7 @@ const Finance = () => {
         </Card>
 
         {/* Overview Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
@@ -470,7 +470,7 @@ const Finance = () => {
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2">
             <TabsTrigger value="payments">Service Payments</TabsTrigger>
             <TabsTrigger value="commissions">Product Commissions</TabsTrigger>
             <TabsTrigger value="affiliate">Affiliate Codes</TabsTrigger>
