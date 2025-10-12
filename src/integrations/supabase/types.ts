@@ -958,6 +958,42 @@ export type Database = {
         }
         Relationships: []
       }
+      favorite_stylists: {
+        Row: {
+          client_id: string
+          created_at: string
+          id: string
+          stylist_profile_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          id?: string
+          stylist_profile_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          id?: string
+          stylist_profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_stylists_stylist_profile_id_fkey"
+            columns: ["stylist_profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_stylists_stylist_profile_id_fkey"
+            columns: ["stylist_profile_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       formula_access_log: {
         Row: {
           access_type: string
