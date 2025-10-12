@@ -103,7 +103,7 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
           text: shareText,
         });
       } catch (error) {
-        console.log("Share cancelled");
+        // Share cancelled by user
       }
     } else {
       navigator.clipboard.writeText(shareText);

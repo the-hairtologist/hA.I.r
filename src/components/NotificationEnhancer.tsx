@@ -221,7 +221,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
   };
 
   const handleRealtimeUpdate = (payload: any) => {
-    console.log("Realtime notification:", payload);
+    // Realtime notification received
     checkNotifications();
   };
 

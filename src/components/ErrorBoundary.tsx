@@ -55,12 +55,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   logErrorToService = (error: Error, errorInfo: React.ErrorInfo) => {
-    // In production, send to error tracking service
-    console.log('[Error Tracking]', {
-      error: error.toString(),
-      componentStack: errorInfo.componentStack,
-      timestamp: new Date().toISOString(),
-    });
+    // In production, send to error tracking service (silent logging)
   };
 
   handleReset = () => {
