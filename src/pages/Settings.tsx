@@ -657,6 +657,9 @@ const Settings = () => {
                     {/* Business Contact */}
                     <div className="pt-4 border-t">
                       <h3 className="font-semibold mb-3">Business Contact</h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Contact info for client inquiries and booking confirmations
+                      </p>
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="businessPhone">Business Phone</Label>
@@ -684,10 +687,20 @@ const Settings = () => {
                     {/* Booking Preferences */}
                     <div className="pt-4 border-t">
                       <h3 className="font-semibold mb-3">Booking Preferences</h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Control how clients can book with you and manage your availability
+                      </p>
                       <div className="space-y-4">
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="timezone">Timezone</Label>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Label htmlFor="timezone">Timezone</Label>
+                              <HelpTooltip
+                                content={{
+                                  stylist: "Your timezone ensures appointment times are shown correctly to clients in different locations."
+                                }}
+                              />
+                            </div>
                             <Select value={timezone} onValueChange={(value) => { setTimezone(value); setHasChanges(true); }}>
                               <SelectTrigger>
                                 <SelectValue />
@@ -719,7 +732,14 @@ const Settings = () => {
 
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="maxClientsPerDay">Max Clients Per Day</Label>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Label htmlFor="maxClientsPerDay">Max Clients Per Day</Label>
+                              <HelpTooltip
+                                content={{
+                                  stylist: "Set a realistic limit to avoid burnout. Most stylists handle 4-8 clients per day."
+                                }}
+                              />
+                            </div>
                             <Input
                               id="maxClientsPerDay"
                               type="number"
@@ -727,13 +747,14 @@ const Settings = () => {
                               onChange={(e) => { setMaxClientsPerDay(e.target.value); setHasChanges(true); }}
                               min="1"
                               max="20"
+                              placeholder="8"
                             />
                           </div>
 
                           <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
                             <div className="space-y-0.5">
                               <Label htmlFor="acceptsNewClients" className="font-semibold">Accepting New Clients</Label>
-                              <p className="text-xs text-muted-foreground">Allow new bookings</p>
+                              <p className="text-xs text-muted-foreground">Toggle when your books are full</p>
                             </div>
                             <ThemeSwitch
                               id="acceptsNewClients"
@@ -752,10 +773,15 @@ const Settings = () => {
                                 onCheckedChange={(checked) => { setDepositRequired(checked); setHasChanges(true); }}
                               />
                               <Label htmlFor="depositRequired" className="font-semibold">Require Deposit</Label>
+                              <HelpTooltip
+                                content={{
+                                  stylist: "Deposits reduce no-shows. Typical range is 25-50% for most services."
+                                }}
+                              />
                             </div>
                             {depositRequired && (
                               <div className="ml-8">
-                                <Label htmlFor="depositPercentage" className="text-sm">Deposit Percentage</Label>
+                                <Label htmlFor="depositPercentage" className="text-sm">Deposit Percentage (%)</Label>
                                 <Input
                                   id="depositPercentage"
                                   type="number"
@@ -776,9 +802,19 @@ const Settings = () => {
                     {/* Policies & Instructions */}
                     <div className="pt-4 border-t">
                       <h3 className="font-semibold mb-3">Policies & Client Information</h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Help clients prepare for their visit and set clear expectations
+                      </p>
                       <div className="space-y-4">
                         <div>
-                          <Label htmlFor="cancellationPolicy">Cancellation Policy</Label>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Label htmlFor="cancellationPolicy">Cancellation Policy</Label>
+                            <HelpTooltip
+                              content={{
+                                stylist: "Clear policies protect your time and income. Be specific about notice requirements and fees."
+                              }}
+                            />
+                          </div>
                           <TextareaWithCounter
                             id="cancellationPolicy"
                             value={cancellationPolicy}
@@ -792,7 +828,7 @@ const Settings = () => {
                         </div>
 
                         <div>
-                          <Label htmlFor="parkingInstructions">Parking Instructions</Label>
+                          <Label htmlFor="parkingInstructions">Parking Instructions (Optional)</Label>
                           <TextareaWithCounter
                             id="parkingInstructions"
                             value={parkingInstructions}
@@ -806,7 +842,7 @@ const Settings = () => {
                         </div>
 
                         <div>
-                          <Label htmlFor="specialAccommodations">Special Accommodations</Label>
+                          <Label htmlFor="specialAccommodations">Special Accommodations (Optional)</Label>
                           <TextareaWithCounter
                             id="specialAccommodations"
                             value={specialAccommodations}
@@ -826,35 +862,41 @@ const Settings = () => {
                 {/* Client-specific fields */}
                 {userRole === "client" && (
                   <>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="birthday">Birthday (Optional)</Label>
-                        <Input
-                          id="birthday"
-                          type="date"
-                          value={birthday}
-                          onChange={(e) => { setBirthday(e.target.value); setHasChanges(true); }}
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">We'll send you a birthday treat!</p>
-                      </div>
+                    <div className="pt-4 border-t">
+                      <h3 className="font-semibold mb-3">Personal Preferences</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Help stylists provide you with the best experience
+                      </p>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="birthday">Birthday (Optional)</Label>
+                          <Input
+                            id="birthday"
+                            type="date"
+                            value={birthday}
+                            onChange={(e) => { setBirthday(e.target.value); setHasChanges(true); }}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">🎉 We'll send you a birthday treat!</p>
+                        </div>
 
-                      <div>
-                        <Label htmlFor="preferredTimeOfDay">Preferred Appointment Time</Label>
-                        <Select value={preferredTimeOfDay} onValueChange={(value) => { setPreferredTimeOfDay(value); setHasChanges(true); }}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select time preference" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="morning">Morning (9 AM - 12 PM)</SelectItem>
-                            <SelectItem value="afternoon">Afternoon (12 PM - 5 PM)</SelectItem>
-                            <SelectItem value="evening">Evening (5 PM - 8 PM)</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <div>
+                          <Label htmlFor="preferredTimeOfDay">Preferred Appointment Time</Label>
+                          <Select value={preferredTimeOfDay} onValueChange={(value) => { setPreferredTimeOfDay(value); setHasChanges(true); }}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select time preference" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="morning">Morning (9 AM - 12 PM)</SelectItem>
+                              <SelectItem value="afternoon">Afternoon (12 PM - 5 PM)</SelectItem>
+                              <SelectItem value="evening">Evening (5 PM - 8 PM)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     </div>
 
-                    <div>
-                      <Label htmlFor="hairGoals">Hair Goals</Label>
+                    <div className="pt-4">
+                      <Label htmlFor="hairGoals">Hair Goals (Optional)</Label>
                       <TextareaWithCounter
                         id="hairGoals"
                         value={hairGoals}
@@ -865,61 +907,79 @@ const Settings = () => {
                         placeholder="What are your hair goals? (e.g., grow it long, maintain healthy color, try a new style)"
                         maxLength={500}
                       />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Share your hair journey! This helps stylists understand your vision.
+                      </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="communicationPref">Communication Preference</Label>
-                        <Select value={communicationPref} onValueChange={(value) => { setCommunicationPref(value); setHasChanges(true); }}>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="app">In-App Messages</SelectItem>
-                            <SelectItem value="email">Email</SelectItem>
-                            <SelectItem value="text">Text/SMS</SelectItem>
-                            <SelectItem value="call">Phone Call</SelectItem>
-                          </SelectContent>
-                        </Select>
+                    <div className="pt-4 border-t">
+                      <h3 className="font-semibold mb-3">Communication & Contact</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="communicationPref">How Should We Reach You?</Label>
+                          <Select value={communicationPref} onValueChange={(value) => { setCommunicationPref(value); setHasChanges(true); }}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="app">In-App Messages</SelectItem>
+                              <SelectItem value="email">Email</SelectItem>
+                              <SelectItem value="text">Text/SMS</SelectItem>
+                              <SelectItem value="call">Phone Call</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="referralSource">How Did You Find Us? (Optional)</Label>
+                          <Input
+                            id="referralSource"
+                            value={referralSource}
+                            onChange={(e) => { setReferralSource(e.target.value); setHasChanges(true); }}
+                            placeholder="e.g., Instagram, Friend, Google"
+                          />
+                        </div>
                       </div>
+                    </div>
 
-                      <div>
-                        <Label htmlFor="referralSource">How did you find us?</Label>
-                        <Input
-                          id="referralSource"
-                          value={referralSource}
-                          onChange={(e) => { setReferralSource(e.target.value); setHasChanges(true); }}
-                          placeholder="e.g., Instagram, Friend, Google"
-                        />
+                    <div className="pt-4 border-t">
+                      <h3 className="font-semibold mb-3">Important Information for Your Stylist</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Label htmlFor="sensitivityNotes">Allergies & Sensitivities (Optional)</Label>
+                            <HelpTooltip
+                              content={{
+                                client: "List any allergies, product sensitivities, or scalp conditions. This keeps you safe!"
+                              }}
+                            />
+                          </div>
+                          <TextareaWithCounter
+                            id="sensitivityNotes"
+                            value={sensitivityNotes}
+                            onValueChange={(value) => {
+                              setSensitivityNotes(value);
+                              setHasChanges(true);
+                            }}
+                            placeholder="Any product sensitivities, allergies, or things your stylist should know?"
+                            maxLength={500}
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="specialRequests">Special Requests (Optional)</Label>
+                          <TextareaWithCounter
+                            id="specialRequests"
+                            value={specialRequests}
+                            onValueChange={(value) => {
+                              setSpecialRequests(value);
+                              setHasChanges(true);
+                            }}
+                            placeholder="Any preferences for your appointments? (e.g., quiet time, love chatting, need childcare nearby)"
+                            maxLength={500}
+                          />
+                        </div>
                       </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="sensitivityNotes">Sensitivity or Allergy Notes</Label>
-                      <TextareaWithCounter
-                        id="sensitivityNotes"
-                        value={sensitivityNotes}
-                        onValueChange={(value) => {
-                          setSensitivityNotes(value);
-                          setHasChanges(true);
-                        }}
-                        placeholder="Any product sensitivities, allergies, or things your stylist should know?"
-                        maxLength={500}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="specialRequests">Special Requests</Label>
-                      <TextareaWithCounter
-                        id="specialRequests"
-                        value={specialRequests}
-                        onValueChange={(value) => {
-                          setSpecialRequests(value);
-                          setHasChanges(true);
-                        }}
-                        placeholder="Any special requests or preferences for your appointments?"
-                        maxLength={500}
-                      />
                     </div>
                   </>
                 )}
