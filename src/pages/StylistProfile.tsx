@@ -36,7 +36,7 @@ const StylistProfile = () => {
       loadStylist();
     } else {
       toast.error("Stylist not found");
-      navigate("/stylists");
+      navigate("/stylist-discovery");
     }
   }, [stylistId]);
 
@@ -59,7 +59,7 @@ const StylistProfile = () => {
     } catch (error: any) {
       console.error("Error loading stylist:", error);
       toast.error("Failed to load stylist profile");
-      navigate("/stylists");
+      navigate("/stylist-discovery");
     } finally {
       setLoading(false);
     }
@@ -96,7 +96,7 @@ const StylistProfile = () => {
         {/* Back Button */}
         <Button 
           variant="ghost" 
-          onClick={() => navigate("/stylists")}
+          onClick={() => navigate("/stylist-discovery")}
           className="mb-6"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />

@@ -65,13 +65,13 @@ export const WelcomeChecklist = ({
     { 
       label: "Find your stylist", 
       completed: false,
-      action: () => navigate("/stylists"),
+      action: () => navigate("/stylist-discovery"),
       cta: "Browse Stylists"
     },
     { 
       label: "Book your first appointment", 
       completed: hasAppointments, 
-      action: () => navigate("/stylists"),
+      action: () => navigate("/stylist-discovery"),
       cta: "Book Now"
     },
   ];

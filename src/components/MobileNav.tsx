@@ -22,7 +22,7 @@ export const MobileNav = ({ userRole }: MobileNavProps) => {
 
   const clientItems = [
     { icon: Home, label: "Home", path: "/dashboard" },
-    { icon: Users, label: "Stylists", path: "/stylists" },
+    { icon: Users, label: "Stylists", path: "/stylist-discovery" },
     { icon: Calendar, label: "Appointments", path: "/appointments" },
     { icon: MessageSquare, label: "Messages", path: "/messages" },
     { icon: User, label: "Settings", path: "/settings" },
