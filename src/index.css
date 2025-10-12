@@ -141,6 +141,41 @@
     outline: 2px solid hsl(var(--primary));
     outline-offset: 2px;
   }
+  
+  /* GPU Acceleration for Smooth Mobile Animations */
+  .animate-fade-in,
+  .animate-fade-out,
+  .animate-slide-up,
+  .animate-slide-down,
+  .animate-scale-in,
+  .transition-all,
+  .transition-transform,
+  .transition-opacity,
+  [class*="animate-"],
+  [class*="transition-"] {
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0); /* Force GPU layer */
+    backface-visibility: hidden; /* Prevent flickering */
+  }
+  
+  /* Remove will-change after animation completes to free resources */
+  .animate-fade-in.animation-complete,
+  .animate-fade-out.animation-complete,
+  .animate-slide-up.animation-complete,
+  .animate-slide-down.animation-complete,
+  .animate-scale-in.animation-complete {
+    will-change: auto;
+  }
+  
+  /* Optimize hover/active states for mobile */
+  @media (hover: none) and (pointer: coarse) {
+    .hover\:scale-105:active,
+    .hover\:scale-110:active,
+    .active\:scale-95:active {
+      will-change: transform;
+      transform: translate3d(0, 0, 0) scale(var(--tw-scale-x), var(--tw-scale-y));
+    }
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
