@@ -35,7 +35,7 @@ const BookAppointment = lazy(() => import("./pages/BookAppointment"));
 const StylistProfile = lazy(() => import("./pages/StylistProfile"));
 const ClientRequests = lazy(() => import("./pages/ClientRequests"));
 const ClientDiscovery = lazy(() => import("./pages/ClientDiscovery"));
-const StylistVerification = lazy(() => import("./pages/StylistVerification"));
+
 const Messages = lazy(() => import("./pages/Messages"));
 const ScheduleManagement = lazy(() => import("./pages/ScheduleManagement"));
 const Services = lazy(() => import("./pages/Services"));
@@ -236,11 +236,6 @@ const App = () => {
           <Route path="/access-codes" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AccessCodes />
-            </ProtectedRoute>
-          } />
-          <Route path="/stylist-verification" element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <StylistVerification />
             </ProtectedRoute>
           } />
           <Route path="/app-directory" element={

@@ -164,15 +164,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Admin Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Button
-            onClick={() => navigate('/stylist-verification')}
-            className="h-auto flex-col gap-2 p-4"
-            variant="outline"
-          >
-            <Shield className="h-6 w-6" />
-            <span className="text-xs">Stylist Verification</span>
-          </Button>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Button
             onClick={() => navigate('/admin/users')}
             className="h-auto flex-col gap-2 p-4"

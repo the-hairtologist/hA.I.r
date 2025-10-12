@@ -19,8 +19,6 @@ type AuthState = {
   email: string;
   password: string;
   fullName: string;
-  licenseNumber: string;
-  licenseState: string;
   resetEmail: string;
   showResetDialog: boolean;
   resetLoading: boolean;
@@ -40,8 +38,6 @@ const initialState: AuthState = {
   email: "",
   password: "",
   fullName: "",
-  licenseNumber: "",
-  licenseState: "",
   resetEmail: "",
   showResetDialog: false,
   resetLoading: false,
@@ -121,13 +117,11 @@ const Auth = () => {
 
       if (roleError) throw roleError;
 
-      // Create stylist profile with license info (honor system - defaults to verified)
+      // Create stylist profile
       const { error: profileError } = await supabase
         .from("stylist_profiles")
         .insert({ 
           user_id: user.id,
-          license_number: state.licenseNumber.trim(),
-          license_state: state.licenseState.trim(),
         });
       
       if (profileError) {
@@ -436,39 +430,6 @@ const Auth = () => {
                     required
                     minLength={6}
                   />
-                </div>
-                
-                <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-blue-200 to-cyan-200 shadow-[3px_3px_0px_0px_hsl(var(--foreground))] space-y-3">
-                  <p className="text-sm font-semibold text-foreground mb-2">📋 Professional License Information</p>
-                  <p className="text-xs text-foreground/80 mb-3">
-                    By providing your license info, you affirm that you are a licensed cosmetology professional. License details are kept on file for verification purposes.
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="license-number" className="text-xs">License Number *</Label>
-                    <Input
-                      id="license-number"
-                      type="text"
-                      placeholder="e.g., CA-12345678"
-                      value={state.licenseNumber}
-                      onChange={(e) => dispatch({ type: "SET_FIELD", field: "licenseNumber", value: e.target.value })}
-                      required
-                      className="bg-card"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="license-state" className="text-xs">Issuing State/Province *</Label>
-                    <Input
-                      id="license-state"
-                      type="text"
-                      placeholder="e.g., California, Ontario"
-                      value={state.licenseState}
-                      onChange={(e) => dispatch({ type: "SET_FIELD", field: "licenseState", value: e.target.value })}
-                      required
-                      className="bg-card"
-                    />
-                  </div>
                 </div>
                 
                 <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">

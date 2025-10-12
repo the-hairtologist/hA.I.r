@@ -1543,19 +1543,11 @@ export type Database = {
           id: string
           is_available: boolean | null
           is_public_listing: boolean | null
-          license_number: string | null
-          license_photo_url: string | null
-          license_state: string | null
           location: string | null
-          rejection_reason: string | null
           specialty: string | null
           total_reviews: number | null
           updated_at: string
           user_id: string
-          verification_notes: string | null
-          verification_status: string | null
-          verified_at: string | null
-          verified_by: string | null
           weekly_schedule: Json | null
           years_experience: number | null
         }
@@ -1570,19 +1562,11 @@ export type Database = {
           id?: string
           is_available?: boolean | null
           is_public_listing?: boolean | null
-          license_number?: string | null
-          license_photo_url?: string | null
-          license_state?: string | null
           location?: string | null
-          rejection_reason?: string | null
           specialty?: string | null
           total_reviews?: number | null
           updated_at?: string
           user_id: string
-          verification_notes?: string | null
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
           weekly_schedule?: Json | null
           years_experience?: number | null
         }
@@ -1597,19 +1581,11 @@ export type Database = {
           id?: string
           is_available?: boolean | null
           is_public_listing?: boolean | null
-          license_number?: string | null
-          license_photo_url?: string | null
-          license_state?: string | null
           location?: string | null
-          rejection_reason?: string | null
           specialty?: string | null
           total_reviews?: number | null
           updated_at?: string
           user_id?: string
-          verification_notes?: string | null
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
           weekly_schedule?: Json | null
           years_experience?: number | null
         }
@@ -2043,15 +2019,6 @@ export type Database = {
       validate_access_code: {
         Args: { code_input: string }
         Returns: boolean
-      }
-      verify_stylist: {
-        Args: {
-          _notes?: string
-          _rejection_reason?: string
-          _status: string
-          _stylist_id: string
-        }
-        Returns: undefined
       }
     }
     Enums: {
