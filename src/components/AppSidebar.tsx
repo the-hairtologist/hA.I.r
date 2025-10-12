@@ -273,7 +273,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const { state } = useSidebar();
   const location = useLocation();
   const { user } = useAuth();
-  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
+  const { isAdmin, isStylist, isClient, loading: roleLoading } = useUserRole(user?.id);
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
@@ -403,9 +403,10 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   // Add admin items to client navigation if user is admin
   const clientAllItems = [...clientBaseItems, ...adminItems];
 
-  const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
+  // Admins see stylist items by default (most comprehensive), or use actual role
+  const defaultItems = (isAdmin || isStylist) ? stylistAllItems : clientAllItems;
   
-  const groupLabels = userRole === "stylist" 
+  const groupLabels = (isAdmin || isStylist)
     ? isAdmin 
       ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support", admin: "Admin" }
       : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support" }
