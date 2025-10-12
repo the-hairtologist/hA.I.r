@@ -2238,8 +2238,20 @@ export type Database = {
         }
         Returns: undefined
       }
+      can_access_stylist_services: {
+        Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
       can_view_client_stats: {
         Args: { _client_id: string }
+        Returns: boolean
+      }
+      can_view_referral_tracking: {
+        Args: {
+          _referred_stylist_id: string
+          _referrer_id: string
+          _user_id: string
+        }
         Returns: boolean
       }
       can_view_security_audit: {
@@ -2328,6 +2340,10 @@ export type Database = {
       trigger_appointment_reminders: {
         Args: Record<PropertyKey, never>
         Returns: Json
+      }
+      user_owns_formula: {
+        Args: { _formula_id: string; _user_id: string }
+        Returns: boolean
       }
       validate_access_code: {
         Args: { code_input: string }
