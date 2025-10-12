@@ -77,6 +77,10 @@ const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const EmailCampaigns = lazy(() => import("./pages/EmailCampaigns"));
 const EmailSettings = lazy(() => import("./pages/EmailSettings"));
+const FavoriteStylistsPage = lazy(() => import("./pages/FavoriteStylistsPage"));
+const PaymentMethodsPage = lazy(() => import("./pages/PaymentMethodsPage"));
+const ClientReviewsPage = lazy(() => import("./pages/ClientReviewsPage"));
+const BookingHistoryPage = lazy(() => import("./pages/BookingHistoryPage"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -208,6 +212,26 @@ const App = () => {
           <Route path="/formulas" element={
             <ProtectedRoute>
               <Formulas />
+            </ProtectedRoute>
+          } />
+          <Route path="/favorites" element={
+            <ProtectedRoute allowedRoles={["client", "admin"]}>
+              <FavoriteStylistsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/booking-history" element={
+            <ProtectedRoute allowedRoles={["client", "admin"]}>
+              <BookingHistoryPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/client-reviews" element={
+            <ProtectedRoute allowedRoles={["client", "admin"]}>
+              <ClientReviewsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/payment-methods" element={
+            <ProtectedRoute allowedRoles={["client", "admin"]}>
+              <PaymentMethodsPage />
             </ProtectedRoute>
           } />
           <Route path="/schedule" element={
