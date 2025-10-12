@@ -1,5 +1,6 @@
 import { StatCard } from "@/components/ui/stat-card";
 import { Calendar, MessageSquare, Star, DollarSign, Users, Clock } from "lucide-react";
+import { HelpTooltip } from "@/components/HelpTooltip";
 
 interface DashboardStatsProps {
   stats: {
@@ -14,13 +15,25 @@ interface DashboardStatsProps {
 }
 
 export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
-  const stylistStats = [
+  const hasNoData = !stats.todayAppointments && !stats.upcomingAppointments && !stats.totalClients;
+
+  interface StatItem {
+    label: string;
+    value: number;
+    icon: any;
+    gradient: string;
+    variant: "gradient";
+    emptyHelp?: string;
+  }
+
+  const stylistStats: StatItem[] = [
     {
       label: "Today's Appointments",
       value: stats.todayAppointments || 0,
       icon: Calendar,
       gradient: "from-blue-500 to-cyan-500",
       variant: "gradient" as const,
+      emptyHelp: hasNoData ? "Start by adding services and clients, then create your first appointment" : undefined,
     },
     {
       label: "Upcoming This Week",
@@ -28,6 +41,7 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
       icon: Clock,
       gradient: "from-purple-500 to-pink-500",
       variant: "gradient" as const,
+      emptyHelp: hasNoData ? "Schedule appointments to fill your week and grow your business" : undefined,
     },
     {
       label: "Unread Messages",
@@ -35,6 +49,7 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
       icon: MessageSquare,
       gradient: "from-emerald-500 to-teal-500",
       variant: "gradient" as const,
+      emptyHelp: "Client messages will appear here",
     },
     {
       label: "Total Clients",
@@ -42,6 +57,7 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
       icon: Users,
       gradient: "from-amber-500 to-orange-500",
       variant: "gradient" as const,
+      emptyHelp: hasNoData ? "Add your first client to start building your client base" : undefined,
     },
   ];
 
@@ -74,15 +90,24 @@ export const DashboardStats = ({ stats, userRole }: DashboardStatsProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
       {displayStats.map((stat, index) => (
-        <StatCard
-          key={stat.label}
-          label={stat.label}
-          value={stat.value}
-          icon={stat.icon}
-          variant={stat.variant}
-          gradient={stat.gradient}
-          delay={index * 75}
-        />
+        <div key={stat.label} className="relative">
+          <StatCard
+            label={stat.label}
+            value={stat.value}
+            icon={stat.icon}
+            variant={stat.variant}
+            gradient={stat.gradient}
+            delay={index * 75}
+          />
+          {stat.emptyHelp && stat.value === 0 && (
+            <div className="absolute -top-2 -right-2">
+              <HelpTooltip
+                title={stat.label}
+                content={{ stylist: stat.emptyHelp }}
+              />
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );

@@ -429,9 +429,26 @@ const Portfolio = () => {
           <h2 className="text-2xl font-bold mb-4 font-display">Your Gallery ({photos.length} photos)</h2>
           {photos.length === 0 ? (
             <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
-              <CardContent className="pt-6 text-center">
-                <ImageIcon className="h-12 w-12 mx-auto mb-4 text-foreground/60" />
-                <p className="text-foreground/80 font-medium">No photos yet. Upload your first photo to get started!</p>
+              <CardContent className="pt-6 text-center space-y-4">
+                <ImageIcon className="h-12 w-12 mx-auto text-foreground/60" />
+                <div>
+                  <p className="text-foreground font-bold text-lg mb-2">Start Building Your Portfolio</p>
+                  <p className="text-foreground/80 font-medium mb-4">Upload your best work to attract new clients</p>
+                </div>
+                <div className="text-left max-w-md mx-auto space-y-2 text-sm">
+                  <p className="text-foreground/90">
+                    <strong>What to upload:</strong>
+                  </p>
+                  <ul className="list-disc list-inside space-y-1 text-foreground/80">
+                    <li>Before & after transformations</li>
+                    <li>Color corrections and highlights</li>
+                    <li>Haircuts and styling techniques</li>
+                    <li>Special occasion styles</li>
+                  </ul>
+                  <p className="text-foreground/70 text-xs pt-2">
+                    💡 Tip: High-quality photos with good lighting showcase your work best
+                  </p>
+                </div>
               </CardContent>
             </Card>
           ) : (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Circle, Sparkles } from "lucide-react";
+import { CheckCircle, Circle, Sparkles, CheckCircle2, X, Calendar, Users, MessageSquare, Image } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 
@@ -80,12 +80,71 @@ export const WelcomeChecklist = ({
   const completedCount = steps.filter(s => s.completed).length;
   const progress = (completedCount / steps.length) * 100;
 
-  if (dismissed || progress === 100) return null;
-
   const handleDismiss = () => {
     localStorage.setItem('welcome_checklist_dismissed', 'true');
     setDismissed(true);
   };
+
+  if (dismissed) {
+    return null;
+  }
+
+  // Show "What's Next" when checklist is complete
+  if (progress === 100) {
+    return (
+      <Card className="border-[3px] border-success shadow-[5px_5px_0px_0px_hsl(var(--success))] bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-success" />
+              <CardTitle className="text-success">You're All Set! 🎉</CardTitle>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDismiss}
+              className="h-8 w-8 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <CardDescription>Your daily workflow as a stylist</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50">
+              <Calendar className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">Check your schedule</p>
+                <p className="text-sm text-muted-foreground">Review today's appointments and prepare for clients</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50">
+              <Users className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">Document client visits</p>
+                <p className="text-sm text-muted-foreground">Save formulas after each service for future reference</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50">
+              <MessageSquare className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">Stay connected</p>
+                <p className="text-sm text-muted-foreground">Respond to client messages and appointment requests</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50">
+              <Image className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">Build your portfolio</p>
+                <p className="text-sm text-muted-foreground">Upload photos of your best work to attract new clients</p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="brutal-border border-primary brutal-shadow-md bg-gradient-to-br from-primary/5 to-secondary/5 animate-fade-in">

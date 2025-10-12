@@ -34,7 +34,9 @@ const clientSchema = z.object({
   email: z.string()
     .trim()
     .email("Invalid email address")
-    .max(255, "Email must be less than 255 characters"),
+    .max(255, "Email must be less than 255 characters")
+    .optional()
+    .or(z.literal("")),
   phone: z.string()
     .trim()
     .max(20, "Phone must be less than 20 characters")
@@ -98,18 +100,20 @@ export const AddClientDialog = ({
       setErrors({});
       setLoading(true);
 
-      // Check if email already exists
-      const { data: existingClient } = await supabase
-        .from("client_profiles")
-        .select("id, user:profiles(full_name)")
-        .eq("email", validatedData.email)
-        .single();
+      // Check if email already exists (only if email provided)
+      if (validatedData.email) {
+        const { data: existingClient } = await supabase
+          .from("client_profiles")
+          .select("id, user:profiles(full_name)")
+          .eq("email", validatedData.email)
+          .single();
 
-      if (existingClient) {
-        toast.error("Email already exists", {
-          description: `This email is already registered for ${existingClient.user?.full_name || "another client"}`,
-        });
-        return;
+        if (existingClient) {
+          toast.error("Email already exists", {
+            description: `This email is already registered for ${existingClient.user?.full_name || "another client"}`,
+          });
+          return;
+        }
       }
 
       // Create the client profile
@@ -197,7 +201,7 @@ export const AddClientDialog = ({
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">
-              Email <span className="text-destructive">*</span>
+              Email (Optional)
             </Label>
             <Input
               id="email"
@@ -211,6 +215,9 @@ export const AddClientDialog = ({
             {errors.email && (
               <p className="text-xs text-destructive">{errors.email}</p>
             )}
+            <p className="text-xs text-muted-foreground">
+              You can add email later - useful for walk-ins or phone bookings
+            </p>
           </div>
 
           {/* Phone */}
@@ -299,7 +306,7 @@ export const AddClientDialog = ({
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={loading || !fullName.trim() || !email.trim()}
+              disabled={loading || !fullName.trim()}
               className="flex-1 gap-2"
             >
               {loading ? (
