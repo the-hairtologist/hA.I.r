@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Bell, Calendar, MessageSquare, Star, Gift } from "lucide-react";
@@ -13,6 +14,7 @@ interface NotificationEnhancerProps {
  * Enhanced notification system with smart grouping and prioritization
  */
 export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerProps) => {
+  const navigate = useNavigate();
   const [lastCheck, setLastCheck] = useState<Date>(new Date());
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
         description: `${latest.client?.user?.full_name} booked ${latest.service_type}`,
         action: {
           label: "View",
-          onClick: () => window.location.href = "/appointments",
+          onClick: () => navigate("/appointments"),
         },
         duration: 6000,
       });
@@ -101,7 +103,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
         icon: <MessageSquare className="h-4 w-4" />,
         action: {
           label: "View",
-          onClick: () => window.location.href = "/messages",
+          onClick: () => navigate("/messages"),
         },
       });
     }
@@ -139,7 +141,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
             description: `${latest.client?.user?.full_name} rated you ${latest.rating}/5`,
             action: {
               label: "View",
-              onClick: () => window.location.href = "/dashboard",
+              onClick: () => navigate("/dashboard"),
             },
           });
         }
@@ -218,7 +220,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
         icon: <MessageSquare className="h-4 w-4" />,
         action: {
           label: "View",
-          onClick: () => window.location.href = "/messages",
+          onClick: () => navigate("/messages"),
         },
       });
     }

@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,7 @@ import { predictiveAnalytics } from '@/lib/ai/PredictiveAnalytics';
 
 export const AdminDivineWeapon = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [securityStatus, setSecurityStatus] = useState<any>(null);
   const [insights, setInsights] = useState<any[]>([]);
   const [systemHealth, setSystemHealth] = useState<any>(null);
@@ -323,7 +325,7 @@ export const AdminDivineWeapon = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Advanced user management and role control will be available here.
               </p>
-              <Button onClick={() => window.location.href = '/admin/users'} className="gap-2">
+              <Button onClick={() => navigate('/admin/users')} className="gap-2">
                 <Users className="h-4 w-4" />
                 Go to User Management
               </Button>
@@ -342,11 +344,11 @@ export const AdminDivineWeapon = () => {
                   System-level controls and configurations.
                 </p>
                 <div className="grid gap-3">
-                  <Button onClick={() => window.location.href = '/system-health'} variant="outline" className="justify-start">
+                  <Button onClick={() => navigate('/system-health')} variant="outline" className="justify-start">
                     <Activity className="h-4 w-4 mr-2" />
                     View System Health
                   </Button>
-                  <Button onClick={() => window.location.href = '/access-codes'} variant="outline" className="justify-start">
+                  <Button onClick={() => navigate('/access-codes')} variant="outline" className="justify-start">
                     <Lock className="h-4 w-4 mr-2" />
                     Manage Access Codes
                   </Button>

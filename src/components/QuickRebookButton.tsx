@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Calendar, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +29,7 @@ export const QuickRebookButton = ({
   className,
   variant = "default"
 }: QuickRebookButtonProps) => {
+  const navigate = useNavigate();
   const [isRebooking, setIsRebooking] = useState(false);
 
   const handleQuickRebook = async () => {
@@ -115,7 +117,7 @@ export const QuickRebookButton = ({
           action: {
             label: "Book Manually",
             onClick: () => {
-              window.location.href = `/book-appointment?clientId=${clientId}&serviceType=${encodeURIComponent(serviceType)}`;
+              navigate(`/book-appointment?clientId=${clientId}&serviceType=${encodeURIComponent(serviceType)}`);
             }
           }
         });
