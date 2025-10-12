@@ -640,7 +640,7 @@ const ScheduleManagement = () => {
         />
 
         <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-7">
+          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
             <TabsTrigger value="availability" className="gap-2 text-xs">
               <Clock className="h-4 w-4" />
               Weekly
@@ -993,7 +993,7 @@ const ScheduleManagement = () => {
                                   <span className="bg-background px-2 text-muted-foreground">Or start from scratch</span>
                                 </div>
                               </div>
-                              <div className="grid grid-cols-2 gap-2">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 <Button
                                   variant="outline"
                                   onClick={() => setOverrideSchedule(schedule)}
@@ -1418,7 +1418,7 @@ const ScheduleManagement = () => {
                   </DialogContent>
                 </Dialog>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {Array.from({ length: 12 }, (_, i) => {
                     const monthDate = addMonths(startOfYear(new Date()), i);
                     const monthStart = startOfMonth(monthDate);

@@ -72,12 +72,12 @@ const BookingPage = () => {
               <Input
                 value={bookingUrl}
                 readOnly
-                className="font-mono text-sm"
+                className="font-mono text-sm overflow-x-auto"
               />
-              <Button onClick={copyToClipboard} variant="outline">
+              <Button onClick={copyToClipboard} variant="outline" className="flex-shrink-0">
                 <Copy className="h-4 w-4" />
               </Button>
-              <Button onClick={shareLink} variant="outline">
+              <Button onClick={shareLink} variant="outline" className="flex-shrink-0">
                 <Share2 className="h-4 w-4" />
               </Button>
             </div>
@@ -143,7 +143,7 @@ const BookingPage = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Share your booking link on social media
             </p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button variant="outline" className="justify-start">
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Share on Facebook
