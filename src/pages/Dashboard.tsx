@@ -568,18 +568,19 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-4 md:p-6 relative overflow-hidden">
+          <div className="bg-blue-600 p-3 md:p-5 relative overflow-hidden">
             <div className="window-scrollbar"></div>
             
-            <div className="max-w-4xl pr-4 sm:pr-8">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-black mb-4 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-black mb-3 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
-              {/* Weekly Schedule View for Stylists and Admins */}
+              {/* Weekly Schedule View + Quick Notes for Stylists and Admins */}
               {(userRole === "stylist" || isAdmin) && (
-                <>
-                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] mt-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                  {/* Calendar takes 2/3 width on desktop */}
+                  <div className="xl:col-span-2 bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)]">
                     <WeeklyScheduleView
                       appointments={weekAppointments}
                       stylistSchedule={profile?.weekly_schedule}
@@ -592,11 +593,11 @@ const Dashboard = () => {
                     />
                   </div>
                   
-                  {/* Quick Notes Notepad */}
-                  <div className="mt-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+                  {/* Quick Notes takes 1/3 width on desktop, full width on mobile */}
+                  <div className="xl:col-span-1 h-full">
                     <QuickNotes compact />
                   </div>
-                </>
+                </div>
               )}
 
               {userRole === "client" && (
@@ -678,14 +679,14 @@ const Dashboard = () => {
               </div>
             )}
             
-            <div className="mb-6 p-4 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div className="space-y-1">
-                  <p className="text-sm font-semibold text-foreground flex items-center gap-2">
-                    <Edit3 className="h-4 w-4 text-primary" />
+            <div className="mb-4 p-3 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <div className="space-y-0.5">
+                  <p className="text-xs font-semibold text-foreground flex items-center gap-2">
+                    <Edit3 className="h-3.5 w-3.5 text-primary" />
                     Personalize Your Dashboard
                   </p>
-                  <p className="text-sm text-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Add, remove, or rearrange sections to match your workflow
                   </p>
                 </div>
@@ -693,9 +694,9 @@ const Dashboard = () => {
                   variant="default" 
                   size="sm" 
                   onClick={() => setIsEditMode(true)}
-                  className="gap-2 shrink-0 w-full sm:w-auto shadow-sm"
+                  className="gap-1.5 shrink-0 w-full sm:w-auto shadow-sm h-8 text-xs"
                 >
-                  <Edit3 className="h-3.5 w-3.5" />
+                  <Edit3 className="h-3 w-3" />
                   <span>Customize</span>
                 </Button>
               </div>
@@ -713,7 +714,7 @@ const Dashboard = () => {
             items={sections.map(s => s.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4">
               {sections.map((section, index) => (
                 <DraggableSection
                   key={section.id}

@@ -129,16 +129,16 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 animate-pulse">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-32 bg-secondary/20 rounded-lg border-[2px] border-foreground" />
+          <div key={i} className="h-24 sm:h-28 bg-secondary/20 rounded-lg border-[2px] border-foreground" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
       {cards.map((card, index) => (
         <Card
           key={index}
@@ -151,12 +151,12 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
           onClick={card.onClick}
           style={{ animationDelay: `${index * 100}ms` }}
         >
-          <CardContent className="p-6">
-            <div className={cn("rounded-lg p-3 w-fit mb-4 bg-gradient-to-br", card.color)}>
-              <card.icon className={cn("h-6 w-6", card.iconColor)} />
+          <CardContent className="p-3 sm:p-4">
+            <div className={cn("rounded-lg p-1.5 sm:p-2 w-fit mb-2 sm:mb-3 bg-gradient-to-br", card.color)}>
+              <card.icon className={cn("h-4 w-4 sm:h-5 sm:w-5", card.iconColor)} />
             </div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">{card.label}</p>
-            <p className="text-3xl font-display font-bold gradient-text">
+            <p className="text-[10px] sm:text-xs font-medium text-muted-foreground mb-0.5">{card.label}</p>
+            <p className="text-xl sm:text-2xl font-display font-bold gradient-text">
               {card.value}
             </p>
           </CardContent>
