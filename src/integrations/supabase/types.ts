@@ -897,6 +897,45 @@ export type Database = {
           },
         ]
       }
+      formula_products: {
+        Row: {
+          created_at: string
+          formula_id: string
+          id: string
+          product_id: string
+          quantity_used: number
+        }
+        Insert: {
+          created_at?: string
+          formula_id: string
+          id?: string
+          product_id: string
+          quantity_used: number
+        }
+        Update: {
+          created_at?: string
+          formula_id?: string
+          id?: string
+          product_id?: string
+          quantity_used?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formula_products_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "formulas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "formula_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "product_inventory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       formulas: {
         Row: {
           application_notes: string | null
@@ -1288,6 +1327,66 @@ export type Database = {
           },
           {
             foreignKeyName: "portfolio_photos_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_inventory: {
+        Row: {
+          brand: string
+          category: string
+          cost_per_unit: number | null
+          created_at: string
+          current_quantity: number
+          id: string
+          notes: string | null
+          product_name: string
+          reorder_threshold: number
+          stylist_id: string
+          unit_type: string
+          updated_at: string
+        }
+        Insert: {
+          brand: string
+          category: string
+          cost_per_unit?: number | null
+          created_at?: string
+          current_quantity?: number
+          id?: string
+          notes?: string | null
+          product_name: string
+          reorder_threshold?: number
+          stylist_id: string
+          unit_type?: string
+          updated_at?: string
+        }
+        Update: {
+          brand?: string
+          category?: string
+          cost_per_unit?: number | null
+          created_at?: string
+          current_quantity?: number
+          id?: string
+          notes?: string | null
+          product_name?: string
+          reorder_threshold?: number
+          stylist_id?: string
+          unit_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_inventory_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_inventory_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
             referencedRelation: "stylist_profiles"

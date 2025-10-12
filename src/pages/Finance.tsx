@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { DollarSign, TrendingUp, Loader2, Plus, Copy, ExternalLink, Tag } from "lucide-react";
+import { DollarSign, TrendingUp, Loader2, Plus, Copy, ExternalLink, Tag, Calendar, TrendingDown, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
-import { format } from "date-fns";
+import { format, subDays, subMonths, startOfMonth, endOfMonth, eachMonthOfInterval, eachWeekOfInterval, startOfWeek, endOfWeek } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 const Finance = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Finance = () => {
   const [brands, setBrands] = useState<any[]>([]);
   const [affiliateCodes, setAffiliateCodes] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
+  const [timePeriod, setTimePeriod] = useState<"30d" | "90d" | "year" | "all">("90d");
 
   useEffect(() => {
     loadData();
@@ -127,19 +129,126 @@ const Finance = () => {
     }
   };
 
-  const totalPayments = payments
-    .filter(p => p.status === "completed")
-    .reduce((sum, p) => sum + parseFloat(p.amount), 0);
+  // Filter data by time period
+  const getFilteredData = (data: any[], dateField: string = "created_at") => {
+    if (timePeriod === "all") return data;
+    
+    const now = new Date();
+    let cutoffDate: Date;
+    
+    switch (timePeriod) {
+      case "30d":
+        cutoffDate = subDays(now, 30);
+        break;
+      case "90d":
+        cutoffDate = subDays(now, 90);
+        break;
+      case "year":
+        cutoffDate = subDays(now, 365);
+        break;
+      default:
+        return data;
+    }
+    
+    return data.filter(item => new Date(item[dateField]) >= cutoffDate);
+  };
 
-  const totalCommissions = commissions
-    .filter(c => c.status === "paid")
-    .reduce((sum, c) => sum + parseFloat(c.commission_amount), 0);
+  const filteredPayments = getFilteredData(payments.filter(p => p.status === "completed"));
+  const filteredCommissions = getFilteredData(commissions.filter(c => c.status === "paid"));
+
+  const totalPayments = filteredPayments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
+  const totalCommissions = filteredCommissions.reduce((sum, c) => sum + parseFloat(c.commission_amount), 0);
 
   const pendingCommissions = commissions
     .filter(c => c.status === "pending")
     .reduce((sum, c) => sum + parseFloat(c.commission_amount), 0);
 
   const totalRevenue = totalPayments + totalCommissions;
+
+  // Chart data - group by month or week based on period
+  const chartData = useMemo(() => {
+    const groupByMonth = timePeriod === "year" || timePeriod === "all";
+    const allData = [...filteredPayments, ...filteredCommissions];
+    
+    if (allData.length === 0) return [];
+
+    const grouped: Record<string, { date: string; payments: number; commissions: number; total: number }> = {};
+
+    allData.forEach(item => {
+      const date = new Date(item.created_at);
+      const key = groupByMonth 
+        ? format(startOfMonth(date), "MMM yyyy")
+        : format(startOfWeek(date), "MMM d");
+      
+      if (!grouped[key]) {
+        grouped[key] = { date: key, payments: 0, commissions: 0, total: 0 };
+      }
+
+      const amount = parseFloat(item.amount || item.commission_amount);
+      if ('amount' in item) {
+        grouped[key].payments += amount;
+      } else {
+        grouped[key].commissions += amount;
+      }
+      grouped[key].total += amount;
+    });
+
+    return Object.values(grouped).sort((a, b) => {
+      const dateA = groupByMonth ? new Date(a.date + " 1") : new Date(a.date);
+      const dateB = groupByMonth ? new Date(b.date + " 1") : new Date(b.date);
+      return dateA.getTime() - dateB.getTime();
+    });
+  }, [filteredPayments, filteredCommissions, timePeriod]);
+
+  // Calculate period comparison (current vs previous period)
+  const periodComparison = useMemo(() => {
+    const now = new Date();
+    let currentStart: Date, previousStart: Date;
+
+    switch (timePeriod) {
+      case "30d":
+        currentStart = subDays(now, 30);
+        previousStart = subDays(now, 60);
+        break;
+      case "90d":
+        currentStart = subDays(now, 90);
+        previousStart = subDays(now, 180);
+        break;
+      case "year":
+        currentStart = subDays(now, 365);
+        previousStart = subDays(now, 730);
+        break;
+      default:
+        return null;
+    }
+
+    const currentPeriodRevenue = [...payments, ...commissions]
+      .filter(item => {
+        const date = new Date(item.created_at);
+        return date >= currentStart && date <= now;
+      })
+      .reduce((sum, item) => sum + parseFloat(item.amount || item.commission_amount), 0);
+
+    const previousPeriodRevenue = [...payments, ...commissions]
+      .filter(item => {
+        const date = new Date(item.created_at);
+        return date >= previousStart && date < currentStart;
+      })
+      .reduce((sum, item) => sum + parseFloat(item.amount || item.commission_amount), 0);
+
+    const change = currentPeriodRevenue - previousPeriodRevenue;
+    const percentChange = previousPeriodRevenue > 0 
+      ? ((change / previousPeriodRevenue) * 100) 
+      : 0;
+
+    return {
+      current: currentPeriodRevenue,
+      previous: previousPeriodRevenue,
+      change,
+      percentChange,
+      isPositive: change >= 0
+    };
+  }, [payments, commissions, timePeriod]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -163,6 +272,36 @@ const Finance = () => {
       />
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* Time Period Selector */}
+        <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] mb-6">
+          <CardContent className="p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-muted-foreground" />
+                <Label className="text-sm font-medium">Time Period:</Label>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { value: "30d", label: "Last 30 Days" },
+                  { value: "90d", label: "Last 90 Days" },
+                  { value: "year", label: "Last Year" },
+                  { value: "all", label: "All Time" }
+                ].map((option) => (
+                  <Button
+                    key={option.value}
+                    variant={timePeriod === option.value ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setTimePeriod(option.value as typeof timePeriod)}
+                    className="border-[2px] border-foreground"
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Overview Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
@@ -173,7 +312,26 @@ const Finance = () => {
               <div className="text-3xl font-bold text-primary">
                 ${totalRevenue.toFixed(2)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">All time earnings</p>
+              <div className="flex items-center gap-2 mt-2">
+                <p className="text-xs text-muted-foreground">
+                  {timePeriod === "30d" ? "Last 30 days" : 
+                   timePeriod === "90d" ? "Last 90 days" :
+                   timePeriod === "year" ? "Last year" : "All time"}
+                </p>
+                {periodComparison && periodComparison.percentChange !== 0 && (
+                  <Badge 
+                    variant={periodComparison.isPositive ? "default" : "destructive"}
+                    className="gap-1 text-xs"
+                  >
+                    {periodComparison.isPositive ? (
+                      <ArrowUpRight className="h-3 w-3" />
+                    ) : (
+                      <ArrowDownRight className="h-3 w-3" />
+                    )}
+                    {Math.abs(periodComparison.percentChange).toFixed(1)}%
+                  </Badge>
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -204,6 +362,106 @@ const Finance = () => {
           </Card>
         </div>
 
+        {/* Revenue Trends Chart */}
+        {chartData.length > 0 && (
+          <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Revenue Trends
+              </CardTitle>
+              <CardDescription>
+                Track your earnings over time
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis 
+                      dataKey="date" 
+                      className="text-xs"
+                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                    />
+                    <YAxis 
+                      className="text-xs"
+                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      tickFormatter={(value) => `$${value}`}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--background))',
+                        border: '2px solid hsl(var(--foreground))',
+                        borderRadius: '8px'
+                      }}
+                      formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+                    />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="payments" 
+                      stroke="hsl(142, 76%, 36%)" 
+                      strokeWidth={2}
+                      name="Service Payments"
+                      dot={{ fill: 'hsl(142, 76%, 36%)', r: 4 }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="commissions" 
+                      stroke="hsl(280, 60%, 50%)" 
+                      strokeWidth={2}
+                      name="Commissions"
+                      dot={{ fill: 'hsl(280, 60%, 50%)', r: 4 }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="total" 
+                      stroke="hsl(var(--primary))" 
+                      strokeWidth={3}
+                      name="Total Revenue"
+                      dot={{ fill: 'hsl(var(--primary))', r: 5 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Weekly Breakdown Bar Chart */}
+              {timePeriod !== "all" && timePeriod !== "year" && (
+                <div className="mt-8 h-[250px] w-full">
+                  <h3 className="text-sm font-medium mb-4">Weekly Breakdown</h3>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis 
+                        dataKey="date" 
+                        className="text-xs"
+                        tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      />
+                      <YAxis 
+                        className="text-xs"
+                        tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                        tickFormatter={(value) => `$${value}`}
+                      />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--background))',
+                          border: '2px solid hsl(var(--foreground))',
+                          borderRadius: '8px'
+                        }}
+                        formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+                      />
+                      <Legend />
+                      <Bar dataKey="payments" fill="hsl(142, 76%, 36%)" name="Payments" />
+                      <Bar dataKey="commissions" fill="hsl(280, 60%, 50%)" name="Commissions" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="payments">Service Payments</TabsTrigger>
@@ -219,14 +477,18 @@ const Finance = () => {
                 <CardDescription>Track service payments from clients</CardDescription>
               </CardHeader>
               <CardContent>
-                {payments.length === 0 ? (
+                {filteredPayments.length === 0 ? (
                   <div className="text-center py-12">
                     <DollarSign className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">No payments recorded yet</p>
+                    <p className="text-muted-foreground">
+                      {payments.length === 0 
+                        ? "No payments recorded yet"
+                        : `No payments in selected time period`}
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {payments.map((payment) => (
+                    {filteredPayments.map((payment) => (
                       <div
                         key={payment.id}
                         className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
@@ -264,14 +526,18 @@ const Finance = () => {
                 <CardDescription>Track product affiliate commissions</CardDescription>
               </CardHeader>
               <CardContent>
-                {commissions.length === 0 ? (
+                {filteredCommissions.length === 0 ? (
                   <div className="text-center py-12">
                     <TrendingUp className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">No commissions recorded yet</p>
+                    <p className="text-muted-foreground">
+                      {commissions.length === 0
+                        ? "No commissions recorded yet"
+                        : `No commissions in selected time period`}
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {commissions.map((commission) => (
+                    {filteredCommissions.map((commission) => (
                       <div
                         key={commission.id}
                         className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"

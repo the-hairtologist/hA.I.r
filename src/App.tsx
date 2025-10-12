@@ -42,6 +42,7 @@ const ScheduleManagement = lazy(() => import("./pages/ScheduleManagement"));
 const Services = lazy(() => import("./pages/Services"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Finance = lazy(() => import("./pages/Finance"));
+const Products = lazy(() => import("./pages/Products"));
 const Resources = lazy(() => import("./pages/Resources"));
 const Knowledge = lazy(() => import("./pages/Knowledge"));
 const AIKnowledge = lazy(() => import("./pages/AIAssistant"));
@@ -218,6 +219,11 @@ const App = () => {
               <SubscriptionGate feature="payments">
                 <Finance />
               </SubscriptionGate>
+            </ProtectedRoute>
+          } />
+          <Route path="/products" element={
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+              <Products />
             </ProtectedRoute>
           } />
           <Route path="/portfolio" element={

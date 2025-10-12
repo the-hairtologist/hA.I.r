@@ -296,6 +296,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "booking-page", title: "My Booking Page", url: "/booking-page", icon: Link2, gradient: "bg-[image:var(--gradient-purple-pink)]", description: "Share with clients", group: "scheduling", color: "text-purple-400 dark:text-purple-300" },
     { id: "services", title: "Services & Pricing", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "finance", title: "Finance", url: "/finance", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
+    { id: "products", title: "Product Inventory", url: "/products", icon: Package, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "reviews", title: "Client Reviews", url: "/reviews", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
     { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "growth", color: "text-orange-400 dark:text-orange-300" },
     { id: "referrals", title: "Referrals", url: "/referrals", icon: Gift, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "growth", color: "text-purple-400 dark:text-purple-300" },

@@ -23,6 +23,7 @@ import { AIDisclaimer } from "@/components/AIDisclaimer";
 import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
 import { FormulaFiltersComponent, FormulaFilters } from "@/components/FormulaFilters";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
+import { EnhancedSearch, HighlightedText, fuzzyMatch } from "@/components/EnhancedSearch";
 import { cn } from "@/lib/utils";
 
 const Formulas = () => {
@@ -262,15 +263,15 @@ const Formulas = () => {
   const filteredFormulas = useMemo(() => {
     let filtered = formulas;
 
-    // Text search
+    // Enhanced fuzzy text search
     if (searchTerm) {
       const search = searchTerm.toLowerCase();
       filtered = filtered.filter(formula =>
-        formula.client?.full_name?.toLowerCase().includes(search) ||
-        formula.client?.email?.toLowerCase().includes(search) ||
-        formula.formula_text?.toLowerCase().includes(search) ||
-        formula.color_line?.toLowerCase().includes(search) ||
-        formula.tags?.some((tag: string) => tag.toLowerCase().includes(search))
+        fuzzyMatch(formula.client?.full_name || "", searchTerm, 2) ||
+        fuzzyMatch(formula.client?.email || "", searchTerm, 2) ||
+        fuzzyMatch(formula.formula_text || "", searchTerm, 2) ||
+        fuzzyMatch(formula.color_line || "", searchTerm, 2) ||
+        formula.tags?.some((tag: string) => fuzzyMatch(tag, searchTerm, 1))
       );
     }
 
@@ -409,16 +410,14 @@ const Formulas = () => {
           </p>
         </div>
 
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search formulas by client, formula, tags, or color line..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
+        {/* Enhanced Search */}
+        <EnhancedSearch
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search formulas by client, formula, tags, or color line..."
+          storageKey="formulas_recent_searches"
+          showRecentSearches={true}
+        />
 
         {/* Filters */}
         {formulas.length > 0 && (
@@ -539,11 +538,18 @@ const Formulas = () => {
                           />
                           <div className="flex-1">
                             <CardTitle className="text-lg">
-                              {formula.client?.full_name || "Client"}
+                              <HighlightedText text={formula.client?.full_name || "Client"} query={searchTerm} />
                             </CardTitle>
                         <CardDescription className="flex flex-wrap items-center gap-2 mt-1">
-                          {formula.client?.email}
-                          {formula.color_line && <span>• {formula.color_line}</span>}
+                          {formula.client?.email && (
+                            <HighlightedText text={formula.client.email} query={searchTerm} />
+                          )}
+                          {formula.color_line && (
+                            <>
+                              <span>•</span>
+                              <HighlightedText text={formula.color_line} query={searchTerm} />
+                            </>
+                          )}
                           {formula.created_at && (
                             <span className="text-xs">• {new Date(formula.created_at).toLocaleDateString()}</span>
                           )}
