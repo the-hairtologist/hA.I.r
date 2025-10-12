@@ -601,7 +601,7 @@ const Dashboard = () => {
               {/* Quick Notes - Compact Notepad */}
               {(userRole === "stylist" || isAdmin) && (
                 <div className="mt-6 max-w-md animate-fade-in" style={{ animationDelay: '250ms' }}>
-                  <div className="bg-yellow-200 rounded-lg shadow-lg border-t-8 border-yellow-400 relative overflow-hidden">
+                  <div className="bg-yellow-300 rounded-lg shadow-lg border-t-8 border-yellow-400 relative overflow-hidden">
                     {/* Notepad ruled lines */}
                     <div 
                       className="absolute inset-0 pointer-events-none" 
@@ -613,14 +613,14 @@ const Dashboard = () => {
                     />
                     
                     {/* Simple header */}
-                    <div className="px-4 py-2 border-b border-yellow-400/30 relative">
+                    <div className="px-4 py-2 border-b border-yellow-400/20 relative bg-yellow-300">
                       <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                         📝 Quick Notes
                       </h3>
                     </div>
                     
                     {/* Notes content - transparent textarea */}
-                    <div className="p-4 relative">
+                    <div className="p-4 relative bg-yellow-300">
                       <QuickNotes compact />
                     </div>
                   </div>
