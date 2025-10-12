@@ -87,7 +87,7 @@ const Dashboard = () => {
   const defaultStylistSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-schedule", title: "My Schedule", component: "WeeklySchedule", enabled: true },
+    { id: "weekly-schedule", title: "My Schedule", component: "WeeklySchedule", enabled: false },
     { id: "weekly-overview", title: "This Week", component: "WeeklyOverview", enabled: true },
     { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
     { id: "quick-tasks", title: "My Tasks", component: "QuickTasks", enabled: true },
@@ -111,7 +111,7 @@ const Dashboard = () => {
   const defaultAdminSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Platform Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-schedule", title: "Platform Schedule", component: "WeeklySchedule", enabled: true },
+    { id: "weekly-schedule", title: "Platform Schedule", component: "WeeklySchedule", enabled: false },
     { id: "weekly-overview", title: "Platform Stats", component: "WeeklyOverview", enabled: true },
     { id: "recent-activity", title: "Platform Activity", component: "RecentActivity", enabled: true },
     { id: "quick-tasks", title: "Admin Tasks", component: "QuickTasks", enabled: true },
@@ -567,23 +567,25 @@ const Dashboard = () => {
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
-              {/* Stylists and Admins */}
+               {/* Stylists and Admins */}
               {(userRole === "stylist" || isAdmin) && (
                 <div className="space-y-3">
                   <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Ready to book your next transformation? ✨
                   </p>
-                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in" style={{ animationDelay: '250ms' }}>
-                    <WeeklyScheduleView
-                      appointments={weekAppointments}
-                      stylistSchedule={profile?.weekly_schedule}
-                      stylistId={profile?.id}
-                      onAppointmentClick={(apt) => navigate("/appointments")}
-                      onTimeSlotClick={(date, hour, minute) => {
-                        setQuickAppointmentData({ date, hour, minute });
-                        setQuickAppointmentOpen(true);
-                      }}
-                    />
+                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] max-h-[600px] animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <div className="overflow-auto max-h-[600px]">
+                      <WeeklyScheduleView
+                        appointments={weekAppointments}
+                        stylistSchedule={profile?.weekly_schedule}
+                        stylistId={profile?.id}
+                        onAppointmentClick={(apt) => navigate("/appointments")}
+                        onTimeSlotClick={(date, hour, minute) => {
+                          setQuickAppointmentData({ date, hour, minute });
+                          setQuickAppointmentOpen(true);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -594,17 +596,19 @@ const Dashboard = () => {
                   <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Ready to book your next transformation? ✨
                   </p>
-                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in" style={{ animationDelay: '250ms' }}>
-                    <WeeklyScheduleView
-                      appointments={weekAppointments}
-                      stylistSchedule={profile?.weekly_schedule}
-                      stylistId={profile?.id}
-                      onAppointmentClick={(apt) => navigate("/appointments")}
-                      onTimeSlotClick={(date, hour, minute) => {
-                        setQuickAppointmentData({ date, hour, minute });
-                        setQuickAppointmentOpen(true);
-                      }}
-                    />
+                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] max-h-[600px] animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <div className="overflow-auto max-h-[600px]">
+                      <WeeklyScheduleView
+                        appointments={weekAppointments}
+                        stylistSchedule={profile?.weekly_schedule}
+                        stylistId={profile?.id}
+                        onAppointmentClick={(apt) => navigate("/appointments")}
+                        onTimeSlotClick={(date, hour, minute) => {
+                          setQuickAppointmentData({ date, hour, minute });
+                          setQuickAppointmentOpen(true);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
