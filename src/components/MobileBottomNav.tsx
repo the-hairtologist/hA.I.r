@@ -23,35 +23,35 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: Home, 
       label: "Home", 
       path: "/dashboard",
-      gradient: "from-[hsl(270,85%,48%)] to-[hsl(330,85%,52%)]",
+      gradient: "from-purple-start to-purple-end",
       highlight: false
     },
     { 
       icon: Calendar, 
       label: "Schedule", 
       path: "/appointments",
-      gradient: "from-[hsl(190,95%,42%)] to-[hsl(210,95%,42%)]",
+      gradient: "from-cyan-start to-cyan-end",
       highlight: false
     },
     { 
       icon: Sparkles, 
       label: "AI", 
       path: "/ai-assistant",
-      gradient: "from-[hsl(270,85%,48%)] to-[hsl(330,85%,52%)]",
+      gradient: "from-purple-start to-purple-end",
       highlight: true
     },
     { 
       icon: Users, 
       label: "Clients", 
       path: "/clients",
-      gradient: "from-[hsl(142,76%,38%)] to-[hsl(160,84%,35%)]",
+      gradient: "from-green-start to-green-end",
       highlight: false
     },
     { 
       icon: MessageSquare, 
       label: "Messages", 
       path: "/messages",
-      gradient: "from-[hsl(330,85%,52%)] to-[hsl(350,85%,48%)]",
+      gradient: "from-pink-start to-pink-end",
       badge: unreadCount,
       highlight: false
     },
@@ -62,35 +62,35 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: Home, 
       label: "Home", 
       path: "/dashboard",
-      gradient: "from-[hsl(270,85%,48%)] to-[hsl(330,85%,52%)]",
+      gradient: "from-purple-start to-purple-end",
       highlight: false
     },
     { 
       icon: Users, 
       label: "Find", 
       path: "/stylist-discovery",
-      gradient: "from-[hsl(190,95%,42%)] to-[hsl(210,95%,42%)]",
+      gradient: "from-cyan-start to-cyan-end",
       highlight: false
     },
     { 
       icon: Sparkles, 
       label: "AI", 
       path: "/ai-assistant",
-      gradient: "from-[hsl(270,85%,48%)] to-[hsl(330,85%,52%)]",
+      gradient: "from-purple-start to-purple-end",
       highlight: true
     },
     { 
       icon: Calendar, 
       label: "Bookings", 
       path: "/appointments",
-      gradient: "from-[hsl(330,85%,52%)] to-[hsl(350,85%,48%)]",
+      gradient: "from-pink-start to-pink-end",
       highlight: false
     },
     { 
       icon: MessageSquare, 
       label: "Messages", 
       path: "/messages",
-      gradient: "from-[hsl(258,90%,52%)] to-[hsl(270,85%,48%)]",
+      gradient: "from-violet-start to-violet-end",
       badge: unreadCount,
       highlight: false
     },
@@ -101,35 +101,35 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: Home, 
       label: "Home", 
       path: "/dashboard",
-      gradient: "from-[hsl(270,85%,48%)] to-[hsl(330,85%,52%)]",
+      gradient: "from-purple-start to-purple-end",
       highlight: false
     },
     { 
       icon: Shield, 
       label: "Command", 
       path: "/admin/command",
-      gradient: "from-[hsl(0,85%,50%)] to-[hsl(25,90%,45%)]",
+      gradient: "from-orange-start to-orange-end",
       highlight: false
     },
     { 
       icon: Users, 
       label: "Users", 
       path: "/admin/users",
-      gradient: "from-[hsl(190,95%,42%)] to-[hsl(210,95%,42%)]",
+      gradient: "from-cyan-start to-cyan-end",
       highlight: false
     },
     { 
       icon: Activity, 
       label: "Health", 
       path: "/system-health",
-      gradient: "from-[hsl(142,76%,38%)] to-[hsl(160,84%,35%)]",
+      gradient: "from-green-start to-green-end",
       highlight: false
     },
     { 
       icon: MessageSquare, 
       label: "Messages", 
       path: "/messages",
-      gradient: "from-[hsl(258,90%,52%)] to-[hsl(270,85%,48%)]",
+      gradient: "from-violet-start to-violet-end",
       badge: unreadCount,
       highlight: false
     },

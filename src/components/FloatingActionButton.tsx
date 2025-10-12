@@ -29,7 +29,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         navigate("/ai-assistant");
         setIsOpen(false);
       },
-      gradient: "from-purple-500 to-pink-500",
+      gradient: "from-purple-start to-purple-end",
     },
     {
       label: "New Client",
@@ -39,7 +39,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         window.dispatchEvent(new CustomEvent('open-add-client-dialog'));
         setIsOpen(false);
       },
-      gradient: "from-green-500 to-emerald-500",
+      gradient: "from-green-start to-green-end",
     },
     {
       label: "New Appointment",
@@ -49,7 +49,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         navigate("/book-appointment");
         setIsOpen(false);
       },
-      gradient: "from-blue-500 to-cyan-500",
+      gradient: "from-cyan-start to-blue-end",
     },
     {
       label: "New Formula",
@@ -59,7 +59,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         navigate("/formulas");
         setIsOpen(false);
       },
-      gradient: "from-amber-500 to-orange-500",
+      gradient: "from-amber-start to-amber-end",
     },
   ];
 
@@ -72,7 +72,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         navigate("/ai-assistant");
         setIsOpen(false);
       },
-      gradient: "from-purple-500 to-pink-500",
+      gradient: "from-purple-start to-purple-end",
     },
   ];
 
