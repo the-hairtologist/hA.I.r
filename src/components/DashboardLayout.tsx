@@ -10,7 +10,8 @@ import { MobileHeader } from "@/components/MobileHeader";
 import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Scissors, User, LogOut, HelpCircle, Crown } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Scissors, User, LogOut, HelpCircle, Crown, ChevronDown, Moon, Sun, Monitor } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,11 +20,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { RoleSwitcher } from "@/components/RoleSwitcher";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
+import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
 interface DashboardLayoutProps {
@@ -36,6 +44,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { roles, loading: roleLoading, isAdmin } = useUserRole(user?.id);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const { unreadCount } = useRealtimeNotifications(user?.id);
+  const { theme, setTheme } = useTheme();
   
   // Admin view switcher - allows admin to preview different role experiences
   type ViewMode = "admin" | "stylist" | "client";
@@ -162,55 +171,112 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </button>
 
               <div className="ml-auto flex items-center gap-2 md:gap-3">
-                {isAdmin && (
-                  <>
-                    <RoleSwitcher 
-                      currentView={adminViewMode}
-                      onViewChange={setAdminViewMode}
-                    />
-                    <Badge className="bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
-                      <Crown className="h-3 w-3 mr-1" />
-                      ADMIN
+                <TooltipProvider>
+                  {isAdmin && (
+                    <>
+                      <RoleSwitcher 
+                        currentView={adminViewMode}
+                        onViewChange={setAdminViewMode}
+                      />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge className="bg-amber-500 text-white border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
+                            <Crown className="h-3 w-3 mr-1" />
+                            ADMIN
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <p className="text-xs">You have administrator privileges</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </>
+                  )}
+                  
+                  {userRole && !isAdmin && (
+                    <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20">
+                      {userRole === "stylist" ? (
+                        <><Scissors className="h-3 w-3 mr-1" /> Stylist</>
+                      ) : (
+                        <><User className="h-3 w-3 mr-1" /> Client</>
+                      )}
                     </Badge>
-                  </>
-                )}
-                
-                {userRole && !isAdmin && (
-                  <Badge variant="secondary" className="bg-warning text-warning-foreground border-2 border-foreground">
-                    {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
-                  </Badge>
-                )}
-                
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-1.5 md:gap-2 border-2 border-foreground px-2 md:px-3">
-                      <User className="h-4 w-4" />
-                      <span className="truncate max-w-[100px]">
-                        {user?.user_metadata?.full_name || "Account"}
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate("/settings")}>
-                      <User className="h-4 w-4 mr-2" />
-                      Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {
-                      localStorage.removeItem('onboarding_complete');
-                      window.location.reload();
-                    }}>
-                      <HelpCircle className="h-4 w-4 mr-2" />
-                      Restart Tutorial
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  )}
+                  
+                  <DropdownMenu>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm" className="gap-2 border border-border hover:bg-muted px-2 md:px-3 transition-all">
+                            <Avatar className="h-6 w-6">
+                              <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                                {(user?.user_metadata?.full_name || user?.email || "U")
+                                  .split(" ")
+                                  .map((n: string) => n[0])
+                                  .join("")
+                                  .toUpperCase()
+                                  .slice(0, 2)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="hidden sm:inline truncate max-w-[100px] text-sm">
+                              {user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Account"}
+                            </span>
+                            <ChevronDown className="h-3 w-3 opacity-50" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        <p className="text-xs">Account settings and preferences</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <DropdownMenuContent align="end" className="w-56 z-50 bg-popover">
+                      <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                          <p className="text-sm font-medium leading-none">{user?.user_metadata?.full_name || "User"}</p>
+                          <p className="text-xs leading-none text-muted-foreground truncate">{user?.email}</p>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => navigate("/profile")}>
+                        <User className="h-4 w-4 mr-2" />
+                        My Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/settings")}>
+                        <HelpCircle className="h-4 w-4 mr-2" />
+                        Settings
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuLabel className="text-xs text-muted-foreground">Theme</DropdownMenuLabel>
+                      <DropdownMenuItem onClick={() => setTheme("light")}>
+                        <Sun className="h-4 w-4 mr-2" />
+                        Light
+                        {theme === "light" && <Badge variant="secondary" className="ml-auto text-[10px]">Active</Badge>}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setTheme("dark")}>
+                        <Moon className="h-4 w-4 mr-2" />
+                        Dark
+                        {theme === "dark" && <Badge variant="secondary" className="ml-auto text-[10px]">Active</Badge>}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setTheme("system")}>
+                        <Monitor className="h-4 w-4 mr-2" />
+                        System
+                        {theme === "system" && <Badge variant="secondary" className="ml-auto text-[10px]">Active</Badge>}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => {
+                        localStorage.removeItem('onboarding_complete');
+                        window.location.reload();
+                      }}>
+                        <HelpCircle className="h-4 w-4 mr-2" />
+                        Restart Tutorial
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Sign Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TooltipProvider>
               </div>
             </div>
           </header>
