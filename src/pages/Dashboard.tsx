@@ -597,32 +597,6 @@ const Dashboard = () => {
                   Ready to book your next transformation? ✨
                 </p>
               )}
-
-              {/* Quick Notes - Modern Notepad */}
-              {(userRole === "stylist" || isAdmin) && (
-                <div className="mt-6 max-w-md animate-fade-in" style={{ animationDelay: '250ms' }}>
-                  <div className="relative h-full brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-all duration-300 rounded-xl overflow-hidden bg-gradient-to-br from-white via-accent/5 to-primary/5 dark:from-card dark:via-accent/5 dark:to-primary/5">
-                    {/* Gradient overlay */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-primary opacity-5 blur-3xl rounded-full" />
-                    
-                    {/* Modern header with gradient */}
-                    <div className="relative px-5 py-3 border-b border-border/50 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10">
-                      <div className="absolute inset-0 bg-gradient-primary opacity-5" />
-                      <h3 className="text-sm font-bold text-foreground flex items-center gap-2 relative z-10">
-                        <div className="p-1.5 rounded-lg bg-gradient-primary shadow-md">
-                          <StickyNote className="h-4 w-4 text-white" />
-                        </div>
-                        <span className="bg-gradient-primary bg-clip-text text-transparent">Quick Notes</span>
-                      </h3>
-                    </div>
-                    
-                    {/* Notes content with glassmorphism */}
-                    <div className="p-5 relative backdrop-blur-sm z-10">
-                      <QuickNotes compact />
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
