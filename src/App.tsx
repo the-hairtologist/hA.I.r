@@ -291,7 +291,7 @@ const App = () => {
               <GrowthAnalytics />
             </ProtectedRoute>
           } />
-          <Route path="/reviews" element={
+          <Route path="/stylist/reviews" element={
             <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <ClientReviews />
             </ProtectedRoute>
@@ -330,16 +330,12 @@ const App = () => {
           } />
           <Route path="/reviews" element={
             <ProtectedRoute allowedRoles={["client"]}>
-              <Suspense fallback={<LoadingSpinner />}>
-                <Reviews />
-              </Suspense>
+              <Reviews />
             </ProtectedRoute>
           } />
           <Route path="/reviews/new" element={
             <ProtectedRoute allowedRoles={["client"]}>
-              <Suspense fallback={<LoadingSpinner />}>
-                <Reviews />
-              </Suspense>
+              <Reviews />
             </ProtectedRoute>
           } />
           <Route path="/system-health" element={

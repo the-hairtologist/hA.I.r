@@ -5,9 +5,10 @@ import { WriteReviewDialog } from "@/components/reviews/WriteReviewDialog";
 import { cn } from "@/lib/utils";
 
 interface QuickReviewButtonProps {
-  appointmentId?: string;
-  stylistId?: string;
+  appointmentId: string;
+  stylistId: string;
   stylistName?: string;
+  hasReview?: boolean;
   className?: string;
   onSuccess?: () => void;
 }

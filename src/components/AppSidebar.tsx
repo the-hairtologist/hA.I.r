@@ -348,8 +348,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         { 
           id: "reviews", 
           title: "Client Reviews", 
-          url: "/reviews", 
-          icon: Star, 
+          url: "/stylist/reviews", 
+          icon: Star,
           gradient: "bg-[image:var(--gradient-amber-orange)]", 
           group: "business",
           color: "text-amber-400 dark:text-amber-300" 
