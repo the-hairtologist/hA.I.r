@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { StickyNote, Save, Plus } from "lucide-react";
+import { StickyNote, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,7 +13,11 @@ interface Note {
   created_at: string;
 }
 
-export function QuickNotes() {
+interface QuickNotesProps {
+  compact?: boolean;
+}
+
+export function QuickNotes({ compact = false }: QuickNotesProps) {
   const { user } = useAuth();
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState("");
@@ -61,6 +65,57 @@ export function QuickNotes() {
       toast.error("Failed to save note");
     }
   };
+
+  if (compact) {
+    return (
+      <div className="space-y-3">
+        <div className="space-y-2">
+          <Textarea
+            placeholder="Jot down a quick note..."
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            className="min-h-[80px] resize-none bg-white/80 border-yellow-600/30 focus:border-yellow-600/50"
+            style={{ fontFamily: 'Courier New, monospace' }}
+          />
+          <Button
+            onClick={handleSaveNote}
+            disabled={!newNote.trim()}
+            size="sm"
+            className="w-full gap-2"
+          >
+            <Save className="h-4 w-4" />
+            Save Note
+          </Button>
+        </div>
+
+        {loading ? (
+          <div className="space-y-2">
+            {[1, 2].map((i) => (
+              <div key={i} className="h-16 bg-yellow-200/50 rounded animate-pulse" />
+            ))}
+          </div>
+        ) : notes.length > 0 ? (
+          <div className="space-y-2 max-h-40 overflow-y-auto">
+            {notes.map((note) => (
+              <div
+                key={note.id}
+                className="p-3 rounded bg-white/60 border border-yellow-600/20 text-sm"
+              >
+                <p className="text-gray-800" style={{ fontFamily: 'Courier New, monospace' }}>{note.content}</p>
+                <p className="text-xs text-gray-600 mt-2">
+                  {new Date(note.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-600 text-center py-2" style={{ fontFamily: 'Courier New, monospace' }}>
+            No notes yet. Start writing!
+          </p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-warning/5">

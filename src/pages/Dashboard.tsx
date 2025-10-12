@@ -598,31 +598,20 @@ const Dashboard = () => {
                 </p>
               )}
 
-              {/* Quick Notes - Retro Yellow Notepad */}
+              {/* Quick Notes - Compact Notepad */}
               {(userRole === "stylist" || isAdmin) && (
-                <div className="mt-6 animate-fade-in" style={{ animationDelay: '250ms' }}>
-                  <div className="bg-gradient-to-b from-yellow-300 via-yellow-200 to-yellow-300 rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.15)] border-t-4 border-yellow-400 relative overflow-hidden">
-                    {/* Notepad ruled lines effect */}
-                    <div className="absolute inset-0 pointer-events-none" 
-                         style={{
-                           backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(200,180,150,0.3) 31px, rgba(200,180,150,0.3) 32px)',
-                           backgroundSize: '100% 32px'
-                         }}>
-                    </div>
-                    
-                    {/* Red margin line */}
-                    <div className="absolute left-12 top-0 bottom-0 w-0.5 bg-red-400 opacity-50"></div>
-                    
-                    {/* Notepad header */}
-                    <div className="relative px-4 py-3 border-b border-yellow-400/50 bg-yellow-300/50">
-                      <h3 className="text-lg font-bold text-gray-800 pl-8" style={{ fontFamily: 'Courier New, monospace' }}>
+                <div className="mt-6 max-w-md animate-fade-in" style={{ animationDelay: '250ms' }}>
+                  <div className="bg-yellow-100 rounded-lg shadow-lg border-t-8 border-yellow-400 relative">
+                    {/* Simple header */}
+                    <div className="px-4 py-2 border-b border-yellow-300/50 bg-yellow-200/30">
+                      <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                         📝 Quick Notes
                       </h3>
                     </div>
                     
-                    {/* Notes content */}
-                    <div className="relative px-4 py-4 pl-16">
-                      <QuickNotes />
+                    {/* Notes content - simplified */}
+                    <div className="p-4">
+                      <QuickNotes compact />
                     </div>
                   </div>
                 </div>
