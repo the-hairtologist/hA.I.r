@@ -151,7 +151,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
         .from("client_profiles")
         .select("id")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
 
       if (clientProfile) {
         const { data: confirmedAppointments } = await supabase

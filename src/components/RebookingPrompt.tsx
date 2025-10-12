@@ -38,7 +38,7 @@ export function RebookingPrompt() {
         .from("client_profiles")
         .select("id")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (!clientProfile) return;
 
