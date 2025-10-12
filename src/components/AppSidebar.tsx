@@ -44,6 +44,7 @@ import { NotificationDot } from "@/components/NotificationDot";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
+import { toast } from "sonner";
 import {
   DndContext,
   closestCenter,
@@ -183,6 +184,56 @@ function SortableNavItem({
                   <ChevronDown className={`h-4 w-4 ${item.color || 'text-muted-foreground'}`} />
                 </div>
               </>
+            )}
+          </div>
+        ) : item.comingSoon ? (
+          <div 
+            className={getNavClassName({ isActive: false })}
+            onClick={(e) => {
+              e.preventDefault();
+              toast.info(`${item.title} is coming soon! 🚀`, {
+                description: "We're working hard to bring you this feature. Stay tuned!"
+              });
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            {isEditMode && !collapsed && (
+              <div
+                {...attributes}
+                {...listeners}
+                className="cursor-grab active:cursor-grabbing"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <GripVertical className="h-4 w-4 text-muted-foreground" />
+              </div>
+            )}
+            <div className="relative flex-shrink-0">
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 ${item.gradient}`}>
+                <item.icon className="h-5 w-5 text-on-surface-primary" />
+              </div>
+              {notificationCount !== undefined && notificationCount > 0 && (
+                <NotificationDot count={notificationCount} size="sm" />
+              )}
+            </div>
+            {!collapsed && (
+              <div className="flex flex-col flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
+                    {item.title}
+                  </span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-amber-500/80 text-white whitespace-nowrap">
+                    Coming Soon
+                  </span>
+                </div>
+                {item.description && (
+                  <span className="text-[10px] text-muted-foreground leading-tight truncate">
+                    {item.description}
+                  </span>
+                )}
+              </div>
             )}
           </div>
         ) : (

@@ -130,15 +130,23 @@ export default function Clients() {
         .from("stylist_profiles")
         .select("id, user:profiles(full_name)")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (stylistProfile) {
         setStylistId(stylistProfile.id);
         setStylistName(stylistProfile.user?.full_name || "");
+      } else {
+        // User is not a stylist - show friendly message
+        toast.info("This feature is for stylists", {
+          description: "The Client Management page is designed for hair stylists to manage their clients."
+        });
+        setLoading(false);
+        // Don't navigate away, just show empty state
       }
     } catch (error) {
       console.error("Error loading stylist profile:", error);
       toast.error("Failed to load profile");
+      setLoading(false);
     }
   };
 
