@@ -7,7 +7,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings, GripVertical, CreditCard } from "lucide-react";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
-import { OnboardingTour } from "@/components/OnboardingTour";
 import { StylistSubscriptionPrompt } from "@/components/StylistSubscriptionPrompt";
 import { SubscriptionManagementCard } from "@/components/SubscriptionManagementCard";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -103,7 +102,6 @@ const Dashboard = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showOnboardingWizard, setShowOnboardingWizard] = useState(false);
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false);
   const [stats, setStats] = useState<any>({});
@@ -117,18 +115,12 @@ const Dashboard = () => {
     hour: number;
     minute: number;
   } | null>(null);
+  // Simplified dashboard - only 4 core sections
   const [sectionOrder, setSectionOrder] = useState<string[]>([
-    "subscription",
-    "client-insights",
     "kpi-cards",
-    "weekly-summary",
-    "checklist",
     "quick-actions",
-    "stats", 
-    "todos",
-    "activity",
-    "reviews",
-    "features"
+    "weekly-summary",
+    "todos"
   ]);
 
   // Enable analytics tracking
@@ -164,21 +156,29 @@ const Dashboard = () => {
       loadDashboardData();
       loadLayoutPreferences();
       
-      // Check if we should show onboarding
+      // Check if we should show onboarding - only OnboardingWizard
       const onboardingComplete = localStorage.getItem('onboarding_completed');
       if (!onboardingComplete && user) {
-        // Show new wizard instead of old onboarding tour
         setTimeout(() => setShowOnboardingWizard(true), 500);
       }
       
       // Check profile completion
       checkProfileCompletion();
       
-      // Show subscription prompt for stylists without subscription
+      // Delayed subscription prompt (after user gets value - 5 appointments)
       if (userRole === "stylist" && !subscriptionLoading && !subscribed && !inTrial) {
         const promptDismissed = localStorage.getItem('subscription_prompt_dismissed');
         if (!promptDismissed) {
-          setTimeout(() => setShowSubscriptionPrompt(true), 2000);
+          // Check appointment count before showing
+          supabase
+            .from("appointments")
+            .select("id", { count: "exact" })
+            .eq("stylist_id", profile.id)
+            .then(({ count }) => {
+              if ((count || 0) >= 5) {
+                setTimeout(() => setShowSubscriptionPrompt(true), 5000);
+              }
+            });
         }
       }
     }
@@ -337,43 +337,47 @@ const Dashboard = () => {
     const weekStart = startOfWeek(today);
     const weekEnd = endOfWeek(today);
 
-    // Get today's appointments
-    const { data: todayAppts } = await supabase
-      .from("appointments")
-      .select("*")
-      .eq("stylist_id", profile.id)
-      .gte("appointment_date", startOfDay(today).toISOString())
-      .lte("appointment_date", endOfDay(today).toISOString())
-      .neq("status", "cancelled");
-
-    // Get week's appointments
-    const { data: weekAppts } = await supabase
-      .from("appointments")
-      .select(`
-        *,
-        client:client_profiles(
-          user:profiles(full_name, email, phone)
-        )
-      `)
-      .eq("stylist_id", profile.id)
-      .gte("appointment_date", weekStart.toISOString())
-      .lte("appointment_date", weekEnd.toISOString())
-      .neq("status", "cancelled");
+    // PERFORMANCE FIX: Parallel queries with Promise.all
+    const [
+      { data: todayAppts },
+      { data: weekAppts },
+      { data: messages },
+      { data: appointments }
+    ] = await Promise.all([
+      supabase
+        .from("appointments")
+        .select("*")
+        .eq("stylist_id", profile.id)
+        .gte("appointment_date", startOfDay(today).toISOString())
+        .lte("appointment_date", endOfDay(today).toISOString())
+        .neq("status", "cancelled"),
+      
+      supabase
+        .from("appointments")
+        .select(`
+          *,
+          client:client_profiles(
+            user:profiles(full_name, email, phone)
+          )
+        `)
+        .eq("stylist_id", profile.id)
+        .gte("appointment_date", weekStart.toISOString())
+        .lte("appointment_date", weekEnd.toISOString())
+        .neq("status", "cancelled"),
+      
+      supabase
+        .from("messages")
+        .select("*")
+        .eq("recipient_id", user.id)
+        .eq("is_read", false),
+      
+      supabase
+        .from("appointments")
+        .select("client_id")
+        .eq("stylist_id", profile.id)
+    ]);
 
     setWeekAppointments(weekAppts || []);
-
-    // Get unread messages
-    const { data: messages } = await supabase
-      .from("messages")
-      .select("*")
-      .eq("recipient_id", user.id)
-      .eq("is_read", false);
-
-    // Get total unique clients
-    const { data: appointments } = await supabase
-      .from("appointments")
-      .select("client_id")
-      .eq("stylist_id", profile.id);
 
     const uniqueClients = new Set(appointments?.map(a => a.client_id) || []).size;
 
@@ -384,7 +388,7 @@ const Dashboard = () => {
       totalClients: uniqueClients,
     });
 
-    // Load recent activity
+    // Load recent activity (can be loaded after initial render)
     const { data: recentAppts } = await supabase
       .from("appointments")
       .select(`
@@ -405,21 +409,6 @@ const Dashboard = () => {
     }));
 
     setRecentActivities(activities);
-
-    // Load recent reviews
-    const { data: reviewsData } = await supabase
-      .from("reviews")
-      .select(`
-        *,
-        client:client_profiles(
-          user:profiles(full_name)
-        )
-      `)
-      .eq("stylist_id", profile.id)
-      .order("created_at", { ascending: false })
-      .limit(5);
-
-    setRecentReviews(reviewsData || []);
   };
 
   const loadClientDashboard = async () => {
@@ -600,81 +589,26 @@ const Dashboard = () => {
 
   const renderSection = (sectionId: string) => {
     switch (sectionId) {
-      case "subscription":
-        // Only show subscription card for stylists
-        if (userRole === "stylist") {
-          return <SubscriptionManagementCard key={sectionId} />;
-        }
-        return null;
-      case "client-insights":
-        if (userRole === "stylist" && profile?.id) {
-          return <PredictiveClientInsights key={sectionId} stylistId={profile.id} />;
-        }
-        return null;
+      case "kpi-cards":
+        return userRole === "stylist" && profile?.id ? (
+          <div key={sectionId} className="mb-8">
+            <LiveKPICards stylistId={profile.id} />
+          </div>
+        ) : null;
       case "quick-actions":
         return (
           <div key={sectionId} className="space-y-4">
-            {/* Integration Suggestions */}
-            <IntegrationSuggestions
-              context="dashboard"
-              userStats={{
-                appointmentCount: stats.upcomingAppointments || stats.todayAppointments,
-                clientCount: stats.totalClients,
-                messageCount: stats.unreadMessages,
-              }}
-            />
             <QuickActions userRole={userRole || ""} />
           </div>
         );
-      case "stats":
-        return <DashboardStats key={sectionId} stats={stats} userRole={userRole || ""} />;
-      case "checklist":
-        return (
-          <WelcomeChecklist
-            key={sectionId}
-            userRole={userRole as "stylist" | "client"}
-            profileComplete={!!userProfile?.full_name}
-            hasClients={stats.totalClients > 0}
-            hasAppointments={stats.totalAppointments > 0}
-            hasPortfolio={false}
-          />
-        );
-      case "todos":
-        return <TodoList />;
-      case "activity":
-        return (
+      case "weekly-summary":
+        return userRole === "stylist" && profile?.id ? (
           <div key={sectionId} className="mb-8">
-            <RecentActivity activities={recentActivities} />
-          </div>
-        );
-      case "reviews":
-        return userRole === "stylist" ? (
-          <div key={sectionId} className="mb-8">
-            <RecentReviews reviews={recentReviews} />
+            <WeeklySummaryCard stylistId={profile.id} />
           </div>
         ) : null;
-      case "features":
-        return (
-          <div key={sectionId} className="mb-8">
-            <h3 className="text-3xl font-display font-bold mb-6 flex items-center gap-3 text-foreground">
-              <Sparkles className="h-7 w-7 text-primary" />
-              Explore More Features
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature, index) => (
-                <FeatureCard
-                  key={feature.route}
-                  title={feature.title}
-                  description={feature.description}
-                  icon={feature.icon}
-                  route={feature.route}
-                  gradient={feature.gradient}
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
-        );
+      case "todos":
+        return <TodoList />;
       default:
         return null;
     }
@@ -738,11 +672,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="mb-6 bg-muted/50 border border-border/50 shadow-sm p-3 rounded-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center flex items-center justify-center gap-2 flex-wrap">
-            <GripVertical className="h-4 w-4 opacity-50" />
-            <span>Hover over sections and drag the handle to rearrange your dashboard</span>
-            <GripVertical className="h-4 w-4 opacity-50" />
+        <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
+          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center">
+            Simplified for speed and clarity
           </p>
         </div>
 
@@ -761,14 +693,13 @@ const Dashboard = () => {
                 if (!content) return null;
                 
                 return (
-                  <SortableSection key={sectionId} id={sectionId}>
-                    <div 
-                      className="animate-fade-in" 
-                      style={{ animationDelay: `${(index + 4) * 50}ms` }}
-                    >
-                      {content}
-                    </div>
-                  </SortableSection>
+                  <div 
+                    key={sectionId}
+                    className="animate-fade-in" 
+                    style={{ animationDelay: `${(index + 4) * 50}ms` }}
+                  >
+                    {content}
+                  </div>
                 );
               })}
             </div>
@@ -780,12 +711,6 @@ const Dashboard = () => {
           onOpenChange={setShowProfileCompletion}
           userRole={userRole}
           userId={user?.id}
-        />
-
-        <OnboardingTour
-          open={showOnboarding}
-          onOpenChange={setShowOnboarding}
-          userRole={userRole as "stylist" | "client"}
         />
 
         <StylistSubscriptionPrompt

@@ -130,7 +130,7 @@ const App = () => {
             <Route path="/terms" element={<Terms />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
           
-          {/* Shared Protected Routes (Both Roles) */}
+          {/* Shared Protected Routes - Limited access for clients */}
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <DashboardErrorBoundary>
@@ -138,90 +138,90 @@ const App = () => {
               </DashboardErrorBoundary>
             </ProtectedRoute>
           } />
-          <Route path="/messages" element={
-            <ProtectedRoute>
-              <Messages />
-            </ProtectedRoute>
-          } />
           <Route path="/settings" element={
             <ProtectedRoute>
               <Settings />
             </ProtectedRoute>
           } />
+          
+          {/* Stylist-Only Routes - Most features */}
+          <Route path="/messages" element={
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+              <Messages />
+            </ProtectedRoute>
+          } />
           <Route path="/resources" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Resources />
             </ProtectedRoute>
           } />
           <Route path="/knowledge" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Knowledge />
             </ProtectedRoute>
           } />
           <Route path="/ai-assistant" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <AIKnowledge />
             </ProtectedRoute>
           } />
           <Route path="/integrations" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Integrations />
             </ProtectedRoute>
           } />
           <Route path="/appointments" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Appointments />
             </ProtectedRoute>
           } />
           <Route path="/formulas" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Formulas />
             </ProtectedRoute>
           } />
-          
-          {/* Stylist-Only Routes */}
-          <Route path="/client-discovery" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
-              <ClientDiscovery />
-            </ProtectedRoute>
-          } />
-          <Route path="/finance" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
-              <SubscriptionGate feature="payments">
-                <Finance />
-              </SubscriptionGate>
-            </ProtectedRoute>
-          } />
           <Route path="/schedule" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <SubscriptionGate feature="schedule">
                 <ScheduleManagement />
               </SubscriptionGate>
             </ProtectedRoute>
           } />
+          <Route path="/client-discovery" element={
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+              <ClientDiscovery />
+            </ProtectedRoute>
+          } />
+          <Route path="/finance" element={
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+              <SubscriptionGate feature="payments">
+                <Finance />
+              </SubscriptionGate>
+            </ProtectedRoute>
+          } />
           <Route path="/portfolio" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <SubscriptionGate feature="portfolio">
                 <Portfolio />
               </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/clients" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <SubscriptionGate feature="clients">
                 <Clients />
               </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/services" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <SubscriptionGate feature="services">
                 <Services />
               </SubscriptionGate>
             </ProtectedRoute>
           } />
           <Route path="/referrals" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Referrals />
             </ProtectedRoute>
           } />
