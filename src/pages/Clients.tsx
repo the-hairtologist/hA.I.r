@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2 } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2, AlertTriangle } from "lucide-react";
 import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
 import { SkeletonList } from "@/components/ui/skeleton-list";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -449,7 +449,22 @@ export default function Clients() {
   const handleBulkDelete = async () => {
     if (selectedCount === 0) return;
     
-    if (!confirm(`Delete ${selectedCount} client${selectedCount !== 1 ? 's' : ''}? This will also delete all their formulas and appointments.`)) {
+    // Count related data
+    const clientIds = Array.from(selectedIds);
+    
+    const { count: formulaCount } = await supabase
+      .from("formulas")
+      .select("*", { count: "exact", head: true })
+      .in("client_id", clientIds);
+    
+    const { count: appointmentCount } = await supabase
+      .from("appointments")
+      .select("*", { count: "exact", head: true })
+      .in("client_id", clientIds);
+    
+    const message = `Delete ${selectedCount} client${selectedCount !== 1 ? 's' : ''}?\n\nThis will also delete:\n• ${formulaCount || 0} formula${(formulaCount || 0) !== 1 ? 's' : ''}\n• ${appointmentCount || 0} appointment${(appointmentCount || 0) !== 1 ? 's' : ''}`;
+    
+    if (!confirm(message)) {
       return;
     }
 
@@ -457,7 +472,7 @@ export default function Clients() {
       const { error } = await supabase
         .from("client_profiles")
         .delete()
-        .in("id", Array.from(selectedIds));
+        .in("id", clientIds);
       
       if (error) throw error;
       toast.success(`${selectedCount} client${selectedCount !== 1 ? 's' : ''} deleted`);
@@ -674,6 +689,40 @@ export default function Clients() {
           }}
         />
 
+        {/* Keyboard shortcut hints */}
+        <div className="flex justify-end text-xs text-muted-foreground gap-4">
+          <span>
+            <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+N</kbd> New client
+          </span>
+          <span>
+            <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+E</kbd> Export
+          </span>
+          <span>
+            <kbd className="px-2 py-1 font-semibold bg-muted rounded border">/</kbd> or <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+K</kbd> Search
+          </span>
+        </div>
+
+        {/* Active Filter Indicator */}
+        {riskFilter !== "all" && (
+          <Card className="border-2 border-destructive bg-destructive/5">
+            <CardContent className="p-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-destructive" />
+                <span className="text-sm font-medium">
+                  Showing at-risk clients: Not seen in {riskFilter}+ days
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setRiskFilter("all")}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Search and Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
           <SearchInput
@@ -695,7 +744,10 @@ export default function Clients() {
             </SelectContent>
           </Select>
           <Select value={riskFilter} onValueChange={(value: any) => setRiskFilter(value)}>
-            <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+            <SelectTrigger className={cn(
+              "w-full sm:w-48 border-[2px] shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
+              riskFilter !== "all" ? "border-destructive bg-destructive/5" : "border-foreground"
+            )}>
               <SelectValue placeholder="At-Risk Filter" />
             </SelectTrigger>
             <SelectContent>
@@ -711,9 +763,24 @@ export default function Clients() {
         {selectedCount > 0 && (
           <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] bg-primary/5 mb-6">
             <CardContent className="p-4 flex items-center justify-between gap-4">
-              <span className="font-medium">
-                {selectedCount} client{selectedCount !== 1 ? 's' : ''} selected
-              </span>
+              <div className="flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  checked={selectedCount === filteredClients.length}
+                  onChange={() => {
+                    if (selectedCount === filteredClients.length) {
+                      clearSelection();
+                    } else {
+                      filteredClients.forEach(c => toggleSelection(c.id));
+                    }
+                  }}
+                  className="h-5 w-5 rounded border-2 border-foreground cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  aria-label="Select all clients"
+                />
+                <span className="font-medium">
+                  {selectedCount} client{selectedCount !== 1 ? 's' : ''} selected
+                </span>
+              </div>
               <div className="flex gap-2">
                 <Button
                   variant="outline"
@@ -736,21 +803,33 @@ export default function Clients() {
         )}
 
         {filteredClients.length === 0 ? (
-          searchQuery || sortBy !== "recent" ? (
+          searchQuery || sortBy !== "recent" || riskFilter !== "all" ? (
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
               <CardContent className="py-12 text-center">
-                <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                <h3 className="text-lg font-display font-bold mb-2">No matches found</h3>
-                <p className="text-muted-foreground mb-4">
-                  Try adjusting your search criteria or clear the filters
-                </p>
+                {riskFilter !== "all" ? (
+                  <>
+                    <User className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                    <h3 className="text-lg font-display font-bold mb-2">Great News! 🎉</h3>
+                    <p className="text-muted-foreground mb-4">
+                      No at-risk clients found - you're doing an amazing job keeping your clients engaged!
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
+                    <h3 className="text-lg font-display font-bold mb-2">No matches found</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Try adjusting your search criteria or clear the filters
+                    </p>
+                  </>
+                )}
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
                   <Button 
                     variant="outline" 
-                    onClick={() => { setSearchQuery(""); setSortBy("recent"); }}
+                    onClick={() => { setSearchQuery(""); setSortBy("recent"); setRiskFilter("all"); }}
                     className="border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
                   >
-                    Clear Filters
+                    Clear All Filters
                   </Button>
                   <Button 
                     onClick={() => setIsDialogOpen(true)}
@@ -817,7 +896,8 @@ export default function Clients() {
                             toggleSelection(client.id);
                           }}
                           onClick={(e) => e.stopPropagation()}
-                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1"
+                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1 focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                          aria-label={`Select ${client.full_name || 'client'}`}
                         />
                         <CardTitle className="flex items-center gap-2 font-display flex-1">
                           <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground">
@@ -848,22 +928,34 @@ export default function Clients() {
                   )}
                   
                   {/* Client Statistics */}
-                  {(client.total_appointments > 0 || client.last_appointment_date) && (
-                    <div className="grid grid-cols-2 gap-2 pt-2 border-t">
-                      <div className="text-center p-2 bg-muted/50 rounded-lg">
-                        <p className="text-xs text-muted-foreground">Visits</p>
-                        <p className="text-lg font-bold text-primary">{client.total_appointments || 0}</p>
-                      </div>
-                      {client.last_appointment_date && (
+                    {(client.total_appointments > 0 || client.last_appointment_date) && (
+                      <div className="grid grid-cols-2 gap-2 pt-2 border-t">
+                        <div className="text-center p-2 bg-muted/50 rounded-lg">
+                          <p className="text-xs text-muted-foreground">Visits</p>
+                          <p className="text-lg font-bold text-primary">{client.total_appointments || 0}</p>
+                        </div>
                         <div className="text-center p-2 bg-muted/50 rounded-lg">
                           <p className="text-xs text-muted-foreground">Last Visit</p>
-                          <p className="text-xs font-semibold">
-                            {new Date(client.last_appointment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                          </p>
+                          {client.last_appointment_date ? (
+                            <>
+                              <p className="text-xs font-semibold">
+                                {new Date(client.last_appointment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                              </p>
+                              {daysSince !== null && (
+                                <Badge 
+                                  variant={daysSince > 90 ? "destructive" : daysSince > 60 ? "secondary" : "outline"} 
+                                  className="text-xs mt-1"
+                                >
+                                  {daysSince} days ago
+                                </Badge>
+                              )}
+                            </>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">Never</p>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  )}
+                      </div>
+                    )}
                   
                   {client.allergies && (
                     <div className="text-sm p-2 bg-destructive/5 rounded-lg border-[2px] border-destructive/20">

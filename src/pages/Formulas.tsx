@@ -17,7 +17,6 @@ import { SkeletonList } from "@/components/ui/skeleton-list";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
 import { AddClientDialog } from "@/components/AddClientDialog";
-import { useKeyboardShortcut, SHORTCUTS } from "@/hooks/useKeyboardShortcut";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { VoiceInput } from "@/components/VoiceInput";
@@ -459,11 +458,21 @@ const Formulas = () => {
           <PrerequisiteCheck type="clients" />
         )}
 
-        {/* Keyboard shortcut hint */}
-        <div className="flex justify-end">
-          <p className="text-xs text-muted-foreground">
-            Press <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">Ctrl</kbd> + <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">N</kbd> to add new formula
-          </p>
+        {/* Keyboard shortcut hints */}
+        <div className="flex justify-between items-center text-xs text-muted-foreground">
+          <div className="flex gap-4">
+            <span>
+              <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+N</kbd> New formula
+            </span>
+            <span>
+              <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+E</kbd> Export
+            </span>
+          </div>
+          {processingTimeSort === null && formulas.some(f => f.processing_time_minutes) && (
+            <span className="text-primary">
+              💡 Tip: Click any processing time to sort formulas
+            </span>
+          )}
         </div>
 
         {/* Enhanced Search */}
@@ -474,6 +483,27 @@ const Formulas = () => {
           storageKey="formulas_recent_searches"
           showRecentSearches={true}
         />
+
+        {/* Active Sort Indicator */}
+        {processingTimeSort && (
+          <Card className="border-2 border-primary bg-primary/5">
+            <CardContent className="p-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">
+                  Sorted by Processing Time: {processingTimeSort === "asc" ? "Shortest First" : "Longest First"}
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setProcessingTimeSort(null)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Filters */}
         {formulas.length > 0 && (
@@ -490,9 +520,24 @@ const Formulas = () => {
             {selectedFormulas.size > 0 && (
               <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
                 <CardContent className="p-4 flex items-center justify-between gap-4">
-                  <span className="font-medium">
-                    {selectedFormulas.size} formula{selectedFormulas.size !== 1 ? 's' : ''} selected
-                  </span>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedFormulas.size === filteredFormulas.length}
+                      onChange={() => {
+                        if (selectedFormulas.size === filteredFormulas.length) {
+                          setSelectedFormulas(new Set());
+                        } else {
+                          setSelectedFormulas(new Set(filteredFormulas.map(f => f.id)));
+                        }
+                      }}
+                      className="h-5 w-5 rounded border-2 border-foreground cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                      aria-label="Select all formulas"
+                    />
+                    <span className="font-medium">
+                      {selectedFormulas.size} formula{selectedFormulas.size !== 1 ? 's' : ''} selected
+                    </span>
+                  </div>
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
@@ -523,7 +568,7 @@ const Formulas = () => {
                       size="sm"
                       onClick={() => setSelectedFormulas(new Set())}
                     >
-                      Clear Selection
+                      Clear
                     </Button>
                   </div>
                 </CardContent>
@@ -534,6 +579,34 @@ const Formulas = () => {
             <div className="grid gap-4">
               {filteredFormulas.length === 0 ? (
             <div className="py-16 px-4 text-center animate-fade-in">
+              {searchTerm || filters.clientId || filters.colorLine || filters.tags.length > 0 ? (
+                <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
+                  <CardContent className="py-12">
+                    <Palette className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-display font-bold mb-2">No formulas match your filters</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Try adjusting your search or filters to find what you're looking for
+                    </p>
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        setSearchTerm("");
+                        setFilters({
+                          clientId: "",
+                          colorLine: "",
+                          dateRange: "all",
+                          sortBy: "date-desc",
+                          tags: [],
+                        });
+                        setProcessingTimeSort(null);
+                      }}
+                    >
+                      Clear All Filters
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : (
+                <>
               <div className="relative mb-6 inline-block">
                 <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
                   <Palette className="h-16 w-16 text-primary" />
@@ -564,6 +637,8 @@ const Formulas = () => {
               <p className="text-xs text-muted-foreground mt-4">
                 <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">Ctrl</kbd> + <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">N</kbd> for quick access
               </p>
+                </>
+              )}
             </div>
           ) : (
               filteredFormulas.map((formula) => {
@@ -589,8 +664,9 @@ const Formulas = () => {
                               }
                               setSelectedFormulas(newSelected);
                             }}
-                            className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1"
+                            className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1 focus:ring-2 focus:ring-primary focus:ring-offset-2"
                             onClick={(e) => e.stopPropagation()}
+                            aria-label={`Select ${formula.client?.full_name || 'formula'}`}
                           />
                           <div className="flex-1">
                             <CardTitle className="text-lg">
@@ -682,18 +758,20 @@ const Formulas = () => {
                       {/* Processing Details */}
                       {(formula.processing_time_minutes || formula.developer_volume) && (
                         <div className="flex flex-wrap gap-4 text-xs">
-                           {formula.processing_time_minutes && (
+                          {formula.processing_time_minutes && (
                             <div 
-                              className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md cursor-pointer hover:bg-muted/70"
+                              className={cn(
+                                "flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer transition-colors",
+                                processingTimeSort ? "bg-primary/10 text-primary" : "bg-muted hover:bg-muted/70"
+                              )}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setProcessingTimeSort(processingTimeSort === "asc" ? "desc" : "asc");
+                                setProcessingTimeSort(processingTimeSort === "asc" ? "desc" : processingTimeSort === "desc" ? null : "asc");
                               }}
-                              title="Click to sort by processing time"
+                              title={processingTimeSort ? "Click to change sort order" : "Click to sort by processing time"}
                             >
                               <Clock className="h-3 w-3 text-primary" />
                               <span className="font-medium">{formula.processing_time_minutes} min</span>
-                              <ArrowUpDown className="h-3 w-3 text-muted-foreground" />
                             </div>
                           )}
                           {formula.developer_volume && (

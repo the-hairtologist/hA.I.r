@@ -17,6 +17,7 @@ import { SkeletonList } from "@/components/ui/skeleton-list";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { useBulkSelection } from "@/hooks/useBulkSelection";
 import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
+import { StockAdjustmentButtons } from "@/components/StockAdjustmentButtons";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import { cn } from "@/lib/utils";
 
@@ -349,6 +350,16 @@ const Products = () => {
           </div>
         </div>
 
+        {/* Keyboard shortcut hints */}
+        <div className="flex justify-end text-xs text-muted-foreground gap-4">
+          <span>
+            <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+N</kbd> New product
+          </span>
+          <span>
+            <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+E</kbd> Export
+          </span>
+        </div>
+
         {/* Overview Cards */}
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
@@ -488,9 +499,24 @@ const Products = () => {
         {selectedCount > 0 && (
           <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] bg-primary/5">
             <CardContent className="p-4 flex items-center justify-between gap-4">
-              <span className="font-medium">
-                {selectedCount} product{selectedCount !== 1 ? 's' : ''} selected
-              </span>
+              <div className="flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  checked={selectedCount === products.length}
+                  onChange={() => {
+                    if (selectedCount === products.length) {
+                      clearSelection();
+                    } else {
+                      products.forEach(p => toggleSelection(p.id));
+                    }
+                  }}
+                  className="h-5 w-5 rounded border-2 border-foreground cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  aria-label="Select all products"
+                />
+                <span className="font-medium">
+                  {selectedCount} product{selectedCount !== 1 ? 's' : ''} selected
+                </span>
+              </div>
               <div className="flex gap-2">
                 <Button
                   variant="outline"
@@ -545,7 +571,8 @@ const Products = () => {
                           type="checkbox"
                           checked={selected}
                           onChange={() => toggleSelection(product.id)}
-                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer"
+                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                          aria-label={`Select ${product.product_name}`}
                         />
                          <div className="flex-1">
                           <div className="flex items-center gap-2">
@@ -561,6 +588,12 @@ const Products = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
+                        <StockAdjustmentButtons
+                          productId={product.id}
+                          currentQuantity={product.current_quantity}
+                          unitType={product.unit_type}
+                          onUpdate={loadData}
+                        />
                         <div className="text-right">
                           <p className="text-lg font-bold">
                             {product.current_quantity} {product.unit_type}
