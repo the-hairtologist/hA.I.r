@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 import { useSidebar } from "@/components/ui/sidebar";
 
 export const MobileSidebarOverlay = () => {
-  const { state, setOpenMobile } = useSidebar();
-  const isOpen = state === "expanded";
+  const { openMobile, setOpenMobile } = useSidebar();
+  const isOpen = openMobile;
   const previousOverflow = useRef<string>('');
   const previousTouchAction = useRef<string>('');
 
