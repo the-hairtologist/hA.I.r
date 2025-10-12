@@ -93,6 +93,8 @@ export function useSidebarOrder(defaultItems: SidebarItem[], groupLabels: { [key
           user_id: user.id,
           sidebar_order: orderIds,
           updated_at: new Date().toISOString(),
+        }, {
+          onConflict: 'user_id'
         });
 
       if (error) {
