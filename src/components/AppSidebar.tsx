@@ -421,12 +421,48 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       gradient: "bg-gradient-to-br from-amber-500 to-yellow-600", 
       group: "admin", 
       color: "text-amber-400 dark:text-amber-300", 
-      description: "God Mode" 
+      description: "Complete platform oversight" 
     },
-    { id: "admin-dashboard", title: "Admin Dashboard", url: "/admin/dashboard", icon: Shield, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "admin", color: "text-purple-400 dark:text-purple-300" },
-    { id: "admin-users", title: "User Management", url: "/admin/users", icon: Wand2, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "admin", color: "text-cyan-400 dark:text-cyan-300" },
-    { id: "system-health", title: "System Health", url: "/system-health", icon: Activity, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "admin", color: "text-green-400 dark:text-green-300" },
-    { id: "app-directory", title: "App Directory", url: "/app-directory", icon: BookIcon, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "admin", color: "text-cyan-400 dark:text-cyan-300" },
+    { 
+      id: "admin-users", 
+      title: "User Management", 
+      url: "/admin/users", 
+      icon: Users, 
+      gradient: "bg-[image:var(--gradient-cyan-blue)]", 
+      group: "admin", 
+      color: "text-cyan-400 dark:text-cyan-300",
+      description: "Manage users & roles" 
+    },
+    { 
+      id: "system-health", 
+      title: "System Monitor", 
+      url: "/system-health", 
+      icon: Activity, 
+      gradient: "bg-[image:var(--gradient-green-emerald)]", 
+      group: "admin", 
+      color: "text-emerald-400 dark:text-emerald-300",
+      description: "Health & performance" 
+    },
+    { 
+      id: "admin-access-codes", 
+      title: "Access Codes", 
+      url: "/admin/access-codes", 
+      icon: Tag, 
+      gradient: "bg-[image:var(--gradient-purple-pink)]", 
+      group: "admin", 
+      color: "text-purple-400 dark:text-purple-300",
+      description: "Manage invite codes" 
+    },
+    { 
+      id: "app-directory", 
+      title: "App Directory", 
+      url: "/app-directory", 
+      icon: BookIcon, 
+      gradient: "bg-[image:var(--gradient-blue-indigo)]", 
+      group: "admin", 
+      color: "text-blue-400 dark:text-blue-300",
+      description: "Platform documentation" 
+    },
   ] : [];
 
   const stylistAllItems = [...stylistBaseItems, ...adminItems];
@@ -456,10 +492,10 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   
   const groupLabels = (isAdmin || isStylist)
     ? isAdmin 
-      ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support", admin: "Admin" }
+      ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support", admin: "Platform Administration" }
       : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support" }
     : isAdmin
-      ? { main: "Main", services: "Services", feedback: "Feedback", account: "Account", help: "Support", admin: "Admin" }
+      ? { main: "Main", services: "Services", feedback: "Feedback", account: "Account", help: "Support", admin: "Platform Administration" }
       : { main: "Main", services: "Services", feedback: "Feedback", account: "Account", help: "Support" };
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);
