@@ -259,14 +259,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const { user } = useAuth();
   const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
   const collapsed = state === "collapsed";
-
-  // Debug log for admin status
-  console.log('AppSidebar Debug:', { 
-    userId: user?.id, 
-    isAdmin, 
-    roleLoading,
-    userEmail: user?.email 
-  });
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [notifications, setNotifications] = useState<Record<string, number>>({
@@ -338,7 +330,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const stylistAllItems = [...stylistBaseItems, ...adminItems];
 
   // Client Navigation with unique IDs
-  const clientAllItems: SidebarItem[] = [
+  const clientBaseItems: SidebarItem[] = [
     { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
     { id: "appointments", title: "My Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main", color: "text-violet-400 dark:text-violet-300" },
@@ -352,13 +344,18 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "help", color: "text-cyan-400 dark:text-cyan-300" },
   ];
 
+  // Add admin items to client navigation if user is admin
+  const clientAllItems = [...clientBaseItems, ...adminItems];
+
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
   
   const groupLabels = userRole === "stylist" 
     ? isAdmin 
       ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support", admin: "Admin" }
       : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support" }
-    : { main: "Main", services: "Services", tools: "Tools", account: "Account", help: "Support" };
+    : isAdmin
+      ? { main: "Main", services: "Services", tools: "Tools", account: "Account", help: "Support", admin: "Admin" }
+      : { main: "Main", services: "Services", tools: "Tools", account: "Account", help: "Support" };
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);
 
