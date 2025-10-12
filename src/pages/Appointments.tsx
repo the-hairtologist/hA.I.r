@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Calendar as CalendarIcon, ArrowLeft, Clock, User, CheckCircle, XCircle, Loader2, CalendarDays, UserPlus, Filter } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, FileText, User, Calendar as CalendarIcon, ArrowLeft, Clock, CheckCircle, XCircle, Filter, CalendarDays, Repeat } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/CalendarView";
@@ -21,7 +21,6 @@ import { AppointmentSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RebookDialog } from "@/components/RebookDialog";
-import { Repeat } from "lucide-react";
 import { useGlobalShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { QuickRebookButton } from "@/components/QuickRebookButton";
 import { ContextualAI } from "@/components/ContextualAI";
@@ -53,6 +52,7 @@ const Appointments = () => {
   const [rebookAppointment, setRebookAppointment] = useState<any>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [services, setServices] = useState<any[]>([]);
+  const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
 
   // Global keyboard shortcut for search focus
   useEffect(() => {
@@ -387,6 +387,50 @@ const Appointments = () => {
               </Select>
             </div>
 
+            {/* Bulk Actions Bar */}
+            {selectedAppointments.size > 0 && (
+              <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
+                <CardContent className="p-4 flex items-center justify-between gap-4">
+                  <span className="font-medium">
+                    {selectedAppointments.size} appointment{selectedAppointments.size !== 1 ? 's' : ''} selected
+                  </span>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                        if (confirm(`Mark ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} as completed?`)) {
+                          try {
+                            const { error } = await supabase
+                              .from("appointments")
+                              .update({ status: "completed" })
+                              .in("id", Array.from(selectedAppointments));
+                            
+                            if (error) throw error;
+                            toast.success(`${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} completed`);
+                            setSelectedAppointments(new Set());
+                            loadData();
+                          } catch (error) {
+                            console.error("Error updating appointments:", error);
+                            toast.error("Failed to update appointments");
+                          }
+                        }
+                      }}
+                    >
+                      Mark as Completed
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedAppointments(new Set())}
+                    >
+                      Clear Selection
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Today's Appointments */}
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader className="border-b-[2px] border-border py-3">
@@ -419,8 +463,27 @@ const Appointments = () => {
                     {filteredAppointments(todayAppointments).map((apt) => (
                       <div
                         key={apt.id}
-                        className="flex items-center justify-between p-3 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group"
+                        className={cn(
+                          "flex items-center justify-between p-3 border-[2px] rounded-lg hover:bg-secondary/5 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] transition-all group",
+                          selectedAppointments.has(apt.id) ? "border-primary ring-2 ring-primary" : "border-foreground"
+                        )}
                       >
+                        <input
+                          type="checkbox"
+                          checked={selectedAppointments.has(apt.id)}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            const newSelected = new Set(selectedAppointments);
+                            if (newSelected.has(apt.id)) {
+                              newSelected.delete(apt.id);
+                            } else {
+                              newSelected.add(apt.id);
+                            }
+                            setSelectedAppointments(newSelected);
+                          }}
+                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer"
+                          onClick={(e) => e.stopPropagation()}
+                        />
                         <div 
                           className="flex items-center gap-3 flex-1 cursor-pointer"
                           onClick={() => {
@@ -485,7 +548,7 @@ const Appointments = () => {
 
       {/* Appointment Details Dialog */}
       <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Appointment Details</DialogTitle>
             <DialogDescription>
@@ -521,8 +584,51 @@ const Appointments = () => {
                 <div className="mt-2">{getStatusBadge(selectedAppointment.status)}</div>
               </div>
 
+              {/* Quick Context Links */}
+              <div className="pt-4 border-t space-y-2">
+                <p className="text-sm font-medium mb-3">Quick Actions</p>
+                <div className="grid gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start gap-2" 
+                    size="sm"
+                    onClick={() => {
+                      navigate(`/clients?view=${selectedAppointment.client_id}`);
+                      setDetailsOpen(false);
+                    }}
+                  >
+                    <User className="h-4 w-4" />
+                    View Client History
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start gap-2"
+                    size="sm" 
+                    onClick={() => {
+                      navigate(`/formulas?client=${selectedAppointment.client_id}`);
+                      setDetailsOpen(false);
+                    }}
+                  >
+                    <FileText className="h-4 w-4" />
+                    View Client Formulas
+                  </Button>
+                  <Button 
+                    variant="default" 
+                    className="w-full justify-start gap-2"
+                    size="sm" 
+                    onClick={() => {
+                      navigate(`/formulas?new=true&client=${selectedAppointment.client_id}`);
+                      setDetailsOpen(false);
+                    }}
+                  >
+                    <Plus className="h-4 w-4" />
+                    Create New Formula
+                  </Button>
+                </div>
+              </div>
+
               {selectedAppointment.status === "scheduled" && (
-                <div className="flex gap-3 pt-4">
+                <div className="flex gap-3 pt-4 border-t">
                   <Button
                     className="flex-1 min-h-[44px]"
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "confirmed")}

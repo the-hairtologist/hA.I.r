@@ -42,6 +42,7 @@ const Formulas = () => {
     tags: [],
   });
   const [tagInput, setTagInput] = useState("");
+  const [selectedFormulas, setSelectedFormulas] = useState<Set<string>>(new Set());
   
   // Form state
   const [selectedClient, setSelectedClient] = useState("");
@@ -402,9 +403,53 @@ const Formulas = () => {
           />
         )}
 
-        {/* Formulas List */}
-        <div className="grid gap-4">
-          {filteredFormulas.length === 0 ? (
+            {/* Bulk Actions Bar */}
+            {selectedFormulas.size > 0 && (
+              <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
+                <CardContent className="p-4 flex items-center justify-between gap-4">
+                  <span className="font-medium">
+                    {selectedFormulas.size} formula{selectedFormulas.size !== 1 ? 's' : ''} selected
+                  </span>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                        if (confirm(`Delete ${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''}?`)) {
+                          try {
+                            const { error } = await supabase
+                              .from("formulas")
+                              .delete()
+                              .in("id", Array.from(selectedFormulas));
+                            
+                            if (error) throw error;
+                            toast.success(`${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''} deleted`);
+                            setSelectedFormulas(new Set());
+                            loadData();
+                          } catch (error) {
+                            console.error("Error deleting formulas:", error);
+                            toast.error("Failed to delete formulas");
+                          }
+                        }
+                      }}
+                    >
+                      Delete Selected
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedFormulas(new Set())}
+                    >
+                      Clear Selection
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Formulas List */}
+            <div className="grid gap-4">
+              {filteredFormulas.length === 0 ? (
             <div className="py-16 px-4 text-center animate-fade-in">
               <div className="relative mb-6 inline-block">
                 <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
@@ -438,14 +483,36 @@ const Formulas = () => {
               </p>
             </div>
           ) : (
-            filteredFormulas.map((formula) => (
-              <Card key={formula.id}>
-                <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <CardTitle className="text-lg">
-                          {formula.client?.full_name || "Client"}
-                        </CardTitle>
+              filteredFormulas.map((formula) => {
+                const isSelected = selectedFormulas.has(formula.id);
+                return (
+                  <Card key={formula.id} className={cn(
+                    "border-[3px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all",
+                    isSelected ? "border-primary ring-2 ring-primary" : "border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]"
+                  )}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-start gap-3 flex-1">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              const newSelected = new Set(selectedFormulas);
+                              if (newSelected.has(formula.id)) {
+                                newSelected.delete(formula.id);
+                              } else {
+                                newSelected.add(formula.id);
+                              }
+                              setSelectedFormulas(newSelected);
+                            }}
+                            className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1"
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          <div className="flex-1">
+                            <CardTitle className="text-lg">
+                              {formula.client?.full_name || "Client"}
+                            </CardTitle>
                         <CardDescription className="flex flex-wrap items-center gap-2 mt-1">
                           {formula.client?.email}
                           {formula.color_line && <span>• {formula.color_line}</span>}
@@ -462,8 +529,9 @@ const Formulas = () => {
                             ))}
                           </div>
                         )}
-                      </div>
-                      <div className="flex gap-2 flex-shrink-0">
+                          </div>
+                        </div>
+                        <div className="flex gap-2 flex-shrink-0">
                         <Button
                           variant="outline"
                           size="sm"
@@ -489,8 +557,8 @@ const Formulas = () => {
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                    </div>
-                </CardHeader>
+                      </div>
+                    </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
                     <p className="text-sm font-medium mb-1">Formula:</p>
