@@ -81,11 +81,21 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
 
   if (compact) {
     return (
-      <div className="space-y-3 bg-gradient-to-b from-yellow-100 to-yellow-50 dark:from-yellow-900/40 dark:to-yellow-800/30 p-4 rounded-lg border-l-4 border-yellow-400 shadow-lg relative">
-        {/* Notepad lines effect */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="border-b border-yellow-300 dark:border-yellow-700 h-8" />
+      <div className="space-y-3 bg-gradient-to-b from-yellow-100 to-yellow-50 dark:from-yellow-900/40 dark:to-yellow-800/30 p-4 rounded-lg border-l-4 border-yellow-400 shadow-lg relative overflow-hidden">
+        {/* Red margin line (like real notepads) */}
+        <div className="absolute left-12 top-0 bottom-0 w-0.5 bg-red-300 dark:bg-red-500 opacity-40 pointer-events-none z-0" />
+        
+        {/* Notepad ruled lines effect */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          {[...Array(20)].map((_, i) => (
+            <div 
+              key={i} 
+              className="border-b border-blue-200 dark:border-blue-400/30" 
+              style={{ 
+                height: '32px',
+                marginTop: i === 0 ? '8px' : '0'
+              }} 
+            />
           ))}
         </div>
         
@@ -100,7 +110,8 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
             maxLength={500}
-            className="min-h-[120px] resize-none bg-yellow-50/50 dark:bg-yellow-900/20 backdrop-blur-sm border-none focus:ring-1 focus:ring-yellow-400 text-yellow-900 dark:text-yellow-50 placeholder:text-yellow-600/60 dark:placeholder:text-yellow-400/60 shadow-none rounded p-3 font-mono text-sm"
+            className="min-h-[120px] resize-none bg-transparent backdrop-blur-sm border-none focus:ring-1 focus:ring-yellow-400 text-yellow-900 dark:text-yellow-50 placeholder:text-yellow-600/60 dark:placeholder:text-yellow-400/60 shadow-none rounded p-3 font-mono text-sm leading-8"
+            style={{ lineHeight: '32px' }}
           />
           <div className="flex items-center justify-between">
             <span className="text-xs text-yellow-700 dark:text-yellow-300 font-mono">
