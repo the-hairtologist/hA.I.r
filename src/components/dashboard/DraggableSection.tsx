@@ -49,45 +49,45 @@ export function DraggableSection({
       style={style}
       className={cn(
         "animate-fade-in relative group transition-all",
-        isEditMode && "rounded-xl brutal-border brutal-shadow-md hover:brutal-shadow-lg bg-gradient-to-br from-background via-background to-primary/5"
+        isEditMode && "rounded-lg border border-primary/10 hover:border-primary/20 shadow-sm hover:shadow-md"
       )}
     >
       {isEditMode && (
-        <div className="absolute -top-3 left-2 right-2 z-10">
-          {/* Single unified control bar */}
-          <div className="flex items-center gap-2 bg-card brutal-border brutal-shadow-md rounded-lg px-2 py-1.5 backdrop-blur-sm bg-gradient-to-r from-card to-primary/5">
+        <div className="absolute -top-2.5 left-2 right-2 z-10">
+          {/* Single unified control bar - sleek & subtle */}
+          <div className="flex items-center gap-2 bg-card/60 backdrop-blur-md border border-border/50 shadow-sm rounded-lg px-2.5 py-1">
             <div
               {...attributes}
               {...listeners}
-              className="cursor-grab active:cursor-grabbing touch-none p-1.5 rounded-md hover:bg-primary/10 transition-all hover:scale-110 active:scale-95"
+              className="cursor-grab active:cursor-grabbing touch-none p-1 rounded hover:bg-accent/50 transition-all hover:scale-105 active:scale-95"
               aria-label="Drag to reorder"
             >
-              <GripVertical className="h-4 w-4 text-primary" />
+              <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
-            <span className="text-[11px] font-display font-bold text-foreground uppercase tracking-wider flex-1">
+            <span className="text-[10px] font-display font-bold text-foreground/80 uppercase tracking-wider flex-1">
               {section.title}
             </span>
             <button
               onClick={onToggle}
               className={cn(
-                "p-1.5 rounded-md transition-all hover:scale-110 active:scale-95",
+                "p-1 rounded transition-all hover:scale-105 active:scale-95",
                 section.enabled 
-                  ? "hover:bg-primary/10" 
-                  : "hover:bg-muted"
+                  ? "hover:bg-accent/50" 
+                  : "hover:bg-muted/50"
               )}
               aria-label={section.enabled ? "Hide section" : "Show section"}
               title={section.enabled ? "Hide" : "Show"}
             >
               {section.enabled ? (
-                <Eye className="h-4 w-4 text-primary" />
+                <Eye className="h-3.5 w-3.5 text-primary" />
               ) : (
-                <EyeOff className="h-4 w-4 text-muted-foreground" />
+                <EyeOff className="h-3.5 w-3.5 text-muted-foreground" />
               )}
             </button>
           </div>
         </div>
       )}
-      <div className={isEditMode ? "pt-5 px-3 pb-3" : ""}>
+      <div className={isEditMode ? "pt-4 px-2 pb-2" : ""}>
         {children}
       </div>
     </div>
