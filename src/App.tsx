@@ -190,12 +190,12 @@ const App = () => {
             </ProtectedRoute>
           } />
           <Route path="/knowledge" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Knowledge />
             </ProtectedRoute>
           } />
           <Route path="/ai-assistant" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <AIKnowledge />
             </ProtectedRoute>
           } />
@@ -332,7 +332,7 @@ const App = () => {
             </ProtectedRoute>
           } />
           <Route path="/email-settings" element={
-            <ProtectedRoute allowedRoles={["stylist"]}>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <EmailSettings />
             </ProtectedRoute>
           } />
