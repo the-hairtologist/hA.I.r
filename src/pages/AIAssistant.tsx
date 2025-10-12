@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, BookOpen } from "lucide-react";
+import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2 } from "lucide-react";
 import { LoadingDots } from "@/components/ui/loading-dots";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,7 @@ const Knowledge = () => {
   
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
-  const [aiMode, setAiMode] = useState<"formula" | "stepbystep">("formula");
+  const [aiMode] = useState<"formula" | "stepbystep">("formula");
   const [aiMessages, setAiMessages] = useState<Array<{ role: "user" | "assistant"; content: string | any; imageUrls?: string[] }>>([]);
   const [aiInput, setAiInput] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
@@ -39,29 +39,6 @@ const Knowledge = () => {
   
   // Color Correction specific state
   const [correctionSteps, setCorrectionSteps] = useState<Array<{ step: string; completed: boolean }>>([]);
-  const [currentCorrection, setCurrentCorrection] = useState<any>(null);
-  
-  // Feature info dialog state
-  const [showFeatureInfo, setShowFeatureInfo] = useState(false);
-  const [selectedFeature, setSelectedFeature] = useState<"formula" | "stepbystep" | null>(null);
-
-  const featureDescriptions = {
-    formula: {
-      title: "Formula Generator",
-      description: "Get AI-powered hair color formulas instantly. Perfect for creating custom color blends, balayage formulas, and toner recommendations.",
-      benefits: ["Custom color formulas", "Balayage techniques", "Toner recommendations", "Level calculations"]
-    },
-    stepbystep: {
-      title: "Step-by-Step Guide",
-      description: "Get guided instructions for any hair technique or problem. Track your progress with interactive checklists.",
-      benefits: ["Color correction techniques", "Styling tutorials", "Treatment processes", "Problem solving guidance"]
-    }
-  };
-
-  const handleFeatureClick = (feature: "formula" | "stepbystep") => {
-    setSelectedFeature(feature);
-    setShowFeatureInfo(true);
-  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -270,59 +247,18 @@ const Knowledge = () => {
       />
 
       <main className="container mx-auto px-4 py-6 max-w-6xl">
-        {/* Mode Selection Tabs with Retro Style */}
+        {/* AI Assistant Header */}
         <div className="mb-6">
-          <div className="flex gap-4 p-2 bg-background rounded-2xl w-fit mx-auto border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
-            <div className="relative group">
-              <button
-                onClick={() => setAiMode("formula")}
-                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
-                  aiMode === "formula"
-                    ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.3)] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.1)]"
-                }`}
-                style={{ border: "3px solid" }}
-              >
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5" />
-                  <span className="font-bold text-base">Formula Generator</span>
-                </div>
-                <span className={`text-xs ${aiMode === "formula" ? "opacity-90" : "text-muted-foreground"}`}>
-                  Create custom color formulas instantly
-                </span>
-              </button>
-              <button
-                onClick={() => handleFeatureClick("formula")}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
-              >
-                <HelpCircle className="h-3.5 w-3.5 text-accent-foreground" />
-              </button>
+          <div className="max-w-2xl mx-auto text-center p-6 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <Sparkles className="h-8 w-8 text-primary animate-pulse" />
+              <h2 className="text-2xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                Your AI Hair Pro Assistant
+              </h2>
             </div>
-            <div className="relative group">
-              <button
-                onClick={() => setAiMode("stepbystep")}
-                className={`flex flex-col items-start gap-1 px-8 py-4 rounded-xl font-display transition-all border-3 ${
-                  aiMode === "stepbystep"
-                    ? "bg-gradient-to-r from-accent to-primary text-accent-foreground border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.3)] translate-x-0 translate-y-0"
-                    : "bg-muted text-foreground border-border hover:translate-x-[1px] hover:translate-y-[1px] shadow-[3px_3px_0px_0px_hsl(var(--foreground)_/_0.1)]"
-                }`}
-                style={{ border: "3px solid" }}
-              >
-                <div className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
-                  <span className="font-bold text-base">Step-by-Step Assist</span>
-                </div>
-                <span className={`text-xs ${aiMode === "stepbystep" ? "opacity-90" : "text-muted-foreground"}`}>
-                  Get guided help for complicated situations
-                </span>
-              </button>
-              <button
-                onClick={() => handleFeatureClick("stepbystep")}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center border-2 border-foreground shadow-md hover:scale-110 transition-transform z-10"
-              >
-                <HelpCircle className="h-3.5 w-3.5 text-accent-foreground" />
-              </button>
-            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              <span className="font-semibold text-foreground">Ask anything hair-related!</span> Get instant color formulas, step-by-step guides for tricky corrections, technique tips, product recommendations, and professional advice—all powered by AI trained on expert hair knowledge.
+            </p>
           </div>
         </div>
 
@@ -398,17 +334,8 @@ const Knowledge = () => {
                     <div className="window-control bg-accent"></div>
                   </div>
                   <h2 className="text-primary-foreground font-display font-bold text-sm flex items-center gap-2">
-                    {aiMode === "formula" ? (
-                      <>
-                        <Sparkles className="h-4 w-4" />
-                        Formula Generator
-                      </>
-                    ) : (
-                      <>
-                        <BookOpen className="h-4 w-4" />
-                        Step-by-Step Guide
-                      </>
-                    )}
+                    <Sparkles className="h-4 w-4" />
+                    AI Hair Pro Assistant
                   </h2>
                 </div>
               </div>
@@ -433,11 +360,7 @@ const Knowledge = () => {
                   <div className="h-full flex flex-col items-center justify-center text-center space-y-5 px-4">
                     <div className="relative animate-bounce-gentle">
                       <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)] border-4 border-foreground">
-                        {aiMode === "formula" ? (
-                          <Sparkles className="h-12 w-12 text-primary-foreground" />
-                        ) : (
-                          <BookOpen className="h-12 w-12 text-primary-foreground" />
-                        )}
+                        <Sparkles className="h-12 w-12 text-primary-foreground" />
                       </div>
                       <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center animate-pulse border-3 border-foreground">
                         <span className="text-sm">✨</span>
@@ -445,12 +368,10 @@ const Knowledge = () => {
                     </div>
                     <div className="space-y-3 max-w-md">
                       <p className="text-lg font-display font-bold gradient-text">
-                        {aiMode === "formula" ? "Let's Create Magic ✨" : "Let's Break It Down! 📝"}
+                        Ready to Create Magic ✨
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        {aiMode === "formula"
-                          ? "Tell me what look you want (example: \"warm blonde balayage for level 5 hair\") and I'll create a complete color formula with exact measurements, developer ratios, and application tips."
-                          : "Ask me anything that needs step-by-step guidance (examples: \"how to fix brassy orange tones\", \"how to do a root melt\", \"steps for olaplex treatment\") and I'll walk you through each step with clear instructions."}
+                        Ask me anything! I can create custom color formulas ("warm blonde balayage for level 5 hair"), guide you through corrections ("fix brassy orange tones"), or provide step-by-step techniques ("how to do a root melt"). Let's get started!
                       </p>
                     </div>
                   </div>
@@ -556,36 +477,6 @@ const Knowledge = () => {
                 Save
               </Button>
             </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        {/* Feature Info Dialog */}
-        <Dialog open={showFeatureInfo} onOpenChange={setShowFeatureInfo}>
-          <DialogContent className="max-w-md border-4 border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground)_/_0.2)]">
-            <DialogHeader>
-              <DialogTitle className="font-display text-2xl gradient-text flex items-center gap-2">
-                {selectedFeature === "formula" ? <Sparkles className="h-6 w-6" /> : <BookOpen className="h-6 w-6" />}
-                {selectedFeature && featureDescriptions[selectedFeature].title}
-              </DialogTitle>
-              <DialogDescription className="text-base pt-2">
-                {selectedFeature && featureDescriptions[selectedFeature].description}
-              </DialogDescription>
-            </DialogHeader>
-            {selectedFeature && (
-              <div className="space-y-4 pt-2">
-                <div>
-                  <h4 className="font-display font-bold mb-2 text-sm">What You Can Do:</h4>
-                  <ul className="space-y-2">
-                    {featureDescriptions[selectedFeature].benefits.map((benefit, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                        {benefit}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
           </DialogContent>
         </Dialog>
       </main>
