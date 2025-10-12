@@ -148,14 +148,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <h1 className="text-xl font-bold font-display hidden sm:block">hA.I.r</h1>
               </button>
 
-              <div className="ml-auto flex items-center gap-3">
+              <div className="ml-auto flex items-center gap-2 md:gap-3">
                 {isAdmin && (
                   <>
                     <RoleSwitcher 
                       currentView={adminViewMode}
                       onViewChange={setAdminViewMode}
                     />
-                    <Badge className="bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
+                    <Badge className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
                       <Crown className="h-3 w-3 mr-1" />
                       ADMIN
                     </Badge>
@@ -170,9 +170,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-2 border-2 border-foreground">
+                    <Button variant="ghost" size="sm" className="gap-1.5 md:gap-2 border-2 border-foreground px-2 md:px-3">
                       <User className="h-4 w-4" />
-                      <span className="hidden sm:inline">
+                      <span className="hidden md:inline truncate max-w-[100px]">
                         {user?.user_metadata?.full_name || "Account"}
                       </span>
                     </Button>

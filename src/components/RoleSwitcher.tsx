@@ -48,13 +48,13 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
         <Button
           variant="outline"
           size="sm"
-          className="gap-2 border-primary/20 hover:border-primary/40"
+          className="gap-1.5 md:gap-2 border-primary/20 hover:border-primary/40 px-2 md:px-3"
         >
           <div className={`p-1 rounded ${viewConfig[currentView].gradient}`}>
             <CurrentIcon className="h-3 w-3 text-primary-foreground" />
           </div>
-          <span className="text-xs font-medium">{viewConfig[currentView].label}</span>
-          <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+          <span className="hidden sm:inline text-xs font-medium">{viewConfig[currentView].label}</span>
+          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-primary/10">
             Preview
           </Badge>
         </Button>

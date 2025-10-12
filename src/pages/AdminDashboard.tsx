@@ -92,23 +92,25 @@ export default function AdminDashboard() {
     <DashboardLayout>
       <div className="space-y-6">
         {/* God Mode Header */}
-        <div className="relative overflow-hidden rounded-xl border-4 border-foreground bg-gradient-to-br from-primary via-accent to-secondary p-8 shadow-brutal-2xl">
+        <div className="relative overflow-hidden rounded-xl border-4 border-foreground bg-gradient-to-br from-primary via-accent to-secondary p-4 md:p-8 shadow-brutal-2xl">
           <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-2">
-              <Crown className="h-8 w-8 text-warning animate-pulse" />
-              <h1 className="text-4xl font-display font-bold text-on-surface-primary">
-                Admin Command Center
-              </h1>
-              <Badge className="bg-warning text-warning-foreground border-2 border-foreground">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-warning animate-pulse" />
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-on-surface-primary">
+                  Admin Command Center
+                </h1>
+              </div>
+              <Badge className="bg-warning text-warning-foreground border-2 border-foreground w-fit">
                 GOD MODE
               </Badge>
             </div>
-            <p className="text-on-surface-primary/80">
+            <p className="text-sm md:text-base text-on-surface-primary/80">
               Complete control and visibility over your platform
             </p>
           </div>
           <div className="absolute top-0 right-0 opacity-10">
-            <Shield className="h-64 w-64" />
+            <Shield className="h-32 w-32 md:h-64 md:w-64" />
           </div>
         </div>
 
@@ -164,30 +166,30 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Admin Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           <Button
             onClick={() => navigate('/admin/users')}
-            className="h-auto flex-col gap-2 p-4"
+            className="h-auto flex-col gap-2 p-3 md:p-4 border-2 border-foreground shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
             variant="outline"
           >
-            <Users className="h-6 w-6" />
-            <span className="text-xs">User Management</span>
+            <Users className="h-5 w-5 md:h-6 md:w-6" />
+            <span className="text-[10px] md:text-xs font-medium text-center">User Management</span>
           </Button>
           <Button
             onClick={() => navigate('/system-health')}
-            className="h-auto flex-col gap-2 p-4"
+            className="h-auto flex-col gap-2 p-3 md:p-4 border-2 border-foreground shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
             variant="outline"
           >
-            <Activity className="h-6 w-6" />
-            <span className="text-xs">System Health</span>
+            <Activity className="h-5 w-5 md:h-6 md:w-6" />
+            <span className="text-[10px] md:text-xs font-medium text-center">System Health</span>
           </Button>
           <Button
             onClick={() => navigate('/access-codes')}
-            className="h-auto flex-col gap-2 p-4"
+            className="h-auto flex-col gap-2 p-3 md:p-4 border-2 border-foreground shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all col-span-2 md:col-span-1"
             variant="outline"
           >
-            <SettingsIcon className="h-6 w-6" />
-            <span className="text-xs">Access Codes</span>
+            <SettingsIcon className="h-5 w-5 md:h-6 md:w-6" />
+            <span className="text-[10px] md:text-xs font-medium text-center">Access Codes</span>
           </Button>
         </div>
 
@@ -208,14 +210,14 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {recentUsers.map((user) => (
-                    <div key={user.id} className="flex items-center justify-between p-4 border-2 border-foreground rounded-lg">
-                      <div className="flex-1">
-                        <p className="font-semibold">{user.full_name || 'Unknown'}</p>
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
+                    <div key={user.id} className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 md:p-4 border-2 border-foreground rounded-lg">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold truncate">{user.full_name || 'Unknown'}</p>
+                        <p className="text-xs md:text-sm text-muted-foreground truncate">{user.email}</p>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         {user.user_roles?.map((ur: any) => (
-                          <Badge key={ur.role} variant="secondary">
+                          <Badge key={ur.role} variant="secondary" className="text-xs">
                             {ur.role}
                           </Badge>
                         ))}
@@ -223,10 +225,10 @@ export default function AdminDashboard() {
                           size="sm" 
                           variant="outline" 
                           onClick={() => navigate(`/admin/user/${user.id}`)}
-                          className="border-2 border-foreground shadow-brutal hover:bg-secondary"
+                          className="border-2 border-foreground shadow-brutal hover:bg-secondary text-xs"
                         >
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
+                          <Eye className="h-3 w-3 md:h-4 md:w-4 md:mr-1" />
+                          <span className="hidden md:inline">View</span>
                         </Button>
                       </div>
                     </div>
@@ -245,17 +247,17 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {recentAppointments.map((appt) => (
-                    <div key={appt.id} className="flex items-center justify-between p-4 border-2 border-foreground rounded-lg">
-                      <div className="flex-1">
-                        <p className="font-semibold">{appt.service_type}</p>
-                        <p className="text-sm text-muted-foreground">
+                    <div key={appt.id} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 md:p-4 border-2 border-foreground rounded-lg">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold truncate">{appt.service_type}</p>
+                        <p className="text-xs md:text-sm text-muted-foreground truncate">
                           {appt.stylist?.user?.full_name} → {appt.client?.user?.full_name}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {format(new Date(appt.appointment_date), 'PPp')}
                         </p>
                       </div>
-                      <Badge>{appt.status}</Badge>
+                      <Badge className="w-fit text-xs">{appt.status}</Badge>
                     </div>
                   ))}
                 </div>
