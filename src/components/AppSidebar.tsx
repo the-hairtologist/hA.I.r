@@ -31,6 +31,12 @@ import {
   Activity,
   Book as BookIcon,
   Wand2,
+  Bell,
+  Star,
+  Link2,
+  User,
+  UserCircle,
+  Clock,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NotificationDot } from "@/components/NotificationDot";
@@ -282,39 +288,32 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   // Stylist Navigation with unique IDs
   const stylistBaseItems: SidebarItem[] = [
     { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "find-clients", title: "Find Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
-    { id: "clients", title: "Clients & Formulas", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main", color: "text-emerald-400 dark:text-emerald-300" },
+    { id: "calendar", title: "Calendar", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "clients", title: "Client Management", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
-    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "scheduling", color: "text-cyan-400 dark:text-cyan-300" },
-    { id: "schedule", title: "Schedule", url: "/schedule", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Set working hours", group: "scheduling", color: "text-blue-400 dark:text-blue-300" },
-    { id: "services", title: "Services", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300" },
-    { id: "referrals", title: "Referrals", url: "/referrals", icon: Gift, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "business", color: "text-purple-400 dark:text-purple-300" },
-    { 
-      id: "finance", 
-      title: "Finance", 
-      url: "/finance", 
-      icon: DollarSign, 
-      gradient: "bg-[image:var(--gradient-amber-orange)]", 
-      group: "business",
-      color: "text-amber-400 dark:text-amber-300",
-      children: [
-        { id: "finance-commissions", title: "Product Commissions", url: "/finance#commissions", icon: Package, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
-        { id: "finance-affiliate", title: "Affiliate Code", url: "/finance#affiliate", icon: Tag, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
-      ]
-    },
-    { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "business", color: "text-orange-400 dark:text-orange-300" },
-    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "find-clients", title: "Find New Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "marketplace", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "availability", title: "Availability", url: "/schedule", icon: Clock, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Set working hours", group: "scheduling", color: "text-blue-400 dark:text-blue-300" },
+    { id: "booking-page", title: "My Booking Page", url: "/booking-page", icon: Link2, gradient: "bg-[image:var(--gradient-purple-pink)]", description: "Share with clients", group: "scheduling", color: "text-purple-400 dark:text-purple-300" },
+    { id: "services", title: "Services & Pricing", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300" },
+    { id: "finance", title: "Finance", url: "/finance", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
+    { id: "reviews", title: "Client Reviews", url: "/reviews", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
+    { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "growth", color: "text-orange-400 dark:text-orange-300" },
+    { id: "referrals", title: "Referrals", url: "/referrals", icon: Gift, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "growth", color: "text-purple-400 dark:text-purple-300" },
     { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools", color: "text-amber-400 dark:text-amber-300" },
+    { id: "profile", title: "My Profile", url: "/profile", icon: UserCircle, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
+    { id: "notifications", title: "Notifications", url: "/notifications", icon: Bell, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "account", color: "text-purple-400 dark:text-purple-300" },
+    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "account", color: "text-cyan-400 dark:text-cyan-300" },
   ];
 
   // Admin-only items
   const adminItems: SidebarItem[] = isAdmin ? [
-    { id: "app-directory", title: "App Directory", url: "/app-directory", icon: BookIcon, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "admin", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "admin-command", title: "Command Center", url: "/admin/command", icon: Crown, gradient: "bg-[image:var(--gradient-warning)]", group: "admin", color: "text-warning", description: "God Mode" },
     { id: "admin-dashboard", title: "Admin Dashboard", url: "/admin/dashboard", icon: Shield, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "admin", color: "text-purple-400 dark:text-purple-300" },
     { id: "admin-users", title: "User Management", url: "/admin/users", icon: Wand2, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "admin", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "system-health", title: "System Health", url: "/system-health", icon: Activity, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "admin", color: "text-green-400 dark:text-green-300" },
+    { id: "app-directory", title: "App Directory", url: "/app-directory", icon: BookIcon, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "admin", color: "text-cyan-400 dark:text-cyan-300" },
   ] : [];
 
   const stylistAllItems = [...stylistBaseItems, ...adminItems];
@@ -322,20 +321,24 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   // Client Navigation with unique IDs
   const clientAllItems: SidebarItem[] = [
     { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "appointments", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
+    { id: "appointments", title: "My Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main", color: "text-violet-400 dark:text-violet-300" },
-    { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "tools", color: "text-emerald-400 dark:text-emerald-300" },
-    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "notifications", title: "Notifications", url: "/notifications", icon: Bell, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
+    { id: "find-stylist", title: "Find a Stylist", url: "/stylist-discovery", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "services", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "services", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
+    { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "profile", title: "My Profile", url: "/profile", icon: UserCircle, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
+    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "account", color: "text-cyan-400 dark:text-cyan-300" },
   ];
 
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
   
   const groupLabels = userRole === "stylist" 
     ? isAdmin 
-      ? { main: "Main", scheduling: "Scheduling", business: "Business", tools: "Tools", admin: "Admin" }
-      : { main: "Main", scheduling: "Scheduling", business: "Business", tools: "Tools" }
-    : { main: "Main", tools: "Tools" };
+      ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Help & Account", admin: "Admin" }
+      : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Help & Account" }
+    : { main: "Main", services: "Services", tools: "Tools", account: "Account" };
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);
 

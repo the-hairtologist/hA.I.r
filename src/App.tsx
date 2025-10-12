@@ -62,6 +62,11 @@ const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
 const DMCA = lazy(() => import("./pages/DMCA"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const ClientReviews = lazy(() => import("./pages/ClientReviews"));
+const BookingPage = lazy(() => import("./pages/BookingPage"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Help = lazy(() => import("./pages/Help"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -143,10 +148,25 @@ const App = () => {
               <Settings />
             </ProtectedRoute>
           } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/notifications" element={
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          } />
+          <Route path="/help" element={
+            <ProtectedRoute>
+              <Help />
+            </ProtectedRoute>
+          } />
           
           {/* Stylist-Only Routes - Most features */}
           <Route path="/messages" element={
-            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+            <ProtectedRoute>
               <Messages />
             </ProtectedRoute>
           } />
@@ -156,12 +176,12 @@ const App = () => {
             </ProtectedRoute>
           } />
           <Route path="/knowledge" element={
-            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+            <ProtectedRoute>
               <Knowledge />
             </ProtectedRoute>
           } />
           <Route path="/ai-assistant" element={
-            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+            <ProtectedRoute>
               <AIKnowledge />
             </ProtectedRoute>
           } />
@@ -171,12 +191,12 @@ const App = () => {
             </ProtectedRoute>
           } />
           <Route path="/appointments" element={
-            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+            <ProtectedRoute>
               <Appointments />
             </ProtectedRoute>
           } />
           <Route path="/formulas" element={
-            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+            <ProtectedRoute>
               <Formulas />
             </ProtectedRoute>
           } />
@@ -223,6 +243,16 @@ const App = () => {
           <Route path="/referrals" element={
             <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Referrals />
+            </ProtectedRoute>
+          } />
+          <Route path="/reviews" element={
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+              <ClientReviews />
+            </ProtectedRoute>
+          } />
+          <Route path="/booking-page" element={
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+              <BookingPage />
             </ProtectedRoute>
           } />
           
@@ -272,6 +302,11 @@ const App = () => {
           <Route path="/book-appointment" element={
             <ProtectedRoute allowedRoles={["client"]}>
               <BookAppointment />
+            </ProtectedRoute>
+          } />
+          <Route path="/stylist/:id" element={
+            <ProtectedRoute>
+              <StylistProfile />
             </ProtectedRoute>
           } />
           
