@@ -18,6 +18,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { DashboardErrorBoundary } from "@/components/DashboardErrorBoundary";
+import { GlobalErrorBoundary } from "@/components/errors/GlobalErrorBoundary";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
 import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
@@ -115,8 +116,9 @@ const App = () => {
   }, []);
 
   return (
-    <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
+    <GlobalErrorBoundary>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
       <SubscriptionProvider>
         <TooltipProvider>
           <GlobalAnnouncer />
@@ -341,7 +343,8 @@ const App = () => {
         </TooltipProvider>
       </SubscriptionProvider>
     </QueryClientProvider>
-  </ErrorBoundary>
+      </ErrorBoundary>
+    </GlobalErrorBoundary>
   );
 };
 
