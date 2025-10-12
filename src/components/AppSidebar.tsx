@@ -458,32 +458,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
           </SortableContext>
         </DndContext>
 
-        {/* Separator */}
-        <Separator className="my-4" />
-
-        {/* Keyboard Shortcuts - Stylist Only */}
-        {!collapsed && userRole === 'stylist' && (
-          <div className="px-3 pb-4 mt-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                // Trigger keyboard shortcuts dialog by dispatching shift+?
-                const event = new KeyboardEvent('keydown', { 
-                  key: '?', 
-                  shiftKey: true,
-                  bubbles: true 
-                });
-                window.dispatchEvent(event);
-              }}
-              className="w-full justify-center gap-2 text-xs h-9 bg-primary/5 border-primary/20 text-primary hover:bg-primary/10 hover:border-primary/40 transition-all"
-              aria-label="View keyboard shortcuts"
-            >
-              <Command className="h-3.5 w-3.5" />
-              <span className="font-medium">Keyboard Shortcuts</span>
-            </Button>
-          </div>
-        )}
       </SidebarContent>
     </Sidebar>
   );
