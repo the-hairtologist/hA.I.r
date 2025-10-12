@@ -11,12 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Shield, 
   Activity, 
-  TrendingUp, 
   AlertTriangle, 
   Zap, 
   Eye,
   Lock,
-  Unlock,
   RefreshCw,
   Users,
   DollarSign,
@@ -322,7 +320,13 @@ export const AdminDivineWeapon = () => {
               <CardTitle>User Management</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">User management coming soon...</p>
+              <p className="text-sm text-muted-foreground mb-4">
+                Advanced user management and role control will be available here.
+              </p>
+              <Button onClick={() => window.location.href = '/admin/users'} className="gap-2">
+                <Users className="h-4 w-4" />
+                Go to User Management
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
@@ -333,7 +337,21 @@ export const AdminDivineWeapon = () => {
               <CardTitle>System Controls</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">System controls coming soon...</p>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  System-level controls and configurations.
+                </p>
+                <div className="grid gap-3">
+                  <Button onClick={() => window.location.href = '/system-health'} variant="outline" className="justify-start">
+                    <Activity className="h-4 w-4 mr-2" />
+                    View System Health
+                  </Button>
+                  <Button onClick={() => window.location.href = '/access-codes'} variant="outline" className="justify-start">
+                    <Lock className="h-4 w-4 mr-2" />
+                    Manage Access Codes
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

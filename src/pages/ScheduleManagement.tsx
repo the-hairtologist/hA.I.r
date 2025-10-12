@@ -607,10 +607,15 @@ const ScheduleManagement = () => {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/dashboard")}>
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate("/dashboard")}
+              className="border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
               <div className="flex items-center gap-2">
                 <CalendarIcon className="h-6 w-6 text-primary" />
                 <h1 className="text-2xl font-bold">Schedule Management</h1>

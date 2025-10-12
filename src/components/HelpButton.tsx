@@ -164,9 +164,9 @@ export const HelpButton = () => {
             <TabsContent value="videos" className="space-y-4">
               <div className="text-center py-12">
                 <Video className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Video Tutorials Coming Soon</h3>
+                <h3 className="text-lg font-semibold mb-2">Video Tutorials</h3>
                 <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  We're creating step-by-step video guides for every feature. Check back soon!
+                  Step-by-step video guides will be available in a future update. In the meantime, explore the app and check our FAQ section!
                 </p>
               </div>
             </TabsContent>

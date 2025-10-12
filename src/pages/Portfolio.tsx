@@ -248,7 +248,11 @@ const Portfolio = () => {
       <DashboardLayout>
         <div className="container mx-auto p-6 max-w-6xl">
           <div className="mb-6">
-            <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate(-1)} 
+              className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
+            >
               <ArrowLeft className="h-4 w-4" />
               Back
             </Button>

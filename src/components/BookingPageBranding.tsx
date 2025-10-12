@@ -15,15 +15,15 @@ export const BookingPageBranding = ({ className = "" }: BookingPageBrandingProps
             <Sparkles className="h-6 w-6 text-on-surface-primary" />
           </div>
           <div className="flex-1 space-y-2">
-            <h3 className="font-semibold text-lg">Client Booking - Coming Soon!</h3>
+            <h3 className="font-semibold text-lg">Client Booking Portal</h3>
             <p className="text-sm text-muted-foreground">
-              We're building an amazing client booking experience. Soon your clients will be able to book appointments, make payments, and manage their hair journey—all in one place.
+              We're building an amazing client booking experience. Your clients will be able to book appointments, make payments, and manage their hair journey—all in one place.
             </p>
           </div>
         </div>
 
         <p className="text-xs text-center text-muted-foreground">
-          Stay tuned for updates ✨
+          Coming in a future update ✨
         </p>
       </CardContent>
     </Card>

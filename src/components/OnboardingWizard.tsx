@@ -78,7 +78,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
     {
       id: "welcome",
       title: "Welcome to Your Hair Journey! ✨",
-      description: "This platform is currently in stylist-only mode. Client booking features are coming soon after launch!",
+      description: "You're joining a professional platform designed for stylists to manage their business and connect with clients!",
       icon: Sparkles,
     },
     {

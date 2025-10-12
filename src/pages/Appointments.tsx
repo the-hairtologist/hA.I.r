@@ -327,7 +327,9 @@ const Appointments = () => {
               }}
               onAction={(action) => {
                 if (action === "send-rebook-reminder") {
-                  toast.info("Rebook reminder feature coming soon!");
+                  toast.info("Rebook reminders are being configured for this feature.", {
+                    description: "Automated reminders will be available soon"
+                  });
                 }
               }}
             />

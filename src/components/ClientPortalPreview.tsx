@@ -51,8 +51,9 @@ export const ClientPortalPreview = ({
 
   const handleBooking = () => {
     haptic.tap();
-    toast.info("Client booking portal coming soon!", {
-      description: "Clients will be able to book directly from your profile link",
+    toast.info("Client booking will be available soon!", {
+      description: "Clients will be able to book appointments directly through your profile link",
+      duration: 4000,
     });
   };
 
@@ -113,16 +114,16 @@ export const ClientPortalPreview = ({
           )}
         </div>
 
-        {/* Coming Soon Banner */}
+        {/* Feature Banner */}
         <div className="p-4 bg-accent/20 rounded-lg brutal-border border-accent/40">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="h-4 w-4 text-accent-foreground" />
             <p className="text-sm font-semibold text-accent-foreground">
-              Client Booking - Coming Soon!
+              Client Booking Portal
             </p>
           </div>
           <p className="text-xs text-accent-foreground/80">
-            Your clients will soon be able to book appointments, make payments, and manage their hair journey directly from your profile page.
+            Your clients will be able to book appointments, make payments, and manage their hair journey directly from your profile page in a future update.
           </p>
         </div>
 

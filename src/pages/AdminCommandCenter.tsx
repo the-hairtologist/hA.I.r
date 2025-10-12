@@ -311,8 +311,14 @@ export default function AdminCommandCenter() {
                             {ur.role}
                           </Badge>
                         ))}
-                        <Button size="sm" variant="ghost" onClick={() => navigate(`/admin/user/${user.id}`)}>
-                          <Eye className="h-4 w-4" />
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => navigate(`/admin/user/${user.id}`)}
+                          className="border-2 border-foreground shadow-brutal hover:bg-secondary"
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
                         </Button>
                       </div>
                     </div>

@@ -305,7 +305,7 @@ const Auth = () => {
                     </Button>
                   </div>
                   <p className="text-xs text-center text-muted-foreground">
-                    Social sign-in coming soon
+                    Additional sign-in methods coming in a future update
                   </p>
                 </div>
 

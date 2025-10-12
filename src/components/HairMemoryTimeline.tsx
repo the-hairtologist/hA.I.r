@@ -116,8 +116,9 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
 
   const downloadTimeline = () => {
     toast({
-      title: "Coming Soon",
-      description: "PDF download feature will be available soon!",
+      title: "PDF Export",
+      description: "Timeline export functionality will be available in a future update",
+      duration: 3000,
     });
   };
 

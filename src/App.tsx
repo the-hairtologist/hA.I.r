@@ -61,7 +61,6 @@ const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
 const DMCA = lazy(() => import("./pages/DMCA"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
-const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -269,12 +268,6 @@ const App = () => {
               <BookAppointment />
             </ProtectedRoute>
           } />
-          <Route path="/coming-soon" element={<ComingSoon />} />
-          
-          {/* Public Stylist Routes - Coming Soon */}
-          <Route path="/stylists" element={<ComingSoon />} />
-          <Route path="/stylist/:id" element={<ComingSoon />} />
-          <Route path="/s/:username" element={<ComingSoon />} />
           
           {/* Legal Pages */}
           <Route path="/dmca" element={<DMCA />} />

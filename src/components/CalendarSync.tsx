@@ -53,13 +53,13 @@ const CalendarSync = () => {
   const handleConnect = async (provider: CalendarProvider) => {
     setConnecting(provider);
     try {
-      // For MVP, we'll show instructions since OAuth requires backend setup
+      // Calendar sync integration coming in a future update
       toast.info(
-        `${provider === 'google' ? 'Google' : 'Outlook'} Calendar sync coming soon! We'll notify you when it's available.`,
+        `${provider === 'google' ? 'Google' : 'Outlook'} Calendar integration is being set up. This feature will be available soon.`,
         { duration: 5000 }
       );
       
-      // OAuth flow implementation via edge function - calendar_oauth
+      // Future implementation will use edge function - calendar_oauth
       // const { data, error } = await supabase.functions.invoke('calendar-oauth-init', {
       //   body: { provider }
       // });

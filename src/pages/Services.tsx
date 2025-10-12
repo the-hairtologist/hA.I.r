@@ -252,7 +252,13 @@ const Services = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0 flex-1">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")} className="border-2 border-foreground min-h-[44px] min-w-[44px] flex-shrink-0 hover:bg-muted/50">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => navigate("/dashboard")} 
+                className="border-2 border-foreground min-h-[44px] min-w-[44px] flex-shrink-0 bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
+                aria-label="Go back to dashboard"
+              >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div className="flex items-center gap-2 min-w-0">
@@ -582,11 +588,23 @@ const Services = () => {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleEdit(service)} className="border-2 border-foreground bg-card hover:bg-card/90 min-h-[44px] min-w-[44px]">
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        onClick={() => handleEdit(service)} 
+                        className="border-2 border-foreground bg-card hover:bg-secondary min-h-[44px] min-w-[44px] shadow-brutal"
+                        aria-label="Edit service"
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => handleDelete(service.id)} className="border-2 border-foreground bg-card hover:bg-card/90 min-h-[44px] min-w-[44px]">
-                        <Trash2 className="h-4 w-4 text-destructive" />
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        onClick={() => handleDelete(service.id)} 
+                        className="border-2 border-foreground bg-card hover:bg-destructive hover:text-destructive-foreground min-h-[44px] min-w-[44px] shadow-brutal"
+                        aria-label="Delete service"
+                      >
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
