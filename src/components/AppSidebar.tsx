@@ -288,11 +288,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   // Stylist Navigation with unique IDs
   const stylistBaseItems: SidebarItem[] = [
     { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "calendar", title: "Calendar", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "calendar", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "clients", title: "Client Management", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
-    { id: "find-clients", title: "Find New Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "marketplace", color: "text-cyan-400 dark:text-cyan-300" },
-    { id: "availability", title: "Availability", url: "/schedule", icon: Clock, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Set working hours", group: "scheduling", color: "text-blue-400 dark:text-blue-300" },
+    { id: "find-clients", title: "Find New Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "marketplace", color: "text-cyan-400 dark:text-cyan-300", description: "Coming Soon" },
+    { id: "availability", title: "Set Availability", url: "/schedule", icon: Clock, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Your working hours", group: "scheduling", color: "text-blue-400 dark:text-blue-300" },
     { id: "booking-page", title: "My Booking Page", url: "/booking-page", icon: Link2, gradient: "bg-[image:var(--gradient-purple-pink)]", description: "Share with clients", group: "scheduling", color: "text-purple-400 dark:text-purple-300" },
     { id: "services", title: "Services & Pricing", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "finance", title: "Finance", url: "/finance", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },

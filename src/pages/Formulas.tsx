@@ -20,6 +20,8 @@ import { showCelebration } from "@/components/CelebrationToast";
 import { AIDisclaimer } from "@/components/AIDisclaimer";
 import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
 
+import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
+
 const Formulas = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -244,11 +246,16 @@ const Formulas = () => {
             <h1 className="text-3xl font-bold">Client Formulas</h1>
             <p className="text-muted-foreground">View and manage your client formulas</p>
           </div>
-          <Button onClick={() => setDialogOpen(true)}>
+          <Button onClick={() => setDialogOpen(true)} disabled={clients.length === 0}>
             <Plus className="h-4 w-4 mr-2" />
             Add Formula
           </Button>
         </div>
+
+        {/* Show prerequisite alert if no clients */}
+        {clients.length === 0 && (
+          <PrerequisiteCheck type="clients" />
+        )}
 
         {/* Keyboard shortcut hint */}
         <div className="flex justify-end">
@@ -286,12 +293,15 @@ const Formulas = () => {
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 {searchTerm 
                   ? "No formulas match your search. Try different keywords or create a new formula!"
-                  : "Start documenting your color formulas and never forget that perfect shade again"}
+                  : clients.length === 0 
+                    ? "Add clients first to start creating formulas. Each formula is tied to a specific client."
+                    : "Start documenting your color formulas and never forget that perfect shade again"}
               </p>
               <Button 
                 onClick={() => setDialogOpen(true)}
                 size="lg"
                 className="gap-2 hover-scale"
+                disabled={clients.length === 0}
               >
                 <Plus className="h-5 w-5" />
                 Create Your First Formula

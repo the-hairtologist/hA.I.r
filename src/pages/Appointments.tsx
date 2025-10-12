@@ -29,6 +29,8 @@ import { SmartSchedulingSuggestions } from "@/components/SmartSchedulingSuggesti
 import { showCelebration } from "@/components/CelebrationToast";
 import { QuickReviewButton } from "@/components/QuickReviewButton";
 
+import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
+
 const Appointments = () => {
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -50,6 +52,7 @@ const Appointments = () => {
   const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
   const [rebookAppointment, setRebookAppointment] = useState<any>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const [services, setServices] = useState<any[]>([]);
 
   // Global keyboard shortcut for search focus
   useEffect(() => {
@@ -94,6 +97,14 @@ const Appointments = () => {
       }
 
       setStylistProfile(stylist);
+
+      // Get services
+      const { data: servicesData } = await supabase
+        .from("stylist_services")
+        .select("id")
+        .eq("stylist_id", stylist.id);
+
+      setServices(servicesData || []);
 
       // Get appointments
       const { data: appointmentsData } = await supabase
@@ -319,6 +330,13 @@ const Appointments = () => {
           </TabsList>
 
           <TabsContent value="list">
+            {/* Show prerequisite alert if no services */}
+            {services.length === 0 && (
+              <div className="mb-6">
+                <PrerequisiteCheck type="services" />
+              </div>
+            )}
+            
             {/* Contextual AI Suggestions */}
             <ContextualAI
               context="appointment"
