@@ -467,21 +467,21 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   const stylistAllItems = [...stylistBaseItems, ...adminItems];
 
-  // Client Navigation with unique IDs
+  // Client Navigation - clean and intuitive
   const clientBaseItems: SidebarItem[] = [
     { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
     { id: "appointments", title: "My Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main", color: "text-violet-400 dark:text-violet-300" },
     { id: "notifications", title: "Notifications", url: "/notifications", icon: Bell, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "find-stylist", title: "Find a Stylist", url: "/stylist-discovery", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "services", color: "text-cyan-400 dark:text-cyan-300", comingSoon: true },
-    { id: "favorite-stylists", title: "Favorite Stylists", url: "/favorites", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "services", color: "text-amber-400 dark:text-amber-300" },
+    { id: "find-stylist", title: "Find Stylists", url: "/stylist-discovery", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "services", color: "text-cyan-400 dark:text-cyan-300", comingSoon: true },
+    { id: "favorite-stylists", title: "My Stylists", url: "/favorites", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "services", color: "text-amber-400 dark:text-amber-300" },
     { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "services", color: "text-emerald-400 dark:text-emerald-300" },
-    { id: "booking-history", title: "Booking History", url: "/booking-history", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "services", color: "text-blue-400 dark:text-blue-300" },
-    { id: "reviews", title: "My Reviews", url: "/client-reviews", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "feedback", color: "text-amber-400 dark:text-amber-300", description: "Rate your stylists" },
+    { id: "booking-history", title: "Booking History", url: "/booking-history", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "history", color: "text-blue-400 dark:text-blue-300" },
+    { id: "reviews", title: "My Reviews", url: "/client-reviews", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "history", color: "text-amber-400 dark:text-amber-300", description: "Rate stylists" },
     { id: "profile", title: "My Profile", url: "/profile", icon: UserCircle, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
-    { id: "payment-methods", title: "Payment Methods", url: "/payment-methods", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "account", color: "text-amber-400 dark:text-amber-300", description: "Manage cards" },
+    { id: "payment-methods", title: "Payment Methods", url: "/payment-methods", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "account", color: "text-amber-400 dark:text-amber-300", description: "Cards & billing" },
     { id: "settings", title: "Settings", url: "/settings", icon: Settings, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
-    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "help", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "support", color: "text-cyan-400 dark:text-cyan-300" },
   ];
 
   // Add admin items to client navigation if user is admin
@@ -495,8 +495,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support", admin: "Platform Administration" }
       : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support" }
     : isAdmin
-      ? { main: "Main", services: "Services", feedback: "Feedback", account: "Account", help: "Support", admin: "Platform Administration" }
-      : { main: "Main", services: "Services", feedback: "Feedback", account: "Account", help: "Support" };
+      ? { main: "Main", services: "Services", history: "History", account: "Account", support: "Support", admin: "Platform Administration" }
+      : { main: "Main", services: "Services", history: "History", account: "Account", support: "Support" };
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);
 

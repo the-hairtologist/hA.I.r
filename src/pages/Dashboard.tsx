@@ -98,12 +98,13 @@ const Dashboard = () => {
     { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: false },
   ];
 
+  // Client dashboard sections - focused on booking and service experience
   const defaultClientSections: DashboardSection[] = [
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "upcoming-appointments", title: "Upcoming Appointments", component: "UpcomingAppointments", enabled: true },
-    { id: "client-milestones", title: "Rewards & Milestones", component: "ClientMilestones", enabled: true },
-    { id: "favorite-stylists", title: "Favorite Stylists", component: "FavoriteStylists", enabled: true },
-    { id: "recent-activity", title: "Activity History", component: "RecentActivity", enabled: true },
+    { id: "upcoming-appointments", title: "My Appointments", component: "UpcomingAppointments", enabled: true },
+    { id: "client-milestones", title: "Rewards & Perks", component: "ClientMilestones", enabled: true },
+    { id: "favorite-stylists", title: "My Stylists", component: "FavoriteStylists", enabled: true },
+    { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
   ];
 
   // Admin sections - comprehensive platform oversight
