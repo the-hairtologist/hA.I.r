@@ -8,6 +8,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Users, Search, Eye, Shield, Ban, Mail, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Dialog,
   DialogContent,
@@ -25,10 +29,22 @@ import {
 } from "@/components/ui/select";
 
 export default function AdminUsers() {
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
   const [users, setUsers] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
   const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  // Redirect non-admins
+  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Show loading while checking permissions
+  if (authLoading || roleLoading) {
+    return <LoadingSpinner message="Verifying access..." />;
+  }
 
   useEffect(() => {
     loadUsers();

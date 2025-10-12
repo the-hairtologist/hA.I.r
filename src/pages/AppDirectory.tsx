@@ -2,7 +2,10 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Crown, Shield, Users, Calendar, MessageSquare, Palette, Image,
   FileText, DollarSign, Settings, Brain, TrendingUp, Share2,
@@ -13,6 +16,18 @@ import {
 
 export default function AppDirectory() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
+
+  // Redirect non-admins
+  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Show loading while checking permissions
+  if (authLoading || roleLoading) {
+    return <LoadingSpinner message="Verifying access..." />;
+  }
 
   const adminFeatures = [
     {

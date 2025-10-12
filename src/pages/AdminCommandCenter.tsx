@@ -11,13 +11,18 @@ import {
   Eye, Settings as SettingsIcon, AlertTriangle, Brain, Target, Zap,
   RefreshCw, Lock, BarChart3, CheckCircle2, XCircle, Clock
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function AdminCommandCenter() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
   const [stats, setStats] = useState<any>({});
   const [recentUsers, setRecentUsers] = useState<any[]>([]);
   const [recentAppointments, setRecentAppointments] = useState<any[]>([]);
@@ -122,6 +127,16 @@ export default function AdminCommandCenter() {
       });
     }
   };
+
+  // Redirect non-admins
+  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Show loading while checking permissions
+  if (authLoading || roleLoading) {
+    return <LoadingSpinner message="Verifying access..." />;
+  }
 
   return (
     <DashboardLayout>

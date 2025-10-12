@@ -22,33 +22,28 @@ interface AccessCode {
 
 export default function AccessCodes() {
   const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
   
   const [codes, setCodes] = useState<AccessCode[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !roleLoading && user && roles.length > 0) {
-      const adminCheck = roles.includes('admin');
-      setIsAdmin(adminCheck);
+    if (!authLoading && !roleLoading) {
+      if (!user) {
+        toast.error("Please sign in");
+        setLoading(false);
+        return;
+      }
       
-      if (!adminCheck) {
+      if (!isAdmin) {
         toast.error("Admin access required");
         setLoading(false);
         return;
       }
       
       loadCodes();
-    } else if (!authLoading && !user) {
-      toast.error("Please sign in");
-      setLoading(false);
     }
-  }, [authLoading, roleLoading, user, roles]);
-
-  const checkAdminAndLoadCodes = async () => {
-    // This function is now handled by the useEffect above with useUserRole hook
-  };
+  }, [authLoading, roleLoading, user, isAdmin]);
 
   const loadCodes = async () => {
     try {
