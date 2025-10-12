@@ -899,43 +899,58 @@ export type Database = {
       }
       formulas: {
         Row: {
+          application_notes: string | null
           client_id: string
           color_line: string | null
           created_at: string
+          developer_volume: string | null
           formula_text: string
           hair_photo_url: string | null
           id: string
           instructions: string | null
+          processing_time_minutes: number | null
           result_notes: string | null
           stylist_id: string
           tags: string[] | null
           updated_at: string
+          what_to_avoid: string | null
+          what_worked: string | null
         }
         Insert: {
+          application_notes?: string | null
           client_id: string
           color_line?: string | null
           created_at?: string
+          developer_volume?: string | null
           formula_text: string
           hair_photo_url?: string | null
           id?: string
           instructions?: string | null
+          processing_time_minutes?: number | null
           result_notes?: string | null
           stylist_id: string
           tags?: string[] | null
           updated_at?: string
+          what_to_avoid?: string | null
+          what_worked?: string | null
         }
         Update: {
+          application_notes?: string | null
           client_id?: string
           color_line?: string | null
           created_at?: string
+          developer_volume?: string | null
           formula_text?: string
           hair_photo_url?: string | null
           id?: string
           instructions?: string | null
+          processing_time_minutes?: number | null
           result_notes?: string | null
           stylist_id?: string
           tags?: string[] | null
           updated_at?: string
+          what_to_avoid?: string | null
+          what_worked?: string | null
         }
         Relationships: [
           {

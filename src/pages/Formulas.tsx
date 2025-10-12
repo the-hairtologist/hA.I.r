@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, Clock, Beaker, FileText, ThumbsUp, AlertTriangle } from "lucide-react";
 import { AddClientDialog } from "@/components/AddClientDialog";
 import { useKeyboardShortcut, SHORTCUTS } from "@/hooks/useKeyboardShortcut";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
@@ -52,6 +53,12 @@ const Formulas = () => {
   const [colorLine, setColorLine] = useState("");
   const [resultNotes, setResultNotes] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  // New structured fields
+  const [processingTime, setProcessingTime] = useState("");
+  const [developerVolume, setDeveloperVolume] = useState("");
+  const [applicationNotes, setApplicationNotes] = useState("");
+  const [whatWorked, setWhatWorked] = useState("");
+  const [whatToAvoid, setWhatToAvoid] = useState("");
 
   useEffect(() => {
     loadData();
@@ -132,6 +139,11 @@ const Formulas = () => {
         color_line: colorLine,
         result_notes: resultNotes,
         tags: tags.length > 0 ? tags : null,
+        processing_time_minutes: processingTime ? parseInt(processingTime) : null,
+        developer_volume: developerVolume || null,
+        application_notes: applicationNotes || null,
+        what_worked: whatWorked || null,
+        what_to_avoid: whatToAvoid || null,
       };
 
       if (editingFormula) {
@@ -175,6 +187,11 @@ const Formulas = () => {
     setColorLine(formula.color_line || "");
     setResultNotes(formula.result_notes || "");
     setTags(formula.tags || []);
+    setProcessingTime(formula.processing_time_minutes?.toString() || "");
+    setDeveloperVolume(formula.developer_volume || "");
+    setApplicationNotes(formula.application_notes || "");
+    setWhatWorked(formula.what_worked || "");
+    setWhatToAvoid(formula.what_to_avoid || "");
     setDialogOpen(true);
   };
 
@@ -186,6 +203,11 @@ const Formulas = () => {
     setColorLine(formula.color_line || "");
     setResultNotes(formula.result_notes || "");
     setTags(formula.tags || []);
+    setProcessingTime(formula.processing_time_minutes?.toString() || "");
+    setDeveloperVolume(formula.developer_volume || "");
+    setApplicationNotes(formula.application_notes || "");
+    setWhatWorked(formula.what_worked || "");
+    setWhatToAvoid(formula.what_to_avoid || "");
     setDialogOpen(true);
     toast.success("Formula duplicated! Make any changes and save.");
   };
@@ -218,6 +240,11 @@ const Formulas = () => {
     setResultNotes("");
     setTags([]);
     setTagInput("");
+    setProcessingTime("");
+    setDeveloperVolume("");
+    setApplicationNotes("");
+    setWhatWorked("");
+    setWhatToAvoid("");
   };
 
   const handleAddTag = () => {
@@ -586,6 +613,64 @@ const Formulas = () => {
                       <p className="text-sm text-muted-foreground">{formula.result_notes}</p>
                     </div>
                   )}
+
+                  {/* Structured Details - Show if any exist */}
+                  {(formula.processing_time_minutes || formula.developer_volume || formula.application_notes || formula.what_worked || formula.what_to_avoid) && (
+                    <div className="border-t pt-3 space-y-3">
+                      {/* Processing Details */}
+                      {(formula.processing_time_minutes || formula.developer_volume) && (
+                        <div className="flex flex-wrap gap-4 text-xs">
+                          {formula.processing_time_minutes && (
+                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md">
+                              <Clock className="h-3 w-3 text-primary" />
+                              <span className="font-medium">{formula.processing_time_minutes} min</span>
+                            </div>
+                          )}
+                          {formula.developer_volume && (
+                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md">
+                              <Beaker className="h-3 w-3 text-primary" />
+                              <span className="font-medium">{formula.developer_volume}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Application Notes */}
+                      {formula.application_notes && (
+                        <div>
+                          <p className="text-xs font-medium mb-1 flex items-center gap-1">
+                            <FileText className="h-3 w-3" />
+                            Application
+                          </p>
+                          <p className="text-xs text-muted-foreground pl-4">{formula.application_notes}</p>
+                        </div>
+                      )}
+
+                      {/* Success/Learnings */}
+                      {(formula.what_worked || formula.what_to_avoid) && (
+                        <div className="grid gap-2">
+                          {formula.what_worked && (
+                            <div className="bg-green-50 dark:bg-green-950/20 p-2 rounded-md">
+                              <p className="text-xs font-medium mb-1 flex items-center gap-1 text-green-700 dark:text-green-400">
+                                <ThumbsUp className="h-3 w-3" />
+                                What Worked
+                              </p>
+                              <p className="text-xs text-green-600 dark:text-green-500/80 pl-4">{formula.what_worked}</p>
+                            </div>
+                          )}
+                          {formula.what_to_avoid && (
+                            <div className="bg-amber-50 dark:bg-amber-950/20 p-2 rounded-md">
+                              <p className="text-xs font-medium mb-1 flex items-center gap-1 text-amber-700 dark:text-amber-400">
+                                <AlertTriangle className="h-3 w-3" />
+                                What to Avoid
+                              </p>
+                              <p className="text-xs text-amber-600 dark:text-amber-500/80 pl-4">{formula.what_to_avoid}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             );
@@ -771,6 +856,120 @@ const Formulas = () => {
                 </div>
               )}
             </div>
+
+            {/* Structured Formula Details - Accordion */}
+            <Accordion type="multiple" className="w-full">
+              {/* Processing Details */}
+              <AccordionItem value="processing">
+                <AccordionTrigger className="text-sm font-medium">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Processing Details
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="space-y-4 pt-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="processing-time" className="text-xs">
+                        Processing Time (minutes)
+                      </Label>
+                      <Input
+                        id="processing-time"
+                        type="number"
+                        placeholder="e.g., 30"
+                        value={processingTime}
+                        onChange={(e) => setProcessingTime(e.target.value)}
+                        min="1"
+                        max="180"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="developer-volume" className="text-xs">
+                        Developer Volume
+                      </Label>
+                      <Input
+                        id="developer-volume"
+                        placeholder="e.g., 20 vol"
+                        value={developerVolume}
+                        onChange={(e) => setDeveloperVolume(e.target.value)}
+                        list="developer-options"
+                      />
+                      <datalist id="developer-options">
+                        <option value="10 vol" />
+                        <option value="20 vol" />
+                        <option value="30 vol" />
+                        <option value="40 vol" />
+                      </datalist>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Application Notes */}
+              <AccordionItem value="application">
+                <AccordionTrigger className="text-sm font-medium">
+                  <div className="flex items-center gap-2">
+                    <Beaker className="h-4 w-4" />
+                    Application Notes
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="space-y-4 pt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="application-notes" className="text-xs">
+                      How to Apply (optional)
+                    </Label>
+                    <Textarea
+                      id="application-notes"
+                      placeholder="e.g., Apply root to ends, section by section..."
+                      value={applicationNotes}
+                      onChange={(e) => setApplicationNotes(e.target.value)}
+                      rows={3}
+                      className="resize-none text-sm"
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Success & Learnings */}
+              <AccordionItem value="learnings">
+                <AccordionTrigger className="text-sm font-medium">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Success & Learnings
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="space-y-4 pt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="what-worked" className="text-xs flex items-center gap-1">
+                      <ThumbsUp className="h-3 w-3" />
+                      What Worked Well
+                    </Label>
+                    <Textarea
+                      id="what-worked"
+                      placeholder="e.g., Perfect lift, even tone, client loved it..."
+                      value={whatWorked}
+                      onChange={(e) => setWhatWorked(e.target.value)}
+                      rows={2}
+                      className="resize-none text-sm"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="what-to-avoid" className="text-xs flex items-center gap-1">
+                      <AlertTriangle className="h-3 w-3" />
+                      What to Avoid Next Time
+                    </Label>
+                    <Textarea
+                      id="what-to-avoid"
+                      placeholder="e.g., Watch timing on roots, less developer needed..."
+                      value={whatToAvoid}
+                      onChange={(e) => setWhatToAvoid(e.target.value)}
+                      rows={2}
+                      className="resize-none text-sm"
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
 
             <Button onClick={handleSaveFormula} className="w-full">
               <Save className="h-4 w-4 mr-2" />
