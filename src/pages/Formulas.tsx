@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -8,8 +8,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X } from "lucide-react";
 import { AddClientDialog } from "@/components/AddClientDialog";
 import { useKeyboardShortcut, SHORTCUTS } from "@/hooks/useKeyboardShortcut";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
@@ -19,7 +20,7 @@ import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
 import { AIDisclaimer } from "@/components/AIDisclaimer";
 import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
-
+import { FormulaFiltersComponent, FormulaFilters } from "@/components/FormulaFilters";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 
 const Formulas = () => {
@@ -33,6 +34,14 @@ const Formulas = () => {
   const [editingFormula, setEditingFormula] = useState<any>(null);
   const [clientSearchOpen, setClientSearchOpen] = useState(false);
   const [addClientDialogOpen, setAddClientDialogOpen] = useState(false);
+  const [filters, setFilters] = useState<FormulaFilters>({
+    clientId: "",
+    colorLine: "",
+    dateRange: "all",
+    sortBy: "date-desc",
+    tags: [],
+  });
+  const [tagInput, setTagInput] = useState("");
   
   // Form state
   const [selectedClient, setSelectedClient] = useState("");
@@ -40,6 +49,7 @@ const Formulas = () => {
   const [instructions, setInstructions] = useState("");
   const [colorLine, setColorLine] = useState("");
   const [resultNotes, setResultNotes] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
     loadData();
@@ -114,16 +124,19 @@ const Formulas = () => {
     }
 
     try {
+      const formulaData = {
+        formula_text: formulaText,
+        instructions,
+        color_line: colorLine,
+        result_notes: resultNotes,
+        tags: tags.length > 0 ? tags : null,
+      };
+
       if (editingFormula) {
         // Update existing formula
         const { error } = await supabase
           .from("formulas")
-          .update({
-            formula_text: formulaText,
-            instructions,
-            color_line: colorLine,
-            result_notes: resultNotes,
-          })
+          .update(formulaData)
           .eq("id", editingFormula.id);
 
         if (error) throw error;
@@ -135,10 +148,7 @@ const Formulas = () => {
           .insert({
             stylist_id: stylistProfile.id,
             client_id: selectedClient,
-            formula_text: formulaText,
-            instructions,
-            color_line: colorLine,
-            result_notes: resultNotes,
+            ...formulaData,
           });
 
         if (error) throw error;
@@ -162,7 +172,20 @@ const Formulas = () => {
     setInstructions(formula.instructions || "");
     setColorLine(formula.color_line || "");
     setResultNotes(formula.result_notes || "");
+    setTags(formula.tags || []);
     setDialogOpen(true);
+  };
+
+  const handleDuplicateFormula = (formula: any) => {
+    setEditingFormula(null); // Not editing, creating new
+    setSelectedClient(formula.client_id);
+    setFormulaText(formula.formula_text || "");
+    setInstructions(formula.instructions || "");
+    setColorLine(formula.color_line || "");
+    setResultNotes(formula.result_notes || "");
+    setTags(formula.tags || []);
+    setDialogOpen(true);
+    toast.success("Formula duplicated! Make any changes and save.");
   };
 
   const handleDeleteFormula = async (formulaId: string) => {
@@ -191,17 +214,110 @@ const Formulas = () => {
     setInstructions("");
     setColorLine("");
     setResultNotes("");
+    setTags([]);
+    setTagInput("");
   };
 
-  const filteredFormulas = formulas.filter(formula => {
-    const search = searchTerm.toLowerCase();
-    return (
-      formula.client?.full_name?.toLowerCase().includes(search) ||
-      formula.client?.email?.toLowerCase().includes(search) ||
-      formula.formula_text?.toLowerCase().includes(search) ||
-      formula.color_line?.toLowerCase().includes(search)
-    );
-  });
+  const handleAddTag = () => {
+    const newTag = tagInput.trim().toLowerCase();
+    if (newTag && !tags.includes(newTag)) {
+      setTags([...tags, newTag]);
+      setTagInput("");
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter(t => t !== tagToRemove));
+  };
+
+  const filteredFormulas = useMemo(() => {
+    let filtered = formulas;
+
+    // Text search
+    if (searchTerm) {
+      const search = searchTerm.toLowerCase();
+      filtered = filtered.filter(formula =>
+        formula.client?.full_name?.toLowerCase().includes(search) ||
+        formula.client?.email?.toLowerCase().includes(search) ||
+        formula.formula_text?.toLowerCase().includes(search) ||
+        formula.color_line?.toLowerCase().includes(search) ||
+        formula.tags?.some((tag: string) => tag.toLowerCase().includes(search))
+      );
+    }
+
+    // Client filter
+    if (filters.clientId) {
+      filtered = filtered.filter(f => f.client_id === filters.clientId);
+    }
+
+    // Color line filter
+    if (filters.colorLine) {
+      filtered = filtered.filter(f => f.color_line === filters.colorLine);
+    }
+
+    // Date range filter
+    if (filters.dateRange !== "all") {
+      const now = new Date();
+      const cutoffDate = new Date();
+      
+      switch (filters.dateRange) {
+        case "week":
+          cutoffDate.setDate(now.getDate() - 7);
+          break;
+        case "month":
+          cutoffDate.setMonth(now.getMonth() - 1);
+          break;
+        case "quarter":
+          cutoffDate.setMonth(now.getMonth() - 3);
+          break;
+        case "year":
+          cutoffDate.setFullYear(now.getFullYear() - 1);
+          break;
+      }
+      
+      filtered = filtered.filter(f => new Date(f.created_at) >= cutoffDate);
+    }
+
+    // Tags filter
+    if (filters.tags.length > 0) {
+      filtered = filtered.filter(f =>
+        f.tags && f.tags.some((tag: string) => filters.tags.includes(tag))
+      );
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      switch (filters.sortBy) {
+        case "date-desc":
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        case "date-asc":
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case "client-asc":
+          return (a.client?.full_name || "").localeCompare(b.client?.full_name || "");
+        case "client-desc":
+          return (b.client?.full_name || "").localeCompare(a.client?.full_name || "");
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [formulas, searchTerm, filters]);
+
+  // Extract unique color lines and tags
+  const uniqueColorLines = useMemo(() => {
+    const lines = formulas
+      .map(f => f.color_line)
+      .filter((line): line is string => !!line);
+    return Array.from(new Set(lines)).sort();
+  }, [formulas]);
+
+  const availableTags = useMemo(() => {
+    const allTags = formulas
+      .flatMap(f => f.tags || [])
+      .filter((tag): tag is string => !!tag);
+    return Array.from(new Set(allTags)).sort();
+  }, [formulas]);
 
   const selectedClientData = clients.find(c => c.id === selectedClient);
 
@@ -268,12 +384,23 @@ const Formulas = () => {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search formulas by client, formula, or color line..."
+            placeholder="Search formulas by client, formula, tags, or color line..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
+
+        {/* Filters */}
+        {formulas.length > 0 && (
+          <FormulaFiltersComponent
+            filters={filters}
+            onFiltersChange={setFilters}
+            clients={clients}
+            colorLines={uniqueColorLines}
+            availableTags={availableTags}
+          />
+        )}
 
         {/* Formulas List */}
         <div className="grid gap-4">
@@ -314,33 +441,55 @@ const Formulas = () => {
             filteredFormulas.map((formula) => (
               <Card key={formula.id}>
                 <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-lg">
-                        {formula.client?.full_name || "Client"}
-                      </CardTitle>
-                      <CardDescription>
-                        {formula.client?.email}
-                        {formula.color_line && ` • ${formula.color_line}`}
-                      </CardDescription>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">
+                          {formula.client?.full_name || "Client"}
+                        </CardTitle>
+                        <CardDescription className="flex flex-wrap items-center gap-2 mt-1">
+                          {formula.client?.email}
+                          {formula.color_line && <span>• {formula.color_line}</span>}
+                          {formula.created_at && (
+                            <span className="text-xs">• {new Date(formula.created_at).toLocaleDateString()}</span>
+                          )}
+                        </CardDescription>
+                        {formula.tags && formula.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {formula.tags.map((tag: string) => (
+                              <Badge key={tag} variant="secondary" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex gap-2 flex-shrink-0">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDuplicateFormula(formula)}
+                          title="Duplicate formula"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditFormula(formula)}
+                          title="Edit formula"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteFormula(formula.id)}
+                          title="Delete formula"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEditFormula(formula)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDeleteFormula(formula.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
@@ -516,6 +665,41 @@ const Formulas = () => {
                 rows={2}
                 className="resize-none"
               />
+            </div>
+
+            {/* Tags */}
+            <div className="space-y-2">
+              <Label htmlFor="tags">Tags (Optional)</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="tags"
+                  placeholder="Add tags (e.g., blonde, balayage, correction)"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddTag();
+                    }
+                  }}
+                />
+                <Button type="button" variant="outline" onClick={handleAddTag} size="sm">
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {tags.map((tag) => (
+                    <Badge key={tag} variant="secondary" className="gap-1">
+                      {tag}
+                      <X
+                        className="h-3 w-3 cursor-pointer"
+                        onClick={() => handleRemoveTag(tag)}
+                      />
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
 
             <Button onClick={handleSaveFormula} className="w-full">

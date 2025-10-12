@@ -32,6 +32,10 @@ interface ClientProfile {
   allergies: string | null;
   notes: string | null;
   created_at: string;
+  total_appointments?: number;
+  last_appointment_date?: string | null;
+  completed_appointments?: number;
+  upcoming_appointments?: number;
 }
 
 export default function Clients() {
@@ -46,7 +50,7 @@ export default function Clients() {
   const [selectedClient, setSelectedClient] = useState<ClientProfile | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearch = useDebounce(searchQuery, 300);
-  const [sortBy, setSortBy] = useState<"name" | "recent">("recent");
+  const [sortBy, setSortBy] = useState<"name" | "recent" | "inactive">("recent");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editFormData, setEditFormData] = useState({
     full_name: "",
@@ -126,14 +130,35 @@ export default function Clients() {
 
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      
+      // Load basic client data
+      const { data: clientsData, error: clientsError } = await supabase
         .from("client_profiles")
         .select("*")
         .eq("preferred_stylist_id", stylistId)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      setClients(data || []);
+      if (clientsError) throw clientsError;
+
+      // Load statistics
+      const { data: statsData, error: statsError } = await supabase
+        .from("client_statistics")
+        .select("*")
+        .eq("preferred_stylist_id", stylistId);
+
+      // Merge statistics with client data
+      const enrichedClients = (clientsData || []).map((client: any) => {
+        const stats = (statsData || []).find((s: any) => s.client_id === client.id);
+        return {
+          ...client,
+          total_appointments: stats?.total_appointments || 0,
+          last_appointment_date: stats?.last_appointment_date || null,
+          completed_appointments: stats?.completed_appointments || 0,
+          upcoming_appointments: stats?.upcoming_appointments || 0,
+        };
+      });
+
+      setClients(enrichedClients);
     } catch (error) {
       console.error("Error loading clients:", error);
       toast.error("Failed to load clients");
@@ -321,11 +346,28 @@ export default function Clients() {
       );
     }
 
+    // Inactive filter (90+ days since last appointment)
+    if (sortBy === "inactive") {
+      const ninetyDaysAgo = new Date();
+      ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+      
+      filtered = filtered.filter(client => 
+        !client.last_appointment_date || 
+        new Date(client.last_appointment_date) < ninetyDaysAgo
+      );
+    }
+
     // Sort
     if (sortBy === "name") {
       filtered = [...filtered].sort((a, b) =>
         (a.full_name || "").localeCompare(b.full_name || "")
       );
+    } else if (sortBy === "recent") {
+      filtered = [...filtered].sort((a, b) => {
+        if (!a.last_appointment_date) return 1;
+        if (!b.last_appointment_date) return -1;
+        return new Date(b.last_appointment_date).getTime() - new Date(a.last_appointment_date).getTime();
+      });
     }
 
     return filtered;
@@ -539,6 +581,7 @@ export default function Clients() {
             <SelectContent>
               <SelectItem value="recent">Most Recent</SelectItem>
               <SelectItem value="name">Name (A-Z)</SelectItem>
+              <SelectItem value="inactive">Inactive (90+ days)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -623,6 +666,25 @@ export default function Clients() {
                       <span>{client.phone}</span>
                     </div>
                   )}
+                  
+                  {/* Client Statistics */}
+                  {(client.total_appointments > 0 || client.last_appointment_date) && (
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t">
+                      <div className="text-center p-2 bg-muted/50 rounded-lg">
+                        <p className="text-xs text-muted-foreground">Visits</p>
+                        <p className="text-lg font-bold text-primary">{client.total_appointments || 0}</p>
+                      </div>
+                      {client.last_appointment_date && (
+                        <div className="text-center p-2 bg-muted/50 rounded-lg">
+                          <p className="text-xs text-muted-foreground">Last Visit</p>
+                          <p className="text-xs font-semibold">
+                            {new Date(client.last_appointment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  
                   {client.allergies && (
                     <div className="text-sm p-2 bg-destructive/5 rounded-lg border-[2px] border-destructive/20">
                       <span className="font-semibold text-destructive">Allergies:</span> {client.allergies}

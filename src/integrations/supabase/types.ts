@@ -282,6 +282,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "appointments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "appointments_service_id_fkey"
             columns: ["service_id"]
             isOneToOne: false
@@ -512,6 +519,13 @@ export type Database = {
             referencedRelation: "client_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "client_hair_posts_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
         ]
       }
       client_invitations: {
@@ -603,6 +617,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "client_profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_milestones_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "client_milestones_stylist_id_fkey"
@@ -887,6 +908,7 @@ export type Database = {
           instructions: string | null
           result_notes: string | null
           stylist_id: string
+          tags: string[] | null
           updated_at: string
         }
         Insert: {
@@ -899,6 +921,7 @@ export type Database = {
           instructions?: string | null
           result_notes?: string | null
           stylist_id: string
+          tags?: string[] | null
           updated_at?: string
         }
         Update: {
@@ -911,6 +934,7 @@ export type Database = {
           instructions?: string | null
           result_notes?: string | null
           stylist_id?: string
+          tags?: string[] | null
           updated_at?: string
         }
         Relationships: [
@@ -920,6 +944,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "client_profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "formulas_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "formulas_stylist_id_fkey"
@@ -1032,6 +1063,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "client_profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_data_access_log_client_profile_id_fkey"
+            columns: ["client_profile_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
           },
         ]
       }
@@ -1167,6 +1205,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "client_profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "payments_stylist_id_fkey"
@@ -1393,6 +1438,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "client_profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "reviews_stylist_id_fkey"
@@ -1957,6 +2009,35 @@ export type Database = {
           user_id: string | null
         }
         Relationships: []
+      }
+      client_statistics: {
+        Row: {
+          client_id: string | null
+          completed_appointments: number | null
+          email: string | null
+          full_name: string | null
+          last_appointment_date: string | null
+          phone: string | null
+          preferred_stylist_id: string | null
+          total_appointments: number | null
+          upcoming_appointments: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
+            columns: ["preferred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
+            columns: ["preferred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       public_stylist_profiles_safe: {
         Row: {
