@@ -159,13 +159,6 @@ function SortableNavItem({
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
               )}
-              {item.comingSoon && (
-                <div className="absolute -top-1 -right-1">
-                  <span className="inline-flex items-center px-1 py-0.5 rounded-full text-[7px] font-medium bg-amber-500/80 text-white">
-                    SOON
-                  </span>
-                </div>
-              )}
             </div>
             {!collapsed && (
               <>
@@ -210,13 +203,6 @@ function SortableNavItem({
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
-              )}
-              {item.comingSoon && (
-                <div className="absolute -top-1 -right-1">
-                  <span className="inline-flex items-center px-1 py-0.5 rounded-full text-[7px] font-medium bg-amber-500/80 text-white">
-                    SOON
-                  </span>
-                </div>
               )}
             </div>
             {!collapsed && (
