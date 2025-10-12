@@ -671,7 +671,7 @@ const Dashboard = () => {
               </div>
             )}
             
-            <div className="mb-6 p-4 rounded-xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent backdrop-blur-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
+            <div className="mb-6 p-4 rounded-xl border-2 border-primary/40 bg-gradient-to-br from-primary/5 to-transparent backdrop-blur-sm shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-foreground flex items-center gap-2">
