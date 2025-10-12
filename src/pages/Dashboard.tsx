@@ -26,6 +26,7 @@ import { HelpButton } from "@/components/HelpButton";
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
 import { useDashboardLayout, DashboardSection } from "@/hooks/useDashboardLayout";
+import { RebookingPrompt } from "@/components/RebookingPrompt";
 import { DraggableSection } from "@/components/dashboard/DraggableSection";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save } from "lucide-react";
@@ -585,6 +586,13 @@ const Dashboard = () => {
                   profileComplete={!!userProfile?.full_name}
                   hasAppointments={stats.upcomingAppointments > 0}
                 />
+              </div>
+            )}
+            
+            {/* Rebooking Prompt for Clients */}
+            {userRole === "client" && (
+              <div className="animate-fade-in" style={{ animationDelay: '320ms' }}>
+                <RebookingPrompt />
               </div>
             )}
             

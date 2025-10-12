@@ -1445,6 +1445,88 @@ export type Database = {
         }
         Relationships: []
       }
+      rebooking_reminders: {
+        Row: {
+          appointment_id: string
+          client_id: string
+          created_at: string
+          id: string
+          rebooked: boolean | null
+          rebooked_appointment_id: string | null
+          reminder_type: string
+          sent_at: string
+          status: string
+          stylist_id: string
+        }
+        Insert: {
+          appointment_id: string
+          client_id: string
+          created_at?: string
+          id?: string
+          rebooked?: boolean | null
+          rebooked_appointment_id?: string | null
+          reminder_type?: string
+          sent_at?: string
+          status?: string
+          stylist_id: string
+        }
+        Update: {
+          appointment_id?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          rebooked?: boolean | null
+          rebooked_appointment_id?: string | null
+          reminder_type?: string
+          sent_at?: string
+          status?: string
+          stylist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rebooking_reminders_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rebooking_reminders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rebooking_reminders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "rebooking_reminders_rebooked_appointment_id_fkey"
+            columns: ["rebooked_appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rebooking_reminders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rebooking_reminders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referral_tracking: {
         Row: {
           created_at: string
@@ -2310,6 +2392,10 @@ export type Database = {
       }
       is_stylist_owner: {
         Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
+      needs_rebooking_reminder: {
+        Args: { appointment_id_param: string }
         Returns: boolean
       }
       profile_shares_contact_with_stylists: {
