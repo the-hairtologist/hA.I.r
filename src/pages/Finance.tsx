@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { DollarSign, TrendingUp, Loader2, Plus, Copy, ExternalLink, Tag, Calendar, TrendingDown, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { DollarSign, TrendingUp, Loader2, Plus, Copy, ExternalLink, Tag, Calendar, TrendingDown, ArrowUpRight, ArrowDownRight, Download } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { format, subDays, subMonths, startOfMonth, endOfMonth, eachMonthOfInterval, eachWeekOfInterval, startOfWeek, endOfWeek } from "date-fns";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
 
 const Finance = () => {
   const navigate = useNavigate();
@@ -255,6 +256,26 @@ const Finance = () => {
     toast.success("Copied to clipboard!");
   };
 
+  const handleExportPayments = () => {
+    try {
+      const exportData = formatDataForExport(filteredPayments);
+      exportToCSV(exportData, 'payments');
+      toast.success('Payments exported successfully!');
+    } catch (error) {
+      toast.error('Failed to export payments');
+    }
+  };
+
+  const handleExportCommissions = () => {
+    try {
+      const exportData = formatDataForExport(filteredCommissions);
+      exportToCSV(exportData, 'commissions');
+      toast.success('Commissions exported successfully!');
+    } catch (error) {
+      toast.error('Failed to export commissions');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -459,8 +480,18 @@ const Finance = () => {
           <TabsContent value="payments">
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
-                <CardTitle>Payment History</CardTitle>
-                <CardDescription>Track service payments from clients</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Payment History</CardTitle>
+                    <CardDescription>Track service payments from clients</CardDescription>
+                  </div>
+                  {filteredPayments.length > 0 && (
+                    <Button onClick={handleExportPayments} variant="outline" size="sm">
+                      <Download className="h-4 w-4 mr-2" />
+                      Export CSV
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 {filteredPayments.length === 0 ? (
@@ -508,8 +539,18 @@ const Finance = () => {
           <TabsContent value="commissions">
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
-                <CardTitle>Commission Earnings</CardTitle>
-                <CardDescription>Track product affiliate commissions</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Commission Earnings</CardTitle>
+                    <CardDescription>Track product affiliate commissions</CardDescription>
+                  </div>
+                  {filteredCommissions.length > 0 && (
+                    <Button onClick={handleExportCommissions} variant="outline" size="sm">
+                      <Download className="h-4 w-4 mr-2" />
+                      Export CSV
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 {filteredCommissions.length === 0 ? (
