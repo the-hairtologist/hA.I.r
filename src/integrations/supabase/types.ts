@@ -2206,6 +2206,14 @@ export type Database = {
           },
         ]
       }
+      security_audit_summary: {
+        Row: {
+          records_with_pii: number | null
+          status: string | null
+          table_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accept_client_invitation: {
@@ -2229,6 +2237,10 @@ export type Database = {
           _user_id: string
         }
         Returns: undefined
+      }
+      can_view_client_stats: {
+        Args: { _client_id: string }
+        Returns: boolean
       }
       check_client_milestones: {
         Args: { p_client_id: string; p_stylist_id: string }
