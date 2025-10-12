@@ -128,7 +128,7 @@ export default function AdminCommandCenter() {
       <PageHeader
         title="Admin Command Center"
         icon={<Crown className="h-6 w-6" />}
-        backTo="/admin/dashboard"
+        backTo="/dashboard"
         actions={
           <div className="flex gap-2">
             <Button onClick={runSystemMaintenance} size="sm" className="gap-2">

@@ -62,7 +62,6 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const ServerError = lazy(() => import("./pages/ServerError"));
 const Referrals = lazy(() => import("./pages/Referrals"));
 const SystemHealth = lazy(() => import("./pages/SystemHealth"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const AdminCommandCenter = lazy(() => import("./pages/AdminCommandCenter"));
 const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
@@ -310,11 +309,6 @@ const App = () => {
           <Route path="/app-directory" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AppDirectory />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/dashboard" element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <AdminDashboard />
             </ProtectedRoute>
           } />
           <Route path="/admin/command" element={

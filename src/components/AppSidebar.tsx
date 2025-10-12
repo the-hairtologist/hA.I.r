@@ -421,7 +421,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       gradient: "bg-gradient-to-br from-amber-500 to-yellow-600", 
       group: "admin", 
       color: "text-amber-400 dark:text-amber-300", 
-      description: "Complete platform oversight" 
+      description: "Full platform control" 
     },
     { 
       id: "admin-users", 
@@ -431,37 +431,37 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       gradient: "bg-[image:var(--gradient-cyan-blue)]", 
       group: "admin", 
       color: "text-cyan-400 dark:text-cyan-300",
-      description: "Manage users & roles" 
+      description: "Users, roles & profiles" 
     },
     { 
       id: "system-health", 
-      title: "System Monitor", 
+      title: "System Health", 
       url: "/system-health", 
       icon: Activity, 
       gradient: "bg-[image:var(--gradient-green-emerald)]", 
       group: "admin", 
       color: "text-emerald-400 dark:text-emerald-300",
-      description: "Health & performance" 
+      description: "Monitor performance" 
     },
     { 
       id: "admin-access-codes", 
-      title: "Access Codes", 
+      title: "Access Control", 
       url: "/admin/access-codes", 
       icon: Tag, 
       gradient: "bg-[image:var(--gradient-purple-pink)]", 
       group: "admin", 
       color: "text-purple-400 dark:text-purple-300",
-      description: "Manage invite codes" 
+      description: "Invitation codes" 
     },
     { 
       id: "app-directory", 
-      title: "App Directory", 
+      title: "Documentation", 
       url: "/app-directory", 
       icon: BookIcon, 
       gradient: "bg-[image:var(--gradient-blue-indigo)]", 
       group: "admin", 
       color: "text-blue-400 dark:text-blue-300",
-      description: "Platform documentation" 
+      description: "App reference guide" 
     },
   ] : [];
 

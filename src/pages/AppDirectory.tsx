@@ -16,11 +16,11 @@ export default function AppDirectory() {
 
   const adminFeatures = [
     {
-      title: "Admin Dashboard",
-      description: "Platform-wide statistics, user management, system overview",
+      title: "Command Center",
+      description: "Full platform control with live metrics and system management",
       icon: Crown,
-      path: "/admin/dashboard",
-      color: "text-purple-500"
+      path: "/admin/command",
+      color: "text-amber-500"
     },
     {
       title: "User Management",

@@ -83,19 +83,19 @@ const Dashboard = () => {
   // Enable analytics tracking
   useAnalytics();
 
-  // Define default dashboard sections based on user role
+  // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: true },
-    { id: "weekly-overview", title: "This Week Stats", component: "WeeklyOverview", enabled: true },
+    { id: "weekly-schedule", title: "My Schedule", component: "WeeklySchedule", enabled: true },
+    { id: "weekly-overview", title: "This Week", component: "WeeklyOverview", enabled: true },
     { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
-    { id: "quick-tasks", title: "Quick Tasks", component: "QuickTasks", enabled: true },
+    { id: "quick-tasks", title: "My Tasks", component: "QuickTasks", enabled: true },
+    { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: true },
     { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: false },
     { id: "top-services", title: "Popular Services", component: "TopServices", enabled: false },
     { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: false },
     { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: false },
-    { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: false },
   ];
 
   const defaultClientSections: DashboardSection[] = [
@@ -106,21 +106,19 @@ const Dashboard = () => {
     { id: "recent-activity", title: "Activity History", component: "RecentActivity", enabled: true },
   ];
 
-  // Admin sections - comprehensive view of everything
+  // Admin sections - comprehensive platform oversight
   const defaultAdminSections: DashboardSection[] = [
-    { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
+    { id: "kpi-cards", title: "Platform Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: true },
-    { id: "weekly-overview", title: "This Week Stats", component: "WeeklyOverview", enabled: true },
-    { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
-    { id: "quick-tasks", title: "Quick Tasks & Todo List", component: "QuickTasks", enabled: true },
-    { id: "quick-notes", title: "Quick Notes & Notepad", component: "QuickNotes", enabled: true },
-    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: true },
-    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: true },
-    { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: true },
-    { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: true },
-    { id: "client-milestones", title: "Rewards & Milestones", component: "ClientMilestones", enabled: true },
-    { id: "favorite-stylists", title: "Favorite Stylists", component: "FavoriteStylists", enabled: false },
+    { id: "weekly-schedule", title: "Platform Schedule", component: "WeeklySchedule", enabled: true },
+    { id: "weekly-overview", title: "Platform Stats", component: "WeeklyOverview", enabled: true },
+    { id: "recent-activity", title: "Platform Activity", component: "RecentActivity", enabled: true },
+    { id: "quick-tasks", title: "Admin Tasks", component: "QuickTasks", enabled: true },
+    { id: "quick-notes", title: "Admin Notes", component: "QuickNotes", enabled: true },
+    { id: "revenue-trends", title: "Revenue Analytics", component: "RevenueTrends", enabled: true },
+    { id: "top-services", title: "Service Analytics", component: "TopServices", enabled: true },
+    { id: "client-sentiment", title: "Feedback Analytics", component: "ClientSentimentTracker", enabled: true },
+    { id: "client-retention", title: "Retention Analytics", component: "ClientRetention", enabled: true },
   ];
 
   // Determine sections based on role - admins get comprehensive view
