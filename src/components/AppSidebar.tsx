@@ -573,7 +573,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
               )}
             </div>
             {isEditMode && (
-              <p className="text-[10px] text-muted-foreground mt-2">
+              <p className="text-xs text-foreground/70 mt-2">
                 Drag items to reorder
               </p>
             )}
@@ -591,7 +591,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
             strategy={verticalListSortingStrategy}
           >
             {Object.entries(groupedItems).map(([groupKey, groupItems]) => (
-              <SidebarGroup key={groupKey}>
+              <SidebarGroup key={groupKey} className="mb-2">
                 <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
                   {labels[groupKey]}
                 </SidebarGroupLabel>
