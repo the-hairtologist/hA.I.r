@@ -583,11 +583,7 @@ const Dashboard = () => {
         <NotificationEnhancer userId={user.id} userRole={userRole as "stylist" | "client"} />
       )}
       
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
-        Skip to main content
-      </a>
-      <main id="main-content" role="main" aria-label="Dashboard" className="w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full space-y-4 sm:space-y-6">
         
         <div className="mb-8 sm:mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
@@ -840,8 +836,7 @@ const Dashboard = () => {
 
         {/* Help Button */}
         <HelpButton />
-        </div>
-      </main>
+      </div>
     </DashboardLayout>
   );
 };
