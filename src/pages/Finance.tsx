@@ -340,7 +340,7 @@ const Finance = () => {
               <CardTitle className="text-sm font-medium text-muted-foreground">Service Payments</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">
+              <div className="text-3xl font-bold text-primary">
                 ${totalPayments.toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Client payments</p>
@@ -352,7 +352,7 @@ const Finance = () => {
               <CardTitle className="text-sm font-medium text-muted-foreground">Commissions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-purple-600">
+              <div className="text-3xl font-bold text-chart-3">
                 ${totalCommissions.toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -381,46 +381,39 @@ const Finance = () => {
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                     <XAxis 
                       dataKey="date" 
-                      className="text-xs"
-                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      className="text-xs fill-muted-foreground"
                     />
                     <YAxis 
-                      className="text-xs"
-                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      className="text-xs fill-muted-foreground"
                       tickFormatter={(value) => `$${value}`}
                     />
                     <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--background))',
-                        border: '2px solid hsl(var(--foreground))',
-                        borderRadius: '8px'
-                      }}
                       formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
                     />
                     <Legend />
                     <Line 
                       type="monotone" 
                       dataKey="payments" 
-                      stroke="hsl(142, 76%, 36%)" 
+                      stroke="hsl(var(--primary))" 
                       strokeWidth={2}
                       name="Service Payments"
-                      dot={{ fill: 'hsl(142, 76%, 36%)', r: 4 }}
+                      dot={{ fill: 'hsl(var(--primary))', r: 4 }}
                     />
                     <Line 
                       type="monotone" 
                       dataKey="commissions" 
-                      stroke="hsl(280, 60%, 50%)" 
+                      stroke="hsl(var(--chart-3))" 
                       strokeWidth={2}
                       name="Commissions"
-                      dot={{ fill: 'hsl(280, 60%, 50%)', r: 4 }}
+                      dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
                     />
                     <Line 
                       type="monotone" 
                       dataKey="total" 
-                      stroke="hsl(var(--primary))" 
+                      stroke="hsl(var(--chart-1))" 
                       strokeWidth={3}
                       name="Total Revenue"
-                      dot={{ fill: 'hsl(var(--primary))', r: 5 }}
+                      dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -435,25 +428,18 @@ const Finance = () => {
                       <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                       <XAxis 
                         dataKey="date" 
-                        className="text-xs"
-                        tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                        className="text-xs fill-muted-foreground"
                       />
                       <YAxis 
-                        className="text-xs"
-                        tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                        className="text-xs fill-muted-foreground"
                         tickFormatter={(value) => `$${value}`}
                       />
                       <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'hsl(var(--background))',
-                          border: '2px solid hsl(var(--foreground))',
-                          borderRadius: '8px'
-                        }}
                         formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
                       />
                       <Legend />
-                      <Bar dataKey="payments" fill="hsl(142, 76%, 36%)" name="Payments" />
-                      <Bar dataKey="commissions" fill="hsl(280, 60%, 50%)" name="Commissions" />
+                      <Bar dataKey="payments" fill="hsl(var(--primary))" name="Payments" />
+                      <Bar dataKey="commissions" fill="hsl(var(--chart-3))" name="Commissions" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

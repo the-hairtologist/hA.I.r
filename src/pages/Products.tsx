@@ -31,7 +31,15 @@ const UNIT_TYPES = [
   { value: "bottles", label: "Bottles" }
 ];
 
-const COLORS = ['#22c55e', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444', '#10b981'];
+// Chart colors using CSS variables for theming
+const CHART_COLORS = [
+  'hsl(var(--chart-1))',
+  'hsl(var(--chart-2))',
+  'hsl(var(--chart-3))',
+  'hsl(var(--chart-4))',
+  'hsl(var(--chart-5))',
+  'hsl(var(--primary))'
+];
 
 const Products = () => {
   const navigate = useNavigate();
@@ -267,7 +275,7 @@ const Products = () => {
               <CardTitle className="text-sm font-medium text-muted-foreground">Low Stock Alerts</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-amber-600">{lowStockProducts.length}</div>
+              <div className="text-3xl font-bold text-destructive">{lowStockProducts.length}</div>
               <p className="text-xs text-muted-foreground mt-1">Items need reordering</p>
             </CardContent>
           </Card>
@@ -277,7 +285,7 @@ const Products = () => {
               <CardTitle className="text-sm font-medium text-muted-foreground">Inventory Value</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">
+              <div className="text-3xl font-bold text-primary">
                 ${totalInventoryValue.toFixed(2)}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Total value at cost</p>
@@ -312,7 +320,7 @@ const Products = () => {
                         dataKey="value"
                       >
                         {categoryUsage.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                         ))}
                       </Pie>
                       <Tooltip formatter={(value: number) => `${value.toFixed(1)} units`} />
@@ -337,10 +345,10 @@ const Products = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={colorLineUsage} layout="vertical" margin={{ left: 60 }}>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
-                      <YAxis type="category" dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                      <XAxis type="number" className="text-xs fill-muted-foreground" />
+                      <YAxis type="category" dataKey="name" className="text-xs fill-muted-foreground" />
                       <Tooltip formatter={(value: number) => [`${value.toFixed(1)} oz`, 'Used']} />
-                      <Bar dataKey="value" fill="hsl(var(--primary))" />
+                      <Bar dataKey="value" className="fill-primary" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
