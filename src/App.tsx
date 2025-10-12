@@ -25,6 +25,9 @@ import { RoleSwitchProtection } from "@/components/RoleSwitchProtection";
 import { CookieConsent } from "@/components/CookieConsent";
 import { lazy, Suspense } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import { initAnalytics } from "@/lib/analytics";
+import { ServiceIntegrationTracker } from "@/components/ServiceIntegrationTracker";
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -82,6 +85,15 @@ const queryClient = new QueryClient({
   },
 });
 
+const AnalyticsInitializer = () => {
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+  
+  useAnalytics();
+  return null;
+};
+
 const App = () => {
   useEffect(() => {
     // Initialize divine protection systems
@@ -89,14 +101,7 @@ const App = () => {
       // DISABLED: Health monitoring causing unnecessary network noise
       // await selfHealing.initialize();
       
-      // Initialize analytics tracking
-      try {
-        const { initAnalytics } = await import('@/lib/analytics');
-        initAnalytics();
-        console.log('📊 Analytics initialized');
-      } catch (error) {
-        console.warn('Analytics initialization failed:', error);
-      }
+      console.log('📊 Analytics initialized');
       
       // Initialize cross-platform optimizer
       try {
@@ -127,6 +132,8 @@ const App = () => {
           <CookieConsent />
           <PerformanceOverlay />
           <BrowserRouter>
+            <AnalyticsInitializer />
+            <ServiceIntegrationTracker />
             <RoleSwitchProtection />
             <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
               <Routes>

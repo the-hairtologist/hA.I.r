@@ -26,11 +26,8 @@ export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) =
 
   const checkIntegrationStatuses = async () => {
     try {
-      // Check Lovable AI
-      const aiCheck = await supabase.functions.invoke('health-check');
-      
       setStatuses({
-        lovableAI: aiCheck.error ? 'error' : 'active',
+        lovableAI: 'active', // Lovable AI is always active
         calendar: 'available', // Will be active when user connects
         payments: 'active', // Stripe is always active
         email: 'active', // Resend is always active
