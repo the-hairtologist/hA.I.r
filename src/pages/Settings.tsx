@@ -18,7 +18,6 @@ import { DataExport } from "@/components/DataExport";
 import { AccountDeletion } from "@/components/AccountDeletion";
 import { PrivacySettings } from "@/components/PrivacySettings";
 import { HelpTooltip } from "@/components/HelpTooltip";
-import { AICommandCenter } from "@/components/AICommandCenter";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -277,12 +276,6 @@ const Settings = () => {
               <Bell className="h-4 w-4 mr-2" />
               Preferences
             </TabsTrigger>
-            {roles.includes('admin') && (
-              <TabsTrigger value="ai">
-                <SettingsIcon className="h-4 w-4 mr-2" />
-                AI Systems
-              </TabsTrigger>
-            )}
           </TabsList>
 
           {/* Profile Tab */}
@@ -536,13 +529,6 @@ const Settings = () => {
               </CardContent>
             </Card>
           </TabsContent>
-
-          {/* AI Systems Tab - Admin Only */}
-          {roles.includes('admin') && (
-            <TabsContent value="ai" className="space-y-6">
-              <AICommandCenter />
-            </TabsContent>
-          )}
         </Tabs>
 
         {hasChanges && (

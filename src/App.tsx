@@ -58,7 +58,6 @@ const SystemHealth = lazy(() => import("./pages/SystemHealth"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
-const AITestDashboard = lazy(() => import("./pages/AITestDashboard"));
 const AIAdGenerator = lazy(() => import("./pages/AIAdGenerator"));
 const DMCA = lazy(() => import("./pages/DMCA"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
@@ -256,11 +255,6 @@ const App = () => {
           <Route path="/system-health" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <SystemHealth />
-            </ProtectedRoute>
-          } />
-          <Route path="/ai-test" element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <AITestDashboard />
             </ProtectedRoute>
           } />
           
