@@ -36,7 +36,7 @@ import { QuickNotes } from "@/components/dashboard/QuickNotes";
 import { FavoriteStylists } from "@/components/dashboard/FavoriteStylists";
 import { ClientMilestones } from "@/components/dashboard/ClientMilestones";
 import { Button } from "@/components/ui/button";
-import { Edit3, RotateCcw, Save } from "lucide-react";
+import { Edit3, RotateCcw, Save, StickyNote } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -598,29 +598,26 @@ const Dashboard = () => {
                 </p>
               )}
 
-              {/* Quick Notes - Compact Notepad */}
+              {/* Quick Notes - Modern Notepad */}
               {(userRole === "stylist" || isAdmin) && (
                 <div className="mt-6 max-w-md animate-fade-in" style={{ animationDelay: '250ms' }}>
-                  <div className="bg-yellow-200 rounded-lg shadow-lg border-t-8 border-yellow-400 relative overflow-hidden">
-                    {/* Notepad ruled lines */}
-                    <div 
-                      className="absolute inset-0 pointer-events-none" 
-                      style={{
-                        backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(200,180,150,0.4) 27px, rgba(200,180,150,0.4) 28px)',
-                        backgroundSize: '100% 28px',
-                        backgroundPosition: '0 48px'
-                      }}
-                    />
+                  <div className="relative h-full brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-all duration-300 rounded-xl overflow-hidden bg-gradient-to-br from-white via-accent/5 to-primary/5 dark:from-card dark:via-accent/5 dark:to-primary/5">
+                    {/* Gradient overlay */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-primary opacity-5 blur-3xl rounded-full" />
                     
-                    {/* Simple header */}
-                    <div className="px-4 py-2 border-b border-yellow-400/30 bg-yellow-200 relative">
-                      <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2">
-                        📝 Quick Notes
+                    {/* Modern header with gradient */}
+                    <div className="relative px-5 py-3 border-b border-border/50 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10">
+                      <div className="absolute inset-0 bg-gradient-primary opacity-5" />
+                      <h3 className="text-sm font-bold text-foreground flex items-center gap-2 relative z-10">
+                        <div className="p-1.5 rounded-lg bg-gradient-primary shadow-md">
+                          <StickyNote className="h-4 w-4 text-white" />
+                        </div>
+                        <span className="bg-gradient-primary bg-clip-text text-transparent">Quick Notes</span>
                       </h3>
                     </div>
                     
-                    {/* Notes content - transparent textarea */}
-                    <div className="p-4 relative bg-yellow-200">
+                    {/* Notes content with glassmorphism */}
+                    <div className="p-5 relative backdrop-blur-sm z-10">
                       <QuickNotes compact />
                     </div>
                   </div>
