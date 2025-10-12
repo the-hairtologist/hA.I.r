@@ -64,7 +64,7 @@ export function DraggableSection({
             >
               <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
-            <span className="text-[10px] font-display font-black text-foreground uppercase tracking-wider flex-1">
+            <span className="text-[11px] font-display font-black text-foreground uppercase tracking-wider flex-1">
               {section.title}
             </span>
             <button

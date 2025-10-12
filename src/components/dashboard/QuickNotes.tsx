@@ -112,7 +112,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
           />
           
           <div className="flex items-center justify-between mt-2 pt-2 border-t border-yellow-300/30 dark:border-yellow-700/30">
-            <span className="text-[10px] text-yellow-700 dark:text-yellow-300 font-mono">
+            <span className="text-[11px] text-yellow-700 dark:text-yellow-300 font-mono">
               {newNote.length}/500
             </span>
             <Button
@@ -138,10 +138,10 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
                 key={note.id}
                 className="p-2 rounded bg-yellow-50/80 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700/50 hover:border-yellow-400 dark:hover:border-yellow-500 transition-colors"
               >
-                <p className="text-[10px] text-yellow-900 dark:text-yellow-50 font-mono leading-relaxed line-clamp-2">
+                <p className="text-[11px] text-yellow-900 dark:text-yellow-50 font-mono leading-relaxed line-clamp-2">
                   {note.content}
                 </p>
-                <p className="text-[9px] text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
+                <p className="text-[11px] text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   {new Date(note.created_at).toLocaleDateString('en-US', { 
                     month: 'short', 
                     day: 'numeric',
