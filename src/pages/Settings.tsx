@@ -263,18 +263,21 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className={`grid w-full ${roles.includes('admin') ? 'grid-cols-4' : 'grid-cols-3'}`}>
-            <TabsTrigger value="profile">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="profile" className="text-sm sm:text-base">
               <User className="h-4 w-4 mr-2" />
-              Profile
+              <span className="hidden sm:inline">Profile</span>
+              <span className="sm:hidden">Profile</span>
             </TabsTrigger>
-            <TabsTrigger value="account">
+            <TabsTrigger value="account" className="text-sm sm:text-base">
               <Shield className="h-4 w-4 mr-2" />
-              Account
+              <span className="hidden sm:inline">Account</span>
+              <span className="sm:hidden">Account</span>
             </TabsTrigger>
-            <TabsTrigger value="preferences">
+            <TabsTrigger value="preferences" className="text-sm sm:text-base">
               <Bell className="h-4 w-4 mr-2" />
-              Preferences
+              <span className="hidden sm:inline">Preferences</span>
+              <span className="sm:hidden">Prefs</span>
             </TabsTrigger>
           </TabsList>
 
@@ -457,8 +460,19 @@ const Settings = () => {
                   </>
                 )}
 
-                <Button onClick={handleSaveProfile} disabled={!hasChanges}>
-                  Save Profile
+                <Button 
+                  onClick={handleSaveProfile} 
+                  disabled={!hasChanges || isSaving}
+                  className="w-full sm:w-auto"
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save Profile'
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -522,7 +536,11 @@ const Settings = () => {
                   </p>
                 </div>
 
-                <Button variant="outline" onClick={() => navigate("/help")} className="w-full">
+                <Button 
+                  variant="outline" 
+                  onClick={() => navigate("/help")} 
+                  className="w-full"
+                >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Restart Tutorial
                 </Button>
@@ -532,19 +550,28 @@ const Settings = () => {
         </Tabs>
 
         {hasChanges && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-card border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] rounded-lg p-4 flex items-center gap-4 z-50">
-            <p className="text-sm font-medium">You have unsaved changes</p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => { 
-                if (user && roles.length > 0) {
-                  const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
-                  loadUser(user, primaryRole);
-                }
-                setHasChanges(false); 
-              }}>
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-card border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] rounded-lg p-3 sm:p-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 z-50 max-w-[90vw] sm:max-w-none">
+            <p className="text-xs sm:text-sm font-medium text-center sm:text-left">You have unsaved changes</p>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex-1 sm:flex-none text-xs sm:text-sm"
+                onClick={() => { 
+                  if (user && roles.length > 0) {
+                    const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
+                    loadUser(user, primaryRole);
+                  }
+                  setHasChanges(false); 
+                }}
+              >
                 Cancel
               </Button>
-              <Button size="sm" onClick={handleSaveProfile}>
+              <Button 
+                size="sm" 
+                className="flex-1 sm:flex-none text-xs sm:text-sm"
+                onClick={handleSaveProfile}
+              >
                 Save Changes
               </Button>
             </div>
