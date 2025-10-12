@@ -396,15 +396,39 @@ const Dashboard = () => {
 
   const loadClientDashboard = async () => {
     const today = new Date();
+    const weekStart = startOfWeek(today);
+    const weekEnd = endOfWeek(today);
 
-    // Get upcoming appointments
+    // Get upcoming appointments (including for calendar view)
     const { data: upcomingAppts } = await supabase
       .from("appointments")
-      .select("*")
+      .select(`
+        *,
+        stylist:stylist_profiles(
+          user:profiles(full_name),
+          weekly_schedule
+        )
+      `)
       .eq("client_id", profile.id)
       .gte("appointment_date", today.toISOString())
       .neq("status", "cancelled")
       .order("appointment_date", { ascending: true });
+
+    // Get week appointments for calendar view
+    const { data: weekAppts } = await supabase
+      .from("appointments")
+      .select(`
+        *,
+        stylist:stylist_profiles(
+          user:profiles(full_name)
+        )
+      `)
+      .eq("client_id", profile.id)
+      .gte("appointment_date", weekStart.toISOString())
+      .lte("appointment_date", weekEnd.toISOString())
+      .neq("status", "cancelled");
+
+    setWeekAppointments(weekAppts || []);
 
     // Get unread messages
     const { data: messages } = await supabase
@@ -567,11 +591,11 @@ const Dashboard = () => {
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
-               {/* Stylists and Admins */}
+              {/* Stylists and Admins */}
               {(userRole === "stylist" || isAdmin) && (
                 <div className="space-y-3">
                   <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                    Ready to book your next transformation? ✨
+                    Your schedule at a glance 📅
                   </p>
                   <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] max-h-[600px] animate-fade-in" style={{ animationDelay: '250ms' }}>
                     <div className="overflow-auto max-h-[600px]">
@@ -592,25 +616,9 @@ const Dashboard = () => {
 
               {/* Clients */}
               {userRole === "client" && (
-                <div className="space-y-3">
-                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                    Ready to book your next transformation? ✨
-                  </p>
-                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] max-h-[600px] animate-fade-in" style={{ animationDelay: '250ms' }}>
-                    <div className="overflow-auto max-h-[600px]">
-                      <WeeklyScheduleView
-                        appointments={weekAppointments}
-                        stylistSchedule={profile?.weekly_schedule}
-                        stylistId={profile?.id}
-                        onAppointmentClick={(apt) => navigate("/appointments")}
-                        onTimeSlotClick={(date, hour, minute) => {
-                          setQuickAppointmentData({ date, hour, minute });
-                          setQuickAppointmentOpen(true);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                  Ready to book your next transformation? ✨
+                </p>
               )}
             </div>
           </div>
@@ -754,8 +762,8 @@ const Dashboard = () => {
           }}
         />
         
-        {/* Quick Appointment Dialog */}
-        {userRole === "stylist" && quickAppointmentData && (
+        {/* Quick Appointment Dialog - Stylist/Admin Only */}
+        {(userRole === "stylist" || isAdmin) && quickAppointmentData && (
           <QuickAppointmentDialog
             open={quickAppointmentOpen}
             onOpenChange={setQuickAppointmentOpen}
