@@ -307,9 +307,18 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "account", color: "text-cyan-400 dark:text-cyan-300" },
   ];
 
-  // Admin-only items
+  // Admin-only items - SECURITY: Only shown when isAdmin=true (verified via database query)
   const adminItems: SidebarItem[] = isAdmin ? [
-    { id: "admin-command", title: "Command Center", url: "/admin/command", icon: Crown, gradient: "bg-[image:var(--gradient-warning)]", group: "admin", color: "text-warning", description: "God Mode" },
+    { 
+      id: "admin-command", 
+      title: "Command Center", 
+      url: "/admin/command", 
+      icon: Crown, 
+      gradient: "bg-gradient-to-br from-amber-500 to-yellow-600", 
+      group: "admin", 
+      color: "text-amber-400 dark:text-amber-300", 
+      description: "God Mode" 
+    },
     { id: "admin-dashboard", title: "Admin Dashboard", url: "/admin/dashboard", icon: Shield, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "admin", color: "text-purple-400 dark:text-purple-300" },
     { id: "admin-users", title: "User Management", url: "/admin/users", icon: Wand2, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "admin", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "system-health", title: "System Health", url: "/system-health", icon: Activity, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "admin", color: "text-green-400 dark:text-green-300" },
