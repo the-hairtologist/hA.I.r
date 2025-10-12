@@ -257,8 +257,16 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const { state } = useSidebar();
   const location = useLocation();
   const { user } = useAuth();
-  const { isAdmin } = useUserRole(user?.id);
+  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
   const collapsed = state === "collapsed";
+
+  // Debug log for admin status
+  console.log('AppSidebar Debug:', { 
+    userId: user?.id, 
+    isAdmin, 
+    roleLoading,
+    userEmail: user?.email 
+  });
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [notifications, setNotifications] = useState<Record<string, number>>({

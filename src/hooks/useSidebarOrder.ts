@@ -31,6 +31,7 @@ export function useSidebarOrder(defaultItems: SidebarItem[], groupLabels: { [key
     return acc;
   }, {} as GroupedItems);
 
+  // Update items when defaultItems change (e.g., when admin role loads)
   useEffect(() => {
     if (!user) {
       setItems(defaultItems);
@@ -39,7 +40,7 @@ export function useSidebarOrder(defaultItems: SidebarItem[], groupLabels: { [key
     }
 
     loadSidebarOrder();
-  }, [user?.id]);
+  }, [user?.id, defaultItems.length]); // Watch for changes in defaultItems
 
   const loadSidebarOrder = async () => {
     try {
