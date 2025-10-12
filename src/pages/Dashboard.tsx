@@ -504,7 +504,7 @@ const Dashboard = () => {
           <ClientRetention stylistId={profile.id} />
         ) : null;
       case "QuickNotes":
-        return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;
+        return null; // Now rendered in welcome box
       case "WeeklySchedule":
         return (userRole === "stylist" || isAdmin) && weekAppointments.length > 0 ? (
           <WeeklyScheduleView
@@ -578,18 +578,25 @@ const Dashboard = () => {
               
               {/* Weekly Schedule View for Stylists */}
               {userRole === "stylist" && (
-                <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] mt-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                  <WeeklyScheduleView
-                    appointments={weekAppointments}
-                    stylistSchedule={profile?.weekly_schedule}
-                    stylistId={profile?.id}
-                    onAppointmentClick={(apt) => navigate("/appointments")}
-                    onTimeSlotClick={(date, hour, minute) => {
-                      setQuickAppointmentData({ date, hour, minute });
-                      setQuickAppointmentOpen(true);
-                    }}
-                  />
-                </div>
+                <>
+                  <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] mt-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                    <WeeklyScheduleView
+                      appointments={weekAppointments}
+                      stylistSchedule={profile?.weekly_schedule}
+                      stylistId={profile?.id}
+                      onAppointmentClick={(apt) => navigate("/appointments")}
+                      onTimeSlotClick={(date, hour, minute) => {
+                        setQuickAppointmentData({ date, hour, minute });
+                        setQuickAppointmentOpen(true);
+                      }}
+                    />
+                  </div>
+                  
+                  {/* Quick Notes Notepad */}
+                  <div className="mt-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+                    <QuickNotes compact />
+                  </div>
+                </>
               )}
 
               {userRole === "client" && (

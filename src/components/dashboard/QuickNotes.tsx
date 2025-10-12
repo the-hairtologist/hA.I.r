@@ -81,47 +81,58 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
 
   if (compact) {
     return (
-      <div className="space-y-4">
-        <div className="space-y-3">
+      <div className="space-y-3 bg-gradient-to-b from-yellow-100 to-yellow-50 dark:from-yellow-900/40 dark:to-yellow-800/30 p-4 rounded-lg border-l-4 border-yellow-400 shadow-lg relative">
+        {/* Notepad lines effect */}
+        <div className="absolute inset-0 pointer-events-none opacity-20">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="border-b border-yellow-300 dark:border-yellow-700 h-8" />
+          ))}
+        </div>
+        
+        <div className="relative z-10 space-y-3">
+          <div className="flex items-center gap-2 mb-2">
+            <StickyNote className="h-4 w-4 text-yellow-700 dark:text-yellow-300" />
+            <h3 className="text-sm font-bold text-yellow-900 dark:text-yellow-100">Quick Notes</h3>
+          </div>
+          
           <Textarea
-            placeholder="Write your thoughts here..."
+            placeholder="Jot down your thoughts..."
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
             maxLength={500}
-            className="min-h-[140px] resize-none bg-card/50 backdrop-blur-sm border-none focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground/60 shadow-none rounded-lg p-4"
+            className="min-h-[120px] resize-none bg-yellow-50/50 dark:bg-yellow-900/20 backdrop-blur-sm border-none focus:ring-1 focus:ring-yellow-400 text-yellow-900 dark:text-yellow-50 placeholder:text-yellow-600/60 dark:placeholder:text-yellow-400/60 shadow-none rounded p-3 font-mono text-sm"
           />
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-yellow-700 dark:text-yellow-300 font-mono">
               {newNote.length}/500
             </span>
             <Button
               onClick={handleSaveNote}
               disabled={!newNote.trim()}
               size="sm"
-              className="gap-2 bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity brutal-border brutal-shadow-sm"
+              className="gap-2 bg-yellow-500 hover:bg-yellow-600 text-yellow-950 shadow-md"
             >
-              <Sparkles className="h-4 w-4" />
-              Save Note
+              <Save className="h-3.5 w-3.5" />
+              Save
             </Button>
           </div>
         </div>
 
         {loading ? (
-          <div className="space-y-2 pt-3 border-t border-border/50">
-            <div className="h-16 bg-muted/30 rounded-lg animate-pulse" />
+          <div className="relative z-10 space-y-2 pt-2">
+            <div className="h-14 bg-yellow-200/50 dark:bg-yellow-800/30 rounded animate-pulse" />
           </div>
         ) : notes.length > 0 ? (
-          <div className="space-y-2 max-h-48 overflow-y-auto pt-3 border-t border-border/50">
+          <div className="relative z-10 space-y-2 max-h-40 overflow-y-auto pt-2">
             {notes.map((note) => (
               <div
                 key={note.id}
-                className="group relative p-3 rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-200 hover:shadow-md"
+                className="p-2.5 rounded bg-yellow-50/80 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700/50 hover:border-yellow-400 dark:hover:border-yellow-500 transition-colors"
               >
-                <p className="text-sm text-foreground/90">
+                <p className="text-xs text-yellow-900 dark:text-yellow-50 font-mono leading-relaxed">
                   {note.content}
                 </p>
-                <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-                  <span className="opacity-60">•</span>
+                <p className="text-[10px] text-yellow-600 dark:text-yellow-400 mt-1.5 font-mono">
                   {new Date(note.created_at).toLocaleDateString('en-US', { 
                     month: 'short', 
                     day: 'numeric',
