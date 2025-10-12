@@ -613,14 +613,14 @@ const Dashboard = () => {
                     />
                     
                     {/* Simple header */}
-                    <div className="px-4 py-2 border-b border-yellow-400/30 bg-yellow-200 relative">
+                    <div className="px-4 py-2 border-b border-yellow-400/30 relative">
                       <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                         📝 Quick Notes
                       </h3>
                     </div>
                     
                     {/* Notes content - transparent textarea */}
-                    <div className="p-4 relative bg-yellow-200">
+                    <div className="p-4 relative">
                       <QuickNotes compact />
                     </div>
                   </div>
