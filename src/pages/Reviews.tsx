@@ -73,13 +73,17 @@ export default function Reviews() {
 
       // If creating new review, load stylist info
       if (isNewReview && stylistId) {
-        const { data: stylist } = await supabase
+        const { data: stylist, error: stylistError } = await supabase
           .from("stylist_profiles")
           .select("*, user:profiles(full_name)")
           .eq("id", stylistId)
-          .single();
+          .maybeSingle();
 
-        setStylistInfo(stylist);
+        if (stylistError || !stylist) {
+          toast.error("Stylist not found");
+        } else {
+          setStylistInfo(stylist);
+        }
       }
     } catch (error) {
       console.error("Error loading data:", error);
@@ -110,10 +114,10 @@ export default function Reviews() {
         .from("client_profiles")
         .select("id")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (!clientProfile) {
-        toast.error("Client profile not found");
+        toast.error("Client profile not found. Please complete your profile first.");
         return;
       }
 
