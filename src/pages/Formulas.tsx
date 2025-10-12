@@ -15,7 +15,7 @@ import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy
 import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
 import { SkeletonList } from "@/components/ui/skeleton-list";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { AddClientDialog } from "@/components/AddClientDialog";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -70,16 +70,16 @@ const Formulas = () => {
   }, []);
   
   // Global keyboard shortcuts
-  useGlobalKeyboardShortcuts([
+  useKeyboardShortcuts([
     {
       key: 'n',
-      ctrl: true,
+      ctrlKey: true,
       description: 'New formula',
       action: () => !dialogOpen && setDialogOpen(true),
     },
     {
       key: 'e',
-      ctrl: true,
+      ctrlKey: true,
       description: 'Export formulas',
       action: () => handleExportCSV(),
     },

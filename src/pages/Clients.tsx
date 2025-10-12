@@ -13,7 +13,7 @@ import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
 import { SkeletonList } from "@/components/ui/skeleton-list";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { useBulkSelection } from "@/hooks/useBulkSelection";
-import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteClientDialog } from "@/components/InviteClientDialog";
@@ -97,16 +97,16 @@ export default function Clients() {
   }, []);
 
   // Global keyboard shortcuts
-  useGlobalKeyboardShortcuts([
+  useKeyboardShortcuts([
     {
       key: 'n',
-      ctrl: true,
+      ctrlKey: true,
       description: 'New client',
       action: () => !isDialogOpen && setIsDialogOpen(true),
     },
     {
       key: 'e',
-      ctrl: true,
+      ctrlKey: true,
       description: 'Export clients',
       action: () => handleExportCSV(),
     },

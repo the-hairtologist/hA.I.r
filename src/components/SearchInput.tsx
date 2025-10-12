@@ -21,11 +21,13 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
       <Input
         ref={ref}
+        type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className="pl-9 pr-9"
         aria-label={placeholder}
+        role="searchbox"
       />
       {value && (
         <Button

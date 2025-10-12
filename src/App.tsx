@@ -19,6 +19,8 @@ import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { DashboardErrorBoundary } from "@/components/DashboardErrorBoundary";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
+import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
 import { SubscriptionGate } from "@/components/SubscriptionGate";
 import { RoleSwitchProtection } from "@/components/RoleSwitchProtection";
 import { CookieConsent } from "@/components/CookieConsent";
@@ -94,8 +96,9 @@ const AnalyticsInitializer = () => {
 };
 
 const App = () => {
+  useGlobalKeyboardShortcuts();
+
   useEffect(() => {
-    // Initialize cross-platform optimizer
     const initializeSystems = async () => {
       try {
         const { crossPlatformOptimizer } = await import('@/lib/platform/CrossPlatformOptimizer');
@@ -113,6 +116,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <SubscriptionProvider>
         <TooltipProvider>
+          <GlobalAnnouncer />
           <OfflineIndicator />
           <Toaster />
           <Sonner />

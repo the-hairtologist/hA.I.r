@@ -135,6 +135,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <SidebarProvider>
+      <a href="#main-content" className="skip-to-main">
+        Skip to main content
+      </a>
       <div className="min-h-screen w-full flex bg-[image:var(--gradient-bg-main)]">
         <AppSidebar userRole={userRole || undefined} />
         <MobileSidebarOverlay />
@@ -213,7 +216,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </header>
 
           {/* Main Content */}
-          <main className="flex-1 overflow-auto pb-20 md:pb-0">
+          <main
+            id="main-content"
+            className="flex-1 overflow-auto pb-20 md:pb-0"
+            role="main"
+            aria-label="Main content"
+          >
             <div className="container mx-auto p-4 sm:p-6 animate-fade-in-fast max-w-full">
               <Breadcrumbs />
               {children}
