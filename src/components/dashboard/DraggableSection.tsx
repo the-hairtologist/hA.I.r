@@ -4,12 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Eye, EyeOff } from "lucide-react";
 import { DashboardSection } from "@/hooks/useDashboardLayout";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Card } from "@/components/ui/card";
 
 interface DraggableSectionProps {
   section: DashboardSection;
@@ -53,54 +48,33 @@ export function DraggableSection({
     <div
       ref={setNodeRef}
       style={style}
-      className={`animate-fade-in relative ${
-        isEditMode 
-          ? "rounded-lg border-2 border-dashed border-primary/40 bg-accent/20 p-4 hover:border-primary/60 transition-all" 
-          : ""
-      }`}
+      className="animate-fade-in relative"
     >
       {isEditMode && (
-        <div className="absolute -top-4 left-4 z-10 flex items-center gap-2 bg-primary text-primary-foreground px-3 py-1.5 rounded-t-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div
-                  {...attributes}
-                  {...listeners}
-                  className="cursor-grab active:cursor-grabbing touch-none flex items-center gap-2 pr-2 border-r border-primary-foreground/30"
-                >
-                  <GripVertical className="h-4 w-4" />
-                  <span className="text-xs font-semibold">{section.title}</span>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p className="text-xs">Drag to reorder • Long-press on mobile</p>
-              </TooltipContent>
-            </Tooltip>
-            
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onToggle}
-                  className="h-7 w-7 p-0 hover:bg-primary-foreground/20"
-                >
-                  {section.enabled ? (
-                    <Eye className="h-4 w-4" />
-                  ) : (
-                    <EyeOff className="h-4 w-4" />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p className="text-xs">{section.enabled ? "Hide section" : "Show section"}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+        <Card className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 flex items-center gap-2 shadow-lg border-2">
+          <div
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing touch-none"
+          >
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <span className="text-xs font-medium">{section.title}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onToggle}
+            className="h-6 w-6 p-0"
+          >
+            {section.enabled ? (
+              <Eye className="h-3.5 w-3.5" />
+            ) : (
+              <EyeOff className="h-3.5 w-3.5" />
+            )}
+          </Button>
+        </Card>
       )}
-      <div className={isEditMode ? "mt-2" : ""}>
+      <div className={isEditMode ? "pt-6" : ""}>
         {children}
       </div>
     </div>
