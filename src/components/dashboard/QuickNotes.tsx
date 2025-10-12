@@ -42,6 +42,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
       setNotes(data || []);
     } catch (error) {
       console.error("Error loading notes:", error);
+      toast.error("Failed to load notes. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -62,7 +63,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
       loadNotes();
     } catch (error) {
       console.error("Error saving note:", error);
-      toast.error("Failed to save note");
+      toast.error("Failed to save note. Please try again.");
     }
   };
 
