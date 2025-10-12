@@ -678,7 +678,7 @@ const Dashboard = () => {
                     <Edit3 className="h-4 w-4 text-primary" />
                     Personalize Your Dashboard
                   </p>
-                  <p className="text-sm text-foreground/80">
+                  <p className="text-sm text-foreground">
                     Add, remove, or rearrange sections to match your workflow
                   </p>
                 </div>

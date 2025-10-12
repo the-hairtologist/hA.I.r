@@ -288,7 +288,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                       )}>
                         {action.label}
                       </p>
-                      <p className="text-xs text-muted-foreground truncate">
+                      <p className="text-xs text-foreground/90 truncate">
                         {action.description}
                       </p>
                     </div>
@@ -334,7 +334,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                       <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
                         {action.label}
                       </h4>
-                      <p className="text-sm text-foreground/70">
+                      <p className="text-sm text-foreground">
                         {action.description}
                       </p>
                     </div>
