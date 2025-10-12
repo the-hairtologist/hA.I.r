@@ -585,7 +585,7 @@ const Dashboard = () => {
       
       <div className="w-full space-y-4 sm:space-y-6">
         
-        <div className="mb-8 sm:mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
+        <div className="mb-6 sm:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
             <span className="text-background font-mono text-[10px] sm:text-xs md:text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
@@ -739,10 +739,10 @@ const Dashboard = () => {
               </div>
             )}
             
-            <div className="mb-4 p-3 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div className="mb-4 p-3 sm:p-4 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-2">
                 <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-foreground flex items-center gap-2">
+                  <p className="text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
                     <Edit3 className="h-3.5 w-3.5 text-primary" />
                     Personalize Your Dashboard
                   </p>
@@ -774,7 +774,7 @@ const Dashboard = () => {
             items={sections.map(s => s.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-4 sm:space-y-6">
               {sections.map((section, index) => (
                 <DraggableSection
                   key={section.id}

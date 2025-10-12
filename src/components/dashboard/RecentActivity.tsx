@@ -84,10 +84,10 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
 
   return (
     <Card className="animate-fade-in brutal-card">
-      <CardHeader>
-        <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
+      <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
+        <CardTitle className="text-lg sm:text-xl font-display text-foreground">Recent Activity</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 sm:p-5 md:p-6">
         <div className="space-y-3">
           {activities.map((activity, index) => {
             const Icon = getActivityIcon(activity.type);
@@ -96,7 +96,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
             return (
               <div
                 key={activity.id}
-                className="flex items-start gap-4 p-4 rounded-lg brutal-border bg-card hover:bg-card/90 transition-all cursor-pointer animate-fade-in brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5"
+                className="flex items-start gap-3 p-3 sm:p-4 rounded-lg brutal-border bg-card hover:bg-card/90 transition-all cursor-pointer animate-fade-in brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5"
                 style={{ animationDelay: `${index * 50}ms` }}
                 onClick={() => {
                   if (activity.type === "appointment") navigate("/appointments");
@@ -104,14 +104,14 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                   if (activity.type === "formula") navigate("/formulas");
                 }}
               >
-                <div className={`p-2 rounded-lg ${colorClass} brutal-border`}>
+                <div className={`p-2 rounded-lg ${colorClass} brutal-border shrink-0`}>
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1">
-                      <p className="font-display font-semibold truncate">{activity.title}</p>
-                      <p className="text-sm text-foreground/70 truncate">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm sm:text-base font-display font-semibold truncate">{activity.title}</p>
+                      <p className="text-xs sm:text-sm text-foreground/70 truncate">
                         {activity.description}
                       </p>
                     </div>

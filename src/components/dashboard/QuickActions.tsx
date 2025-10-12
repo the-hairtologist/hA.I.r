@@ -205,16 +205,16 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
   return (
     <Card 
       variant="glass"
-      className="mb-8 animate-fade-in backdrop-blur-xl bg-gradient-to-br from-background/80 to-card/60"
+      className="mb-6 animate-fade-in backdrop-blur-xl bg-gradient-to-br from-background/80 to-card/60"
     >
-      <CardHeader className="pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <CardTitle className="flex items-center gap-2 text-xl font-display">
+      <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-display">
               <Sparkles className="h-5 w-5 text-primary" />
               Your Quick Actions
             </CardTitle>
-            <p className="text-sm font-semibold mt-1 text-foreground/80">
+            <p className="text-xs sm:text-sm font-semibold mt-1 text-foreground/80">
               Jump to what matters most
             </p>
           </div>
@@ -238,19 +238,19 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 sm:p-5 md:p-6">
         {isCustomizing ? (
           <div className="space-y-4">
-            <div className="p-4 rounded-lg brutal-border bg-gradient-to-r from-primary/10 to-accent/10 brutal-shadow-sm">
-              <p className="text-sm font-bold text-foreground">
+            <div className="p-3 sm:p-4 rounded-lg brutal-border bg-gradient-to-r from-primary/10 to-accent/10 brutal-shadow-sm">
+              <p className="text-xs sm:text-sm font-bold text-foreground">
                 ✨ Customize Your Actions
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
                 Click to toggle • Drag selected items to reorder
               </p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {allActions.map((action) => {
                 const Icon = action.icon;
                 const isSelected = selectedActions.includes(action.id);
@@ -312,7 +312,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {displayedActions.map((action, index) => {
               const Icon = action.icon;
               
