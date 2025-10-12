@@ -644,43 +644,73 @@ export type Database = {
       client_profiles: {
         Row: {
           allergies: string | null
+          appointment_reminders_enabled: boolean | null
+          birthday: string | null
+          client_since: string | null
+          communication_preference: string | null
           created_at: string
           email: string | null
           full_name: string | null
+          hair_goals: string | null
           hair_type: string | null
           id: string
           medical_info_consent: boolean | null
           notes: string | null
           phone: string | null
           preferred_stylist_id: string | null
+          preferred_stylist_notes: string | null
+          preferred_time_of_day: string | null
+          referral_source: string | null
+          sensitivity_notes: string | null
+          special_requests: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
           allergies?: string | null
+          appointment_reminders_enabled?: boolean | null
+          birthday?: string | null
+          client_since?: string | null
+          communication_preference?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
+          hair_goals?: string | null
           hair_type?: string | null
           id?: string
           medical_info_consent?: boolean | null
           notes?: string | null
           phone?: string | null
           preferred_stylist_id?: string | null
+          preferred_stylist_notes?: string | null
+          preferred_time_of_day?: string | null
+          referral_source?: string | null
+          sensitivity_notes?: string | null
+          special_requests?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           allergies?: string | null
+          appointment_reminders_enabled?: boolean | null
+          birthday?: string | null
+          client_since?: string | null
+          communication_preference?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
+          hair_goals?: string | null
           hair_type?: string | null
           id?: string
           medical_info_consent?: boolean | null
           notes?: string | null
           phone?: string | null
           preferred_stylist_id?: string | null
+          preferred_stylist_notes?: string | null
+          preferred_time_of_day?: string | null
+          referral_source?: string | null
+          sensitivity_notes?: string | null
+          special_requests?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -1533,49 +1563,58 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          dashboard_preferences: Json | null
           deleted_at: string | null
           email: string
           email_digest_enabled: boolean | null
           full_name: string | null
           gender: string | null
           id: string
+          notification_preferences: Json | null
           phone: string | null
           share_contact_with_clients: boolean | null
           share_contact_with_stylists: boolean | null
           sms_consent: boolean | null
           sms_consent_date: string | null
+          theme_preference: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          dashboard_preferences?: Json | null
           deleted_at?: string | null
           email: string
           email_digest_enabled?: boolean | null
           full_name?: string | null
           gender?: string | null
           id: string
+          notification_preferences?: Json | null
           phone?: string | null
           share_contact_with_clients?: boolean | null
           share_contact_with_stylists?: boolean | null
           sms_consent?: boolean | null
           sms_consent_date?: string | null
+          theme_preference?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          dashboard_preferences?: Json | null
           deleted_at?: string | null
           email?: string
           email_digest_enabled?: boolean | null
           full_name?: string | null
           gender?: string | null
           id?: string
+          notification_preferences?: Json | null
           phone?: string | null
           share_contact_with_clients?: boolean | null
           share_contact_with_stylists?: boolean | null
           sms_consent?: boolean | null
           sms_consent_date?: string | null
+          theme_preference?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1973,20 +2012,34 @@ export type Database = {
       }
       stylist_profiles: {
         Row: {
+          accepts_new_clients: boolean | null
           average_rating: number | null
           bio: string | null
           booking_link: string | null
           buffer_time_minutes: number | null
+          business_email: string | null
           business_name: string | null
+          business_phone: string | null
+          cancellation_policy: string | null
           color_line: string | null
           commission_rate: number | null
           created_at: string
+          deposit_percentage: number | null
+          deposit_required: boolean | null
           id: string
           instant_booking_enabled: boolean | null
           is_available: boolean | null
           is_public_listing: boolean | null
           location: string | null
+          max_clients_per_day: number | null
+          parking_instructions: string | null
+          preferred_communication: string | null
+          social_media_facebook: string | null
+          social_media_instagram: string | null
+          social_media_tiktok: string | null
+          special_accommodations: string | null
           specialty: string | null
+          timezone: string | null
           total_reviews: number | null
           updated_at: string
           user_id: string
@@ -1994,20 +2047,34 @@ export type Database = {
           years_experience: number | null
         }
         Insert: {
+          accepts_new_clients?: boolean | null
           average_rating?: number | null
           bio?: string | null
           booking_link?: string | null
           buffer_time_minutes?: number | null
+          business_email?: string | null
           business_name?: string | null
+          business_phone?: string | null
+          cancellation_policy?: string | null
           color_line?: string | null
           commission_rate?: number | null
           created_at?: string
+          deposit_percentage?: number | null
+          deposit_required?: boolean | null
           id?: string
           instant_booking_enabled?: boolean | null
           is_available?: boolean | null
           is_public_listing?: boolean | null
           location?: string | null
+          max_clients_per_day?: number | null
+          parking_instructions?: string | null
+          preferred_communication?: string | null
+          social_media_facebook?: string | null
+          social_media_instagram?: string | null
+          social_media_tiktok?: string | null
+          special_accommodations?: string | null
           specialty?: string | null
+          timezone?: string | null
           total_reviews?: number | null
           updated_at?: string
           user_id: string
@@ -2015,20 +2082,34 @@ export type Database = {
           years_experience?: number | null
         }
         Update: {
+          accepts_new_clients?: boolean | null
           average_rating?: number | null
           bio?: string | null
           booking_link?: string | null
           buffer_time_minutes?: number | null
+          business_email?: string | null
           business_name?: string | null
+          business_phone?: string | null
+          cancellation_policy?: string | null
           color_line?: string | null
           commission_rate?: number | null
           created_at?: string
+          deposit_percentage?: number | null
+          deposit_required?: boolean | null
           id?: string
           instant_booking_enabled?: boolean | null
           is_available?: boolean | null
           is_public_listing?: boolean | null
           location?: string | null
+          max_clients_per_day?: number | null
+          parking_instructions?: string | null
+          preferred_communication?: string | null
+          social_media_facebook?: string | null
+          social_media_instagram?: string | null
+          social_media_tiktok?: string | null
+          special_accommodations?: string | null
           specialty?: string | null
+          timezone?: string | null
           total_reviews?: number | null
           updated_at?: string
           user_id?: string
