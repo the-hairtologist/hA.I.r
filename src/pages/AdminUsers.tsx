@@ -52,30 +52,6 @@ export default function AdminUsers() {
     }
   };
 
-  const handleRoleChange = async (userId: string, newRole: 'admin' | 'stylist' | 'client', oldRole: 'admin' | 'stylist' | 'client') => {
-    try {
-      // Remove old role
-      await supabase
-        .from('user_roles')
-        .delete()
-        .eq('user_id', userId)
-        .eq('role', oldRole);
-
-      // Add new role
-      const { error } = await supabase
-        .from('user_roles')
-        .insert([{ user_id: userId, role: newRole }]);
-
-      if (error) throw error;
-
-      toast.success('User role updated');
-      loadUsers();
-    } catch (error) {
-      console.error('Error updating role:', error);
-      toast.error('Failed to update role');
-    }
-  };
-
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email?.toLowerCase().includes(searchTerm.toLowerCase());
