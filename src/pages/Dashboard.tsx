@@ -1,94 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Scissors, Calendar, MessageSquare, DollarSign, BookOpen, User, LogOut, Users, Sparkles, Settings, GripVertical, CreditCard } from "lucide-react";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { StylistSubscriptionPrompt } from "@/components/StylistSubscriptionPrompt";
-import { SubscriptionManagementCard } from "@/components/SubscriptionManagementCard";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { QuickActions } from "@/components/dashboard/QuickActions";
-import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { RecentReviews } from "@/components/dashboard/RecentReviews";
-import { FeatureCard } from "@/components/dashboard/FeatureCard";
-import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
-import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { WeeklySummaryCard } from "@/components/WeeklySummaryCard";
 import { NotificationManager } from "@/components/NotificationManager";
 import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import avatarMale from "@/assets/avatar-male-lego.png";
-import avatarFemale from "@/assets/avatar-female-lego.png";
-import avatarNeutral from "@/assets/avatar-neutral-lego.png";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  useSortable,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { IntegrationSuggestions } from "@/components/IntegrationSuggestions";
-import { PredictiveClientInsights } from "@/components/PredictiveClientInsights";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { TodoList } from "@/components/dashboard/TodoList";
 import { HelpButton } from "@/components/HelpButton";
-
-interface SortableSectionProps {
-  id: string;
-  children: React.ReactNode;
-}
-
-const SortableSection = ({ id, children }: SortableSectionProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div ref={setNodeRef} style={style} className="relative group">
-      <div
-        {...attributes}
-        {...listeners}
-        className="absolute -left-8 top-4 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
-      >
-        <div className="w-6 h-6 rounded bg-secondary/20 hover:bg-secondary/40 flex items-center justify-center border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-          <GripVertical className="h-4 w-4 text-secondary" />
-        </div>
-      </div>
-      {children}
-    </div>
-  );
-};
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -106,7 +38,6 @@ const Dashboard = () => {
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false);
   const [stats, setStats] = useState<any>({});
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
-  const [recentReviews, setRecentReviews] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [weekAppointments, setWeekAppointments] = useState<any[]>([]);
   const [quickAppointmentOpen, setQuickAppointmentOpen] = useState(false);
@@ -115,23 +46,9 @@ const Dashboard = () => {
     hour: number;
     minute: number;
   } | null>(null);
-  // Simplified dashboard - only 4 core sections
-  const [sectionOrder, setSectionOrder] = useState<string[]>([
-    "kpi-cards",
-    "quick-actions",
-    "weekly-summary",
-    "todos"
-  ]);
 
   // Enable analytics tracking
   useAnalytics();
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
 
   useEffect(() => {
     // Wait for auth and roles to be fully loaded
@@ -154,7 +71,6 @@ const Dashboard = () => {
   useEffect(() => {
     if (userRole && profile) {
       loadDashboardData();
-      loadLayoutPreferences();
       
       // Check if we should show onboarding - only OnboardingWizard
       const onboardingComplete = localStorage.getItem('onboarding_completed');
@@ -220,60 +136,15 @@ const Dashboard = () => {
   };
 
   const loadLayoutPreferences = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
-      const { data, error } = await supabase
-        .from("dashboard_layout")
-        .select("section_order")
-        .eq("user_id", session.user.id)
-        .single();
-
-      if (error && error.code !== "PGRST116") {
-        throw error;
-      }
-
-      if (data?.section_order) {
-        setSectionOrder(data.section_order as string[]);
-      }
-    } catch (error: any) {
-      console.error("Error loading layout:", error);
-    }
+    // Removed - dashboard now has fixed layout for simplicity
   };
 
   const saveLayoutPreferences = async (newOrder: string[]) => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
-      const { error } = await supabase
-        .from("dashboard_layout")
-        .upsert({
-          user_id: session.user.id,
-          section_order: newOrder,
-        });
-
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Error saving layout:", error);
-      toast.error("Failed to save layout");
-    }
+    // Removed - dashboard now has fixed layout for simplicity
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      setSectionOrder((items) => {
-        const oldIndex = items.indexOf(active.id as string);
-        const newIndex = items.indexOf(over.id as string);
-        const newOrder = arrayMove(items, oldIndex, newIndex);
-        saveLayoutPreferences(newOrder);
-        toast.success("Layout saved!");
-        return newOrder;
-      });
-    }
+  const handleDragEnd = (event: any) => {
+    // Removed - drag and drop disabled for simplicity
   };
 
   const checkUser = async (sessionUser: any, primaryRole: string) => {
@@ -492,126 +363,9 @@ const Dashboard = () => {
     );
   }
 
-  const stylistFeatures = [
-    {
-      title: "Services & Pricing",
-      description: "Set your prices, showcase your specialties, and watch clients book the services they need—effortlessly",
-      icon: DollarSign,
-      route: "/services",
-      gradient: "from-cyan-400 to-blue-500",
-    },
-    {
-      title: "Schedule Management",
-      description: "Set your hours, block vacation days, and manage availability in seconds—your time, your rules",
-      icon: Settings,
-      route: "/schedule",
-      gradient: "from-blue-400 to-indigo-500",
-    },
-    {
-      title: "💬 AI Chat Assistant",
-      description: "Your 24/7 color expert: Ask anything—technique tips, troubleshooting, product advice—get instant answers (nothing is saved)",
-      icon: Sparkles,
-      route: "/ai-assistant",
-      gradient: "from-purple-400 to-pink-500",
-    },
-    {
-      title: "📋 Formula Generator",
-      description: "Generate professional formulas with precise measurements and step-by-step instructions—automatically saved to each client's profile",
-      icon: Scissors,
-      route: "/formulas",
-      gradient: "from-red-400 to-orange-500",
-    },
-    {
-      title: "Financial Overview",
-      description: "See every dollar you've earned at a glance—no spreadsheets, no confusion, just clarity on your income",
-      icon: DollarSign,
-      route: "/finance",
-      gradient: "from-yellow-300 to-orange-400",
-    },
-    {
-      title: "Referral Program",
-      description: "Turn recommendations into rewards—earn for every stylist you bring to the platform",
-      icon: DollarSign,
-      route: "/referrals",
-      gradient: "from-green-400 to-emerald-500",
-    },
-    {
-      title: "Knowledge Base",
-      description: "Level up with curated tutorials, trending techniques, and insider tips from master colorists",
-      icon: BookOpen,
-      route: "/knowledge",
-      gradient: "from-indigo-400 to-blue-500",
-    },
-  ];
-
-  const clientFeatures = [
-    {
-      title: "My Appointments",
-      description: "View your upcoming appointments and booking history—all in one place",
-      icon: Calendar,
-      route: "/appointments",
-      gradient: "from-blue-400 to-cyan-500",
-    },
-    {
-      title: "Hair Care Library",
-      description: "Expert tips on maintaining vibrant color, preventing damage, and keeping your hair healthy between appointments",
-      icon: BookOpen,
-      route: "/knowledge",
-      gradient: "from-purple-400 to-pink-500",
-    },
-  ];
-
-  const stylistMessages = [
-    "Every masterpiece starts with a vision—grab your brush, trust your instincts, and let's turn some heads today! 💫",
-    "Your chair is your canvas, your client is your muse—time to create something they'll absolutely love! 🎨",
-    "Coffee's brewing, creativity's flowing—let's make today unforgettable, one transformation at a time! ☕✨",
-    "Behind every great hairstyle is a stylist who dared to dream bigger. That's you. Now go make magic happen! 🌟",
-    "The world needs your artistry today—ready to blend, highlight, and slay? Let's do this! 💅",
-    "Some days you change hair, other days you change lives. Today? Let's aim for both! 🚀",
-    "Your scissors are sharp, your vision is clear, your talent is undeniable—let's create some jaw-dropping looks! ⚡"
-  ];
-
-  const clientMessages = [
-    "Your next iconic look is just a booking away. Ready to discover the transformation you've been dreaming of? ✨",
-    "Great hair isn't just styled—it's crafted with care. Find your perfect stylist and let the transformation begin! 💫",
-    "Today's a great day to treat yourself to something fabulous. Your dream hair is waiting! 🌟",
-    "Life's too short for boring hair. Ready to turn heads and feel amazing? Let's find your look! 💁‍♀️",
-    "Every great style starts with a great stylist. Your perfect match is just a click away! 🎨",
-    "You deserve to feel confident and gorgeous. Time to book that appointment you've been thinking about! ✨",
-    "Your hair journey is a story worth telling. Let's write the next beautiful chapter together! 📖"
-  ];
-
-  const welcomeMessage = userRole === "stylist" 
-    ? stylistMessages[Math.floor(Math.random() * stylistMessages.length)]
-    : clientMessages[Math.floor(Math.random() * clientMessages.length)];
-
-  const features = userRole === "stylist" ? stylistFeatures : clientFeatures;
-
   const renderSection = (sectionId: string) => {
-    switch (sectionId) {
-      case "kpi-cards":
-        return userRole === "stylist" && profile?.id ? (
-          <div key={sectionId} className="mb-8">
-            <LiveKPICards stylistId={profile.id} />
-          </div>
-        ) : null;
-      case "quick-actions":
-        return (
-          <div key={sectionId} className="space-y-4">
-            <QuickActions userRole={userRole || ""} />
-          </div>
-        );
-      case "weekly-summary":
-        return userRole === "stylist" && profile?.id ? (
-          <div key={sectionId} className="mb-8">
-            <WeeklySummaryCard stylistId={profile.id} />
-          </div>
-        ) : null;
-      case "todos":
-        return <TodoList />;
-      default:
-        return null;
-    }
+    // Removed - sections now rendered inline for simplicity
+    return null;
   };
 
   return (
@@ -678,33 +432,31 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={sectionOrder}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="space-y-8">
-              {sectionOrder.map((sectionId, index) => {
-                const content = renderSection(sectionId);
-                if (!content) return null;
-                
-                return (
-                  <div 
-                    key={sectionId}
-                    className="animate-fade-in" 
-                    style={{ animationDelay: `${(index + 4) * 50}ms` }}
-                  >
-                    {content}
-                  </div>
-                );
-              })}
+        <div className="space-y-8">
+          {/* KPI Cards */}
+          {userRole === "stylist" && profile?.id && (
+            <div className="animate-fade-in" style={{ animationDelay: '350ms' }}>
+              <LiveKPICards stylistId={profile.id} />
             </div>
-          </SortableContext>
-        </DndContext>
+          )}
+
+          {/* Quick Actions */}
+          <div className="animate-fade-in" style={{ animationDelay: '400ms' }}>
+            <QuickActions userRole={userRole || ""} />
+          </div>
+
+          {/* Weekly Summary */}
+          {userRole === "stylist" && profile?.id && (
+            <div className="animate-fade-in" style={{ animationDelay: '450ms' }}>
+              <WeeklySummaryCard stylistId={profile.id} />
+            </div>
+          )}
+
+          {/* Todos */}
+          <div className="animate-fade-in" style={{ animationDelay: '500ms' }}>
+            <TodoList />
+          </div>
+        </div>
 
         <ProfileCompletionDialog
           open={showProfileCompletion}
