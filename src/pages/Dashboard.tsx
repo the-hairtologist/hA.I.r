@@ -587,7 +587,7 @@ const Dashboard = () => {
         
         <div className="mb-6 sm:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-[10px] sm:text-xs md:text-sm font-bold">
+            <span className="text-background font-mono text-[11px] sm:text-xs md:text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
             </span>
             <div className="window-controls">
@@ -645,7 +645,7 @@ const Dashboard = () => {
                         />
                     </div>
                   ) : (
-                    <div className="mt-2 sm:mt-3 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-3 sm:p-4 md:p-6 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <div className="mt-2 sm:mt-3 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-4 sm:p-5 md:p-6 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
                       <div className="max-w-xs mx-auto">
                         <div className="mb-2 sm:mb-3">
                           <span className="text-3xl sm:text-4xl">📅</span>
@@ -673,8 +673,8 @@ const Dashboard = () => {
 
         {/* Customize Dashboard Controls */}
         {isEditMode && (
-          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="mb-4 sm:mb-6 p-4 sm:p-5 md:p-6 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex-1">
                 <h3 className="text-sm font-bold text-foreground mb-1 flex items-center gap-2">
                   <Edit3 className="h-3.5 w-3.5 text-primary" />
@@ -741,8 +741,8 @@ const Dashboard = () => {
               </div>
             )}
             
-            <div className="mb-4 p-3 sm:p-4 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-2">
+            <div className="mb-4 p-4 sm:p-5 md:p-6 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                 <div className="space-y-0.5">
                   <p className="text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
                     <Edit3 className="h-3.5 w-3.5 text-primary" />

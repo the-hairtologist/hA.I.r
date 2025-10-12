@@ -60,7 +60,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
                   <p className="text-sm font-medium truncate">{insight.clientName}</p>
                   <Badge 
                     variant="outline" 
-                    className={`text-[10px] px-1.5 py-0 ${getConfidenceBadge(insight.confidence)}`}
+                    className={`text-[11px] px-1.5 py-0.5 min-h-[20px] flex items-center ${getConfidenceBadge(insight.confidence)}`}
                   >
                     {insight.confidence}
                   </Badge>

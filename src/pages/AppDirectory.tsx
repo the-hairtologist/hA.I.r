@@ -368,7 +368,7 @@ export default function AppDirectory() {
             <h2 className="text-3xl font-display font-bold">Admin Features</h2>
             <Badge className="bg-purple-500">God Mode</Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {adminFeatures.map((feature) => (
               <Card key={feature.path} className="border-4 border-foreground shadow-brutal hover:shadow-brutal-lg transition-all cursor-pointer" onClick={() => navigate(feature.path)}>
                 <CardHeader>
@@ -391,7 +391,7 @@ export default function AppDirectory() {
             <h2 className="text-3xl font-display font-bold">Stylist Features</h2>
             <Badge variant="secondary">{stylistFeatures.length} Features</Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {stylistFeatures.map((feature) => (
               <Card key={feature.path} className="border-2 border-foreground hover:border-primary transition-all cursor-pointer" onClick={() => navigate(feature.path)}>
                 <CardHeader>
@@ -414,7 +414,7 @@ export default function AppDirectory() {
             <h2 className="text-3xl font-display font-bold">Client Features</h2>
             <Badge variant="outline">{clientFeatures.length} Features</Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {clientFeatures.map((feature) => (
               <Card key={feature.path} className="border-2 border-foreground hover:border-blue-500 transition-all cursor-pointer" onClick={() => navigate(feature.path)}>
                 <CardHeader>
@@ -437,7 +437,7 @@ export default function AppDirectory() {
             <h2 className="text-3xl font-display font-bold">AI-Powered Features</h2>
             <Badge className="bg-violet-500">Intelligent</Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {aiFeatures.map((feature) => (
               <Card key={feature.path} className="border-2 border-foreground hover:border-violet-500 transition-all cursor-pointer bg-gradient-to-br from-violet-500/5 to-transparent" onClick={() => navigate(feature.path)}>
                 <CardHeader>
@@ -460,7 +460,7 @@ export default function AppDirectory() {
             <h2 className="text-3xl font-display font-bold">Backend Functions</h2>
             <Badge variant="secondary">{backendFeatures.length} Functions</Badge>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {backendFeatures.map((feature) => (
               <Card key={feature.title} className="border-2 border-foreground bg-muted/30">
                 <CardHeader>

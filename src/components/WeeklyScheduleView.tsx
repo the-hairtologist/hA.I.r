@@ -187,7 +187,7 @@ export const WeeklyScheduleView = ({
                   variant="default" 
                   size="sm" 
                   onClick={() => setSelectedDay(null)}
-                  className="h-5 text-[10px] px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0"
+                  className="h-6 text-[11px] px-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex-shrink-0"
                 >
                   View Week
                 </Button>

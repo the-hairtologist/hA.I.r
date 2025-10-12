@@ -249,17 +249,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       <DropdownMenuItem onClick={() => setTheme("light")}>
                         <Sun className="h-4 w-4 mr-2" />
                         Light
-                        {theme === "light" && <Badge variant="secondary" className="ml-auto text-[10px]">Active</Badge>}
+                        {theme === "light" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setTheme("dark")}>
                         <Moon className="h-4 w-4 mr-2" />
                         Dark
-                        {theme === "dark" && <Badge variant="secondary" className="ml-auto text-[10px]">Active</Badge>}
+                        {theme === "dark" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setTheme("system")}>
                         <Monitor className="h-4 w-4 mr-2" />
                         System
-                        {theme === "system" && <Badge variant="secondary" className="ml-auto text-[10px]">Active</Badge>}
+                        {theme === "system" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => {

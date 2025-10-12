@@ -24,7 +24,7 @@ export const KeyboardShortcutHint = memo(
       >
         {keys.map((key, index) => (
           <span key={index} className="inline-flex items-center gap-1">
-            <kbd className="px-2 py-0.5 bg-muted rounded text-[10px] font-mono border border-border">
+            <kbd className="px-2 py-0.5 bg-muted rounded text-[11px] font-mono border border-border min-h-[24px] flex items-center justify-center">
               {key}
             </kbd>
             {index < keys.length - 1 && (

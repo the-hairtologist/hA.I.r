@@ -111,7 +111,7 @@ export const SmartSchedulingSuggestions = ({
                     </div>
                     <p className="text-xs text-muted-foreground">{suggestion.reason}</p>
                   </div>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full border ${getConfidenceColor(suggestion.confidence)}`}>
+                  <span className={`text-[11px] px-2 py-1 min-h-[24px] flex items-center rounded-full border ${getConfidenceColor(suggestion.confidence)}`}>
                     {suggestion.confidence}
                   </span>
                 </div>
@@ -130,7 +130,7 @@ export const SmartSchedulingSuggestions = ({
             <div className="grid grid-cols-2 gap-2">
               {Object.keys(patterns.dayCount || {}).length > 0 && (
                 <div className="p-2 rounded-md bg-muted/50 border">
-                  <p className="text-[10px] text-muted-foreground mb-1">Busiest Day</p>
+                  <p className="text-[11px] text-muted-foreground mb-1">Busiest Day</p>
                   <p className="text-xs font-medium">
                     {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
                       parseInt(Object.entries(patterns.dayCount).sort((a, b) => (b[1] as number) - (a[1] as number))[0]?.[0] || '0')
@@ -140,7 +140,7 @@ export const SmartSchedulingSuggestions = ({
               )}
               {Object.keys(patterns.hourCount || {}).length > 0 && (
                 <div className="p-2 rounded-md bg-muted/50 border">
-                  <p className="text-[10px] text-muted-foreground mb-1">Peak Time</p>
+                  <p className="text-[11px] text-muted-foreground mb-1">Peak Time</p>
                   <p className="text-xs font-medium">
                     {Object.entries(patterns.hourCount).sort((a, b) => (b[1] as number) - (a[1] as number))[0]?.[0]}:00
                   </p>

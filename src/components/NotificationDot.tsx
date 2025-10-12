@@ -22,9 +22,9 @@ export const NotificationDot = ({
   };
 
   const badgeSizeClasses = {
-    sm: "h-4 min-w-4 text-[9px] px-1",
-    md: "h-5 min-w-5 text-[10px] px-1.5",
-    lg: "h-6 min-w-6 text-xs px-2",
+    sm: "h-5 min-w-5 text-[11px] px-1",
+    md: "h-6 min-w-6 text-[11px] px-1.5",
+    lg: "h-7 min-w-7 text-xs px-2",
   };
 
   if (count !== undefined && count > 0) {

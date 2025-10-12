@@ -88,7 +88,7 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
                   </div>
                   <span className="text-sm">{viewConfig[view].label}</span>
                   {currentView === view && (
-                    <Badge variant="secondary" className="ml-auto text-[10px] bg-primary text-primary-foreground">
+                    <Badge variant="secondary" className="ml-auto text-[11px] bg-primary text-primary-foreground min-h-[20px]">
                       Active
                     </Badge>
                   )}

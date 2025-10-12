@@ -537,7 +537,7 @@ const Integrations = () => {
               <Sparkles className="h-5 w-5 text-primary" />
               <h2 className="text-2xl font-bold">Recommended for You</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {recommendedIntegrations.map((integration, index) => {
                 const Icon = integration.icon;
                 return (

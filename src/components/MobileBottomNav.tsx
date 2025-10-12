@@ -177,7 +177,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
                 {/* Label */}
                 <span 
                   className={cn(
-                    "text-[10px] font-medium transition-all duration-200",
+                    "text-[11px] font-medium transition-all duration-200",
                     active ? "text-primary scale-105" : "text-muted-foreground"
                   )}
                 >

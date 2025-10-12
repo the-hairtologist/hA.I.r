@@ -178,7 +178,7 @@ export default function AdminCommandCenter() {
         </div>
 
         {/* Key Metrics Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           <Card className="border-4 border-foreground shadow-brutal">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">

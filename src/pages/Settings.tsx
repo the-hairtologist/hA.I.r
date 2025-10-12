@@ -1361,7 +1361,7 @@ const Settings = () => {
         </Tabs>
 
         {hasChanges && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-card border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] rounded-lg p-3 sm:p-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 z-50 max-w-[90vw] sm:max-w-none">
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-card border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 z-50 max-w-[90vw] sm:max-w-none min-h-[56px]">
             <p className="text-xs sm:text-sm font-medium text-center sm:text-left">You have unsaved changes</p>
             <div className="flex gap-2 w-full sm:w-auto">
               <Button 
