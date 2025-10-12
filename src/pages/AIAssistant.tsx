@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { HelpCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { AIDisclaimer } from "@/components/AIDisclaimer";
@@ -24,7 +23,6 @@ const Knowledge = () => {
   
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
-  const [aiMode] = useState<"formula" | "stepbystep">("formula");
   const [aiMessages, setAiMessages] = useState<Array<{ role: "user" | "assistant"; content: string | any; imageUrls?: string[] }>>([]);
   const [aiInput, setAiInput] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
@@ -182,7 +180,7 @@ const Knowledge = () => {
       const { data, error } = await supabase.functions.invoke("hair-assistant-chat", {
         body: {
           message: userMessage,
-          mode: aiMode,
+          mode: "unified", // Unified mode handles both formulas and steps
           conversationHistory: historyWithImages,
           images: uploadedImages.length > 0 ? uploadedImages : undefined
         }
@@ -192,12 +190,10 @@ const Knowledge = () => {
 
       setAiMessages(prev => [...prev, { role: "assistant", content: data.response }]);
       
-      // For step-by-step mode, parse steps
-      if (aiMode === "stepbystep") {
-        const steps = parseStepsFromResponse(data.response);
-        if (steps.length > 0) {
-          setCorrectionSteps(steps);
-        }
+      // Auto-parse steps from any response that contains numbered lists
+      const steps = parseStepsFromResponse(data.response);
+      if (steps.length > 0) {
+        setCorrectionSteps(steps);
       }
     } catch (error: any) {
       console.error("AI Error:", error);
@@ -249,15 +245,15 @@ const Knowledge = () => {
       <main className="container mx-auto px-4 py-6 max-w-6xl">
         {/* AI Assistant Header */}
         <div className="mb-6">
-          <div className="max-w-2xl mx-auto text-center p-6 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <Sparkles className="h-8 w-8 text-primary animate-pulse" />
-              <h2 className="text-2xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Your AI Hair Pro Assistant
+          <div className="max-w-2xl mx-auto text-center p-5 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Sparkles className="h-7 w-7 text-primary animate-pulse" />
+              <h2 className="text-xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                AI Hair Pro
               </h2>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              <span className="font-semibold text-foreground">Ask anything hair-related!</span> Get instant color formulas, step-by-step guides for tricky corrections, technique tips, product recommendations, and professional advice—all powered by AI trained on expert hair knowledge.
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <span className="font-semibold text-foreground">Your expert stylist assistant.</span> Get color formulas, step-by-step techniques, corrections, and pro advice instantly.
             </p>
           </div>
         </div>
@@ -266,12 +262,12 @@ const Knowledge = () => {
           {/* Left Sidebar */}
           <div className="space-y-5">
             {/* Formula History */}
-            {aiMode === "formula" && savedFormulas.length > 0 && (
+            {savedFormulas.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-secondary/5 to-primary/5">
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-4">
                     <History className="h-4 w-4 text-secondary" />
-                    <h3 className="text-sm font-display font-bold">💾 Saved Formulas</h3>
+                    <h3 className="text-sm font-display font-bold">Saved Formulas</h3>
                   </div>
                   <div className="space-y-2">
                     {savedFormulas.map((formula) => (
@@ -290,16 +286,16 @@ const Knowledge = () => {
               </div>
             )}
 
-            {/* Step Progress */}
-            {aiMode === "stepbystep" && correctionSteps.length > 0 && (
+            {/* Step Progress - Auto-shows when AI provides steps */}
+            {correctionSteps.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-accent/5 to-primary/5">
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckSquare className="h-4 w-4 text-accent" />
-                    <h3 className="text-sm font-display font-bold">📋 Step Tracker</h3>
+                    <h3 className="text-sm font-display font-bold">Step Tracker</h3>
                   </div>
                   <div className="text-xs font-semibold text-accent mb-3">
-                    {correctionSteps.filter(s => s.completed).length} / {correctionSteps.length} Done
+                    {correctionSteps.filter(s => s.completed).length} / {correctionSteps.length} Complete
                   </div>
                   <div className="space-y-2.5">
                     {correctionSteps.map((step, idx) => (
@@ -320,7 +316,6 @@ const Knowledge = () => {
                 </div>
               </div>
             )}
-
           </div>
 
           {/* Main Chat Area */}
@@ -391,7 +386,7 @@ const Knowledge = () => {
                           style={{ border: "3px solid" }}
                         >
                           <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
-                          {msg.role === "assistant" && aiMode === "formula" && idx === aiMessages.length - 1 && (
+                          {msg.role === "assistant" && idx === aiMessages.length - 1 && (
                             <button
                               onClick={() => {
                                 setFormulaToSave(msg.content);
@@ -426,11 +421,7 @@ const Knowledge = () => {
                   <Input
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
-                    placeholder={
-                      aiMode === "formula"
-                        ? "What formula do you need? ✨"
-                        : "What's the color issue? 🔧"
-                    }
+                    placeholder="Ask me anything: formulas, techniques, corrections..."
                     disabled={aiLoading}
                     className="flex-1 border-3 border-foreground rounded-xl font-medium focus-visible:ring-primary/50 shadow-[2px_2px_0px_0px_hsl(var(--foreground)_/_0.1)]"
                     style={{ border: "3px solid" }}
