@@ -74,6 +74,8 @@ const BookingPage = lazy(() => import("./pages/BookingPage"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Help = lazy(() => import("./pages/Help"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
+const EmailCampaigns = lazy(() => import("./pages/EmailCampaigns"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -169,6 +171,7 @@ const App = () => {
               <Help />
             </ProtectedRoute>
           } />
+          <Route path="/unsubscribe" element={<Unsubscribe />} />
           
           {/* Stylist-Only Routes - Most features */}
           <Route path="/messages" element={
@@ -296,6 +299,11 @@ const App = () => {
           <Route path="/system-health" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <SystemHealth />
+            </ProtectedRoute>
+          } />
+          <Route path="/email-campaigns" element={
+            <ProtectedRoute allowedRoles={["admin", "stylist"]}>
+              <EmailCampaigns />
             </ProtectedRoute>
           } />
           
