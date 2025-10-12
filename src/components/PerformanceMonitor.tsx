@@ -19,9 +19,11 @@ export const PerformanceMonitor = () => {
 
   const reportPerformance = () => {
     requestIdleCallback(() => {
+      // Metrics are collected silently - view in browser DevTools Performance tab
       const metrics = getPerformanceMetrics();
       
-      if (metrics) {
+      // Only log in development mode
+      if (import.meta.env.DEV && metrics) {
         console.log('[Performance Metrics]', {
           'Time to First Byte': `${metrics.ttfb?.toFixed(2)}ms`,
           'DOM Content Loaded': `${metrics.domContentLoaded?.toFixed(2)}ms`,
@@ -29,15 +31,6 @@ export const PerformanceMonitor = () => {
           'First Paint': `${metrics.firstPaint?.toFixed(2)}ms`,
           'First Contentful Paint': `${metrics.firstContentfulPaint?.toFixed(2)}ms`,
         });
-
-        // Warn about slow metrics
-        if (metrics.firstContentfulPaint && metrics.firstContentfulPaint > 2500) {
-          console.warn('[Performance] Slow First Contentful Paint:', metrics.firstContentfulPaint);
-        }
-        
-        if (metrics.ttfb && metrics.ttfb > 600) {
-          console.warn('[Performance] Slow Time to First Byte:', metrics.ttfb);
-        }
       }
     });
   };

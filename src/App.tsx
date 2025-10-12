@@ -14,7 +14,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
-// import { selfHealing } from "@/lib/selfHealing"; // Disabled - health monitoring causing unnecessary network noise
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -96,29 +95,17 @@ const AnalyticsInitializer = () => {
 
 const App = () => {
   useEffect(() => {
-    // Initialize divine protection systems
+    // Initialize cross-platform optimizer
     const initializeSystems = async () => {
-      // DISABLED: Health monitoring causing unnecessary network noise
-      // await selfHealing.initialize();
-      
-      console.log('📊 Analytics initialized');
-      
-      // Initialize cross-platform optimizer
       try {
         const { crossPlatformOptimizer } = await import('@/lib/platform/CrossPlatformOptimizer');
         await crossPlatformOptimizer.initialize();
-        console.log('✨ Divine protection systems activated');
       } catch (error) {
-        console.warn('Cross-platform optimizer will activate shortly');
+        // Optimizer will retry on next load
       }
     };
     
     initializeSystems();
-    
-    // DISABLED: Health monitoring shutdown
-    // return () => {
-    //   selfHealing.shutdown();
-    // };
   }, []);
 
   return (

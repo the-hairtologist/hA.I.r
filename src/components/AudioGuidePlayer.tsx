@@ -42,8 +42,6 @@ export const AudioGuidePlayer = ({
 
     setIsLoading(true);
     try {
-      console.log('Generating audio for text:', text.substring(0, 50) + '...');
-      
       const { data, error } = await supabase.functions.invoke('text-to-speech', {
         body: { text, voice }
       });

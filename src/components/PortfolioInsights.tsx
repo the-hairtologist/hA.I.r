@@ -18,8 +18,6 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
   const analyzePortfolio = async () => {
     setLoading(true);
     try {
-      console.log('Requesting portfolio analysis for stylist:', stylistId);
-      
       const { data, error } = await supabase.functions.invoke('analyze-portfolio', {
         body: { stylistId }
       });
