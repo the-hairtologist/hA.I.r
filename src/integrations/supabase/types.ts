@@ -2317,6 +2317,10 @@ export type Database = {
         Args: { _client_id: string; _stylist_user_id: string }
         Returns: boolean
       }
+      trigger_appointment_reminders: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       validate_access_code: {
         Args: { code_input: string }
         Returns: boolean

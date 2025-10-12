@@ -1,5 +1,8 @@
 project_id = "iyotklwiwyljospfqnoy"
 
+[functions.automated-reminders]
+verify_jwt = false
+
 [functions.generate-formula]
 verify_jwt = true
 
