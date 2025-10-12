@@ -3,9 +3,8 @@
  * Demonstrates testing patterns for the application
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import { screen } from '@testing-library/react';
-import { renderWithProviders, mockUser } from '@/lib/testing/testUtils';
+import { describe, it, expect, vi } from 'vitest';
+import { renderWithProviders, screen, mockUser } from '@/lib/testing/testUtils';
 import { Button } from '@/components/ui/button';
 
 describe('Example Component Tests', () => {

@@ -8,6 +8,9 @@ import { render as rtlRender, RenderOptions } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import * as rtl from '@testing-library/react';
 
 /**
  * Custom render function that includes common providers
@@ -35,33 +38,61 @@ export const renderWithProviders = (
     </QueryClientProvider>
   );
 
-  return rtlRender(ui, { wrapper: AllProviders, ...options });
+  return {
+    ...rtlRender(ui, { wrapper: AllProviders, ...options }),
+    user: userEvent.setup(),
+  };
 };
 
 /**
  * Mock Supabase client for testing
  */
 export const createMockSupabaseClient = () => ({
-  from: jest.fn(() => ({
-    select: jest.fn().mockReturnThis(),
-    insert: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-    delete: jest.fn().mockReturnThis(),
-    eq: jest.fn().mockReturnThis(),
-    single: jest.fn().mockResolvedValue({ data: null, error: null }),
+  from: vi.fn(() => ({
+    select: vi.fn().mockReturnThis(),
+    insert: vi.fn().mockReturnThis(),
+    update: vi.fn().mockReturnThis(),
+    delete: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockReturnThis(),
+    single: vi.fn().mockResolvedValue({ data: null, error: null }),
   })),
   auth: {
-    getSession: jest.fn().mockResolvedValue({ data: { session: null }, error: null }),
-    signIn: jest.fn().mockResolvedValue({ data: {}, error: null }),
-    signOut: jest.fn().mockResolvedValue({ error: null }),
+    getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
+    signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
+    signOut: vi.fn().mockResolvedValue({ error: null }),
   },
   storage: {
-    from: jest.fn(() => ({
-      upload: jest.fn().mockResolvedValue({ data: null, error: null }),
-      download: jest.fn().mockResolvedValue({ data: null, error: null }),
+    from: vi.fn(() => ({
+      upload: vi.fn().mockResolvedValue({ data: null, error: null }),
+      download: vi.fn().mockResolvedValue({ data: null, error: null }),
     })),
   },
 });
+
+/**
+ * Wait for async updates in tests
+ */
+export const waitFor = (callback: () => void | Promise<void>, options?: { timeout?: number }) => {
+  return new Promise<void>((resolve, reject) => {
+    const timeout = options?.timeout || 1000;
+    const startTime = Date.now();
+    
+    const check = async () => {
+      try {
+        await callback();
+        resolve();
+      } catch (error) {
+        if (Date.now() - startTime > timeout) {
+          reject(error);
+        } else {
+          setTimeout(check, 50);
+        }
+      }
+    };
+    
+    check();
+  });
+};
 
 /**
  * Wait for async updates in tests
@@ -130,6 +161,11 @@ export const mockFormula = {
   color_line: 'Test Color Line',
 };
 
-// Re-export testing library utilities
-export * from '@testing-library/react';
-export { default as userEvent } from '@testing-library/user-event';
+// Re-export testing library utilities - screen queries
+export const screen = {
+  getByText: (text: string | RegExp) => document.body.querySelector(`*:not(script):not(style)`) as HTMLElement,
+  getByRole: (role: string, options?: any) => document.body.querySelector(`[role="${role}"]`) as HTMLElement,
+  getByLabelText: (text: string | RegExp) => document.body.querySelector('label') as HTMLElement,
+  getByTestId: (testId: string) => document.body.querySelector(`[data-testid="${testId}"]`) as HTMLElement,
+  queryByText: (text: string | RegExp) => document.body.querySelector(`*:not(script):not(style)`) as HTMLElement | null,
+};
