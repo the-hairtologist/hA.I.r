@@ -632,7 +632,7 @@ const Dashboard = () => {
             )}
             
             <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <p className="text-xs sm:text-sm font-medium text-muted-foreground">
+              <p className="text-sm sm:text-base font-bold font-display text-foreground">
                 Your personalized dashboard
               </p>
               <Button 
