@@ -34,6 +34,7 @@ import { TopServices } from "@/components/dashboard/TopServices";
 import { ClientRetention } from "@/components/dashboard/ClientRetention";
 import { QuickNotes } from "@/components/dashboard/QuickNotes";
 import { FavoriteStylists } from "@/components/dashboard/FavoriteStylists";
+import { ClientMilestones } from "@/components/dashboard/ClientMilestones";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save } from "lucide-react";
 import {
@@ -57,7 +58,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user: authUser, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading } = useUserRole(authUser?.id);
+  const { roles, isAdmin, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
   
   const [loading, setLoading] = useState(true);
@@ -86,23 +87,48 @@ const Dashboard = () => {
   const defaultStylistSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-overview", title: "This Week", component: "WeeklyOverview", enabled: true },
-    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: true },
-    { id: "quick-tasks", title: "Tasks", component: "QuickTasks", enabled: true },
-    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: true },
+    { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: true },
+    { id: "weekly-overview", title: "This Week Stats", component: "WeeklyOverview", enabled: true },
+    { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
+    { id: "quick-tasks", title: "Quick Tasks", component: "QuickTasks", enabled: true },
+    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: false },
+    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: false },
     { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: false },
     { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: false },
-    { id: "quick-notes", title: "Notes", component: "QuickNotes", enabled: false },
+    { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: false },
   ];
 
   const defaultClientSections: DashboardSection[] = [
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "favorite-stylists", title: "Favorite Stylists", component: "FavoriteStylists", enabled: true },
     { id: "upcoming-appointments", title: "Upcoming Appointments", component: "UpcomingAppointments", enabled: true },
-    { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
+    { id: "client-milestones", title: "Rewards & Milestones", component: "ClientMilestones", enabled: true },
+    { id: "favorite-stylists", title: "Favorite Stylists", component: "FavoriteStylists", enabled: true },
+    { id: "recent-activity", title: "Activity History", component: "RecentActivity", enabled: true },
   ];
 
-  const defaultSections = userRole === "stylist" ? defaultStylistSections : defaultClientSections;
+  // Admin sections - comprehensive view of everything
+  const defaultAdminSections: DashboardSection[] = [
+    { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
+    { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
+    { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: true },
+    { id: "weekly-overview", title: "This Week Stats", component: "WeeklyOverview", enabled: true },
+    { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
+    { id: "quick-tasks", title: "Quick Tasks", component: "QuickTasks", enabled: true },
+    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: true },
+    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: true },
+    { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: true },
+    { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: true },
+    { id: "client-milestones", title: "Rewards & Milestones", component: "ClientMilestones", enabled: true },
+    { id: "favorite-stylists", title: "Favorite Stylists", component: "FavoriteStylists", enabled: false },
+    { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: false },
+  ];
+
+  // Determine sections based on role - admins get comprehensive view
+  const defaultSections = isAdmin 
+    ? defaultAdminSections 
+    : userRole === "stylist" 
+      ? defaultStylistSections 
+      : defaultClientSections;
   
   const { sections, isLoading: layoutLoading, saveDashboardLayout, resetDashboardLayout, toggleSection } = 
     useDashboardLayout(defaultSections);
@@ -455,48 +481,63 @@ const Dashboard = () => {
 
     switch (section.component) {
       case "LiveKPICards":
-        return userRole === "stylist" && profile?.id ? (
+        return (userRole === "stylist" || isAdmin) && profile?.id ? (
           <LiveKPICards stylistId={profile.id} />
         ) : null;
       case "QuickActions":
         return <QuickActions userRole={userRole || ""} />;
       case "WeeklyOverview":
-        return userRole === "stylist" ? <WeeklyOverview /> : null;
+        return (userRole === "stylist" || isAdmin) ? <WeeklyOverview /> : null;
       case "ClientSentimentTracker":
-        return userRole === "stylist" && profile?.id ? (
+        return (userRole === "stylist" || isAdmin) && profile?.id ? (
           <ClientSentimentTracker stylistId={profile.id} />
         ) : null;
       case "RevenueTrends":
-        return userRole === "stylist" && profile?.id ? (
+        return (userRole === "stylist" || isAdmin) && profile?.id ? (
           <RevenueTrends stylistId={profile.id} />
         ) : null;
       case "TopServices":
-        return userRole === "stylist" && profile?.id ? (
+        return (userRole === "stylist" || isAdmin) && profile?.id ? (
           <TopServices stylistId={profile.id} />
         ) : null;
       case "ClientRetention":
-        return userRole === "stylist" && profile?.id ? (
+        return (userRole === "stylist" || isAdmin) && profile?.id ? (
           <ClientRetention stylistId={profile.id} />
         ) : null;
       case "QuickNotes":
-        return userRole === "stylist" ? <QuickNotes /> : null;
+        return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;
+      case "WeeklySchedule":
+        return (userRole === "stylist" || isAdmin) && weekAppointments.length > 0 ? (
+          <WeeklyScheduleView
+            appointments={weekAppointments}
+            onAppointmentClick={(appt) => navigate(`/appointments/${appt.id}`)}
+            onTimeSlotClick={(date, hour) => {
+              setQuickAppointmentData({ date, hour, minute: 0 });
+              setQuickAppointmentOpen(true);
+            }}
+          />
+        ) : null;
+      case "RecentActivity":
+        return ((userRole === "stylist" || userRole === "client" || isAdmin) && recentActivities.length > 0) ? (
+          <RecentActivity activities={recentActivities} />
+        ) : null;
       case "QuickTasks":
-        return userRole === "stylist" ? <QuickTasks /> : null;
+        return (userRole === "stylist" || isAdmin) ? <QuickTasks /> : null;
       case "FavoriteStylists":
-        return userRole === "client" && profile?.id ? (
+        return (userRole === "client" || isAdmin) && profile?.id ? (
           <FavoriteStylists clientId={profile.id} />
         ) : null;
+      case "ClientMilestones":
+        return (userRole === "client" || isAdmin) && profile?.id ? (
+          <ClientMilestones clientId={profile.id} />
+        ) : null;
       case "UpcomingAppointments":
-        return userRole === "client" && stats ? (
+        return (userRole === "client" || isAdmin) && stats ? (
           stats.upcomingAppointments > 0 ? (
             <RecentActivity activities={recentActivities} />
           ) : (
             <EmptyStateGuidance type="appointments" />
           )
-        ) : null;
-      case "RecentActivity":
-        return userRole === "client" && recentActivities.length > 0 ? (
-          <RecentActivity activities={recentActivities} />
         ) : null;
       default:
         return null;

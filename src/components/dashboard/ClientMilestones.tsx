@@ -1,0 +1,144 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Trophy, Gift, Calendar } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+interface ClientMilestonesProps {
+  clientId: string;
+}
+
+export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
+  const { data: milestones, isLoading } = useQuery({
+    queryKey: ['client-milestones', clientId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('client_milestones')
+        .select('*')
+        .eq('client_id', clientId)
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    toast.success("Discount code copied!");
+  };
+
+  const getMilestoneIcon = (type: string) => {
+    if (type === "anniversary") return Calendar;
+    return Trophy;
+  };
+
+  if (isLoading) {
+    return (
+      <Card variant="glass" className="backdrop-blur-xl">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <Trophy className="h-4 w-4 text-primary" />
+            Your Rewards & Milestones
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-20 bg-muted/20 rounded-lg animate-pulse" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!milestones || milestones.length === 0) {
+    return (
+      <Card variant="glass" className="backdrop-blur-xl border-primary/10">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <Trophy className="h-4 w-4 text-primary" />
+            Your Rewards & Milestones
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8">
+            <Trophy className="h-12 w-12 text-muted-foreground mx-auto mb-3 opacity-50" />
+            <p className="text-sm text-muted-foreground">
+              Complete appointments to unlock rewards!
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card variant="glass" className="backdrop-blur-xl border-primary/10 hover:border-primary/20 transition-all duration-300">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base font-semibold flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
+            <Trophy className="h-4 w-4 text-primary" />
+          </div>
+          Your Rewards & Milestones
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          {milestones.map((milestone, index) => {
+            const Icon = getMilestoneIcon(milestone.milestone_type);
+            return (
+              <div
+                key={milestone.id}
+                className="group relative rounded-xl border border-border/50 bg-gradient-to-br from-background to-muted/20 p-4 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                style={{ 
+                  animation: `fadeInUp 0.4s ease-out ${index * 0.1}s both`
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                <div className="relative flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3 flex-1">
+                    <div className="p-2 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 shadow-sm">
+                      <Icon className="h-4 w-4 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm">
+                        {milestone.milestone_type === "anniversary"
+                          ? `${milestone.milestone_value} Year${milestone.milestone_value > 1 ? "s" : ""} Anniversary! 🎂`
+                          : `${milestone.milestone_value} Appointments Complete! ⭐`}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(milestone.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  {milestone.discount_code && (
+                    <div className="flex flex-col items-end gap-2">
+                      <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30">
+                        <Gift className="h-3 w-3 text-green-600 dark:text-green-400" />
+                        <span className="text-xs font-bold text-green-600 dark:text-green-400">
+                          ${milestone.discount_amount} OFF
+                        </span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleCopyCode(milestone.discount_code)}
+                        className="h-7 text-xs"
+                      >
+                        Copy Code
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
