@@ -110,12 +110,44 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
 
   const allClientActions: ActionButton[] = [
     {
+      id: "find-stylist",
+      label: "Find a Stylist",
+      description: "Browse stylists",
+      icon: Users,
+      route: "/stylists",
+      gradient: "from-purple-500 to-pink-500",
+    },
+    {
+      id: "book",
+      label: "Book Appointment",
+      description: "Schedule a visit",
+      icon: Calendar,
+      route: "/appointments",
+      gradient: "from-blue-500 to-cyan-500",
+    },
+    {
       id: "messages",
       label: "Messages",
       description: "Chat with stylist",
       icon: MessageSquare,
       route: "/messages",
       gradient: "from-emerald-500 to-teal-500",
+    },
+    {
+      id: "profile",
+      label: "My Profile",
+      description: "Update your info",
+      icon: Settings2,
+      route: "/settings",
+      gradient: "from-indigo-500 to-purple-500",
+    },
+    {
+      id: "knowledge",
+      label: "Hair Care Tips",
+      description: "Learn & explore",
+      icon: BookOpen,
+      route: "/knowledge",
+      gradient: "from-cyan-500 to-blue-500",
     },
   ];
 

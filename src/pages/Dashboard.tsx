@@ -85,6 +85,8 @@ const Dashboard = () => {
 
   const defaultClientSections: DashboardSection[] = [
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
+    { id: "upcoming-appointments", title: "Upcoming Appointments", component: "UpcomingAppointments", enabled: true },
+    { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
   ];
 
   const defaultSections = userRole === "stylist" ? defaultStylistSections : defaultClientSections;
@@ -449,6 +451,18 @@ const Dashboard = () => {
         return userRole === "stylist" ? <WeeklyOverview /> : null;
       case "QuickTasks":
         return userRole === "stylist" ? <QuickTasks /> : null;
+      case "UpcomingAppointments":
+        return userRole === "client" && stats ? (
+          stats.upcomingAppointments > 0 ? (
+            <RecentActivity activities={recentActivities} />
+          ) : (
+            <EmptyStateGuidance type="appointments" />
+          )
+        ) : null;
+      case "RecentActivity":
+        return userRole === "client" && recentActivities.length > 0 ? (
+          <RecentActivity activities={recentActivities} />
+        ) : null;
       default:
         return null;
     }
@@ -550,8 +564,9 @@ const Dashboard = () => {
         
         {!isEditMode && stats && (
           <>
+            {/* Stylist Welcome Checklist */}
             {userRole === "stylist" && stats.todayAppointments === 0 && stats.totalClients === 0 && (
-              <div className="mb-6 flex items-center justify-between gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
                 <WelcomeChecklist 
                   userRole="stylist"
                   profileComplete={!!userProfile?.full_name && !!profile?.business_name && !!profile?.color_line}
@@ -561,6 +576,18 @@ const Dashboard = () => {
                 />
               </div>
             )}
+            
+            {/* Client Welcome Checklist */}
+            {userRole === "client" && stats.upcomingAppointments === 0 && (
+              <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
+                <WelcomeChecklist 
+                  userRole="client"
+                  profileComplete={!!userProfile?.full_name}
+                  hasAppointments={stats.upcomingAppointments > 0}
+                />
+              </div>
+            )}
+            
             <div className="mb-6 flex items-center justify-between gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
               <p className="text-sm font-medium text-muted-foreground">
                 Your personalized dashboard
