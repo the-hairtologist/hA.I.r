@@ -118,30 +118,29 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
   }
 
   return (
-    <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-all duration-300 bg-gradient-to-br from-card via-primary/5 to-accent/5 overflow-hidden">
-      <CardHeader className="pb-3 relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-primary opacity-10 blur-3xl rounded-full" />
-        <CardTitle className="flex items-center gap-3 text-lg font-display relative z-10">
-          <div className="p-2.5 rounded-xl bg-gradient-primary shadow-lg">
+    <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-lg font-display">
+          <div className="p-2 rounded-lg bg-gradient-purple-pink">
             <StickyNote className="h-5 w-5 text-white" />
           </div>
-          <span className="bg-gradient-primary bg-clip-text text-transparent font-bold">Quick Notes</span>
+          <span>Quick Notes</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="relative z-10">
-        <div className="space-y-4">
-          <div className="space-y-3">
+      <CardContent>
+        <div className="space-y-3">
+          <div className="space-y-2">
             <Textarea
-              placeholder="Capture your ideas..."
+              placeholder="Jot down a quick note..."
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
-              className="min-h-[100px] resize-none brutal-border bg-white/50 dark:bg-card/50 backdrop-blur-sm focus:border-primary transition-colors"
+              className="min-h-[80px] resize-none brutal-border"
             />
             <Button
               onClick={handleSaveNote}
               disabled={!newNote.trim()}
               size="sm"
-              className="w-full gap-2 brutal-border brutal-shadow-sm hover:brutal-shadow-md transition-all bg-gradient-primary hover:opacity-90"
+              className="w-full gap-2 brutal-border brutal-shadow-sm hover:brutal-shadow-md transition-shadow"
             >
               <Save className="h-4 w-4" />
               Save Note
@@ -149,41 +148,29 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
           </div>
 
           {loading ? (
-            <div className="space-y-2 pt-3 border-t border-border">
+            <div className="space-y-2">
               {[1, 2].map((i) => (
-                <div key={i} className="h-20 bg-muted/30 rounded-lg animate-pulse" />
+                <div key={i} className="h-16 bg-muted/50 rounded-lg animate-pulse" />
               ))}
             </div>
           ) : notes.length > 0 ? (
-            <div className="space-y-2 max-h-56 overflow-y-auto pt-3 border-t border-border">
+            <div className="space-y-2 max-h-48 overflow-y-auto">
               {notes.map((note) => (
                 <div
                   key={note.id}
-                  className="group p-4 rounded-lg bg-gradient-to-br from-white/60 to-white/40 dark:from-card/60 dark:to-card/40 backdrop-blur-sm brutal-border hover:brutal-shadow-sm transition-all duration-200"
+                  className="p-3 rounded-lg bg-muted/30 brutal-border text-sm"
                 >
-                  <p className="text-sm text-foreground/90">
-                    {note.content}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
-                    <span className="w-1 h-1 rounded-full bg-primary/60" />
-                    {new Date(note.created_at).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
+                  <p className="text-foreground/90">{note.content}</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {new Date(note.created_at).toLocaleDateString()}
                   </p>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 pt-3 border-t border-border">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-primary/10 mb-3">
-                <StickyNote className="h-6 w-6 text-primary" />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                No notes yet. Start writing!
-              </p>
-            </div>
+            <p className="text-sm text-muted-foreground text-center py-2">
+              No notes yet. Start writing!
+            </p>
           )}
         </div>
       </CardContent>
