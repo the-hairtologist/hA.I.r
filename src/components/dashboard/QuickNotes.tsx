@@ -88,7 +88,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
             maxLength={500}
-            className="min-h-[140px] resize-none bg-white/50 backdrop-blur-sm border-none focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground/60 shadow-none rounded-lg p-4"
+            className="min-h-[140px] resize-none bg-card/50 backdrop-blur-sm border-none focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground/60 shadow-none rounded-lg p-4"
           />
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground">
@@ -98,7 +98,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
               onClick={handleSaveNote}
               disabled={!newNote.trim()}
               size="sm"
-              className="gap-2 bg-gradient-primary text-white hover:opacity-90 transition-opacity brutal-border brutal-shadow-sm"
+              className="gap-2 bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity brutal-border brutal-shadow-sm"
             >
               <Sparkles className="h-4 w-4" />
               Save Note
@@ -115,7 +115,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             {notes.map((note) => (
               <div
                 key={note.id}
-                className="group relative p-3 rounded-lg bg-white/40 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-200 hover:shadow-md"
+                className="group relative p-3 rounded-lg bg-card/40 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-200 hover:shadow-md"
               >
                 <p className="text-sm text-foreground/90">
                   {note.content}
@@ -141,7 +141,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-purple-pink">
-            <StickyNote className="h-5 w-5 text-white" />
+            <StickyNote className="h-5 w-5 text-primary-foreground" />
           </div>
           <span>Quick Notes</span>
         </CardTitle>

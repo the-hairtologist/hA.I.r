@@ -51,7 +51,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
         .from("profiles")
         .select("*")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
       if (profile) {
         setFullName(profile.full_name || "");
@@ -64,7 +64,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           .from("stylist_profiles")
           .select("*")
           .eq("user_id", userId)
-          .single();
+          .maybeSingle();
 
         if (stylistProfile) {
           setBusinessName(stylistProfile.business_name || "");

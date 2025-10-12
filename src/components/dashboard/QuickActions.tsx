@@ -278,7 +278,7 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                     )}>
                       <Icon className={cn(
                         "h-5 w-5 transition-colors",
-                        isSelected ? "text-white" : "text-muted-foreground"
+                        isSelected ? "text-primary-foreground" : "text-muted-foreground"
                       )} />
                     </div>
                     <div className="flex-1 min-w-0">
