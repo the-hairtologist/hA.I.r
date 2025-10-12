@@ -17,11 +17,15 @@ import {
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const Help = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { user } = useAuth();
+  const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
 
-  const faqs = [
+  const stylistFaqs = [
     {
       question: "How do I add a new client?",
       answer: "Go to 'Client Management' in the sidebar, then click the '+ Add Client' button. Fill in their information and save.",
@@ -84,6 +88,52 @@ const Help = () => {
     },
   ];
 
+  const clientFaqs = [
+    {
+      question: "How do I book an appointment with a stylist?",
+      answer: "Go to 'Find a Stylist', browse available stylists, select one you like, and click 'Book Appointment'. You can choose your preferred date, time, and service.",
+    },
+    {
+      question: "How can I view my upcoming appointments?",
+      answer: "Click on 'My Appointments' in the sidebar to see all your scheduled appointments, past visits, and available rebooking options.",
+    },
+    {
+      question: "How do I see my hair formulas?",
+      answer: "Your stylist will share formulas with you after each appointment. You can view them in your profile under 'My Formulas' to see the exact colors and products used.",
+    },
+    {
+      question: "How do I message my stylist?",
+      answer: "Go to 'Messages' in the sidebar, select your stylist from your conversations, and send them a message. You'll get notified when they respond.",
+    },
+    {
+      question: "How do I leave a review?",
+      answer: "After your appointment is completed, you'll receive a notification to leave a review. You can also go to your appointment history and click 'Leave Review'.",
+    },
+    {
+      question: "How do I reschedule or cancel an appointment?",
+      answer: "Go to 'My Appointments', click on the appointment you want to change, then select 'Reschedule' or 'Cancel'. Your stylist will be notified automatically.",
+    },
+    {
+      question: "Can I save my favorite stylists?",
+      answer: "Yes! Click the heart icon on any stylist's profile to add them to your favorites. You'll see them on your dashboard for quick booking.",
+    },
+    {
+      question: "What if I forgot my password?",
+      answer: "Click 'Forgot Password' on the login screen. You'll receive an email with instructions to reset your password securely.",
+    },
+    {
+      question: "How do I update my profile?",
+      answer: "Go to 'My Profile' to update your photo, contact information, hair preferences, and notification settings.",
+    },
+    {
+      question: "How do I track my milestones and rewards?",
+      answer: "Check your dashboard for 'Rewards & Milestones'. You'll earn discounts after completing 5, 10, and 25 appointments with the same stylist!",
+    },
+  ];
+
+  // Choose FAQs based on role
+  const faqs = isStylist ? stylistFaqs : isClient ? clientFaqs : [...stylistFaqs, ...clientFaqs];
+
   const filteredFaqs = searchQuery
     ? faqs.filter(faq => 
         faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -101,7 +151,13 @@ const Help = () => {
       <div className="space-y-6 max-w-4xl">
         <div>
           <h1 className="text-3xl font-display font-bold">Help & Support</h1>
-          <p className="text-muted-foreground">Get help and find answers to your questions</p>
+          <p className="text-muted-foreground">
+            {isStylist 
+              ? "Get help managing your salon business"
+              : isClient
+              ? "Get help booking appointments and managing your hair care"
+              : "Get help and find answers to your questions"}
+          </p>
         </div>
 
         {/* Quick Actions */}

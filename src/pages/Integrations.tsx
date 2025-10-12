@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { SearchInput } from "@/components/SearchInput";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { 
   Zap, Calendar, MessageSquare, Instagram, CreditCard, 
   FileText, Star, Cloud, Video, TrendingUp, Mail,
@@ -27,6 +29,7 @@ interface Integration {
   setupType: "webhook" | "oauth" | "api_key" | "direct";
   benefits: string[];
   recommended?: boolean;
+  recommendedFor?: ("stylist" | "client" | "both")[];
 }
 
 const integrations: Integration[] = [
@@ -42,6 +45,7 @@ const integrations: Integration[] = [
     setupType: "webhook",
     benefits: ["Automate appointment reminders", "Sync client data", "Connect to any app"],
     recommended: true,
+    recommendedFor: ["stylist"],
   },
   // Calendar
   {
@@ -55,6 +59,7 @@ const integrations: Integration[] = [
     setupType: "oauth",
     benefits: ["Two-way sync", "Auto-updates", "Conflict prevention"],
     recommended: true,
+    recommendedFor: ["stylist", "both"],
   },
   {
     id: "outlook-calendar",
@@ -147,6 +152,7 @@ const integrations: Integration[] = [
     setupType: "oauth",
     benefits: ["Auto-post portfolio", "Client discovery", "Engagement"],
     recommended: true,
+    recommendedFor: ["stylist"],
   },
   {
     id: "facebook",
@@ -193,6 +199,7 @@ const integrations: Integration[] = [
     setupType: "oauth",
     benefits: ["Auto-sync payments", "Tax ready", "P&L reports"],
     recommended: true,
+    recommendedFor: ["stylist"],
   },
   {
     id: "xero",
@@ -348,6 +355,8 @@ const categories = [
 
 const Integrations = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
   const [webhookUrl, setWebhookUrl] = useState("");
@@ -370,10 +379,19 @@ const Integrations = () => {
     return filtered;
   }, [selectedCategory, searchQuery]);
 
-  const recommendedIntegrations = useMemo(() => 
-    integrations.filter(int => int.recommended), 
-    []
-  );
+  const recommendedIntegrations = useMemo(() => {
+    let recommended = integrations.filter(int => int.recommended);
+    
+    // Filter by role if not admin
+    if (!isAdmin) {
+      recommended = recommended.filter(int => 
+        int.recommendedFor?.includes(isStylist ? "stylist" : "client") ||
+        int.recommendedFor?.includes("both")
+      );
+    }
+    
+    return recommended;
+  }, [isStylist, isClient, isAdmin]);
 
   const stats = useMemo(() => ({
     available: integrations.filter(i => i.status === "available").length,
@@ -472,7 +490,11 @@ const Integrations = () => {
               <div>
                 <h1 className="text-4xl font-bold gradient-text">Integrations</h1>
                 <p className="text-muted-foreground text-lg">
-                  Connect your favorite tools and automate your workflow
+                  {isStylist 
+                    ? "Connect your favorite tools and automate your salon workflow"
+                    : isClient
+                    ? "Connect with your favorite calendar apps"
+                    : "Connect your favorite tools and automate your workflow"}
                 </p>
               </div>
             </div>

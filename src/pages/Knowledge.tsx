@@ -280,6 +280,14 @@ const Knowledge = () => {
       />
 
       <main className="container mx-auto px-4 py-6 max-w-7xl">
+        {/* Role-specific subtitle */}
+        <p className="text-muted-foreground text-center mb-6">
+          {isStylist 
+            ? "Professional guides and techniques for hair stylists"
+            : isClient
+            ? "Learn about hair care and what to expect from your appointments"
+            : "Browse articles, guides, and resources"}
+        </p>
         {/* Search Bar */}
         <Card className="mb-8 border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))]">
           <CardContent className="p-6">
