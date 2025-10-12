@@ -28,6 +28,12 @@ import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
 import { useDashboardLayout, DashboardSection } from "@/hooks/useDashboardLayout";
 import { RebookingPrompt } from "@/components/RebookingPrompt";
 import { DraggableSection } from "@/components/dashboard/DraggableSection";
+import { ClientSentimentTracker } from "@/components/dashboard/ClientSentimentTracker";
+import { RevenueTrends } from "@/components/dashboard/RevenueTrends";
+import { TopServices } from "@/components/dashboard/TopServices";
+import { ClientRetention } from "@/components/dashboard/ClientRetention";
+import { QuickNotes } from "@/components/dashboard/QuickNotes";
+import { FavoriteStylists } from "@/components/dashboard/FavoriteStylists";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save } from "lucide-react";
 import {
@@ -81,11 +87,17 @@ const Dashboard = () => {
     { id: "kpi-cards", title: "KPI Cards", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
     { id: "weekly-overview", title: "Weekly Overview", component: "WeeklyOverview", enabled: true },
+    { id: "client-sentiment", title: "Client Sentiment", component: "ClientSentimentTracker", enabled: true },
+    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: true },
+    { id: "top-services", title: "Top Services", component: "TopServices", enabled: true },
+    { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: true },
+    { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: true },
     { id: "quick-tasks", title: "Quick Tasks", component: "QuickTasks", enabled: true },
   ];
 
   const defaultClientSections: DashboardSection[] = [
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
+    { id: "favorite-stylists", title: "Favorite Stylists", component: "FavoriteStylists", enabled: true },
     { id: "upcoming-appointments", title: "Upcoming Appointments", component: "UpcomingAppointments", enabled: true },
     { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
   ];
@@ -450,8 +462,30 @@ const Dashboard = () => {
         return <QuickActions userRole={userRole || ""} />;
       case "WeeklyOverview":
         return userRole === "stylist" ? <WeeklyOverview /> : null;
+      case "ClientSentimentTracker":
+        return userRole === "stylist" && profile?.id ? (
+          <ClientSentimentTracker stylistId={profile.id} />
+        ) : null;
+      case "RevenueTrends":
+        return userRole === "stylist" && profile?.id ? (
+          <RevenueTrends stylistId={profile.id} />
+        ) : null;
+      case "TopServices":
+        return userRole === "stylist" && profile?.id ? (
+          <TopServices stylistId={profile.id} />
+        ) : null;
+      case "ClientRetention":
+        return userRole === "stylist" && profile?.id ? (
+          <ClientRetention stylistId={profile.id} />
+        ) : null;
+      case "QuickNotes":
+        return userRole === "stylist" ? <QuickNotes /> : null;
       case "QuickTasks":
         return userRole === "stylist" ? <QuickTasks /> : null;
+      case "FavoriteStylists":
+        return userRole === "client" && profile?.id ? (
+          <FavoriteStylists clientId={profile.id} />
+        ) : null;
       case "UpcomingAppointments":
         return userRole === "client" && stats ? (
           stats.upcomingAppointments > 0 ? (

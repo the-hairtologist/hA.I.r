@@ -241,9 +241,15 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
       <CardContent>
         {isCustomizing ? (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Select and reorder your quick actions. Drag to reorder, click to toggle.
-            </p>
+            <div className="p-4 rounded-lg brutal-border bg-gradient-to-r from-primary/10 to-accent/10 brutal-shadow-sm">
+              <p className="text-sm font-bold text-foreground">
+                ✨ Customize Your Actions
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Click to toggle • Drag selected items to reorder
+              </p>
+            </div>
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {allActions.map((action) => {
                 const Icon = action.icon;
@@ -258,29 +264,47 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
                     onDragEnd={handleDragEnd}
                     onClick={() => toggleAction(action.id)}
                     className={cn(
-                      "flex items-center gap-3 p-4 rounded-lg border-2 transition-all cursor-pointer",
+                      "group relative flex items-center gap-3 p-4 rounded-lg brutal-border cursor-pointer transition-all",
                       isSelected
-                        ? "border-primary bg-primary/5 hover:bg-primary/10"
-                        : "border-border bg-card/50 hover:border-primary/50"
+                        ? "bg-gradient-to-br from-primary/10 to-accent/10 brutal-shadow-md hover:brutal-shadow-lg active:brutal-shadow-sm"
+                        : "bg-card/80 hover:bg-card brutal-shadow-xs hover:brutal-shadow-sm active:scale-95"
                     )}
                   >
-                    {isSelected && (
-                      <GripVertical className="h-5 w-5 text-muted-foreground cursor-grab" />
-                    )}
                     <div className={cn(
-                      "p-2 rounded-md",
-                      isSelected ? "bg-primary/20" : "bg-muted"
+                      "p-2.5 rounded-lg brutal-border transition-all",
+                      isSelected 
+                        ? `bg-gradient-to-br ${action.gradient}` 
+                        : "bg-muted"
                     )}>
-                      <Icon className="h-5 w-5" />
+                      <Icon className={cn(
+                        "h-5 w-5 transition-colors",
+                        isSelected ? "text-white" : "text-muted-foreground"
+                      )} />
                     </div>
-                    <div className="flex-1">
-                      <p className="font-medium">{action.label}</p>
-                      <p className="text-sm text-muted-foreground">{action.description}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className={cn(
+                        "font-bold text-sm truncate transition-colors",
+                        isSelected && "text-primary"
+                      )}>
+                        {action.label}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {action.description}
+                      </p>
                     </div>
                     {isSelected && (
-                      <Badge variant="secondary">
-                        {selectedActions.indexOf(action.id) + 1}
-                      </Badge>
+                      <>
+                        <GripVertical className="h-5 w-5 text-primary cursor-grab active:cursor-grabbing shrink-0" />
+                        <Badge 
+                          variant="secondary" 
+                          className="absolute -top-2 -right-2 brutal-border brutal-shadow-xs bg-primary text-primary-foreground font-bold"
+                        >
+                          {selectedActions.indexOf(action.id) + 1}
+                        </Badge>
+                      </>
+                    )}
+                    {!isSelected && (
+                      <Plus className="h-5 w-5 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                     )}
                   </div>
                 );
