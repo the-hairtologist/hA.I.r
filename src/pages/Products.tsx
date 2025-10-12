@@ -11,8 +11,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Loader2, Package, AlertTriangle, TrendingUp, Edit, Trash2, Beaker } from "lucide-react";
+import { Plus, Loader2, Package, AlertTriangle, TrendingUp, Edit, Trash2, Beaker, Download } from "lucide-react";
+import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
+import { SkeletonList } from "@/components/ui/skeleton-list";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { useBulkSelection } from "@/hooks/useBulkSelection";
+import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { cn } from "@/lib/utils";
 
 const PRODUCT_CATEGORIES = [
   { value: "color", label: "Color" },
@@ -60,9 +66,34 @@ const Products = () => {
   const [costPerUnit, setCostPerUnit] = useState("");
   const [notes, setNotes] = useState("");
 
+  // Bulk selection
+  const {
+    selectedIds,
+    selectedCount,
+    isSelected,
+    toggleSelection,
+    clearSelection,
+  } = useBulkSelection(products);
+
   useEffect(() => {
     loadData();
   }, []);
+
+  // Global keyboard shortcuts
+  useGlobalKeyboardShortcuts([
+    {
+      key: 'n',
+      ctrl: true,
+      description: 'New product',
+      action: () => !dialogOpen && setDialogOpen(true),
+    },
+    {
+      key: 'e',
+      ctrl: true,
+      description: 'Export products',
+      action: () => handleExportCSV(),
+    },
+  ]);
 
   const loadData = async () => {
     try {
@@ -236,26 +267,86 @@ const Products = () => {
       .slice(0, 10);
   }, [usageData]);
 
+  const handleExportCSV = () => {
+    if (products.length === 0) {
+      toast.error("No products to export");
+      return;
+    }
+    
+    const exportData = products.map(p => ({
+      product_name: p.product_name,
+      brand: p.brand,
+      category: p.category,
+      current_quantity: p.current_quantity,
+      unit_type: p.unit_type,
+      reorder_threshold: p.reorder_threshold,
+      cost_per_unit: p.cost_per_unit || "",
+      total_value: ((p.current_quantity || 0) * (p.cost_per_unit || 0)).toFixed(2),
+      notes: p.notes || "",
+    }));
+    
+    exportToCSV(exportData, "product-inventory");
+    toast.success("Products exported!");
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedCount === 0) return;
+    
+    if (!confirm(`Delete ${selectedCount} product${selectedCount !== 1 ? 's' : ''}? This will remove them from all formulas.`)) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("product_inventory")
+        .delete()
+        .in("id", Array.from(selectedIds));
+      
+      if (error) throw error;
+      toast.success(`${selectedCount} product${selectedCount !== 1 ? 's' : ''} deleted`);
+      clearSelection();
+      loadData();
+    } catch (error) {
+      console.error("Error deleting products:", error);
+      toast.error("Failed to delete products");
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+      <DashboardLayout>
+        <div className="space-y-6">
+          <Breadcrumbs />
+          <SkeletonList count={6} variant="card" showHeader />
+        </div>
+      </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        <Breadcrumbs />
+        
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Product Inventory</h1>
             <p className="text-muted-foreground">Track product usage and manage inventory</p>
           </div>
-          <Button onClick={() => setDialogOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Product
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={handleExportCSV}
+              disabled={products.length === 0}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Product
+            </Button>
+          </div>
         </div>
 
         {/* Overview Cards */}
@@ -393,6 +484,34 @@ const Products = () => {
           </Card>
         )}
 
+        {/* Bulk Actions Bar */}
+        {selectedCount > 0 && (
+          <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] bg-primary/5">
+            <CardContent className="p-4 flex items-center justify-between gap-4">
+              <span className="font-medium">
+                {selectedCount} product{selectedCount !== 1 ? 's' : ''} selected
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBulkDelete}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete Selected
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearSelection}
+                >
+                  Clear
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Products List */}
         <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
           <CardHeader>
@@ -411,53 +530,67 @@ const Products = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="font-semibold">{product.product_name}</p>
-                        <Badge variant="outline" className="text-xs">
-                          {product.category}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{product.brand}</p>
-                      {product.notes && (
-                        <p className="text-xs text-muted-foreground mt-1">{product.notes}</p>
+                {products.map((product) => {
+                  const selected = isSelected(product.id);
+                  return (
+                    <div
+                      key={product.id}
+                      className={cn(
+                        "flex items-center justify-between p-4 border-[2px] rounded-lg hover:bg-secondary/5 transition-colors",
+                        selected ? "border-primary ring-2 ring-primary" : "border-foreground"
                       )}
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className="text-lg font-bold">
-                          {product.current_quantity} {product.unit_type}
-                        </p>
-                        {product.cost_per_unit && (
-                          <p className="text-xs text-muted-foreground">
-                            ${product.cost_per_unit}/{product.unit_type}
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <input
+                          type="checkbox"
+                          checked={selected}
+                          onChange={() => toggleSelection(product.id)}
+                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer"
+                        />
+                         <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold">{product.product_name}</p>
+                            <Badge variant="outline" className="text-xs">
+                              {product.category}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{product.brand}</p>
+                          {product.notes && (
+                            <p className="text-xs text-muted-foreground mt-1">{product.notes}</p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="text-lg font-bold">
+                            {product.current_quantity} {product.unit_type}
                           </p>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditProduct(product)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDeleteProduct(product.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                          {product.cost_per_unit && (
+                            <p className="text-xs text-muted-foreground">
+                              ${product.cost_per_unit}/{product.unit_type}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditProduct(product)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeleteProduct(product.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </CardContent>

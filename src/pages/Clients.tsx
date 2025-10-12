@@ -3,11 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2 } from "lucide-react";
+import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
+import { SkeletonList } from "@/components/ui/skeleton-list";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { useBulkSelection } from "@/hooks/useBulkSelection";
+import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
+import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteClientDialog } from "@/components/InviteClientDialog";
 import { SearchInput } from "@/components/SearchInput";
@@ -52,6 +59,7 @@ export default function Clients() {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [sortBy, setSortBy] = useState<"name" | "recent" | "inactive">("recent");
+  const [riskFilter, setRiskFilter] = useState<"all" | "60" | "90" | "120">("all");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
@@ -75,9 +83,34 @@ export default function Clients() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditSubmitting, setIsEditSubmitting] = useState(false);
 
+  // Bulk selection
+  const {
+    selectedIds,
+    selectedCount,
+    isSelected,
+    toggleSelection,
+    clearSelection,
+  } = useBulkSelection(clients);
+
   useEffect(() => {
     loadStylistProfile();
   }, []);
+
+  // Global keyboard shortcuts
+  useGlobalKeyboardShortcuts([
+    {
+      key: 'n',
+      ctrl: true,
+      description: 'New client',
+      action: () => !isDialogOpen && setIsDialogOpen(true),
+    },
+    {
+      key: 'e',
+      ctrl: true,
+      description: 'Export clients',
+      action: () => handleExportCSV(),
+    },
+  ]);
 
   useEffect(() => {
     if (stylistId) {
@@ -349,6 +382,18 @@ export default function Clients() {
       );
     }
 
+    // Risk filter - at-risk clients by days since last appointment
+    if (riskFilter !== "all") {
+      const daysAgo = parseInt(riskFilter);
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - daysAgo);
+      
+      filtered = filtered.filter(client => 
+        !client.last_appointment_date || 
+        new Date(client.last_appointment_date) < cutoffDate
+      );
+    }
+
     // Inactive filter (90+ days since last appointment)
     if (sortBy === "inactive") {
       const ninetyDaysAgo = new Date();
@@ -374,11 +419,66 @@ export default function Clients() {
     }
 
     return filtered;
-  }, [clients, debouncedSearch, sortBy]);
+  }, [clients, debouncedSearch, sortBy, riskFilter]);
+
+  const handleExportCSV = () => {
+    if (filteredClients.length === 0) {
+      toast.error("No clients to export");
+      return;
+    }
+    
+    const exportData = filteredClients.map(c => ({
+      name: c.full_name || "",
+      email: c.email || "",
+      phone: c.phone || "",
+      hair_type: c.hair_type || "",
+      allergies: c.allergies || "",
+      total_appointments: c.total_appointments || 0,
+      last_appointment: c.last_appointment_date 
+        ? new Date(c.last_appointment_date).toLocaleDateString()
+        : "Never",
+      days_since_last: c.last_appointment_date
+        ? Math.floor((new Date().getTime() - new Date(c.last_appointment_date).getTime()) / (1000 * 60 * 60 * 24))
+        : "N/A",
+    }));
+    
+    exportToCSV(exportData, "clients");
+    toast.success("Clients exported!");
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedCount === 0) return;
+    
+    if (!confirm(`Delete ${selectedCount} client${selectedCount !== 1 ? 's' : ''}? This will also delete all their formulas and appointments.`)) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("client_profiles")
+        .delete()
+        .in("id", Array.from(selectedIds));
+      
+      if (error) throw error;
+      toast.success(`${selectedCount} client${selectedCount !== 1 ? 's' : ''} deleted`);
+      clearSelection();
+      loadClients();
+    } catch (error) {
+      console.error("Error deleting clients:", error);
+      toast.error("Failed to delete clients");
+    }
+  };
+
+  const getDaysSinceLastVisit = (lastAppointmentDate: string | null): number | null => {
+    if (!lastAppointmentDate) return null;
+    const days = Math.floor((new Date().getTime() - new Date(lastAppointmentDate).getTime()) / (1000 * 60 * 60 * 24));
+    return days;
+  };
 
   if (loading) {
     return (
       <div className="container mx-auto py-8 px-4">
+        <Breadcrumbs />
         <div className="mb-6">
           <Button 
             variant="outline" 
@@ -390,11 +490,7 @@ export default function Clients() {
             Back
           </Button>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
-            <ClientCardSkeleton key={i} />
-          ))}
-        </div>
+        <SkeletonList count={9} variant="grid" />
       </div>
     );
   }
@@ -405,6 +501,8 @@ export default function Clients() {
         Skip to main content
       </a>
       <main id="main-content" role="main" aria-label="Clients" className="container mx-auto py-8 px-4">
+        <Breadcrumbs />
+        
         <div className="mb-6">
           <Button
             variant="outline"
@@ -424,11 +522,20 @@ export default function Clients() {
           <div className="flex gap-2">
             <Button 
               variant="outline"
+              onClick={handleExportCSV}
+              disabled={filteredClients.length === 0}
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Export
+            </Button>
+            <Button 
+              variant="outline"
               onClick={() => navigate("/formulas")}
               className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
             >
               <FileText className="h-4 w-4" />
-              View All Formulas
+              Formulas
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
@@ -576,7 +683,7 @@ export default function Clients() {
             placeholder="Search by name, email, or phone number (Press / or Cmd+K)"
             className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
           />
-          <Select value={sortBy} onValueChange={(value: "name" | "recent") => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
             <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
               <Filter className="h-4 w-4 mr-2" />
               <SelectValue />
@@ -587,7 +694,46 @@ export default function Clients() {
               <SelectItem value="inactive">Inactive (90+ days)</SelectItem>
             </SelectContent>
           </Select>
+          <Select value={riskFilter} onValueChange={(value: any) => setRiskFilter(value)}>
+            <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+              <SelectValue placeholder="At-Risk Filter" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Clients</SelectItem>
+              <SelectItem value="60">Not seen 60+ days</SelectItem>
+              <SelectItem value="90">Not seen 90+ days</SelectItem>
+              <SelectItem value="120">Not seen 120+ days</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+
+        {/* Bulk Actions Bar */}
+        {selectedCount > 0 && (
+          <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] bg-primary/5 mb-6">
+            <CardContent className="p-4 flex items-center justify-between gap-4">
+              <span className="font-medium">
+                {selectedCount} client{selectedCount !== 1 ? 's' : ''} selected
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBulkDelete}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete Selected
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearSelection}
+                >
+                  Clear
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {filteredClients.length === 0 ? (
           searchQuery || sortBy !== "recent" ? (
@@ -642,20 +788,51 @@ export default function Clients() {
           )
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredClients.map((client) => (
-              <Card 
-                key={client.id} 
-                className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-y-[-4px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] transition-all duration-300 bg-gradient-to-br from-card via-card to-secondary/5 cursor-pointer"
-                onClick={() => openEditDialog(client)}
-              >
-                <CardHeader className="border-b-[3px] border-foreground bg-secondary/10">
-                  <CardTitle className="flex items-center gap-2 font-display">
-                    <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground">
-                      <User className="h-5 w-5 text-secondary-foreground" />
+            {filteredClients.map((client) => {
+              const selected = isSelected(client.id);
+              const daysSince = getDaysSinceLastVisit(client.last_appointment_date);
+              
+              return (
+                <Card 
+                  key={client.id} 
+                  className={cn(
+                    "border-[3px] shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-y-[-4px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] transition-all duration-300 bg-gradient-to-br from-card via-card to-secondary/5 cursor-pointer",
+                    selected ? "border-primary ring-2 ring-primary" : "border-foreground"
+                  )}
+                  onClick={(e) => {
+                    // Only open dialog if not clicking checkbox
+                    if (!(e.target as HTMLElement).closest('input[type="checkbox"]')) {
+                      openEditDialog(client);
+                    }
+                  }}
+                >
+                  <CardHeader className="border-b-[3px] border-foreground bg-secondary/10">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2 flex-1">
+                        <input
+                          type="checkbox"
+                          checked={selected}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            toggleSelection(client.id);
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1"
+                        />
+                        <CardTitle className="flex items-center gap-2 font-display flex-1">
+                          <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground">
+                            <User className="h-5 w-5 text-secondary-foreground" />
+                          </div>
+                          {client.full_name || "Unnamed Client"}
+                        </CardTitle>
+                      </div>
+                      {daysSince !== null && (
+                        <Badge variant={daysSince > 90 ? "destructive" : daysSince > 60 ? "secondary" : "outline"} className="text-xs">
+                          {daysSince} days ago
+                        </Badge>
+                      )}
                     </div>
-                    {client.full_name || "Unnamed Client"}
-                  </CardTitle>
-                </CardHeader>
+                  </CardHeader>
                 <CardContent className="space-y-3 pt-4">
                   {client.email && (
                     <div className="flex items-center gap-2 text-sm p-2 bg-primary/5 rounded-lg border-[2px] border-primary/20">
@@ -743,7 +920,8 @@ export default function Clients() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            );
+          })}
           </div>
         )}
 

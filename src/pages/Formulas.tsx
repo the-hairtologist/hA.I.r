@@ -11,7 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, Clock, Beaker, FileText, ThumbsUp, AlertTriangle } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, Clock, Beaker, FileText, ThumbsUp, AlertTriangle, Download, ArrowUpDown } from "lucide-react";
+import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
+import { SkeletonList } from "@/components/ui/skeleton-list";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
 import { AddClientDialog } from "@/components/AddClientDialog";
 import { useKeyboardShortcut, SHORTCUTS } from "@/hooks/useKeyboardShortcut";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
@@ -44,6 +48,7 @@ const Formulas = () => {
     sortBy: "date-desc",
     tags: [],
   });
+  const [processingTimeSort, setProcessingTimeSort] = useState<"asc" | "desc" | null>(null);
   const [tagInput, setTagInput] = useState("");
   const [selectedFormulas, setSelectedFormulas] = useState<Set<string>>(new Set());
   
@@ -65,12 +70,21 @@ const Formulas = () => {
     loadData();
   }, []);
   
-  // Keyboard shortcut: Ctrl+N to open new formula dialog
-  useKeyboardShortcut(() => {
-    if (!dialogOpen) {
-      setDialogOpen(true);
-    }
-  }, { ...SHORTCUTS.NEW });
+  // Global keyboard shortcuts
+  useGlobalKeyboardShortcuts([
+    {
+      key: 'n',
+      ctrl: true,
+      description: 'New formula',
+      action: () => !dialogOpen && setDialogOpen(true),
+    },
+    {
+      key: 'e',
+      ctrl: true,
+      description: 'Export formulas',
+      action: () => handleExportCSV(),
+    },
+  ]);
 
   const loadData = async () => {
     try {
@@ -315,21 +329,30 @@ const Formulas = () => {
       );
     }
 
-    // Sort
-    filtered.sort((a, b) => {
-      switch (filters.sortBy) {
-        case "date-desc":
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-        case "date-asc":
-          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-        case "client-asc":
-          return (a.client?.full_name || "").localeCompare(b.client?.full_name || "");
-        case "client-desc":
-          return (b.client?.full_name || "").localeCompare(a.client?.full_name || "");
-        default:
-          return 0;
-      }
-    });
+    // Sort by processing time if enabled
+    if (processingTimeSort) {
+      filtered.sort((a, b) => {
+        const aTime = a.processing_time_minutes || 0;
+        const bTime = b.processing_time_minutes || 0;
+        return processingTimeSort === "asc" ? aTime - bTime : bTime - aTime;
+      });
+    } else {
+      // Regular sort
+      filtered.sort((a, b) => {
+        switch (filters.sortBy) {
+          case "date-desc":
+            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          case "date-asc":
+            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          case "client-asc":
+            return (a.client?.full_name || "").localeCompare(b.client?.full_name || "");
+          case "client-desc":
+            return (b.client?.full_name || "").localeCompare(a.client?.full_name || "");
+          default:
+            return 0;
+        }
+      });
+    }
 
     return filtered;
   }, [formulas, searchTerm, filters]);
@@ -351,20 +374,43 @@ const Formulas = () => {
 
   const selectedClientData = clients.find(c => c.id === selectedClient);
 
+  const handleExportCSV = () => {
+    if (filteredFormulas.length === 0) {
+      toast.error("No formulas to export");
+      return;
+    }
+    
+    const exportData = filteredFormulas.map(f => ({
+      client_name: f.client?.full_name || "",
+      formula: f.formula_text || "",
+      color_line: f.color_line || "",
+      processing_time: f.processing_time_minutes || "",
+      instructions: f.instructions || "",
+      result_notes: f.result_notes || "",
+      tags: f.tags?.join(", ") || "",
+      created_at: new Date(f.created_at).toLocaleDateString(),
+    }));
+    
+    exportToCSV(exportData, "formulas");
+    toast.success("Formulas exported!");
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
-          <p className="text-sm text-muted-foreground">Loading formulas...</p>
+      <DashboardLayout>
+        <div className="space-y-6">
+          <Breadcrumbs />
+          <SkeletonList count={8} variant="card" showHeader />
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        <Breadcrumbs />
+        
         {/* AI Disclaimer */}
         <AIDisclaimer context="formula" />
 
@@ -392,10 +438,20 @@ const Formulas = () => {
             <h1 className="text-3xl font-bold">Client Formulas</h1>
             <p className="text-muted-foreground">View and manage your client formulas</p>
           </div>
-          <Button onClick={() => setDialogOpen(true)} disabled={clients.length === 0}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Formula
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={handleExportCSV}
+              disabled={filteredFormulas.length === 0}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+            <Button onClick={() => setDialogOpen(true)} disabled={clients.length === 0}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Formula
+            </Button>
+          </div>
         </div>
 
         {/* Show prerequisite alert if no clients */}
@@ -626,10 +682,18 @@ const Formulas = () => {
                       {/* Processing Details */}
                       {(formula.processing_time_minutes || formula.developer_volume) && (
                         <div className="flex flex-wrap gap-4 text-xs">
-                          {formula.processing_time_minutes && (
-                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md">
+                           {formula.processing_time_minutes && (
+                            <div 
+                              className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md cursor-pointer hover:bg-muted/70"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setProcessingTimeSort(processingTimeSort === "asc" ? "desc" : "asc");
+                              }}
+                              title="Click to sort by processing time"
+                            >
                               <Clock className="h-3 w-3 text-primary" />
                               <span className="font-medium">{formula.processing_time_minutes} min</span>
+                              <ArrowUpDown className="h-3 w-3 text-muted-foreground" />
                             </div>
                           )}
                           {formula.developer_volume && (
