@@ -161,7 +161,7 @@ export const QuickAppointmentDialog = ({
           notes: notes.trim() || null,
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

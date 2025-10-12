@@ -32,7 +32,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
         .eq("celebrated", false)
         .order("created_at", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (data) {
         setMilestone(data);

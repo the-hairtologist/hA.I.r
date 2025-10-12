@@ -576,8 +576,8 @@ const Dashboard = () => {
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
-              {/* Weekly Schedule View for Stylists */}
-              {userRole === "stylist" && (
+              {/* Weekly Schedule View for Stylists and Admins */}
+              {(userRole === "stylist" || isAdmin) && (
                 <>
                   <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] mt-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     <WeeklyScheduleView

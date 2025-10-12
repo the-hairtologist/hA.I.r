@@ -133,7 +133,7 @@ export const AddClientDialog = ({
           preferred_stylist_id: stylistId,
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

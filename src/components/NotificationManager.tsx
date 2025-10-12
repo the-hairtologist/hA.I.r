@@ -30,7 +30,7 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", userId)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) return;
 
