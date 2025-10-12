@@ -186,40 +186,108 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
               Jump to what matters most
             </p>
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsCustomizing(!isCustomizing)}
+            className="shrink-0"
+          >
+            {isCustomizing ? (
+              <>
+                <X className="h-4 w-4 mr-2" />
+                Done
+              </>
+            ) : (
+              <>
+                <Settings2 className="h-4 w-4 mr-2" />
+                Customize
+              </>
+            )}
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {displayedActions.map((action, index) => {
-            const Icon = action.icon;
-            
-            return (
-              <button
-                key={action.id}
-                onClick={() => navigate(action.route)}
-                className="group relative rounded-xl brutal-border bg-card transition-all overflow-hidden brutal-shadow-xs hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] hover:-translate-y-2 hover:scale-[1.03] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <div className="flex flex-col items-center gap-3 p-5 text-center">
-                  <div className={`absolute inset-0 bg-gradient-to-br opacity-15 group-hover:opacity-20 transition-opacity ${action.gradient}`} />
-                  <div className="relative">
-                    <div className={`inline-flex p-3 rounded-lg bg-gradient-to-br brutal-border brutal-shadow-xs group-hover:brutal-shadow-sm transition-shadow ${action.gradient}`}>
-                      <Icon className="h-6 w-6 text-primary-foreground" />
+        {isCustomizing ? (
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Select and reorder your quick actions. Drag to reorder, click to toggle.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {allActions.map((action) => {
+                const Icon = action.icon;
+                const isSelected = selectedActions.includes(action.id);
+                
+                return (
+                  <div
+                    key={action.id}
+                    draggable={isSelected}
+                    onDragStart={() => handleDragStart(action.id)}
+                    onDragOver={(e) => handleDragOver(e, action.id)}
+                    onDragEnd={handleDragEnd}
+                    onClick={() => toggleAction(action.id)}
+                    className={cn(
+                      "flex items-center gap-3 p-4 rounded-lg border-2 transition-all cursor-pointer",
+                      isSelected
+                        ? "border-primary bg-primary/5 hover:bg-primary/10"
+                        : "border-border bg-card/50 hover:border-primary/50"
+                    )}
+                  >
+                    {isSelected && (
+                      <GripVertical className="h-5 w-5 text-muted-foreground cursor-grab" />
+                    )}
+                    <div className={cn(
+                      "p-2 rounded-md",
+                      isSelected ? "bg-primary/20" : "bg-muted"
+                    )}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">{action.label}</p>
+                      <p className="text-sm text-muted-foreground">{action.description}</p>
+                    </div>
+                    {isSelected && (
+                      <Badge variant="secondary">
+                        {selectedActions.indexOf(action.id) + 1}
+                      </Badge>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {displayedActions.map((action, index) => {
+              const Icon = action.icon;
+              
+              return (
+                <button
+                  key={action.id}
+                  onClick={() => navigate(action.route)}
+                  className="group relative rounded-xl brutal-border bg-card transition-all overflow-hidden brutal-shadow-xs hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] hover:-translate-y-2 hover:scale-[1.03] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <div className="flex flex-col items-center gap-3 p-5 text-center">
+                    <div className={`absolute inset-0 bg-gradient-to-br opacity-15 group-hover:opacity-20 transition-opacity ${action.gradient}`} />
+                    <div className="relative">
+                      <div className={`inline-flex p-3 rounded-lg bg-gradient-to-br brutal-border brutal-shadow-xs group-hover:brutal-shadow-sm transition-shadow ${action.gradient}`}>
+                        <Icon className="h-6 w-6 text-primary-foreground" />
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
+                        {action.label}
+                      </h4>
+                      <p className="text-sm text-foreground/70">
+                        {action.description}
+                      </p>
                     </div>
                   </div>
-                  <div className="relative">
-                    <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
-                      {action.label}
-                    </h4>
-                    <p className="text-sm text-foreground/70">
-                      {action.description}
-                    </p>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
