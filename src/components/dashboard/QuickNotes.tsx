@@ -75,11 +75,6 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
             className="min-h-[140px] resize-none bg-white/50 backdrop-blur-sm border-none focus:ring-0 focus:outline-none text-foreground placeholder:text-muted-foreground/60 shadow-none rounded-lg p-4"
-            style={{ 
-              fontFamily: 'Georgia, serif',
-              lineHeight: '1.8',
-              fontSize: '0.95rem'
-            }}
           />
           <Button
             onClick={handleSaveNote}
@@ -103,7 +98,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
                 key={note.id}
                 className="group relative p-3 rounded-lg bg-white/40 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-200 hover:shadow-md"
               >
-                <p className="text-sm text-foreground/90 leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                <p className="text-sm text-foreground/90">
                   {note.content}
                 </p>
                 <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
@@ -141,10 +136,6 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               className="min-h-[100px] resize-none brutal-border bg-white/50 dark:bg-card/50 backdrop-blur-sm focus:border-primary transition-colors"
-              style={{ 
-                fontFamily: 'Georgia, serif',
-                lineHeight: '1.8'
-              }}
             />
             <Button
               onClick={handleSaveNote}
@@ -170,7 +161,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
                   key={note.id}
                   className="group p-4 rounded-lg bg-gradient-to-br from-white/60 to-white/40 dark:from-card/60 dark:to-card/40 backdrop-blur-sm brutal-border hover:brutal-shadow-sm transition-all duration-200"
                 >
-                  <p className="text-sm text-foreground/90 leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                  <p className="text-sm text-foreground/90">
                     {note.content}
                   </p>
                   <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
