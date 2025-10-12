@@ -17,8 +17,6 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
   const [scrolled, setScrolled] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [headerVisible, setHeaderVisible] = useState(true);
 
   useEffect(() => {
     let ticking = false;
@@ -27,16 +25,7 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
-          
-          // Show/hide header based on scroll direction
-          if (currentScrollY > lastScrollY && currentScrollY > 80) {
-            setHeaderVisible(false);
-          } else {
-            setHeaderVisible(true);
-          }
-          
           setScrolled(currentScrollY > 10);
-          setLastScrollY(currentScrollY);
           ticking = false;
         });
         ticking = true;
@@ -45,7 +34,7 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const handleMenuClick = () => {
     haptic.tap();
@@ -57,8 +46,7 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
       className={cn(
         "md:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md",
         "transition-all duration-300 ease-out",
-        scrolled && "border-b-2 border-foreground shadow-lg",
-        headerVisible ? "translate-y-0" : "-translate-y-full"
+        scrolled && "border-b-2 border-foreground shadow-lg"
       )}
       style={{
         paddingTop: 'env(safe-area-inset-top, 0px)'
@@ -70,7 +58,7 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
           scrolled ? "h-14" : "h-16"
         )}
       >
-        {/* Left: Menu button - Enhanced visibility */}
+        {/* Left: Menu button with "More" indicator */}
         <Button
           variant="ghost"
           size="icon"
@@ -79,10 +67,16 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
             "min-w-[44px] min-h-[44px] touch-manipulation",
             "relative group hover:bg-primary/10 transition-all duration-200"
           )}
-          aria-label="Open navigation menu"
+          aria-label="Open full navigation menu - More options available"
         >
-          <Menu className="h-6 w-6 group-hover:text-primary transition-colors" />
-          {/* Subtle pulse indicator for discoverability */}
+          <div className="relative">
+            <Menu className="h-6 w-6 group-hover:text-primary transition-colors" />
+            {/* "More" indicator - small badge showing there's more in the menu */}
+            <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse" 
+                 title="More menu items available" 
+                 aria-hidden="true" />
+          </div>
+          {/* Subtle pulse background for discoverability */}
           <div className="absolute inset-0 rounded-md bg-primary/5 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity" />
         </Button>
 

@@ -1,51 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Calendar,
-  Users,
-  MessageSquare,
-  Palette,
-  DollarSign,
-  Sparkles,
-  Settings,
-  HelpCircle,
-  Home,
-  CalendarRange,
-  Scissors,
-  Building2,
-  Search,
-  LayoutDashboard,
-  BookOpen,
-  UserPlus,
-  Megaphone,
-  GripVertical,
-  Edit3,
-  RotateCcw,
-  Package,
-  Tag,
-  ChevronDown,
-  ChevronRight,
-  Command,
-  Gift,
-  Shield,
-  Crown,
-  FileText,
-  Activity,
-  Book as BookIcon,
-  Wand2,
-  Bell,
-  Star,
-  Link2,
-  User,
-  UserCircle,
-  Clock,
-  Mail,
-  TrendingUp,
-} from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
-import { NotificationDot } from "@/components/NotificationDot";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
+import { Edit3, RotateCcw } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -59,10 +13,8 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import {
   Sidebar,
   SidebarContent,
@@ -70,212 +22,33 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useSidebarOrder, SidebarItem } from "@/hooks/useSidebarOrder";
+import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
+import {
+  stylistNavigationItems,
+  clientNavigationItems,
+  getAdminNavigationItems,
+  stylistGroupLabels,
+  stylistAdminGroupLabels,
+  clientGroupLabels,
+  clientAdminGroupLabels,
+  type NavigationItem,
+} from "@/config/navigationConfig";
 
 interface AppSidebarProps {
   userRole?: string;
 }
 
-interface SortableNavItemProps {
-  item: SidebarItem;
-  collapsed: boolean;
-  getNavClassName: (props: { isActive: boolean }) => string;
-  isEditMode: boolean;
-  expandedItems: Set<string>;
-  toggleExpanded: (id: string) => void;
-  notificationCount?: number;
-}
-
-function SortableNavItem({
-  item,
-  collapsed,
-  getNavClassName,
-  isEditMode,
-  expandedItems,
-  toggleExpanded,
-  notificationCount,
-}: SortableNavItemProps) {
-  const location = useLocation();
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: item.id, disabled: !isEditMode });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  const hasChildren = item.children && item.children.length > 0;
-  const isExpanded = expandedItems.has(item.id);
-  const isParentActive = location.pathname === item.url.split('#')[0];
-  const isAnyChildActive = hasChildren && item.children?.some(child => 
-    location.pathname + location.hash === child.url || location.pathname === child.url.split('#')[0]
-  );
-
-  return (
-    <SidebarMenuItem ref={setNodeRef} style={style}>
-      <SidebarMenuButton 
-        asChild={!hasChildren} 
-        tooltip={item.title} 
-        className="min-h-[44px] group relative p-0"
-        onClick={hasChildren ? (e) => {
-          e.preventDefault();
-          toggleExpanded(item.id);
-        } : undefined}
-      >
-        {hasChildren ? (
-          <div className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
-            isParentActive || isAnyChildActive
-              ? 'bg-primary/10' 
-              : 'hover:bg-muted/50'
-          }`}>
-            {isEditMode && !collapsed && (
-              <div
-                {...attributes}
-                {...listeners}
-                className="cursor-grab active:cursor-grabbing"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <GripVertical className="h-4 w-4 text-muted-foreground" />
-              </div>
-            )}
-            <div className="relative flex-shrink-0">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 ${item.gradient}`}>
-                <item.icon className="h-5 w-5 text-on-surface-primary" />
-              </div>
-              {notificationCount !== undefined && notificationCount > 0 && (
-                <NotificationDot count={notificationCount} size="sm" />
-              )}
-            </div>
-            {!collapsed && (
-              <>
-                <div className="flex flex-col flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
-                      {item.title}
-                    </span>
-                  {item.comingSoon && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-gradient-to-r from-amber-500 to-orange-500 text-on-surface-primary shadow-sm whitespace-nowrap">
-                      Soon
-                    </span>
-                  )}
-                  </div>
-                  {item.description && (
-                    <span className="text-xs text-muted-foreground leading-tight truncate">
-                      {item.description}
-                    </span>
-                  )}
-                </div>
-                <div className={`flex-shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
-                  <ChevronDown className={`h-4 w-4 ${item.color || 'text-muted-foreground'}`} />
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <NavLink to={item.url} className={getNavClassName}>
-            {isEditMode && !collapsed && (
-              <div
-                {...attributes}
-                {...listeners}
-                className="cursor-grab active:cursor-grabbing"
-                onClick={(e) => e.preventDefault()}
-              >
-                <GripVertical className="h-4 w-4 text-muted-foreground" />
-              </div>
-            )}
-            <div className="relative flex-shrink-0">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 ${item.gradient}`}>
-                <item.icon className="h-5 w-5 text-on-surface-primary" />
-              </div>
-              {notificationCount !== undefined && notificationCount > 0 && (
-                <NotificationDot count={notificationCount} size="sm" />
-              )}
-            </div>
-            {!collapsed && (
-              <div className="flex flex-col flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
-                    {item.title}
-                  </span>
-                  {item.comingSoon && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-gradient-to-r from-amber-500 to-orange-500 text-on-surface-primary shadow-sm whitespace-nowrap">
-                      Soon
-                    </span>
-                  )}
-                </div>
-                {item.description && (
-                  <span className="text-xs text-muted-foreground leading-tight truncate">
-                    {item.description}
-                  </span>
-                )}
-              </div>
-            )}
-          </NavLink>
-        )}
-      </SidebarMenuButton>
-      {hasChildren && !collapsed && (
-        <div 
-          className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            isExpanded ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <SidebarMenuSub className="mt-1 mb-2 ml-4 space-y-1">
-            {item.children!.map((child) => {
-              const isChildActive = location.pathname + location.hash === child.url;
-              return (
-                <SidebarMenuSubItem key={child.id}>
-                  <SidebarMenuSubButton asChild>
-                    <NavLink 
-                      to={child.url} 
-                      className={`group relative pl-3 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-3 ${
-                        isChildActive 
-                          ? 'bg-primary/10' 
-                          : 'hover:bg-muted/50'
-                      }`}
-                    >
-                      <div className="relative flex-shrink-0">
-                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${child.gradient} ${
-                          isChildActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'
-                        }`}>
-                          <child.icon className="h-4 w-4 text-on-surface-primary" />
-                        </div>
-                      </div>
-                      <span className={`text-sm truncate ${child.color || 'text-foreground'}`}>
-                        {child.title}
-                      </span>
-                    </NavLink>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              );
-            })}
-          </SidebarMenuSub>
-        </div>
-      )}
-    </SidebarMenuItem>
-  );
-}
-
 export function AppSidebar({ userRole }: AppSidebarProps) {
   const { state } = useSidebar();
-  const location = useLocation();
   const { user } = useAuth();
-  const { isAdmin, isStylist, isClient, loading: roleLoading } = useUserRole(user?.id);
+  const { isAdmin, isStylist } = useUserRole(user?.id);
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
@@ -312,204 +85,18 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     }`;
   };
 
-  // Stylist Navigation with unique IDs
-  const stylistBaseItems: SidebarItem[] = [
-    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "calendar", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
-    { id: "clients", title: "Clients", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main", color: "text-emerald-400 dark:text-emerald-300" },
-    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
-    { 
-      id: "business", 
-      title: "Business", 
-      url: "#", 
-      icon: DollarSign, 
-      gradient: "bg-[image:var(--gradient-amber-orange)]", 
-      group: "business", 
-      color: "text-amber-400 dark:text-amber-300",
-      children: [
-        { 
-          id: "finance", 
-          title: "Finance Hub", 
-          url: "/finance", 
-          icon: DollarSign, 
-          gradient: "bg-[image:var(--gradient-amber-orange)]", 
-          group: "business",
-          color: "text-amber-400 dark:text-amber-300" 
-        },
-        { 
-          id: "services", 
-          title: "Services & Pricing", 
-          url: "/services", 
-          icon: Scissors, 
-          gradient: "bg-[image:var(--gradient-emerald-teal)]", 
-          group: "business",
-          color: "text-emerald-400 dark:text-emerald-300" 
-        },
-        { 
-          id: "reviews", 
-          title: "Client Reviews", 
-          url: "/stylist/reviews", 
-          icon: Star,
-          gradient: "bg-[image:var(--gradient-amber-orange)]", 
-          group: "business",
-          color: "text-amber-400 dark:text-amber-300" 
-        },
-      ]
-    },
-    { id: "availability", title: "Schedule", url: "/schedule", icon: Clock, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "scheduling", color: "text-blue-400 dark:text-blue-300" },
-    { id: "booking-page", title: "Booking Page", url: "/booking-page", icon: Link2, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "scheduling", color: "text-purple-400 dark:text-purple-300" },
-    { 
-      id: "growth", 
-      title: "Growth & Marketing", 
-      url: "#", 
-      icon: TrendingUp, 
-      gradient: "bg-[image:var(--gradient-green-emerald)]", 
-      group: "growth", 
-      color: "text-emerald-400 dark:text-emerald-300",
-      children: [
-        { 
-          id: "analytics", 
-          title: "Analytics", 
-          url: "/analytics", 
-          icon: Activity, 
-          gradient: "bg-[image:var(--gradient-green-emerald)]", 
-          group: "growth",
-          color: "text-emerald-400 dark:text-emerald-300" 
-        },
-        { 
-          id: "referrals", 
-          title: "Referrals", 
-          url: "/referrals", 
-          icon: Gift, 
-          gradient: "bg-[image:var(--gradient-purple-pink)]", 
-          group: "growth",
-          color: "text-purple-400 dark:text-purple-300" 
-        },
-        { 
-          id: "portfolio", 
-          title: "Portfolio", 
-          url: "/portfolio", 
-          icon: Palette, 
-          gradient: "bg-[image:var(--gradient-orange-red)]", 
-          group: "growth",
-          color: "text-orange-400 dark:text-orange-300" 
-        },
-        { 
-          id: "email-campaigns", 
-          title: "Email Campaigns", 
-          url: "/email-campaigns", 
-          icon: Mail, 
-          gradient: "bg-[image:var(--gradient-purple-pink)]", 
-          group: "growth",
-          color: "text-purple-400 dark:text-purple-300" 
-        },
-      ]
-    },
-    { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
-    { id: "knowledge", title: "Knowledge", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
-    { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools", color: "text-amber-400 dark:text-amber-300" },
-    { id: "settings", title: "Settings", url: "/settings", icon: Settings, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "tools", color: "text-blue-400 dark:text-blue-300" },
-    { id: "help", title: "Help", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
-  ];
+  // Get navigation items based on role
+  const adminItems = getAdminNavigationItems(isAdmin);
+  const baseItems: NavigationItem[] = (isAdmin || isStylist) 
+    ? [...stylistNavigationItems, ...adminItems]
+    : [...clientNavigationItems, ...adminItems];
 
-  // Admin-only items - SECURITY: Only shown when isAdmin=true (verified via database query)
-  const adminItems: SidebarItem[] = isAdmin ? [
-    { 
-      id: "admin-command", 
-      title: "Command Center", 
-      url: "/admin/command", 
-      icon: Crown, 
-      gradient: "bg-gradient-to-br from-amber-500 to-yellow-600", 
-      group: "admin", 
-      color: "text-amber-400 dark:text-amber-300", 
-      description: "Full platform control" 
-    },
-    { 
-      id: "admin-users", 
-      title: "User Management", 
-      url: "/admin/users", 
-      icon: Users, 
-      gradient: "bg-[image:var(--gradient-cyan-blue)]", 
-      group: "admin", 
-      color: "text-cyan-400 dark:text-cyan-300",
-      description: "Users, roles & profiles" 
-    },
-    { 
-      id: "audit-logs", 
-      title: "Audit Logs", 
-      url: "/admin/audit-logs", 
-      icon: FileText, 
-      gradient: "bg-gradient-to-br from-purple-500 to-pink-600", 
-      group: "admin", 
-      color: "text-purple-400 dark:text-purple-300",
-      description: "Security & compliance logs" 
-    },
-    { 
-      id: "system-health", 
-      title: "System Health", 
-      url: "/system-health", 
-      icon: Activity,
-      gradient: "bg-[image:var(--gradient-green-emerald)]", 
-      group: "admin", 
-      color: "text-emerald-400 dark:text-emerald-300",
-      description: "Monitor performance" 
-    },
-    { 
-      id: "admin-access-codes", 
-      title: "Access Control", 
-      url: "/admin/access-codes", 
-      icon: Tag, 
-      gradient: "bg-[image:var(--gradient-purple-pink)]", 
-      group: "admin", 
-      color: "text-purple-400 dark:text-purple-300",
-      description: "Invitation codes" 
-    },
-    { 
-      id: "app-directory", 
-      title: "Documentation", 
-      url: "/app-directory", 
-      icon: BookIcon, 
-      gradient: "bg-[image:var(--gradient-blue-indigo)]", 
-      group: "admin", 
-      color: "text-blue-400 dark:text-blue-300",
-      description: "App reference guide" 
-    },
-  ] : [];
-
-  const stylistAllItems = [...stylistBaseItems, ...adminItems];
-
-  // Client Navigation - clean and intuitive
-  const clientBaseItems: SidebarItem[] = [
-    { id: "dashboard", title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "appointments", title: "My Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
-    { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-violet-purple)]", group: "main", color: "text-violet-400 dark:text-violet-300" },
-    { id: "notifications", title: "Notifications", url: "/notifications", icon: Bell, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "main", color: "text-purple-400 dark:text-purple-300" },
-    { id: "find-stylist", title: "Find Stylists", url: "/stylist-discovery", icon: Search, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "services", color: "text-cyan-400 dark:text-cyan-300", comingSoon: true },
-    { id: "favorite-stylists", title: "My Stylists", url: "/favorites", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "services", color: "text-amber-400 dark:text-amber-300" },
-    { id: "my-formulas", title: "My Formulas", url: "/formulas", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "services", color: "text-emerald-400 dark:text-emerald-300" },
-    { id: "booking-history", title: "Booking History", url: "/booking-history", icon: CalendarRange, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "history", color: "text-blue-400 dark:text-blue-300" },
-    { id: "reviews", title: "My Reviews", url: "/client-reviews", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "history", color: "text-amber-400 dark:text-amber-300", description: "Rate stylists" },
-    { id: "profile", title: "My Profile", url: "/profile", icon: UserCircle, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
-    { id: "payment-methods", title: "Payment Methods", url: "/payment-methods", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "account", color: "text-amber-400 dark:text-amber-300", description: "Cards & billing" },
-    { id: "settings", title: "Settings", url: "/settings", icon: Settings, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
-    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "support", color: "text-cyan-400 dark:text-cyan-300" },
-  ];
-
-  // Add admin items to client navigation if user is admin
-  const clientAllItems = [...clientBaseItems, ...adminItems];
-
-  // Admins see stylist items by default (most comprehensive), or use actual role
-  const defaultItems = (isAdmin || isStylist) ? stylistAllItems : clientAllItems;
-  
+  // Get group labels based on role
   const groupLabels = (isAdmin || isStylist)
-    ? isAdmin 
-      ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support", admin: "Platform Administration" }
-      : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", help: "Support" }
-    : isAdmin
-      ? { main: "Main", services: "Services", history: "History", account: "Account", support: "Support", admin: "Platform Administration" }
-      : { main: "Main", services: "Services", history: "History", account: "Account", support: "Support" };
+    ? (isAdmin ? stylistAdminGroupLabels : stylistGroupLabels)
+    : (isAdmin ? clientAdminGroupLabels : clientGroupLabels);
   
-  const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);
+  const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(baseItems as SidebarItem[], groupLabels);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
