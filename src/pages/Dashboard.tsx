@@ -87,10 +87,10 @@ const Dashboard = () => {
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
     { id: "weekly-overview", title: "This Week", component: "WeeklyOverview", enabled: true },
+    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: true },
     { id: "quick-tasks", title: "Tasks", component: "QuickTasks", enabled: true },
-    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: false },
+    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: true },
     { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: false },
-    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: false },
     { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: false },
     { id: "quick-notes", title: "Notes", component: "QuickNotes", enabled: false },
   ];
@@ -631,24 +631,27 @@ const Dashboard = () => {
               </div>
             )}
             
-            <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-foreground">
-                  Your personalized dashboard
-                </p>
-                <p className="text-[10px] sm:text-xs text-muted-foreground">
-                  Click "Customize Dashboard" to add or remove sections
-                </p>
+            <div className="mb-6 p-4 rounded-xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent backdrop-blur-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    <Edit3 className="h-4 w-4 text-primary" />
+                    Personalize Your Dashboard
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Add, remove, or rearrange sections to match your workflow
+                  </p>
+                </div>
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  onClick={() => setIsEditMode(true)}
+                  className="gap-2 shrink-0 w-full sm:w-auto shadow-sm"
+                >
+                  <Edit3 className="h-3.5 w-3.5" />
+                  <span>Customize</span>
+                </Button>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setIsEditMode(true)}
-                className="gap-1.5 shrink-0 w-full sm:w-auto h-9"
-              >
-                <Edit3 className="h-3.5 w-3.5" />
-                <span>Customize Dashboard</span>
-              </Button>
             </div>
           </>
         )}

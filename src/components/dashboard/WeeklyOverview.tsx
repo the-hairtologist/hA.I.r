@@ -48,30 +48,37 @@ export const WeeklyOverview = () => {
   ];
 
   return (
-    <Card variant="glass" className="backdrop-blur-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg font-display">
-          <TrendingUp className="h-5 w-5 text-primary" />
+    <Card variant="glass" className="backdrop-blur-xl border-primary/10 hover:border-primary/20 transition-all duration-300">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-base font-semibold">
+          <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
+            <TrendingUp className="h-4 w-4 text-primary" />
+          </div>
           This Week
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {stats.map((stat) => {
+        <div className="grid grid-cols-2 gap-3">
+          {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
               <div
                 key={stat.label}
-                className="relative rounded-lg brutal-border bg-card p-4 overflow-hidden"
+                className="group relative rounded-xl border border-border/50 bg-gradient-to-br from-background to-muted/20 p-4 overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                style={{ 
+                  animation: `fadeInUp 0.4s ease-out ${index * 0.15}s both`
+                }}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br opacity-10 ${stat.gradient}`} />
-                <div className="relative flex items-center gap-3">
-                  <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.gradient}`}>
-                    <Icon className="h-5 w-5 text-primary-foreground" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.gradient} shadow-sm`}>
+                      <Icon className="h-4 w-4 text-white" />
+                    </div>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold font-display">{stat.value}</p>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+                    <p className="text-3xl font-bold font-display tracking-tight">{stat.value}</p>
+                    <p className="text-xs text-muted-foreground font-medium">{stat.label}</p>
                   </div>
                 </div>
               </div>

@@ -168,11 +168,11 @@ function SortableNavItem({
                     <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
                       {item.title}
                     </span>
-                    {item.comingSoon && (
-                      <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-amber-500/80 text-white whitespace-nowrap">
-                        Coming Soon
-                      </span>
-                    )}
+                  {item.comingSoon && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm whitespace-nowrap">
+                      Soon
+                    </span>
+                  )}
                   </div>
                   {item.description && (
                     <span className="text-[10px] text-muted-foreground leading-tight truncate">
@@ -213,8 +213,8 @@ function SortableNavItem({
                     {item.title}
                   </span>
                   {item.comingSoon && (
-                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-amber-500/80 text-white whitespace-nowrap">
-                      Coming Soon
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm whitespace-nowrap">
+                      Soon
                     </span>
                   )}
                 </div>

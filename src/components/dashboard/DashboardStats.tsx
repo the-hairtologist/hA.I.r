@@ -92,9 +92,15 @@ export const DashboardStats = memo(({ stats, userRole }: DashboardStatsProps) =>
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       {displayStats.map((stat, index) => (
-        <div key={stat.label} className="relative">
+        <div 
+          key={stat.label} 
+          className="relative transform transition-all duration-300 hover:scale-[1.02]"
+          style={{ 
+            animation: `fadeInUp 0.4s ease-out ${index * 0.1}s both`
+          }}
+        >
           <StatCard
             label={stat.label}
             value={stat.value}
@@ -104,7 +110,7 @@ export const DashboardStats = memo(({ stats, userRole }: DashboardStatsProps) =>
             delay={index * 75}
           />
           {stat.emptyHelp && stat.value === 0 && (
-            <div className="absolute -top-2 -right-2">
+            <div className="absolute -top-1 -right-1 z-10">
               <HelpTooltip
                 title={stat.label}
                 content={{ stylist: stat.emptyHelp }}
