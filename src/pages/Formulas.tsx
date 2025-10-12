@@ -703,6 +703,7 @@ const Formulas = () => {
                           size="sm"
                           onClick={() => handleDuplicateFormula(formula)}
                           title="Duplicate formula"
+                          aria-label={`Duplicate formula for ${formula.client?.full_name || 'client'}`}
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
@@ -711,6 +712,7 @@ const Formulas = () => {
                           size="sm"
                           onClick={() => handleEditFormula(formula)}
                           title="Edit formula"
+                          aria-label={`Edit formula for ${formula.client?.full_name || 'client'}`}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -719,6 +721,7 @@ const Formulas = () => {
                           size="sm"
                           onClick={() => handleDeleteFormula(formula.id)}
                           title="Delete formula"
+                          aria-label={`Delete formula for ${formula.client?.full_name || 'client'}`}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

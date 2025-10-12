@@ -198,6 +198,7 @@ const Notifications = () => {
                             size="icon"
                             variant="ghost"
                             onClick={() => markAsRead.mutate(notification.id)}
+                            aria-label="Mark as read"
                           >
                             <Check className="h-4 w-4" />
                           </Button>
@@ -206,6 +207,7 @@ const Notifications = () => {
                           size="icon"
                           variant="ghost"
                           onClick={() => deleteNotification.mutate(notification.id)}
+                          aria-label="Delete notification"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

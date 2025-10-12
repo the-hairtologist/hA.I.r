@@ -616,6 +616,7 @@ const Integrations = () => {
                                   variant="outline" 
                                   size="icon"
                                   onClick={() => window.open(`https://${integration.id}.com`, '_blank')}
+                                  aria-label={`Open ${integration.name} website`}
                                 >
                                   <ExternalLink className="h-4 w-4" />
                                 </Button>
@@ -793,6 +794,7 @@ const Integrations = () => {
                             variant="outline" 
                             size="icon"
                             onClick={() => window.open(`https://${integration.id}.com`, '_blank')}
+                            aria-label={`Open ${integration.name} website`}
                           >
                             <ExternalLink className="h-4 w-4" />
                           </Button>

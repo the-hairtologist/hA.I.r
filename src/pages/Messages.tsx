@@ -516,6 +516,7 @@ const Messages = () => {
                       onClick={() => document.getElementById("video-upload")?.click()}
                       disabled={uploading}
                       title="Upload video"
+                      aria-label="Upload video"
                     >
                       {uploading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -540,6 +541,7 @@ const Messages = () => {
                       disabled={!messageText.trim()}
                       size="icon"
                       className="h-[60px] w-[60px]"
+                      aria-label="Send message"
                     >
                       <Send className="h-4 w-4" />
                     </Button>
