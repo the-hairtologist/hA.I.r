@@ -589,9 +589,9 @@ const Dashboard = () => {
       <main id="main-content" role="main" aria-label="Dashboard" className="pl-12 w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
+        <div className="mb-8 sm:mb-12 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-xs sm:text-sm font-bold">
+            <span className="text-background font-mono text-[10px] sm:text-xs md:text-sm font-bold">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
             </span>
             <div className="window-controls">
@@ -601,21 +601,21 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-3 md:p-5 relative overflow-hidden">
+          <div className="bg-blue-600 p-2 sm:p-3 md:p-5 relative overflow-hidden">
             <div className="window-scrollbar"></div>
             
-            <div className="max-w-7xl mx-auto">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-black mb-3 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+            <div className="w-full">
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-display font-black mb-2 sm:mb-3 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
               {/* Stylists and Admins */}
               {(userRole === "stylist" || isAdmin) && (
-                <div className="space-y-3">
-                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="space-y-2 sm:space-y-3">
+                  <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Your schedule at a glance 📅
                   </p>
-                  <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in" style={{ animationDelay: '250ms' }}>
+                  <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in overflow-hidden" style={{ animationDelay: '250ms' }}>
                     <WeeklyScheduleView
                         appointments={weekAppointments}
                         stylistSchedule={profile?.weekly_schedule}
@@ -633,11 +633,11 @@ const Dashboard = () => {
               {/* Clients */}
               {userRole === "client" && (
                 <>
-                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                  <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Ready to book your next transformation? ✨
                   </p>
                   {weekAppointments.length > 0 ? (
-                    <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in mt-3" style={{ animationDelay: '250ms' }}>
+                    <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in mt-2 sm:mt-3 overflow-hidden" style={{ animationDelay: '250ms' }}>
                         <WeeklyScheduleView
                           appointments={weekAppointments}
                           stylistSchedule={profile?.weekly_schedule}
@@ -647,19 +647,20 @@ const Dashboard = () => {
                         />
                     </div>
                   ) : (
-                    <div className="mt-4 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-6 sm:p-8 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <div className="mt-3 sm:mt-4 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-4 sm:p-6 md:p-8 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
                       <div className="max-w-sm mx-auto">
-                        <div className="mb-4">
-                          <span className="text-5xl">📅</span>
+                        <div className="mb-3 sm:mb-4">
+                          <span className="text-4xl sm:text-5xl">📅</span>
                         </div>
-                        <h3 className="text-lg font-bold text-foreground mb-2">No Upcoming Appointments</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
+                        <h3 className="text-base sm:text-lg font-bold text-foreground mb-2">No Upcoming Appointments</h3>
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                           Book your next appointment to see your schedule here
                         </p>
                         <Button 
                           onClick={() => navigate("/stylist-discovery")}
                           variant="default"
                           className="gap-2"
+                          size="sm"
                         >
                           Find Your Stylist
                         </Button>
