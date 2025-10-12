@@ -71,17 +71,22 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
       <div className="space-y-3">
         <div className="space-y-2">
           <Textarea
-            placeholder="Jot down a quick note..."
+            placeholder="Write your note here..."
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
-            className="min-h-[80px] resize-none bg-white/80 border-yellow-600/30 focus:border-yellow-600/50"
-            style={{ fontFamily: 'Courier New, monospace' }}
+            className="min-h-[100px] resize-none bg-transparent border-none focus:ring-0 text-gray-800 placeholder:text-gray-500"
+            style={{ 
+              fontFamily: 'Courier New, monospace',
+              lineHeight: '1.8rem',
+              fontSize: '0.95rem'
+            }}
           />
           <Button
             onClick={handleSaveNote}
             disabled={!newNote.trim()}
             size="sm"
-            className="w-full gap-2"
+            className="gap-2"
+            variant="secondary"
           >
             <Save className="h-4 w-4" />
             Save Note
@@ -89,30 +94,28 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
         </div>
 
         {loading ? (
-          <div className="space-y-2">
-            {[1, 2].map((i) => (
-              <div key={i} className="h-16 bg-yellow-200/50 rounded animate-pulse" />
+          <div className="space-y-2 pt-2 border-t border-yellow-600/20">
+            {[1].map((i) => (
+              <div key={i} className="h-12 bg-yellow-300/30 rounded animate-pulse" />
             ))}
           </div>
         ) : notes.length > 0 ? (
-          <div className="space-y-2 max-h-40 overflow-y-auto">
+          <div className="space-y-2 max-h-40 overflow-y-auto pt-2 border-t border-yellow-600/20">
             {notes.map((note) => (
               <div
                 key={note.id}
-                className="p-3 rounded bg-white/60 border border-yellow-600/20 text-sm"
+                className="text-sm pb-2 border-b border-yellow-600/10 last:border-0"
               >
-                <p className="text-gray-800" style={{ fontFamily: 'Courier New, monospace' }}>{note.content}</p>
-                <p className="text-xs text-gray-600 mt-2">
+                <p className="text-gray-800" style={{ fontFamily: 'Courier New, monospace', lineHeight: '1.6' }}>
+                  {note.content}
+                </p>
+                <p className="text-xs text-gray-600 mt-1">
                   {new Date(note.created_at).toLocaleDateString()}
                 </p>
               </div>
             ))}
           </div>
-        ) : (
-          <p className="text-sm text-gray-600 text-center py-2" style={{ fontFamily: 'Courier New, monospace' }}>
-            No notes yet. Start writing!
-          </p>
-        )}
+        ) : null}
       </div>
     );
   }
