@@ -3,9 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { MobileNav } from "@/components/MobileNav";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { MobileHeader } from "@/components/MobileHeader";
+import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Scissors, User, LogOut, HelpCircle, Crown } from "lucide-react";
@@ -21,6 +23,7 @@ import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { RoleSwitcher } from "@/components/RoleSwitcher";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useState, useEffect } from "react";
 
 interface DashboardLayoutProps {
@@ -32,6 +35,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user, loading: authLoading } = useAuth();
   const { roles, loading: roleLoading, isAdmin } = useUserRole(user?.id);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const { unreadCount } = useRealtimeNotifications(user?.id);
   
   // Admin view switcher - allows admin to preview different role experiences
   type ViewMode = "admin" | "stylist" | "client";
@@ -133,19 +137,25 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <SidebarProvider>
       <div className="min-h-screen w-full flex bg-[image:var(--gradient-bg-main)]">
         <AppSidebar userRole={userRole || undefined} />
+        <MobileSidebarOverlay />
         
         <div className="flex-1 min-w-0 flex flex-col">
-          {/* Top Header */}
-          <header className="sticky top-0 z-40 border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-            <div className="flex h-16 items-center gap-4 px-4">
-              <SidebarTrigger className="-ml-1 border-2 border-foreground" />
+          {/* Mobile Header */}
+          <MobileHeader 
+            userRole={userRole || undefined} 
+            notificationCount={unreadCount}
+          />
+
+          {/* Desktop Header */}
+          <header className="hidden md:flex sticky top-0 z-40 border-b-4 border-foreground bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
+            <div className="flex h-16 items-center gap-4 px-4 w-full">
               
               <button 
                 onClick={() => navigate("/dashboard")}
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
                 <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-bold font-display hidden sm:block">hA.I.r</h1>
+                <h1 className="text-xl font-bold font-display">hA.I.r</h1>
               </button>
 
               <div className="ml-auto flex items-center gap-2 md:gap-3">
@@ -155,7 +165,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       currentView={adminViewMode}
                       onViewChange={setAdminViewMode}
                     />
-                    <Badge className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
+                    <Badge className="bg-warning text-warning-foreground border-2 border-foreground animate-pulse">
                       <Crown className="h-3 w-3 mr-1" />
                       ADMIN
                     </Badge>
@@ -163,7 +173,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 )}
                 
                 {userRole && !isAdmin && (
-                  <Badge variant="secondary" className="hidden sm:flex bg-warning text-warning-foreground border-2 border-foreground">
+                  <Badge variant="secondary" className="bg-warning text-warning-foreground border-2 border-foreground">
                     {userRole === "stylist" ? "✂️ Stylist" : "👤 Client"}
                   </Badge>
                 )}
@@ -172,7 +182,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="gap-1.5 md:gap-2 border-2 border-foreground px-2 md:px-3">
                       <User className="h-4 w-4" />
-                      <span className="hidden md:inline truncate max-w-[100px]">
+                      <span className="truncate max-w-[100px]">
                         {user?.user_metadata?.full_name || "Account"}
                       </span>
                     </Button>
@@ -203,15 +213,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </header>
 
           {/* Main Content */}
-      <main className="flex-1 overflow-auto pb-16 md:pb-0">
-        <div className="container mx-auto p-4 sm:p-6 animate-fade-in-fast max-w-full">
-          <Breadcrumbs />
-          {children}
-        </div>
-      </main>
+          <main className="flex-1 overflow-auto pb-20 md:pb-0">
+            <div className="container mx-auto p-4 sm:p-6 animate-fade-in-fast max-w-full">
+              <Breadcrumbs />
+              {children}
+            </div>
+          </main>
         </div>
         
-        <MobileNav userRole={userRole || undefined} />
+        <MobileBottomNav userRole={userRole || undefined} />
         <FloatingActionButton userRole={userRole || "client"} />
       </div>
       

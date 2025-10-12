@@ -82,7 +82,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
     <div 
       className="fixed right-4 sm:right-6 md:right-8 z-[60] flex flex-col-reverse items-end gap-3"
       style={{
-        bottom: 'clamp(6rem, 18vh, 10rem)' // Increased: 96px-160px from bottom for better clearance
+        bottom: 'max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 5.5rem))' // 88px + safe area
       }}
     >
       {/* Action Items */}

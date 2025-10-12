@@ -1,0 +1,143 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Menu, Scissors, Bell, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { haptic } from "@/platform/haptics";
+import { useSidebar } from "@/components/ui/sidebar";
+import { NotificationDot } from "./NotificationDot";
+
+interface MobileHeaderProps {
+  userRole?: string;
+  notificationCount?: number;
+}
+
+export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderProps) => {
+  const navigate = useNavigate();
+  const { toggleSidebar } = useSidebar();
+  const [scrolled, setScrolled] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [headerVisible, setHeaderVisible] = useState(true);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          
+          // Show/hide header based on scroll direction
+          if (currentScrollY > lastScrollY && currentScrollY > 80) {
+            setHeaderVisible(false);
+          } else {
+            setHeaderVisible(true);
+          }
+          
+          setScrolled(currentScrollY > 10);
+          setLastScrollY(currentScrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  const handleMenuClick = () => {
+    haptic.tap();
+    toggleSidebar();
+  };
+
+  return (
+    <header 
+      className={cn(
+        "md:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md",
+        "transition-all duration-300 ease-out",
+        scrolled && "border-b-2 border-foreground shadow-lg",
+        headerVisible ? "translate-y-0" : "-translate-y-full"
+      )}
+      style={{
+        paddingTop: 'env(safe-area-inset-top, 0px)'
+      }}
+    >
+      <div 
+        className={cn(
+          "flex items-center justify-between px-4 transition-all duration-300",
+          scrolled ? "h-14" : "h-16"
+        )}
+      >
+        {/* Left: Menu button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleMenuClick}
+          className="min-w-[44px] min-h-[44px] touch-manipulation"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="h-6 w-6" />
+        </Button>
+
+        {/* Center: Logo */}
+        <button 
+          onClick={() => {
+            haptic.tap();
+            navigate("/dashboard");
+          }}
+          className={cn(
+            "flex items-center gap-2 transition-all duration-300 touch-manipulation",
+            "hover:opacity-80 active:scale-95",
+            scrolled && "scale-90"
+          )}
+          aria-label="Go to dashboard"
+        >
+          <Scissors className="h-6 w-6 text-primary" />
+          <h1 className="text-lg font-bold font-display bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            hA.I.r
+          </h1>
+        </button>
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-1">
+          {/* Search button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              haptic.tap();
+              window.dispatchEvent(new CustomEvent('global-search-focus'));
+            }}
+            className="min-w-[44px] min-h-[44px] touch-manipulation"
+            aria-label="Open search"
+          >
+            <Search className="h-5 w-5" />
+          </Button>
+
+          {/* Notifications button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              haptic.tap();
+              navigate("/notifications");
+            }}
+            className="relative min-w-[44px] min-h-[44px] touch-manipulation"
+            aria-label={`Notifications${notificationCount > 0 ? `, ${notificationCount} unread` : ''}`}
+          >
+            <Bell className="h-5 w-5" />
+            {notificationCount > 0 && (
+              <NotificationDot 
+                count={notificationCount} 
+                size="sm"
+                className="absolute top-1 right-1"
+              />
+            )}
+          </Button>
+        </div>
+      </div>
+    </header>
+  );
+};
