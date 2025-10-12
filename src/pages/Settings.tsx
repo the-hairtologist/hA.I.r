@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
@@ -18,6 +18,8 @@ import { DataExport } from "@/components/DataExport";
 import { AccountDeletion } from "@/components/AccountDeletion";
 import { PrivacySettings } from "@/components/PrivacySettings";
 import { HelpTooltip } from "@/components/HelpTooltip";
+import { useTheme } from "next-themes";
+import { Switch as ThemeSwitch } from "@/components/ui/switch";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -29,6 +31,20 @@ const Settings = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  // Security - Password change
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  // Notification preferences
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [smsNotifications, setSmsNotifications] = useState(false);
+  const [marketingEmails, setMarketingEmails] = useState(true);
+  const [appointmentReminders, setAppointmentReminders] = useState(true);
+  const [rebookingReminders, setRebookingReminders] = useState(true);
 
   // Profile data
   const [fullName, setFullName] = useState("");
@@ -245,6 +261,51 @@ const Settings = () => {
     }
   };
 
+  const handlePasswordChange = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("All password fields are required");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords don't match");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) throw error;
+
+      toast.success("Password updated successfully");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error: any) {
+      console.error("Error changing password:", error);
+      toast.error(error.message || "Failed to change password");
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const handlePreviewProfile = () => {
+    if (userRole === "stylist") {
+      // Open stylist profile in new tab
+      window.open(`/stylist/${user?.id}`, '_blank');
+    } else {
+      toast.info("Profile preview is available for stylists");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -263,21 +324,26 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="profile" className="text-sm sm:text-base">
-              <User className="h-4 w-4 mr-2" />
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="profile" className="text-xs sm:text-sm">
+              <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Profile</span>
-              <span className="sm:hidden">Profile</span>
             </TabsTrigger>
-            <TabsTrigger value="account" className="text-sm sm:text-base">
-              <Shield className="h-4 w-4 mr-2" />
+            <TabsTrigger value="account" className="text-xs sm:text-sm">
+              <Shield className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Account</span>
-              <span className="sm:hidden">Account</span>
             </TabsTrigger>
-            <TabsTrigger value="preferences" className="text-sm sm:text-base">
-              <Bell className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Preferences</span>
-              <span className="sm:hidden">Prefs</span>
+            <TabsTrigger value="security" className="text-xs sm:text-sm">
+              <Lock className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Security</span>
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="text-xs sm:text-sm">
+              <Bell className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Alerts</span>
+            </TabsTrigger>
+            <TabsTrigger value="preferences" className="text-xs sm:text-sm">
+              <SettingsIcon className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Prefs</span>
             </TabsTrigger>
           </TabsList>
 
@@ -460,20 +526,32 @@ const Settings = () => {
                   </>
                 )}
 
-                <Button 
-                  onClick={handleSaveProfile} 
-                  disabled={!hasChanges || isSaving}
-                  className="w-full sm:w-auto"
-                >
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    'Save Profile'
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button 
+                    onClick={handleSaveProfile} 
+                    disabled={!hasChanges || isSaving}
+                    className="w-full sm:w-auto"
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Profile'
+                    )}
+                  </Button>
+                  {userRole === "stylist" && (
+                    <Button 
+                      variant="outline"
+                      onClick={handlePreviewProfile}
+                      className="w-full sm:w-auto"
+                    >
+                      <Eye className="mr-2 h-4 w-4" />
+                      Preview Public Profile
+                    </Button>
                   )}
-                </Button>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
