@@ -51,47 +51,47 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
 
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-secondary/5">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg font-display">
+      <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-pink-rose">
             <Repeat className="h-5 w-5 text-on-surface-primary" />
           </div>
           <span>Client Retention</span>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 sm:p-5 md:p-6">
         {loading ? (
-          <div className="space-y-3">
+          <div className="space-y-3 sm:space-y-4">
             <div className="h-24 bg-muted/50 rounded-lg animate-pulse" />
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="text-center">
-              <div className="text-4xl font-display font-bold text-secondary">
+              <div className="text-3xl sm:text-4xl font-display font-bold text-secondary">
                 {stats.retentionRate}%
               </div>
-              <p className="text-sm text-muted-foreground font-medium mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">
                 Retention Rate
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-lg bg-muted/30 brutal-border text-center">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 rounded-lg bg-muted/30 brutal-border text-center min-h-[100px] flex flex-col items-center justify-center">
                 <Users className="h-5 w-5 mx-auto mb-2 text-primary" />
-                <div className="text-2xl font-display font-bold">
+                <div className="text-xl sm:text-2xl font-display font-bold">
                   {stats.totalClients}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
                   Total Clients
                 </p>
               </div>
 
-              <div className="p-3 rounded-lg bg-muted/30 brutal-border text-center">
+              <div className="p-3 sm:p-4 rounded-lg bg-muted/30 brutal-border text-center min-h-[100px] flex flex-col items-center justify-center">
                 <Repeat className="h-5 w-5 mx-auto mb-2 text-secondary" />
-                <div className="text-2xl font-display font-bold">
+                <div className="text-xl sm:text-2xl font-display font-bold">
                   {stats.returningClients}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
                   Returning
                 </p>
               </div>

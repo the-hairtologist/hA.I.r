@@ -92,7 +92,7 @@ export const DashboardStats = memo(({ stats, userRole }: DashboardStatsProps) =>
   );
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
       {displayStats.map((stat, index) => (
         <div 
           key={stat.label} 

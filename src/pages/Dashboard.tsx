@@ -621,6 +621,7 @@ const Dashboard = () => {
                           setQuickAppointmentData({ date, hour, minute });
                           setQuickAppointmentOpen(true);
                         }}
+                        compact={true}
                       />
                   </div>
                 </div>
@@ -640,6 +641,7 @@ const Dashboard = () => {
                           stylistId={profile?.id}
                           onAppointmentClick={(apt) => navigate("/appointments")}
                           onTimeSlotClick={undefined}
+                          compact={true}
                         />
                     </div>
                   ) : (
