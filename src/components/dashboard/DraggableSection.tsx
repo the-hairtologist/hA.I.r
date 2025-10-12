@@ -64,7 +64,7 @@ export function DraggableSection({
             >
               <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
-            <span className="text-[10px] font-display font-bold text-foreground/80 uppercase tracking-wider flex-1">
+            <span className="text-[10px] font-display font-black text-foreground uppercase tracking-wider flex-1">
               {section.title}
             </span>
             <button
@@ -76,7 +76,7 @@ export function DraggableSection({
                   : "hover:bg-muted/50"
               )}
               aria-label={section.enabled ? "Hide section" : "Show section"}
-              title={section.enabled ? "Hide" : "Show"}
+              title={section.enabled ? "Click to hide this section" : "Click to show this section"}
             >
               {section.enabled ? (
                 <Eye className="h-3.5 w-3.5 text-primary" />
