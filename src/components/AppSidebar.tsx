@@ -159,13 +159,27 @@ function SortableNavItem({
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
               )}
+              {item.comingSoon && (
+                <div className="absolute -top-1 -right-1">
+                  <span className="inline-flex items-center px-1 py-0.5 rounded text-[8px] font-semibold bg-amber-500 text-white shadow-sm">
+                    SOON
+                  </span>
+                </div>
+              )}
             </div>
             {!collapsed && (
               <>
                 <div className="flex flex-col flex-1 min-w-0">
-                  <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
-                    {item.title}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
+                      {item.title}
+                    </span>
+                    {item.comingSoon && (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500 text-white whitespace-nowrap">
+                        Coming Soon
+                      </span>
+                    )}
+                  </div>
                   {item.description && (
                     <span className="text-[10px] text-muted-foreground leading-tight truncate">
                       {item.description}
@@ -197,12 +211,26 @@ function SortableNavItem({
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
               )}
+              {item.comingSoon && (
+                <div className="absolute -top-1 -right-1">
+                  <span className="inline-flex items-center px-1 py-0.5 rounded text-[8px] font-semibold bg-amber-500 text-white shadow-sm">
+                    SOON
+                  </span>
+                </div>
+              )}
             </div>
             {!collapsed && (
               <div className="flex flex-col flex-1 min-w-0">
-                <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
-                  {item.title}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-sm font-medium truncate ${item.color || 'text-foreground'}`}>
+                    {item.title}
+                  </span>
+                  {item.comingSoon && (
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500 text-white whitespace-nowrap">
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
                 {item.description && (
                   <span className="text-[10px] text-muted-foreground leading-tight truncate">
                     {item.description}
@@ -302,12 +330,12 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "calendar", title: "Appointments", url: "/appointments", icon: Calendar, gradient: "bg-[image:var(--gradient-cyan-blue)]", description: "View & manage bookings", group: "main", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "clients", title: "Client Management", url: "/clients", icon: Users, gradient: "bg-[image:var(--gradient-green-emerald)]", group: "main", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "messages", title: "Messages", url: "/messages", icon: MessageSquare, gradient: "bg-[image:var(--gradient-pink-rose)]", group: "main", color: "text-pink-400 dark:text-pink-300" },
-    { id: "find-clients", title: "Find New Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "marketplace", color: "text-cyan-400 dark:text-cyan-300", description: "Coming Soon" },
+    { id: "find-clients", title: "Find New Clients", url: "/client-discovery", icon: UserPlus, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "marketplace", color: "text-cyan-400 dark:text-cyan-300", comingSoon: true },
     { id: "availability", title: "Set Availability", url: "/schedule", icon: Clock, gradient: "bg-[image:var(--gradient-blue-indigo)]", description: "Your working hours", group: "scheduling", color: "text-blue-400 dark:text-blue-300" },
     { id: "booking-page", title: "My Booking Page", url: "/booking-page", icon: Link2, gradient: "bg-[image:var(--gradient-purple-pink)]", description: "Share with clients", group: "scheduling", color: "text-purple-400 dark:text-purple-300" },
     { id: "services", title: "Services & Pricing", url: "/services", icon: Scissors, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300" },
     { id: "finance", title: "Finance", url: "/finance", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
-    { id: "products", title: "Product Inventory", url: "/products", icon: Package, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300", description: "Coming Soon" },
+    { id: "products", title: "Product Inventory", url: "/products", icon: Package, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300", comingSoon: true },
     { id: "reviews", title: "Client Reviews", url: "/reviews", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
     { 
       id: "marketing", 

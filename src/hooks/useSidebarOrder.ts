@@ -11,6 +11,7 @@ export interface SidebarItem {
   description?: string;
   group: string;
   color?: string;
+  comingSoon?: boolean;
   children?: SidebarItem[];
 }
 
