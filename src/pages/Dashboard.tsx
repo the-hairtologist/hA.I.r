@@ -643,19 +643,19 @@ const Dashboard = () => {
                         />
                     </div>
                   ) : (
-                    <div className="mt-3 sm:mt-4 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-4 sm:p-6 md:p-8 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
-                      <div className="max-w-sm mx-auto">
-                        <div className="mb-3 sm:mb-4">
-                          <span className="text-4xl sm:text-5xl">📅</span>
+                    <div className="mt-2 sm:mt-3 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-3 sm:p-4 md:p-6 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
+                      <div className="max-w-xs mx-auto">
+                        <div className="mb-2 sm:mb-3">
+                          <span className="text-3xl sm:text-4xl">📅</span>
                         </div>
-                        <h3 className="text-base sm:text-lg font-bold text-foreground mb-2">No Upcoming Appointments</h3>
-                        <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
+                        <h3 className="text-sm sm:text-base font-bold text-foreground mb-1.5 sm:mb-2">No Upcoming Appointments</h3>
+                        <p className="text-[11px] sm:text-xs text-muted-foreground mb-2.5 sm:mb-3">
                           Book your next appointment to see your schedule here
                         </p>
                         <Button 
                           onClick={() => navigate("/stylist-discovery")}
                           variant="default"
-                          className="gap-2"
+                          className="gap-2 h-8 text-xs"
                           size="sm"
                         >
                           Find Your Stylist
