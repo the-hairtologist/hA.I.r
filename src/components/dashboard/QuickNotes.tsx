@@ -74,11 +74,12 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             placeholder="Write your note here..."
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
-            className="min-h-[100px] resize-none bg-transparent border-none focus:ring-0 text-gray-800 placeholder:text-gray-500"
+            className="min-h-[120px] resize-none bg-transparent border-none focus:ring-0 focus:outline-none text-gray-800 placeholder:text-gray-500/60 shadow-none"
             style={{ 
               fontFamily: 'Courier New, monospace',
-              lineHeight: '1.8rem',
-              fontSize: '0.95rem'
+              lineHeight: '1.75rem',
+              fontSize: '0.95rem',
+              paddingTop: '0.25rem'
             }}
           />
           <Button

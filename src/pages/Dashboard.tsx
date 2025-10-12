@@ -601,16 +601,26 @@ const Dashboard = () => {
               {/* Quick Notes - Compact Notepad */}
               {(userRole === "stylist" || isAdmin) && (
                 <div className="mt-6 max-w-md animate-fade-in" style={{ animationDelay: '250ms' }}>
-                  <div className="bg-yellow-100 rounded-lg shadow-lg border-t-8 border-yellow-400 relative">
+                  <div className="bg-yellow-100 rounded-lg shadow-lg border-t-8 border-yellow-400 relative overflow-hidden">
+                    {/* Notepad ruled lines */}
+                    <div 
+                      className="absolute inset-0 pointer-events-none" 
+                      style={{
+                        backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(200,180,150,0.4) 27px, rgba(200,180,150,0.4) 28px)',
+                        backgroundSize: '100% 28px',
+                        backgroundPosition: '0 48px'
+                      }}
+                    />
+                    
                     {/* Simple header */}
-                    <div className="px-4 py-2 border-b border-yellow-300/50 bg-yellow-200/30">
+                    <div className="px-4 py-2 border-b border-yellow-300/50 bg-yellow-200/30 relative">
                       <h3 className="text-sm font-bold text-gray-700 flex items-center gap-2">
                         📝 Quick Notes
                       </h3>
                     </div>
                     
-                    {/* Notes content - simplified */}
-                    <div className="p-4">
+                    {/* Notes content - transparent textarea */}
+                    <div className="p-4 relative">
                       <QuickNotes compact />
                     </div>
                   </div>
