@@ -111,6 +111,41 @@ serve(async (req) => {
           continue;
         }
 
+        // Get stylist's email settings for customization
+        const { data: emailSettings } = await supabase
+          .from("email_settings")
+          .select("*")
+          .eq("user_id", stylistProfile?.user_id)
+          .single();
+
+        // Use custom settings or defaults
+        const settings = emailSettings || {
+          rebooking_enabled: true,
+          rebooking_subject: "✨ Time for a Touch-Up with {{stylist_name}}!",
+          rebooking_headline: "Hi {{client_name}}! 👋",
+          rebooking_opening: "It's been about 6 weeks since your last visit with {{stylist_name}} at {{business_name}}. Your hair is probably ready for some professional love! 💇",
+          rebooking_cta_text: "📅 Book Your Appointment",
+          rebooking_closing: "{{stylist_name}} is looking forward to seeing you again and help you maintain that fabulous look!",
+          custom_message: "",
+          show_business_logo: false,
+          business_logo_url: "",
+        };
+
+        // Skip if stylist has disabled rebooking emails
+        if (!settings.rebooking_enabled) {
+          console.log(`Rebooking emails disabled for stylist ${stylistProfile?.id}`);
+          continue;
+        }
+
+        // Function to replace placeholders
+        const replacePlaceholders = (text: string) => {
+          if (!text) return "";
+          return text
+            .replace(/\{\{client_name\}\}/g, clientName)
+            .replace(/\{\{stylist_name\}\}/g, stylistName)
+            .replace(/\{\{business_name\}\}/g, businessName);
+        };
+
         // Check email preferences
         const { data: emailPrefs } = await supabase
           .from("email_preferences")
@@ -143,11 +178,28 @@ serve(async (req) => {
         const bookingUrl = `${baseUrl}/appointments?ref=rebooking_email&reminder_id=${appointment.id}`;
         const unsubscribeUrl = `${baseUrl}/unsubscribe?token=${unsubscribeToken}`;
 
-        // Send email reminder with improved styling
+        // Build custom email HTML using stylist's settings
+        const logoSection = settings.show_business_logo && settings.business_logo_url ? `
+          <tr>
+            <td style="padding: 20px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+              <img src="${settings.business_logo_url}" alt="${businessName} Logo" style="max-width: 150px; height: auto;">
+            </td>
+          </tr>
+        ` : '';
+
+        const customMessageSection = settings.custom_message ? `
+          <div style="background-color: #f8f9fa; border-left: 4px solid #6366f1; padding: 20px; margin: 30px 0; border-radius: 8px;">
+            <p style="font-size: 15px; line-height: 1.6; color: #333; margin: 0;">
+              ${replacePlaceholders(settings.custom_message)}
+            </p>
+          </div>
+        ` : '';
+
+        // Send email reminder with stylist's customization
         const emailResult = await resend.emails.send({
           from: `${businessName} via hA.I.r <onboarding@resend.dev>`,
           to: [clientEmail],
-          subject: `✨ Time for a Touch-Up with ${stylistName}!`,
+          subject: replacePlaceholders(settings.rebooking_subject),
           html: `
             <!DOCTYPE html>
             <html>
@@ -160,11 +212,13 @@ serve(async (req) => {
                 <tr>
                   <td align="center">
                     <table width="600" cellpadding="0" cellspacing="0" style="background-color: white; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+                      ${logoSection}
+                      
                       <!-- Header with gradient -->
                       <tr>
                         <td style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 40px 40px 30px; text-align: center;">
                           <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">
-                            ✨ Time for Your Next Appointment
+                            ${replacePlaceholders(settings.rebooking_headline)}
                           </h1>
                         </td>
                       </tr>
@@ -172,30 +226,23 @@ serve(async (req) => {
                       <!-- Main content -->
                       <tr>
                         <td style="padding: 40px;">
-                          <p style="font-size: 18px; line-height: 1.6; color: #333; margin: 0 0 20px;">
-                            Hi <strong>${clientName}</strong>! 👋
-                          </p>
-                          
                           <p style="font-size: 16px; line-height: 1.6; color: #555; margin: 0 0 20px;">
-                            It's been about 6 weeks since your last visit with <strong>${stylistName}</strong> at <strong>${businessName}</strong>. 
-                            Your hair is probably ready for some professional love! 💇
+                            ${replacePlaceholders(settings.rebooking_opening)}
                           </p>
                           
-                          <p style="font-size: 16px; line-height: 1.6; color: #555; margin: 0 0 30px;">
-                            Want to keep that fabulous look going? Book your next appointment now and let's make magic happen again! ✨
-                          </p>
+                          ${customMessageSection}
                           
                           <!-- CTA Button -->
                           <div style="text-align: center; margin: 40px 0;">
                             <a href="${bookingUrl}" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 16px 40px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">
-                              📅 Book Your Appointment
+                              ${replacePlaceholders(settings.rebooking_cta_text)}
                             </a>
                           </div>
                           
-                          <!-- Social proof -->
+                          <!-- Pro Tip -->
                           <div style="background-color: #f8f9fa; border-left: 4px solid #6366f1; padding: 20px; margin: 30px 0; border-radius: 8px;">
                             <p style="font-size: 14px; line-height: 1.6; color: #666; margin: 0;">
-                              💡 <strong>Pro Tip:</strong> Regular appointments every 6-8 weeks help maintain healthy, beautiful hair. ${stylistName} is looking forward to seeing you!
+                              💡 <strong>Pro Tip:</strong> Regular appointments every 6-8 weeks help maintain healthy, beautiful hair. ${replacePlaceholders(settings.rebooking_closing)}
                             </p>
                           </div>
                           

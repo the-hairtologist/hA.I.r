@@ -76,6 +76,7 @@ const Help = lazy(() => import("./pages/Help"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const EmailCampaigns = lazy(() => import("./pages/EmailCampaigns"));
+const EmailSettings = lazy(() => import("./pages/EmailSettings"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -304,6 +305,11 @@ const App = () => {
           <Route path="/email-campaigns" element={
             <ProtectedRoute allowedRoles={["admin", "stylist"]}>
               <EmailCampaigns />
+            </ProtectedRoute>
+          } />
+          <Route path="/email-settings" element={
+            <ProtectedRoute allowedRoles={["stylist"]}>
+              <EmailSettings />
             </ProtectedRoute>
           } />
           

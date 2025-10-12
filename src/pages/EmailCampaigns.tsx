@@ -101,14 +101,24 @@ export default function EmailCampaigns() {
               Monitor and manage your automated email campaigns
             </p>
           </div>
-          <Button 
-            onClick={triggerManualSend} 
-            disabled={triggering}
-            className="gap-2"
-          >
-            <RefreshCw className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`} />
-            {triggering ? "Sending..." : "Send Now"}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => window.location.href = '/email-settings'}
+              variant="outline"
+              className="gap-2"
+            >
+              <Mail className="w-4 h-4" />
+              Customize Emails
+            </Button>
+            <Button 
+              onClick={triggerManualSend} 
+              disabled={triggering}
+              className="gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`} />
+              {triggering ? "Sending..." : "Send Now"}
+            </Button>
+          </div>
         </div>
 
         {/* Key Metrics */}

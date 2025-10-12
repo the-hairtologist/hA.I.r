@@ -823,6 +823,105 @@ export type Database = {
         }
         Relationships: []
       }
+      email_preferences: {
+        Row: {
+          appointment_reminders_enabled: boolean | null
+          client_id: string | null
+          created_at: string | null
+          email: string
+          id: string
+          marketing_emails_enabled: boolean | null
+          rebooking_reminders_enabled: boolean | null
+          unsubscribe_token: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          appointment_reminders_enabled?: boolean | null
+          client_id?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          marketing_emails_enabled?: boolean | null
+          rebooking_reminders_enabled?: boolean | null
+          unsubscribe_token?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          appointment_reminders_enabled?: boolean | null
+          client_id?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          marketing_emails_enabled?: boolean | null
+          rebooking_reminders_enabled?: boolean | null
+          unsubscribe_token?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_preferences_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_preferences_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+        ]
+      }
+      email_settings: {
+        Row: {
+          business_logo_url: string | null
+          created_at: string | null
+          custom_message: string | null
+          id: string
+          rebooking_closing: string | null
+          rebooking_cta_text: string | null
+          rebooking_enabled: boolean | null
+          rebooking_headline: string | null
+          rebooking_opening: string | null
+          rebooking_subject: string | null
+          show_business_logo: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          business_logo_url?: string | null
+          created_at?: string | null
+          custom_message?: string | null
+          id?: string
+          rebooking_closing?: string | null
+          rebooking_cta_text?: string | null
+          rebooking_enabled?: boolean | null
+          rebooking_headline?: string | null
+          rebooking_opening?: string | null
+          rebooking_subject?: string | null
+          show_business_logo?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          business_logo_url?: string | null
+          created_at?: string | null
+          custom_message?: string | null
+          id?: string
+          rebooking_closing?: string | null
+          rebooking_cta_text?: string | null
+          rebooking_enabled?: boolean | null
+          rebooking_headline?: string | null
+          rebooking_opening?: string | null
+          rebooking_subject?: string | null
+          show_business_logo?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       error_logs: {
         Row: {
           action: string
