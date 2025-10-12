@@ -53,40 +53,38 @@ export function DraggableSection({
       )}
     >
       {isEditMode && (
-        <div className="absolute -top-3 left-2 right-2 z-10 flex items-center justify-between gap-2">
-          {/* Left side - Drag handle */}
-          <div className="flex items-center gap-2 bg-card brutal-border brutal-shadow-sm rounded-lg px-2 py-1.5">
+        <div className="absolute -top-3 left-2 right-2 z-10">
+          {/* Single unified control bar */}
+          <div className="flex items-center gap-2 bg-card brutal-border brutal-shadow-md rounded-lg px-2 py-1.5 backdrop-blur-sm bg-gradient-to-r from-card to-primary/5">
             <div
               {...attributes}
               {...listeners}
-              className="cursor-grab active:cursor-grabbing touch-none p-1.5 rounded-md bg-gradient-to-br from-primary/20 to-accent/20 hover:from-primary/30 hover:to-accent/30 transition-all hover:scale-110 active:scale-95"
+              className="cursor-grab active:cursor-grabbing touch-none p-1.5 rounded-md hover:bg-primary/10 transition-all hover:scale-110 active:scale-95"
               aria-label="Drag to reorder"
             >
               <GripVertical className="h-4 w-4 text-primary" />
             </div>
-            <span className="text-[11px] font-display font-bold text-foreground uppercase tracking-wider">
+            <span className="text-[11px] font-display font-bold text-foreground uppercase tracking-wider flex-1">
               {section.title}
             </span>
+            <button
+              onClick={onToggle}
+              className={cn(
+                "p-1.5 rounded-md transition-all hover:scale-110 active:scale-95",
+                section.enabled 
+                  ? "hover:bg-primary/10" 
+                  : "hover:bg-muted"
+              )}
+              aria-label={section.enabled ? "Hide section" : "Show section"}
+              title={section.enabled ? "Hide" : "Show"}
+            >
+              {section.enabled ? (
+                <Eye className="h-4 w-4 text-primary" />
+              ) : (
+                <EyeOff className="h-4 w-4 text-muted-foreground" />
+              )}
+            </button>
           </div>
-
-          {/* Right side - Toggle visibility */}
-          <button
-            onClick={onToggle}
-            className={cn(
-              "brutal-border brutal-shadow-sm rounded-lg p-2 transition-all hover:brutal-shadow-md active:scale-95",
-              section.enabled 
-                ? "bg-gradient-to-br from-success/20 to-success/10 hover:from-success/30 hover:to-success/20" 
-                : "bg-card hover:bg-muted"
-            )}
-            aria-label={section.enabled ? "Hide section" : "Show section"}
-            title={section.enabled ? "Hide" : "Show"}
-          >
-            {section.enabled ? (
-              <Eye className="h-4 w-4 text-success" />
-            ) : (
-              <EyeOff className="h-4 w-4 text-muted-foreground" />
-            )}
-          </button>
         </div>
       )}
       <div className={isEditMode ? "pt-5 px-3 pb-3" : ""}>
