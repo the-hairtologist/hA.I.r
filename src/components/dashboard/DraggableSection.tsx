@@ -4,7 +4,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Eye, EyeOff } from "lucide-react";
 import { DashboardSection } from "@/hooks/useDashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface DraggableSectionProps {
   section: DashboardSection;
@@ -45,60 +44,48 @@ export function DraggableSection({
   }
 
   return (
-    <TooltipProvider>
-      <div
-        ref={setNodeRef}
-        style={style}
-        className={`animate-fade-in relative ${
-          isEditMode ? "rounded-lg border-2 border-dashed border-primary/30 p-4 bg-muted/20" : ""
-        }`}
-      >
-        {isEditMode && (
-          <div className="absolute -top-3 left-3 z-10 flex items-center gap-1.5 bg-background border border-border rounded-md px-2 py-1 shadow-sm">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div
-                  {...attributes}
-                  {...listeners}
-                  className="cursor-grab active:cursor-grabbing touch-none p-0.5 hover:bg-accent rounded transition-colors"
-                  aria-label="Drag to reorder section"
-                >
-                  <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p className="text-xs">Drag to reorder</p>
-              </TooltipContent>
-            </Tooltip>
-            
-            <span className="text-xs font-medium text-foreground px-1">{section.title}</span>
-            
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onToggle}
-                  className="h-5 w-5 p-0 hover:bg-accent"
-                  aria-label={section.enabled ? "Hide section" : "Show section"}
-                >
-                  {section.enabled ? (
-                    <Eye className="h-3 w-3 text-muted-foreground" />
-                  ) : (
-                    <EyeOff className="h-3 w-3 text-muted-foreground" />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p className="text-xs">{section.enabled ? "Hide" : "Show"}</p>
-              </TooltipContent>
-            </Tooltip>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`animate-fade-in relative group ${
+        isEditMode ? "rounded-lg border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors" : ""
+      }`}
+    >
+      {isEditMode && (
+        <div className="absolute -top-2.5 left-2 right-2 z-10 flex items-center justify-between">
+          {/* Left side - Drag handle */}
+          <div className="flex items-center gap-1 bg-background/95 backdrop-blur-sm border border-border rounded-md px-1.5 py-0.5 shadow-sm">
+            <div
+              {...attributes}
+              {...listeners}
+              className="cursor-grab active:cursor-grabbing touch-none p-1 hover:bg-accent rounded transition-colors"
+              aria-label="Drag to reorder"
+            >
+              <GripVertical className="h-3 w-3 text-muted-foreground" />
+            </div>
+            <span className="text-[10px] font-semibold text-foreground uppercase tracking-wide">
+              {section.title}
+            </span>
           </div>
-        )}
-        <div className={isEditMode ? "mt-2" : ""}>
-          {children}
+
+          {/* Right side - Toggle visibility */}
+          <button
+            onClick={onToggle}
+            className="bg-background/95 backdrop-blur-sm border border-border rounded-md p-1.5 hover:bg-accent transition-all shadow-sm active:scale-95"
+            aria-label={section.enabled ? "Hide section" : "Show section"}
+            title={section.enabled ? "Hide" : "Show"}
+          >
+            {section.enabled ? (
+              <Eye className="h-3 w-3 text-green-600" />
+            ) : (
+              <EyeOff className="h-3 w-3 text-muted-foreground" />
+            )}
+          </button>
         </div>
+      )}
+      <div className={isEditMode ? "pt-4 px-2 pb-2" : ""}>
+        {children}
       </div>
-    </TooltipProvider>
+    </div>
   );
 }

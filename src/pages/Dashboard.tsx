@@ -529,33 +529,34 @@ const Dashboard = () => {
 
         {/* Customize Dashboard Controls */}
         {isEditMode && (
-          <div className="mb-6 p-4 bg-primary/5 border-l-4 border-primary rounded-lg animate-fade-in">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-primary/5 to-accent/5 border-l-4 border-primary rounded-lg animate-fade-in shadow-sm">
+            <div className="flex flex-col gap-3">
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-foreground mb-1">Customize Your Dashboard</h3>
-                <p className="text-xs text-muted-foreground hidden sm:block">
-                  Drag sections to reorder • Toggle eye icon to show/hide
-                </p>
-                <p className="text-xs text-muted-foreground sm:hidden">
-                  Long-press to drag • Tap eye icon to toggle
+                <h3 className="text-sm font-bold text-foreground mb-1 flex items-center gap-2">
+                  <Edit3 className="h-3.5 w-3.5" />
+                  Customize Your Dashboard
+                </h3>
+                <p className="text-[11px] sm:text-xs text-muted-foreground">
+                  <span className="hidden sm:inline">Drag sections to reorder • Toggle eye icon to show/hide</span>
+                  <span className="sm:hidden">Long-press to drag • Tap eye to toggle</span>
                 </p>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-2">
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={handleReset}
-                  className="gap-1.5 min-w-[80px]"
+                  className="gap-1.5 flex-1 sm:flex-none sm:min-w-[90px] h-8 text-xs"
                 >
-                  <RotateCcw className="h-3.5 w-3.5" />
+                  <RotateCcw className="h-3 w-3" />
                   <span>Reset</span>
                 </Button>
                 <Button 
                   size="sm" 
                   onClick={handleSave}
-                  className="gap-1.5 min-w-[80px]"
+                  className="gap-1.5 flex-1 sm:flex-none sm:min-w-[90px] h-8 text-xs"
                 >
-                  <Save className="h-3.5 w-3.5" />
+                  <Save className="h-3 w-3" />
                   <span>Done</span>
                 </Button>
               </div>
@@ -596,19 +597,18 @@ const Dashboard = () => {
               </div>
             )}
             
-            <div className="mb-6 flex items-center justify-between gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <p className="text-sm font-medium text-muted-foreground">
+            <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">
                 Your personalized dashboard
               </p>
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={() => setIsEditMode(true)}
-                className="gap-1.5 shrink-0"
+                className="gap-1.5 shrink-0 w-full sm:w-auto h-9"
               >
                 <Edit3 className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Customize Dashboard</span>
-                <span className="sm:hidden">Customize</span>
+                <span>Customize Dashboard</span>
               </Button>
             </div>
           </>
@@ -624,7 +624,7 @@ const Dashboard = () => {
             items={sections.map(s => s.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {sections.map((section, index) => (
                 <DraggableSection
                   key={section.id}
