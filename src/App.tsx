@@ -67,6 +67,7 @@ const ClientReviews = lazy(() => import("./pages/ClientReviews"));
 const BookingPage = lazy(() => import("./pages/BookingPage"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Help = lazy(() => import("./pages/Help"));
+const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -307,6 +308,13 @@ const App = () => {
           <Route path="/stylist/:id" element={
             <ProtectedRoute>
               <StylistProfile />
+            </ProtectedRoute>
+          } />
+          
+          {/* Coming Soon Page */}
+          <Route path="/coming-soon" element={
+            <ProtectedRoute>
+              <ComingSoon />
             </ProtectedRoute>
           } />
           
