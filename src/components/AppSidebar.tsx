@@ -459,11 +459,11 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
         </DndContext>
 
         {/* Separator */}
-        <Separator className="my-2" />
+        <Separator className="my-4" />
 
         {/* Keyboard Shortcuts - Stylist Only */}
         {!collapsed && userRole === 'stylist' && (
-          <div className="px-3 py-2">
+          <div className="px-3 pb-4 mt-auto">
             <Button
               variant="outline"
               size="sm"
@@ -476,7 +476,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
                 });
                 window.dispatchEvent(event);
               }}
-              className="w-full justify-center gap-2 text-xs h-8 bg-primary/10 border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50 transition-all animate-fade-in"
+              className="w-full justify-center gap-2 text-xs h-9 bg-primary/5 border-primary/20 text-primary hover:bg-primary/10 hover:border-primary/40 transition-all"
               aria-label="View keyboard shortcuts"
             >
               <Command className="h-3.5 w-3.5" />
@@ -484,38 +484,6 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
             </Button>
           </div>
         )}
-
-        {/* Account Section - Sticky Footer */}
-        <SidebarGroup className="mt-auto">
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Settings" className="min-h-[44px]">
-                  <NavLink to="/settings" className={getNavClassName}>
-                    <div className="relative flex-shrink-0">
-                      <div className="w-9 h-9 rounded-lg bg-[image:var(--gradient-gray-slate)] flex items-center justify-center transition-opacity hover:opacity-90">
-                        <Settings className="h-5 w-5 text-primary-foreground" />
-                      </div>
-                    </div>
-                    {!collapsed && <span className="text-sm font-medium">Settings</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Help & Support" className="min-h-[44px]">
-                  <NavLink to="/resources" className={getNavClassName}>
-                    <div className="relative flex-shrink-0">
-                      <div className="w-9 h-9 rounded-lg bg-[image:var(--gradient-cyan-blue)] flex items-center justify-center transition-opacity hover:opacity-90">
-                        <HelpCircle className="h-5 w-5 text-primary-foreground" />
-                      </div>
-                    </div>
-                    {!collapsed && <span className="text-sm font-medium">Help & Support</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
