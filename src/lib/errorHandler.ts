@@ -1,16 +1,19 @@
 /**
- * Centralized Error Handling Utility
- * Provides consistent error handling and user-friendly error messages
+ * Enhanced Error Handling Utility
+ * Provides consistent error handling, retry logic, and user-friendly error messages
  */
 
 import { toast } from "sonner";
 import { log } from "./logger";
+import { PostgrestError } from "@supabase/supabase-js";
 
 export interface AppError {
   message: string;
   code?: string;
   context?: string;
   originalError?: any;
+  retryable?: boolean;
+  statusCode?: number;
 }
 
 /**
@@ -79,20 +82,27 @@ export function handleError(error: any, context?: string, options?: {
   showToast?: boolean;
   logError?: boolean;
   customMessage?: string;
+  retryable?: boolean;
+  onRetry?: () => void;
 }): AppError {
   const {
     showToast = true,
     logError = true,
     customMessage,
+    retryable = false,
+    onRetry,
   } = options || {};
 
   const errorMessage = customMessage || getErrorMessage(error);
+  const isRetryable = retryable || isNetworkError(error);
 
   const appError: AppError = {
     message: errorMessage,
     code: error.code,
     context,
     originalError: error,
+    retryable: isRetryable,
+    statusCode: error.statusCode || error.status,
   };
 
   // Log the error
@@ -100,12 +110,32 @@ export function handleError(error: any, context?: string, options?: {
     log.error(errorMessage, context, error);
   }
 
-  // Show toast notification
+  // Show toast notification with retry option
   if (showToast) {
-    toast.error(errorMessage);
+    if (isRetryable && onRetry) {
+      toast.error(errorMessage, {
+        action: {
+          label: "Retry",
+          onClick: onRetry,
+        },
+        duration: 5000,
+      });
+    } else {
+      toast.error(errorMessage);
+    }
   }
 
   return appError;
+}
+
+/**
+ * Checks if error is a network error
+ */
+function isNetworkError(error: any): boolean {
+  return (
+    error instanceof TypeError && 
+    (error.message.includes('fetch') || error.message.includes('network'))
+  ) || error.message?.toLowerCase().includes('timeout');
 }
 
 /**
@@ -167,4 +197,71 @@ export function createSafeHandler<T extends (...args: any[]) => Promise<void>>(
       handleError(error, context);
     }
   }) as T;
+}
+
+/**
+ * Retry logic for failed operations
+ */
+export async function withRetry<T>(
+  operation: () => Promise<T>,
+  options: {
+    maxRetries?: number;
+    delay?: number;
+    backoff?: boolean;
+    onRetry?: (attempt: number) => void;
+  } = {}
+): Promise<T> {
+  const {
+    maxRetries = 3,
+    delay = 1000,
+    backoff = true,
+    onRetry,
+  } = options;
+
+  let lastError: Error;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+
+      // Calculate delay with optional exponential backoff
+      const currentDelay = backoff ? delay * Math.pow(2, attempt - 1) : delay;
+      
+      console.log(`Retry attempt ${attempt}/${maxRetries} after ${currentDelay}ms`);
+      onRetry?.(attempt);
+
+      await new Promise(resolve => setTimeout(resolve, currentDelay));
+    }
+  }
+
+  throw lastError!;
+}
+
+/**
+ * Safe async operation wrapper
+ */
+export async function safeAsync<T>(
+  operation: () => Promise<T>,
+  errorContext: string,
+  options?: {
+    showToast?: boolean;
+    onError?: (error: AppError) => void;
+  }
+): Promise<{ data: T | null; error: AppError | null }> {
+  try {
+    const data = await operation();
+    return { data, error: null };
+  } catch (error) {
+    const appError = handleError(error, errorContext, {
+      showToast: options?.showToast ?? true,
+    });
+    options?.onError?.(appError);
+    return { data: null, error: appError };
+  }
 }
