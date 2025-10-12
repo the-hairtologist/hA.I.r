@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2, AlertTriangle } from "lucide-react";
+import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2, AlertTriangle, Users } from "lucide-react";
 import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
 import { SkeletonList } from "@/components/ui/skeleton-list";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -514,6 +514,36 @@ export default function Clients() {
           </Button>
         </div>
         <SkeletonList count={9} variant="grid" />
+      </div>
+    );
+  }
+
+  // Show empty state for non-stylists
+  if (!stylistId) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <main className="container mx-auto py-8 px-4">
+          <Breadcrumbs />
+          <div className="mb-6">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate("/dashboard")} 
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Dashboard
+            </Button>
+          </div>
+          
+          <EmptyState
+            icon={Users}
+            title="This Feature is for Stylists"
+            description="Client Management is designed for hair stylists to manage their client profiles, track formulas, and maintain relationships. If you're a stylist, please make sure you've completed your stylist profile setup."
+            actionLabel="Go to Dashboard"
+            onAction={() => navigate("/dashboard")}
+            gradient="bg-[image:var(--gradient-purple-pink)]"
+          />
+        </main>
       </div>
     );
   }
