@@ -74,3 +74,6 @@ verify_jwt = true
 
 [functions.analyze-portfolio]
 verify_jwt = true
+
+[functions.send-rebooking-reminder]
+verify_jwt = false
