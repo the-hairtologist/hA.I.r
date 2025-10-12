@@ -37,6 +37,7 @@ import {
   User,
   UserCircle,
   Clock,
+  Mail,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NotificationDot } from "@/components/NotificationDot";
@@ -308,6 +309,35 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "finance", title: "Finance", url: "/finance", icon: DollarSign, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
     { id: "products", title: "Product Inventory", url: "/products", icon: Package, gradient: "bg-[image:var(--gradient-emerald-teal)]", group: "business", color: "text-emerald-400 dark:text-emerald-300", description: "Coming Soon" },
     { id: "reviews", title: "Client Reviews", url: "/reviews", icon: Star, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "business", color: "text-amber-400 dark:text-amber-300" },
+    { 
+      id: "marketing", 
+      title: "Marketing", 
+      url: "#", 
+      icon: Megaphone, 
+      gradient: "bg-[image:var(--gradient-purple-pink)]", 
+      group: "business", 
+      color: "text-purple-400 dark:text-purple-300",
+      children: [
+        { 
+          id: "email-campaigns", 
+          title: "Email Campaigns", 
+          url: "/email-campaigns", 
+          icon: Mail, 
+          gradient: "bg-[image:var(--gradient-purple-pink)]", 
+          group: "business",
+          color: "text-purple-400 dark:text-purple-300" 
+        },
+        { 
+          id: "email-settings", 
+          title: "Email Settings", 
+          url: "/email-settings", 
+          icon: Settings, 
+          gradient: "bg-[image:var(--gradient-blue-indigo)]", 
+          group: "business",
+          color: "text-blue-400 dark:text-blue-300" 
+        },
+      ]
+    },
     { id: "portfolio", title: "Portfolio", url: "/portfolio", icon: Palette, gradient: "bg-[image:var(--gradient-orange-red)]", group: "growth", color: "text-orange-400 dark:text-orange-300" },
     { id: "referrals", title: "Referrals", url: "/referrals", icon: Gift, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "growth", color: "text-purple-400 dark:text-purple-300" },
     { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
