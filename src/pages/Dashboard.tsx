@@ -113,14 +113,14 @@ const Dashboard = () => {
     { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: true },
     { id: "weekly-overview", title: "This Week Stats", component: "WeeklyOverview", enabled: true },
     { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
-    { id: "quick-tasks", title: "Quick Tasks", component: "QuickTasks", enabled: true },
+    { id: "quick-tasks", title: "Quick Tasks & Todo List", component: "QuickTasks", enabled: true },
+    { id: "quick-notes", title: "Quick Notes & Notepad", component: "QuickNotes", enabled: true },
     { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: true },
     { id: "top-services", title: "Popular Services", component: "TopServices", enabled: true },
     { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: true },
     { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: true },
     { id: "client-milestones", title: "Rewards & Milestones", component: "ClientMilestones", enabled: true },
     { id: "favorite-stylists", title: "Favorite Stylists", component: "FavoriteStylists", enabled: false },
-    { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: false },
   ];
 
   // Determine sections based on role - admins get comprehensive view
