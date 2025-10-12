@@ -504,7 +504,7 @@ const Dashboard = () => {
           <ClientRetention stylistId={profile.id} />
         ) : null;
       case "QuickNotes":
-        return null; // Now rendered in welcome box
+        return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;
       case "WeeklySchedule":
         return (userRole === "stylist" || isAdmin) && weekAppointments.length > 0 ? (
           <WeeklyScheduleView
@@ -576,34 +576,50 @@ const Dashboard = () => {
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
-              {/* Weekly Schedule View + Quick Notes for Stylists and Admins */}
+              {/* Stylists and Admins */}
               {(userRole === "stylist" || isAdmin) && (
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                  {/* Calendar takes 2/3 width on desktop */}
-                  <div className="xl:col-span-2 bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)]">
-                    <WeeklyScheduleView
-                      appointments={weekAppointments}
-                      stylistSchedule={profile?.weekly_schedule}
-                      stylistId={profile?.id}
-                      onAppointmentClick={(apt) => navigate("/appointments")}
-                      onTimeSlotClick={(date, hour, minute) => {
-                        setQuickAppointmentData({ date, hour, minute });
-                        setQuickAppointmentOpen(true);
-                      }}
-                    />
+                <>
+                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mb-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                    Ready to book your next transformation? ✨
+                  </p>
+                  <div className="animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)]">
+                      <WeeklyScheduleView
+                        appointments={weekAppointments}
+                        stylistSchedule={profile?.weekly_schedule}
+                        stylistId={profile?.id}
+                        onAppointmentClick={(apt) => navigate("/appointments")}
+                        onTimeSlotClick={(date, hour, minute) => {
+                          setQuickAppointmentData({ date, hour, minute });
+                          setQuickAppointmentOpen(true);
+                        }}
+                      />
+                    </div>
                   </div>
-                  
-                  {/* Quick Notes takes 1/3 width on desktop, full width on mobile */}
-                  <div className="xl:col-span-1 h-full">
-                    <QuickNotes compact />
-                  </div>
-                </div>
+                </>
               )}
 
+              {/* Clients */}
               {userRole === "client" && (
-                <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mt-2 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                  Ready to book your next transformation? ✨
-                </p>
+                <>
+                  <p className="text-sm sm:text-base md:text-lg font-medium text-pink-200 mb-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                    Ready to book your next transformation? ✨
+                  </p>
+                  <div className="animate-fade-in" style={{ animationDelay: '250ms' }}>
+                    <div className="bg-card rounded-lg overflow-hidden border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)]">
+                      <WeeklyScheduleView
+                        appointments={weekAppointments}
+                        stylistSchedule={profile?.weekly_schedule}
+                        stylistId={profile?.id}
+                        onAppointmentClick={(apt) => navigate("/appointments")}
+                        onTimeSlotClick={(date, hour, minute) => {
+                          setQuickAppointmentData({ date, hour, minute });
+                          setQuickAppointmentOpen(true);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </div>
