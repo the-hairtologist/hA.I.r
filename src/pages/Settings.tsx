@@ -594,9 +594,284 @@ const Settings = () => {
             </Card>
           </TabsContent>
 
+          {/* Security Tab */}
+          <TabsContent value="security" className="space-y-6">
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader>
+                <CardTitle>Security Settings</CardTitle>
+                <CardDescription>Manage your password and security preferences</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="current-password">Current Password</Label>
+                    <Input
+                      id="current-password"
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      placeholder="Enter current password"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="new-password">New Password</Label>
+                    <Input
+                      id="new-password"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password (min 8 characters)"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="confirm-password">Confirm New Password</Label>
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                    />
+                  </div>
+
+                  <Button 
+                    onClick={handlePasswordChange}
+                    disabled={isChangingPassword || !currentPassword || !newPassword || !confirmPassword}
+                    className="w-full sm:w-auto"
+                  >
+                    {isChangingPassword ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Updating Password...
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="mr-2 h-4 w-4" />
+                        Update Password
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+                  <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-primary" />
+                    Password Requirements
+                  </h4>
+                  <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                    <li>At least 8 characters long</li>
+                    <li>Mix of uppercase and lowercase recommended</li>
+                    <li>Include numbers and special characters for stronger security</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Notifications Tab */}
+          <TabsContent value="notifications" className="space-y-6">
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader>
+                <CardTitle>Notification Preferences</CardTitle>
+                <CardDescription>Choose how you want to be notified</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="email-notifications" className="font-semibold">Email Notifications</Label>
+                      <p className="text-sm text-muted-foreground">Receive notifications via email</p>
+                    </div>
+                    <ThemeSwitch
+                      id="email-notifications"
+                      checked={emailNotifications}
+                      onCheckedChange={setEmailNotifications}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="appointment-reminders" className="font-semibold">Appointment Reminders</Label>
+                      <p className="text-sm text-muted-foreground">Get reminded about upcoming appointments</p>
+                    </div>
+                    <ThemeSwitch
+                      id="appointment-reminders"
+                      checked={appointmentReminders}
+                      onCheckedChange={setAppointmentReminders}
+                    />
+                  </div>
+
+                  {userRole === "client" && (
+                    <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="rebooking-reminders" className="font-semibold">Rebooking Reminders</Label>
+                        <p className="text-sm text-muted-foreground">Get notified when it's time to book again</p>
+                      </div>
+                      <ThemeSwitch
+                        id="rebooking-reminders"
+                        checked={rebookingReminders}
+                        onCheckedChange={setRebookingReminders}
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="marketing-emails" className="font-semibold">Marketing Emails</Label>
+                      <p className="text-sm text-muted-foreground">Receive tips, offers, and updates</p>
+                    </div>
+                    <ThemeSwitch
+                      id="marketing-emails"
+                      checked={marketingEmails}
+                      onCheckedChange={setMarketingEmails}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg opacity-50">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="sms-notifications" className="font-semibold">SMS Notifications</Label>
+                      <p className="text-sm text-muted-foreground">Receive text message alerts (Coming Soon)</p>
+                    </div>
+                    <ThemeSwitch
+                      id="sms-notifications"
+                      checked={smsNotifications}
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                {userRole === "stylist" && (
+                  <div className="mt-6">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/email-settings")}
+                      className="w-full"
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      Advanced Email Settings
+                      <ExternalLink className="ml-2 h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Preferences Tab */}
           <TabsContent value="preferences" className="space-y-6">
             <PrivacySettings userId={user?.id || ''} userRole={userRole} />
+            
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader>
+                <CardTitle>Appearance</CardTitle>
+                <CardDescription>Customize how the app looks</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-4">
+                  <Label>Theme</Label>
+                  <div className="grid grid-cols-3 gap-3">
+                    <Button
+                      variant={theme === "light" ? "default" : "outline"}
+                      onClick={() => setTheme("light")}
+                      className="flex flex-col items-center gap-2 h-auto py-3"
+                    >
+                      <Sun className="h-5 w-5" />
+                      <span className="text-xs">Light</span>
+                    </Button>
+                    <Button
+                      variant={theme === "dark" ? "default" : "outline"}
+                      onClick={() => setTheme("dark")}
+                      className="flex flex-col items-center gap-2 h-auto py-3"
+                    >
+                      <Moon className="h-5 w-5" />
+                      <span className="text-xs">Dark</span>
+                    </Button>
+                    <Button
+                      variant={theme === "system" ? "default" : "outline"}
+                      onClick={() => setTheme("system")}
+                      className="flex flex-col items-center gap-2 h-auto py-3"
+                    >
+                      <Monitor className="h-5 w-5" />
+                      <span className="text-xs">System</span>
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader>
+                <CardTitle>Quick Access</CardTitle>
+                <CardDescription>Jump to other settings and tools</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {userRole === "stylist" && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/portfolio")}
+                      className="w-full justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Image className="h-4 w-4" />
+                        <span>Portfolio Management</span>
+                      </div>
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/services")}
+                      className="w-full justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="h-4 w-4" />
+                        <span>Services & Pricing</span>
+                      </div>
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/booking-page")}
+                      className="w-full justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <ExternalLink className="h-4 w-4" />
+                        <span>My Booking Page</span>
+                      </div>
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/email-settings")}
+                      className="w-full justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Mail className="h-4 w-4" />
+                        <span>Email Campaigns</span>
+                      </div>
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/integrations")}
+                      className="w-full justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>Calendar Integration</span>
+                      </div>
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+                  </>
+                )}
+              </CardContent>
+            </Card>
             
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
