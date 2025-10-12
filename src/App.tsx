@@ -41,6 +41,7 @@ const BookAppointment = lazy(() => import("./pages/BookAppointment"));
 const StylistProfile = lazy(() => import("./pages/StylistProfile"));
 const ClientRequests = lazy(() => import("./pages/ClientRequests"));
 const ClientDiscovery = lazy(() => import("./pages/ClientDiscovery"));
+const Reviews = lazy(() => import("./pages/Reviews"));
 
 const Messages = lazy(() => import("./pages/Messages"));
 const ScheduleManagement = lazy(() => import("./pages/ScheduleManagement"));
@@ -64,6 +65,7 @@ const Referrals = lazy(() => import("./pages/Referrals"));
 const SystemHealth = lazy(() => import("./pages/SystemHealth"));
 const AdminCommandCenter = lazy(() => import("./pages/AdminCommandCenter"));
 const AdminUsers = lazy(() => import("./pages/AdminUsers"));
+const AuditLogs = lazy(() => import("./pages/AuditLogs"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
 const DMCA = lazy(() => import("./pages/DMCA"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
@@ -319,6 +321,25 @@ const App = () => {
           <Route path="/admin/users" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AdminUsers />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/audit-logs" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AuditLogs />
+            </ProtectedRoute>
+          } />
+          <Route path="/reviews" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <Suspense fallback={<LoadingSpinner />}>
+                <Reviews />
+              </Suspense>
+            </ProtectedRoute>
+          } />
+          <Route path="/reviews/new" element={
+            <ProtectedRoute allowedRoles={["client"]}>
+              <Suspense fallback={<LoadingSpinner />}>
+                <Reviews />
+              </Suspense>
             </ProtectedRoute>
           } />
           <Route path="/system-health" element={

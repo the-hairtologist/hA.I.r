@@ -30,6 +30,7 @@ import { showCelebration } from "@/components/CelebrationToast";
 import { HairMemoryTimeline } from "@/components/HairMemoryTimeline";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { ClientHistoryTimeline } from "@/components/ClientHistoryTimeline";
+import { ClientCSVImport } from "@/components/ClientCSVImport";
 
 interface ClientProfile {
   id: string;
@@ -567,6 +568,11 @@ export default function Clients() {
             Back
           </Button>
         </div>
+        {/* CSV Import - Week 2 Feature */}
+        {stylistId && (
+          <ClientCSVImport stylistId={stylistId} onImportComplete={loadClients} />
+        )}
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <h1 className="text-4xl font-display font-bold mb-2 gradient-text">Clients & Formulas</h1>

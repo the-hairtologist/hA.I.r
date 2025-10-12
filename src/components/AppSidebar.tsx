@@ -28,6 +28,7 @@ import {
   Gift,
   Shield,
   Crown,
+  FileText,
   Activity,
   Book as BookIcon,
   Wand2,
@@ -434,10 +435,20 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       description: "Users, roles & profiles" 
     },
     { 
+      id: "audit-logs", 
+      title: "Audit Logs", 
+      url: "/admin/audit-logs", 
+      icon: FileText, 
+      gradient: "bg-gradient-to-br from-purple-500 to-pink-600", 
+      group: "admin", 
+      color: "text-purple-400 dark:text-purple-300",
+      description: "Security & compliance logs" 
+    },
+    { 
       id: "system-health", 
       title: "System Health", 
       url: "/system-health", 
-      icon: Activity, 
+      icon: Activity,
       gradient: "bg-[image:var(--gradient-green-emerald)]", 
       group: "admin", 
       color: "text-emerald-400 dark:text-emerald-300",
