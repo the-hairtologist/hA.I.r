@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Calendar,
   Users,
@@ -42,6 +42,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { NotificationDot } from "@/components/NotificationDot";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import {
   DndContext,
   closestCenter,
@@ -261,8 +262,9 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const { unreadCount } = useRealtimeNotifications(user?.id);
   const [notifications, setNotifications] = useState<Record<string, number>>({
-    messages: 0,
+    messages: unreadCount || 0,
   });
 
   const toggleExpanded = (id: string) => {
@@ -276,6 +278,14 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       return next;
     });
   };
+
+  // Update notifications when unread count changes
+  useEffect(() => {
+    setNotifications(prev => ({
+      ...prev,
+      messages: unreadCount || 0,
+    }));
+  }, [unreadCount]);
 
   const getNavClassName = ({ isActive }: { isActive: boolean }) => {
     return `flex items-center gap-3 w-full transition-colors duration-200 px-2 py-2 rounded-md ${
