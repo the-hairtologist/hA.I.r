@@ -506,16 +506,7 @@ const Dashboard = () => {
       case "QuickNotes":
         return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;
       case "WeeklySchedule":
-        return (userRole === "stylist" || isAdmin) && weekAppointments.length > 0 ? (
-          <WeeklyScheduleView
-            appointments={weekAppointments}
-            onAppointmentClick={(appt) => navigate(`/appointments/${appt.id}`)}
-            onTimeSlotClick={(date, hour) => {
-              setQuickAppointmentData({ date, hour, minute: 0 });
-              setQuickAppointmentOpen(true);
-            }}
-          />
-        ) : null;
+        return null; // Now rendered in welcome box
       case "RecentActivity":
         return ((userRole === "stylist" || userRole === "client" || isAdmin) && recentActivities.length > 0) ? (
           <RecentActivity activities={recentActivities} />
