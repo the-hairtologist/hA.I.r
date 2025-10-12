@@ -304,8 +304,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "integrations", title: "Integrations", url: "/integrations", icon: Building2, gradient: "bg-[image:var(--gradient-amber-orange)]", group: "tools", color: "text-amber-400 dark:text-amber-300" },
     { id: "profile", title: "My Profile", url: "/profile", icon: UserCircle, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
     { id: "notifications", title: "Notifications", url: "/notifications", icon: Bell, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "account", color: "text-purple-400 dark:text-purple-300" },
-    { id: "settings", title: "Settings", url: "/settings", icon: Settings, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
-    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "account", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "settings", title: "Settings", url: "/settings", icon: Settings, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "support", color: "text-blue-400 dark:text-blue-300" },
+    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "support", color: "text-cyan-400 dark:text-cyan-300" },
   ];
 
   // Admin-only items - SECURITY: Only shown when isAdmin=true (verified via database query)
@@ -339,17 +339,17 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { id: "ai-assistant", title: "AI Assistant", url: "/ai-assistant", icon: Sparkles, gradient: "bg-[image:var(--gradient-purple-pink)]", group: "tools", color: "text-purple-400 dark:text-purple-300" },
     { id: "knowledge", title: "Knowledge Base", url: "/knowledge", icon: BookOpen, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "tools", color: "text-cyan-400 dark:text-cyan-300" },
     { id: "profile", title: "My Profile", url: "/profile", icon: UserCircle, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
-    { id: "settings", title: "Settings", url: "/settings", icon: Settings, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "account", color: "text-blue-400 dark:text-blue-300" },
-    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "account", color: "text-cyan-400 dark:text-cyan-300" },
+    { id: "settings", title: "Settings", url: "/settings", icon: Settings, gradient: "bg-[image:var(--gradient-blue-indigo)]", group: "support", color: "text-blue-400 dark:text-blue-300" },
+    { id: "help", title: "Help & Support", url: "/help", icon: HelpCircle, gradient: "bg-[image:var(--gradient-cyan-blue)]", group: "support", color: "text-cyan-400 dark:text-cyan-300" },
   ];
 
   const defaultItems = userRole === "stylist" ? stylistAllItems : clientAllItems;
   
   const groupLabels = userRole === "stylist" 
     ? isAdmin 
-      ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account & Support", admin: "Admin" }
-      : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account & Support" }
-    : { main: "Main", services: "Services", tools: "Tools", account: "Account & Support" };
+      ? { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", support: "", admin: "Admin" }
+      : { main: "Main", marketplace: "Marketplace", scheduling: "Scheduling", business: "Business", growth: "Growth & Marketing", tools: "Tools", account: "Account", support: "" }
+    : { main: "Main", services: "Services", tools: "Tools", account: "Account", support: "" };
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(defaultItems, groupLabels);
 
