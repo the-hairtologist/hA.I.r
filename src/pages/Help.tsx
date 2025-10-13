@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   HelpCircle, 
   MessageSquare, 
@@ -13,17 +14,60 @@ import {
   ExternalLink,
   Search,
   ChevronRight,
+  BookOpen,
+  Video,
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { haptic } from "@/platform/haptics";
 
 const Help = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAuth();
   const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
+
+  // Help articles from the help button
+  const helpArticles = [
+    {
+      id: "add-client",
+      title: "How to Add Your First Client",
+      description: "Step-by-step guide to adding clients and building their hair history",
+      category: "Getting Started",
+    },
+    {
+      id: "formulas",
+      title: "Saving Color Formulas",
+      description: "Learn how to document and save perfect color formulas",
+      category: "Features",
+    },
+    {
+      id: "milestones",
+      title: "Understanding Client Milestones",
+      description: "How milestone celebrations work and reward your loyal clients",
+      category: "Features",
+    },
+    {
+      id: "referrals",
+      title: "Referral Program Guide",
+      description: "Earn free months by inviting other stylists to join",
+      category: "Growth",
+    },
+    {
+      id: "timeline",
+      title: "Hair Memory Timeline",
+      description: "Track every client's hair journey and share their story",
+      category: "Features",
+    },
+    {
+      id: "booking",
+      title: "Managing Appointments",
+      description: "How to create, update, and track client appointments",
+      category: "Getting Started",
+    },
+  ];
 
   const stylistFaqs = [
     {
@@ -141,6 +185,13 @@ const Help = () => {
       )
     : faqs;
 
+  const filteredArticles = searchQuery
+    ? helpArticles.filter(article =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        article.description.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : helpArticles;
+
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Message sent! We'll get back to you soon.");
@@ -160,119 +211,258 @@ const Help = () => {
           </p>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="pt-6">
-              <Book className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold mb-1">Documentation</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                Browse our complete guides
-              </p>
-              <Button variant="ghost" size="sm" className="p-0">
-                View Docs <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </CardContent>
-          </Card>
+        {/* Tabbed Interface */}
+        <Tabs defaultValue="articles" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="articles" className="gap-2">
+              <BookOpen className="h-4 w-4" />
+              Articles & FAQs
+            </TabsTrigger>
+            <TabsTrigger value="videos" className="gap-2">
+              <Video className="h-4 w-4" />
+              Videos
+            </TabsTrigger>
+            <TabsTrigger value="contact" className="gap-2">
+              <MessageSquare className="h-4 w-4" />
+              Contact Us
+            </TabsTrigger>
+          </TabsList>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="pt-6">
-              <MessageSquare className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold mb-1">Live Chat</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                Chat with our support team
-              </p>
-              <Button variant="ghost" size="sm" className="p-0">
-                Start Chat <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </CardContent>
-          </Card>
+          {/* Articles & FAQs Tab */}
+          <TabsContent value="articles" className="space-y-6 mt-6">
+            {/* Search */}
+            <Card>
+              <CardContent className="pt-6">
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search help articles and FAQs..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+              </CardContent>
+            </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="pt-6">
-              <HelpCircle className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold mb-1">Video Tutorials</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                Watch step-by-step guides
-              </p>
-              <Button variant="ghost" size="sm" className="p-0">
-                Watch Now <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Search FAQs */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Frequently Asked Questions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search for help..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-
-            <Accordion type="single" collapsible className="w-full">
-              {filteredFaqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger>{faq.question}</AccordionTrigger>
-                  <AccordionContent>{faq.answer}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-
-            {filteredFaqs.length === 0 && (
-              <p className="text-center text-muted-foreground py-8">
-                No results found. Try a different search term.
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Contact Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Still Need Help?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleContactSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input id="subject" placeholder="What do you need help with?" required />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="message">Message</Label>
-                <Textarea
-                  id="message"
-                  placeholder="Describe your issue in detail..."
-                  rows={5}
-                  required
-                />
-              </div>
-
-              <Button type="submit">Send Message</Button>
-            </form>
-
-            <div className="mt-6 pt-6 border-t space-y-3">
-              <p className="text-sm font-semibold">Other ways to reach us:</p>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Mail className="h-4 w-4" />
-                <span>support@hair-ai.com</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="h-4 w-4" />
-                <span>1-800-HAIR-AI</span>
+            {/* Help Articles */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Help Articles</h2>
+              <div className="grid gap-3">
+                {filteredArticles.length === 0 && searchQuery ? (
+                  <Card>
+                    <CardContent className="py-8 text-center text-muted-foreground">
+                      No articles found. Try a different search term.
+                    </CardContent>
+                  </Card>
+                ) : (
+                  filteredArticles.map((article) => (
+                    <Card
+                      key={article.id}
+                      className="brutal-border hover:border-primary/40 transition-colors cursor-pointer"
+                      onClick={() => {
+                        haptic.tap();
+                        // Article detail view could be added here
+                      }}
+                    >
+                      <CardContent className="p-4">
+                        <div className="space-y-2">
+                          <div className="flex items-start justify-between">
+                            <h4 className="font-semibold text-sm">{article.title}</h4>
+                            <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0 ml-2" />
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {article.description}
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-primary font-medium">
+                              {article.category}
+                            </span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
               </div>
             </div>
-          </CardContent>
-        </Card>
+
+            {/* FAQs */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Frequently Asked Questions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Accordion type="single" collapsible className="w-full">
+                  {filteredFaqs.map((faq, index) => (
+                    <AccordionItem key={index} value={`item-${index}`}>
+                      <AccordionTrigger>{faq.question}</AccordionTrigger>
+                      <AccordionContent>{faq.answer}</AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+
+                {filteredFaqs.length === 0 && searchQuery && (
+                  <p className="text-center text-muted-foreground py-8">
+                    No FAQs found. Try a different search term.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Videos Tab */}
+          <TabsContent value="videos" className="space-y-6 mt-6">
+            <Card>
+              <CardContent className="py-12">
+                <div className="text-center space-y-4">
+                  <Video className="h-16 w-16 mx-auto text-muted-foreground" />
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2">Video Tutorials Coming Soon</h3>
+                    <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                      Step-by-step video guides will be available in a future update. In the meantime, explore the articles and FAQs sections!
+                    </p>
+                  </div>
+                  <Button variant="outline" onClick={() => haptic.tap()}>
+                    Browse Articles Instead
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions while waiting */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="pt-6">
+                  <Book className="h-8 w-8 text-primary mb-3" />
+                  <h3 className="font-semibold mb-1">Documentation</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Browse our complete guides
+                  </p>
+                  <Button variant="ghost" size="sm" className="p-0">
+                    View Docs <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="pt-6">
+                  <MessageSquare className="h-8 w-8 text-primary mb-3" />
+                  <h3 className="font-semibold mb-1">Live Chat</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Chat with our support team
+                  </p>
+                  <Button variant="ghost" size="sm" className="p-0">
+                    Start Chat <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="pt-6">
+                  <HelpCircle className="h-8 w-8 text-primary mb-3" />
+                  <h3 className="font-semibold mb-1">Need More Help?</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Contact us directly
+                  </p>
+                  <Button variant="ghost" size="sm" className="p-0">
+                    Get in Touch <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Contact Tab */}
+          <TabsContent value="contact" className="space-y-6 mt-6">
+            {/* Live Chat Option */}
+            <Card className="border-[2px] border-primary/30">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <MessageSquare className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold">Live Chat Support</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Chat with our team Monday-Friday, 9am-6pm EST
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      haptic.tap();
+                      toast.info("Chat widget opening soon!");
+                    }}
+                    className="border-[2px] border-foreground"
+                  >
+                    Start Chat
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contact Form */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Send Us a Message</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="subject">Subject</Label>
+                    <Input id="subject" placeholder="What do you need help with?" required />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Message</Label>
+                    <Textarea
+                      id="message"
+                      placeholder="Describe your issue in detail..."
+                      rows={5}
+                      required
+                    />
+                  </div>
+
+                  <Button type="submit">Send Message</Button>
+                </form>
+
+                <div className="mt-6 pt-6 border-t space-y-3">
+                  <p className="text-sm font-semibold">Other ways to reach us:</p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Mail className="h-4 w-4" />
+                    <a href="mailto:support@hair-ai.com" className="hover:text-primary">
+                      support@hair-ai.com
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Phone className="h-4 w-4" />
+                    <span>1-800-HAIR-AI</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Email Support Card */}
+            <Card className="border-[2px] border-border">
+              <CardContent className="p-6">
+                <h4 className="font-semibold mb-2">Email Support</h4>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Send us an email and we'll respond within 24 hours
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    window.location.href = "mailto:support@hair-ai.com";
+                  }}
+                  className="border-[2px] border-foreground"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  support@hair-ai.com
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );

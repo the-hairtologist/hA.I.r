@@ -22,7 +22,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
-import { HelpButton } from "@/components/HelpButton";
+
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
 import { useDashboardLayout, DashboardSection } from "@/hooks/useDashboardLayout";
@@ -841,8 +841,6 @@ const Dashboard = () => {
           />
         )}
 
-        {/* Help Button */}
-        <HelpButton />
       </div>
     </DashboardLayout>
   );
