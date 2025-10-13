@@ -185,7 +185,7 @@ const Terms = () => {
             </ul>
             
             <h2>17. Governing Law</h2>
-            <p>These terms are governed by the laws of the jurisdiction where the service is operated.</p>
+            <p>These terms are governed by the laws of the State of Delaware, United States, without regard to its conflict of law provisions.</p>
             
             <h2>18. Contact Information</h2>
             <p>For questions about these terms, contact us through the app's support feature.</p>

@@ -20,7 +20,7 @@ const Privacy = () => {
               <strong>Company:</strong> hA.I.r™ (Hair Management Platform)<br />
               <strong>Email:</strong> privacy@hair.app<br />
               <strong>Data Protection Inquiries:</strong> dpo@hair.app<br />
-              <strong>Address:</strong> [Your Business Address]
+              <strong>Address:</strong> 8 The Green, Suite A, Dover, DE 19901, United States
             </p>
             
             <h2>1. Information We Collect</h2>

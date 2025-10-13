@@ -74,8 +74,8 @@ const DMCA = () => {
               <div>
                 <strong>Mailing Address:</strong><br />
                 hA.I.r DMCA Agent<br />
-                [Your Business Address]<br />
-                [City, State ZIP]
+                8 The Green, Suite A<br />
+                Dover, DE 19901, United States
               </div>
             </div>
 
