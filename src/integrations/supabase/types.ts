@@ -904,6 +904,303 @@ export type Database = {
           },
         ]
       }
+      email_sequence_enrollments: {
+        Row: {
+          client_id: string
+          completed_at: string | null
+          created_at: string | null
+          current_step: number | null
+          enrolled_at: string | null
+          id: string
+          metadata: Json | null
+          next_send_at: string | null
+          sequence_id: string
+          status: string | null
+          stylist_id: string
+          unenrolled_at: string | null
+          unenrolled_reason: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          client_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          enrolled_at?: string | null
+          id?: string
+          metadata?: Json | null
+          next_send_at?: string | null
+          sequence_id: string
+          status?: string | null
+          stylist_id: string
+          unenrolled_at?: string | null
+          unenrolled_reason?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          enrolled_at?: string | null
+          id?: string
+          metadata?: Json | null
+          next_send_at?: string | null
+          sequence_id?: string
+          status?: string | null
+          stylist_id?: string
+          unenrolled_at?: string | null
+          unenrolled_reason?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_sequence_enrollments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequence_enrollments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "email_sequence_enrollments_sequence_id_fkey"
+            columns: ["sequence_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequence_enrollments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequence_enrollments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_sequence_logs: {
+        Row: {
+          bounce_reason: string | null
+          bounced: boolean | null
+          clicked_at: string | null
+          client_id: string
+          created_at: string | null
+          email_address: string
+          enrollment_id: string
+          id: string
+          opened_at: string | null
+          resend_email_id: string | null
+          sent_at: string | null
+          step_id: string
+          stylist_id: string
+          subject: string
+          unsubscribed: boolean | null
+        }
+        Insert: {
+          bounce_reason?: string | null
+          bounced?: boolean | null
+          clicked_at?: string | null
+          client_id: string
+          created_at?: string | null
+          email_address: string
+          enrollment_id: string
+          id?: string
+          opened_at?: string | null
+          resend_email_id?: string | null
+          sent_at?: string | null
+          step_id: string
+          stylist_id: string
+          subject: string
+          unsubscribed?: boolean | null
+        }
+        Update: {
+          bounce_reason?: string | null
+          bounced?: boolean | null
+          clicked_at?: string | null
+          client_id?: string
+          created_at?: string | null
+          email_address?: string
+          enrollment_id?: string
+          id?: string
+          opened_at?: string | null
+          resend_email_id?: string | null
+          sent_at?: string | null
+          step_id?: string
+          stylist_id?: string
+          subject?: string
+          unsubscribed?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_sequence_logs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequence_logs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "email_sequence_logs_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequence_enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequence_logs_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequence_steps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequence_logs_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequence_logs_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_sequence_steps: {
+        Row: {
+          body_html: string
+          created_at: string | null
+          delay_amount: number
+          delay_unit: string
+          id: string
+          name: string
+          send_time_preference: string | null
+          sequence_id: string
+          step_order: number
+          stop_on_conditions: Json | null
+          subject: string
+          updated_at: string | null
+        }
+        Insert: {
+          body_html: string
+          created_at?: string | null
+          delay_amount?: number
+          delay_unit?: string
+          id?: string
+          name: string
+          send_time_preference?: string | null
+          sequence_id: string
+          step_order: number
+          stop_on_conditions?: Json | null
+          subject: string
+          updated_at?: string | null
+        }
+        Update: {
+          body_html?: string
+          created_at?: string | null
+          delay_amount?: number
+          delay_unit?: string
+          id?: string
+          name?: string
+          send_time_preference?: string | null
+          sequence_id?: string
+          step_order?: number
+          stop_on_conditions?: Json | null
+          subject?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_sequence_steps_sequence_id_fkey"
+            columns: ["sequence_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_sequences: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          is_global_template: boolean | null
+          name: string
+          stylist_id: string | null
+          trigger_conditions: Json | null
+          trigger_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_global_template?: boolean | null
+          name: string
+          stylist_id?: string | null
+          trigger_conditions?: Json | null
+          trigger_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_global_template?: boolean | null
+          name?: string
+          stylist_id?: string | null
+          trigger_conditions?: Json | null
+          trigger_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_sequences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_settings: {
         Row: {
           business_logo_url: string | null
@@ -951,6 +1248,69 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      email_templates: {
+        Row: {
+          category: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          html_content: string
+          id: string
+          is_global: boolean | null
+          name: string
+          preview_text: string | null
+          stylist_id: string | null
+          subject_template: string
+          updated_at: string | null
+          variables: Json | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          html_content: string
+          id?: string
+          is_global?: boolean | null
+          name: string
+          preview_text?: string | null
+          stylist_id?: string | null
+          subject_template: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          html_content?: string
+          id?: string
+          is_global?: boolean | null
+          name?: string
+          preview_text?: string | null
+          stylist_id?: string | null
+          subject_template?: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       error_logs: {
         Row: {
