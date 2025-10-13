@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format, isToday, startOfDay, endOfDay } from "date-fns";
 import { Calendar, DollarSign, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface NotificationManagerProps {
   userId: string;
@@ -11,6 +12,7 @@ interface NotificationManagerProps {
 
 export const NotificationManager = ({ userId, userRole }: NotificationManagerProps) => {
   const [lastCheck, setLastCheck] = useState<Date>(new Date());
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userRole !== "stylist") return;
@@ -138,7 +140,7 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
                 duration: 8000,
                 action: {
                   label: "Save Now",
-                  onClick: () => window.location.href = "/formulas",
+                  onClick: () => navigate("/formulas"),
                 },
               }
             );

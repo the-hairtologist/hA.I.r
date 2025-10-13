@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 interface SmartNotification {
   id: string;
@@ -25,6 +26,7 @@ interface SmartNotification {
 
 export const AISmartNotifications = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<SmartNotification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -184,7 +186,7 @@ export const AISmartNotifications = () => {
                         variant="outline"
                         onClick={() => {
                           if (notification.actionUrl) {
-                            window.location.href = notification.actionUrl;
+                            navigate(notification.actionUrl);
                           }
                         }}
                         className="w-full"

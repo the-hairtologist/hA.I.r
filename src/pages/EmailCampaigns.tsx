@@ -5,7 +5,8 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
+import { useNavigate } from "react-router-dom";
+import {
   Mail, 
   TrendingUp, 
   Users, 
@@ -28,6 +29,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function EmailCampaigns() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [triggering, setTriggering] = useState(false);
 
   // Fetch campaign statistics
@@ -103,7 +105,7 @@ export default function EmailCampaigns() {
           </div>
           <div className="flex gap-2">
             <Button
-              onClick={() => window.location.href = '/email-settings'}
+              onClick={() => navigate('/email-settings')}
               variant="outline"
               className="gap-2"
             >
