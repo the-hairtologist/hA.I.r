@@ -5,6 +5,7 @@ import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useAuth } from "@/hooks/useAuth";
+import { useState, useEffect } from "react";
 
 interface MobileBottomNavProps {
   userRole?: string;
@@ -131,7 +132,50 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
     },
   ];
 
-  const items = userRole === "admin" ? adminItems : userRole === "stylist" ? stylistItems : clientItems;
+  // Load customized navigation from localStorage
+  const storageKey = `mobileNav-${userRole}`;
+  const [customizedItems, setCustomizedItems] = useState<NavItem[]>([]);
+  const [mounted, setMounted] = useState(false);
+
+  // Define all available items
+  const allItems = userRole === "admin" ? adminItems : userRole === "stylist" ? stylistItems : clientItems;
+
+  useEffect(() => {
+    setMounted(true);
+    
+    const savedConfig = localStorage.getItem(storageKey);
+    if (savedConfig) {
+      try {
+        const config = JSON.parse(savedConfig);
+        const { order, enabledIds } = config;
+        
+        if (order && enabledIds) {
+          // Map saved IDs to actual nav items
+          const idToItemMap = new Map(allItems.map(item => {
+            const id = item.path.split('/').pop() || item.label.toLowerCase();
+            return [id, item];
+          }));
+          
+          // Restore custom order and filter by enabled items
+          const orderedItems = order
+            .filter((id: string) => enabledIds.includes(id))
+            .map((id: string) => idToItemMap.get(id))
+            .filter(Boolean);
+          
+          if (orderedItems.length > 0) {
+            setCustomizedItems(orderedItems as NavItem[]);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load mobile nav config:", e);
+      }
+    }
+    
+    setCustomizedItems(allItems);
+  }, [userRole]);
+
+  const items = mounted && customizedItems.length > 0 ? customizedItems : allItems;
 
   const handleNavigation = (path: string) => {
     haptic.tap();

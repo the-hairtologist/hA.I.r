@@ -21,6 +21,7 @@ import { HelpTooltip } from "@/components/HelpTooltip";
 import { useTheme } from "next-themes";
 import { Switch as ThemeSwitch } from "@/components/ui/switch";
 import { ClientPreferenceCenter } from "@/components/email-sequences/ClientPreferenceCenter";
+import { MobileNavCustomizer } from "@/components/MobileNavCustomizer";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -1233,6 +1234,11 @@ const Settings = () => {
 
           {/* Preferences Tab */}
           <TabsContent value="preferences" className="space-y-6">
+            {/* Mobile Navigation Customization */}
+            {(userRole === "stylist" || userRole === "client" || roles.includes("admin")) && (
+              <MobileNavCustomizer userRole={roles.includes("admin") ? "admin" : userRole} />
+            )}
+            
             <PrivacySettings userId={user?.id || ''} userRole={userRole} />
             
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
