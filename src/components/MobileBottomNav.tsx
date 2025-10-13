@@ -28,14 +28,8 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  // Stylist bottom nav: Most-used daily actions (optimized for productivity)
   const stylistItems: NavItem[] = [
-    { 
-      icon: Home, 
-      label: "Home", 
-      path: "/dashboard",
-      gradient: "from-purple-start to-purple-end",
-      highlight: false
-    },
     { 
       icon: Calendar, 
       label: "Schedule", 
@@ -44,17 +38,24 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       highlight: false
     },
     { 
-      icon: Sparkles, 
-      label: "AI", 
-      path: "/ai-assistant",
-      gradient: "from-purple-start to-purple-end",
-      highlight: true
-    },
-    { 
       icon: Users, 
       label: "Clients", 
       path: "/clients",
       gradient: "from-green-start to-green-end",
+      highlight: false
+    },
+    { 
+      icon: Home, 
+      label: "Home", 
+      path: "/dashboard",
+      gradient: "from-purple-start to-purple-end",
+      highlight: true
+    },
+    { 
+      icon: Sparkles, 
+      label: "AI", 
+      path: "/ai-assistant",
+      gradient: "from-violet-start to-violet-end",
       highlight: false
     },
     { 
