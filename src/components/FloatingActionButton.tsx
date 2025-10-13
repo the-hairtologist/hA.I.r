@@ -1,4 +1,4 @@
-import { Plus, Calendar, Users, Scissors, Sparkles } from "lucide-react";
+import { Plus, Calendar, Users, Scissors, Sparkles, User } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -73,6 +73,16 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
         setIsOpen(false);
       },
       gradient: "from-purple-start to-purple-end",
+    },
+    {
+      label: "Profile",
+      icon: User,
+      onClick: () => {
+        haptic.tap();
+        navigate("/profile");
+        setIsOpen(false);
+      },
+      gradient: "from-blue-start to-blue-end",
     },
   ];
 

@@ -496,8 +496,8 @@ const Knowledge = () => {
               />
             )}
 
-            {/* Formula History */}
-            {savedFormulas.length > 0 && (
+            {/* Formula History - STYLIST ONLY */}
+            {userRole === "stylist" && savedFormulas.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-secondary/5 to-primary/5">
                 <div className="p-3 md:p-4">
                   <div className="flex items-center gap-2 mb-3 md:mb-4">
@@ -522,8 +522,8 @@ const Knowledge = () => {
               </div>
             )}
 
-            {/* Step Progress - Auto-shows when AI provides steps */}
-            {correctionSteps.length > 0 && (
+            {/* Step Progress - STYLIST ONLY - Auto-shows when AI provides steps */}
+            {userRole === "stylist" && correctionSteps.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-accent/5 to-primary/5">
                 <div className="p-3 md:p-4">
                   <div className="flex items-center gap-2 mb-2">
@@ -651,7 +651,8 @@ const Knowledge = () => {
                           style={{ border: "3px solid" }}
                         >
                           <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
-                          {msg.role === "assistant" && idx === aiMessages.length - 1 && (
+                          {/* Save Formula Button - STYLIST ONLY */}
+                          {userRole === "stylist" && msg.role === "assistant" && idx === aiMessages.length - 1 && typeof msg.content === "string" && msg.content.toLowerCase().includes("formula") && (
                             <button
                               onClick={() => {
                                 setFormulaToSave(msg.content);

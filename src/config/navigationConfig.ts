@@ -83,6 +83,17 @@ export const stylistNavigationItems: NavigationItem[] = [
     color: "text-emerald-400 dark:text-emerald-300" 
   },
   { 
+    id: "find-clients", 
+    title: "Find Clients", 
+    url: "/client-discovery", 
+    icon: Search, 
+    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
+    group: "main", 
+    color: "text-cyan-400 dark:text-cyan-300",
+    comingSoon: true,
+    description: "Browse client requests"
+  },
+  { 
     id: "messages", 
     title: "Messages", 
     url: "/messages", 
@@ -354,7 +365,8 @@ export const clientNavigationItems: NavigationItem[] = [
     icon: Search, 
     gradient: "bg-[image:var(--gradient-cyan-blue)]", 
     group: "services", 
-    color: "text-cyan-400 dark:text-cyan-300"
+    color: "text-cyan-400 dark:text-cyan-300",
+    comingSoon: true
   },
   { 
     id: "favorite-stylists", 
@@ -363,16 +375,8 @@ export const clientNavigationItems: NavigationItem[] = [
     icon: Star, 
     gradient: "bg-[image:var(--gradient-amber-orange)]", 
     group: "services", 
-    color: "text-amber-400 dark:text-amber-300" 
-  },
-  { 
-    id: "my-formulas", 
-    title: "My Formulas", 
-    url: "/formulas", 
-    icon: Scissors, 
-    gradient: "bg-[image:var(--gradient-emerald-teal)]", 
-    group: "services", 
-    color: "text-emerald-400 dark:text-emerald-300" 
+    color: "text-amber-400 dark:text-amber-300",
+    comingSoon: true
   },
   { 
     id: "booking-history", 
@@ -381,7 +385,8 @@ export const clientNavigationItems: NavigationItem[] = [
     icon: CalendarRange, 
     gradient: "bg-[image:var(--gradient-blue-indigo)]", 
     group: "history", 
-    color: "text-blue-400 dark:text-blue-300" 
+    color: "text-blue-400 dark:text-blue-300",
+    comingSoon: true
   },
   { 
     id: "reviews", 
@@ -391,7 +396,8 @@ export const clientNavigationItems: NavigationItem[] = [
     gradient: "bg-[image:var(--gradient-amber-orange)]", 
     group: "history", 
     color: "text-amber-400 dark:text-amber-300", 
-    description: "Rate stylists" 
+    description: "Rate stylists",
+    comingSoon: true
   },
   { 
     id: "profile", 
@@ -410,7 +416,8 @@ export const clientNavigationItems: NavigationItem[] = [
     gradient: "bg-[image:var(--gradient-amber-orange)]", 
     group: "account", 
     color: "text-amber-400 dark:text-amber-300", 
-    description: "Cards & billing" 
+    description: "Cards & billing",
+    comingSoon: true
   },
   { 
     id: "settings", 
