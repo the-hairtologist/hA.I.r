@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
@@ -82,6 +82,10 @@ const Settings = () => {
   const [sensitivityNotes, setSensitivityNotes] = useState("");
   const [communicationPref, setCommunicationPref] = useState("app");
   const [specialRequests, setSpecialRequests] = useState("");
+
+  // AI Systems
+  const [aiEnabled, setAiEnabled] = useState(true); // Default enabled
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Account data
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -420,7 +424,7 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="profile" className="text-xs sm:text-sm">
               <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Profile</span>
@@ -436,6 +440,10 @@ const Settings = () => {
             <TabsTrigger value="notifications" className="text-xs sm:text-sm">
               <Bell className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Alerts</span>
+            </TabsTrigger>
+            <TabsTrigger value="ai-systems" className="text-xs sm:text-sm">
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">AI</span>
             </TabsTrigger>
             <TabsTrigger value="preferences" className="text-xs sm:text-sm">
               <SettingsIcon className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
@@ -1231,6 +1239,195 @@ const Settings = () => {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          {/* AI Systems Tab */}
+          <TabsContent value="ai-systems" className="space-y-6">
+            <Card className="border-[3px] border-primary/50 shadow-[4px_4px_0px_0px_hsl(var(--primary))] bg-gradient-to-br from-primary/5 to-primary/10">
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-primary" />
+                      AI Command Center
+                    </CardTitle>
+                    <CardDescription className="mt-2">
+                      Deep AI integration orchestrating all intelligent systems across your salon
+                    </CardDescription>
+                  </div>
+                  <div className={`px-3 py-1 rounded-full text-xs font-semibold ${aiEnabled ? 'bg-green-500 text-white' : 'bg-destructive text-white'}`}>
+                    {aiEnabled ? 'Active' : 'Inactive'}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Master Toggle */}
+                <div className="flex items-center justify-between p-4 bg-background/80 rounded-lg border-2 border-foreground">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <h4 className="font-semibold">Activate AI Intelligence</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Enable all AI-powered features to optimize your business
+                    </p>
+                  </div>
+                  <ThemeSwitch
+                    checked={aiEnabled}
+                    onCheckedChange={async (checked) => {
+                      setAiEnabled(checked);
+                      toast.success(checked ? "AI systems activated!" : "AI systems deactivated");
+                    }}
+                    disabled={aiLoading}
+                  />
+                </div>
+
+                {aiEnabled && (
+                  <>
+                    {/* AI Features Grid */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* Smart Scheduling */}
+                      <Card className="border-2 border-muted">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-cyan-500/10 rounded-lg">
+                              <Calendar className="h-5 w-5 text-cyan-500" />
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="font-semibold text-sm mb-1">Smart Scheduling</h5>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                AI suggests optimal appointment times based on your calendar patterns
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-green-600">
+                                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                <span>Active & Learning</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Formula Recommendations */}
+                      <Card className="border-2 border-muted">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-purple-500/10 rounded-lg">
+                              <Sparkles className="h-5 w-5 text-purple-500" />
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="font-semibold text-sm mb-1">Formula Intelligence</h5>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                AI analyzes hair history to recommend perfect color formulas
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-green-600">
+                                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                <span>Active & Learning</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Client Insights */}
+                      <Card className="border-2 border-muted">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-blue-500/10 rounded-lg">
+                              <Brain className="h-5 w-5 text-blue-500" />
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="font-semibold text-sm mb-1">Client Insights</h5>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                AI detects patterns and predicts client needs and preferences
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-green-600">
+                                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                <span>Active & Learning</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Automated Follow-ups */}
+                      <Card className="border-2 border-muted">
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-pink-500/10 rounded-lg">
+                              <Mail className="h-5 w-5 text-pink-500" />
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="font-semibold text-sm mb-1">Smart Follow-ups</h5>
+                              <p className="text-xs text-muted-foreground mb-2">
+                                AI drafts personalized messages for client engagement
+                              </p>
+                              <div className="flex items-center gap-2 text-xs text-green-600">
+                                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                <span>Active & Learning</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Usage Info */}
+                    <div className="p-4 bg-blue-500/10 border-2 border-blue-500/30 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <Sparkles className="h-5 w-5 text-blue-600 mt-0.5" />
+                        <div className="flex-1">
+                          <h5 className="font-semibold text-sm mb-1">💡 Free During Beta Period</h5>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            All AI features powered by <span className="font-semibold">Google Gemini 2.5 Flash</span> are 
+                            completely <span className="font-semibold">FREE until October 13, 2025</span>! 
+                            The AI learns from your patterns to provide better recommendations over time.
+                            {userRole === "stylist" && (
+                              <span className="block mt-2">
+                                These features work automatically in the background - check your AI Assistant page to interact directly with AI.
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => navigate("/ai-assistant")}
+                        className="flex-1"
+                      >
+                        <Sparkles className="mr-2 h-4 w-4" />
+                        Open AI Assistant
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => toast.info("AI analytics coming soon!")}
+                        className="flex-1"
+                      >
+                        <Brain className="mr-2 h-4 w-4" />
+                        View AI Insights
+                      </Button>
+                    </div>
+                  </>
+                )}
+
+                {!aiEnabled && (
+                  <div className="text-center py-8">
+                    <Brain className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                    <h4 className="font-semibold mb-2">AI Systems Inactive</h4>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Enable AI to unlock intelligent features that help you work smarter
+                    </p>
+                    <Button onClick={() => setAiEnabled(true)} className="gap-2">
+                      <Sparkles className="h-4 w-4" />
+                      Activate AI Intelligence
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Preferences Tab */}

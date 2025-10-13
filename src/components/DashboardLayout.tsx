@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/tooltip";
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { FloatingActionButton } from "@/components/FloatingActionButton";
+
 import { RoleSwitcher } from "@/components/RoleSwitcher";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useTheme } from "next-themes";
@@ -298,7 +298,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
         
         <MobileBottomNav userRole={userRole || undefined} />
-        <FloatingActionButton userRole={userRole || "client"} />
       </div>
       
       <KeyboardShortcutsDialog 
