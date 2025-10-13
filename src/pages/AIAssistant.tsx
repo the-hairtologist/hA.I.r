@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2 } from "lucide-react";
+import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, MessageSquare, User } from "lucide-react";
 import { LoadingDots } from "@/components/ui/loading-dots";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { AIDisclaimer } from "@/components/AIDisclaimer";
+import { AIContextPanel } from "@/components/AIContextPanel";
+import { ConversationSelector } from "@/components/ConversationSelector";
+import { ClientSelectorDialog } from "@/components/ClientSelectorDialog";
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -480,24 +483,35 @@ const Knowledge = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[300px_1fr] gap-6">
+        <div className="grid lg:grid-cols-[320px_1fr] gap-4 md:gap-6">
           {/* Left Sidebar */}
-          <div className="space-y-5">
+          <div className="space-y-4 md:space-y-5">
+            {/* AI Context Panel - Shows what AI knows */}
+            {userRole === "stylist" && (
+              <AIContextPanel 
+                clientContext={clientContext}
+                stylistContext={stylistContext}
+                onSelectClient={() => setShowClientSelector(true)}
+                showClientSelector={true}
+              />
+            )}
+
             {/* Formula History */}
             {savedFormulas.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-secondary/5 to-primary/5">
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
+                <div className="p-3 md:p-4">
+                  <div className="flex items-center gap-2 mb-3 md:mb-4">
                     <History className="h-4 w-4 text-secondary" />
                     <h3 className="text-sm font-display font-bold">Saved Formulas</h3>
                   </div>
                   <div className="space-y-2">
                     {savedFormulas.map((formula) => (
-                      <div key={formula.id} className="group flex items-center justify-between p-3 rounded-lg bg-background/50 border-2 border-secondary/20 hover:border-secondary/40 transition-all">
+                      <div key={formula.id} className="group flex items-center justify-between p-2 md:p-3 rounded-lg bg-background/50 border-2 border-secondary/20 hover:border-secondary/40 transition-all">
                         <span className="text-xs truncate flex-1 font-medium">{formula.formula_name}</span>
                         <button
                           onClick={() => handleDeleteFormula(formula.id)}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-destructive/20 rounded-md"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-destructive/20 rounded-md touch-manipulation"
+                          aria-label="Delete formula"
                         >
                           <Trash2 className="h-3 w-3 text-destructive" />
                         </button>
@@ -511,7 +525,7 @@ const Knowledge = () => {
             {/* Step Progress - Auto-shows when AI provides steps */}
             {correctionSteps.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-accent/5 to-primary/5">
-                <div className="p-4">
+                <div className="p-3 md:p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckSquare className="h-4 w-4 text-accent" />
                     <h3 className="text-sm font-display font-bold">Step Tracker</h3>
@@ -521,7 +535,7 @@ const Knowledge = () => {
                   </div>
                   <div className="space-y-2.5">
                     {correctionSteps.map((step, idx) => (
-                      <label key={idx} className="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-accent/5 transition-colors">
+                      <label key={idx} className="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-accent/5 transition-colors touch-manipulation">
                         <Checkbox
                           checked={step.completed}
                           onCheckedChange={() => toggleStepCompletion(idx)}
@@ -541,26 +555,55 @@ const Knowledge = () => {
           </div>
 
           {/* Main Chat Area */}
-          <div>
-                <div className="window-frame h-[calc(100vh-200px)] flex flex-col bg-background">
+          <div className="min-h-[500px] md:min-h-0">
+            <div className="window-frame h-[calc(100vh-280px)] md:h-[calc(100vh-200px)] flex flex-col bg-background">
               <div className="window-titlebar bg-gradient-to-r from-primary via-secondary to-accent">
-                <div className="flex items-center gap-3">
-                  <div className="window-controls">
-                    <div className="window-control bg-destructive"></div>
-                    <div className="window-control bg-warning"></div>
-                    <div className="window-control bg-accent"></div>
+                <div className="flex items-center justify-between gap-2 md:gap-3">
+                  <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                    <div className="window-controls hidden md:flex">
+                      <div className="window-control bg-destructive"></div>
+                      <div className="window-control bg-warning"></div>
+                      <div className="window-control bg-accent"></div>
+                    </div>
+                    <h2 className="text-primary-foreground font-display font-bold text-xs md:text-sm flex items-center gap-1 md:gap-2 truncate">
+                      <Sparkles className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+                      <span className="truncate">AI Hair Pro{clientContext ? ` - ${clientContext.full_name}` : ''}</span>
+                    </h2>
                   </div>
-                  <h2 className="text-primary-foreground font-display font-bold text-sm flex items-center gap-2">
-                    <Sparkles className="h-4 w-4" />
-                    AI Hair Pro Assistant
-                  </h2>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowConversations(true)}
+                      className="h-7 md:h-8 px-2 md:px-3 text-xs text-primary-foreground hover:bg-white/20"
+                      title="Conversation History"
+                    >
+                      <MessageSquare className="h-3 w-3 md:h-4 md:w-4" />
+                      <span className="hidden md:inline ml-1">History</span>
+                    </Button>
+                    
+                    {currentConversationId && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={startNewConversation}
+                        className="h-7 md:h-8 px-2 md:px-3 text-xs text-primary-foreground hover:bg-white/20"
+                        title="New Conversation"
+                      >
+                        <Sparkles className="h-3 w-3 md:h-4 md:w-4" />
+                        <span className="hidden md:inline ml-1">New</span>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Chat Messages */}
-              <ScrollArea className="flex-1 p-5 bg-gradient-to-br from-background to-muted/20">
+              <ScrollArea className="flex-1 p-3 md:p-5 bg-gradient-to-br from-background to-muted/20">
                 {/* AI Disclaimer */}
-                <div className="mb-4">
+                <div className="mb-3 md:mb-4">
                   <AIDisclaimer context="chat" />
                 </div>
                 
@@ -638,23 +681,24 @@ const Knowledge = () => {
               </ScrollArea>
 
               {/* Input Form */}
-              <form onSubmit={handleAiSubmit} className="p-4 bg-gradient-to-r from-muted/50 to-muted/30 border-t-4 border-foreground">
-                <div className="flex gap-3">
+              <form onSubmit={handleAiSubmit} className="p-3 md:p-4 bg-gradient-to-r from-muted/50 to-muted/30 border-t-4 border-foreground">
+                <div className="flex gap-2 md:gap-3">
                   <Input
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}
                     placeholder="Ask me anything: formulas, techniques, corrections..."
                     disabled={aiLoading}
-                    className="flex-1 border-3 border-foreground rounded-xl font-medium focus-visible:ring-primary/50 shadow-[2px_2px_0px_0px_hsl(var(--foreground)_/_0.1)]"
+                    className="flex-1 border-3 border-foreground rounded-xl font-medium focus-visible:ring-primary/50 shadow-[2px_2px_0px_0px_hsl(var(--foreground)_/_0.1)] text-sm md:text-base"
                     style={{ border: "3px solid" }}
                   />
                   <button
                     type="submit" 
                     disabled={aiLoading || !aiInput.trim()} 
-                    className="retro-button bg-gradient-to-r from-primary to-accent text-primary-foreground px-6 rounded-xl font-display font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="retro-button bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 md:px-6 rounded-xl font-display font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm md:text-base touch-manipulation min-h-[44px]"
+                    aria-label="Send message"
                   >
                     <Send className="h-4 w-4" />
-                    Send
+                    <span className="hidden md:inline">Send</span>
                   </button>
                 </div>
               </form>
@@ -692,6 +736,28 @@ const Knowledge = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Conversation History Dialog */}
+        <ConversationSelector
+          open={showConversations}
+          onOpenChange={setShowConversations}
+          conversations={conversations}
+          currentConversationId={currentConversationId}
+          onSelectConversation={setCurrentConversationId}
+          onNewConversation={startNewConversation}
+          onConversationsChange={loadConversations}
+        />
+
+        {/* Client Selector Dialog - Stylist Only */}
+        {userRole === "stylist" && (
+          <ClientSelectorDialog
+            open={showClientSelector}
+            onOpenChange={setShowClientSelector}
+            clients={clientsList}
+            selectedClientId={selectedClientId}
+            onSelectClient={setSelectedClientId}
+          />
+        )}
       </main>
     </div>
   );
