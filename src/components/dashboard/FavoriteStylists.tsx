@@ -13,9 +13,9 @@ interface FavoriteStylistsProps {
 interface Stylist {
   id: string;
   business_name: string;
-  avatar_url?: string;
   user: {
     full_name: string;
+    avatar_url?: string;
   };
 }
 
@@ -38,8 +38,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
           stylist:stylist_profiles(
             id,
             business_name,
-            avatar_url,
-            user:profiles(full_name)
+            user:profiles(full_name, avatar_url)
           )
         `)
         .eq("client_id", clientId)
@@ -111,7 +110,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
               >
                 <div className="flex items-center gap-3 mb-3">
                   <Avatar className="h-12 w-12 brutal-border">
-                    <AvatarImage src={stylist.avatar_url} />
+                    <AvatarImage src={stylist.user?.avatar_url} />
                     <AvatarFallback className="bg-gradient-purple-pink text-on-surface-primary font-bold">
                       {stylist.business_name?.[0]?.toUpperCase() || stylist.user?.full_name?.[0]?.toUpperCase()}
                     </AvatarFallback>
