@@ -320,16 +320,47 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
   ];
 };
 
-// Client Navigation Items - Simplified for Coming Soon Mode
+// Client Navigation Items - Client-specific features only
 export const clientNavigationItems: NavigationItem[] = [
   { 
     id: "dashboard", 
     title: "Dashboard", 
     url: "/dashboard", 
-    icon: LayoutDashboard, 
+    icon: Home, 
     gradient: "bg-[image:var(--gradient-purple-pink)]", 
     group: "main", 
     color: "text-purple-400 dark:text-purple-300" 
+  },
+  { 
+    id: "my-appointments", 
+    title: "My Appointments", 
+    url: "/appointments", 
+    icon: Calendar, 
+    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
+    group: "main", 
+    color: "text-cyan-400 dark:text-cyan-300",
+    description: "View & manage bookings"
+  },
+  { 
+    id: "find-stylists", 
+    title: "Find Stylists", 
+    url: "/client-discovery", 
+    icon: Search, 
+    gradient: "bg-[image:var(--gradient-green-emerald)]", 
+    group: "main", 
+    color: "text-emerald-400 dark:text-emerald-300",
+    comingSoon: true,
+    description: "Browse and book stylists"
+  },
+  { 
+    id: "messages", 
+    title: "Messages", 
+    url: "/messages", 
+    icon: MessageSquare, 
+    gradient: "bg-[image:var(--gradient-pink-rose)]", 
+    group: "main", 
+    color: "text-pink-400 dark:text-pink-300",
+    description: "Chat with your stylist"
   },
   { 
     id: "knowledge", 
@@ -337,7 +368,7 @@ export const clientNavigationItems: NavigationItem[] = [
     url: "/knowledge", 
     icon: BookOpen, 
     gradient: "bg-[image:var(--gradient-cyan-blue)]", 
-    group: "main", 
+    group: "resources", 
     color: "text-cyan-400 dark:text-cyan-300",
     description: "Learn & explore"
   },
@@ -399,6 +430,7 @@ export const stylistAdminGroupLabels: NavigationGroup = {
 
 export const clientGroupLabels: NavigationGroup = {
   main: "Main",
+  resources: "Resources",
   account: "Account",
   support: "Support",
 };
