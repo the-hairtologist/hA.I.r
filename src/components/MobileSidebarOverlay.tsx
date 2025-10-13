@@ -10,8 +10,8 @@ export const MobileSidebarOverlay = () => {
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
   useEffect(() => {
-    // Only apply scroll lock on mobile devices
-    const isMobile = window.innerWidth < 768;
+    // Only apply scroll lock on mobile/tablet devices (< 1024px)
+    const isMobile = window.innerWidth < 1024;
     
     if (!isMobile) return;
 
