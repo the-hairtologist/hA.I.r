@@ -1024,6 +1024,35 @@ export type Database = {
           },
         ]
       }
+      feedback_upvotes: {
+        Row: {
+          created_at: string
+          feedback_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_upvotes_feedback_id_fkey"
+            columns: ["feedback_id"]
+            isOneToOne: false
+            referencedRelation: "product_feedback"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       formula_access_log: {
         Row: {
           access_type: string
@@ -1498,6 +1527,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      product_feedback: {
+        Row: {
+          admin_response: string | null
+          category: string | null
+          created_at: string
+          description: string
+          feedback_type: string
+          id: string
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string
+          upvotes: number | null
+          user_id: string
+        }
+        Insert: {
+          admin_response?: string | null
+          category?: string | null
+          created_at?: string
+          description: string
+          feedback_type: string
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id: string
+        }
+        Update: {
+          admin_response?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string
+          feedback_type?: string
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: []
       }
       product_inventory: {
         Row: {

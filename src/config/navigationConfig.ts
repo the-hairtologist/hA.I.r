@@ -32,6 +32,7 @@ import {
   Clock,
   Mail,
   TrendingUp,
+  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -238,6 +239,16 @@ export const stylistNavigationItems: NavigationItem[] = [
     group: "tools", 
     color: "text-cyan-400 dark:text-cyan-300" 
   },
+  { 
+    id: "feedback", 
+    title: "Feedback", 
+    url: "/feedback", 
+    icon: MessageCircle, 
+    gradient: "bg-[image:var(--gradient-orange-red)]", 
+    group: "tools", 
+    color: "text-orange-400 dark:text-orange-300",
+    description: "Share ideas & report issues"
+  },
 ];
 
 // Admin Navigation Items
@@ -408,6 +419,16 @@ export const clientNavigationItems: NavigationItem[] = [
     gradient: "bg-[image:var(--gradient-cyan-blue)]", 
     group: "support", 
     color: "text-cyan-400 dark:text-cyan-300" 
+  },
+  { 
+    id: "feedback", 
+    title: "Feedback", 
+    url: "/feedback", 
+    icon: MessageCircle, 
+    gradient: "bg-[image:var(--gradient-orange-red)]", 
+    group: "support", 
+    color: "text-orange-400 dark:text-orange-300",
+    description: "Share ideas & report issues"
   },
 ];
 

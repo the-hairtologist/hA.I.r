@@ -83,6 +83,7 @@ const PaymentMethodsPage = lazy(() => import("./pages/PaymentMethodsPage"));
 const ClientReviewsPage = lazy(() => import("./pages/ClientReviewsPage"));
 const BookingHistoryPage = lazy(() => import("./pages/BookingHistoryPage"));
 const GrowthAnalytics = lazy(() => import("./pages/GrowthAnalytics"));
+const FeedbackBoard = lazy(() => import("./pages/FeedbackBoard"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -289,6 +290,11 @@ const App = () => {
           <Route path="/analytics" element={
             <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <GrowthAnalytics />
+            </ProtectedRoute>
+          } />
+          <Route path="/feedback" element={
+            <ProtectedRoute>
+              <FeedbackBoard />
             </ProtectedRoute>
           } />
           <Route path="/stylist/reviews" element={
