@@ -10,6 +10,16 @@ interface MobileBottomNavProps {
   userRole?: string;
 }
 
+interface NavItem {
+  icon: any;
+  label: string;
+  path: string;
+  gradient: string;
+  highlight: boolean;
+  badge?: number;
+  disabled?: boolean;
+}
+
 export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,7 +28,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  const stylistItems = [
+  const stylistItems: NavItem[] = [
     { 
       icon: Home, 
       label: "Home", 
@@ -57,7 +67,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
     },
   ];
 
-  const clientItems = [
+  const clientItems: NavItem[] = [
     { 
       icon: Home, 
       label: "Home", 
@@ -97,7 +107,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
     },
   ];
 
-  const adminItems = [
+  const adminItems: NavItem[] = [
     { 
       icon: Home, 
       label: "Home", 
