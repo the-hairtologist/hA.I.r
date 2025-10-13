@@ -29,6 +29,18 @@ serve(async (req) => {
       );
     }
 
+    // Validate UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(enrollmentId)) {
+      return new Response(
+        generateHtmlResponse(
+          'Invalid Link',
+          'This unsubscribe link format is invalid.'
+        ),
+        { status: 400, headers: { 'Content-Type': 'text/html' } }
+      );
+    }
+
     // Update enrollment status
     const { error } = await supabase
       .from('email_sequence_enrollments')

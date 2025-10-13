@@ -7,10 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/useToast";
-import { Plus, Trash2, GripVertical, Save } from "lucide-react";
+import { Plus, Trash2, GripVertical, Save, Eye } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/useAuth";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface Step {
   id?: string;
@@ -177,6 +178,40 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
     setSteps(newSteps);
   };
 
+  // Preview email with sample data
+  const generatePreviewHtml = (step: Step) => {
+    let preview = step.body_html;
+    
+    // Replace variables with sample data
+    preview = preview.replace(/\{\{client_name\}\}/g, "Sarah Johnson");
+    preview = preview.replace(/\{\{stylist_name\}\}/g, "Emily Smith");
+    preview = preview.replace(/\{\{business_name\}\}/g, "Glamour Hair Studio");
+    preview = preview.replace(/\{\{appointment_date\}\}/g, "Tuesday, October 15, 2025 at 2:00 PM");
+    preview = preview.replace(/\{\{appointment_time\}\}/g, "2:00 PM");
+    
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+            h1, h2, h3 { color: #7c3aed; }
+            .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }
+          </style>
+        </head>
+        <body>
+          ${preview}
+          <div class="footer">
+            <p><strong>Sample Preview</strong> - Variables replaced with example data</p>
+            <p>Unsubscribe link will be automatically added to live emails</p>
+          </div>
+        </body>
+      </html>
+    `;
+  };
+
   return (
     <form
       onSubmit={(e) => {
@@ -312,7 +347,36 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
               </div>
 
               <div className="space-y-2 sm:col-span-2">
-                <Label>Email Body (HTML) *</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Email Body (HTML) *</Label>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="gap-2"
+                        disabled={!step.body_html}
+                      >
+                        <Eye className="h-4 w-4" />
+                        Preview
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh]">
+                      <DialogHeader>
+                        <DialogTitle>Email Preview - {step.subject || "Untitled"}</DialogTitle>
+                      </DialogHeader>
+                      <div className="border rounded-lg overflow-auto max-h-[60vh]">
+                        <iframe
+                          srcDoc={generatePreviewHtml(step)}
+                          className="w-full h-[500px]"
+                          title="Email Preview"
+                          sandbox="allow-same-origin"
+                        />
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <Textarea
                   value={step.body_html}
                   onChange={(e) => updateStep(index, "body_html", e.target.value)}

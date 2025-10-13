@@ -6,6 +6,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Input validation helper
+const validateUUID = (uuid: string): boolean => {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+};
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -20,11 +26,21 @@ serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
 
-    const { client_id, sequence_id, stylist_id } = await req.json();
+    const body = await req.json();
+    const { client_id, sequence_id, stylist_id } = body;
 
+    // Validate required fields
     if (!client_id || !sequence_id || !stylist_id) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields' }),
+        JSON.stringify({ error: 'Missing required fields: client_id, sequence_id, and stylist_id are required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate UUIDs
+    if (!validateUUID(client_id) || !validateUUID(sequence_id) || !validateUUID(stylist_id)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid UUID format for one or more IDs' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

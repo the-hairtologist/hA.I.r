@@ -91,9 +91,29 @@ export const ClientEnrollments = () => {
     enabled: !!user,
   });
 
+  // Check for duplicate enrollment
+  const checkDuplicateEnrollment = async () => {
+    if (!selectedClient || !selectedSequence) return null;
+
+    const { data } = await supabase
+      .from("email_sequence_enrollments")
+      .select("id, status")
+      .eq("client_id", selectedClient)
+      .eq("sequence_id", selectedSequence)
+      .maybeSingle();
+
+    return data;
+  };
+
   // Enroll client
   const enrollMutation = useMutation({
     mutationFn: async () => {
+      // Check for duplicate before enrolling
+      const existing = await checkDuplicateEnrollment();
+      if (existing && existing.status === 'active') {
+        throw new Error('This client is already enrolled in this sequence');
+      }
+
       const { data: stylistProfile } = await supabase
         .from("stylist_profiles")
         .select("id")
