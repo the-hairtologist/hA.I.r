@@ -65,21 +65,21 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   const clientActions: FloatingAction[] = [
     {
-      label: "AI Assistant",
+      label: "Hair Care Tips",
       icon: Sparkles,
       onClick: () => {
         haptic.tap();
-        navigate("/ai-assistant");
+        navigate("/knowledge");
         setIsOpen(false);
       },
-      gradient: "from-purple-start to-purple-end",
+      gradient: "from-cyan-start to-cyan-end",
     },
     {
-      label: "Profile",
+      label: "My Profile",
       icon: User,
       onClick: () => {
         haptic.tap();
-        navigate("/profile");
+        navigate("/settings");
         setIsOpen(false);
       },
       gradient: "from-blue-start to-blue-end",

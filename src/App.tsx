@@ -194,7 +194,7 @@ const App = () => {
             </ProtectedRoute>
           } />
           <Route path="/knowledge" element={
-            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+            <ProtectedRoute allowedRoles={["stylist", "admin", "client"]}>
               <Knowledge />
             </ProtectedRoute>
           } />

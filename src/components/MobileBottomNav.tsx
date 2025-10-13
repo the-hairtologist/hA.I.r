@@ -76,33 +76,17 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       highlight: false
     },
     { 
-      icon: Users, 
-      label: "Find", 
-      path: "/coming-soon",
-      gradient: "from-cyan-start to-cyan-end",
-      highlight: false,
-      disabled: true
-    },
-    { 
       icon: Sparkles, 
-      label: "AI", 
-      path: "/ai-assistant",
-      gradient: "from-purple-start to-purple-end",
-      highlight: true
-    },
-    { 
-      icon: Calendar, 
-      label: "Bookings", 
-      path: "/appointments",
-      gradient: "from-pink-start to-pink-end",
+      label: "Tips", 
+      path: "/knowledge",
+      gradient: "from-cyan-start to-cyan-end",
       highlight: false
     },
     { 
-      icon: MessageSquare, 
-      label: "Messages", 
-      path: "/messages",
-      gradient: "from-violet-start to-violet-end",
-      badge: unreadCount,
+      icon: User, 
+      label: "Profile", 
+      path: "/settings",
+      gradient: "from-purple-start to-purple-end",
       highlight: false
     },
   ];
