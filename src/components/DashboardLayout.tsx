@@ -147,11 +147,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <a href="#main-content" className="skip-to-main">
         Skip to main content
       </a>
-      <div className="min-h-screen w-full flex bg-[image:var(--gradient-bg-main)]">
+      <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
         <AppSidebar userRole={userRole || undefined} />
         <MobileSidebarOverlay />
         
-        <div className="flex-1 min-w-0 flex flex-col">
+        <div className="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
           {/* Mobile Header */}
           <MobileHeader 
             userRole={userRole || undefined} 
@@ -283,14 +283,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          {/* Main Content */}
+          {/* Main Content - CRITICAL: Prevent overflow */}
           <main
             id="main-content"
-            className="flex-1 overflow-auto pb-20 lg:pb-0"
+            className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-20 lg:pb-0"
             role="main"
             aria-label="Main content"
           >
-            <div className="container mx-auto p-4 sm:p-6 animate-fade-in-fast max-w-full">
+            <div className="container mx-auto p-4 sm:p-6 animate-fade-in-fast w-full max-w-full">
               <Breadcrumbs />
               {children}
             </div>
