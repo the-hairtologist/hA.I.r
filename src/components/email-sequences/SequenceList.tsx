@@ -188,7 +188,7 @@ export const SequenceList = () => {
               Create Sequence
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto w-[95vw] sm:w-full">
             <DialogHeader>
               <DialogTitle>
                 {selectedSequence ? "Edit Sequence" : "Create New Sequence"}

@@ -362,7 +362,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
                         Preview
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[80vh]">
+                    <DialogContent className="max-w-2xl max-h-[80vh] w-[95vw] sm:w-full">
                       <DialogHeader>
                         <DialogTitle>Email Preview - {step.subject || "Untitled"}</DialogTitle>
                       </DialogHeader>

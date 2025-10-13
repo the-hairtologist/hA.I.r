@@ -24,18 +24,14 @@ export const enableSmoothScrolling = () => {
 };
 
 /**
- * Prevent zoom on input focus (mobile)
+ * Prevent zoom on input focus (mobile) - DEPRECATED
+ * Note: This function is kept for backwards compatibility but should not be used
+ * as it impacts accessibility. Modern browsers handle input zoom appropriately.
  */
 export const preventInputZoom = () => {
-  if (Platform.isMobile) {
-    const viewportMeta = document.querySelector('meta[name="viewport"]');
-    if (viewportMeta) {
-      viewportMeta.setAttribute(
-        'content',
-        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
-      );
-    }
-  }
+  // DEPRECATED: Disabling zoom hurts accessibility
+  // Modern mobile browsers handle input zoom intelligently
+  console.warn('preventInputZoom is deprecated and should not be used for accessibility reasons');
 };
 
 /**
