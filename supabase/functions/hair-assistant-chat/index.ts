@@ -19,7 +19,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message, mode, conversationHistory } = await req.json();
+    const { message, mode, conversationHistory, clientContext, stylistContext } = await req.json();
     
     // Get authorization header to extract user ID
     const authHeader = req.headers.get('authorization');
@@ -55,94 +55,92 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log('Processing chat request in mode:', mode);
+    console.log('Processing chat request with context:', { 
+      hasClientContext: !!clientContext, 
+      hasStylistContext: !!stylistContext 
+    });
 
-    // Build mode-specific system prompt
-    const formulaPrompt = `You are an expert AI Hair Color Formula Generator with 25+ years of professional salon experience.
+    // Build enhanced context-aware system prompt
+    let contextInfo = '';
+    
+    if (stylistContext) {
+      contextInfo += `\n\n🎨 STYLIST CONTEXT:\n`;
+      if (stylistContext.business_name) contextInfo += `- Business: ${stylistContext.business_name}\n`;
+      if (stylistContext.color_line) contextInfo += `- Preferred Color Line: ${stylistContext.color_line}\n`;
+      if (stylistContext.specialty) contextInfo += `- Specialty: ${stylistContext.specialty}\n`;
+      if (stylistContext.years_experience) contextInfo += `- Experience: ${stylistContext.years_experience} years\n`;
+    }
 
-YOUR ROLE: Generate precise hair color formulas and provide strategic guidance on color approaches.
+    if (clientContext) {
+      contextInfo += `\n\n👤 CLIENT CONTEXT (${clientContext.full_name}):\n`;
+      if (clientContext.hair_type) contextInfo += `- Hair Type: ${clientContext.hair_type}\n`;
+      if (clientContext.hair_goals) contextInfo += `- Hair Goals: ${clientContext.hair_goals}\n`;
+      if (clientContext.allergies) contextInfo += `- ⚠️ ALLERGIES: ${clientContext.allergies}\n`;
+      if (clientContext.sensitivity_notes) contextInfo += `- Sensitivities: ${clientContext.sensitivity_notes}\n`;
+      if (clientContext.notes) contextInfo += `- Notes: ${clientContext.notes}\n`;
+      if (clientContext.client_since) contextInfo += `- Client Since: ${clientContext.client_since}\n`;
+      
+      if (clientContext.recentFormulas?.length > 0) {
+        contextInfo += `\n📋 RECENT FORMULAS:\n`;
+        clientContext.recentFormulas.forEach((f: any, i: number) => {
+          contextInfo += `${i + 1}. ${f.formula_name} (${new Date(f.created_at).toLocaleDateString()})\n`;
+          if (f.notes) contextInfo += `   Notes: ${f.notes}\n`;
+        });
+      }
 
-FOCUS ON:
-- Exact formulas with measurements, ratios, and developer volumes
-- Different approach options for achieving the desired result
-- Product recommendations and alternative methods
-- Strategic planning for color transformations
+      if (clientContext.recentAppointments?.length > 0) {
+        contextInfo += `\n📅 RECENT APPOINTMENTS:\n`;
+        clientContext.recentAppointments.forEach((a: any, i: number) => {
+          contextInfo += `${i + 1}. ${a.service_type} - ${new Date(a.appointment_date).toLocaleDateString()}\n`;
+          if (a.notes) contextInfo += `   Notes: ${a.notes}\n`;
+        });
+      }
+    }
 
-FORMULA FORMAT:
-1. **Starting Point Analysis**: Current level, undertones, hair condition
-2. **Goal Color**: Target level and tone
-3. **Recommended Approach**: Best method to achieve the result
+    // Enhanced system prompt with context
+    const basePrompt = `You are an expert AI Hair Professional Assistant with 25+ years of salon experience.
+
+YOUR ROLE: Provide precise, personalized hair advice based on the specific client and stylist context provided.
+
+${contextInfo}
+
+PERSONALIZATION RULES:
+${clientContext ? `- ALWAYS reference ${clientContext.full_name} by name in your responses
+- Consider their hair history, past formulas, and recent appointments
+- If they have allergies or sensitivities, ALWAYS check compatibility and warn if needed
+- Reference their hair goals when making recommendations
+- Build on their previous work together` : ''}
+${stylistContext ? `- Prioritize recommendations using ${stylistContext.color_line || 'their preferred color line'}
+- Align with their specialty: ${stylistContext.specialty || 'general hair services'}
+- Adapt complexity to their ${stylistContext.years_experience || '10'} years of experience` : ''}
+
+FORMULA FORMAT (when generating formulas):
+1. **Client Analysis**: Current hair state and goals
+2. **Historical Context**: Reference past formulas if relevant
+3. **Recommended Approach**: Method to achieve result
 4. **Formula Components**: 
    - Exact measurements (grams/oz)
    - Developer strength and mixing ratio
-   - Toners/glosses if needed
-5. **Application Method**: Sectioning and technique
-6. **Processing Time**: Timing with checkpoints
-7. **Expected Outcome**: Realistic result description
+   - ${stylistContext?.color_line ? `Using ${stylistContext.color_line} products` : 'Product recommendations'}
+5. **Allergy Check**: ${clientContext?.allergies ? `⚠️ VERIFY compatibility with known allergies: ${clientContext.allergies}` : 'No known allergies'}
+6. **Application Method**: Technique and sectioning
+7. **Processing Time**: Timing with checkpoints
+8. **Expected Outcome**: Realistic result
 
-KEEP IT PRACTICAL:
-- Offer multiple approach options when possible
-- Consider hair history and condition
-- Recommend strand tests for major changes
-- Be specific with measurements and timing
-
-Remember: These are professional recommendations. Results vary based on individual hair.`;
-
-    const stepByStepPrompt = `You are an expert AI Hair Professional Assistant with 25+ years of salon experience.
-
-YOUR ROLE: Provide detailed step-by-step guidance for ANY hair-related technique, process, or problem.
-
-YOU CAN HELP WITH:
-- Color correction and toning techniques
-- Styling tutorials (blowouts, curls, updos)
-- Chemical treatments (keratin, perms, relaxers)
-- Hair cutting and layering techniques
-- Product application methods
-- Problem-solving (damage, breakage, etc.)
-- Client consultation approaches
-- ANY other hair technique or process
-
-STEP-BY-STEP FORMAT:
-1. **Understanding the Request**:
-   - Clarify what needs to be done
-   - Identify starting conditions
-   - Set realistic expectations
-
-2. **Preparation**:
-   - Tools and products needed
-   - Prep work required
-   - Safety considerations
-
-3. **Detailed Step-by-Step Process**:
-   - STEP 1: [Clear action] - Why it matters + timing + what to look for
-   - STEP 2: [Clear action] - Why it matters + timing + what to look for
-   - Continue for each step needed (typically 3-10 steps)
-   
-4. **Checkpoints & Adjustments**:
-   - When to evaluate progress
-   - How to adjust technique if needed
-   - Common mistakes to avoid
-
-5. **Finishing & Aftercare**:
-   - Final steps to complete the process
-   - Client care instructions
-   - Expected results and timeline
-
-GUIDELINES:
-- Break down complex techniques into manageable steps
+STEP-BY-STEP GUIDANCE (when providing techniques):
+- Break down complex techniques into clear steps
 - Explain the "why" behind each step
-- Be thorough but clear and practical
 - Include timing and visual cues
-- Anticipate potential issues
-- Adapt guidance to different skill levels
+- Reference past work when relevant
+- Adapt to stylist's experience level
 
-Remember: You're here to guide professionals through ANY hair technique with clear, actionable steps.`;
+TONE: Professional, personalized, and practical. Make the stylist feel you understand their specific situation.
 
-    const systemPrompt = mode === 'formula' ? formulaPrompt : stepByStepPrompt;
+Remember: You have access to their full history. Use it to provide truly personalized, expert guidance.`;
 
     // Build messages array
     const messages = [
-      { role: 'system', content: systemPrompt },
+      { role: 'system', content: basePrompt },
       ...(conversationHistory || []),
       { role: 'user', content: message }
     ];

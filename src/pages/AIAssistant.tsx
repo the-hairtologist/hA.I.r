@@ -29,6 +29,18 @@ const Knowledge = () => {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
+  // Conversation persistence
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [showConversations, setShowConversations] = useState(false);
+  
+  // Context data
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [clientContext, setClientContext] = useState<any>(null);
+  const [stylistContext, setStylistContext] = useState<any>(null);
+  const [clientsList, setClientsList] = useState<any[]>([]);
+  const [showClientSelector, setShowClientSelector] = useState(false);
+  
   // Formula Generator specific state
   const [savedFormulas, setSavedFormulas] = useState<any[]>([]);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
@@ -59,8 +71,27 @@ const Knowledge = () => {
   useEffect(() => {
     if (userRole === "stylist") {
       loadSavedFormulas();
+      loadStylistContext();
+      loadClientsList();
     }
+    loadConversations();
   }, [userRole]);
+
+  // Load conversation when selected
+  useEffect(() => {
+    if (currentConversationId) {
+      loadConversationMessages(currentConversationId);
+    }
+  }, [currentConversationId]);
+
+  // Load client context when selected
+  useEffect(() => {
+    if (selectedClientId) {
+      loadClientContext(selectedClientId);
+    } else {
+      setClientContext(null);
+    }
+  }, [selectedClientId]);
 
   const checkUserRole = async () => {
     // This function is now handled by the useEffect above with useUserRole hook
@@ -130,6 +161,186 @@ const Knowledge = () => {
     }
   };
 
+  const loadConversations = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data, error } = await supabase
+        .from("ai_conversations")
+        .select("*")
+        .order("updated_at", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      setConversations(data || []);
+    } catch (error: any) {
+      console.error("Error loading conversations:", error);
+    }
+  };
+
+  const loadConversationMessages = async (conversationId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("ai_conversation_messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+      
+      const messages = data?.map(msg => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+        imageUrls: msg.image_urls || undefined
+      })) || [];
+      
+      setAiMessages(messages);
+    } catch (error: any) {
+      console.error("Error loading conversation messages:", error);
+      toast.error("Failed to load conversation");
+    }
+  };
+
+  const saveConversationMessage = async (role: "user" | "assistant", content: string, imageUrls?: string[]) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      // Create conversation if it doesn't exist
+      let convId = currentConversationId;
+      if (!convId) {
+        const title = content.slice(0, 50) + (content.length > 50 ? "..." : "");
+        const { data: conv, error: convError } = await supabase
+          .from("ai_conversations")
+          .insert({
+            user_id: session.user.id,
+            title,
+            context_type: selectedClientId ? "client" : "general",
+            context_id: selectedClientId
+          })
+          .select()
+          .single();
+
+        if (convError) throw convError;
+        convId = conv.id;
+        setCurrentConversationId(convId);
+      }
+
+      // Save message
+      const { error } = await supabase
+        .from("ai_conversation_messages")
+        .insert({
+          conversation_id: convId,
+          role,
+          content,
+          image_urls: imageUrls
+        });
+
+      if (error) throw error;
+      loadConversations();
+    } catch (error: any) {
+      console.error("Error saving message:", error);
+    }
+  };
+
+  const loadStylistContext = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data, error } = await supabase
+        .from("stylist_profiles")
+        .select("color_line, specialty, years_experience, business_name")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (error) throw error;
+      setStylistContext(data);
+    } catch (error: any) {
+      console.error("Error loading stylist context:", error);
+    }
+  };
+
+  const loadClientsList = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data: stylistData } = await supabase
+        .from("stylist_profiles")
+        .select("id")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (!stylistData) return;
+
+      const { data, error } = await supabase
+        .from("client_profiles")
+        .select("id, full_name, email")
+        .eq("preferred_stylist_id", stylistData.id)
+        .order("full_name", { ascending: true });
+
+      if (error) throw error;
+      setClientsList(data || []);
+    } catch (error: any) {
+      console.error("Error loading clients list:", error);
+    }
+  };
+
+  const loadClientContext = async (clientId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("client_profiles")
+        .select(`
+          full_name,
+          hair_type,
+          hair_goals,
+          allergies,
+          sensitivity_notes,
+          notes,
+          client_since
+        `)
+        .eq("id", clientId)
+        .single();
+
+      if (error) throw error;
+
+      // Load recent formulas for this client
+      const { data: formulas } = await supabase
+        .from("formulas")
+        .select("formula_name, created_at, notes")
+        .eq("client_id", clientId)
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      // Load recent appointments
+      const { data: appointments } = await supabase
+        .from("appointments")
+        .select("appointment_date, service_type, notes")
+        .eq("client_id", clientId)
+        .order("appointment_date", { ascending: false })
+        .limit(3);
+
+      setClientContext({
+        ...data,
+        recentFormulas: formulas || [],
+        recentAppointments: appointments || []
+      });
+    } catch (error: any) {
+      console.error("Error loading client context:", error);
+      toast.error("Failed to load client data");
+    }
+  };
+
+  const startNewConversation = () => {
+    setCurrentConversationId(null);
+    setAiMessages([]);
+    setSelectedClientId(null);
+    setClientContext(null);
+    setCorrectionSteps([]);
+  };
+
   const parseStepsFromResponse = (response: string) => {
     const lines = response.split("\n");
     const steps: Array<{ step: string; completed: boolean }> = [];
@@ -180,21 +391,32 @@ const Knowledge = () => {
       const { data, error } = await supabase.functions.invoke("hair-assistant-chat", {
         body: {
           message: userMessage,
-          mode: "unified", // Unified mode handles both formulas and steps
+          mode: "unified",
           conversationHistory: historyWithImages,
-          images: uploadedImages.length > 0 ? uploadedImages : undefined
+          images: uploadedImages.length > 0 ? uploadedImages : undefined,
+          clientContext: clientContext,
+          stylistContext: stylistContext
         }
       });
+
+      // Save user message
+      await saveConversationMessage("user", userMessage, uploadedImages.length > 0 ? uploadedImages : undefined);
 
       if (error) throw error;
 
       setAiMessages(prev => [...prev, { role: "assistant", content: data.response }]);
+      
+      // Save assistant message
+      await saveConversationMessage("assistant", data.response);
       
       // Auto-parse steps from any response that contains numbered lists
       const steps = parseStepsFromResponse(data.response);
       if (steps.length > 0) {
         setCorrectionSteps(steps);
       }
+      
+      // Clear uploaded images after successful send
+      setUploadedImages([]);
     } catch (error: any) {
       console.error("AI Error:", error);
       
