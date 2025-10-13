@@ -87,36 +87,35 @@ const Dashboard = () => {
   const defaultStylistSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-schedule", title: "My Schedule", component: "WeeklySchedule", enabled: false },
-    { id: "weekly-overview", title: "This Week", component: "WeeklyOverview", enabled: true },
+    { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: false },
+    { id: "weekly-overview", title: "This Week's Stats", component: "WeeklyOverview", enabled: true },
     { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
     { id: "quick-tasks", title: "My Tasks", component: "QuickTasks", enabled: true },
     { id: "quick-notes", title: "Quick Notes", component: "QuickNotes", enabled: true },
-    { id: "revenue-trends", title: "Revenue Trends", component: "RevenueTrends", enabled: false },
-    { id: "top-services", title: "Popular Services", component: "TopServices", enabled: false },
+    { id: "revenue-trends", title: "Revenue Analytics", component: "RevenueTrends", enabled: false },
+    { id: "top-services", title: "Service Performance", component: "TopServices", enabled: false },
     { id: "client-sentiment", title: "Client Feedback", component: "ClientSentimentTracker", enabled: false },
-    { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: false },
+    { id: "client-retention", title: "Retention Metrics", component: "ClientRetention", enabled: false },
   ];
 
-  // Client dashboard sections - simplified for coming soon mode
+  // Client dashboard sections - ultra-simplified for coming soon mode
   const defaultClientSections: DashboardSection[] = [
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "coming-soon-info", title: "Coming Soon", component: "ComingSoonInfo", enabled: true },
   ];
 
   // Admin sections - comprehensive platform oversight
   const defaultAdminSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Platform Overview", component: "LiveKPICards", enabled: true },
-    { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "weekly-schedule", title: "Platform Schedule", component: "WeeklySchedule", enabled: false },
-    { id: "weekly-overview", title: "Platform Stats", component: "WeeklyOverview", enabled: true },
-    { id: "recent-activity", title: "Platform Activity", component: "RecentActivity", enabled: true },
+    { id: "quick-actions", title: "Admin Controls", component: "QuickActions", enabled: true },
+    { id: "weekly-schedule", title: "All Appointments", component: "WeeklySchedule", enabled: false },
+    { id: "weekly-overview", title: "Platform Metrics", component: "WeeklyOverview", enabled: true },
+    { id: "recent-activity", title: "System Activity", component: "RecentActivity", enabled: true },
     { id: "quick-tasks", title: "Admin Tasks", component: "QuickTasks", enabled: true },
-    { id: "quick-notes", title: "Admin Notes", component: "QuickNotes", enabled: true },
-    { id: "revenue-trends", title: "Revenue Analytics", component: "RevenueTrends", enabled: true },
-    { id: "top-services", title: "Service Analytics", component: "TopServices", enabled: true },
-    { id: "client-sentiment", title: "Feedback Analytics", component: "ClientSentimentTracker", enabled: true },
-    { id: "client-retention", title: "Retention Analytics", component: "ClientRetention", enabled: true },
+    { id: "quick-notes", title: "Platform Notes", component: "QuickNotes", enabled: true },
+    { id: "revenue-trends", title: "Platform Revenue", component: "RevenueTrends", enabled: true },
+    { id: "top-services", title: "Service Insights", component: "TopServices", enabled: true },
+    { id: "client-sentiment", title: "User Feedback", component: "ClientSentimentTracker", enabled: true },
+    { id: "client-retention", title: "User Retention", component: "ClientRetention", enabled: true },
   ];
 
   // Determine sections based on role - admins get comprehensive view
@@ -624,21 +623,23 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Clients ONLY (not stylists) */}
+              {/* Clients ONLY - Coming Soon Banner (admins excluded) */}
               {userRole === "client" && !isAdmin && (
-                <div className="mt-2 sm:mt-3 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-primary/30 p-4 sm:p-5 md:p-6 text-center animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="mt-2 sm:mt-3 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 backdrop-blur-sm rounded-lg border-2 border-primary/30 p-4 sm:p-5 md:p-6 text-center animate-fade-in shadow-[0_4px_20px_rgba(var(--primary-rgb),0.1)]" style={{ animationDelay: '200ms' }}>
                   <div className="max-w-md mx-auto space-y-3 sm:space-y-4">
                     <div className="mb-2 sm:mb-3">
-                      <span className="text-4xl sm:text-5xl">✨</span>
+                      <span className="text-4xl sm:text-5xl animate-pulse">✨</span>
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-foreground">Client Features Coming Soon! 🎉</h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground">
-                      We're currently in <span className="font-semibold text-primary">stylist-only mode</span>. Client features like booking appointments, finding stylists, and messaging will be available soon!
+                    <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-foreground uppercase tracking-tight">
+                      Client Features Coming Soon! 🎉
+                    </h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                      We're currently in <span className="font-bold text-primary">stylist-only mode</span>. Full client features like booking appointments, finding stylists, messaging, and reviews will launch soon!
                     </p>
                     <div className="pt-2 flex flex-wrap gap-2 justify-center">
                       <Button 
                         onClick={() => navigate('/knowledge')}
-                        className="gap-2 h-9 text-xs"
+                        className="gap-2 h-9 text-xs font-semibold shadow-sm hover:shadow-md transition-shadow"
                         size="sm"
                       >
                         <BookOpen className="h-3.5 w-3.5" />
@@ -647,7 +648,7 @@ const Dashboard = () => {
                       <Button 
                         variant="outline"
                         onClick={() => navigate('/feedback')}
-                        className="gap-2 h-9 text-xs"
+                        className="gap-2 h-9 text-xs font-semibold"
                         size="sm"
                       >
                         <MessageCircle className="h-3.5 w-3.5" />
@@ -700,8 +701,8 @@ const Dashboard = () => {
         
         {!isEditMode && stats && (
           <>
-            {/* Stylist Welcome Checklist */}
-            {userRole === "stylist" && stats.todayAppointments === 0 && stats.totalClients === 0 && (
+            {/* Stylist Welcome Checklist - Show only for new stylists */}
+            {userRole === "stylist" && !isAdmin && stats.todayAppointments === 0 && stats.totalClients === 0 && (
               <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
                 <WelcomeChecklist 
                   userRole="stylist"
@@ -713,8 +714,8 @@ const Dashboard = () => {
               </div>
             )}
             
-            {/* Client Welcome Checklist */}
-            {userRole === "client" && stats.upcomingAppointments === 0 && (
+            {/* Client Welcome Checklist - Show only for clients, not admins */}
+            {userRole === "client" && !isAdmin && stats.upcomingAppointments === 0 && (
               <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
                 <WelcomeChecklist 
                   userRole="client"
@@ -724,35 +725,41 @@ const Dashboard = () => {
               </div>
             )}
             
-            {/* Rebooking Prompt for Clients */}
-            {userRole === "client" && (
+            {/* Rebooking Prompt - Clients only, not admins */}
+            {userRole === "client" && !isAdmin && (
               <div className="animate-fade-in" style={{ animationDelay: '320ms' }}>
                 <RebookingPrompt />
               </div>
             )}
             
-            <div className="mb-4 p-4 sm:p-5 md:p-6 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-                <div className="space-y-0.5">
-                  <p className="text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
-                    <Edit3 className="h-3.5 w-3.5 text-primary" />
-                    Personalize Your Dashboard
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Add, remove, or rearrange sections to match your workflow
-                  </p>
+            {/* Dashboard Customization Prompt - Stylists & Admins only, not clients */}
+            {(userRole === "stylist" || isAdmin) && (
+              <div className="mb-4 p-4 sm:p-5 md:p-6 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                  <div className="space-y-0.5">
+                    <p className="text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
+                      <Edit3 className="h-3.5 w-3.5 text-primary" />
+                      {isAdmin ? "Customize Admin Dashboard" : "Personalize Your Dashboard"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {isAdmin 
+                        ? "Configure platform monitoring sections to match your oversight needs" 
+                        : "Add, remove, or rearrange sections to match your workflow"
+                      }
+                    </p>
+                  </div>
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    onClick={() => setIsEditMode(true)}
+                    className="gap-1.5 shrink-0 w-full sm:w-auto shadow-sm h-8 text-xs"
+                  >
+                    <Edit3 className="h-3 w-3" />
+                    <span>Customize</span>
+                  </Button>
                 </div>
-                <Button 
-                  variant="default" 
-                  size="sm" 
-                  onClick={() => setIsEditMode(true)}
-                  className="gap-1.5 shrink-0 w-full sm:w-auto shadow-sm h-8 text-xs"
-                >
-                  <Edit3 className="h-3 w-3" />
-                  <span>Customize</span>
-                </Button>
               </div>
-            </div>
+            )}
           </>
         )}
 

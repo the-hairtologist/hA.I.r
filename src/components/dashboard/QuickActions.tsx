@@ -201,8 +201,8 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
     if (saved) {
       setSelectedActions(JSON.parse(saved));
     } else {
-      // Default: show all for clients (2), first 5 for admins, first 4 for stylists
-      const defaultCount = isAdmin ? 5 : userRole === "client" ? allActions.length : 4;
+      // Default: Admin (6 shortcuts), Client (2 essentials), Stylist (4 key actions)
+      const defaultCount = isAdmin ? 6 : userRole === "client" ? allActions.length : 4;
       setSelectedActions(allActions.slice(0, defaultCount).map(a => a.id));
     }
   }, [userRole, isAdmin]);
