@@ -523,7 +523,7 @@ const Dashboard = () => {
           <LiveKPICards stylistId={profile.id} />
         ) : null;
       case "QuickActions":
-        return <QuickActions userRole={userRole || ""} />;
+        return <QuickActions userRole={userRole || ""} isAdmin={isAdmin} />;
       case "WeeklyOverview":
         return (userRole === "stylist" || isAdmin) ? <WeeklyOverview /> : null;
       case "ClientSentimentTracker":

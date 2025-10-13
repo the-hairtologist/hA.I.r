@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, Users, Calendar, MessageSquare, Scissors, Settings2, Plus, X, Palette, DollarSign, BookOpen, CreditCard, GripVertical } from "lucide-react";
+import { Sparkles, Users, Calendar, MessageSquare, Scissors, Settings2, Plus, X, Palette, DollarSign, BookOpen, CreditCard, GripVertical, Crown, Shield, Activity, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 
 interface QuickActionsProps {
   userRole: string;
+  isAdmin?: boolean;
 }
 
 interface ActionButton {
@@ -20,7 +21,7 @@ interface ActionButton {
   disabled?: boolean;
 }
 
-export const QuickActions = ({ userRole }: QuickActionsProps) => {
+export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) => {
   const navigate = useNavigate();
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [selectedActions, setSelectedActions] = useState<string[]>([]);
@@ -145,19 +146,74 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
     },
   ];
 
-  const allActions = userRole === "stylist" ? allStylistActions : allClientActions;
-  const storageKey = `quickActions-${userRole}`;
+  const allAdminActions: ActionButton[] = [
+    {
+      id: "command-center",
+      label: "Command Center",
+      description: "Full platform control",
+      icon: Crown,
+      route: "/admin/command",
+      gradient: "from-amber-500 to-yellow-500",
+    },
+    {
+      id: "user-management",
+      label: "User Management",
+      description: "Manage users & roles",
+      icon: Users,
+      route: "/admin/users",
+      gradient: "from-blue-500 to-cyan-500",
+    },
+    {
+      id: "audit-logs",
+      label: "Audit Logs",
+      description: "Security & compliance",
+      icon: FileText,
+      route: "/admin/audit-logs",
+      gradient: "from-purple-500 to-pink-500",
+    },
+    {
+      id: "system-health",
+      label: "System Health",
+      description: "Monitor performance",
+      icon: Activity,
+      route: "/system-health",
+      gradient: "from-green-500 to-emerald-500",
+    },
+    {
+      id: "security-scan",
+      label: "Security Scanner",
+      description: "Check vulnerabilities",
+      icon: Shield,
+      route: "/security-audit",
+      gradient: "from-red-500 to-orange-500",
+    },
+    {
+      id: "ai-assistant",
+      label: "AI Assistant",
+      description: "Platform insights",
+      icon: Sparkles,
+      route: "/ai-assistant",
+      gradient: "from-violet-500 to-purple-500",
+    },
+  ];
+
+  const allActions = isAdmin 
+    ? allAdminActions 
+    : userRole === "stylist" 
+      ? allStylistActions 
+      : allClientActions;
+  const storageKey = `quickActions-${isAdmin ? 'admin' : userRole}`;
 
   useEffect(() => {
     const saved = localStorage.getItem(storageKey);
     if (saved) {
       setSelectedActions(JSON.parse(saved));
     } else {
-      // Default: show all actions for clients (only 3), first 4 for stylists
-      const defaultCount = userRole === "client" ? allActions.length : 4;
+      // Default: show all for clients (3), first 5 for admins, first 4 for stylists
+      const defaultCount = isAdmin ? 5 : userRole === "client" ? allActions.length : 4;
       setSelectedActions(allActions.slice(0, defaultCount).map(a => a.id));
     }
-  }, [userRole]);
+  }, [userRole, isAdmin]);
 
   const toggleAction = (id: string) => {
     setSelectedActions(prev => {
@@ -200,17 +256,26 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
   return (
     <Card 
       variant="glass"
-      className="mb-6 animate-fade-in backdrop-blur-xl bg-gradient-to-br from-background/80 to-card/60"
+      className={cn(
+        "mb-6 animate-fade-in backdrop-blur-xl",
+        isAdmin 
+          ? "bg-gradient-to-br from-amber-500/10 via-yellow-500/10 to-orange-500/10 border-amber-500/20" 
+          : "bg-gradient-to-br from-background/80 to-card/60"
+      )}
     >
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-display">
-              <Sparkles className="h-5 w-5 text-primary" />
-              Your Quick Actions
+              {isAdmin ? (
+                <Crown className="h-5 w-5 text-amber-500" />
+              ) : (
+                <Sparkles className="h-5 w-5 text-primary" />
+              )}
+              {isAdmin ? "Admin Controls" : "Your Quick Actions"}
             </CardTitle>
             <p className="text-xs sm:text-sm font-semibold mt-1 text-foreground/80">
-              Jump to what matters most
+              {isAdmin ? "Platform management at your fingertips" : "Jump to what matters most"}
             </p>
           </div>
           <Button
