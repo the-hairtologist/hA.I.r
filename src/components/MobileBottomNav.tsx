@@ -132,7 +132,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
     },
   ];
 
-  // Load customized navigation from localStorage
+  // Load customized navigation from localStorage (stylist/admin only)
   const storageKey = `mobileNav-${userRole}`;
   const [customizedItems, setCustomizedItems] = useState<NavItem[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -142,6 +142,12 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
 
   useEffect(() => {
     setMounted(true);
+    
+    // Clients always use fixed navigation - no customization
+    if (userRole === "client") {
+      setCustomizedItems(clientItems);
+      return;
+    }
     
     const savedConfig = localStorage.getItem(storageKey);
     if (savedConfig) {

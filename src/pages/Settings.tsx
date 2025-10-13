@@ -1234,8 +1234,8 @@ const Settings = () => {
 
           {/* Preferences Tab */}
           <TabsContent value="preferences" className="space-y-6">
-            {/* Mobile Navigation Customization */}
-            {(userRole === "stylist" || userRole === "client" || roles.includes("admin")) && (
+            {/* Mobile Navigation Customization - Stylist & Admin Only */}
+            {(userRole === "stylist" || roles.includes("admin")) && (
               <MobileNavCustomizer userRole={roles.includes("admin") ? "admin" : userRole} />
             )}
             
