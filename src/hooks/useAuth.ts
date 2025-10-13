@@ -48,9 +48,15 @@ export function useAuth(): UseAuthReturn {
           isAuthenticated: !!session,
         });
 
+        // CRITICAL FIX: Only navigate on actual sign-in/sign-out events, NOT initial session load
         // Defer navigation with setTimeout to prevent deadlocks
-        if (event === 'SIGNED_IN' && session) {
-          setTimeout(() => navigate('/dashboard'), 0);
+        if (event === 'SIGNED_IN') {
+          setTimeout(() => {
+            // Only navigate if we're currently on auth page
+            if (window.location.pathname === '/auth') {
+              navigate('/dashboard');
+            }
+          }, 0);
         } else if (event === 'SIGNED_OUT') {
           setTimeout(() => navigate('/auth'), 0);
         } else if (event === 'TOKEN_REFRESHED') {
