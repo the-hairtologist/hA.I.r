@@ -36,7 +36,7 @@ import { QuickNotes } from "@/components/dashboard/QuickNotes";
 import { FavoriteStylists } from "@/components/dashboard/FavoriteStylists";
 import { ClientMilestones } from "@/components/dashboard/ClientMilestones";
 import { Button } from "@/components/ui/button";
-import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles } from "lucide-react";
+import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles, BookOpen } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -637,12 +637,12 @@ const Dashboard = () => {
                     </p>
                     <div className="pt-2 flex flex-wrap gap-2 justify-center">
                       <Button 
-                        onClick={() => navigate('/ai-assistant')}
+                        onClick={() => navigate('/knowledge')}
                         className="gap-2 h-9 text-xs"
                         size="sm"
                       >
-                        <Sparkles className="h-3.5 w-3.5" />
-                        Try AI Hair Assistant
+                        <BookOpen className="h-3.5 w-3.5" />
+                        Hair Care Tips
                       </Button>
                       <Button 
                         variant="outline"

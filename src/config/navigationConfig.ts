@@ -332,14 +332,14 @@ export const clientNavigationItems: NavigationItem[] = [
     color: "text-purple-400 dark:text-purple-300" 
   },
   { 
-    id: "ai-assistant", 
-    title: "AI Assistant", 
-    url: "/ai-assistant", 
-    icon: Sparkles, 
-    gradient: "bg-[image:var(--gradient-purple-pink)]", 
+    id: "knowledge", 
+    title: "Hair Care Tips", 
+    url: "/knowledge", 
+    icon: BookOpen, 
+    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
     group: "main", 
-    color: "text-purple-400 dark:text-purple-300",
-    description: "Get hair care advice"
+    color: "text-cyan-400 dark:text-cyan-300",
+    description: "Learn & explore"
   },
   { 
     id: "profile", 

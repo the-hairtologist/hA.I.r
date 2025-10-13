@@ -49,25 +49,36 @@
 
 ## Client Access - What They CAN See
 
-### ✅ Allowed Features
+### ✅ Allowed Features (5 items)
+**Navigation:**
 - Dashboard (with coming soon message)
-- AI Assistant (basic queries, no formula saving)
+- Hair Care Tips (5 client-relevant articles with proper filtering)
 - Profile (their profile settings)
 - Settings (privacy, email preferences)
 - Help & Support
 - Feedback
-- Knowledge Base (hair care resources)
 
-### 🔒 Removed/Hidden (Coming Soon Mode)
-All non-functional features have been removed from navigation to avoid confusion:
-- ~~My Appointments~~ - Removed (no stylists to book with)
-- ~~Messages~~ - Removed (no one to message)
-- ~~Notifications~~ - Removed (no activity to notify)
-- ~~Find Stylists~~ - Removed (not yet available)
-- ~~My Stylists (Favorites)~~ - Removed (not yet available)
-- ~~Booking History~~ - Removed (not yet available)
-- ~~My Reviews~~ - Removed (not yet available)
-- ~~Payment Methods~~ - Removed (not yet available)
+**Quick Actions (2 items):**
+- Hair Care Tips
+- My Profile
+
+**Knowledge Base Content (Client-Filtered):**
+- Preparing for Hair Appointment
+- How to Communicate Hair Goals
+- Understanding Hair Color Pricing
+- Making Your Color Last: Aftercare Tips
+- Color Transformation Reality Check
+
+### ❌ Removed from Client Experience
+- ~~AI Assistant~~ - Not useful without stylist relationship (removed from navigation, quick actions, dashboard, knowledge page)
+- ~~My Appointments~~ - No stylists to book with
+- ~~Messages~~ - No one to message
+- ~~Notifications~~ - No activity
+- ~~Find Stylists~~ - Not yet available
+- ~~My Stylists~~ - Not yet available
+- ~~Booking History~~ - Not yet available
+- ~~My Reviews~~ - Not yet available
+- ~~Payment Methods~~ - Not yet available
 
 ### ❌ Blocked Entirely (Stylist/Admin Only)
 - ~~Formulas~~ - Removed from client navigation

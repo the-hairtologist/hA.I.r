@@ -121,12 +121,12 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
 
   const allClientActions: ActionButton[] = [
     {
-      id: "ai-assistant",
-      label: "AI Hair Assistant",
-      description: "Get expert advice",
-      icon: Sparkles,
-      route: "/ai-assistant",
-      gradient: "from-purple-500 to-pink-500",
+      id: "knowledge",
+      label: "Hair Care Tips",
+      description: "Learn & explore",
+      icon: BookOpen,
+      route: "/knowledge",
+      gradient: "from-cyan-500 to-blue-500",
     },
     {
       id: "profile",
@@ -135,14 +135,6 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
       icon: Settings2,
       route: "/settings",
       gradient: "from-indigo-500 to-purple-500",
-    },
-    {
-      id: "knowledge",
-      label: "Hair Care Tips",
-      description: "Learn & explore",
-      icon: BookOpen,
-      route: "/knowledge",
-      gradient: "from-cyan-500 to-blue-500",
     },
   ];
 
@@ -209,7 +201,7 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
     if (saved) {
       setSelectedActions(JSON.parse(saved));
     } else {
-      // Default: show all for clients (3), first 5 for admins, first 4 for stylists
+      // Default: show all for clients (2), first 5 for admins, first 4 for stylists
       const defaultCount = isAdmin ? 5 : userRole === "client" ? allActions.length : 4;
       setSelectedActions(allActions.slice(0, defaultCount).map(a => a.id));
     }
