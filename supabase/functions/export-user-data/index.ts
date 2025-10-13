@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { compressedJsonResponse, compressedErrorResponse, corsHeaders } from '../_shared/compression.ts';
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -21,10 +17,7 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
     if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return await compressedErrorResponse("Unauthorized", 401);
     }
 
     // Collect all user data
@@ -127,15 +120,10 @@ serve(async (req) => {
       .eq("user_id", user.id);
     exportData.data.roles = roles;
 
-    return new Response(JSON.stringify(exportData), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return await compressedJsonResponse(exportData, 200);
   } catch (error) {
     console.error("Error exporting data:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return await compressedErrorResponse(errorMessage, 500);
   }
 });

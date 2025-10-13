@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { compressedJsonResponse, compressedErrorResponse, corsHeaders } from '../_shared/compression.ts';
 
 // Input validation schema
 const requestSchema = z.object({
@@ -24,12 +20,10 @@ serve(async (req) => {
     // Validate input
     const validationResult = requestSchema.safeParse(body);
     if (!validationResult.success) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Invalid input', 
-          details: validationResult.error.issues.map(i => i.message).join(', ')
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      return await compressedErrorResponse(
+        'Invalid input',
+        400,
+        validationResult.error.issues.map(i => i.message).join(', ')
       );
     }
     
@@ -121,21 +115,9 @@ Focus on verified professionals with portfolios. Include 3-5 top results.`
 
     console.log(`Found ${uniqueResults.length} unique stylists`);
 
-    return new Response(
-      JSON.stringify({ stylists: uniqueResults }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return await compressedJsonResponse({ stylists: uniqueResults }, 200);
   } catch (error: any) {
     console.error('Error in search-stylists function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return await compressedErrorResponse(error.message || 'An unexpected error occurred', 500);
   }
 });

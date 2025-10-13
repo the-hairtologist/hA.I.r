@@ -1,16 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { compressedJsonResponse, compressedErrorResponse, corsHeaders } from '../_shared/compression.ts';
 
 /**
  * Copyright © 2025 hA.I.r. All Rights Reserved.
  * Proprietary AI Formula Generation System
  */
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
 
 // Input validation schema
 const requestSchema = z.object({
@@ -37,12 +33,10 @@ serve(async (req) => {
     // Validate input
     const validationResult = requestSchema.safeParse(body);
     if (!validationResult.success) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Invalid input', 
-          details: validationResult.error.issues.map(i => i.message).join(', ')
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      return await compressedErrorResponse(
+        'Invalid input',
+        400,
+        validationResult.error.issues.map(i => i.message).join(', ')
       );
     }
     
@@ -153,17 +147,11 @@ Please provide 2-3 formula options with complete instructions.`;
       console.error('AI Gateway error:', response.status, errorText);
       
       if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return await compressedErrorResponse('Rate limit exceeded. Please try again in a moment.', 429);
       }
       
       if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: 'AI usage limit reached. Please add credits to continue.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return await compressedErrorResponse('AI usage limit reached. Please add credits to continue.', 402);
       }
       
       throw new Error(`AI Gateway error: ${response.status}`);
@@ -184,21 +172,9 @@ Please provide 2-3 formula options with complete instructions.`;
       formula_text: addWatermark(formula.formula_text, userId),
     }));
 
-    return new Response(
-      JSON.stringify({ formulas }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return await compressedJsonResponse({ formulas }, 200);
   } catch (error: any) {
     console.error('Error in generate-formula function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return await compressedErrorResponse(error.message || 'An unexpected error occurred', 500);
   }
 });

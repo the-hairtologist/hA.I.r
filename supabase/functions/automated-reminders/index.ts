@@ -1,10 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 import { Resend } from 'https://esm.sh/resend@4.0.0';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { compressedJsonResponse, compressedErrorResponse, corsHeaders } from '../_shared/compression.ts';
 
 interface Database {
   public: {
@@ -112,13 +108,10 @@ Deno.serve(async (req) => {
     };
 
     if (!appointments || appointments.length === 0) {
-      return new Response(
-        JSON.stringify({ 
-          message: 'No appointments need reminders at this time',
-          results 
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-      );
+      return await compressedJsonResponse({ 
+        message: 'No appointments need reminders at this time',
+        results 
+      }, 200);
     }
 
     // Send reminders for each appointment
@@ -236,19 +229,13 @@ Deno.serve(async (req) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        message: `Processed ${appointments.length} appointments`,
-        results,
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-    );
+    return await compressedJsonResponse({
+      message: `Processed ${appointments.length} appointments`,
+      results,
+    }, 200);
   } catch (error) {
     console.error('Error in automated-reminders function:', error);
     const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(
-      JSON.stringify({ error: errorMsg }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-    );
+    return await compressedErrorResponse(errorMsg, 500);
   }
 });

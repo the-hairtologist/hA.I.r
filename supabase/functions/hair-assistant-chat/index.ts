@@ -1,15 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
+import { compressedJsonResponse, compressedErrorResponse, corsHeaders } from '../_shared/compression.ts';
 
 /**
  * Copyright © 2025 hA.I.r. All Rights Reserved.
  * Proprietary AI Hair Consultation System
  */
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
 
 // Watermark helper
 const addWatermark = (content: string, userId?: string): string => {
@@ -41,26 +37,17 @@ serve(async (req) => {
     
     // Input validation
     if (!message || typeof message !== 'string') {
-      return new Response(
-        JSON.stringify({ error: 'Invalid message format' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return await compressedErrorResponse('Invalid message format', 400);
     }
 
     // Check message length
     if (message.length > 2000) {
-      return new Response(
-        JSON.stringify({ error: 'Message too long (max 2000 characters)' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return await compressedErrorResponse('Message too long (max 2000 characters)', 400);
     }
 
     // Rate limiting check - limit conversation history
     if (conversationHistory && conversationHistory.length > 50) {
-      return new Response(
-        JSON.stringify({ error: 'Conversation too long. Please start a new chat.' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return await compressedErrorResponse('Conversation too long. Please start a new chat.', 400);
     }
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -178,17 +165,11 @@ Remember: You're here to guide professionals through ANY hair technique with cle
       console.error('AI Gateway error:', response.status, errorText);
       
       if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return await compressedErrorResponse('Rate limit exceeded. Please try again in a moment.', 429);
       }
       
       if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: 'AI usage limit reached. Please add credits to continue.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return await compressedErrorResponse('AI usage limit reached. Please add credits to continue.', 402);
       }
       
       throw new Error(`AI Gateway error: ${response.status}`);
@@ -199,24 +180,12 @@ Remember: You're here to guide professionals through ANY hair technique with cle
     
     const assistantMessage = addWatermark(data.choices[0].message.content, userId);
 
-    return new Response(
-      JSON.stringify({ 
-        response: assistantMessage,
-        usage: data.usage 
-      }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return await compressedJsonResponse({ 
+      response: assistantMessage,
+      usage: data.usage 
+    }, 200);
   } catch (error: any) {
     console.error('Error in hair-assistant-chat function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return await compressedErrorResponse(error.message || 'An unexpected error occurred', 500);
   }
 });

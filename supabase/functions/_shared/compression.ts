@@ -65,7 +65,7 @@ export async function compressedJsonResponse(
   
   try {
     const compressed = await gzipEncode(json);
-    return new Response(compressed, {
+    return new Response(compressed as unknown as BodyInit, {
       status,
       headers: {
         'Content-Type': 'application/json',
