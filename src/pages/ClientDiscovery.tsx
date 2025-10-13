@@ -3,14 +3,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Sparkles, Search, TrendingUp, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const ClientDiscovery = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { roles } = useUserRole(user?.id);
+  const isClient = roles.includes('client');
+  const isStylist = roles.includes('stylist');
+
+  // Determine role-specific content
+  const pageTitle = isClient ? "Find Stylists" : "Find New Clients";
+  const comingSoonTitle = isClient 
+    ? "Stylist Discovery Coming Soon!" 
+    : "Client Discovery Coming Soon!";
+  const comingSoonDescription = isClient
+    ? "We're building a powerful directory to help you find the perfect stylist for your hair needs"
+    : "We're building a powerful marketplace to connect you with clients looking for your expertise";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <PageHeader
-        title="Find New Clients"
+        title={pageTitle}
         icon={<Search className="h-6 w-6" />}
         backTo="/dashboard"
       />
@@ -22,10 +37,10 @@ const ClientDiscovery = () => {
               <Sparkles className="h-10 w-10 text-primary" />
             </div>
             <CardTitle className="text-3xl font-display text-foreground">
-              Client Discovery Coming Soon!
+              {comingSoonTitle}
             </CardTitle>
             <CardDescription className="text-foreground/80 text-lg font-medium pt-2">
-              We're building a powerful marketplace to connect you with clients looking for your expertise
+              {comingSoonDescription}
             </CardDescription>
           </CardHeader>
           
@@ -35,48 +50,91 @@ const ClientDiscovery = () => {
                 <TrendingUp className="h-5 w-5 text-primary" />
                 What's Coming
               </h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">1</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Client Discovery Feed</p>
-                    <p className="text-sm text-muted-foreground">Browse clients posting their hair goals, photos, and budget</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">2</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Smart Matching</p>
-                    <p className="text-sm text-muted-foreground">AI recommends clients based on your specialty and location</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">3</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Direct Booking</p>
-                    <p className="text-sm text-muted-foreground">Connect with interested clients and book appointments instantly</p>
-                  </div>
-                </li>
-              </ul>
+              {isClient ? (
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-primary">1</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Stylist Directory</p>
+                      <p className="text-sm text-muted-foreground">Browse stylists' portfolios, specialties, and availability</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-primary">2</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Smart Matching</p>
+                      <p className="text-sm text-muted-foreground">AI recommends stylists based on your hair type, goals, and location</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-primary">3</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Direct Booking</p>
+                      <p className="text-sm text-muted-foreground">Book appointments directly with your chosen stylist</p>
+                    </div>
+                  </li>
+                </ul>
+              ) : (
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-primary">1</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Client Discovery Feed</p>
+                      <p className="text-sm text-muted-foreground">Browse clients posting their hair goals, photos, and budget</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-primary">2</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Smart Matching</p>
+                      <p className="text-sm text-muted-foreground">AI recommends clients based on your specialty and location</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-primary">3</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-foreground">Direct Booking</p>
+                      <p className="text-sm text-muted-foreground">Connect with interested clients and book appointments instantly</p>
+                    </div>
+                  </li>
+                </ul>
+              )}
             </div>
 
             <div className="text-center space-y-4 pt-2">
               <p className="text-sm text-foreground/70 font-medium">
-                In the meantime, focus on your existing clients and build your portfolio!
+                {isClient 
+                  ? "In the meantime, explore our knowledge base and prepare for your perfect hair transformation!"
+                  : "In the meantime, focus on your existing clients and build your portfolio!"}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                {isStylist && (
+                  <Button 
+                    onClick={() => navigate("/clients")}
+                    className="gap-2"
+                  >
+                    <Calendar className="h-4 w-4" />
+                    Manage Clients
+                  </Button>
+                )}
                 <Button 
-                  onClick={() => navigate("/clients")}
+                  onClick={() => navigate("/dashboard")}
+                  variant="outline"
                   className="gap-2"
                 >
-                  <Calendar className="h-4 w-4" />
-                  Manage Clients
+                  Back to Dashboard
                 </Button>
                 <Button 
                   onClick={() => navigate("/portfolio")}
