@@ -96,6 +96,8 @@
 **Unfinished Tasks:** 0  
 **Known Limitations:** 1 Pro Plan feature (non-blocking)
 
+**Month 1 User Testing:** See [MONTH_ONE_USER_TESTING_REPORT.md](./MONTH_ONE_USER_TESTING_REPORT.md) for detailed findings from simulated 3-user test (2 stylists + 1 client observer)
+
 ### Security Posture:
 - ✅ Strong password requirements enforced
 - ✅ Industry-standard bcrypt password hashing
