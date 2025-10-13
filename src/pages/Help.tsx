@@ -18,8 +18,10 @@ import {
   Video,
   Sparkles,
   Play,
+  CheckCircle,
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -215,50 +217,7 @@ const Help = () => {
           </p>
         </div>
 
-        {/* Interactive Demo Link */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0">
-                  <Sparkles className="h-6 w-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold mb-1">Interactive Demo</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    See key features in action
-                  </p>
-                  <Button onClick={() => navigate("/showcase")} className="gap-2" size="sm">
-                    <Play className="h-4 w-4" />
-                    Launch Demo
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {isStylist && (
-            <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-primary/20">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shrink-0">
-                    <Sparkles className="h-6 w-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold mb-1">Ad Generator</h3>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Create marketing content with AI
-                    </p>
-                    <Button onClick={() => navigate("/ad-generator")} variant="outline" className="gap-2" size="sm">
-                      <Sparkles className="h-4 w-4" />
-                      Create Ad
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+        {/* Interactive Demo & Ad Generator Cards - Now Removed (Moved to Interactive Tools Tab) */}
 
         {/* Tabbed Interface */}
         <Tabs defaultValue="articles" className="w-full">
@@ -268,8 +227,8 @@ const Help = () => {
               Articles & FAQs
             </TabsTrigger>
             <TabsTrigger value="videos" className="gap-2">
-              <Video className="h-4 w-4" />
-              Videos
+              <Sparkles className="h-4 w-4" />
+              Interactive Tools
             </TabsTrigger>
             <TabsTrigger value="contact" className="gap-2">
               <MessageSquare className="h-4 w-4" />
@@ -360,62 +319,150 @@ const Help = () => {
             </Card>
           </TabsContent>
 
-          {/* Videos Tab */}
+          {/* Interactive Tools Tab */}
           <TabsContent value="videos" className="space-y-6 mt-6">
-            <Card>
-              <CardContent className="py-12">
-                <div className="text-center space-y-4">
-                  <Video className="h-16 w-16 mx-auto text-muted-foreground" />
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Video Tutorials Coming Soon</h3>
-                    <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                      Step-by-step video guides will be available in a future update. In the meantime, explore the articles and FAQs sections!
-                    </p>
+            {/* Interactive Demo - Available for All Roles */}
+            <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0 brutal-shadow-md">
+                    <Play className="h-8 w-8 text-white" />
                   </div>
-                  <Button variant="outline" onClick={() => haptic.tap()}>
-                    Browse Articles Instead
-                  </Button>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-bold text-lg">Interactive Feature Demo</h3>
+                      <Badge variant="secondary" className="shrink-0">
+                        <Sparkles className="h-3 w-3 mr-1" />
+                        Live Preview
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {isStylist 
+                        ? "See how hA.I.r helps you save time, increase revenue, and manage your salon business effortlessly"
+                        : isClient
+                        ? "Experience how easy it is to book appointments and manage your hair care journey"
+                        : "Explore key features with an interactive walkthrough"}
+                    </p>
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>See features in action</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>No signup required</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>Works on all devices</span>
+                      </div>
+                    </div>
+                    <Button onClick={() => navigate("/showcase")} className="gap-2 w-full sm:w-auto hover-scale">
+                      <Play className="h-4 w-4" />
+                      Launch Interactive Demo
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Quick Actions while waiting */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            {/* Ad Generator - Stylists and Admins Only */}
+            {(isStylist || isAdmin) && (
+              <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in" style={{ animationDelay: '100ms' }}>
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shrink-0 brutal-shadow-md">
+                      <Sparkles className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <h3 className="font-bold text-lg">AI Ad Generator</h3>
+                        <Badge variant="secondary" className="shrink-0">
+                          <Sparkles className="h-3 w-3 mr-1" />
+                          AI-Powered
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Create professional marketing content in seconds. Generate headlines, body copy, CTAs, and even images for social media, emails, and ads.
+                      </p>
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Professional copywriting</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>Optional AI image generation</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>One-click copy to clipboard</span>
+                        </div>
+                      </div>
+                      <Button onClick={() => navigate("/ad-generator")} variant="outline" className="gap-2 w-full sm:w-auto hover-scale">
+                        <Sparkles className="h-4 w-4" />
+                        Create Marketing Ad
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Video Tutorials Coming Soon - Secondary Position */}
+            <Card className="brutal-border animate-fade-in" style={{ animationDelay: '200ms' }}>
+              <CardContent className="py-8">
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
+                    <Video className="h-8 w-8 text-muted-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2">Video Tutorials Coming Soon</h3>
+                    <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                      Step-by-step video guides will be available in a future update. For now, try our interactive tools above!
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Resources */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <Card className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale" onClick={() => navigate("/knowledge")}>
                 <CardContent className="pt-6">
-                  <Book className="h-8 w-8 text-primary mb-3" />
-                  <h3 className="font-semibold mb-1">Documentation</h3>
+                  <BookOpen className="h-8 w-8 text-primary mb-3" />
+                  <h3 className="font-semibold mb-1">Knowledge Base</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Browse our complete guides
+                    {isStylist ? "Hair care guides & resources" : "Learn about hair care"}
                   </p>
-                  <Button variant="ghost" size="sm" className="p-0">
-                    View Docs <ChevronRight className="h-4 w-4 ml-1" />
+                  <Button variant="ghost" size="sm" className="p-0 gap-1">
+                    Browse <ChevronRight className="h-4 w-4" />
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale" onClick={() => navigate("/help")}>
                 <CardContent className="pt-6">
                   <MessageSquare className="h-8 w-8 text-primary mb-3" />
-                  <h3 className="font-semibold mb-1">Live Chat</h3>
+                  <h3 className="font-semibold mb-1">FAQs & Articles</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Chat with our support team
+                    Quick answers to common questions
                   </p>
-                  <Button variant="ghost" size="sm" className="p-0">
-                    Start Chat <ChevronRight className="h-4 w-4 ml-1" />
+                  <Button variant="ghost" size="sm" className="p-0 gap-1">
+                    View FAQs <ChevronRight className="h-4 w-4" />
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale" onClick={() => navigate("/feedback")}>
                 <CardContent className="pt-6">
                   <HelpCircle className="h-8 w-8 text-primary mb-3" />
                   <h3 className="font-semibold mb-1">Need More Help?</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Contact us directly
+                    Contact support or share feedback
                   </p>
-                  <Button variant="ghost" size="sm" className="p-0">
-                    Get in Touch <ChevronRight className="h-4 w-4 ml-1" />
+                  <Button variant="ghost" size="sm" className="p-0 gap-1">
+                    Get Support <ChevronRight className="h-4 w-4" />
                   </Button>
                 </CardContent>
               </Card>
