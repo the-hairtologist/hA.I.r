@@ -652,15 +652,15 @@ const Dashboard = () => {
                         </div>
                         <h3 className="text-sm sm:text-base font-bold text-foreground mb-1.5 sm:mb-2">No Upcoming Appointments</h3>
                         <p className="text-[11px] sm:text-xs text-muted-foreground mb-2.5 sm:mb-3">
-                          Book your next appointment to see your schedule here
+                          Stylist booking will be available soon
                         </p>
                         <Button 
-                          onClick={() => navigate("/stylist-discovery")}
-                          variant="default"
-                          className="gap-2 h-8 text-xs"
+                          variant="outline"
+                          className="gap-2 h-8 text-xs opacity-60 cursor-not-allowed"
                           size="sm"
+                          disabled
                         >
-                          Find Your Stylist
+                          Find Your Stylist - Coming Soon!
                         </Button>
                       </div>
                     </div>

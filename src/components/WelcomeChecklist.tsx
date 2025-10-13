@@ -13,6 +13,14 @@ interface WelcomeChecklistProps {
   hasPortfolio?: boolean;
 }
 
+interface ChecklistStep {
+  label: string;
+  completed: boolean;
+  action?: () => void;
+  cta: string;
+  disabled?: boolean;
+}
+
 export const WelcomeChecklist = ({ 
   userRole, 
   profileComplete,
@@ -65,14 +73,16 @@ export const WelcomeChecklist = ({
     { 
       label: "Find your stylist", 
       completed: false,
-      action: () => navigate("/stylist-discovery"),
-      cta: "Browse Stylists"
+      action: undefined,
+      cta: "Coming Soon",
+      disabled: true
     },
     { 
       label: "Book your first appointment", 
       completed: hasAppointments, 
-      action: () => navigate("/stylist-discovery"),
-      cta: "Book Now"
+      action: undefined,
+      cta: "Coming Soon",
+      disabled: true
     },
   ];
 
@@ -192,8 +202,10 @@ export const WelcomeChecklist = ({
               {!step.completed && (
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant={step.disabled ? "outline" : "outline"}
                   onClick={step.action}
+                  disabled={step.disabled}
+                  className={step.disabled ? "opacity-60 cursor-not-allowed" : ""}
                 >
                   {step.cta}
                 </Button>

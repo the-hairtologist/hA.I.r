@@ -17,6 +17,7 @@ interface ActionButton {
   route: string;
   description?: string;
   gradient?: string;
+  disabled?: boolean;
 }
 
 export const QuickActions = ({ userRole }: QuickActionsProps) => {
@@ -112,18 +113,20 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
     {
       id: "find-stylist",
       label: "Find a Stylist",
-      description: "Browse stylists",
+      description: "Coming Soon",
       icon: Users,
-      route: "/stylists",
+      route: "/coming-soon",
       gradient: "from-purple-500 to-pink-500",
+      disabled: true,
     },
     {
       id: "book",
       label: "Book Appointment",
-      description: "Schedule a visit",
+      description: "Coming Soon",
       icon: Calendar,
-      route: "/appointments",
+      route: "/coming-soon",
       gradient: "from-blue-500 to-cyan-500",
+      disabled: true,
     },
     {
       id: "messages",
@@ -319,19 +322,28 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
               return (
                 <button
                   key={action.id}
-                  onClick={() => navigate(action.route)}
-                  className="group relative rounded-xl brutal-border bg-card transition-all overflow-hidden brutal-shadow-xs hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] hover:-translate-y-2 hover:scale-[1.03] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
+                  onClick={() => !action.disabled && navigate(action.route)}
+                  disabled={action.disabled}
+                  className={cn(
+                    "group relative rounded-xl brutal-border bg-card transition-all overflow-hidden brutal-shadow-xs",
+                    action.disabled 
+                      ? "opacity-60 cursor-not-allowed" 
+                      : "hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] hover:-translate-y-2 hover:scale-[1.03] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
+                  )}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div className="flex flex-col items-center gap-3 p-5 text-center">
-                    <div className={`absolute inset-0 bg-gradient-to-br opacity-15 group-hover:opacity-20 transition-opacity ${action.gradient}`} />
+                    <div className={`absolute inset-0 bg-gradient-to-br opacity-15 ${!action.disabled && 'group-hover:opacity-20'} transition-opacity ${action.gradient}`} />
                     <div className="relative">
-                      <div className={`inline-flex p-3 rounded-lg bg-gradient-to-br brutal-border brutal-shadow-xs group-hover:brutal-shadow-sm transition-shadow ${action.gradient}`}>
+                      <div className={`inline-flex p-3 rounded-lg bg-gradient-to-br brutal-border brutal-shadow-xs ${!action.disabled && 'group-hover:brutal-shadow-sm'} transition-shadow ${action.gradient}`}>
                         <Icon className="h-6 w-6 text-primary-foreground" />
                       </div>
                     </div>
                     <div className="relative">
-                      <h4 className="font-display font-semibold text-base mb-1 group-hover:text-primary transition-colors">
+                      <h4 className={cn(
+                        "font-display font-semibold text-base mb-1 transition-colors",
+                        !action.disabled && "group-hover:text-primary"
+                      )}>
                         {action.label}
                       </h4>
                       <p className="text-sm text-foreground">

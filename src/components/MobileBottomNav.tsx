@@ -68,9 +68,10 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
     { 
       icon: Users, 
       label: "Find", 
-      path: "/stylist-discovery",
+      path: "/coming-soon",
       gradient: "from-cyan-start to-cyan-end",
-      highlight: false
+      highlight: false,
+      disabled: true
     },
     { 
       icon: Sparkles, 
@@ -163,14 +164,16 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
             return (
               <button
                 key={item.path}
-                onClick={() => handleNavigation(item.path)}
+                onClick={() => !item.disabled && handleNavigation(item.path)}
+                disabled={item.disabled}
                 className={cn(
                   "relative flex flex-col items-center justify-center flex-1",
                   "min-w-[60px] min-h-[56px] gap-1",
                   "transition-all duration-200 ease-out",
                   "active:scale-95",
-                  "touch-manipulation", // Optimizes touch response
-                  active && "text-primary"
+                  "touch-manipulation",
+                  active && "text-primary",
+                  item.disabled && "opacity-50 cursor-not-allowed"
                 )}
                 aria-label={`Navigate to ${item.label}`}
                 aria-current={active ? "page" : undefined}

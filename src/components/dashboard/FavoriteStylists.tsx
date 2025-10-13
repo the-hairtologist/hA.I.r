@@ -95,10 +95,11 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
             </p>
             <Button
               size="sm"
-              onClick={() => navigate("/stylists")}
-              className="gap-2 brutal-border brutal-shadow-sm hover:brutal-shadow-md transition-shadow"
+              variant="outline"
+              disabled
+              className="gap-2 opacity-60 cursor-not-allowed"
             >
-              Find Stylists
+              Find Stylists - Coming Soon
             </Button>
           </div>
         ) : (
