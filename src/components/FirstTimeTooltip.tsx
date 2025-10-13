@@ -36,16 +36,21 @@ export const FirstTimeTooltip = ({
 
   useEffect(() => {
     // Check if user has seen this tooltip before
-    const seenTooltips = JSON.parse(localStorage.getItem("seenTooltips") || "{}");
-    
-    if (!seenTooltips[id]) {
-      // Show tooltip after delay
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-        setIsOpen(true);
-      }, delayMs);
+    try {
+      const seenTooltips = JSON.parse(localStorage.getItem("seenTooltips") || "{}");
+      
+      if (!seenTooltips[id]) {
+        // Show tooltip after delay
+        const timer = setTimeout(() => {
+          setIsVisible(true);
+          setIsOpen(true);
+        }, delayMs);
 
-      return () => clearTimeout(timer);
+        return () => clearTimeout(timer);
+      }
+    } catch (error) {
+      // If localStorage is unavailable or JSON parsing fails, don't show tooltip
+      console.warn("FirstTimeTooltip: localStorage error", error);
     }
   }, [id, delayMs]);
 
@@ -54,9 +59,14 @@ export const FirstTimeTooltip = ({
     setIsVisible(false);
     
     // Mark tooltip as seen
-    const seenTooltips = JSON.parse(localStorage.getItem("seenTooltips") || "{}");
-    seenTooltips[id] = true;
-    localStorage.setItem("seenTooltips", JSON.stringify(seenTooltips));
+    try {
+      const seenTooltips = JSON.parse(localStorage.getItem("seenTooltips") || "{}");
+      seenTooltips[id] = true;
+      localStorage.setItem("seenTooltips", JSON.stringify(seenTooltips));
+    } catch (error) {
+      // If localStorage write fails (quota exceeded, etc.), gracefully fail
+      console.warn("FirstTimeTooltip: Failed to save to localStorage", error);
+    }
   };
 
   if (!isVisible) {
@@ -100,5 +110,9 @@ export const FirstTimeTooltip = ({
  * Reset all seen tooltips (useful for testing or user request)
  */
 export const resetAllTooltips = () => {
-  localStorage.removeItem("seenTooltips");
+  try {
+    localStorage.removeItem("seenTooltips");
+  } catch (error) {
+    console.warn("FirstTimeTooltip: Failed to reset tooltips", error);
+  }
 };
