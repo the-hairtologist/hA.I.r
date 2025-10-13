@@ -69,6 +69,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
     },
   ];
 
+  // Client bottom nav: Essential daily actions (booking-focused)
   const clientItems: NavItem[] = [
     { 
       icon: Home, 
@@ -78,17 +79,25 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       highlight: false
     },
     { 
-      icon: Sparkles, 
-      label: "Tips", 
-      path: "/knowledge",
+      icon: Calendar, 
+      label: "Bookings", 
+      path: "/appointments",
       gradient: "from-cyan-start to-cyan-end",
+      highlight: false
+    },
+    { 
+      icon: MessageSquare, 
+      label: "Messages", 
+      path: "/messages",
+      gradient: "from-pink-start to-pink-end",
+      badge: unreadCount,
       highlight: false
     },
     { 
       icon: User, 
       label: "Profile", 
       path: "/settings",
-      gradient: "from-pink-start to-pink-end", // Changed from purple to pink
+      gradient: "from-blue-start to-blue-end",
       highlight: false
     },
   ];

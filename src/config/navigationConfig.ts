@@ -142,12 +142,13 @@ export const stylistNavigationItems: NavigationItem[] = [
   },
   { 
     id: "availability", 
-    title: "Schedule", 
+    title: "Availability", 
     url: "/schedule", 
     icon: Clock, 
     gradient: "bg-[image:var(--gradient-blue-indigo)]", 
     group: "scheduling", 
-    color: "text-blue-400 dark:text-blue-300" 
+    color: "text-blue-400 dark:text-blue-300",
+    description: "Set your working hours"
   },
   { 
     id: "booking-page", 
