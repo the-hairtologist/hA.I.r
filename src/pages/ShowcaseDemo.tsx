@@ -16,7 +16,7 @@ export default function ShowcaseDemo() {
   const [selectedRole, setSelectedRole] = useState<"stylist" | "client">("stylist");
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-gradient-to-br from-background via-background to-primary/5 animate-fade-in">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -51,12 +51,12 @@ export default function ShowcaseDemo() {
 
       {/* Role Selector */}
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex p-1 bg-muted rounded-lg">
+        <div className="flex justify-center mb-8 animate-scale-in">
+          <div className="inline-flex p-1 bg-muted rounded-lg brutal-border brutal-shadow-md">
             <Button
               variant={selectedRole === "stylist" ? "default" : "ghost"}
               onClick={() => setSelectedRole("stylist")}
-              className="gap-2"
+              className="gap-2 transition-all hover-scale"
             >
               <Scissors className="h-4 w-4" />
               I'm a Stylist
@@ -64,7 +64,7 @@ export default function ShowcaseDemo() {
             <Button
               variant={selectedRole === "client" ? "default" : "ghost"}
               onClick={() => setSelectedRole("client")}
-              className="gap-2"
+              className="gap-2 transition-all hover-scale"
             >
               I'm a Client
             </Button>

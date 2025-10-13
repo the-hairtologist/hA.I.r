@@ -117,6 +117,14 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
       route: "/knowledge",
       gradient: "from-cyan-500 to-blue-500",
     },
+    {
+      id: "ad-generator",
+      label: "Ad Generator",
+      description: "Create marketing content",
+      icon: Sparkles,
+      route: "/ad-generator",
+      gradient: "from-purple-500 to-pink-500",
+    },
   ];
 
   const allClientActions: ActionButton[] = [

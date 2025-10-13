@@ -214,6 +214,16 @@ export const stylistNavigationItems: NavigationItem[] = [
         color: "text-cyan-400 dark:text-cyan-300",
         description: "Automated email campaigns"
       },
+      { 
+        id: "ad-generator", 
+        title: "Ad Generator", 
+        url: "/ad-generator", 
+        icon: Sparkles, 
+        gradient: "bg-[image:var(--gradient-purple-pink)]", 
+        group: "growth",
+        color: "text-purple-400 dark:text-purple-300",
+        description: "Create marketing content with AI"
+      },
     ]
   },
   { 

@@ -20,6 +20,7 @@ export default function AdGenerator() {
   const [prompt, setPrompt] = useState("");
   const [adType, setAdType] = useState<AdType>("social-media");
   const [generating, setGenerating] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
   const [generatedAd, setGeneratedAd] = useState<{
     copy: { headline: string; bodyCopy: string; cta: string };
     image?: string;
@@ -53,9 +54,11 @@ export default function AdGenerator() {
     }
   };
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
+    setCopied(type);
     toast.success("Copied to clipboard!");
+    setTimeout(() => setCopied(null), 2000);
   };
 
   const adTypeExamples = {
@@ -67,18 +70,26 @@ export default function AdGenerator() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-4xl">
-        <div>
-          <h1 className="text-3xl font-display font-bold mb-2">Ad Generator</h1>
-          <p className="text-muted-foreground">
-            Create professional marketing content using AI
-          </p>
+      <div className="space-y-6 max-w-4xl animate-fade-in">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl font-display font-bold mb-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Ad Generator
+            </h1>
+            <p className="text-muted-foreground">
+              Create professional marketing content using AI
+            </p>
+          </div>
+          <Badge variant="secondary" className="gap-2 animate-pulse">
+            <Sparkles className="h-3 w-3" />
+            AI-Powered
+          </Badge>
         </div>
 
-        <Card>
+        <Card className="brutal-border hover:brutal-shadow-lg transition-all duration-300">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Wand2 className="h-5 w-5" />
+              <Wand2 className="h-5 w-5 text-primary" />
               Generate Ad Content
             </CardTitle>
             <CardDescription>
@@ -129,19 +140,37 @@ export default function AdGenerator() {
               <Button
                 onClick={() => handleGenerate(false)}
                 disabled={generating}
-                className="gap-2"
+                className="gap-2 hover-scale"
               >
-                <Sparkles className="h-4 w-4" />
-                {generating ? "Generating..." : "Generate Ad Copy"}
+                {generating ? (
+                  <>
+                    <Sparkles className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4" />
+                    Generate Ad Copy
+                  </>
+                )}
               </Button>
               <Button
                 onClick={() => handleGenerate(true)}
                 disabled={generating}
                 variant="outline"
-                className="gap-2"
+                className="gap-2 hover-scale"
               >
-                <Sparkles className="h-4 w-4" />
-                {generating ? "Generating..." : "Generate with Image"}
+                {generating ? (
+                  <>
+                    <Sparkles className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4" />
+                    Generate with Image
+                  </>
+                )}
               </Button>
             </div>
           </CardContent>
@@ -149,22 +178,22 @@ export default function AdGenerator() {
 
         {/* Generated Ad Preview */}
         {generatedAd && (
-          <Card className="border-primary/20">
+          <Card className="border-primary/20 animate-scale-in brutal-border brutal-shadow-xl bg-gradient-to-br from-background to-primary/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <CheckCircle className="h-5 w-5 text-green-500 animate-pulse" />
                 Your Generated Ad
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Image Preview */}
               {generatedAd.image && (
-                <div>
+                <div className="animate-fade-in">
                   <Label className="mb-2 block">Generated Image</Label>
                   <img
                     src={generatedAd.image}
                     alt="Generated ad"
-                    className="w-full rounded-lg border"
+                    className="w-full rounded-lg border brutal-shadow-md hover-scale transition-all duration-300"
                   />
                 </div>
               )}
@@ -178,9 +207,10 @@ export default function AdGenerator() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => copyToClipboard(generatedAd.copy.headline)}
+                      onClick={() => copyToClipboard(generatedAd.copy.headline, "headline")}
+                      className={copied === "headline" ? "text-green-500" : ""}
                     >
-                      <Copy className="h-4 w-4" />
+                      {copied === "headline" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
                   <div className="p-4 bg-muted rounded-lg">
@@ -195,9 +225,10 @@ export default function AdGenerator() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => copyToClipboard(generatedAd.copy.bodyCopy)}
+                      onClick={() => copyToClipboard(generatedAd.copy.bodyCopy, "body")}
+                      className={copied === "body" ? "text-green-500" : ""}
                     >
-                      <Copy className="h-4 w-4" />
+                      {copied === "body" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
                   <div className="p-4 bg-muted rounded-lg">
@@ -212,9 +243,10 @@ export default function AdGenerator() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => copyToClipboard(generatedAd.copy.cta)}
+                      onClick={() => copyToClipboard(generatedAd.copy.cta, "cta")}
+                      className={copied === "cta" ? "text-green-500" : ""}
                     >
-                      <Copy className="h-4 w-4" />
+                      {copied === "cta" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
                   <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary/20">
@@ -225,23 +257,26 @@ export default function AdGenerator() {
 
               {/* Copy All Button */}
               <Button
-                className="w-full gap-2"
+                className="w-full gap-2 hover-scale"
                 onClick={() => {
                   const allText = `${generatedAd.copy.headline}\n\n${generatedAd.copy.bodyCopy}\n\n${generatedAd.copy.cta}`;
-                  copyToClipboard(allText);
+                  copyToClipboard(allText, "all");
                 }}
               >
-                <Copy className="h-4 w-4" />
-                Copy All Text
+                {copied === "all" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copied === "all" ? "Copied!" : "Copy All Text"}
               </Button>
             </CardContent>
           </Card>
         )}
 
         {/* Ready-to-Use Templates */}
-        <Card>
+        <Card className="brutal-border hover:brutal-shadow-md transition-all duration-300">
           <CardHeader>
-            <CardTitle>Quick Templates</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              Quick Templates
+            </CardTitle>
             <CardDescription>
               Use these prompts to get started quickly
             </CardDescription>
@@ -255,8 +290,9 @@ export default function AdGenerator() {
             ].map((template, i) => (
               <div
                 key={i}
-                className="p-3 bg-muted rounded-lg cursor-pointer hover:bg-muted/80 transition-colors"
+                className="p-3 bg-muted rounded-lg cursor-pointer hover:bg-primary/10 hover:border-primary/20 border border-transparent transition-all hover-scale"
                 onClick={() => setPrompt(template)}
+                style={{ animationDelay: `${i * 100}ms` }}
               >
                 <p className="text-sm">{template}</p>
               </div>
