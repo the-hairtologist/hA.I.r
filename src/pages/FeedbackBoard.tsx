@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,33 +8,86 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/useToast";
-import { ArrowUp, MessageSquare, Plus, Filter, TrendingUp } from "lucide-react";
+import { ArrowUp, MessageSquare, Plus, Filter, TrendingUp, ArrowUpDown } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { format } from "date-fns";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
+import { AdminFeedbackActions } from "@/components/feedback/AdminFeedbackActions";
 
 const FeedbackBoard = () => {
-  const { toast } = useToast();
+  const toast = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { isAdmin } = useUserRole(user?.id);
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("recent");
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
 
-  // Fetch feedback
+  // Real-time subscription for feedback updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('feedback-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'product_feedback'
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["product_feedback"] });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'feedback_upvotes'
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["product_feedback"] });
+          queryClient.invalidateQueries({ queryKey: ["user_upvotes"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
+  // Fetch feedback with sorting
   const { data: feedback, isLoading } = useQuery({
-    queryKey: ["product_feedback", filterType, filterStatus],
+    queryKey: ["product_feedback", filterType, filterStatus, sortBy],
     queryFn: async () => {
       let query = supabase
         .from("product_feedback")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("*");
 
       if (filterType !== "all") {
         query = query.eq("feedback_type", filterType);
       }
       if (filterStatus !== "all") {
         query = query.eq("status", filterStatus);
+      }
+
+      // Apply sorting
+      switch (sortBy) {
+        case "upvotes":
+          query = query.order("upvotes", { ascending: false });
+          break;
+        case "oldest":
+          query = query.order("created_at", { ascending: true });
+          break;
+        case "recent":
+        default:
+          query = query.order("created_at", { ascending: false });
+          break;
       }
 
       const { data, error } = await query;
@@ -139,7 +192,7 @@ const FeedbackBoard = () => {
           </Dialog>
         </div>
 
-        {/* Filters */}
+        {/* Filters & Sort */}
         <Card className="p-4 border-2 shadow-md">
           <div className="flex flex-wrap items-center gap-3">
             <Filter className="h-5 w-5 text-primary" />
@@ -168,17 +221,31 @@ const FeedbackBoard = () => {
                 <SelectItem value="completed">✅ Completed</SelectItem>
               </SelectContent>
             </Select>
-            {(filterType !== "all" || filterStatus !== "all") && (
+            <div className="flex items-center gap-2 ml-auto">
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[140px] border-2">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="recent">Recent</SelectItem>
+                  <SelectItem value="oldest">Oldest</SelectItem>
+                  <SelectItem value="upvotes">Most Upvoted</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {(filterType !== "all" || filterStatus !== "all" || sortBy !== "recent") && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => {
                   setFilterType("all");
                   setFilterStatus("all");
+                  setSortBy("recent");
                 }}
                 className="text-xs"
               >
-                Clear filters
+                Reset
               </Button>
             )}
           </div>
@@ -244,9 +311,19 @@ const FeedbackBoard = () => {
                           {format(new Date(item.created_at), "MMM d, yyyy 'at' h:mm a")}
                         </p>
                       </div>
-                      <Badge className={`${getStatusColor(item.status)} font-semibold uppercase text-xs`} variant="outline">
-                        {item.status.replace("_", " ")}
-                      </Badge>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge className={`${getStatusColor(item.status)} font-semibold uppercase text-xs`} variant="outline">
+                          {item.status.replace("_", " ")}
+                        </Badge>
+                        {isAdmin && (
+                          <AdminFeedbackActions
+                            feedbackId={item.id}
+                            currentStatus={item.status}
+                            currentPriority={item.priority || "medium"}
+                            currentAdminResponse={item.admin_response}
+                          />
+                        )}
+                      </div>
                     </div>
                     <p className="text-sm leading-relaxed text-foreground/90">{item.description}</p>
                     {item.category && (
