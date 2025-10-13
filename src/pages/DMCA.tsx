@@ -69,7 +69,7 @@ const DMCA = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-5 w-5 text-primary" />
-                <strong>Email:</strong> dmca@hair.app
+                <strong>Email:</strong> ThehA.I.rtologist@gmail.com
               </div>
               <div>
                 <strong>Mailing Address:</strong><br />
@@ -151,8 +151,7 @@ const DMCA = () => {
             <h2>Contact Information</h2>
             <p>
               For any questions about this DMCA policy, please contact:<br />
-              <strong>Email:</strong> dmca@hair.app<br />
-              <strong>Support:</strong> support@hair.app
+              <strong>Email:</strong> ThehA.I.rtologist@gmail.com
             </p>
 
             <div className="bg-primary/10 p-6 rounded-lg mt-8">

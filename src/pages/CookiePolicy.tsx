@@ -151,7 +151,7 @@ const CookiePolicy = () => {
               If you have questions about our use of cookies, please contact us at:
             </p>
             <p>
-              <strong>Email:</strong> privacy@hair.app<br />
+              <strong>Email:</strong> ThehA.I.rtologist@gmail.com<br />
               <strong>Subject:</strong> Cookie Policy Inquiry
             </p>
             

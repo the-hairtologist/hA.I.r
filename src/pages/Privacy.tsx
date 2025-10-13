@@ -18,8 +18,8 @@ const Privacy = () => {
             <h2>Data Controller Contact</h2>
             <p>
               <strong>Company:</strong> hA.I.r™ (Hair Management Platform)<br />
-              <strong>Email:</strong> privacy@hair.app<br />
-              <strong>Data Protection Inquiries:</strong> dpo@hair.app<br />
+              <strong>Email:</strong> ThehA.I.rtologist@gmail.com<br />
+              <strong>Data Protection Inquiries:</strong> ThehA.I.rtologist@gmail.com<br />
               <strong>Address:</strong> 8 The Green, Suite A, Dover, DE 19901, United States
             </p>
             
@@ -130,13 +130,13 @@ const Privacy = () => {
             <p>Your data may be processed in the United States and other countries. We use Standard Contractual Clauses (SCCs) and appropriate safeguards to protect your data.</p>
             
             <h2>11. Children's Privacy</h2>
-            <p>Our service is intended for users 18 years and older. We do not knowingly collect information from individuals under 18. If you believe a minor has provided us with personal information, please contact us immediately at privacy@hair.app.</p>
+            <p>Our service is intended for users 18 years and older. We do not knowingly collect information from individuals under 18. If you believe a minor has provided us with personal information, please contact us immediately at ThehA.I.rtologist@gmail.com.</p>
             
             <h2>12. Changes to Privacy Policy</h2>
             <p>We may update this privacy policy from time to time. Material changes will be notified via email at least 30 days before taking effect.</p>
             
             <h2>13. Contact Us</h2>
-            <p>For privacy inquiries: <strong>privacy@hair.app</strong> | Data Protection Officer: <strong>dpo@hair.app</strong></p>
+            <p>For privacy inquiries: <strong>ThehA.I.rtologist@gmail.com</strong></p>
             
             <h2>GDPR Compliance (EU Users)</h2>
             <p>If you are in the European Union, you have additional rights under GDPR:</p>
