@@ -1249,10 +1249,12 @@ const Settings = () => {
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <Brain className="h-5 w-5 text-primary" />
-                      AI Command Center
+                      AI {userRole === "client" ? "Assistant" : "Command Center"}
                     </CardTitle>
                     <CardDescription className="mt-2">
-                      Deep AI integration orchestrating all intelligent systems across your salon
+                      {userRole === "client" 
+                        ? "AI-powered features to enhance your hair care experience and bookings"
+                        : "Deep AI integration orchestrating all intelligent systems across your salon"}
                     </CardDescription>
                   </div>
                   <div className={`px-3 py-1 rounded-full text-xs font-semibold ${aiEnabled ? 'bg-green-500 text-white' : 'bg-destructive text-white'}`}>
@@ -1269,7 +1271,9 @@ const Settings = () => {
                       <h4 className="font-semibold">Activate AI Intelligence</h4>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Enable all AI-powered features to optimize your business
+                      {userRole === "client"
+                        ? "Enable AI features to get personalized recommendations and insights"
+                        : "Enable all AI-powered features to optimize your business"}
                     </p>
                   </div>
                   <ThemeSwitch
@@ -1286,68 +1290,137 @@ const Settings = () => {
                   <>
                     {/* AI Features Grid */}
                     <div className="grid md:grid-cols-2 gap-4">
-                      {/* Smart Scheduling */}
-                      <Card className="border-2 border-muted">
-                        <CardContent className="pt-4">
-                          <div className="flex items-start gap-3">
-                            <div className="p-2 bg-cyan-500/10 rounded-lg">
-                              <Calendar className="h-5 w-5 text-cyan-500" />
-                            </div>
-                            <div className="flex-1">
-                              <h5 className="font-semibold text-sm mb-1">Smart Scheduling</h5>
-                              <p className="text-xs text-muted-foreground mb-2">
-                                AI suggests optimal appointment times based on your calendar patterns
-                              </p>
-                              <div className="flex items-center gap-2 text-xs text-green-600">
-                                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-                                <span>Active & Learning</span>
+                      {userRole === "stylist" ? (
+                        <>
+                          {/* Smart Scheduling */}
+                          <Card className="border-2 border-muted">
+                            <CardContent className="pt-4">
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 bg-cyan-500/10 rounded-lg">
+                                  <Calendar className="h-5 w-5 text-cyan-500" />
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-sm mb-1">Smart Scheduling</h5>
+                                  <p className="text-xs text-muted-foreground mb-2">
+                                    AI suggests optimal appointment times based on your calendar patterns
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-green-600">
+                                    <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                    <span>Active & Learning</span>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                            </CardContent>
+                          </Card>
 
-                      {/* Formula Recommendations */}
-                      <Card className="border-2 border-muted">
-                        <CardContent className="pt-4">
-                          <div className="flex items-start gap-3">
-                            <div className="p-2 bg-purple-500/10 rounded-lg">
-                              <Sparkles className="h-5 w-5 text-purple-500" />
-                            </div>
-                            <div className="flex-1">
-                              <h5 className="font-semibold text-sm mb-1">Formula Intelligence</h5>
-                              <p className="text-xs text-muted-foreground mb-2">
-                                AI analyzes hair history to recommend perfect color formulas
-                              </p>
-                              <div className="flex items-center gap-2 text-xs text-green-600">
-                                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-                                <span>Active & Learning</span>
+                          {/* Formula Recommendations */}
+                          <Card className="border-2 border-muted">
+                            <CardContent className="pt-4">
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 bg-purple-500/10 rounded-lg">
+                                  <Sparkles className="h-5 w-5 text-purple-500" />
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-sm mb-1">Formula Intelligence</h5>
+                                  <p className="text-xs text-muted-foreground mb-2">
+                                    AI analyzes hair history to recommend perfect color formulas
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-green-600">
+                                    <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                    <span>Active & Learning</span>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                            </CardContent>
+                          </Card>
 
-                      {/* Client Insights */}
-                      <Card className="border-2 border-muted">
-                        <CardContent className="pt-4">
-                          <div className="flex items-start gap-3">
-                            <div className="p-2 bg-blue-500/10 rounded-lg">
-                              <Brain className="h-5 w-5 text-blue-500" />
-                            </div>
-                            <div className="flex-1">
-                              <h5 className="font-semibold text-sm mb-1">Client Insights</h5>
-                              <p className="text-xs text-muted-foreground mb-2">
-                                AI detects patterns and predicts client needs and preferences
-                              </p>
-                              <div className="flex items-center gap-2 text-xs text-green-600">
-                                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-                                <span>Active & Learning</span>
+                          {/* Client Insights */}
+                          <Card className="border-2 border-muted">
+                            <CardContent className="pt-4">
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 bg-blue-500/10 rounded-lg">
+                                  <Brain className="h-5 w-5 text-blue-500" />
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-sm mb-1">Client Insights</h5>
+                                  <p className="text-xs text-muted-foreground mb-2">
+                                    AI detects patterns and predicts client needs and preferences
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-green-600">
+                                    <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                    <span>Active & Learning</span>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                            </CardContent>
+                          </Card>
+                        </>
+                      ) : (
+                        <>
+                          {/* Personalized Recommendations (Client) */}
+                          <Card className="border-2 border-muted">
+                            <CardContent className="pt-4">
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 bg-purple-500/10 rounded-lg">
+                                  <Sparkles className="h-5 w-5 text-purple-500" />
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-sm mb-1">Personalized Recommendations</h5>
+                                  <p className="text-xs text-muted-foreground mb-2">
+                                    Get AI-powered hair care tips based on your hair type and goals
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-green-600">
+                                    <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                    <span>Active</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Smart Booking (Client) */}
+                          <Card className="border-2 border-muted">
+                            <CardContent className="pt-4">
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 bg-cyan-500/10 rounded-lg">
+                                  <Calendar className="h-5 w-5 text-cyan-500" />
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-sm mb-1">Smart Booking</h5>
+                                  <p className="text-xs text-muted-foreground mb-2">
+                                    AI suggests best appointment times based on your preferences
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-green-600">
+                                    <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                    <span>Active</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Hair Insights (Client) */}
+                          <Card className="border-2 border-muted">
+                            <CardContent className="pt-4">
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 bg-blue-500/10 rounded-lg">
+                                  <Brain className="h-5 w-5 text-blue-500" />
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-sm mb-1">Hair Care Insights</h5>
+                                  <p className="text-xs text-muted-foreground mb-2">
+                                    Track your hair journey with AI-powered analysis and tips
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-green-600">
+                                    <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                                    <span>Active</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </>
+                      )}
 
                       {/* Automated Follow-ups */}
                       <Card className="border-2 border-muted">

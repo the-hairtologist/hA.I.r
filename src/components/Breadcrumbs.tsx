@@ -1,6 +1,8 @@
 import { ChevronRight, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useUserRole } from "@/hooks/useUserRole";
+import { useAuth } from "@/hooks/useAuth";
 
 const routeLabels: Record<string, string> = {
   dashboard: "Dashboard",
@@ -12,7 +14,7 @@ const routeLabels: Record<string, string> = {
   finance: "Finance",
   products: "Product Inventory",
   portfolio: "Portfolio",
-  reviews: "Client Reviews",
+  reviews: "Reviews",
   knowledge: "Knowledge Base",
   "ai-assistant": "AI Assistant",
   integrations: "Integrations",
@@ -22,7 +24,6 @@ const routeLabels: Record<string, string> = {
   resources: "Help & Support",
   stylists: "Find Stylists",
   "client-requests": "My Requests",
-  "client-discovery": "Find Clients",
   formulas: "Formulas",
   referrals: "Referrals",
   "booking-page": "My Booking Page",
@@ -36,6 +37,9 @@ const routeLabels: Record<string, string> = {
 
 export const Breadcrumbs = () => {
   const location = useLocation();
+  const { user } = useAuth();
+  const { roles } = useUserRole(user?.id);
+  const userRole = roles.includes('stylist') ? 'stylist' : (roles.includes('client') ? 'client' : roles[0]);
   const pathSegments = location.pathname.split("/").filter(Boolean);
 
   if (pathSegments.length === 0 || pathSegments[0] === "dashboard") {
@@ -44,7 +48,16 @@ export const Breadcrumbs = () => {
 
   const breadcrumbs = pathSegments.map((segment, index) => {
     const path = "/" + pathSegments.slice(0, index + 1).join("/");
-    const label = routeLabels[segment] || segment;
+    
+    // Role-specific labels
+    let label = routeLabels[segment] || segment;
+    if (segment === "client-discovery") {
+      label = userRole === "client" ? "Find Stylists" : "Find Clients";
+    }
+    if (segment === "reviews" && userRole === "stylist") {
+      label = "Client Reviews";
+    }
+    
     const isLast = index === pathSegments.length - 1;
 
     return { path, label, isLast };

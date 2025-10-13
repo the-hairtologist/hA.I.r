@@ -346,7 +346,9 @@ const Appointments = () => {
                 </Button>
                 <div className="flex items-center gap-2 min-w-0">
                   <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
-                  <h1 className="text-2xl font-display font-bold gradient-text truncate">My Appointments</h1>
+                  <h1 className="text-2xl font-display font-bold gradient-text truncate">
+                    {userRole === "client" ? "My Appointments" : "Appointments"}
+                  </h1>
                 </div>
               </div>
               {userRole === "stylist" && (

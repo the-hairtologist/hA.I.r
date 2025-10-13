@@ -740,7 +740,7 @@ const Dashboard = () => {
                   <div className="space-y-0.5">
                     <p className="text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
                       <Edit3 className="h-3.5 w-3.5 text-primary" />
-                      {isAdmin ? "Customize Admin Dashboard" : "Personalize Your Dashboard"}
+                      {isAdmin ? "Customize Platform Dashboard" : "Personalize Your Dashboard"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {isAdmin 
