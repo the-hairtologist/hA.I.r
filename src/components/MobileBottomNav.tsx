@@ -88,7 +88,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       icon: User, 
       label: "Profile", 
       path: "/settings",
-      gradient: "from-purple-start to-purple-end",
+      gradient: "from-pink-start to-pink-end", // Changed from purple to pink
       highlight: false
     },
   ];
@@ -195,13 +195,17 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       
       {/* Navigation bar */}
       <nav 
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t-2 border-foreground shadow-[0_-4px_12px_rgba(0,0,0,0.08)]" 
+        className={cn(
+          "md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
+          "border-t-2",
+          userRole === "admin" ? "border-t-amber-500/50" : "border-foreground"
+        )}
         aria-label="Mobile navigation"
         style={{
           paddingBottom: 'env(safe-area-inset-bottom, 0px)'
         }}
       >
-        <div className="flex justify-around items-stretch h-16 px-1">
+        <div className="flex justify-around items-stretch h-16 px-2">{/* Increased padding */}
           {items.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -227,9 +231,10 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
                 {active && (
                   <div 
                     className={cn(
-                      "absolute inset-0 opacity-10 rounded-2xl",
+                      "absolute inset-0 rounded-2xl",
                       "bg-gradient-to-br",
-                      item.gradient
+                      item.gradient,
+                      userRole === "admin" ? "opacity-20" : "opacity-10"
                     )}
                     aria-hidden="true"
                   />
@@ -239,14 +244,22 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
                 <div className="relative flex items-center justify-center">
                   <div 
                     className={cn(
-                      "flex items-center justify-center w-10 h-10 rounded-2xl",
+                      "flex items-center justify-center rounded-2xl",
                       "transition-all duration-200",
+                      // Enhanced Home highlight
+                      item.highlight && !active && [
+                        "w-11 h-11", // Slightly larger for center home
+                        "bg-gradient-to-br from-primary/10 to-secondary/10",
+                        "ring-1 ring-primary/20"
+                      ],
+                      !item.highlight && "w-10 h-10",
                       active && [
                         "bg-gradient-to-br",
                         item.gradient,
-                        "shadow-lg scale-110"
+                        "shadow-lg",
+                        item.highlight ? "scale-115" : "scale-110"
                       ],
-                      !active && "hover:bg-accent/50"
+                      !active && !item.highlight && "hover:bg-accent/50"
                     )}
                   >
                     <Icon 
@@ -272,7 +285,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
                 {/* Label */}
                 <span 
                   className={cn(
-                    "text-[11px] font-medium transition-all duration-200",
+                    "text-xs font-medium transition-all duration-200",
                     active ? "text-primary scale-105" : "text-muted-foreground"
                   )}
                 >
@@ -284,7 +297,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
                   <div 
                     className={cn(
                       "absolute bottom-0 left-1/2 -translate-x-1/2",
-                      "h-1 w-8 rounded-t-full",
+                      "h-1.5 w-10 rounded-t-full",
                       "bg-gradient-to-r",
                       item.gradient,
                       "animate-fade-in"
