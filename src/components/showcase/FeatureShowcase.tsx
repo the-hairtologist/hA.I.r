@@ -193,10 +193,6 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
     <div className="w-full max-w-7xl mx-auto">
       {/* Header */}
       <div className="text-center mb-8">
-        <Badge className="mb-4" variant="secondary">
-          <Star className="h-3 w-3 mr-1" />
-          See Why Pros Choose hA.I.r
-        </Badge>
         <h2 className="text-3xl sm:text-4xl font-bold mb-3">
           {role === "stylist" ? "Built for Busy Stylists" : "Book Smarter, Not Harder"}
         </h2>
@@ -218,26 +214,17 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
             <Card
               key={feature.id}
               className={cn(
-                "group relative overflow-hidden transition-all cursor-pointer",
-                "hover:shadow-xl hover:-translate-y-1",
-                isSelected && "ring-2 ring-primary shadow-xl"
+                "relative overflow-hidden transition-all cursor-pointer",
+                "hover:border-primary/40",
+                isSelected && "border-primary"
               )}
               onClick={() => setSelectedFeature(feature.id)}
             >
-              {/* Gradient background */}
-              <div className={cn(
-                "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity",
-                feature.gradient
-              )} />
 
               <CardHeader className="relative">
                 {/* Icon */}
-                <div className={cn(
-                  "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 shadow-lg",
-                  "group-hover:scale-110 transition-transform",
-                  feature.gradient
-                )}>
-                  <Icon className="h-7 w-7 text-white" />
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Icon className="h-6 w-6 text-primary" />
                 </div>
 
                 {/* Stats Badge */}
@@ -250,11 +237,11 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
                   </Badge>
                 )}
 
-                <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                <CardTitle className="text-xl">
                   {feature.title}
                 </CardTitle>
                 
-                <CardDescription className="text-base font-semibold text-primary">
+                <CardDescription className="text-base font-medium">
                   {feature.benefit}
                 </CardDescription>
               </CardHeader>
@@ -265,35 +252,17 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
                 </p>
 
                 <Button
-                  className={cn(
-                    "w-full gap-2 group-hover:bg-primary group-hover:text-primary-foreground",
-                    playingDemo && isSelected && "animate-pulse"
-                  )}
+                  className="w-full gap-2"
                   variant={isSelected ? "default" : "outline"}
+                  size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDemoAction(feature.id);
                   }}
                 >
-                  {playingDemo && isSelected ? (
-                    <>
-                      <Play className="h-4 w-4 animate-spin" />
-                      Playing Demo...
-                    </>
-                  ) : (
-                    <>
-                      <Play className="h-4 w-4" />
-                      {feature.demoAction}
-                    </>
-                  )}
+                  {playingDemo && isSelected ? "Demo Active" : "Learn More"}
                 </Button>
               </CardContent>
-
-              {/* Hover overlay */}
-              <div className={cn(
-                "absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity",
-                feature.gradient
-              )} />
             </Card>
           );
         })}

@@ -68,21 +68,16 @@ export function QuickWinDemo() {
   const [progress, setProgress] = useState(0);
   const [completed, setCompleted] = useState<number[]>([]);
 
-  useEffect(() => {
-    // Auto-cycle through wins
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setCompleted((c) => [...c, currentWin]);
-          setCurrentWin((w) => (w + 1) % quickWins.length);
-          return 0;
-        }
-        return prev + 2;
-      });
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, [currentWin]);
+  // Manual control instead of auto-cycling
+  const handleNext = () => {
+    if (progress < 100) {
+      setProgress(100);
+    } else {
+      setCompleted((c) => [...c, currentWin]);
+      setCurrentWin((w) => (w + 1) % quickWins.length);
+      setProgress(0);
+    }
+  };
 
   const win = quickWins[currentWin];
   const Icon = win.icon;
@@ -132,7 +127,17 @@ export function QuickWinDemo() {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <Progress value={progress} className="h-2" />
+          <div className="space-y-2">
+            <Progress value={progress} className="h-2" />
+            <Button 
+              onClick={handleNext} 
+              size="sm" 
+              variant="outline" 
+              className="w-full"
+            >
+              {progress < 100 ? "Complete Demo" : "Next Feature"}
+            </Button>
+          </div>
 
           {/* Before/After Comparison */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

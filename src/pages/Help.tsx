@@ -216,25 +216,49 @@ const Help = () => {
         </div>
 
         {/* Interactive Demo Link */}
-        <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20">
-          <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0">
-                <Sparkles className="h-6 w-6 text-white" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-6 w-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold mb-1">Interactive Demo</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    See key features in action
+                  </p>
+                  <Button onClick={() => navigate("/showcase")} className="gap-2" size="sm">
+                    <Play className="h-4 w-4" />
+                    Launch Demo
+                  </Button>
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="font-bold mb-1">Interactive Feature Demo</h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  See key features in action with an interactive walkthrough
-                </p>
-                <Button onClick={() => navigate("/showcase")} className="gap-2">
-                  <Play className="h-4 w-4" />
-                  Launch Demo
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+
+          {isStylist && (
+            <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-primary/20">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shrink-0">
+                    <Sparkles className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold mb-1">Ad Generator</h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Create marketing content with AI
+                    </p>
+                    <Button onClick={() => navigate("/ad-generator")} variant="outline" className="gap-2" size="sm">
+                      <Sparkles className="h-4 w-4" />
+                      Create Ad
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
 
         {/* Tabbed Interface */}
         <Tabs defaultValue="articles" className="w-full">
