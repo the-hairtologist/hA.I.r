@@ -79,6 +79,7 @@ const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const EmailCampaigns = lazy(() => import("./pages/EmailCampaigns"));
 const EmailSettings = lazy(() => import("./pages/EmailSettings"));
 const EmailSequences = lazy(() => import("./pages/EmailSequences"));
+const ShowcaseDemo = lazy(() => import("./pages/ShowcaseDemo"));
 const FavoriteStylistsPage = lazy(() => import("./pages/FavoriteStylistsPage"));
 const PaymentMethodsPage = lazy(() => import("./pages/PaymentMethodsPage"));
 const ClientReviewsPage = lazy(() => import("./pages/ClientReviewsPage"));
@@ -297,6 +298,11 @@ const App = () => {
             <ProtectedRoute>
               <FeedbackBoard />
             </ProtectedRoute>
+          } />
+          <Route path="/showcase" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ShowcaseDemo />
+            </Suspense>
           } />
           <Route path="/stylist/reviews" element={
             <ProtectedRoute allowedRoles={["stylist", "admin"]}>

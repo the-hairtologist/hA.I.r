@@ -16,6 +16,8 @@ import {
   ChevronRight,
   BookOpen,
   Video,
+  Sparkles,
+  Play,
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useState } from "react";
@@ -23,11 +25,13 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { haptic } from "@/platform/haptics";
+import { useNavigate } from "react-router-dom";
 
 const Help = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAuth();
   const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
+  const navigate = useNavigate();
 
   // Help articles from the help button
   const helpArticles = [
@@ -210,6 +214,27 @@ const Help = () => {
               : "Get help and find answers to your questions"}
           </p>
         </div>
+
+        {/* Interactive Demo Link */}
+        <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold mb-1">Interactive Feature Demo</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  See key features in action with an interactive walkthrough
+                </p>
+                <Button onClick={() => navigate("/showcase")} className="gap-2">
+                  <Play className="h-4 w-4" />
+                  Launch Demo
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Tabbed Interface */}
         <Tabs defaultValue="articles" className="w-full">
