@@ -192,6 +192,16 @@ export const stylistNavigationItems: NavigationItem[] = [
         group: "growth",
         color: "text-purple-400 dark:text-purple-300" 
       },
+      { 
+        id: "email-sequences", 
+        title: "Email Sequences", 
+        url: "/email-sequences", 
+        icon: Mail, 
+        gradient: "bg-[image:var(--gradient-cyan-blue)]", 
+        group: "growth",
+        color: "text-cyan-400 dark:text-cyan-300",
+        description: "Automated email campaigns"
+      },
     ]
   },
   { 
