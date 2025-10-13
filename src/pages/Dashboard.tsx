@@ -26,6 +26,7 @@ import { HelpButton } from "@/components/HelpButton";
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
 import { useDashboardLayout, DashboardSection } from "@/hooks/useDashboardLayout";
+import { FirstTimeTooltip } from "@/components/FirstTimeTooltip";
 import { RebookingPrompt } from "@/components/RebookingPrompt";
 import { DraggableSection } from "@/components/dashboard/DraggableSection";
 import { ClientSentimentTracker } from "@/components/dashboard/ClientSentimentTracker";
@@ -748,15 +749,22 @@ const Dashboard = () => {
                       }
                     </p>
                   </div>
-                  <Button 
-                    variant="default" 
-                    size="sm" 
-                    onClick={() => setIsEditMode(true)}
-                    className="gap-1.5 shrink-0 w-full sm:w-auto shadow-sm h-8 text-xs"
+                  <FirstTimeTooltip
+                    id="dashboard-customize"
+                    content="Drag sections to reorder, toggle visibility, and create your perfect dashboard layout. Changes save automatically!"
+                    side="left"
+                    delayMs={2000}
                   >
-                    <Edit3 className="h-3 w-3" />
-                    <span>Customize</span>
-                  </Button>
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      onClick={() => setIsEditMode(true)}
+                      className="gap-1.5 shrink-0 w-full sm:w-auto shadow-sm h-8 text-xs"
+                    >
+                      <Edit3 className="h-3 w-3" />
+                      <span>Customize</span>
+                    </Button>
+                  </FirstTimeTooltip>
                 </div>
               </div>
             )}

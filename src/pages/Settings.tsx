@@ -22,6 +22,7 @@ import { useTheme } from "next-themes";
 import { Switch as ThemeSwitch } from "@/components/ui/switch";
 import { ClientPreferenceCenter } from "@/components/email-sequences/ClientPreferenceCenter";
 import { MobileNavCustomizer } from "@/components/MobileNavCustomizer";
+import { FirstTimeTooltip } from "@/components/FirstTimeTooltip";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -1236,7 +1237,16 @@ const Settings = () => {
           <TabsContent value="preferences" className="space-y-6">
             {/* Mobile Navigation Customization - Stylist & Admin Only */}
             {(userRole === "stylist" || roles.includes("admin")) && (
-              <MobileNavCustomizer userRole={roles.includes("admin") ? "admin" : userRole} />
+              <FirstTimeTooltip
+                id="mobile-nav-customize"
+                content="Customize your mobile bottom navigation! Drag to reorder, toggle items, and create your perfect mobile workflow."
+                side="top"
+                delayMs={1500}
+              >
+                <div>
+                  <MobileNavCustomizer userRole={roles.includes("admin") ? "admin" : userRole} />
+                </div>
+              </FirstTimeTooltip>
             )}
             
             <PrivacySettings userId={user?.id || ''} userRole={userRole} />
