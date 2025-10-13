@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { ArrowUp, MessageSquare, Plus, Filter } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
+import { ArrowUp, MessageSquare, Plus, Filter, TrendingUp } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -90,12 +90,12 @@ const FeedbackBoard = () => {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      new: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-      under_review: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-      planned: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-      in_progress: "bg-orange-500/10 text-orange-500 border-orange-500/20",
-      completed: "bg-green-500/10 text-green-500 border-green-500/20",
-      wont_fix: "bg-gray-500/10 text-gray-500 border-gray-500/20",
+      new: "bg-info/10 text-info border-info/20",
+      under_review: "bg-warning/10 text-warning-foreground border-warning/20",
+      planned: "bg-primary/10 text-primary border-primary/20",
+      in_progress: "bg-accent/10 text-accent border-accent/20",
+      completed: "bg-success/10 text-success border-success/20",
+      wont_fix: "bg-muted text-muted-foreground border-border",
     };
     return colors[status as keyof typeof colors] || "";
   };
@@ -112,18 +112,20 @@ const FeedbackBoard = () => {
 
   return (
     <DashboardLayout>
-      <div className="container max-w-6xl py-8 space-y-6">
+      <div className="container max-w-6xl py-8 space-y-6 animate-fade-in">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Feedback Board</h1>
-            <p className="text-muted-foreground mt-2">
-              Share your ideas and help us improve hA.I.r
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold font-display bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              Feedback Board
+            </h1>
+            <p className="text-muted-foreground">
+              💡 Share your ideas and help us improve hA.I.r
             </p>
           </div>
           <Dialog open={isSubmitDialogOpen} onOpenChange={setIsSubmitDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="gap-2">
+              <Button className="gap-2 shadow-lg hover:shadow-xl transition-all">
                 <Plus className="h-4 w-4" />
                 Submit Feedback
               </Button>
@@ -138,93 +140,127 @@ const FeedbackBoard = () => {
         </div>
 
         {/* Filters */}
-        <Card className="p-4">
-          <div className="flex items-center gap-4">
-            <Filter className="h-4 w-4 text-muted-foreground" />
+        <Card className="p-4 border-2 shadow-md">
+          <div className="flex flex-wrap items-center gap-3">
+            <Filter className="h-5 w-5 text-primary" />
             <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border-2">
                 <SelectValue placeholder="Filter by type" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="feature_request">Feature Request</SelectItem>
-                <SelectItem value="bug_report">Bug Report</SelectItem>
-                <SelectItem value="improvement">Improvement</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                <SelectItem value="feature_request">✨ Feature Request</SelectItem>
+                <SelectItem value="bug_report">🐛 Bug Report</SelectItem>
+                <SelectItem value="improvement">📈 Improvement</SelectItem>
+                <SelectItem value="other">💡 Other</SelectItem>
               </SelectContent>
             </Select>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border-2">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="new">New</SelectItem>
-                <SelectItem value="under_review">Under Review</SelectItem>
-                <SelectItem value="planned">Planned</SelectItem>
-                <SelectItem value="in_progress">In Progress</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="new">🆕 New</SelectItem>
+                <SelectItem value="under_review">👀 Under Review</SelectItem>
+                <SelectItem value="planned">📋 Planned</SelectItem>
+                <SelectItem value="in_progress">⚡ In Progress</SelectItem>
+                <SelectItem value="completed">✅ Completed</SelectItem>
               </SelectContent>
             </Select>
+            {(filterType !== "all" || filterStatus !== "all") && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setFilterType("all");
+                  setFilterStatus("all");
+                }}
+                className="text-xs"
+              >
+                Clear filters
+              </Button>
+            )}
           </div>
         </Card>
 
         {/* Feedback List */}
         <div className="space-y-4">
           {isLoading ? (
-            <Card className="p-8 text-center">
-              <p className="text-muted-foreground">Loading feedback...</p>
+            <Card className="p-12 text-center border-2">
+              <div className="flex flex-col items-center gap-3">
+                <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-muted-foreground">Loading feedback...</p>
+              </div>
             </Card>
           ) : feedback?.length === 0 ? (
-            <Card className="p-8 text-center">
-              <p className="text-muted-foreground">No feedback yet. Be the first to share!</p>
+            <Card className="p-12 text-center border-2 border-dashed">
+              <div className="flex flex-col items-center gap-3">
+                <MessageSquare className="h-12 w-12 text-muted-foreground/50" />
+                <div>
+                  <p className="font-semibold text-lg mb-1">No feedback yet</p>
+                  <p className="text-muted-foreground text-sm">Be the first to share your ideas!</p>
+                </div>
+                <Button onClick={() => setIsSubmitDialogOpen(true)} className="mt-2">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Submit Feedback
+                </Button>
+              </div>
             </Card>
           ) : (
             feedback?.map((item) => (
-              <Card key={item.id} className="p-6">
+              <Card key={item.id} className="p-6 border-2 hover:shadow-lg transition-shadow group">
                 <div className="flex gap-4">
                   {/* Upvote Button */}
-                  <div className="flex flex-col items-center gap-1">
+                  <div className="flex flex-col items-center gap-1 flex-shrink-0">
                     <Button
                       variant={userUpvotes?.includes(item.id) ? "default" : "outline"}
                       size="sm"
-                      className="h-10 w-10 p-0"
+                      className={`h-12 w-12 p-0 border-2 transition-all ${
+                        userUpvotes?.includes(item.id) 
+                          ? "shadow-md" 
+                          : "hover:border-primary hover:shadow-md"
+                      }`}
                       onClick={() => upvoteMutation.mutate(item.id)}
+                      disabled={upvoteMutation.isPending}
                     >
-                      <ArrowUp className="h-4 w-4" />
+                      <ArrowUp className={`h-5 w-5 ${userUpvotes?.includes(item.id) ? "animate-bounce-gentle" : ""}`} />
                     </Button>
-                    <span className="text-sm font-semibold">{item.upvotes}</span>
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3 text-muted-foreground" />
+                      <span className="text-sm font-bold text-foreground">{item.upvotes}</span>
+                    </div>
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 space-y-2">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">{getTypeIcon(item.feedback_type)}</span>
-                          <h3 className="font-semibold text-lg">{item.title}</h3>
+                  <div className="flex-1 space-y-3 min-w-0">
+                    <div className="flex items-start justify-between gap-4 flex-wrap">
+                      <div className="space-y-1 flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-2xl">{getTypeIcon(item.feedback_type)}</span>
+                          <h3 className="font-bold text-lg font-display">{item.title}</h3>
                         </div>
-                        <p className="text-muted-foreground text-sm">
-                          {format(new Date(item.created_at), "MMM d, yyyy")}
+                        <p className="text-muted-foreground text-xs">
+                          {format(new Date(item.created_at), "MMM d, yyyy 'at' h:mm a")}
                         </p>
                       </div>
-                      <Badge className={getStatusColor(item.status)} variant="outline">
+                      <Badge className={`${getStatusColor(item.status)} font-semibold uppercase text-xs`} variant="outline">
                         {item.status.replace("_", " ")}
                       </Badge>
                     </div>
-                    <p className="text-sm leading-relaxed">{item.description}</p>
+                    <p className="text-sm leading-relaxed text-foreground/90">{item.description}</p>
                     {item.category && (
-                      <Badge variant="secondary" className="text-xs">
-                        {item.category}
+                      <Badge variant="secondary" className="text-xs font-semibold">
+                        🏷️ {item.category}
                       </Badge>
                     )}
                     {item.admin_response && (
-                      <div className="mt-4 p-4 bg-muted/50 rounded-lg border">
+                      <div className="mt-4 p-4 bg-primary/5 rounded-lg border-2 border-primary/20">
                         <div className="flex items-center gap-2 mb-2">
                           <MessageSquare className="h-4 w-4 text-primary" />
-                          <span className="font-medium text-sm">Team Response</span>
+                          <span className="font-bold text-sm text-primary">Team Response</span>
                         </div>
-                        <p className="text-sm">{item.admin_response}</p>
+                        <p className="text-sm leading-relaxed">{item.admin_response}</p>
                       </div>
                     )}
                   </div>
@@ -239,7 +275,7 @@ const FeedbackBoard = () => {
 };
 
 const FeedbackForm = ({ onSuccess }: { onSuccess: () => void }) => {
-  const { toast } = useToast();
+  const toast = useToast();
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     feedback_type: "feature_request",
@@ -261,16 +297,18 @@ const FeedbackForm = ({ onSuccess }: { onSuccess: () => void }) => {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Feedback submitted successfully!" });
+      toast.success("Feedback submitted successfully!", "Thank you for helping us improve!");
       queryClient.invalidateQueries({ queryKey: ["product_feedback"] });
+      setFormData({
+        feedback_type: "feature_request",
+        title: "",
+        description: "",
+        category: "",
+      });
       onSuccess();
     },
     onError: (error) => {
-      toast({
-        title: "Failed to submit feedback",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast.error("Failed to submit feedback", error.message);
     },
   });
 
@@ -278,17 +316,21 @@ const FeedbackForm = ({ onSuccess }: { onSuccess: () => void }) => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        if (!formData.title.trim() || !formData.description.trim()) {
+          toast.error("Missing fields", "Please fill in all required fields");
+          return;
+        }
         submitMutation.mutate();
       }}
-      className="space-y-4"
+      className="space-y-5"
     >
       <div className="space-y-2">
-        <Label>Type</Label>
+        <Label htmlFor="feedback-type" className="text-base">Type *</Label>
         <Select
           value={formData.feedback_type}
           onValueChange={(value) => setFormData({ ...formData, feedback_type: value })}
         >
-          <SelectTrigger>
+          <SelectTrigger id="feedback-type" className="border-2">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -301,37 +343,63 @@ const FeedbackForm = ({ onSuccess }: { onSuccess: () => void }) => {
       </div>
 
       <div className="space-y-2">
-        <Label>Title</Label>
+        <Label htmlFor="feedback-title" className="text-base">Title *</Label>
         <Input
+          id="feedback-title"
           placeholder="Brief summary of your feedback"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           required
+          maxLength={100}
+          className="border-2"
         />
+        <p className="text-xs text-muted-foreground">{formData.title.length}/100</p>
       </div>
 
       <div className="space-y-2">
-        <Label>Description</Label>
+        <Label htmlFor="feedback-description" className="text-base">Description *</Label>
         <Textarea
+          id="feedback-description"
           placeholder="Describe your idea or issue in detail..."
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          rows={5}
+          rows={6}
           required
+          maxLength={1000}
+          className="border-2 resize-none"
         />
+        <p className="text-xs text-muted-foreground">{formData.description.length}/1000</p>
       </div>
 
       <div className="space-y-2">
-        <Label>Category (optional)</Label>
+        <Label htmlFor="feedback-category" className="text-base">Category <span className="text-muted-foreground">(optional)</span></Label>
         <Input
+          id="feedback-category"
           placeholder="e.g., Dashboard, Appointments, Formulas"
           value={formData.category}
           onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          maxLength={50}
+          className="border-2"
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={submitMutation.isPending}>
-        {submitMutation.isPending ? "Submitting..." : "Submit Feedback"}
+      <Button 
+        type="submit" 
+        className="w-full shadow-lg hover:shadow-xl transition-all" 
+        disabled={submitMutation.isPending}
+        size="lg"
+      >
+        {submitMutation.isPending ? (
+          <>
+            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+            Submitting...
+          </>
+        ) : (
+          <>
+            <Plus className="h-4 w-4 mr-2" />
+            Submit Feedback
+          </>
+        )}
       </Button>
     </form>
   );
