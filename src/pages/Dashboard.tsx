@@ -36,7 +36,7 @@ import { QuickNotes } from "@/components/dashboard/QuickNotes";
 import { FavoriteStylists } from "@/components/dashboard/FavoriteStylists";
 import { ClientMilestones } from "@/components/dashboard/ClientMilestones";
 import { Button } from "@/components/ui/button";
-import { Edit3, RotateCcw, Save, StickyNote } from "lucide-react";
+import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -98,13 +98,10 @@ const Dashboard = () => {
     { id: "client-retention", title: "Client Retention", component: "ClientRetention", enabled: false },
   ];
 
-  // Client dashboard sections - focused on booking and service experience
+  // Client dashboard sections - simplified for coming soon mode
   const defaultClientSections: DashboardSection[] = [
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
-    { id: "upcoming-appointments", title: "My Appointments", component: "UpcomingAppointments", enabled: true },
-    { id: "client-milestones", title: "Rewards & Perks", component: "ClientMilestones", enabled: true },
-    { id: "favorite-stylists", title: "My Stylists", component: "FavoriteStylists", enabled: true },
-    { id: "recent-activity", title: "Recent Activity", component: "RecentActivity", enabled: true },
+    { id: "coming-soon-info", title: "Coming Soon", component: "ComingSoonInfo", enabled: true },
   ];
 
   // Admin sections - comprehensive platform oversight
@@ -629,43 +626,36 @@ const Dashboard = () => {
 
               {/* Clients ONLY (not stylists) */}
               {userRole === "client" && !isAdmin && (
-                <>
-                  <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                    Your upcoming appointments ✨
-                  </p>
-                  {stats?.upcomingAppointments > 0 ? (
-                    <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in mt-2 sm:mt-3 overflow-hidden" style={{ animationDelay: '250ms' }}>
-                        <WeeklyScheduleView
-                          appointments={weekAppointments}
-                          stylistSchedule={profile?.weekly_schedule}
-                          stylistId={profile?.id}
-                          onAppointmentClick={(apt) => navigate("/appointments")}
-                          onTimeSlotClick={undefined}
-                          compact={true}
-                        />
+                <div className="mt-2 sm:mt-3 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-primary/30 p-4 sm:p-5 md:p-6 text-center animate-fade-in" style={{ animationDelay: '200ms' }}>
+                  <div className="max-w-md mx-auto space-y-3 sm:space-y-4">
+                    <div className="mb-2 sm:mb-3">
+                      <span className="text-4xl sm:text-5xl">✨</span>
                     </div>
-                  ) : (
-                    <div className="mt-2 sm:mt-3 bg-card/80 backdrop-blur-sm rounded-lg border-2 border-dashed border-primary/30 p-4 sm:p-5 md:p-6 text-center animate-fade-in" style={{ animationDelay: '250ms' }}>
-                      <div className="max-w-xs mx-auto">
-                        <div className="mb-2 sm:mb-3">
-                          <span className="text-3xl sm:text-4xl">📅</span>
-                        </div>
-                        <h3 className="text-sm sm:text-base font-bold text-foreground mb-1.5 sm:mb-2">No Upcoming Appointments</h3>
-                        <p className="text-[11px] sm:text-xs text-muted-foreground mb-2.5 sm:mb-3">
-                          Stylist booking will be available soon
-                        </p>
-                        <Button 
-                          variant="outline"
-                          className="gap-2 h-8 text-xs opacity-60 cursor-not-allowed"
-                          size="sm"
-                          disabled
-                        >
-                          Find Your Stylist - Coming Soon!
-                        </Button>
-                      </div>
+                    <h3 className="text-base sm:text-lg font-bold text-foreground">Client Features Coming Soon! 🎉</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      We're currently in <span className="font-semibold text-primary">stylist-only mode</span>. Client features like booking appointments, finding stylists, and messaging will be available soon!
+                    </p>
+                    <div className="pt-2 flex flex-wrap gap-2 justify-center">
+                      <Button 
+                        onClick={() => navigate('/ai-assistant')}
+                        className="gap-2 h-9 text-xs"
+                        size="sm"
+                      >
+                        <Sparkles className="h-3.5 w-3.5" />
+                        Try AI Hair Assistant
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        onClick={() => navigate('/feedback')}
+                        className="gap-2 h-9 text-xs"
+                        size="sm"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        Share Feedback
+                      </Button>
                     </div>
-                  )}
-                </>
+                  </div>
+                </div>
               )}
             </div>
           </div>

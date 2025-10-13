@@ -320,7 +320,7 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
   ];
 };
 
-// Client Navigation Items
+// Client Navigation Items - Simplified for Coming Soon Mode
 export const clientNavigationItems: NavigationItem[] = [
   { 
     id: "dashboard", 
@@ -332,72 +332,14 @@ export const clientNavigationItems: NavigationItem[] = [
     color: "text-purple-400 dark:text-purple-300" 
   },
   { 
-    id: "appointments", 
-    title: "My Appointments", 
-    url: "/appointments", 
-    icon: Calendar, 
-    gradient: "bg-[image:var(--gradient-pink-rose)]", 
-    group: "main", 
-    color: "text-pink-400 dark:text-pink-300" 
-  },
-  { 
-    id: "messages", 
-    title: "Messages", 
-    url: "/messages", 
-    icon: MessageSquare, 
-    gradient: "bg-[image:var(--gradient-violet-purple)]", 
-    group: "main", 
-    color: "text-violet-400 dark:text-violet-300" 
-  },
-  { 
-    id: "notifications", 
-    title: "Notifications", 
-    url: "/notifications", 
-    icon: Bell, 
+    id: "ai-assistant", 
+    title: "AI Assistant", 
+    url: "/ai-assistant", 
+    icon: Sparkles, 
     gradient: "bg-[image:var(--gradient-purple-pink)]", 
     group: "main", 
-    color: "text-purple-400 dark:text-purple-300" 
-  },
-  { 
-    id: "find-stylist", 
-    title: "Find Stylists", 
-    url: "/stylist-discovery", 
-    icon: Search, 
-    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
-    group: "services", 
-    color: "text-cyan-400 dark:text-cyan-300",
-    comingSoon: true
-  },
-  { 
-    id: "favorite-stylists", 
-    title: "My Stylists", 
-    url: "/favorites", 
-    icon: Star, 
-    gradient: "bg-[image:var(--gradient-amber-orange)]", 
-    group: "services", 
-    color: "text-amber-400 dark:text-amber-300",
-    comingSoon: true
-  },
-  { 
-    id: "booking-history", 
-    title: "Booking History", 
-    url: "/booking-history", 
-    icon: CalendarRange, 
-    gradient: "bg-[image:var(--gradient-blue-indigo)]", 
-    group: "history", 
-    color: "text-blue-400 dark:text-blue-300",
-    comingSoon: true
-  },
-  { 
-    id: "reviews", 
-    title: "My Reviews", 
-    url: "/client-reviews", 
-    icon: Star, 
-    gradient: "bg-[image:var(--gradient-amber-orange)]", 
-    group: "history", 
-    color: "text-amber-400 dark:text-amber-300", 
-    description: "Rate stylists",
-    comingSoon: true
+    color: "text-purple-400 dark:text-purple-300",
+    description: "Get hair care advice"
   },
   { 
     id: "profile", 
@@ -407,17 +349,6 @@ export const clientNavigationItems: NavigationItem[] = [
     gradient: "bg-[image:var(--gradient-blue-indigo)]", 
     group: "account", 
     color: "text-blue-400 dark:text-blue-300" 
-  },
-  { 
-    id: "payment-methods", 
-    title: "Payment Methods", 
-    url: "/payment-methods", 
-    icon: DollarSign, 
-    gradient: "bg-[image:var(--gradient-amber-orange)]", 
-    group: "account", 
-    color: "text-amber-400 dark:text-amber-300", 
-    description: "Cards & billing",
-    comingSoon: true
   },
   { 
     id: "settings", 
@@ -468,8 +399,6 @@ export const stylistAdminGroupLabels: NavigationGroup = {
 
 export const clientGroupLabels: NavigationGroup = {
   main: "Main",
-  services: "Services",
-  history: "History",
   account: "Account",
   support: "Support",
 };

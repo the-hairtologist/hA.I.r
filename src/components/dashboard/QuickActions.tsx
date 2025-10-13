@@ -120,30 +120,12 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
 
   const allClientActions: ActionButton[] = [
     {
-      id: "find-stylist",
-      label: "Find a Stylist",
-      description: "Coming Soon",
-      icon: Users,
-      route: "/coming-soon",
+      id: "ai-assistant",
+      label: "AI Hair Assistant",
+      description: "Get expert advice",
+      icon: Sparkles,
+      route: "/ai-assistant",
       gradient: "from-purple-500 to-pink-500",
-      disabled: true,
-    },
-    {
-      id: "book",
-      label: "Book Appointment",
-      description: "Coming Soon",
-      icon: Calendar,
-      route: "/coming-soon",
-      gradient: "from-blue-500 to-cyan-500",
-      disabled: true,
-    },
-    {
-      id: "messages",
-      label: "Messages",
-      description: "Chat with stylist",
-      icon: MessageSquare,
-      route: "/messages",
-      gradient: "from-emerald-500 to-teal-500",
     },
     {
       id: "profile",
@@ -171,8 +153,9 @@ export const QuickActions = ({ userRole }: QuickActionsProps) => {
     if (saved) {
       setSelectedActions(JSON.parse(saved));
     } else {
-      // Default: show first 4 actions only
-      setSelectedActions(allActions.slice(0, 4).map(a => a.id));
+      // Default: show all actions for clients (only 3), first 4 for stylists
+      const defaultCount = userRole === "client" ? allActions.length : 4;
+      setSelectedActions(allActions.slice(0, defaultCount).map(a => a.id));
     }
   }, [userRole]);
 
