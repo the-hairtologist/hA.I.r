@@ -627,11 +627,11 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Clients */}
-              {userRole === "client" && (
+              {/* Clients ONLY (not stylists) */}
+              {userRole === "client" && !isAdmin && (
                 <>
                   <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                    Ready to book your next transformation? ✨
+                    Your upcoming appointments ✨
                   </p>
                   {stats?.upcomingAppointments > 0 ? (
                     <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in mt-2 sm:mt-3 overflow-hidden" style={{ animationDelay: '250ms' }}>
