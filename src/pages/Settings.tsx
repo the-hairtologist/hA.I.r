@@ -20,6 +20,7 @@ import { PrivacySettings } from "@/components/PrivacySettings";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { useTheme } from "next-themes";
 import { Switch as ThemeSwitch } from "@/components/ui/switch";
+import { ClientPreferenceCenter } from "@/components/email-sequences/ClientPreferenceCenter";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -1215,6 +1216,19 @@ const Settings = () => {
                 )}
               </CardContent>
             </Card>
+
+            {/* Client Email Sequence Preferences */}
+            {userRole === "client" && (
+              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                <CardHeader>
+                  <CardTitle>Email Sequence Preferences</CardTitle>
+                  <CardDescription>Control automated emails from your stylists</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ClientPreferenceCenter />
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Preferences Tab */}
