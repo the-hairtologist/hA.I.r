@@ -5,6 +5,7 @@ import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { useState, useEffect } from "react";
 
 interface MobileBottomNavProps {
@@ -25,6 +26,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+  const { isAdmin } = useUserRole(user?.id);
   const { unreadCount } = useRealtimeNotifications(user?.id);
 
   const isActive = (path: string) => location.pathname === path;
@@ -142,12 +144,14 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
   ];
 
   // Load customized navigation from localStorage (stylist/admin only)
-  const storageKey = `mobileNav-${userRole}`;
+  // SECURITY: Only show admin items if user actually has admin role
+  const effectiveRole = isAdmin ? "admin" : userRole;
+  const storageKey = `mobileNav-${effectiveRole}`;
   const [customizedItems, setCustomizedItems] = useState<NavItem[]>([]);
   const [mounted, setMounted] = useState(false);
 
-  // Define all available items
-  const allItems = userRole === "admin" ? adminItems : userRole === "stylist" ? stylistItems : clientItems;
+  // Define all available items - admin check ensures only actual admins see admin items
+  const allItems = isAdmin ? adminItems : userRole === "stylist" ? stylistItems : clientItems;
 
   useEffect(() => {
     setMounted(true);
@@ -207,7 +211,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
         className={cn(
           "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
           "border-t-2",
-          userRole === "admin" ? "border-t-amber-500/50" : "border-foreground"
+          isAdmin ? "border-t-amber-500/50" : "border-foreground"
         )}
         aria-label="Mobile navigation"
         style={{
@@ -238,15 +242,15 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
               >
                 {/* Background glow effect for active item */}
                 {active && (
-                  <div 
-                    className={cn(
-                      "absolute inset-0 rounded-2xl",
-                      "bg-gradient-to-br",
-                      item.gradient,
-                      userRole === "admin" ? "opacity-20" : "opacity-10"
-                    )}
-                    aria-hidden="true"
-                  />
+                    <div 
+                      className={cn(
+                        "absolute inset-0 rounded-2xl",
+                        "bg-gradient-to-br",
+                        item.gradient,
+                        isAdmin ? "opacity-20" : "opacity-10"
+                      )}
+                      aria-hidden="true"
+                    />
                 )}
 
                 {/* Icon container */}

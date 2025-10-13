@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { 
   Home, 
   Calendar, 
@@ -119,6 +121,8 @@ const SortableNavItem = ({ item, isEnabled, onToggle }: {
 };
 
 export const MobileNavCustomizer = ({ userRole }: MobileNavCustomizerProps) => {
+  const { user } = useAuth();
+  const { isAdmin } = useUserRole(user?.id);
   const [mounted, setMounted] = useState(false);
 
   // Stylist navigation items
@@ -229,13 +233,15 @@ export const MobileNavCustomizer = ({ userRole }: MobileNavCustomizerProps) => {
     },
   ];
 
-  const allItems = userRole === "admin" 
+  // SECURITY: Only show admin items if user actually has admin role
+  const allItems = isAdmin 
     ? adminNavItems 
     : userRole === "stylist" 
       ? stylistNavItems 
       : clientNavItems;
 
-  const storageKey = `mobileNav-${userRole}`;
+  const effectiveRole = isAdmin ? "admin" : userRole;
+  const storageKey = `mobileNav-${effectiveRole}`;
   const [items, setItems] = useState<NavItem[]>(allItems);
   const [enabledIds, setEnabledIds] = useState<string[]>(
     allItems.map(item => item.id)
