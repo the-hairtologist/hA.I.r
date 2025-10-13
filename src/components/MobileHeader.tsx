@@ -44,7 +44,7 @@ export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderPr
   return (
     <header 
       className={cn(
-        "md:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md",
+        "lg:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md",
         "transition-all duration-300 ease-out",
         scrolled && "border-b-2 border-foreground shadow-lg"
       )}

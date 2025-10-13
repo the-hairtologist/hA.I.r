@@ -191,12 +191,12 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
   return (
     <>
       {/* Safe area spacer */}
-      <div className="md:hidden h-16 flex-shrink-0" aria-hidden="true" />
+      <div className="lg:hidden h-16 flex-shrink-0" aria-hidden="true" />
       
       {/* Navigation bar */}
       <nav 
         className={cn(
-          "md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
+          "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
           "border-t-2",
           userRole === "admin" ? "border-t-amber-500/50" : "border-foreground"
         )}

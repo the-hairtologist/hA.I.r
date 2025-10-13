@@ -159,7 +159,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           />
 
           {/* Desktop Header */}
-          <header className={`hidden md:flex sticky top-0 z-40 border-b-4 ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
+          <header className={`hidden lg:flex sticky top-0 z-40 border-b-4 ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
             <div className="flex h-16 items-center gap-4 px-4 w-full">
               {/* CRITICAL: Always-visible sidebar trigger */}
               <SidebarTrigger className="h-9 w-9" />
@@ -286,7 +286,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Main Content */}
           <main
             id="main-content"
-            className="flex-1 overflow-auto pb-20 md:pb-0"
+            className="flex-1 overflow-auto pb-20 lg:pb-0"
             role="main"
             aria-label="Main content"
           >
