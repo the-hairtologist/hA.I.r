@@ -1,6 +1,12 @@
 # hA.I.r - AI-Powered Salon Assistant
 # Copyright © 2025 hA.I.r. All Rights Reserved.
 
-# Block all search engine crawlers
+# Allow all search engine crawlers
 User-agent: *
-Disallow: /
+Allow: /
+
+# Sitemap location
+Sitemap: https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/sitemap.xml
+
+# Crawl rate
+Crawl-delay: 1

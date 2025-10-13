@@ -2,58 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Landing & Auth -->
   <url>
-    <loc>https://hair.app/</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://hair.app/auth</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/auth</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Public Pages -->
   <url>
-    <loc>https://hair.app/stylist-directory</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/stylist-directory</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://hair.app/book-appointment</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/book-appointment</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <!-- Legal -->
   <url>
-    <loc>https://hair.app/terms</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/terms</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://hair.app/privacy</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://hair.app/cookie-policy</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/cookie-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <!-- Featured Routes -->
   <url>
-    <loc>https://hair.app/resources</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/resources</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://hair.app/client-discovery</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/client-discovery</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://hair.app/stylist-discovery</loc>
+    <loc>https://a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2.lovableproject.com/stylist-discovery</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
