@@ -133,7 +133,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
 
   return (
     <Sidebar collapsible="icon" className="border-r">
-      <SidebarContent>
+      <SidebarContent className="pb-4">
         {/* Customize Controls */}
         {!collapsed && (
           <div className="px-3 py-2 border-b">
