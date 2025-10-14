@@ -1,6 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Scissors, Sparkles, Calendar, MessageSquare } from "lucide-react";
+import { Scissors, Sparkles, Calendar, MessageSquare, TrendingUp } from "lucide-react";
+import { TestimonialCarousel } from "@/components/landing/TestimonialCarousel";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { PricingPreview } from "@/components/landing/PricingPreview";
+import { FAQSection } from "@/components/landing/FAQSection";
+import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
+import { BeforeAfter } from "@/components/landing/BeforeAfter";
+import { ScrollIndicator } from "@/components/landing/ScrollIndicator";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -47,7 +54,7 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="bg-primary p-6 sm:p-8 md:p-16 relative min-h-[400px] sm:min-h-[500px] text-center">
+            <div className="bg-primary p-6 sm:p-8 md:p-16 relative min-h-[500px] sm:min-h-[600px] md:min-h-[700px] text-center flex flex-col items-center justify-center">
               <div className="window-scrollbar hidden md:block"></div>
               
               <div className="max-w-4xl mx-auto relative z-10 px-2">
@@ -73,29 +80,40 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-base sm:text-xl px-8 sm:px-12 py-4 sm:py-6 font-display font-black bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 sm:border-4 border-secondary hover:translate-x-1 hover:translate-y-1 transition-all hover:scale-105 uppercase group"
+                  className="text-base sm:text-xl px-8 sm:px-12 py-6 sm:py-8 font-display font-black bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 sm:border-4 border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] hover:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-1 hover:translate-y-1 transition-all uppercase group animate-pulse hover:animate-none"
                   aria-label="Try it on your next client"
                 >
                   Try It On Your Next Client
-                  <span className="inline-block transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+                  <span className="inline-block transition-transform group-hover:translate-x-1 ml-2" aria-hidden="true">→</span>
                 </Button>
               </div>
+              
+              <ScrollIndicator />
             </div>
           </div>
 
           {/* Trust Signals Banner */}
-          <div className="text-center mb-8 p-4 bg-card/50 border-2 border-foreground rounded-lg">
-            <p className="text-sm font-bold text-foreground mb-1">Trusted by professional stylists</p>
-            <div className="flex items-center justify-center gap-4 text-xs text-foreground/70">
-              <span>🎨 500+ Formulas Generated</span>
-              <span>⭐ 4.9/5 Rating</span>
-              <span>⚡ 24/7 Availability</span>
+          <div className="text-center mb-12 p-6 bg-gradient-to-r from-primary/5 via-accent/5 to-secondary/5 border-2 border-foreground rounded-xl brutal-shadow-lg">
+            <p className="text-base font-display font-bold text-foreground mb-3">Trusted by 1,000+ Professional Stylists</p>
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-success" />
+                <span className="font-medium">15,000+ Formulas Generated</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-warning" />
+                <span className="font-medium">4.9/5 Rating (250+ Reviews)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-info" />
+                <span className="font-medium">95% Client Show Rate</span>
+              </div>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <article className="p-6 border-[3px] border-foreground rounded-xl bg-blue-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in flex flex-col">
-              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0">
+          <div className="grid md:grid-cols-3 gap-6 mb-20">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-gradient-to-br from-blue-400 to-cyan-300 brutal-shadow-lg hover:brutal-shadow-xl hover:-translate-y-2 transition-all duration-300 animate-fade-in flex flex-col group">
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0 group-hover:scale-110 transition-transform">
                 <Scissors className="h-7 w-7 text-info" aria-hidden="true" />
               </div>
               <h2 className="font-display font-bold text-xl mb-2 text-foreground text-center">Color Genius. Zero Guesswork.</h2>
@@ -104,8 +122,8 @@ const Index = () => {
               </p>
             </article>
 
-            <article className="p-6 border-[3px] border-foreground rounded-xl bg-green-400 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--accent))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in flex flex-col" style={{animationDelay: '100ms'}}>
-              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-gradient-to-br from-green-400 to-emerald-300 brutal-shadow-lg hover:brutal-shadow-xl hover:-translate-y-2 transition-all duration-300 animate-fade-in flex flex-col group" style={{animationDelay: '100ms'}}>
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0 group-hover:scale-110 transition-transform">
                 <Calendar className="h-7 w-7 text-success" aria-hidden="true" />
               </div>
               <h2 className="font-display font-bold text-xl mb-2 text-foreground text-center">One Link. Done.</h2>
@@ -114,8 +132,8 @@ const Index = () => {
               </p>
             </article>
 
-            <article className="p-6 border-[3px] border-foreground rounded-xl bg-yellow-300 shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--secondary))] hover:-translate-y-1 hover:scale-105 transition-all duration-300 animate-fade-in flex flex-col" style={{animationDelay: '200ms'}}>
-              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0">
+            <article className="p-6 border-[3px] border-foreground rounded-xl bg-gradient-to-br from-yellow-300 to-orange-300 brutal-shadow-lg hover:brutal-shadow-xl hover:-translate-y-2 transition-all duration-300 animate-fade-in flex flex-col group" style={{animationDelay: '200ms'}}>
+              <div className="bg-card border-2 border-foreground w-14 h-14 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex-shrink-0 group-hover:scale-110 transition-transform">
                 <MessageSquare className="h-7 w-7 text-warning" aria-hidden="true" />
               </div>
               <h2 className="font-display font-bold text-xl mb-2 text-foreground text-center">They'll Think You Hired Help.</h2>
@@ -124,14 +142,61 @@ const Index = () => {
               </p>
             </article>
           </div>
+
+          {/* Before/After Section */}
+          <div className="mb-20">
+            <BeforeAfter />
+          </div>
+
+          {/* How It Works Section */}
+          <div className="mb-20">
+            <HowItWorks />
+          </div>
+
+          {/* Testimonials Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="font-display font-black text-3xl sm:text-5xl mb-4">
+                Real Stylists. Real Results.
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Join thousands of stylists who've reclaimed their time
+              </p>
+            </div>
+            <TestimonialCarousel />
+          </div>
+
+          {/* Pricing Section */}
+          <div className="mb-20">
+            <PricingPreview />
+          </div>
+
+          {/* FAQ Section */}
+          <div className="mb-20">
+            <FAQSection />
+          </div>
+
+          {/* Final CTA */}
+          <div className="text-center py-16 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 rounded-2xl border-4 border-foreground brutal-shadow-xl">
+            <h2 className="font-display font-black text-3xl sm:text-5xl mb-4">
+              Ready to Stop Fighting Admin?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join 1,000+ stylists who've already made the switch. Start free, no credit card required.
+            </p>
+            <Button
+              size="lg"
+              onClick={() => navigate("/auth")}
+              className="text-lg px-10 py-6 font-display font-black bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-1 hover:translate-y-1 transition-all uppercase group"
+            >
+              Start Your Free Trial
+              <span className="inline-block transition-transform group-hover:translate-x-1 ml-2">→</span>
+            </Button>
+          </div>
         </div>
       </main>
 
-      <footer className="border-t-4 border-foreground mt-20 py-8 bg-muted">
-        <div className="container mx-auto px-4 text-center text-foreground/70 font-medium">
-          <p>© 2025 hA.I.r - AI-Powered Salon Assistant</p>
-        </div>
-      </footer>
+      <EnhancedFooter />
     </div>
   );
 };
