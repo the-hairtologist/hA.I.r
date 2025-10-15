@@ -67,6 +67,7 @@ const SystemHealth = lazy(() => import("./pages/SystemHealth"));
 const AdminCommandCenter = lazy(() => import("./pages/AdminCommandCenter"));
 const AdminUsers = lazy(() => import("./pages/AdminUsers"));
 const AuditLogs = lazy(() => import("./pages/AuditLogs"));
+const ActivityLog = lazy(() => import("./pages/admin/ActivityLog"));
 const AppDirectory = lazy(() => import("./pages/AppDirectory"));
 const DMCA = lazy(() => import("./pages/DMCA"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
@@ -349,6 +350,11 @@ const App = () => {
           <Route path="/admin/audit-logs" element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AuditLogs />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/activity" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <ActivityLog />
             </ProtectedRoute>
           } />
           <Route path="/reviews" element={

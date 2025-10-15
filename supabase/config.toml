@@ -77,3 +77,6 @@ verify_jwt = true
 
 [functions.send-rebooking-reminder]
 verify_jwt = false
+
+[functions.waitlist-notifications]
+verify_jwt = true

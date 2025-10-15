@@ -29,6 +29,7 @@ import { showCelebration } from "@/components/CelebrationToast";
 import { QuickReviewButton } from "@/components/QuickReviewButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { RescheduleDialog } from "@/components/RescheduleDialog";
+import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
 
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 
@@ -59,6 +60,7 @@ const Appointments = () => {
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [services, setServices] = useState<any[]>([]);
   const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
+  const [serviceTemplateMode, setServiceTemplateMode] = useState(false);
 
   // Global keyboard shortcut for search focus
   useEffect(() => {
@@ -567,6 +569,47 @@ const Appointments = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           {getStatusBadge(apt.status)}
+                          {apt.status === "scheduled" && userRole === "stylist" && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                try {
+                                  // Check if timer already exists
+                                  const { data: existingTimer } = await supabase
+                                    .from("appointment_timers")
+                                    .select("*")
+                                    .eq("appointment_id", apt.id)
+                                    .maybeSingle();
+
+                                  if (existingTimer && !existingTimer.end_time) {
+                                    toast.info("Timer already running for this appointment");
+                                    return;
+                                  }
+
+                                  // Create new timer
+                                  const { error } = await supabase
+                                    .from("appointment_timers")
+                                    .insert({
+                                      appointment_id: apt.id,
+                                      start_time: new Date().toISOString(),
+                                    });
+
+                                  if (error) throw error;
+                                  toast.success("⏱️ Timer started!");
+                                  loadData();
+                                } catch (error) {
+                                  console.error("Error starting timer:", error);
+                                  toast.error("Failed to start timer");
+                                }
+                              }}
+                              className="h-8 opacity-0 group-hover:opacity-100 transition-opacity border-2 shadow-brutal"
+                            >
+                              <Clock className="h-3.5 w-3.5 mr-1" />
+                              Start Timer
+                            </Button>
+                          )}
                           {apt.status === "completed" && (
                             <>
                               <QuickRebookButton
