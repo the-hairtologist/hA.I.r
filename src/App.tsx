@@ -15,6 +15,7 @@ import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { DashboardErrorBoundary } from "@/components/DashboardErrorBoundary";
@@ -151,10 +152,11 @@ const App = () => {
             <CookieConsent />
             <PerformanceOverlay />
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <AnalyticsInitializer />
-            <KeyboardShortcutsInitializer />
-            <ServiceIntegrationTracker />
-            <RoleSwitchProtection />
+              <EnhancedAuthProvider>
+                <AnalyticsInitializer />
+                <KeyboardShortcutsInitializer />
+                <ServiceIntegrationTracker />
+                <RoleSwitchProtection />
             <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
               <Routes>
           {/* Public Routes */}
@@ -456,6 +458,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
+              </EnhancedAuthProvider>
           </BrowserRouter>
           </TooltipProvider>
         </DemoModeProvider>

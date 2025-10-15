@@ -25,8 +25,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useSidebarOrder, SidebarItem } from "@/hooks/useSidebarOrder";
 import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
@@ -46,8 +45,7 @@ import {
 
 export function AppSidebar() {
   const { state } = useSidebar();
-  const { user } = useAuth();
-  const { isAdmin, isStylist, isClient } = useUserRole(user?.id);
+  const { user, isAdmin, isStylist, isClient } = useEnhancedAuth();
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());

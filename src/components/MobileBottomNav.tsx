@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { useState, useEffect } from "react";
 
 interface NavItem {
@@ -21,8 +20,7 @@ interface NavItem {
 export const MobileBottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
-  const { isAdmin, isStylist, isClient } = useUserRole(user?.id);
+  const { user, isAdmin, isStylist, isClient } = useEnhancedAuth();
   const { unreadCount } = useRealtimeNotifications(user?.id);
 
   const isActive = (path: string) => location.pathname === path;

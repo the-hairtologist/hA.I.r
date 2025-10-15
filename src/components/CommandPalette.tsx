@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { stylistNavigationItems, clientNavigationItems, getAdminNavigationItems } from "@/config/navigationConfig";
 import { cn } from "@/lib/utils";
 
@@ -26,8 +25,7 @@ interface CommandPaletteProps {
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const { isAdmin, isStylist } = useUserRole(user?.id);
+  const { isAdmin, isStylist } = useEnhancedAuth();
   const [search, setSearch] = useState("");
 
   // Get all navigation items based on role

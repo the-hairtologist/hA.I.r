@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
@@ -41,16 +40,14 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading, isAdmin } = useUserRole(user?.id);
+  const { user, loading, roles, isAdmin, isStylist, isClient } = useEnhancedAuth();
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const { unreadCount } = useRealtimeNotifications(user?.id);
   const { theme, setTheme } = useTheme();
   
   // Determine user role - admin gets full access, no role switching needed
-  const userRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
-  const loading = authLoading || roleLoading || (user && roles.length === 0);
+  const userRole = isStylist ? 'stylist' : isClient ? 'client' : 'admin';
 
   // Listen for keyboard shortcuts (stylist only)
   useEffect(() => {
@@ -107,7 +104,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }, [userRole, navigate]);
 
   // Redirect if not authenticated
-  if (!authLoading && !user) {
+  if (!loading && !user) {
     navigate("/auth");
     return null;
   }

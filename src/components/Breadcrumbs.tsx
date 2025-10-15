@@ -1,8 +1,7 @@
 import { ChevronRight, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useUserRole } from "@/hooks/useUserRole";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 
 const routeLabels: Record<string, string> = {
   dashboard: "Dashboard",
@@ -37,8 +36,7 @@ const routeLabels: Record<string, string> = {
 
 export const Breadcrumbs = () => {
   const location = useLocation();
-  const { user } = useAuth();
-  const { roles } = useUserRole(user?.id);
+  const { roles } = useEnhancedAuth();
   const userRole = roles.includes('stylist') ? 'stylist' : (roles.includes('client') ? 'client' : roles[0]);
   const pathSegments = location.pathname.split("/").filter(Boolean);
 

@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Scissors } from "lucide-react";
 
 interface ProtectedRouteProps {
@@ -10,11 +8,8 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  const { user, loading, roles, initialized } = useEnhancedAuth();
   const location = useLocation();
-
-  const loading = authLoading || roleLoading;
 
   // Wait for roles to fully load if user exists
   const isStillLoading = loading || (user && roles.length === 0);
