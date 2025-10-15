@@ -444,7 +444,7 @@ const Formulas = () => {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Client Formulas</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Client Formulas</h1>
             <p className="text-muted-foreground">View and manage your client formulas</p>
           </div>
           <div className="flex gap-2">
@@ -469,7 +469,7 @@ const Formulas = () => {
         )}
 
         {/* Keyboard shortcut hints */}
-        <div className="flex justify-between items-center text-xs text-muted-foreground">
+        <div className="flex justify-between items-center text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
           <div className="flex gap-4">
             <span>
               <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+N</kbd> New formula
@@ -500,7 +500,7 @@ const Formulas = () => {
             <CardContent className="p-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">
+                <span className="text-xs sm:text-sm font-medium">
                   Sorted by Processing Time: {processingTimeSort === "asc" ? "Shortest First" : "Longest First"}
                 </span>
               </div>
@@ -596,7 +596,7 @@ const Formulas = () => {
                 <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
                   <CardContent className="py-12">
                     <Palette className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-display font-bold mb-2">No formulas match your filters</h3>
+                    <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-2">No formulas match your filters</h3>
                     <p className="text-muted-foreground mb-4">
                       Try adjusting your search or filters to find what you're looking for
                     </p>
@@ -625,10 +625,10 @@ const Formulas = () => {
                   <Palette className="h-16 w-16 text-primary" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
-                  <span className="text-2xl" role="img" aria-label="magic">🔮</span>
+                  <span className="text-xl sm:text-2xl md:text-3xl" role="img" aria-label="magic">🔮</span>
                 </div>
               </div>
-              <h2 className="text-2xl font-display font-bold mb-2 gradient-text">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-2 gradient-text">
                 Your Formula Library Awaits!
               </h2>
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
@@ -647,8 +647,8 @@ const Formulas = () => {
                 <Plus className="h-5 w-5" />
                 Create Your First Formula
               </Button>
-              <p className="text-xs text-muted-foreground mt-4">
-                <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">Ctrl</kbd> + <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">N</kbd> for quick access
+              <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground mt-4">
+                <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">Ctrl</kbd> + <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">N</kbd> for quick access
               </p>
                 </>
               )}
@@ -682,7 +682,7 @@ const Formulas = () => {
                             aria-label={`Select ${formula.client?.full_name || 'formula'}`}
                           />
                           <div className="flex-1">
-                            <CardTitle className="text-lg">
+                            <CardTitle className="text-base sm:text-lg md:text-xl">
                               <HighlightedText text={formula.client?.full_name || "Client"} query={searchTerm} />
                             </CardTitle>
                         <CardDescription className="flex flex-wrap items-center gap-2 mt-1">
@@ -696,13 +696,13 @@ const Formulas = () => {
                             </>
                           )}
                           {formula.created_at && (
-                            <span className="text-xs">• {new Date(formula.created_at).toLocaleDateString()}</span>
+                            <span className="text-[10px] xs:text-xs">• {new Date(formula.created_at).toLocaleDateString()}</span>
                           )}
                         </CardDescription>
                         {formula.tags && formula.tags.length > 0 && (
                           <div className="flex flex-wrap gap-1 mt-2">
                             {formula.tags.map((tag: string) => (
-                              <Badge key={tag} variant="secondary" className="text-xs">
+                              <Badge key={tag} variant="secondary" className="text-[10px] xs:text-xs">
                                 {tag}
                               </Badge>
                             ))}
@@ -743,15 +743,15 @@ const Formulas = () => {
                     </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <p className="text-sm font-medium mb-1">Formula:</p>
-                    <p className="text-sm whitespace-pre-wrap text-muted-foreground">
+                    <p className="text-xs sm:text-sm font-medium mb-1">Formula:</p>
+                    <p className="text-xs sm:text-sm whitespace-pre-wrap text-muted-foreground">
                       {formula.formula_text}
                     </p>
                   </div>
                   {formula.instructions && (
                     <div className="space-y-2">
-                      <p className="text-sm font-medium mb-1">Instructions:</p>
-                      <p className="text-sm whitespace-pre-wrap text-muted-foreground">
+                      <p className="text-xs sm:text-sm font-medium mb-1">Instructions:</p>
+                      <p className="text-xs sm:text-sm whitespace-pre-wrap text-muted-foreground">
                         {formula.instructions}
                       </p>
                       <AudioGuidePlayer 
@@ -763,8 +763,8 @@ const Formulas = () => {
                   )}
                   {formula.result_notes && (
                     <div>
-                      <p className="text-sm font-medium mb-1">Notes:</p>
-                      <p className="text-sm text-muted-foreground">{formula.result_notes}</p>
+                      <p className="text-xs sm:text-sm font-medium mb-1">Notes:</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{formula.result_notes}</p>
                     </div>
                   )}
 
@@ -773,7 +773,7 @@ const Formulas = () => {
                     <div className="border-t pt-3 space-y-3">
                       {/* Processing Details */}
                       {(formula.processing_time_minutes || formula.developer_volume) && (
-                        <div className="flex flex-wrap gap-4 text-xs">
+                        <div className="flex flex-wrap gap-4 text-[10px] xs:text-xs">
                           {formula.processing_time_minutes && (
                             <div 
                               className={cn(
@@ -802,11 +802,11 @@ const Formulas = () => {
                       {/* Application Notes */}
                       {formula.application_notes && (
                         <div>
-                          <p className="text-xs font-medium mb-1 flex items-center gap-1">
+                          <p className="text-[10px] xs:text-xs font-medium mb-1 flex items-center gap-1">
                             <FileText className="h-3 w-3" />
                             Application
                           </p>
-                          <p className="text-xs text-muted-foreground pl-4">{formula.application_notes}</p>
+                          <p className="text-[10px] xs:text-xs text-muted-foreground pl-4">{formula.application_notes}</p>
                         </div>
                       )}
 
@@ -919,7 +919,7 @@ const Formulas = () => {
                               {client.full_name || "Client"}
                             </span>
                             {client.email && (
-                              <span className="text-xs text-muted-foreground">{client.email}</span>
+                              <span className="text-[10px] xs:text-xs text-muted-foreground">{client.email}</span>
                             )}
                           </div>
                         </CommandItem>
@@ -1025,7 +1025,7 @@ const Formulas = () => {
             <Accordion type="multiple" className="w-full">
               {/* Processing Details */}
               <AccordionItem value="processing">
-                <AccordionTrigger className="text-sm font-medium">
+                <AccordionTrigger className="text-xs sm:text-sm font-medium">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     Processing Details
@@ -1034,7 +1034,7 @@ const Formulas = () => {
                 <AccordionContent className="space-y-4 pt-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="processing-time" className="text-xs">
+                      <Label htmlFor="processing-time" className="text-[10px] xs:text-xs">
                         Processing Time (minutes)
                       </Label>
                       <Input

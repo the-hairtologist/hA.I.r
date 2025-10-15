@@ -581,7 +581,7 @@ export default function Clients() {
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-4xl font-display font-bold mb-2 gradient-text">Clients & Formulas</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-2 gradient-text">Clients & Formulas</h1>
             <p className="text-muted-foreground">Manage your client profiles, formulas, and preferences</p>
           </div>
           <div className="flex gap-2">
@@ -619,7 +619,7 @@ export default function Clients() {
               </DialogTrigger>
           <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-2xl gradient-text">Add a New Client</DialogTitle>
+              <DialogTitle className="text-xl sm:text-2xl md:text-3xl gradient-text">Add a New Client</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -748,7 +748,7 @@ export default function Clients() {
         />
 
         {/* Keyboard shortcut hints */}
-        <div className="flex justify-end text-xs text-muted-foreground gap-4">
+        <div className="flex justify-end text-[10px] xs:text-xs sm:text-sm text-muted-foreground gap-4">
           <span>
             <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+N</kbd> New client
           </span>
@@ -766,7 +766,7 @@ export default function Clients() {
             <CardContent className="p-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-destructive" />
-                <span className="text-sm font-medium">
+                <span className="text-xs sm:text-sm font-medium">
                   Showing at-risk clients: Not seen in {riskFilter}+ days
                 </span>
               </div>
@@ -832,7 +832,7 @@ export default function Clients() {
                 {riskFilter !== "all" ? (
                   <>
                     <User className="h-12 w-12 mx-auto mb-4 text-green-500" />
-                    <h3 className="text-lg font-display font-bold mb-2">Great News! 🎉</h3>
+                    <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-2">Great News! 🎉</h3>
                     <p className="text-muted-foreground mb-4">
                       No at-risk clients found - you're doing an amazing job keeping your clients engaged!
                     </p>
@@ -840,7 +840,7 @@ export default function Clients() {
                 ) : (
                   <>
                     <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                    <h3 className="text-lg font-display font-bold mb-2">No matches found</h3>
+                    <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-2">No matches found</h3>
                     <p className="text-muted-foreground mb-4">
                       Try adjusting your search criteria or clear the filters
                     </p>
@@ -871,10 +871,10 @@ export default function Clients() {
                   <User className="h-16 w-16 text-primary" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
-                  <span className="text-2xl" role="img" aria-label="sparkles">✨</span>
+                  <span className="text-xl sm:text-2xl md:text-3xl" role="img" aria-label="sparkles">✨</span>
                 </div>
               </div>
-              <h3 className="text-2xl font-display font-bold mb-2 gradient-text">Your Client Roster Awaits!</h3>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-2 gradient-text">Your Client Roster Awaits!</h3>
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 Build your dream client list! Track hair profiles, preferences, and formula history all in one beautiful place
               </p>
@@ -930,7 +930,7 @@ export default function Clients() {
                         </CardTitle>
                       </div>
                       {daysSince !== null && (
-                        <Badge variant={daysSince > 90 ? "destructive" : daysSince > 60 ? "secondary" : "outline"} className="text-xs">
+                        <Badge variant={daysSince > 90 ? "destructive" : daysSince > 60 ? "secondary" : "outline"} className="text-[10px] xs:text-xs">
                           {daysSince} days ago
                         </Badge>
                       )}
@@ -938,13 +938,13 @@ export default function Clients() {
                   </CardHeader>
                 <CardContent className="space-y-3 pt-4">
                   {client.email && (
-                    <div className="flex items-center gap-2 text-sm p-2 bg-primary/5 rounded-lg border-[2px] border-primary/20">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-primary/5 rounded-lg border-[2px] border-primary/20">
                       <Mail className="h-4 w-4 text-primary" />
                       <span className="truncate">{client.email}</span>
                     </div>
                   )}
                   {client.phone && (
-                    <div className="flex items-center gap-2 text-sm p-2 bg-accent/5 rounded-lg border-[2px] border-accent/20">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-accent/5 rounded-lg border-[2px] border-accent/20">
                       <Phone className="h-4 w-4 text-accent" />
                       <span>{client.phone}</span>
                     </div>
@@ -974,18 +974,18 @@ export default function Clients() {
                               )}
                             </>
                           ) : (
-                            <p className="text-xs text-muted-foreground">Never</p>
+                            <p className="text-[10px] xs:text-xs text-muted-foreground">Never</p>
                           )}
                         </div>
                       </div>
                     )}
                   
                   {client.allergies && (
-                    <div className="text-sm p-2 bg-destructive/5 rounded-lg border-[2px] border-destructive/20">
+                    <div className="text-xs sm:text-sm p-2 bg-destructive/5 rounded-lg border-[2px] border-destructive/20">
                       <span className="font-semibold text-destructive">Allergies:</span> {client.allergies}
                     </div>
                   )}
-                  <div className="text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
+                  <div className="text-xs sm:text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
                     <span className="font-semibold text-secondary">Notes: </span>
                     <span className="text-foreground">
                       {client.notes || <span className="text-muted-foreground italic">No notes</span>}
@@ -1054,7 +1054,7 @@ export default function Clients() {
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-2xl gradient-text">Client Profile</DialogTitle>
+              <DialogTitle className="text-xl sm:text-2xl md:text-3xl gradient-text">Client Profile</DialogTitle>
             </DialogHeader>
             
             <Tabs defaultValue="info" className="w-full">
@@ -1068,7 +1068,7 @@ export default function Clients() {
                 <div className="grid md:grid-cols-2 gap-6">
               {/* Client Info Form */}
               <div>
-                <h3 className="text-lg font-display font-bold mb-4 text-secondary">Client Information</h3>
+                <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-4 text-secondary">Client Information</h3>
                 <form onSubmit={handleEditClient} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="edit_full_name">Full Name *</Label>
@@ -1144,7 +1144,7 @@ export default function Clients() {
 
               {/* Formulas List */}
               <div>
-                <h3 className="text-lg font-display font-bold mb-4 text-primary flex items-center gap-2">
+                <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-4 text-primary flex items-center gap-2">
                   <FileText className="h-5 w-5" />
                   Formula History ({clientFormulas.length})
                 </h3>
@@ -1152,7 +1152,7 @@ export default function Clients() {
                 {clientFormulas.length === 0 ? (
                   <div className="text-center py-8 border-[3px] border-dashed border-muted rounded-lg bg-muted/5">
                     <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">No formulas created yet</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">No formulas created yet</p>
                   </div>
                 ) : (
                   <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
@@ -1197,7 +1197,7 @@ export default function Clients() {
               </TabsContent>
               
               <TabsContent value="appointments">
-                <p className="text-sm text-muted-foreground">Appointment history coming soon</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Appointment history coming soon</p>
               </TabsContent>
             </Tabs>
           </DialogContent>

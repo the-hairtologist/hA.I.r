@@ -672,11 +672,11 @@ const Dashboard = () => {
           <div className="mb-4 sm:mb-6 p-4 sm:p-5 md:p-6 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-foreground mb-1 flex items-center gap-2">
+                <h3 className="text-xs sm:text-sm font-bold text-foreground mb-1 flex items-center gap-2">
                   <Edit3 className="h-3.5 w-3.5 text-primary" />
                   Customize Your Dashboard
                 </h3>
-                <p className="text-[11px] sm:text-xs text-muted-foreground">
+                <p className="text-[10px] xs:text-[11px] sm:text-xs text-muted-foreground">
                   <span className="hidden sm:inline">Drag sections to reorder • Click eye icon to show/hide sections</span>
                   <span className="sm:hidden">Long-press to drag • Tap eye to toggle</span>
                 </p>
@@ -686,7 +686,7 @@ const Dashboard = () => {
                   size="sm"
                   variant="outline"
                   onClick={handleReset}
-                  className="text-xs"
+                  className="text-[10px] xs:text-xs"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
                   Reset
@@ -694,7 +694,7 @@ const Dashboard = () => {
                 <Button
                   size="sm"
                   onClick={handleSave}
-                  className="text-xs"
+                  className="text-[10px] xs:text-xs"
                 >
                   <Save className="h-3.5 w-3.5 mr-1" />
                   Done
@@ -742,33 +742,31 @@ const Dashboard = () => {
               <div className="mb-4 p-4 sm:p-5 md:p-6 rounded-xl border-2 border-border/50 bg-card/40 backdrop-blur-sm brutal-shadow-sm animate-fade-in" style={{ animationDelay: '300ms' }}>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                   <div className="space-y-0.5">
-                    <p className="text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
+                    <p className="text-[10px] xs:text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
                       <Edit3 className="h-3.5 w-3.5 text-primary" />
                       {isAdmin ? "Customize Platform Dashboard" : "Personalize Your Dashboard"}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[10px] xs:text-xs text-muted-foreground">
                       {isAdmin 
                         ? "Configure platform monitoring sections to match your oversight needs" 
                         : "Add, remove, or rearrange sections to match your workflow"
                       }
                     </p>
                   </div>
-                  <FirstTimeTooltip
-                    id="dashboard-customize"
-                    content="Drag sections to reorder, toggle visibility, and create your perfect dashboard layout. Changes save automatically!"
-                    side="left"
-                    delayMs={2000}
-                  >
+                  <div className="flex gap-2 shrink-0">
+                    {isAdmin && (
+                      <StatsToggleButton />
+                    )}
                     <Button 
                       variant="default" 
                       size="sm" 
                       onClick={() => setIsEditMode(true)}
-                      className="gap-1.5 shrink-0 w-full sm:w-auto shadow-sm h-8 text-xs"
+                      className="gap-1.5 shrink-0 w-full sm:w-auto shadow-sm h-8 text-[10px] xs:text-xs"
                     >
                       <Edit3 className="h-3 w-3" />
                       <span>Customize</span>
                     </Button>
-                  </FirstTimeTooltip>
+                  </div>
                 </div>
               </div>
             )}

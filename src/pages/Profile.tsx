@@ -100,7 +100,7 @@ const Profile = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-3xl">
         <div>
-          <h1 className="text-3xl font-display font-bold">My Profile</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold">My Profile</h1>
           <p className="text-muted-foreground">Manage your personal information</p>
         </div>
 
@@ -111,7 +111,7 @@ const Profile = () => {
           <CardContent className="flex items-center gap-6">
             <Avatar className="h-24 w-24">
               <AvatarImage src={profile?.avatar_url || ""} />
-              <AvatarFallback className="text-2xl">
+              <AvatarFallback className="text-xl sm:text-2xl md:text-3xl">
                 {profile?.full_name?.[0] || "U"}
               </AvatarFallback>
             </Avatar>
@@ -120,7 +120,7 @@ const Profile = () => {
                 <Camera className="h-4 w-4 mr-2" />
                 Change Photo
               </Button>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                 JPG, GIF or PNG. Max size 2MB
               </p>
             </div>
@@ -158,7 +158,7 @@ const Profile = () => {
                     className="pl-9"
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
                   Email cannot be changed here
                 </p>
               </div>
