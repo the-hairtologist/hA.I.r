@@ -48,7 +48,7 @@ interface AppSidebarProps {
 export function AppSidebar({ userRole }: AppSidebarProps) {
   const { state } = useSidebar();
   const { user } = useAuth();
-  const { isAdmin, isStylist } = useUserRole(user?.id);
+  const { isAdmin, isStylist, isClient } = useUserRole(user?.id);
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
@@ -85,16 +85,45 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     }`;
   };
 
-  // Get navigation items based on role
+  // Get navigation items based on role - FIXED: Proper client detection
   const adminItems = getAdminNavigationItems(isAdmin);
-  const baseItems: NavigationItem[] = (isAdmin || isStylist) 
-    ? [...stylistNavigationItems, ...adminItems]
-    : [...clientNavigationItems, ...adminItems];
+  
+  // Determine which navigation items to show based on actual role
+  const baseItems: NavigationItem[] = (() => {
+    // Admin viewing as specific role (via role switcher)
+    if (isAdmin && userRole === 'client') {
+      return [...clientNavigationItems, ...adminItems];
+    }
+    if (isAdmin && userRole === 'stylist') {
+      return [...stylistNavigationItems, ...adminItems];
+    }
+    
+    // Stylist (not in admin mode)
+    if (isStylist && !isAdmin) {
+      return [...stylistNavigationItems];
+    }
+    
+    // Client (default) - Show client items only
+    return [...clientNavigationItems];
+  })();
 
   // Get group labels based on role
-  const groupLabels = (isAdmin || isStylist)
-    ? (isAdmin ? stylistAdminGroupLabels : stylistGroupLabels)
-    : (isAdmin ? clientAdminGroupLabels : clientGroupLabels);
+  const groupLabels = (() => {
+    // Admin viewing as client
+    if (isAdmin && userRole === 'client') {
+      return clientAdminGroupLabels;
+    }
+    // Admin viewing as stylist or default admin view
+    if (isAdmin) {
+      return stylistAdminGroupLabels;
+    }
+    // Stylist
+    if (isStylist) {
+      return stylistGroupLabels;
+    }
+    // Client
+    return clientGroupLabels;
+  })();
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(baseItems as SidebarItem[], groupLabels);
 
@@ -134,8 +163,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarContent className="pb-4">
-        {/* Customize Controls */}
-        {!collapsed && (
+        {/* Customize Controls - Only for stylists and admins */}
+        {!collapsed && (isStylist || isAdmin) && (
           <div className="px-3 py-2 border-b">
             <div className="flex items-center gap-2">
               <Button
