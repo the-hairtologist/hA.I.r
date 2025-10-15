@@ -13,7 +13,7 @@ interface Props {
 }
 
 const DefaultLoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-[400px]">
+  <div className="flex items-center justify-center min-h-[min(60vh,400px)]">
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
   </div>
 );

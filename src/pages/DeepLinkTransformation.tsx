@@ -156,7 +156,7 @@ export default function DeepLinkTransformation() {
                 <img
                   src={photo.before_image_url}
                   alt="Before"
-                  className="w-full h-[400px] object-cover"
+                  className="w-full aspect-square object-cover"
                 />
               </CardContent>
             </Card>
@@ -169,7 +169,7 @@ export default function DeepLinkTransformation() {
                 <img
                   src={photo.after_image_url}
                   alt="After"
-                  className="w-full h-[400px] object-cover"
+                  className="w-full aspect-square object-cover"
                 />
               </CardContent>
             </Card>

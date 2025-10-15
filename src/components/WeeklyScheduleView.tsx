@@ -213,7 +213,7 @@ export const WeeklyScheduleView = ({
         <div className="relative w-full overflow-hidden">
           <div className={cn(
             "overflow-x-auto overflow-y-auto",
-            compact ? "max-h-[250px]" : "max-h-[300px] sm:max-h-[400px] md:max-h-[500px]"
+            compact ? "max-h-[min(40vh,250px)]" : "max-h-[min(50vh,300px)] sm:max-h-[min(60vh,400px)] md:max-h-[min(70vh,500px)]"
           )}>
           <div className="w-full">
             {/* Header with days */}

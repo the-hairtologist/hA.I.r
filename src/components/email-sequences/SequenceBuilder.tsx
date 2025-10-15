@@ -369,7 +369,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
                       <div className="border rounded-lg overflow-auto max-h-[60vh]">
                         <iframe
                           srcDoc={generatePreviewHtml(step)}
-                          className="w-full h-[500px]"
+                          className="w-full h-[min(60vh,500px)]"
                           title="Email Preview"
                           sandbox="allow-same-origin"
                         />

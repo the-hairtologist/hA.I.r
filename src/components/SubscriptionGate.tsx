@@ -21,7 +21,7 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-[min(60vh,400px)]">
         <LoadingSpinner />
       </div>
     );
@@ -68,7 +68,7 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
 
     return (
       <>
-        <div className="flex items-center justify-center min-h-[400px] p-6">
+        <div className="flex items-center justify-center min-h-[min(60vh,400px)] p-6">
           <Card className="max-w-md brutal-border border-primary brutal-shadow-md">
             <CardHeader className="text-center">
               <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 brutal-border border-primary">

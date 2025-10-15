@@ -561,7 +561,7 @@ const Knowledge = () => {
           </div>
 
           {/* Main Chat Area */}
-          <div className="min-h-[500px] md:min-h-0">
+          <div className="min-h-[min(60vh,500px)] md:min-h-0">
             <div className="window-frame h-[calc(100vh-280px)] md:h-[calc(100vh-200px)] flex flex-col bg-background">
               <div className="window-titlebar bg-gradient-to-r from-primary via-secondary to-accent">
                 <div className="flex items-center justify-between gap-2 md:gap-3">
