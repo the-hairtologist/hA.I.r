@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, Plus } from "lucide-react";
+import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
@@ -71,7 +71,7 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
     },
   ];
 
-  // Client bottom nav: Essential daily actions (booking-focused)
+  // Client bottom nav: Core working features only (coming soon features removed)
   const clientItems: NavItem[] = [
     { 
       icon: Home, 
@@ -81,18 +81,11 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       highlight: false
     },
     { 
-      icon: Plus, 
-      label: "Book", 
-      path: "/book-appointment",
-      gradient: "from-green-start to-green-end",
-      highlight: true // Primary action for clients
-    },
-    { 
       icon: Calendar, 
       label: "Appointments", 
       path: "/appointments",
       gradient: "from-cyan-start to-cyan-end",
-      highlight: false
+      highlight: true // Primary action - view and manage appointments
     },
     { 
       icon: MessageSquare, 

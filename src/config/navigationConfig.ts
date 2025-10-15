@@ -334,10 +334,10 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
   ];
 };
 
-// Client Navigation Items - Optimized for simplicity
-// Priority items shown on all devices, secondary items on larger screens
+// Client Navigation Items - Minimal working features only
+// Coming Soon features removed until implementation
 export const clientNavigationItems: NavigationItem[] = [
-  // PRIORITY (Always visible - essential client actions)
+  // MAIN (Core working features)
   { 
     id: "dashboard", 
     title: "Home", 
@@ -347,16 +347,6 @@ export const clientNavigationItems: NavigationItem[] = [
     group: "main", 
     color: "text-purple-400 dark:text-purple-300",
     description: "Your dashboard"
-  },
-  { 
-    id: "book-appointment", 
-    title: "Book", 
-    url: "/book-appointment", 
-    icon: Plus, 
-    gradient: "bg-[image:var(--gradient-green-emerald)]", 
-    group: "main", 
-    color: "text-emerald-400 dark:text-emerald-300",
-    description: "Schedule appointment"
   },
   { 
     id: "my-appointments", 
@@ -379,7 +369,7 @@ export const clientNavigationItems: NavigationItem[] = [
     description: "Chat with stylist"
   },
   
-  // SECONDARY (Desktop/tablet only - nice to have)
+  // INFO (Client records - working)
   { 
     id: "my-formulas", 
     title: "Hair History", 
@@ -389,16 +379,6 @@ export const clientNavigationItems: NavigationItem[] = [
     group: "info", 
     color: "text-purple-400 dark:text-purple-300",
     description: "Your formulas"
-  },
-  { 
-    id: "favorites", 
-    title: "Favorites", 
-    url: "/favorites", 
-    icon: Heart, 
-    gradient: "bg-[image:var(--gradient-pink-rose)]", 
-    group: "info", 
-    color: "text-pink-400 dark:text-pink-300",
-    description: "Saved stylists"
   },
   { 
     id: "notifications", 
@@ -411,7 +391,7 @@ export const clientNavigationItems: NavigationItem[] = [
     description: "Updates"
   },
   
-  // ACCOUNT (Desktop/tablet - settings & profile)
+  // ACCOUNT (Settings & profile - working)
   { 
     id: "profile", 
     title: "Profile", 
@@ -433,7 +413,7 @@ export const clientNavigationItems: NavigationItem[] = [
     description: "Preferences"
   },
   
-  // HELP (Desktop only - least urgent)
+  // HELP (Support resources - working)
   { 
     id: "knowledge", 
     title: "Hair Tips", 
@@ -456,6 +436,11 @@ export const clientNavigationItems: NavigationItem[] = [
   },
 ];
 
+// REMOVED ITEMS (Coming Soon - will be re-added when implemented):
+// - Book Appointment (broken primary action)
+// - Favorites (broken feature)
+// These will be added back once the features are built
+
 // Group Labels
 export const stylistGroupLabels: NavigationGroup = {
   main: "Main",
@@ -474,7 +459,7 @@ export const stylistAdminGroupLabels: NavigationGroup = {
 };
 
 export const clientGroupLabels: NavigationGroup = {
-  main: "Quick Actions",
+  main: "Main",
   info: "My Info",
   account: "Account",
   help: "Resources",
