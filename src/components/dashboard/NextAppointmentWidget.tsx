@@ -50,7 +50,7 @@ export function NextAppointmentWidget() {
             service_type,
             stylist_id,
             notes,
-            stylist_profiles!inner(full_name)
+            stylist_profiles!inner(user:profiles(full_name))
           `)
           .eq("client_id", clientProfile.id)
           .gte("appointment_date", now)
@@ -64,7 +64,7 @@ export function NextAppointmentWidget() {
         if (data) {
           setAppointment({
             ...data,
-            stylist_name: (data.stylist_profiles as any)?.full_name || "Your Stylist"
+            stylist_name: (data.stylist_profiles as any)?.user?.full_name || "Your Stylist"
           });
         }
       } catch (error) {
