@@ -103,7 +103,7 @@ const App = () => {
                 <RoleSwitchProtection />
             <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
               <Routes>
-                <AppRoutes />
+                {AppRoutes()}
               </Routes>
             </Suspense>
               </EnhancedAuthProvider>
