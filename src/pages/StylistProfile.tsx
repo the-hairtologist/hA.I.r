@@ -41,10 +41,6 @@ const StylistProfile = () => {
   }, [stylistId]);
 
   const loadStylist = async () => {
-    // Feature coming soon - redirect to coming soon page
-    navigate("/coming-soon");
-    return;
-    
     try {
       // Use safe public view to prevent exposure of sensitive business data
       // View excludes: commission_rate, color_line, buffer_time_minutes, weekly_schedule
