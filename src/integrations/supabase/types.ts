@@ -2367,6 +2367,54 @@ export type Database = {
         }
         Relationships: []
       }
+      service_templates: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          services: string[]
+          stylist_id: string
+          total_duration: number
+          total_price: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          services?: string[]
+          stylist_id: string
+          total_duration?: number
+          total_price?: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          services?: string[]
+          stylist_id?: string
+          total_duration?: number
+          total_price?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_type_colors: {
         Row: {
           color: string
