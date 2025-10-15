@@ -235,7 +235,11 @@ class HealthMonitorSystem {
   }
 
   private handlePerformanceDegradation(metrics: HealthMetrics) {
-    logger.warn('Performance degradation detected', 'HealthMonitor', metrics);
+    logger.warn('Performance degradation detected', 'HealthMonitor', {
+      memoryUsage: metrics.memoryUsage,
+      apiLatency: metrics.apiLatency,
+      timestamp: metrics.timestamp
+    });
 
     if (metrics.memoryUsage > 0.85) {
       toast.warning('High memory usage detected. Clearing caches...');

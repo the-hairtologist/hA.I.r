@@ -13,24 +13,7 @@
 import { toast } from "sonner";
 import { log } from "./logger";
 import { PostgrestError } from "@supabase/supabase-js";
-
-/**
- * Application error interface with additional metadata
- */
-export interface AppError {
-  /** Human-readable error message */
-  message: string;
-  /** Error code for programmatic handling */
-  code?: string;
-  /** Context where the error occurred */
-  context?: string;
-  /** Original error object */
-  originalError?: any;
-  /** Whether the operation can be retried */
-  retryable?: boolean;
-  /** HTTP status code if applicable */
-  statusCode?: number;
-}
+import type { AppError, ErrorContext, RetryOptions, ErrorHandlerOptions } from "@/types/errors";
 
 /**
  * Maps common error codes to user-friendly messages
@@ -69,24 +52,27 @@ const ERROR_MESSAGES: Record<string, string> = {
  * @param error - Error object of any type
  * @returns User-friendly error message
  */
-export function getErrorMessage(error: any): string {
+export function getErrorMessage(error: unknown): string {
   // Handle null/undefined
   if (!error) return ERROR_MESSAGES.unknown;
 
+  // Type guard for error objects
+  const err = error as Record<string, unknown>;
+
   // Handle Supabase errors
-  if (error.code) {
-    return ERROR_MESSAGES[error.code] || error.message || ERROR_MESSAGES.unknown;
+  if (typeof err.code === 'string') {
+    return ERROR_MESSAGES[err.code] || (err.message as string) || ERROR_MESSAGES.unknown;
   }
 
   // Handle PostgreSQL errors
-  if (error.message && error.message.includes('violates')) {
-    if (error.message.includes('unique')) return ERROR_MESSAGES['23505'];
-    if (error.message.includes('foreign key')) return ERROR_MESSAGES['23503'];
+  if (typeof err.message === 'string' && err.message.includes('violates')) {
+    if (err.message.includes('unique')) return ERROR_MESSAGES['23505'];
+    if (err.message.includes('foreign key')) return ERROR_MESSAGES['23503'];
   }
 
   // Handle auth errors
-  if (error.message) {
-    const msg = error.message.toLowerCase();
+  if (typeof err.message === 'string') {
+    const msg = err.message.toLowerCase();
     if (msg.includes('invalid login')) return ERROR_MESSAGES.invalid_credentials;
     if (msg.includes('already registered')) return ERROR_MESSAGES.email_exists;
     if (msg.includes('weak password')) return ERROR_MESSAGES.weak_password;
@@ -94,7 +80,9 @@ export function getErrorMessage(error: any): string {
   }
 
   // Return the error message or fallback
-  return error.message || error.toString() || ERROR_MESSAGES.unknown;
+  if (typeof err.message === 'string') return err.message;
+  if (error instanceof Error) return error.message;
+  return String(error) || ERROR_MESSAGES.unknown;
 }
 
 /**
@@ -118,13 +106,11 @@ export function getErrorMessage(error: any): string {
  * }
  * ```
  */
-export function handleError(error: any, context?: string, options?: {
-  showToast?: boolean;
-  logError?: boolean;
-  customMessage?: string;
-  retryable?: boolean;
-  onRetry?: () => void;
-}): AppError {
+export function handleError(
+  error: unknown,
+  context?: string,
+  options?: ErrorHandlerOptions
+): AppError {
   const {
     showToast = true,
     logError = true,
@@ -136,13 +122,14 @@ export function handleError(error: any, context?: string, options?: {
   const errorMessage = customMessage || getErrorMessage(error);
   const isRetryable = retryable || isNetworkError(error);
 
+  const err = error as Record<string, unknown>;
   const appError: AppError = {
     message: errorMessage,
-    code: error.code,
+    code: typeof err.code === 'string' ? err.code : undefined,
     context,
-    originalError: error,
+    originalError: error instanceof Error ? error : undefined,
     retryable: isRetryable,
-    statusCode: error.statusCode || error.status,
+    statusCode: typeof err.statusCode === 'number' ? err.statusCode : typeof err.status === 'number' ? err.status : undefined,
   };
 
   // Log the error
@@ -171,11 +158,12 @@ export function handleError(error: any, context?: string, options?: {
 /**
  * Checks if error is a network error
  */
-function isNetworkError(error: any): boolean {
-  return (
-    error instanceof TypeError && 
-    (error.message.includes('fetch') || error.message.includes('network'))
-  ) || error.message?.toLowerCase().includes('timeout');
+function isNetworkError(error: unknown): boolean {
+  if (error instanceof TypeError) {
+    return error.message.includes('fetch') || error.message.includes('network');
+  }
+  const err = error as Record<string, unknown>;
+  return typeof err.message === 'string' && err.message.toLowerCase().includes('timeout');
 }
 
 /**
@@ -261,12 +249,7 @@ export function createSafeHandler<T extends (...args: any[]) => Promise<void>>(
  */
 export async function withRetry<T>(
   operation: () => Promise<T>,
-  options: {
-    maxRetries?: number;
-    delay?: number;
-    backoff?: boolean;
-    onRetry?: (attempt: number) => void;
-  } = {}
+  options: RetryOptions = {}
 ): Promise<T> {
   const {
     maxRetries = 3,

@@ -154,9 +154,14 @@ class PerformanceMonitor {
 
   report() {
     const score = this.getScore();
+    const metrics = this.getMetrics();
     logger.info('Performance Report', 'performanceMonitor', {
       score,
-      metrics: this.getMetrics(),
+      fcp: metrics.fcp,
+      lcp: metrics.lcp,
+      fid: metrics.fid,
+      cls: metrics.cls,
+      ttfb: metrics.ttfb,
       grade: score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F'
     });
     

@@ -3,27 +3,31 @@
  * Provides consistent logging across the application
  */
 
-type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+import type { LogLevel, LogEntry, LogContext, LoggerInterface } from '@/types/logger';
 
-interface LogEntry {
-  timestamp: string;
-  level: LogLevel;
-  message: string;
-  label?: string;
-  context?: any;
-}
-
-class Logger {
+class Logger implements LoggerInterface {
   private logs: LogEntry[] = [];
   private maxLogs = 1000;
 
-  private log(level: LogLevel, message: string, label?: string, context?: any) {
+  private log(level: LogLevel, message: string, label?: string, context?: LogContext | Error | unknown) {
+    // Convert Error objects to LogContext
+    let logContext: LogContext | undefined;
+    if (context instanceof Error) {
+      logContext = {
+        name: context.name,
+        message: context.message,
+        stack: context.stack,
+      };
+    } else if (context && typeof context === 'object') {
+      logContext = context as LogContext;
+    }
+
     const entry: LogEntry = {
       timestamp: new Date().toISOString(),
       level,
       message,
       label,
-      context,
+      context: logContext,
     };
 
     this.logs.push(entry);
@@ -39,33 +43,33 @@ class Logger {
 
     switch (level) {
       case 'DEBUG':
-        console.debug(fullMessage, context);
+        console.debug(fullMessage, logContext);
         break;
       case 'INFO':
-        console.info(fullMessage, context);
+        console.info(fullMessage, logContext);
         break;
       case 'WARN':
-        console.warn(fullMessage, context);
+        console.warn(fullMessage, logContext);
         break;
       case 'ERROR':
-        console.error(fullMessage, context);
+        console.error(fullMessage, logContext);
         break;
     }
   }
 
-  debug(message: string, label?: string, context?: any) {
+  debug(message: string, label?: string, context?: LogContext) {
     this.log('DEBUG', message, label, context);
   }
 
-  info(message: string, label?: string, context?: any) {
+  info(message: string, label?: string, context?: LogContext) {
     this.log('INFO', message, label, context);
   }
 
-  warn(message: string, label?: string, context?: any) {
+  warn(message: string, label?: string, context?: LogContext) {
     this.log('WARN', message, label, context);
   }
 
-  error(message: string, label?: string, error?: any) {
+  error(message: string, label?: string, error?: Error | LogContext | unknown) {
     this.log('ERROR', message, label, error);
   }
 
