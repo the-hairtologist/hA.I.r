@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2, Info, Palette } from "lucide-react";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
+import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -265,14 +266,17 @@ const Services = () => {
                 <DollarSign className="h-6 w-6 text-primary flex-shrink-0" />
                 <h1 className="text-2xl font-bold font-display truncate">Service Pricing</h1>
               </div>
+              </div>
             </div>
-            <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-              <DialogTrigger asChild>
-                <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Service
-                </Button>
-              </DialogTrigger>
+            <div className="flex items-center gap-2 flex-wrap">
+              <ServiceTemplatesDialog />
+              <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+                <DialogTrigger asChild>
+                  <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Service
+                  </Button>
+                </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>{editingService ? "Edit Service" : "Add New Service"}</DialogTitle>

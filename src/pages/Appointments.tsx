@@ -27,6 +27,8 @@ import { ContextualAI } from "@/components/ContextualAI";
 import { SmartSchedulingSuggestions } from "@/components/SmartSchedulingSuggestions";
 import { showCelebration } from "@/components/CelebrationToast";
 import { QuickReviewButton } from "@/components/QuickReviewButton";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
+import { RescheduleDialog } from "@/components/RescheduleDialog";
 
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 
@@ -52,6 +54,8 @@ const Appointments = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
   const [rebookAppointment, setRebookAppointment] = useState<any>(null);
+  const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
+  const [rescheduleAppointment, setRescheduleAppointment] = useState<any>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [services, setServices] = useState<any[]>([]);
   const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
@@ -824,6 +828,15 @@ const Appointments = () => {
         appointment={rebookAppointment}
         onSuccess={loadData}
       />
+
+      <RescheduleDialog
+        open={rescheduleDialogOpen}
+        onOpenChange={setRescheduleDialogOpen}
+        appointment={rescheduleAppointment}
+        onSuccess={loadData}
+      />
+
+      <WaitlistDialog />
 
       {/* Quick Review Button - shows for completed client appointments */}
       {userRole === "client" && selectedAppointment?.status === "completed" && selectedAppointment?.stylist_id && (

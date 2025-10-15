@@ -26,6 +26,10 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
+import { AppointmentTimerWidget } from "@/components/AppointmentTimerWidget";
+import { BirthdayAlertsWidget } from "@/components/BirthdayAlertsWidget";
+import { StatsToggleButton } from "@/components/admin/StatsToggleButton";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
 
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
@@ -91,6 +95,8 @@ const Dashboard = () => {
   // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
+    { id: "appointment-timer", title: "Session Timer", component: "AppointmentTimer", enabled: true },
+    { id: "birthday-alerts", title: "Client Birthdays", component: "BirthdayAlerts", enabled: true },
     { id: "commission-tracker", title: "Commission Earnings", component: "CommissionTracker", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
     { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: false },
@@ -533,6 +539,10 @@ const Dashboard = () => {
         ) : null;
       case "LoyaltyProgress":
         return (userRole === "client" || isAdmin) ? <LoyaltyProgressWidget /> : null;
+      case "AppointmentTimer":
+        return (userRole === "stylist" || isAdmin) ? <AppointmentTimerWidget /> : null;
+      case "BirthdayAlerts":
+        return (userRole === "stylist" || isAdmin) ? <BirthdayAlertsWidget /> : null;
       case "CommissionTracker":
         return (userRole === "stylist" || isAdmin) ? <CommissionTrackerWidget /> : null;
       case "LiveKPICards":

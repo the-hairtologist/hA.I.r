@@ -31,6 +31,8 @@ import { HairMemoryTimeline } from "@/components/HairMemoryTimeline";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { ClientHistoryTimeline } from "@/components/ClientHistoryTimeline";
 import { ClientCSVImport } from "@/components/ClientCSVImport";
+import { BulkActionsBar } from "@/components/admin/BulkActionsBar";
+import { CSVImportDialog } from "@/components/admin/CSVImportDialog";
 
 interface ClientProfile {
   id: string;
@@ -568,9 +570,13 @@ export default function Clients() {
             Back
           </Button>
         </div>
+        
         {/* CSV Import - Week 2 Feature */}
         {stylistId && (
-          <ClientCSVImport stylistId={stylistId} onImportComplete={loadClients} />
+          <>
+            <ClientCSVImport stylistId={stylistId} onImportComplete={loadClients} />
+            <CSVImportDialog />
+          </>
         )}
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
@@ -595,6 +601,14 @@ export default function Clients() {
             >
               <FileText className="h-4 w-4" />
               Formulas
+            </Button>
+            <Button 
+              onClick={() => setInviteDialogOpen(true)} 
+              variant="outline"
+              className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+            >
+              <UserPlus className="h-4 w-4" />
+              Invite Client
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
@@ -804,7 +818,15 @@ export default function Clients() {
         </div>
 
         {/* Bulk Actions Bar */}
-        {selectedCount > 0 && (
+        <BulkActionsBar
+          selectedIds={Array.from(selectedIds)}
+          onClearSelection={clearSelection}
+          onRefresh={loadClients}
+          type="clients"
+        />
+
+        {/* Legacy Bulk Actions (keeping for now) */}
+        {false && selectedCount > 0 && (
           <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] bg-primary/5 mb-6">
             <CardContent className="p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-4">
