@@ -58,8 +58,8 @@ export const DataExport = () => {
         <div className="flex items-start space-x-3">
           <FileJson className="h-5 w-5 text-primary mt-0.5" />
           <div className="flex-1">
-            <h3 className="text-lg font-semibold">Export Your Data</h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h3 className="text-base sm:text-lg lg:text-xl font-semibold">Export Your Data</h3>
+            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground mt-1">
               Download a complete copy of all your personal data stored in our system. 
               This includes your profile, appointments, messages, formulas, and more.
             </p>
@@ -67,8 +67,8 @@ export const DataExport = () => {
         </div>
 
         <div className="bg-muted p-4 rounded-lg space-y-2">
-          <p className="text-sm font-medium">Your export will include:</p>
-          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm font-medium">Your export will include:</p>
+          <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-muted-foreground">
             <li>Profile information and settings</li>
             <li>Appointment history</li>
             <li>Hair formulas (stylists only)</li>
@@ -81,7 +81,7 @@ export const DataExport = () => {
         </div>
 
         <div className="flex items-center justify-between pt-2">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[11px] sm:text-xs text-muted-foreground">
             Format: JSON • Compliant with GDPR Article 20
           </p>
           <Button onClick={handleExportData} disabled={isExporting}>

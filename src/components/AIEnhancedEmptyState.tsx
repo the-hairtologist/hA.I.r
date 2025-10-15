@@ -98,8 +98,8 @@ export const AIEnhancedEmptyState = ({
 
           {/* Text */}
           <div className="space-y-2">
-            <h3 className="text-xl font-display font-bold">{title}</h3>
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-bold">{title}</h3>
+            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground">{description}</p>
           </div>
 
           {/* AI Suggestions */}
@@ -109,7 +109,7 @@ export const AIEnhancedEmptyState = ({
             </div>
           ) : suggestions.length > 0 && (
             <div className="space-y-2 pt-2">
-              <div className="flex items-center gap-2 justify-center text-xs text-muted-foreground">
+              <div className="flex items-center gap-2 justify-center text-[11px] sm:text-xs text-muted-foreground">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
                 <span className="font-medium">AI Tips</span>
               </div>
@@ -118,7 +118,7 @@ export const AIEnhancedEmptyState = ({
                   key={idx}
                   className="p-3 rounded-lg border-2 border-border bg-background/50 hover:border-primary/30 transition-all text-left"
                 >
-                  <p className="text-xs text-foreground">{suggestion.text}</p>
+                  <p className="text-[11px] sm:text-xs lg:text-sm text-foreground">{suggestion.text}</p>
                 </div>
               ))}
             </div>

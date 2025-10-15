@@ -129,10 +129,15 @@ const App = () => {
   useEffect(() => {
     const initializeSystems = async () => {
       try {
+        // Initialize cross-platform optimizer
         const { crossPlatformOptimizer } = await import('@/lib/platform/CrossPlatformOptimizer');
         await crossPlatformOptimizer.initialize();
+        
+        // Initialize self-healing system
+        const { selfHealing } = await import('@/lib/selfHealing');
+        await selfHealing.initialize();
       } catch (error) {
-        // Optimizer will retry on next load
+        // Systems will retry on next load
       }
     };
     

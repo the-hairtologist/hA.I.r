@@ -99,7 +99,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl p-0 gap-0">
         <DialogHeader className="px-4 pt-4 pb-0">
-          <DialogTitle className="flex items-center gap-2 text-base">
+          <DialogTitle className="flex items-center gap-2 text-sm sm:text-base lg:text-lg">
             <Command className="h-4 w-4" />
             Quick Navigation
             <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
@@ -121,7 +121,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         <ScrollArea className="max-h-[min(60vh,400px)] overflow-y-auto">
           <div className="px-2 pb-4">
             {filteredItems.length === 0 ? (
-              <div className="py-8 text-center text-sm text-muted-foreground">
+              <div className="py-8 text-center text-xs sm:text-sm text-muted-foreground">
                 No results found
               </div>
             ) : (
@@ -144,7 +144,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm">{item.title}</span>
+                          <span className="font-medium text-xs sm:text-sm">{item.title}</span>
                           {item.comingSoon && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
                               SOON
@@ -152,12 +152,12 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                           )}
                         </div>
                         {item.description && (
-                          <p className="text-xs text-muted-foreground truncate">
+                          <p className="text-[11px] sm:text-xs text-muted-foreground truncate">
                             {item.description}
                           </p>
                         )}
                       </div>
-                      <div className="flex-shrink-0 text-xs text-muted-foreground">
+                      <div className="flex-shrink-0 text-[11px] sm:text-xs text-muted-foreground">
                         {item.url}
                       </div>
                     </button>

@@ -69,8 +69,8 @@ export const AccountDeletion = () => {
         <div className="flex items-start space-x-3">
           <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
           <div>
-            <h3 className="text-lg font-semibold text-destructive">Delete Account</h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-destructive">Delete Account</h3>
+            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground mt-1">
               Permanently delete your account and all associated data.
             </p>
           </div>
@@ -93,7 +93,7 @@ export const AccountDeletion = () => {
                 <p className="font-semibold text-foreground">
                   This action cannot be undone. This will permanently delete:
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-sm">
+                <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
                   <li>Your profile and account information</li>
                   <li>All appointments and scheduling history</li>
                   <li>Hair formulas and client notes (for stylists)</li>
@@ -103,8 +103,8 @@ export const AccountDeletion = () => {
                 </ul>
 
                 <div className="bg-muted p-4 rounded-lg space-y-2">
-                  <p className="text-sm font-medium text-foreground">What will be retained:</p>
-                  <ul className="list-disc list-inside space-y-1 text-sm">
+                  <p className="text-xs sm:text-sm font-medium text-foreground">What will be retained:</p>
+                  <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
                     <li>Financial records (7 years for tax compliance)</li>
                     <li>Anonymized analytics data</li>
                     <li>Legal records if involved in disputes</li>
@@ -113,7 +113,7 @@ export const AccountDeletion = () => {
 
                 <div className="space-y-3 pt-2">
                   <div className="space-y-2">
-                    <Label htmlFor="confirm-delete" className="text-sm">
+                    <Label htmlFor="confirm-delete" className="text-xs sm:text-sm">
                       Type <strong>DELETE</strong> to confirm:
                     </Label>
                     <Input
@@ -133,7 +133,7 @@ export const AccountDeletion = () => {
                     />
                     <Label
                       htmlFor="understand"
-                      className="text-sm font-normal cursor-pointer leading-tight"
+                      className="text-xs sm:text-sm font-normal cursor-pointer leading-tight"
                     >
                       I understand that this action is permanent and cannot be reversed. 
                       I will receive a confirmation email within 72 hours.

@@ -23,7 +23,7 @@ export const AIContextPanel = ({
   return (
     <Card className="brutal-border bg-gradient-to-br from-primary/5 to-accent/5">
       <CardHeader>
-        <CardTitle className="text-sm font-display flex items-center gap-2">
+        <CardTitle className="text-xs sm:text-sm lg:text-base font-display flex items-center gap-2">
           <Brain className="h-4 w-4 text-primary" />
           AI Context Data
         </CardTitle>
@@ -34,19 +34,19 @@ export const AIContextPanel = ({
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <User className="h-4 w-4 text-secondary" />
-              <span className="text-sm font-semibold">{clientContext.full_name}</span>
-              <Badge variant="secondary" className="text-xs">Client</Badge>
+              <span className="text-xs sm:text-sm font-semibold">{clientContext.full_name}</span>
+              <Badge variant="secondary" className="text-[11px] sm:text-xs">Client</Badge>
             </div>
 
             {clientContext.hair_type && (
-              <div className="text-xs">
+              <div className="text-[11px] sm:text-xs">
                 <span className="text-muted-foreground">Hair Type:</span>{" "}
                 <span className="font-medium">{clientContext.hair_type}</span>
               </div>
             )}
 
             {clientContext.hair_goals && (
-              <div className="text-xs">
+              <div className="text-[11px] sm:text-xs">
                 <Target className="h-3 w-3 inline mr-1 text-accent" />
                 <span className="text-muted-foreground">Goals:</span>{" "}
                 <span className="font-medium">{clientContext.hair_goals}</span>
@@ -54,7 +54,7 @@ export const AIContextPanel = ({
             )}
 
             {clientContext.allergies && (
-              <div className="text-xs bg-destructive/10 p-2 rounded-lg border-2 border-destructive/20">
+              <div className="text-[11px] sm:text-xs bg-destructive/10 p-2 rounded-lg border-2 border-destructive/20">
                 <AlertTriangle className="h-3 w-3 inline mr-1 text-destructive" />
                 <span className="text-destructive font-semibold">Allergies:</span>{" "}
                 <span className="text-destructive">{clientContext.allergies}</span>
@@ -62,14 +62,14 @@ export const AIContextPanel = ({
             )}
 
             {clientContext.sensitivity_notes && (
-              <div className="text-xs">
+              <div className="text-[11px] sm:text-xs">
                 <span className="text-muted-foreground">Sensitivities:</span>{" "}
                 <span className="font-medium">{clientContext.sensitivity_notes}</span>
               </div>
             )}
 
             {clientContext.recentFormulas?.length > 0 && (
-              <div className="text-xs space-y-1">
+              <div className="text-[11px] sm:text-xs space-y-1">
                 <div className="flex items-center gap-1">
                   <History className="h-3 w-3 text-primary" />
                   <span className="font-semibold">Recent Formulas ({clientContext.recentFormulas.length})</span>
@@ -83,7 +83,7 @@ export const AIContextPanel = ({
             )}
 
             {clientContext.client_since && (
-              <div className="text-xs text-muted-foreground">
+              <div className="text-[11px] sm:text-xs text-muted-foreground">
                 Client since {new Date(clientContext.client_since).toLocaleDateString()}
               </div>
             )}
@@ -105,32 +105,32 @@ export const AIContextPanel = ({
           <div className="space-y-3 pt-3 border-t-2 border-border">
             <div className="flex items-center gap-2">
               <Scissors className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold">Your Profile</span>
+              <span className="text-xs sm:text-sm font-semibold">Your Profile</span>
             </div>
 
             {stylistContext.business_name && (
-              <div className="text-xs">
+              <div className="text-[11px] sm:text-xs">
                 <span className="text-muted-foreground">Business:</span>{" "}
                 <span className="font-medium">{stylistContext.business_name}</span>
               </div>
             )}
 
             {stylistContext.color_line && (
-              <div className="text-xs">
+              <div className="text-[11px] sm:text-xs">
                 <span className="text-muted-foreground">Preferred Line:</span>{" "}
-                <Badge variant="secondary" className="text-xs">{stylistContext.color_line}</Badge>
+                <Badge variant="secondary" className="text-[11px] sm:text-xs">{stylistContext.color_line}</Badge>
               </div>
             )}
 
             {stylistContext.specialty && (
-              <div className="text-xs">
+              <div className="text-[11px] sm:text-xs">
                 <span className="text-muted-foreground">Specialty:</span>{" "}
                 <span className="font-medium">{stylistContext.specialty}</span>
               </div>
             )}
 
             {stylistContext.years_experience && (
-              <div className="text-xs text-muted-foreground">
+              <div className="text-[11px] sm:text-xs text-muted-foreground">
                 {stylistContext.years_experience} years of experience
               </div>
             )}
@@ -138,7 +138,7 @@ export const AIContextPanel = ({
         )}
 
         {hasContext && (
-          <div className="text-xs text-muted-foreground pt-2 border-t border-border">
+          <div className="text-[11px] sm:text-xs text-muted-foreground pt-2 border-t border-border">
             <Brain className="h-3 w-3 inline mr-1" />
             AI will use this context to personalize all responses
           </div>

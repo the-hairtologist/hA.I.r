@@ -146,17 +146,17 @@ export function BirthdayAlertsWidget() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
+        <CardTitle className="flex items-center gap-2 text-sm sm:text-base lg:text-lg">
           <Cake className="h-5 w-5 text-accent" />
           Upcoming Birthdays
         </CardTitle>
       </CardHeader>
       <CardContent>
         {upcomingBirthdays.length === 0 ? (
-          <div className="text-center py-8 text-sm text-muted-foreground space-y-2">
+          <div className="text-center py-8 text-xs sm:text-sm text-muted-foreground space-y-2">
             <Gift className="h-8 w-8 mx-auto mb-2 opacity-50" />
             <p className="font-medium">No upcoming birthdays</p>
-            <p className="text-xs">Add birthdays to client profiles to see alerts here</p>
+            <p className="text-[11px] sm:text-xs">Add birthdays to client profiles to see alerts here</p>
             <Button
               variant="outline"
               size="sm"
@@ -174,10 +174,10 @@ export function BirthdayAlertsWidget() {
                 className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">
+                  <p className="font-medium text-xs sm:text-sm truncate">
                     {client.full_name}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     {format(new Date(client.birthday), "MMMM d")}
                   </p>
                 </div>

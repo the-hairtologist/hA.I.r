@@ -106,17 +106,17 @@ export const CelebrationAnimation = ({
           <div className="text-8xl animate-bounce mb-4">{emoji}</div>
           
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold gradient-text">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold gradient-text">
               {title}
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground">
               {message}
             </p>
           </div>
 
           {discountCode && (
             <div className="space-y-4 pt-4">
-              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground">
                 <TrendingUp className="h-4 w-4 text-success" />
                 <span>You've earned a special reward!</span>
               </div>
@@ -125,15 +125,15 @@ export const CelebrationAnimation = ({
                 <div className="space-y-3">
                   <div className="flex items-center justify-center gap-2">
                     <Sparkles className="h-5 w-5 text-primary" />
-                    <p className="text-sm font-semibold">Discount Code</p>
+                    <p className="text-xs sm:text-sm font-semibold">Discount Code</p>
                   </div>
                   
-                  <div className="font-mono text-2xl font-bold tracking-wider bg-background px-4 py-3 rounded brutal-border-subtle">
+                  <div className="font-mono text-xl sm:text-2xl lg:text-3xl font-bold tracking-wider bg-background px-4 py-3 rounded brutal-border-subtle">
                     {discountCode}
                   </div>
                   
                   {discountAmount && (
-                    <p className="text-lg font-bold text-success">
+                    <p className="text-base sm:text-lg lg:text-xl font-bold text-success">
                       ${discountAmount} OFF
                     </p>
                   )}
