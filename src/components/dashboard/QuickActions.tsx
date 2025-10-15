@@ -46,8 +46,8 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
     },
     {
       id: "schedule",
-      label: "Today's Schedule",
-      description: "View appointments",
+      label: "Appointments",
+      description: "View your schedule",
       icon: Calendar,
       route: "/appointments",
       gradient: "from-blue-500 to-cyan-500",

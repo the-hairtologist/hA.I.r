@@ -32,7 +32,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       gradient: "from-purple-start to-purple-end",
     },
     {
-      label: "New Client",
+      label: "Add Client",
       icon: Users,
       onClick: () => {
         haptic.tap();
@@ -42,7 +42,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       gradient: "from-green-start to-green-end",
     },
     {
-      label: "New Appointment",
+      label: "Book Appointment",
       icon: Calendar,
       onClick: () => {
         haptic.tap();

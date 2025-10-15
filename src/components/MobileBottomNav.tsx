@@ -34,7 +34,7 @@ export const MobileBottomNav = () => {
   const stylistItems: NavItem[] = [
     { 
       icon: Calendar, 
-      label: "Schedule", 
+      label: "Appointments", 
       path: "/appointments",
       gradient: "from-cyan-start to-cyan-end",
       highlight: false
@@ -81,7 +81,7 @@ export const MobileBottomNav = () => {
     },
     { 
       icon: Plus, 
-      label: "Book", 
+      label: "Book Now", 
       path: "/book-appointment",
       gradient: "from-emerald-start to-emerald-end",
       highlight: true // PRIMARY ACTION for clients
@@ -106,7 +106,7 @@ export const MobileBottomNav = () => {
     },
     { 
       icon: Calendar, 
-      label: "Calendar", 
+      label: "Schedule", 
       path: "/schedule",
       gradient: "from-cyan-start to-cyan-end",
       highlight: false
