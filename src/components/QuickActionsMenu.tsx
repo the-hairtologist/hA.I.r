@@ -146,15 +146,15 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
             </ContextMenuItem>
             <ContextMenuSeparator />
             <ContextMenuItem onClick={() => handleAction("complete")}>
-              <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+              <CheckCircle className="mr-2 h-4 w-4 text-success" />
               Mark as Completed
             </ContextMenuItem>
             <ContextMenuItem onClick={() => handleAction("cancel")}>
-              <XCircle className="mr-2 h-4 w-4 text-red-500" />
+              <XCircle className="mr-2 h-4 w-4 text-destructive" />
               Cancel Appointment
             </ContextMenuItem>
             <ContextMenuSeparator />
-            <ContextMenuItem onClick={() => handleAction("delete")} className="text-red-500">
+            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive">
               <Trash2 className="mr-2 h-4 w-4" />
               Delete
             </ContextMenuItem>
@@ -192,7 +192,7 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
               </ContextMenuSubContent>
             </ContextMenuSub>
             <ContextMenuSeparator />
-            <ContextMenuItem onClick={() => handleAction("delete")} className="text-red-500">
+            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive">
               <Trash2 className="mr-2 h-4 w-4" />
               Delete Client
             </ContextMenuItem>
@@ -203,7 +203,7 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
         {type === "task" && (
           <>
             <ContextMenuItem onClick={() => handleAction("complete")}>
-              <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+              <CheckCircle className="mr-2 h-4 w-4 text-success" />
               Mark as Done
               <ContextMenuShortcut>⌘D</ContextMenuShortcut>
             </ContextMenuItem>
@@ -212,7 +212,7 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
               Edit Task
             </ContextMenuItem>
             <ContextMenuSeparator />
-            <ContextMenuItem onClick={() => handleAction("delete")} className="text-red-500">
+            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive">
               <Trash2 className="mr-2 h-4 w-4" />
               Delete Task
             </ContextMenuItem>

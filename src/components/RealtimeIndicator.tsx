@@ -26,16 +26,16 @@ export function RealtimeIndicator({ isConnected, className }: RealtimeIndicatorP
         <div 
           className={cn(
             "w-2 h-2 rounded-full transition-colors duration-300",
-            isConnected ? "bg-green-500" : "bg-gray-400"
+            isConnected ? "bg-success" : "bg-muted"
           )}
         />
         {isConnected && pulse && (
-          <div className="absolute inset-0 w-2 h-2 rounded-full bg-green-500 animate-ping" />
+          <div className="absolute inset-0 w-2 h-2 rounded-full bg-success animate-ping" />
         )}
       </div>
       <Activity className={cn(
         "h-4 w-4 transition-colors duration-300",
-        isConnected ? "text-green-500" : "text-gray-400"
+        isConnected ? "text-success" : "text-muted-foreground"
       )} />
       <span className="text-xs text-muted-foreground">
         {isConnected ? "Live" : "Connecting..."}

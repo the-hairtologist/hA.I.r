@@ -40,30 +40,30 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
   const getActivityColor = (type: string) => {
     switch (type) {
       case "appointment":
-        return "text-blue-500 bg-blue-500/10";
+        return "text-info bg-info/10";
       case "message":
-        return "text-green-500 bg-green-500/10";
+        return "text-success bg-success/10";
       case "review":
-        return "text-yellow-500 bg-yellow-500/10";
+        return "text-warning bg-warning/10";
       case "payment":
-        return "text-purple-500 bg-purple-500/10";
+        return "text-primary bg-primary/10";
       case "formula":
-        return "text-pink-500 bg-pink-500/10";
+        return "text-secondary bg-secondary/10";
       default:
-        return "text-gray-500 bg-gray-500/10";
+        return "text-muted-foreground bg-muted/20";
     }
   };
 
   const getStatusColor = (status?: string) => {
     switch (status) {
       case "scheduled":
-        return "bg-blue-500/10 text-blue-500";
+        return "bg-info/10 text-info";
       case "confirmed":
-        return "bg-green-500/10 text-green-500";
+        return "bg-success/10 text-success";
       case "completed":
-        return "bg-gray-500/10 text-gray-500";
+        return "bg-muted/20 text-muted-foreground";
       case "cancelled":
-        return "bg-red-500/10 text-red-500";
+        return "bg-destructive/10 text-destructive";
       default:
         return "bg-primary/10 text-primary";
     }
