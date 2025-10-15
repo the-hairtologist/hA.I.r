@@ -471,36 +471,13 @@ const Help = () => {
 
           {/* Contact Tab */}
           <TabsContent value="contact" className="space-y-6 mt-6">
-            {/* Live Chat Option */}
-            <Card className="border-[2px] border-primary/30">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <MessageSquare className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold">Live Chat Support</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Chat with our team Monday-Friday, 9am-6pm EST
-                    </p>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      haptic.tap();
-                      toast.info("Chat widget opening soon!");
-                    }}
-                    className="border-[2px] border-foreground"
-                  >
-                    Start Chat
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Contact Form */}
             <Card>
               <CardHeader>
                 <CardTitle>Send Us a Message</CardTitle>
+                <p className="text-sm text-muted-foreground mt-2">
+                  We typically respond within 24 hours
+                </p>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleContactSubmit} className="space-y-4">
@@ -519,42 +496,45 @@ const Help = () => {
                     />
                   </div>
 
-                  <Button type="submit">Send Message</Button>
+                  <Button type="submit" className="w-full">
+                    <Mail className="h-4 w-4 mr-2" />
+                    Send Message
+                  </Button>
                 </form>
 
                 <div className="mt-6 pt-6 border-t space-y-3">
-                  <p className="text-sm font-semibold">Other ways to reach us:</p>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Mail className="h-4 w-4" />
-                    <a href="mailto:support@hair-ai.com" className="hover:text-primary">
+                  <p className="text-sm font-semibold text-muted-foreground">Or reach us directly:</p>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="h-4 w-4 text-primary" />
+                    <a href="mailto:support@hair-ai.com" className="hover:text-primary transition-colors">
                       support@hair-ai.com
                     </a>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Phone className="h-4 w-4" />
-                    <span>1-800-HAIR-AI</span>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="h-4 w-4 text-primary" />
+                    <a href="tel:1-800-HAIR-AI" className="hover:text-primary transition-colors">
+                      1-800-HAIR-AI
+                    </a>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Email Support Card */}
-            <Card className="border-[2px] border-border">
+            {/* Live Chat Coming Soon */}
+            <Card className="border-[2px] border-muted">
               <CardContent className="p-6">
-                <h4 className="font-semibold mb-2">Email Support</h4>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Send us an email and we'll respond within 24 hours
-                </p>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    window.location.href = "mailto:support@hair-ai.com";
-                  }}
-                  className="border-[2px] border-foreground"
-                >
-                  <Mail className="h-4 w-4 mr-2" />
-                  support@hair-ai.com
-                </Button>
+                <div className="flex items-start gap-3">
+                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center shrink-0">
+                    <MessageSquare className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold mb-1">Live Chat Support</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Coming soon! Live chat will be available Monday-Friday, 9am-6pm EST
+                    </p>
+                    <Badge variant="secondary" className="mt-2">Coming Soon</Badge>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
