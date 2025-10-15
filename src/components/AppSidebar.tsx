@@ -30,6 +30,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useSidebarOrder, SidebarItem } from "@/hooks/useSidebarOrder";
 import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
+import { TodaysScheduleWidget } from "@/components/sidebar/TodaysScheduleWidget";
 import {
   stylistNavigationItems,
   clientNavigationItems,
@@ -96,8 +97,7 @@ export function AppSidebar() {
   // Get navigation items based on role
   const adminItems = getAdminNavigationItems(isAdmin);
   
-  // Admin sees EVERYTHING organized by role groups
-  // Non-admin sees only their role items
+  // Admin sees EVERYTHING - Prioritized order: Admin first, then Stylist, then Client
   const baseItems: NavigationItem[] = (() => {
     if (isAdmin) {
       // Prefix client items with "client-" group to differentiate
@@ -106,8 +106,8 @@ export function AppSidebar() {
         group: `client-${item.group}`
       }));
       
-      // Admin gets all items: client + stylist + admin
-      return [...clientItemsWithPrefix, ...stylistNavigationItems, ...adminItems];
+      // Admin gets all items in priority order: ADMIN → STYLIST → CLIENT
+      return [...adminItems, ...stylistNavigationItems, ...clientItemsWithPrefix];
     }
     
     // Stylist gets only stylist items
@@ -168,6 +168,9 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarContent className="pb-4">
+        {/* Today's Schedule Widget - Only for stylists and admins */}
+        {(isStylist || isAdmin) && !collapsed && <TodaysScheduleWidget />}
+        
         {/* Customize Controls - Only for stylists and admins */}
         {!collapsed && (isStylist || isAdmin) && !isClient && (
           <div className="px-3 py-2 border-b">

@@ -334,7 +334,7 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
   ];
 };
 
-// Client Navigation Items - Simplified to core essentials (5 items max)
+// Client Navigation Items - Optimized for key actions
 export const clientNavigationItems: NavigationItem[] = [
   { 
     id: "dashboard", 
@@ -345,6 +345,16 @@ export const clientNavigationItems: NavigationItem[] = [
     group: "main", 
     color: "text-purple-400 dark:text-purple-300",
     description: "Your dashboard"
+  },
+  { 
+    id: "book-appointment", 
+    title: "Book Appointment", 
+    url: "/book-appointment", 
+    icon: Plus, 
+    gradient: "bg-[image:var(--gradient-green-emerald)]", 
+    group: "main", 
+    color: "text-emerald-400 dark:text-emerald-300",
+    description: "Schedule a service"
   },
   { 
     id: "my-appointments", 
@@ -365,6 +375,16 @@ export const clientNavigationItems: NavigationItem[] = [
     group: "main", 
     color: "text-blue-400 dark:text-blue-300",
     description: "Chat with stylist"
+  },
+  { 
+    id: "my-formulas", 
+    title: "Hair History", 
+    url: "/client-formulas", 
+    icon: Beaker, 
+    gradient: "bg-[image:var(--gradient-purple-pink)]", 
+    group: "info", 
+    color: "text-purple-400 dark:text-purple-300",
+    description: "Your formulas"
   },
   { 
     id: "profile", 
@@ -412,6 +432,7 @@ export const stylistAdminGroupLabels: NavigationGroup = {
 
 export const clientGroupLabels: NavigationGroup = {
   main: "Quick Actions",
+  info: "My Records",
   account: "My Account",
 };
 
@@ -420,22 +441,23 @@ export const clientAdminGroupLabels: NavigationGroup = {
   admin: "Platform Administration",
 };
 
-// Full Admin Access - Shows all features with role icons for clarity
+// Full Admin Access - Prioritizes admin tools, then stylist operations, then client view
 export const adminFullAccessGroupLabels: NavigationGroup = {
-  // Client features
-  "client-main": "👤 Client Experience",
-  "client-account": "👤 Client Account",
+  // Admin features FIRST (power user priority)
+  admin: "🛡️ Platform Administration",
   
-  // Stylist features
+  // Stylist features (operational tools)
   main: "✂️ Daily Operations",
   scheduling: "✂️ Calendar & Bookings",
   business: "✂️ Client Management",
   growth: "✂️ Business Growth",
   tools: "✂️ Business Tools",
   
-  // Admin features
-  admin: "🛡️ Platform Administration",
+  // Client features (informational view)
+  "client-main": "👤 Client Quick Actions",
+  "client-info": "👤 Client Records",
+  "client-account": "👤 Client Account",
   
-  // Shared
+  // Shared resources
   help: "📚 Support & Resources",
 };

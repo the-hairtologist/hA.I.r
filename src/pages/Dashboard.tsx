@@ -17,6 +17,7 @@ import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
 import { NotificationManager } from "@/components/NotificationManager";
 import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
+import { NextAppointmentWidget } from "@/components/dashboard/NextAppointmentWidget";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
@@ -99,9 +100,12 @@ const Dashboard = () => {
     { id: "client-retention", title: "Retention Metrics", component: "ClientRetention", enabled: false },
   ];
 
-  // Client dashboard sections - ultra-simplified for coming soon mode
+  // Client dashboard sections - optimized for client needs
   const defaultClientSections: DashboardSection[] = [
+    { id: "next-appointment", title: "Upcoming", component: "NextAppointment", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
+    { id: "favorite-stylists", title: "My Stylists", component: "FavoriteStylists", enabled: true },
+    { id: "client-milestones", title: "Rewards & Loyalty", component: "ClientMilestones", enabled: true },
   ];
 
   // Admin sections - comprehensive platform oversight
@@ -518,6 +522,10 @@ const Dashboard = () => {
     if (!section.enabled) return null;
 
     switch (section.component) {
+      case "NextAppointment":
+        return (userRole === "client" || isAdmin) ? (
+          <NextAppointmentWidget />
+        ) : null;
       case "LiveKPICards":
         return (userRole === "stylist" || isAdmin) && profile?.id ? (
           <LiveKPICards stylistId={profile.id} />
