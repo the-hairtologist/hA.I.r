@@ -5,6 +5,7 @@
 
 import { useEffect } from 'react';
 import { getPerformanceMetrics, requestIdleCallback } from '@/lib/performanceOptimizer';
+import { logger } from '@/lib/logger';
 
 export const PerformanceMonitor = () => {
   useEffect(() => {
@@ -19,12 +20,11 @@ export const PerformanceMonitor = () => {
 
   const reportPerformance = () => {
     requestIdleCallback(() => {
-      // Metrics are collected silently - view in browser DevTools Performance tab
       const metrics = getPerformanceMetrics();
       
       // Only log in development mode
       if (import.meta.env.DEV && metrics) {
-        console.log('[Performance Metrics]', {
+        logger.info('Performance Metrics', 'performanceMonitor', {
           'Time to First Byte': `${metrics.ttfb?.toFixed(2)}ms`,
           'DOM Content Loaded': `${metrics.domContentLoaded?.toFixed(2)}ms`,
           'Load Complete': `${metrics.loadComplete?.toFixed(2)}ms`,

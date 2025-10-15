@@ -4,6 +4,7 @@
  */
 
 import { Platform } from '@/platform';
+import { logger } from './logger';
 
 // Analytics configuration
 const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID || '';
@@ -31,7 +32,7 @@ export const initAnalytics = () => {
 
   // Google Analytics 4 - with security validation
   if (!GA4_MEASUREMENT_ID || !isValidGA4Id(GA4_MEASUREMENT_ID)) {
-    console.info('[Analytics] GA4 not configured or invalid. Add VITE_GA4_MEASUREMENT_ID to enable tracking.');
+    logger.info('GA4 not configured or invalid', 'analytics');
     analyticsInitialized = true;
     isInitialized = true;
     return;
@@ -64,7 +65,7 @@ export const initAnalytics = () => {
 
   isInitialized = true;
   analyticsInitialized = true;
-  console.log('[Analytics] Initialized successfully');
+  logger.info('Analytics initialized successfully', 'analytics');
 };
 
 /**
@@ -89,7 +90,7 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
     });
   }
 
-  console.log('[Analytics] Page view:', pagePath);
+  logger.debug('Page view tracked', 'analytics', { pagePath });
 };
 
 /**
@@ -112,7 +113,7 @@ export const trackEvent = (
     (window as any).gtag('event', eventName, eventData);
   }
 
-  console.log('[Analytics] Event:', eventName, eventData);
+  logger.debug('Event tracked', 'analytics', { eventName, eventData });
 };
 
 /**
@@ -129,7 +130,7 @@ export const setUserProperties = (userId: string, properties?: Record<string, an
     });
   }
 
-  console.log('[Analytics] User properties set:', userId);
+  logger.debug('User properties set', 'analytics', { userId });
 };
 
 /**
@@ -146,7 +147,7 @@ export const identifyUser = (userId: string, traits?: Record<string, any>) => {
     });
   }
 
-  console.log('[Analytics] User identified:', userId);
+  logger.debug('User identified', 'analytics', { userId });
 };
 
 interface AnalyticsEvent {

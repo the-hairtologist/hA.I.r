@@ -40,13 +40,13 @@ let sentryInitialized = false;
  */
 export const initSentry = () => {
   if (sentryInitialized || !SENTRY_DSN) {
-    console.log('[Monitoring] Sentry not initialized:', !SENTRY_DSN ? 'No DSN provided' : 'Already initialized');
+    // Sentry not available - silent return
     return;
   }
 
   // Check if Sentry is available
   if (typeof window === 'undefined' || !(window as any).Sentry) {
-    console.log('[Monitoring] Sentry package not installed. Run: npm install @sentry/react');
+    // Sentry package not installed - silent return
     return;
   }
 
@@ -98,9 +98,8 @@ export const initSentry = () => {
     });
 
     sentryInitialized = true;
-    console.log('[Monitoring] Sentry initialized successfully');
   } catch (error) {
-    console.error('[Monitoring] Failed to initialize Sentry:', error);
+    // Failed to initialize Sentry - silent return
   }
 };
 

@@ -4,6 +4,7 @@
  */
 
 import imageCompression from 'browser-image-compression';
+import { logger } from './logger';
 
 export interface ImageProcessOptions {
   maxSizeMB?: number;
@@ -35,15 +36,13 @@ export const processImage = async (
   try {
     // Check if already small enough
     if (file.size <= (opts.maxSizeMB! * 1024 * 1024)) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Image already optimized, skipping compression');
-      }
+      logger.debug('Image already optimized, skipping compression', 'imageUtils');
       return file;
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Original file size:', (file.size / 1024 / 1024).toFixed(2), 'MB');
-    }
+    logger.debug('Original file size', 'imageUtils', {
+      size: (file.size / 1024 / 1024).toFixed(2) + 'MB'
+    });
     
     const compressedFile = await imageCompression(file, {
       maxSizeMB: opts.maxSizeMB,
@@ -52,14 +51,15 @@ export const processImage = async (
       fileType: opts.format,
     });
     
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Compressed file size:', (compressedFile.size / 1024 / 1024).toFixed(2), 'MB');
-      console.log('Compression ratio:', ((1 - compressedFile.size / file.size) * 100).toFixed(1), '%');
-    }
+    logger.debug('Image compressed', 'imageUtils', {
+      originalSize: (file.size / 1024 / 1024).toFixed(2) + 'MB',
+      compressedSize: (compressedFile.size / 1024 / 1024).toFixed(2) + 'MB',
+      ratio: ((1 - compressedFile.size / file.size) * 100).toFixed(1) + '%'
+    });
     
     return compressedFile;
   } catch (error) {
-    console.error('Image processing failed, using original:', error);
+    logger.error('Image processing failed, using original', 'imageUtils', error);
     return file;
   }
 };

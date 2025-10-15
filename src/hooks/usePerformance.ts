@@ -6,6 +6,7 @@
 import { useEffect, useRef } from 'react';
 import { customMetrics } from '@/lib/performance/customMetrics';
 import { measurePerformance, getPerformanceMetrics } from '@/lib/performanceOptimizer';
+import { logger } from '@/lib/logger';
 
 interface PerformanceOptions {
   componentName: string;
@@ -35,7 +36,10 @@ export const usePerformance = ({
 
       const loadTime = Date.now() - mountTime.current;
       if (loadTime > 100 && process.env.NODE_ENV === 'development') {
-        console.warn(`[Performance] ${componentName} slow mount: ${loadTime}ms`);
+        logger.warn('Slow component mount detected', 'performance', {
+          component: componentName,
+          loadTime: `${loadTime}ms`
+        });
       }
 
       return () => {
@@ -43,9 +47,10 @@ export const usePerformance = ({
         const mountDuration = unmountTime - mountTime.current;
         measurePerformance(`${componentName}-unmount`);
         
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`${componentName} was mounted for ${Math.round(mountDuration)}ms`);
-        }
+        logger.debug('Component unmounted', 'performance', {
+          component: componentName,
+          duration: `${Math.round(mountDuration)}ms`
+        });
       };
     }
   }, [componentName, trackMounts]);
@@ -63,22 +68,27 @@ export const usePerformance = ({
 
       // Log slow renders
       if (renderTime > reportThreshold && logToConsole) {
-        console.warn(
-          `[Performance] ${componentName} slow render:`,
-          `${renderTime}ms (threshold: ${reportThreshold}ms)`,
-          `Render #${renderCount.current}`
-        );
+        logger.warn('Slow component render detected', 'performance', {
+          component: componentName,
+          renderTime: `${renderTime}ms`,
+          threshold: `${reportThreshold}ms`,
+          renderNumber: renderCount.current
+        });
       }
 
       // Warn about excessive renders
       if (process.env.NODE_ENV === 'development' && renderCount.current > 10) {
-        console.warn(`⚠️ ${componentName} has rendered ${renderCount.current} times`);
+        logger.warn('Excessive renders detected', 'performance', {
+          component: componentName,
+          renderCount: renderCount.current
+        });
       }
 
       // Log every 10th render in development
       if (logToConsole && renderCount.current % 10 === 0) {
         const metrics = getPerformanceMetrics();
-        console.log(`[Performance] ${componentName} metrics:`, {
+        logger.debug('Component performance metrics', 'performance', {
+          component: componentName,
           renders: renderCount.current,
           lastRenderTime: renderTime,
           ...metrics,

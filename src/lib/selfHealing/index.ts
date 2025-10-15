@@ -13,6 +13,9 @@ import { performanceOptimizer } from './PerformanceOptimizer';
 import { clientRetentionAI } from '@/lib/ai/ClientRetentionAI';
 import { smartCacheAI } from '@/lib/ai/SmartCacheAI';
 import { logger } from '@/lib/logger';
+import { webVitalsMonitor } from '@/lib/performance/webVitals';
+import { customMetrics } from '@/lib/performance/customMetrics';
+import { performanceMonitor } from '@/lib/performanceMonitor';
 
 class SelfHealingSystem {
   private initialized = false;
@@ -31,6 +34,10 @@ class SelfHealingSystem {
     try {
       // Start health monitoring
       healthMonitor.startMonitoring();
+
+      // Initialize performance monitoring
+      performanceMonitor.init();
+      webVitalsMonitor.init();
 
       // Run initial integrity check
       const issues = await dataIntegrity.runFullCheck();
@@ -55,6 +62,7 @@ class SelfHealingSystem {
    */
   shutdown() {
     healthMonitor.stopMonitoring();
+    performanceMonitor.cleanup();
     this.initialized = false;
     logger.info('Self-healing system shut down');
   }
@@ -67,6 +75,11 @@ class SelfHealingSystem {
       initialized: this.initialized,
       health: healthMonitor.getHealthStatus(),
       errorRecovery: errorRecovery.getHealthStatus(),
+      performance: {
+        webVitals: webVitalsMonitor.getMetrics(),
+        customMetrics: customMetrics.getMeasures(),
+        score: performanceMonitor.getScore(),
+      },
     };
   }
 
@@ -190,4 +203,7 @@ export {
   performanceOptimizer,
   clientRetentionAI,
   smartCacheAI,
+  webVitalsMonitor,
+  customMetrics,
+  performanceMonitor,
 };

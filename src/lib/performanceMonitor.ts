@@ -3,6 +3,8 @@
  * Tracks Core Web Vitals and provides performance insights
  */
 
+import { logger } from './logger';
+
 interface PerformanceMetrics {
   fcp?: number; // First Contentful Paint
   lcp?: number; // Largest Contentful Paint
@@ -31,14 +33,14 @@ class PerformanceMonitor {
         for (const entry of list.getEntries()) {
           if (entry.name === 'first-contentful-paint') {
             this.metrics.fcp = entry.startTime;
-            console.log(`[Performance] FCP: ${entry.startTime.toFixed(2)}ms`);
+            logger.debug(`FCP: ${entry.startTime.toFixed(2)}ms`, 'performanceMonitor');
           }
         }
       });
       observer.observe({ entryTypes: ['paint'] });
       this.observers.push(observer);
     } catch (e) {
-      console.warn('FCP observation not supported');
+      logger.debug('FCP observation not supported', 'performanceMonitor');
     }
   }
 
@@ -48,12 +50,12 @@ class PerformanceMonitor {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
         this.metrics.lcp = lastEntry.startTime;
-        console.log(`[Performance] LCP: ${lastEntry.startTime.toFixed(2)}ms`);
+        logger.debug(`LCP: ${lastEntry.startTime.toFixed(2)}ms`, 'performanceMonitor');
       });
       observer.observe({ entryTypes: ['largest-contentful-paint'] });
       this.observers.push(observer);
     } catch (e) {
-      console.warn('LCP observation not supported');
+      logger.debug('LCP observation not supported', 'performanceMonitor');
     }
   }
 
@@ -63,13 +65,13 @@ class PerformanceMonitor {
         for (const entry of list.getEntries()) {
           const fidEntry = entry as any;
           this.metrics.fid = fidEntry.processingStart - fidEntry.startTime;
-          console.log(`[Performance] FID: ${this.metrics.fid.toFixed(2)}ms`);
+          logger.debug(`FID: ${this.metrics.fid.toFixed(2)}ms`, 'performanceMonitor');
         }
       });
       observer.observe({ entryTypes: ['first-input'] });
       this.observers.push(observer);
     } catch (e) {
-      console.warn('FID observation not supported');
+      logger.debug('FID observation not supported', 'performanceMonitor');
     }
   }
 
@@ -82,14 +84,14 @@ class PerformanceMonitor {
           if (!layoutShift.hadRecentInput) {
             clsValue += layoutShift.value;
             this.metrics.cls = clsValue;
-            console.log(`[Performance] CLS: ${clsValue.toFixed(4)}`);
+            logger.debug(`CLS: ${clsValue.toFixed(4)}`, 'performanceMonitor');
           }
         }
       });
       observer.observe({ entryTypes: ['layout-shift'] });
       this.observers.push(observer);
     } catch (e) {
-      console.warn('CLS observation not supported');
+      logger.debug('CLS observation not supported', 'performanceMonitor');
     }
   }
 
@@ -100,13 +102,13 @@ class PerformanceMonitor {
         entries.forEach((entry) => {
           const navEntry = entry as PerformanceNavigationTiming;
           this.metrics.ttfb = navEntry.responseStart - navEntry.requestStart;
-          console.log(`[Performance] TTFB: ${this.metrics.ttfb.toFixed(2)}ms`);
+          logger.debug(`TTFB: ${this.metrics.ttfb.toFixed(2)}ms`, 'performanceMonitor');
         });
       });
       observer.observe({ entryTypes: ['navigation'] });
       this.observers.push(observer);
     } catch (e) {
-      console.warn('TTFB observation not supported');
+      logger.debug('TTFB observation not supported', 'performanceMonitor');
     }
   }
 
@@ -152,8 +154,11 @@ class PerformanceMonitor {
 
   report() {
     const score = this.getScore();
-    console.log('[Performance] Overall Score:', score);
-    console.log('[Performance] Metrics:', this.getMetrics());
+    logger.info('Performance Report', 'performanceMonitor', {
+      score,
+      metrics: this.getMetrics(),
+      grade: score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F'
+    });
     
     return {
       score,

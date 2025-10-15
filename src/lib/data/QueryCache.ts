@@ -11,6 +11,8 @@
  * - TypeScript generics for type safety
  */
 
+import { logger } from '../logger';
+
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
@@ -32,18 +34,18 @@ class QueryCache {
     // Check cache first
     const cached = this.get<T>(key);
     if (cached !== null) {
-      console.log(`[Cache] Hit for ${key}`);
+      logger.debug('Cache hit', 'queryCache', { key });
       return cached;
     }
 
     // Check if there's already a pending request for this key
     if (this.pendingRequests.has(key)) {
-      console.log(`[Cache] Deduplicating request for ${key}`);
+      logger.debug('Deduplicating request', 'queryCache', { key });
       return this.pendingRequests.get(key)!;
     }
 
     // Fetch data
-    console.log(`[Cache] Miss for ${key}, fetching...`);
+    logger.debug('Cache miss, fetching', 'queryCache', { key });
     const promise = fetcher();
     this.pendingRequests.set(key, promise);
 
@@ -68,7 +70,7 @@ class QueryCache {
 
     // Check if expired
     if (Date.now() - entry.timestamp > entry.ttl) {
-      console.log(`[Cache] Expired ${key}`);
+      logger.debug('Cache entry expired', 'queryCache', { key });
       this.cache.delete(key);
       return null;
     }
@@ -91,7 +93,7 @@ class QueryCache {
    * Invalidate specific key
    */
   invalidate(key: string): void {
-    console.log(`[Cache] Invalidating ${key}`);
+    logger.debug('Invalidating cache key', 'queryCache', { key });
     this.cache.delete(key);
   }
 
@@ -108,7 +110,7 @@ class QueryCache {
     }
 
     keysToDelete.forEach(key => {
-      console.log(`[Cache] Invalidating ${key} (pattern match)`);
+      logger.debug('Invalidating cache key (pattern match)', 'queryCache', { key });
       this.cache.delete(key);
     });
   }
@@ -117,7 +119,7 @@ class QueryCache {
    * Clear all cache
    */
   clear(): void {
-    console.log("[Cache] Clearing all");
+    logger.debug('Clearing all cache', 'queryCache');
     this.cache.clear();
     this.pendingRequests.clear();
   }
