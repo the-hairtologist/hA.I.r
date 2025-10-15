@@ -101,7 +101,7 @@ export const SelfHealingMonitor = () => {
             <Card>
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <Activity className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                  <Activity className="h-8 w-8 mx-auto mb-2 text-info" />
                   <div className="text-2xl font-bold">Active</div>
                   <div className="text-sm text-muted-foreground">System Status</div>
                 </div>
@@ -111,7 +111,7 @@ export const SelfHealingMonitor = () => {
             <Card>
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <Database className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                  <Database className="h-8 w-8 mx-auto mb-2 text-success" />
                   <div className="text-2xl font-bold">0%</div>
                   <div className="text-sm text-muted-foreground">Error Rate</div>
                 </div>
@@ -121,7 +121,7 @@ export const SelfHealingMonitor = () => {
             <Card>
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <CheckCircle className="h-8 w-8 mx-auto mb-2 text-emerald-500" />
+                  <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
                   <div className="text-2xl font-bold">0</div>
                   <div className="text-sm text-muted-foreground">Open Circuits</div>
                 </div>

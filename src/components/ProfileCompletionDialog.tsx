@@ -432,7 +432,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
 
           {step === 2 && userRole === "client" && (
             <div className="space-y-4 animate-fade-in text-center py-8">
-              <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+              <CheckCircle className="h-16 w-16 text-success mx-auto mb-4" />
               <h3 className="text-2xl font-bold">You're All Set!</h3>
               <p className="text-muted-foreground">
                 Your profile is complete. You can now discover stylists and book appointments.

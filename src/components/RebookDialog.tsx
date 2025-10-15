@@ -197,7 +197,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
 
       toast.success(
         <div className="flex items-center gap-2">
-          <CheckCircle className="h-5 w-5 text-green-500" />
+          <CheckCircle className="h-5 w-5 text-success" />
           <div>
             <p className="font-semibold">Appointment Rebooked!</p>
             <p className="text-sm">{format(appointmentDateTime, "MMM d, yyyy 'at' h:mm a")}</p>

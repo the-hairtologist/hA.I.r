@@ -31,25 +31,25 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
       if (isDeposit && remainingBalance > 0) {
         return {
           icon: AlertCircle,
-          color: 'text-yellow-500',
-          bgColor: 'bg-yellow-100',
-          borderColor: 'border-yellow-300',
+          color: 'text-warning',
+          bgColor: 'bg-warning/10',
+          borderColor: 'border-warning',
           text: 'Deposit Paid',
         };
       }
       return {
         icon: CheckCircle2,
-        color: 'text-green-500',
-        bgColor: 'bg-green-100',
-        borderColor: 'border-green-300',
+        color: 'text-success',
+        bgColor: 'bg-success/10',
+        borderColor: 'border-success',
         text: 'Fully Paid',
       };
     }
     return {
       icon: AlertCircle,
-      color: 'text-gray-500',
-      bgColor: 'bg-gray-100',
-      borderColor: 'border-gray-300',
+      color: 'text-muted-foreground',
+      bgColor: 'bg-muted/20',
+      borderColor: 'border-muted',
       text: 'Pending Payment',
     };
   };
@@ -90,7 +90,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
                 {isDeposit ? 'Deposit Paid' : 'Amount Paid'}
               </span>
             </div>
-            <span className="text-sm font-semibold text-green-600">
+            <span className="text-sm font-semibold text-success">
               ${amountPaid.toFixed(2)}
             </span>
           </div>
@@ -100,10 +100,10 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
         {remainingBalance > 0 && (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-yellow-500" />
-              <span className="text-sm font-medium text-yellow-700">Balance Due</span>
+              <AlertCircle className="h-4 w-4 text-warning" />
+              <span className="text-sm font-medium text-warning">Balance Due</span>
             </div>
-            <span className="text-base font-bold text-yellow-700">
+            <span className="text-base font-bold text-warning">
               ${remainingBalance.toFixed(2)}
             </span>
           </div>
@@ -121,8 +121,8 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
 
         {/* Balance Due Notice */}
         {isDeposit && remainingBalance > 0 && (
-          <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-xs text-yellow-800">
+          <div className="mt-3 p-3 bg-warning/10 border border-warning rounded-lg">
+            <p className="text-xs text-warning">
               <strong>Note:</strong> Please pay the remaining balance of ${remainingBalance.toFixed(2)} before or at your appointment.
             </p>
           </div>
@@ -130,9 +130,9 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
 
         {/* Fully Paid Notice */}
         {!isDeposit || remainingBalance === 0 && paymentStatus === 'completed' && (
-          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
-            <p className="text-xs text-green-800 font-medium">
+          <div className="mt-3 p-3 bg-success/10 border border-success rounded-lg flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 text-success" />
+            <p className="text-xs text-success font-medium">
               Payment complete - You're all set!
             </p>
           </div>

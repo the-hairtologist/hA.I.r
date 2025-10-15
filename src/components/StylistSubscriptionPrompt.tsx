@@ -150,15 +150,15 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
           {/* Trust Signals */}
           <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Check className="h-4 w-4 text-green-500" />
+              <Check className="h-4 w-4 text-success" />
               <span>Cancel Anytime</span>
             </div>
             <div className="flex items-center gap-1">
-              <Check className="h-4 w-4 text-green-500" />
+              <Check className="h-4 w-4 text-success" />
               <span>Secure Payments</span>
             </div>
             <div className="flex items-center gap-1">
-              <Check className="h-4 w-4 text-green-500" />
+              <Check className="h-4 w-4 text-success" />
               <span>No Hidden Fees</span>
             </div>
           </div>

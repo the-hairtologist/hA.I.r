@@ -202,7 +202,7 @@ const CalendarSync = () => {
                       <p className="font-medium">{getProviderName(connection.provider)}</p>
                       <div className="flex items-center gap-2 mt-1">
                         {connection.is_active ? (
-                          <Badge variant="default" className="bg-green-500">
+                          <Badge variant="default" className="bg-success">
                             <CheckCircle2 className="h-3 w-3 mr-1" />
                             Connected
                           </Badge>

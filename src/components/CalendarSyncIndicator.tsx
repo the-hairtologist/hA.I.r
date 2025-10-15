@@ -113,7 +113,7 @@ export function CalendarSyncIndicator() {
                 {connection.provider === 'google' ? 'Google Calendar' : 'Calendar'}
               </span>
               {connection.sync_enabled && (
-                <CheckCircle className="h-3 w-3 text-green-500 flex-shrink-0" />
+                <CheckCircle className="h-3 w-3 text-success flex-shrink-0" />
               )}
             </div>
             <p className="text-[10px] text-muted-foreground truncate">
