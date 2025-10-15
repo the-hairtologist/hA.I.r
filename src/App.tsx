@@ -149,7 +149,7 @@ const App = () => {
             <Sonner />
             <CookieConsent />
             <PerformanceOverlay />
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <AnalyticsInitializer />
             <KeyboardShortcutsInitializer />
             <ServiceIntegrationTracker />
