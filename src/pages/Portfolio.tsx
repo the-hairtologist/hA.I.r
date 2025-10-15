@@ -498,7 +498,8 @@ const Portfolio = () => {
                       {photo.caption && (
                         <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{photo.caption}</p>
                       )}
-                      <div className="flex gap-2 mb-2">
+                      {/* Action Buttons - Optimized for mobile */}
+                      <div className="flex flex-col sm:flex-row gap-2 mb-2">
                         <Button
                           size="sm"
                           variant="secondary"
@@ -508,37 +509,44 @@ const Portfolio = () => {
                               ? photo.before_photo_url 
                               : photo.photo_url 
                           })}
-                          className="flex-1"
+                          className="w-full sm:flex-1 gap-2"
                           title="Remove background with AI"
+                          aria-label="Remove background with AI"
                         >
                           <Sparkles className="h-4 w-4" />
+                          <span className="sm:hidden">Remove Background</span>
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => movePhoto(photo.id, "up")}
-                          disabled={index === 0}
-                          className="flex-1"
-                        >
-                          <ArrowUp className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => movePhoto(photo.id, "down")}
-                          disabled={index === photos.length - 1}
-                          className="flex-1"
-                        >
-                          <ArrowDown className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDelete(photo.id)}
-                          className="flex-1"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => movePhoto(photo.id, "up")}
+                            disabled={index === 0}
+                            className="flex-1"
+                            aria-label="Move photo up"
+                          >
+                            <ArrowUp className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => movePhoto(photo.id, "down")}
+                            disabled={index === photos.length - 1}
+                            className="flex-1"
+                            aria-label="Move photo down"
+                          >
+                            <ArrowDown className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDelete(photo.id)}
+                            className="flex-1"
+                            aria-label="Delete photo"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </CardContent>

@@ -165,11 +165,11 @@ const ZapierIntegration = () => {
               </p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button
                 onClick={handleTestWebhook}
                 disabled={!webhookUrl || testing}
-                className="flex-1"
+                className="w-full sm:flex-1"
               >
                 {testing ? (
                   <>
@@ -188,7 +188,7 @@ const ZapierIntegration = () => {
                   </>
                 )}
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild className="w-full sm:w-auto">
                 <a
                   href="https://zapier.com/app/zaps"
                   target="_blank"

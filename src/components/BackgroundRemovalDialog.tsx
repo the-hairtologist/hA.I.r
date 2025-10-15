@@ -108,7 +108,7 @@ export const BackgroundRemovalDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
@@ -182,18 +182,23 @@ export const BackgroundRemovalDialog = ({
             </div>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex gap-2 justify-end">
+          {/* Action Buttons - Mobile optimized */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
             {!processedImage ? (
               <>
                 <Button
                   variant="outline"
                   onClick={() => onOpenChange(false)}
                   disabled={processing}
+                  className="w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
-                <Button onClick={handleProcess} disabled={processing}>
+                <Button 
+                  onClick={handleProcess} 
+                  disabled={processing}
+                  className="w-full sm:w-auto"
+                >
                   {processing ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -209,14 +214,27 @@ export const BackgroundRemovalDialog = ({
               </>
             ) : (
               <>
-                <Button variant="outline" onClick={handleReset}>
+                <Button 
+                  variant="outline" 
+                  onClick={handleReset}
+                  className="w-full sm:w-auto"
+                >
                   Try Again
                 </Button>
-                <Button variant="outline" onClick={handleDownload}>
+                <Button 
+                  variant="outline" 
+                  onClick={handleDownload}
+                  className="w-full sm:w-auto"
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
-                <Button onClick={() => onOpenChange(false)}>Done</Button>
+                <Button 
+                  onClick={() => onOpenChange(false)}
+                  className="w-full sm:w-auto"
+                >
+                  Done
+                </Button>
               </>
             )}
           </div>
