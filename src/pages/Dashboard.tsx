@@ -840,7 +840,15 @@ const Dashboard = () => {
         {userRole && (
           <OnboardingWizard
             open={showOnboardingWizard}
-            onComplete={() => setShowOnboardingWizard(false)}
+            onComplete={() => {
+              setShowOnboardingWizard(false);
+              // Reload dashboard data after onboarding completes
+              setTimeout(() => {
+                if (userRole && profile) {
+                  loadDashboardData();
+                }
+              }, 100);
+            }}
             userRole={userRole as "stylist" | "client"}
           />
         )}

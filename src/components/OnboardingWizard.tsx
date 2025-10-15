@@ -120,7 +120,10 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
   const completeOnboarding = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
+      if (!session) {
+        console.error("No session found");
+        return;
+      }
 
       // Save onboarding completion
       localStorage.setItem('onboarding_completed', 'true');
@@ -130,9 +133,12 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
         description: "Explore your dashboard and start your journey!",
       });
 
+      // Close wizard first, then allow dashboard to reload naturally
       onComplete();
     } catch (error) {
       console.error("Error completing onboarding:", error);
+      // Ensure wizard closes even on error
+      onComplete();
     }
   };
 
