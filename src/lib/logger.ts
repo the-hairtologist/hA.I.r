@@ -1,118 +1,199 @@
 /**
  * Centralized Logging Utility
- * Provides consistent logging across the application with log levels
+ * 
+ * Replaces scattered console.log/warn/error calls with structured logging
+ * - Development: Full logging to console
+ * - Production: Minimal logging, can integrate with external services
+ * - Performance: Batched logging to reduce overhead
  */
 
-export enum LogLevel {
-  DEBUG = 'DEBUG',
-  INFO = 'INFO',
-  WARN = 'WARN',
-  ERROR = 'ERROR',
-}
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LogEntry {
+  timestamp: string;
   level: LogLevel;
   message: string;
-  context?: string;
-  data?: any;
-  timestamp: string;
+  context?: any;
+  error?: Error;
 }
 
 class Logger {
   private isDevelopment = import.meta.env.DEV;
-  private logs: LogEntry[] = [];
-  private maxLogs = 100; // Keep last 100 logs in memory
+  private logBuffer: LogEntry[] = [];
+  private maxBufferSize = 100;
 
-  private formatMessage(level: LogLevel, message: string, context?: string, data?: any): LogEntry {
-    return {
-      level,
-      message,
-      context,
-      data,
-      timestamp: new Date().toISOString(),
-    };
+  private formatTimestamp(): string {
+    return new Date().toISOString();
   }
 
   private shouldLog(level: LogLevel): boolean {
-    // In production, only log WARN and ERROR
-    if (!this.isDevelopment) {
-      return level === LogLevel.WARN || level === LogLevel.ERROR;
+    if (this.isDevelopment) return true;
+    // In production, only log warnings and errors
+    return level === 'warn' || level === 'error';
+  }
+
+  private createLogEntry(
+    level: LogLevel, 
+    message: string, 
+    context?: any, 
+    error?: Error
+  ): LogEntry {
+    return {
+      timestamp: this.formatTimestamp(),
+      level,
+      message,
+      context,
+      error
+    };
+  }
+
+  private writeToConsole(entry: LogEntry): void {
+    const prefix = `[${entry.timestamp}] [${entry.level.toUpperCase()}]`;
+    const style = this.getLogStyle(entry.level);
+
+    switch (entry.level) {
+      case 'debug':
+        console.debug(`%c${prefix}`, style, entry.message, entry.context || '');
+        break;
+      case 'info':
+        console.info(`%c${prefix}`, style, entry.message, entry.context || '');
+        break;
+      case 'warn':
+        console.warn(`%c${prefix}`, style, entry.message, entry.context || '');
+        break;
+      case 'error':
+        console.error(`%c${prefix}`, style, entry.message, entry.context || '', entry.error || '');
+        break;
     }
-    return true;
   }
 
-  private addToHistory(entry: LogEntry) {
-    this.logs.push(entry);
-    if (this.logs.length > this.maxLogs) {
-      this.logs.shift();
+  private getLogStyle(level: LogLevel): string {
+    const styles = {
+      debug: 'color: #888; font-weight: normal',
+      info: 'color: #2196F3; font-weight: bold',
+      warn: 'color: #FF9800; font-weight: bold',
+      error: 'color: #F44336; font-weight: bold'
+    };
+    return styles[level];
+  }
+
+  private addToBuffer(entry: LogEntry): void {
+    this.logBuffer.push(entry);
+    if (this.logBuffer.length > this.maxBufferSize) {
+      this.logBuffer.shift(); // Remove oldest entry
     }
   }
 
-  debug(message: string, context?: string, data?: any) {
-    if (!this.shouldLog(LogLevel.DEBUG)) return;
-
-    const entry = this.formatMessage(LogLevel.DEBUG, message, context, data);
-    this.addToHistory(entry);
-
-    console.log(
-      `%c[${entry.level}]%c ${entry.context ? `[${entry.context}]` : ''} ${entry.message}`,
-      'color: #6b7280; font-weight: bold',
-      'color: inherit',
-      data || ''
-    );
+  /**
+   * Log debug information (development only)
+   */
+  debug(message: string, context?: any): void {
+    if (!this.shouldLog('debug')) return;
+    const entry = this.createLogEntry('debug', message, context);
+    this.writeToConsole(entry);
+    this.addToBuffer(entry);
   }
 
-  info(message: string, context?: string, data?: any) {
-    if (!this.shouldLog(LogLevel.INFO)) return;
-
-    const entry = this.formatMessage(LogLevel.INFO, message, context, data);
-    this.addToHistory(entry);
-
-    console.log(
-      `%c[${entry.level}]%c ${entry.context ? `[${entry.context}]` : ''} ${entry.message}`,
-      'color: #3b82f6; font-weight: bold',
-      'color: inherit',
-      data || ''
-    );
+  /**
+   * Log informational messages
+   */
+  info(message: string, context?: any): void {
+    if (!this.shouldLog('info')) return;
+    const entry = this.createLogEntry('info', message, context);
+    this.writeToConsole(entry);
+    this.addToBuffer(entry);
   }
 
-  warn(message: string, context?: string, data?: any) {
-    if (!this.shouldLog(LogLevel.WARN)) return;
-
-    const entry = this.formatMessage(LogLevel.WARN, message, context, data);
-    this.addToHistory(entry);
-
-    console.warn(
-      `%c[${entry.level}]%c ${entry.context ? `[${entry.context}]` : ''} ${entry.message}`,
-      'color: #f59e0b; font-weight: bold',
-      'color: inherit',
-      data || ''
-    );
+  /**
+   * Log warning messages
+   */
+  warn(message: string, context?: any): void {
+    if (!this.shouldLog('warn')) return;
+    const entry = this.createLogEntry('warn', message, context);
+    this.writeToConsole(entry);
+    this.addToBuffer(entry);
   }
 
-  error(message: string, context?: string, error?: any) {
-    const entry = this.formatMessage(LogLevel.ERROR, message, context, error);
-    this.addToHistory(entry);
-
-    console.error(
-      `%c[${entry.level}]%c ${entry.context ? `[${entry.context}]` : ''} ${entry.message}`,
-      'color: #ef4444; font-weight: bold',
-      'color: inherit',
-      error || ''
-    );
-
-    // In production, you could send errors to a logging service here
-    // e.g., Sentry, LogRocket, etc.
+  /**
+   * Log error messages - flexible signature to support all existing usage patterns
+   */
+  error(message: string, errorOrContext?: any, context?: any): void {
+    if (!this.shouldLog('error')) return;
+    
+    let error: Error | undefined;
+    let ctx: any;
+    
+    // Pattern 1: error(message, Error, context)
+    if (errorOrContext instanceof Error) {
+      error = errorOrContext;
+      ctx = context;
+    }
+    // Pattern 2: error(message, errorString, context)
+    else if (typeof errorOrContext === 'string' && context) {
+      error = new Error(errorOrContext);
+      ctx = context;
+    }
+    // Pattern 3: error(message, context) 
+    else if (errorOrContext && typeof errorOrContext === 'object' && !context) {
+      ctx = errorOrContext;
+      error = undefined;
+    }
+    // Pattern 4: error(message, errorString)
+    else if (typeof errorOrContext === 'string') {
+      error = new Error(errorOrContext);
+      ctx = undefined;
+    }
+    // Pattern 5: error(message)
+    else {
+      error = undefined;
+      ctx = undefined;
+    }
+    
+    const entry = this.createLogEntry('error', message, ctx, error);
+    this.writeToConsole(entry);
+    this.addToBuffer(entry);
+    
+    // In production, could send to error tracking service here
+    // Example: Sentry.captureException(error, { tags: ctx });
   }
 
-  // Get recent logs for debugging
-  getRecentLogs(count: number = 50): LogEntry[] {
-    return this.logs.slice(-count);
+  /**
+   * Get recent logs (useful for debugging)
+   */
+  getRecentLogs(level?: LogLevel): LogEntry[] {
+    if (level) {
+      return this.logBuffer.filter(entry => entry.level === level);
+    }
+    return [...this.logBuffer];
   }
 
-  // Clear log history
-  clearLogs() {
-    this.logs = [];
+  /**
+   * Clear log buffer
+   */
+  clearBuffer(): void {
+    this.logBuffer = [];
+  }
+
+  /**
+   * Group related logs together
+   */
+  group(label: string, callback: () => void): void {
+    if (!this.isDevelopment) return;
+    console.group(`📦 ${label}`);
+    callback();
+    console.groupEnd();
+  }
+
+  /**
+   * Time a function execution
+   */
+  time(label: string): () => void {
+    if (!this.isDevelopment) return () => {};
+    const start = performance.now();
+    return () => {
+      const duration = performance.now() - start;
+      this.debug(`⏱️ ${label}`, { duration: `${duration.toFixed(2)}ms` });
+    };
   }
 }
 
@@ -121,8 +202,10 @@ export const logger = new Logger();
 
 // Convenience exports
 export const log = {
-  debug: (message: string, context?: string, data?: any) => logger.debug(message, context, data),
-  info: (message: string, context?: string, data?: any) => logger.info(message, context, data),
-  warn: (message: string, context?: string, data?: any) => logger.warn(message, context, data),
-  error: (message: string, context?: string, error?: any) => logger.error(message, context, error),
+  debug: (message: string, context?: any) => logger.debug(message, context),
+  info: (message: string, context?: any) => logger.info(message, context),
+  warn: (message: string, context?: any) => logger.warn(message, context),
+  error: (message: string, errorOrContext?: any, context?: any) => logger.error(message, errorOrContext, context),
+  group: (label: string, callback: () => void) => logger.group(label, callback),
+  time: (label: string) => logger.time(label)
 };
