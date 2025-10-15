@@ -4,6 +4,7 @@
  */
 
 import { analytics } from './analytics';
+import { logger } from './logger';
 
 /**
  * Business-critical events to track
@@ -88,9 +89,8 @@ class EnhancedAnalytics {
     
     this.eventQueue.push(analyticsEvent);
     
-    // Log to console in development
     if (import.meta.env.DEV) {
-      console.log('[Analytics]', event, properties);
+      logger.debug('[Analytics]', event, properties);
     }
     
     // Flush if queue is full
@@ -114,7 +114,7 @@ class EnhancedAnalytics {
     try {
       // In production, send to analytics backend
       // For now, just log batch size
-      console.log(`[Analytics] Flushed ${eventsToSend.length} events`);
+      logger.debug(`[Analytics] Flushed ${eventsToSend.length} events`, 'enhancedAnalytics');
       
       // TODO: Send to backend analytics service
       // await fetch('/api/analytics/batch', {
@@ -122,7 +122,7 @@ class EnhancedAnalytics {
       //   body: JSON.stringify({ events: eventsToSend })
       // });
     } catch (error) {
-      console.error('[Analytics] Failed to flush events:', error);
+      logger.error('[Analytics] Failed to flush events', 'enhancedAnalytics', error);
       // Re-queue on failure
       this.eventQueue.unshift(...eventsToSend);
     }

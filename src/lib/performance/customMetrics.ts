@@ -3,6 +3,8 @@
  * Track custom performance marks and measures
  */
 
+import { logger } from '@/lib/logger';
+
 interface PerformanceMark {
   name: string;
   startTime: number;
@@ -51,12 +53,12 @@ class CustomMetricsTracker {
       this.measures.push(customMeasure);
 
       if (process.env.NODE_ENV === 'development') {
-        console.log(`⏱️ ${name}: ${Math.round(measure.duration)}ms`);
+        logger.debug(`⏱️ ${name}: ${Math.round(measure.duration)}ms`, 'customMetrics');
       }
 
       return customMeasure;
     } catch (error) {
-      console.warn(`Failed to measure ${name}:`, error);
+      logger.warn(`Failed to measure ${name}`, 'customMetrics', error);
     }
   }
 
@@ -112,7 +114,9 @@ class CustomMetricsTracker {
       fullPageLoad: navigation.loadEventEnd - navigation.loadEventStart,
     };
 
-    console.log('📈 Navigation Metrics:', metrics);
+    if (process.env.NODE_ENV === 'development') {
+      logger.info('📈 Navigation Metrics', 'customMetrics', metrics);
+    }
     return metrics;
   }
 

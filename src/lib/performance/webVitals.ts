@@ -3,6 +3,8 @@
  * Tracks Core Web Vitals (LCP, FID, CLS, FCP, TTFB)
  */
 
+import { logger } from '@/lib/logger';
+
 interface WebVitalMetric {
   name: string;
   value: number;
@@ -33,9 +35,9 @@ class WebVitalsMonitor {
       onLCP(this.handleMetric.bind(this));
       onTTFB(this.handleMetric.bind(this));
 
-      console.log('📊 Web Vitals monitoring initialized');
+      logger.debug('📊 Web Vitals monitoring initialized', 'webVitals');
     } catch (error) {
-      console.warn('Web Vitals library not available:', error);
+      logger.warn('Web Vitals library not available', 'webVitals', error);
     }
   }
 
@@ -56,10 +58,11 @@ class WebVitalsMonitor {
 
     // Log in development
     if (process.env.NODE_ENV === 'development') {
-      console.log(
-        `${metric.name}: ${Math.round(metric.value)}ms (${webVitalMetric.rating})`,
-        metric
-      );
+      logger.debug(`${metric.name}`, 'webVitals', {
+        value: `${Math.round(metric.value)}ms`,
+        rating: webVitalMetric.rating,
+        ...metric
+      });
     }
 
     // Send to analytics in production

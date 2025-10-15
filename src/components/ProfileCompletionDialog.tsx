@@ -99,12 +99,12 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
 
     setUploading(true);
     try {
-      // Import compression utility
-      const { compressAvatar } = await import('@/lib/imageCompression');
+      // Import image utility
+      const { ImagePresets } = await import('@/lib/imageUtils');
       
-      // Compress image automatically
+      // Optimize image automatically
       toast.info("Optimizing image...", { duration: 2000 });
-      const compressedFile = await compressAvatar(file);
+      const compressedFile = await ImagePresets.avatar(file);
       
       const fileExt = compressedFile.name.split('.').pop();
       const fileName = `${userId}/${Math.random()}.${fileExt}`;
