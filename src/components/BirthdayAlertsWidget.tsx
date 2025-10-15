@@ -153,9 +153,18 @@ export function BirthdayAlertsWidget() {
       </CardHeader>
       <CardContent>
         {upcomingBirthdays.length === 0 ? (
-          <div className="text-center py-8 text-sm text-muted-foreground">
+          <div className="text-center py-8 text-sm text-muted-foreground space-y-2">
             <Gift className="h-8 w-8 mx-auto mb-2 opacity-50" />
-            <p>No upcoming birthdays in the next 30 days</p>
+            <p className="font-medium">No upcoming birthdays</p>
+            <p className="text-xs">Add birthdays to client profiles to see alerts here</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate("/clients")}
+              className="mt-2"
+            >
+              Manage Clients
+            </Button>
           </div>
         ) : (
           <div className="space-y-3">

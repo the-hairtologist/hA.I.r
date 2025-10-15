@@ -349,7 +349,10 @@ const Settings = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+    const confirmed = window.confirm(
+      "⚠️ Delete Account Permanently?\n\nThis action CANNOT be undone.\n\nAll your data including:\n• Client profiles\n• Formulas\n• Appointments\n• Settings\n\nWill be permanently deleted.\n\nType DELETE to confirm."
+    );
+    if (!confirmed) return;
 
     try {
       await supabase.auth.signOut();
@@ -1257,7 +1260,7 @@ const Settings = () => {
                         : "Deep AI integration orchestrating all intelligent systems across your salon"}
                     </CardDescription>
                   </div>
-                  <div className={`px-3 py-1 rounded-full text-xs font-semibold ${aiEnabled ? 'bg-green-500 text-white' : 'bg-destructive text-white'}`}>
+                  <div className={`px-3 py-1 rounded-full text-xs font-semibold ${aiEnabled ? 'bg-success text-success-foreground' : 'bg-destructive text-destructive-foreground'}`}>
                     {aiEnabled ? 'Active' : 'Inactive'}
                   </div>
                 </div>

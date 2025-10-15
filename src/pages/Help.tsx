@@ -325,9 +325,9 @@ const Help = () => {
             <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0 brutal-shadow-md">
-                    <Play className="h-8 w-8 text-white" />
-                  </div>
+                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0 brutal-shadow-md">
+                      <Play className="h-8 w-8 text-primary-foreground" />
+                    </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <h3 className="font-bold text-lg">Interactive Feature Demo</h3>
@@ -372,7 +372,7 @@ const Help = () => {
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shrink-0 brutal-shadow-md">
-                      <Sparkles className="h-8 w-8 text-white" />
+                      <Sparkles className="h-8 w-8 text-primary-foreground" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-3 mb-2">

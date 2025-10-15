@@ -82,7 +82,7 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
       });
     } catch (error) {
       console.error("Error loading KPIs:", error);
-      toast.error("Failed to load dashboard metrics");
+      toast.error("Unable to load today's metrics. Your data is safe - please refresh.");
     } finally {
       setLoading(false);
     }

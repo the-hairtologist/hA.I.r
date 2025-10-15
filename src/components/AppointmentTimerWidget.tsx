@@ -142,19 +142,22 @@ export function AppointmentTimerWidget() {
         </CardHeader>
         <CardContent>
           <p className="text-xs text-muted-foreground mb-3">
-            Track time during appointments
+            Start tracking time when you begin an appointment
           </p>
           <Button
             size="sm"
+            variant="outline"
             className="w-full"
             onClick={() => {
-              // In real implementation, you'd select an appointment first
-              toast.info("Select an appointment to start tracking");
+              toast.info("Go to Appointments page and click 'Start Timer' on any active appointment");
             }}
           >
-            <Play className="mr-2 h-4 w-4" />
-            Start Timer
+            <Clock className="mr-2 h-4 w-4" />
+            How to Start
           </Button>
+          <p className="text-[10px] text-muted-foreground mt-2 text-center">
+            Timer becomes active during appointments
+          </p>
         </CardContent>
       </Card>
     );

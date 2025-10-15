@@ -78,7 +78,7 @@ const Services = () => {
       setServices(servicesData || []);
     } catch (error: any) {
       console.error("Error loading data:", error);
-      toast.error("Error loading services");
+      toast.error("Unable to load your services. Please refresh or check your connection.");
     } finally {
       setLoading(false);
     }

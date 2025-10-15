@@ -457,7 +457,10 @@ const ScheduleManagement = () => {
     const blockedDate = blockedDates.find(d => d.id === id);
     const dateStr = blockedDate ? format(new Date(blockedDate.blocked_date), 'MMMM d, yyyy') : "this date";
     
-    if (!confirm(`Unblock ${dateStr}?\n\nClients will be able to book appointments on this date again.`)) return;
+    const confirmed = window.confirm(
+      `Unblock ${dateStr}?\n\nClients will be able to book appointments on this date again.`
+    );
+    if (!confirmed) return;
 
     try {
       const { error } = await supabase

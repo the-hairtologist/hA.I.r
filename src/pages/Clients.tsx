@@ -208,7 +208,7 @@ export default function Clients() {
       setClients(enrichedClients);
     } catch (error) {
       console.error("Error loading clients:", error);
-      toast.error("Failed to load clients");
+      toast.error("Unable to load your client list. Please refresh or check your connection.");
     } finally {
       setLoading(false);
     }
@@ -287,7 +287,7 @@ export default function Clients() {
       loadClients();
     } catch (error) {
       console.error("Error adding client:", error);
-      toast.error("Failed to add client");
+      toast.error("Unable to add client. Please check all fields and try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -345,7 +345,7 @@ export default function Clients() {
       loadClients();
     } catch (error) {
       console.error("Error updating client:", error);
-      toast.error("Failed to update client");
+      toast.error("Unable to update client information. Please try again.");
     } finally {
       setIsEditSubmitting(false);
     }
@@ -817,56 +817,13 @@ export default function Clients() {
           </Select>
         </div>
 
-        {/* Bulk Actions Bar */}
+        {/* Bulk Actions Bar - New Component */}
         <BulkActionsBar
           selectedIds={Array.from(selectedIds)}
           onClearSelection={clearSelection}
           onRefresh={loadClients}
           type="clients"
         />
-
-        {/* Legacy Bulk Actions (keeping for now) */}
-        {false && selectedCount > 0 && (
-          <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] bg-primary/5 mb-6">
-            <CardContent className="p-4 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <input
-                  type="checkbox"
-                  checked={selectedCount === filteredClients.length}
-                  onChange={() => {
-                    if (selectedCount === filteredClients.length) {
-                      clearSelection();
-                    } else {
-                      filteredClients.forEach(c => toggleSelection(c.id));
-                    }
-                  }}
-                  className="h-5 w-5 rounded border-2 border-foreground cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  aria-label="Select all clients"
-                />
-                <span className="font-medium">
-                  {selectedCount} client{selectedCount !== 1 ? 's' : ''} selected
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleBulkDelete}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete Selected
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearSelection}
-                >
-                  Clear
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {filteredClients.length === 0 ? (
           searchQuery || sortBy !== "recent" || riskFilter !== "all" ? (

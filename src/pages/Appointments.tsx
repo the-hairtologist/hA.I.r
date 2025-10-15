@@ -157,7 +157,7 @@ const Appointments = () => {
       }
     } catch (error: any) {
       console.error("Error loading data:", error);
-      toast.error("Error loading appointments");
+      toast.error("Unable to load your appointments. Please refresh the page or check your connection.");
     } finally {
       setLoading(false);
     }
@@ -182,7 +182,7 @@ const Appointments = () => {
       toast.success(`You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} appointments`);
     } catch (error: any) {
       console.error("Error updating availability:", error);
-      toast.error("Error updating availability");
+      toast.error("Unable to update your availability status. Please try again.");
     }
   };
 
@@ -251,7 +251,7 @@ const Appointments = () => {
           loadData();
         } catch (error: any) {
           console.error("Error updating appointment:", error);
-          toast.error("Error updating appointment");
+          toast.error("Unable to update appointment status. Please try again.");
         } finally {
           setUpdatingStatus(null);
         }
@@ -455,7 +455,10 @@ const Appointments = () => {
                       variant="outline"
                       size="sm"
                       onClick={async () => {
-                        if (confirm(`Mark ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} as completed?`)) {
+                        const confirmed = window.confirm(
+                          `Mark ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} as completed?\n\nThis will update all selected appointments to completed status.`
+                        );
+                        if (confirmed) {
                           try {
                             const { error } = await supabase
                               .from("appointments")

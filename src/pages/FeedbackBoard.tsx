@@ -468,7 +468,7 @@ const FeedbackForm = ({ onSuccess }: { onSuccess: () => void }) => {
       >
         {submitMutation.isPending ? (
           <>
-            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+            <div className="h-4 w-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2"></div>
             Submitting...
           </>
         ) : (

@@ -102,7 +102,10 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
   };
 
   const deleteServiceType = async (id: string, serviceType: string) => {
-    if (!confirm(`Delete color for "${serviceType}"?`)) return;
+    const confirmed = window.confirm(
+      `Remove custom color for "${serviceType}"?\n\nThis won't delete the service, just its custom color. The service will use the default color.`
+    );
+    if (!confirmed) return;
 
     try {
       const { error } = await supabase

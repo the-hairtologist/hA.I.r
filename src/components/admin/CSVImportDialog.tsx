@@ -157,8 +157,14 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Import Clients from CSV</DialogTitle>
-          <DialogDescription>
-            Upload a CSV file to bulk import client data
+          <DialogDescription className="space-y-2">
+            <span>Upload a CSV file to bulk import client data</span>
+            <div className="text-xs bg-primary/10 border border-primary/20 rounded p-2 mt-2">
+              <p className="font-medium mb-1">Required Fields:</p>
+              <p className="text-muted-foreground">• full_name • email</p>
+              <p className="font-medium mt-2 mb-1">Optional Fields:</p>
+              <p className="text-muted-foreground">• phone • birthday • hair_type • notes</p>
+            </div>
           </DialogDescription>
         </DialogHeader>
 

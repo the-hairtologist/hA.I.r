@@ -234,7 +234,10 @@ const Formulas = () => {
   };
 
   const handleDeleteFormula = async (formulaId: string) => {
-    if (!confirm("Are you sure you want to delete this formula?")) return;
+    const confirmed = window.confirm(
+      "Delete this formula?\n\nThis will permanently remove the formula from your records. This action cannot be undone."
+    );
+    if (!confirmed) return;
 
     try {
       const { error } = await supabase
@@ -550,7 +553,10 @@ const Formulas = () => {
                       variant="outline"
                       size="sm"
                       onClick={async () => {
-                        if (confirm(`Delete ${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''}?`)) {
+                        const confirmed = window.confirm(
+                          `Delete ${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''}?\n\nThis will permanently remove the selected formulas from your records.`
+                        );
+                        if (confirmed) {
                           try {
                             const { error } = await supabase
                               .from("formulas")

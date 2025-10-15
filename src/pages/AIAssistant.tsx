@@ -577,7 +577,7 @@ const Knowledge = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => setShowConversations(true)}
-                      className="h-7 md:h-8 px-2 md:px-3 text-xs text-primary-foreground hover:bg-white/20"
+                      className="h-7 md:h-8 px-2 md:px-3 text-xs text-primary-foreground hover:bg-primary/20"
                       title="Conversation History"
                     >
                       <MessageSquare className="h-3 w-3 md:h-4 md:w-4" />
@@ -589,7 +589,7 @@ const Knowledge = () => {
                         variant="ghost"
                         size="sm"
                         onClick={startNewConversation}
-                        className="h-7 md:h-8 px-2 md:px-3 text-xs text-primary-foreground hover:bg-white/20"
+                        className="h-7 md:h-8 px-2 md:px-3 text-xs text-primary-foreground hover:bg-primary/20"
                         title="New Conversation"
                       >
                         <Sparkles className="h-3 w-3 md:h-4 md:w-4" />

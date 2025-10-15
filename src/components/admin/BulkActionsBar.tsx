@@ -185,8 +185,8 @@ export function BulkActionsBar({
 
   return (
     <>
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-slide-in-right">
-        <div className="bg-background border rounded-lg shadow-lg p-3 flex items-center gap-3">
+      <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-[45] animate-slide-in-right">
+        <div className="bg-background border-2 border-primary rounded-lg shadow-lg p-3 flex items-center gap-3">
           <Badge variant="secondary" className="px-3 py-1">
             {selectedIds.length} selected
           </Badge>

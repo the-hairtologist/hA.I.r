@@ -226,6 +226,17 @@ export function WaitlistDialog() {
                 />
               </div>
             </div>
+            <div>
+              <Label htmlFor="notes">Notes (Optional)</Label>
+              <Input
+                id="notes"
+                value={formData.notes}
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
+                placeholder="Any special requests or preferences"
+              />
+            </div>
             <Button
               onClick={handleAddToWaitlist}
               disabled={loading}
@@ -241,11 +252,16 @@ export function WaitlistDialog() {
             <h4 className="font-medium text-sm">Current Waitlist</h4>
             {loading ? (
               <div className="text-center py-8 text-sm text-muted-foreground">
-                Loading...
+                <Clock className="h-6 w-6 mx-auto mb-2 animate-spin" />
+                Loading waitlist...
               </div>
             ) : entries.length === 0 ? (
-              <div className="text-center py-8 text-sm text-muted-foreground">
-                No one on the waitlist
+              <div className="text-center py-8 text-sm text-muted-foreground space-y-2">
+                <Clock className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="font-medium">Waitlist is empty</p>
+                <p className="text-xs">
+                  Add clients who want to be notified when slots become available
+                </p>
               </div>
             ) : (
               <ScrollArea className="max-h-[300px]">

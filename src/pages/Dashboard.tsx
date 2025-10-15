@@ -326,7 +326,7 @@ const Dashboard = () => {
         setShowProfileCompletion(true);
       }
     } catch (error: any) {
-      toast.error("Error loading dashboard");
+      toast.error("Unable to load your dashboard. Please refresh the page.");
       console.error(error);
     } finally {
       setLoading(false);

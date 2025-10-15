@@ -90,7 +90,7 @@ export function QuickAddClientFAB() {
         onClick={() => setOpen(true)}
         size="lg"
         className={cn(
-          "fixed bottom-20 right-6 z-40 h-14 w-14 rounded-full shadow-lg",
+          "fixed bottom-20 right-6 z-[45] h-14 w-14 rounded-full shadow-lg",
           "lg:bottom-6 lg:right-6",
           "bg-gradient-to-br from-emerald-500 to-green-600",
           "hover:from-emerald-600 hover:to-green-700",
