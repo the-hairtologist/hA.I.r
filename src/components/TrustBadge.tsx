@@ -12,22 +12,22 @@ export const TrustBadge = ({ type, className }: TrustBadgeProps) => {
     verified: {
       icon: CheckCircle,
       text: "Verified",
-      color: "bg-green-100 text-green-700 border-green-300",
+      color: "bg-success/10 text-success border-success",
     },
     "top-rated": {
       icon: Star,
       text: "Top Rated",
-      color: "bg-yellow-100 text-yellow-700 border-yellow-300",
+      color: "bg-warning/10 text-warning border-warning",
     },
     experienced: {
       icon: Award,
       text: "Experienced",
-      color: "bg-blue-100 text-blue-700 border-blue-300",
+      color: "bg-info/10 text-info border-info",
     },
     responsive: {
       icon: Shield,
       text: "Quick Responder",
-      color: "bg-purple-100 text-purple-700 border-purple-300",
+      color: "bg-accent/10 text-accent border-accent",
     },
   };
 

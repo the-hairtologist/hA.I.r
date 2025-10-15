@@ -54,10 +54,10 @@ export const SmartSchedulingSuggestions = ({
 
   const getConfidenceColor = (confidence: string) => {
     switch (confidence) {
-      case 'high': return 'text-green-600 bg-green-50 border-green-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-orange-600 bg-orange-50 border-orange-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case 'high': return 'text-success bg-success/10 border-success';
+      case 'medium': return 'text-warning bg-warning/10 border-warning';
+      case 'low': return 'text-destructive bg-destructive/10 border-destructive';
+      default: return 'text-muted-foreground bg-muted border-border';
     }
   };
 

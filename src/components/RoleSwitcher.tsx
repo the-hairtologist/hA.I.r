@@ -29,19 +29,19 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
       icon: Crown,
       label: "Admin View",
       color: "text-warning",
-      gradient: "bg-gradient-to-r from-amber-500 to-orange-500"
+      gradient: "bg-gradient-warning-orange"
     },
     stylist: {
       icon: Scissors,
       label: "Stylist View",
-      color: "text-purple-400",
-      gradient: "bg-gradient-to-r from-purple-500 to-pink-500"
+      color: "text-accent",
+      gradient: "bg-gradient-purple-pink"
     },
     client: {
       icon: User,
       label: "Client View",
-      color: "text-cyan-400",
-      gradient: "bg-gradient-to-r from-cyan-500 to-blue-500"
+      color: "text-info",
+      gradient: "bg-gradient-cyan-blue"
     }
   };
 

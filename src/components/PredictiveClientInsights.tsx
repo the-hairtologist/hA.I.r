@@ -28,9 +28,9 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
 
   const getConfidenceBadge = (confidence: string) => {
     const colors = {
-      high: "bg-green-100 text-green-700 border-green-300",
-      medium: "bg-yellow-100 text-yellow-700 border-yellow-300",
-      low: "bg-orange-100 text-orange-700 border-orange-300"
+      high: "bg-success/10 text-success border-success",
+      medium: "bg-warning/10 text-warning border-warning",
+      low: "bg-destructive/10 text-destructive border-destructive"
     };
     return colors[confidence as keyof typeof colors] || colors.medium;
   };

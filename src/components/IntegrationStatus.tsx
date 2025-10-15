@@ -119,8 +119,8 @@ const StatusItem = ({
     switch (status) {
       case 'active':
         return {
-          icon: <Check className="h-4 w-4 text-green-600" />,
-          badge: <Badge variant="default" className="bg-green-600">Active</Badge>,
+          icon: <Check className="h-4 w-4 text-success" />,
+          badge: <Badge variant="default" className="bg-success hover:bg-success">Active</Badge>,
         };
       case 'error':
         return {

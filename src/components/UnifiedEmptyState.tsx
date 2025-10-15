@@ -13,11 +13,11 @@ interface UnifiedEmptyStateProps {
 }
 
 const variantClasses = {
-  blue: 'bg-blue-400',
-  green: 'bg-green-400',
-  yellow: 'bg-yellow-300',
-  purple: 'bg-purple-400',
-  red: 'bg-red-400',
+  blue: 'bg-info/20',
+  green: 'bg-success/20',
+  yellow: 'bg-warning/20',
+  purple: 'bg-accent/20',
+  red: 'bg-destructive/20',
 };
 
 /**
