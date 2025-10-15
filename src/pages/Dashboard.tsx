@@ -185,8 +185,15 @@ const Dashboard = () => {
       
       // Check if we should show onboarding - only OnboardingWizard
       const onboardingComplete = localStorage.getItem('onboarding_completed');
+      const profileComplete = localStorage.getItem('profile_completed');
+      
       if (!onboardingComplete && user) {
         setTimeout(() => setShowOnboardingWizard(true), 500);
+      }
+      
+      // Only check profile completion if not already marked complete AND onboarding is done
+      if (profileComplete || !onboardingComplete) {
+        return; // Skip profile completion check
       }
       
       // Check profile completion
@@ -322,7 +329,9 @@ const Dashboard = () => {
 
       setUserProfile(profileData);
 
-      if (!profileData?.full_name) {
+      // Only show profile completion if not already marked as complete
+      const profileComplete = localStorage.getItem('profile_completed');
+      if (!profileData?.full_name && !profileComplete) {
         setShowProfileCompletion(true);
       }
     } catch (error: any) {
