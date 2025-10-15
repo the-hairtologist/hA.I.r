@@ -4,6 +4,7 @@
  */
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -134,6 +135,7 @@ interface FeatureShowcaseProps {
 }
 
 export function FeatureShowcase({ role = "stylist", onClose, compact = false }: FeatureShowcaseProps) {
+  const navigate = useNavigate();
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
   const [playingDemo, setPlayingDemo] = useState(false);
 
@@ -275,7 +277,7 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
               }
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Button size="lg" className="gap-2" onClick={onClose || (() => window.location.href = "/auth")}>
+              <Button size="lg" className="gap-2" onClick={onClose || (() => navigate("/auth"))}>
                 <CalendarCheck className="h-5 w-5" />
                 {role === "stylist" ? "Start Free Trial" : "Find Your Stylist"}
               </Button>

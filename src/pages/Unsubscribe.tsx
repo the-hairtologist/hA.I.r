@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, CheckCircle2, XCircle } from "lucide-react";
 
 export default function Unsubscribe() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
@@ -100,7 +101,7 @@ export default function Unsubscribe() {
               Changed your mind? Contact your stylist to update your preferences.
             </p>
             <Button
-              onClick={() => window.location.href = '/'}
+              onClick={() => navigate('/')}
               variant="outline"
             >
               Return to Home

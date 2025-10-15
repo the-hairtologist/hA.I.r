@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Gift, Star, Trophy, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -21,6 +22,7 @@ interface Milestone {
 }
 
 export function LoyaltyProgressWidget() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [appointmentCount, setAppointmentCount] = useState(0);
@@ -153,7 +155,7 @@ export function LoyaltyProgressWidget() {
 
         {/* Call to action */}
         <Button
-          onClick={() => window.location.href = '/appointments'}
+          onClick={() => navigate('/appointments')}
           variant="outline"
           className="w-full"
         >
