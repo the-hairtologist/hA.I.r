@@ -71,7 +71,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-primary/5">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-amber-orange">
             <Award className="h-5 w-5 text-on-surface-primary" />
           </div>
@@ -86,7 +86,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
             ))}
           </div>
         ) : services.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">
+          <p className="text-xs sm:text-sm text-muted-foreground text-center py-4">
             No completed services yet
           </p>
         ) : (
@@ -103,14 +103,14 @@ export function TopServices({ stylistId }: TopServicesProps) {
                     {index + 1}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-sm truncate">
+                    <h4 className="font-semibold text-xs sm:text-sm truncate">
                       {service.service}
                     </h4>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[11px] sm:text-xs text-muted-foreground">
                       ${service.revenue.toFixed(2)} total
                     </p>
                   </div>
-                  <Badge variant="secondary" className="shrink-0">
+                  <Badge variant="secondary" className="shrink-0 text-[11px] sm:text-xs">
                     {service.count}x
                   </Badge>
                 </div>

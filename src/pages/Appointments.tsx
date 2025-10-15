@@ -317,7 +317,7 @@ const Appointments = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">My Appointments</h1>
+              <h1 className="text-xl sm:text-2xl font-bold">My Appointments</h1>
             </div>
           </div>
         </header>
@@ -352,7 +352,7 @@ const Appointments = () => {
                 </Button>
                 <div className="flex items-center gap-2 min-w-0">
                   <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
-                  <h1 className="text-2xl font-display font-bold gradient-text truncate">
+                  <h1 className="text-xl sm:text-2xl font-display font-bold gradient-text truncate">
                     {userRole === "client" ? "My Appointments" : "Appointments"}
                   </h1>
                 </div>
@@ -496,7 +496,7 @@ const Appointments = () => {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader className="border-b-[2px] border-border py-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="font-display text-lg">
+                  <CardTitle className="font-display text-base sm:text-lg">
                     Today's Schedule - {format(new Date(), 'EEEE, MMMM d')}
                   </CardTitle>
                   {todayAppointments.length > 0 && (
@@ -513,7 +513,7 @@ const Appointments = () => {
                         ? "No appointments match your filters"
                         : "Your schedule is clear today! ☕"}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
                       {searchQuery || statusFilter !== "all"
                         ? "Try adjusting your search or filters"
                         : "Time to relax or catch up on other tasks"}
@@ -562,7 +562,7 @@ const Appointments = () => {
                                 : apt.client?.user?.full_name
                               }
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-xs sm:text-sm text-muted-foreground">
                               {format(new Date(apt.appointment_date), "h:mm a")} • {apt.service_type} • {apt.duration_minutes}min
                             </p>
                           </div>
@@ -679,13 +679,13 @@ const Appointments = () => {
             <div className="space-y-4">
               <div>
                 <Label>{userRole === "client" ? "Stylist" : "Client"}</Label>
-                <p className="text-sm font-medium">
+                <p className="text-xs sm:text-sm font-medium">
                   {userRole === "client"
                     ? (selectedAppointment.stylist?.business_name || selectedAppointment.stylist?.user?.full_name)
                     : selectedAppointment.client?.user?.full_name
                   }
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {userRole === "client"
                     ? selectedAppointment.stylist?.user?.email
                     : selectedAppointment.client?.user?.email
@@ -693,7 +693,7 @@ const Appointments = () => {
                 </p>
                 {((userRole === "client" && selectedAppointment.stylist?.user?.phone) ||
                   (userRole === "stylist" && selectedAppointment.client?.user?.phone)) && (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     {userRole === "client" 
                       ? selectedAppointment.stylist?.user?.phone
                       : selectedAppointment.client?.user?.phone
@@ -703,16 +703,16 @@ const Appointments = () => {
               </div>
               <div>
                 <Label>Service</Label>
-                <p className="text-sm">{selectedAppointment.service_type}</p>
+                <p className="text-xs sm:text-sm">{selectedAppointment.service_type}</p>
               </div>
               <div>
                 <Label>Duration</Label>
-                <p className="text-sm">{selectedAppointment.duration_minutes} minutes</p>
+                <p className="text-xs sm:text-sm">{selectedAppointment.duration_minutes} minutes</p>
               </div>
               {selectedAppointment.notes && (
                 <div>
                   <Label>Notes</Label>
-                  <p className="text-sm text-muted-foreground">{selectedAppointment.notes}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{selectedAppointment.notes}</p>
                 </div>
               )}
               <div>
@@ -723,7 +723,7 @@ const Appointments = () => {
               {/* Quick Context Links */}
               {userRole === "stylist" && (
                 <div className="pt-4 border-t space-y-2">
-                  <p className="text-sm font-medium mb-3">Quick Actions</p>
+                  <p className="text-xs sm:text-sm font-medium mb-3">Quick Actions</p>
                   <div className="grid gap-2">
                     <Button 
                       variant="outline" 

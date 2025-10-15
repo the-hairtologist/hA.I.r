@@ -74,7 +74,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-pink-500/5">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-pink-rose">
             <Heart className="h-5 w-5 text-on-surface-primary" />
           </div>
@@ -90,7 +90,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
           </div>
         ) : stylists.length === 0 ? (
           <div className="text-center py-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               No favorite stylists yet. Complete some appointments to build your stylist connections!
             </p>
           </div>
@@ -109,10 +109,10 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-sm truncate">
+                    <h4 className="font-semibold text-xs sm:text-sm truncate">
                       {stylist.business_name || stylist.user?.full_name}
                     </h4>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[11px] sm:text-xs text-muted-foreground">
                       Your go-to stylist
                     </p>
                   </div>
@@ -121,7 +121,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="flex-1 gap-1 h-8 text-xs"
+                    className="flex-1 gap-1 h-8 text-[11px] sm:text-xs"
                     onClick={() => navigate(`/stylist/${stylist.id}`)}
                   >
                     <Calendar className="h-3 w-3" />
@@ -130,7 +130,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="flex-1 gap-1 h-8 text-xs"
+                    className="flex-1 gap-1 h-8 text-[11px] sm:text-xs"
                     onClick={() => navigate("/messages")}
                   >
                     <MessageSquare className="h-3 w-3" />

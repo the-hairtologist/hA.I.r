@@ -82,10 +82,10 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
           <div className="mx-auto mb-4 p-4 rounded-xl bg-primary/10 brutal-border border-primary">
             <Sparkles className="h-12 w-12 text-primary" />
           </div>
-          <DialogTitle className="text-2xl font-bold text-center">
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center">
             Ready to Transform Your Business?
           </DialogTitle>
-          <DialogDescription className="text-center text-base">
+          <DialogDescription className="text-center text-sm sm:text-base">
             Join thousands of stylists maximizing their income with AI-powered tools. Start your 7-day free trial today
           </DialogDescription>
         </DialogHeader>
@@ -94,8 +94,8 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
           {/* Pricing Card */}
           <div className="brutal-border border-primary rounded-xl p-6 bg-gradient-to-br from-primary/5 to-secondary/5 brutal-shadow-xs">
             <div className="text-center mb-4">
-              <div className="text-4xl font-bold text-primary">$15<span className="text-lg text-muted-foreground">/month</span></div>
-              <div className="text-sm text-muted-foreground mt-1">7-day free trial included</div>
+              <div className="text-3xl sm:text-4xl font-bold text-primary">$15<span className="text-base sm:text-lg text-muted-foreground">/month</span></div>
+              <div className="text-xs sm:text-sm text-muted-foreground mt-1">7-day free trial included</div>
             </div>
             <Button 
               onClick={handleSubscribe} 
@@ -105,7 +105,7 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
             >
               {loading ? "Starting trial..." : "Start 7-Day Free Trial"}
             </Button>
-            <p className="text-xs text-center text-muted-foreground mt-2">
+            <p className="text-[11px] sm:text-xs text-center text-muted-foreground mt-2">
               Cancel anytime during trial • No commitment required
             </p>
           </div>
@@ -124,8 +124,8 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
                       <Icon className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold mb-1">{feature.title}</h3>
-                      <p className="text-sm text-muted-foreground">{feature.description}</p>
+                      <h3 className="font-semibold text-sm sm:text-base mb-1">{feature.title}</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{feature.description}</p>
                     </div>
                   </div>
                 </div>
@@ -138,8 +138,8 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
             <div className="flex items-start gap-2">
               <Lock className="h-5 w-5 text-muted-foreground mt-0.5" />
               <div>
-                <h3 className="font-semibold text-sm mb-1">What You're Missing Without Pro</h3>
-                <p className="text-xs text-muted-foreground">
+                <h3 className="font-semibold text-xs sm:text-sm mb-1">What You're Missing Without Pro</h3>
+                <p className="text-[11px] sm:text-xs text-muted-foreground">
                   Free accounts can't manage clients, book appointments, generate AI formulas, or track revenue. 
                   Upgrade now to unlock your full earning potential.
                 </p>
@@ -148,7 +148,7 @@ export const StylistSubscriptionPrompt = ({ open, onOpenChange }: StylistSubscri
           </div>
 
           {/* Trust Signals */}
-          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-6 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Check className="h-4 w-4 text-success" />
               <span>Cancel Anytime</span>

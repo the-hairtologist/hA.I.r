@@ -81,13 +81,13 @@ export function NextAppointmentWidget() {
     return (
       <Card className="border-2 border-dashed">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
             <Calendar className="h-5 w-5" />
             No Upcoming Appointments
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-4">
             Ready to book your next appointment?
           </p>
           <Button 
@@ -108,33 +108,33 @@ export function NextAppointmentWidget() {
   return (
     <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
           <Calendar className="h-5 w-5 text-primary" />
           Next Appointment
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
             <Clock className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">{format(aptDate, "EEEE, MMMM d 'at' h:mm a")}</span>
           </div>
           
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
             <span>{timeUntil}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
             <User className="h-4 w-4 text-muted-foreground" />
             <span>{appointment.stylist_name}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
             <span className="font-medium text-primary">{appointment.service_type}</span>
           </div>
 
           {appointment.notes && (
-            <div className="mt-2 p-2 bg-muted/50 rounded text-sm">
+            <div className="mt-2 p-2 bg-muted/50 rounded text-xs sm:text-sm">
               <p className="text-muted-foreground">{appointment.notes}</p>
             </div>
           )}

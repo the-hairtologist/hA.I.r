@@ -340,7 +340,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="location">
-                    Location <span className="text-muted-foreground text-xs">(Optional)</span>
+                    Location <span className="text-muted-foreground text-[11px] sm:text-xs">(Optional)</span>
                   </Label>
                   <Input
                     id="location"
@@ -349,14 +349,14 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                     placeholder="e.g., Los Angeles, CA"
                     maxLength={100}
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     City and state
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="yearsExperience">
-                    Years Experience <span className="text-muted-foreground text-xs">(Optional)</span>
+                    Years Experience <span className="text-muted-foreground text-[11px] sm:text-xs">(Optional)</span>
                   </Label>
                   <Input
                     id="yearsExperience"
@@ -367,14 +367,14 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                     onChange={(e) => setYearsExperience(e.target.value)}
                     placeholder="5"
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     Years of professional experience
                   </p>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="colorLine" className="text-base font-semibold">
+                <Label htmlFor="colorLine" className="text-sm sm:text-base font-semibold">
                   Preferred Color Line <span className="text-primary">*</span>
                 </Label>
                 <Input
@@ -386,13 +386,13 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                   className={!colorLine.trim() ? "border-primary/50" : ""}
                 />
                 <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 space-y-2">
-                  <p className="text-sm font-medium text-primary">
+                  <p className="text-xs sm:text-sm font-medium text-primary">
                     🎨 Important for Formula Accuracy
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     Specifying your color line ensures AI-generated formulas match your exact products and mixing ratios. This dramatically improves formula reliability and consistency.
                   </p>
-                  <p className="text-xs text-muted-foreground font-medium">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground font-medium">
                     Popular brands: Redken, Wella, Schwarzkopf, Goldwell, Matrix, Pravana, Pulp Riot, Joico, L'Oréal Professional
                   </p>
                 </div>
@@ -403,13 +403,13 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           {step === 3 && userRole === "stylist" && (
             <div className="space-y-4 animate-fade-in">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold mb-2">Share Your Story</h3>
-                <p className="text-sm text-muted-foreground">Connect with clients on a personal level</p>
+                <h3 className="text-base sm:text-lg font-semibold mb-2">Share Your Story</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Connect with clients on a personal level</p>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="bio">
-                  Professional Bio <span className="text-muted-foreground text-xs">(Optional)</span>
+                  Professional Bio <span className="text-muted-foreground text-[11px] sm:text-xs">(Optional)</span>
                 </Label>
                 <Textarea
                   id="bio"
@@ -420,7 +420,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                   maxLength={500}
                   className="resize-none"
                 />
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <div className="flex items-center justify-between text-[11px] sm:text-xs text-muted-foreground">
                   <span>Visible on your profile and in stylist discovery</span>
                   <span className={bio.length > 450 ? "text-warning" : ""}>
                     {bio.length}/500
@@ -433,8 +433,8 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           {step === 2 && userRole === "client" && (
             <div className="space-y-4 animate-fade-in text-center py-8">
               <CheckCircle className="h-16 w-16 text-success mx-auto mb-4" />
-              <h3 className="text-2xl font-bold">You're All Set!</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-xl sm:text-2xl font-bold">You're All Set!</h3>
+              <p className="text-xs sm:text-sm lg:text-base text-muted-foreground">
                 Your profile is complete. You can now discover stylists and book appointments.
               </p>
             </div>

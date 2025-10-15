@@ -60,7 +60,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-accent/5">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center justify-between gap-2 text-lg font-display">
+        <CardTitle className="flex items-center justify-between gap-2 text-base sm:text-lg font-display">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-gradient-purple-pink">
               <Smile className="h-5 w-5 text-on-surface-primary" />
@@ -81,16 +81,16 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
             <div className="h-20 bg-muted/50 rounded-lg animate-pulse" />
           </div>
         ) : total === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">
+          <p className="text-xs sm:text-sm text-muted-foreground text-center py-4">
             No reviews yet. Keep up the great work!
           </p>
         ) : (
           <div className="space-y-4">
             <div className="text-center">
-              <div className="text-4xl font-display font-bold text-primary">
+              <div className="text-3xl sm:text-4xl font-display font-bold text-primary">
                 {positivePercent}%
               </div>
-              <p className="text-sm text-muted-foreground font-medium mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">
                 Positive Reviews
               </p>
             </div>
@@ -104,7 +104,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
                     style={{ width: `${total > 0 ? (sentiment.positive / total) * 100 : 0}%` }}
                   />
                 </div>
-                <span className="text-sm font-bold w-8 text-right">{sentiment.positive}</span>
+                <span className="text-xs sm:text-sm font-bold w-8 text-right">{sentiment.positive}</span>
               </div>
               
               <div className="flex items-center gap-3">
@@ -115,7 +115,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
                     style={{ width: `${total > 0 ? (sentiment.neutral / total) * 100 : 0}%` }}
                   />
                 </div>
-                <span className="text-sm font-bold w-8 text-right">{sentiment.neutral}</span>
+                <span className="text-xs sm:text-sm font-bold w-8 text-right">{sentiment.neutral}</span>
               </div>
               
               <div className="flex items-center gap-3">
@@ -126,7 +126,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
                     style={{ width: `${total > 0 ? (sentiment.negative / total) * 100 : 0}%` }}
                   />
                 </div>
-                <span className="text-sm font-bold w-8 text-right">{sentiment.negative}</span>
+                <span className="text-xs sm:text-sm font-bold w-8 text-right">{sentiment.negative}</span>
               </div>
             </div>
           </div>

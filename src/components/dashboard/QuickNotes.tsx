@@ -99,7 +99,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <StickyNote className="h-4 w-4 text-yellow-700 dark:text-yellow-300" />
-            <h3 className="text-xs font-bold text-yellow-900 dark:text-yellow-100 uppercase tracking-wide">Quick Notes</h3>
+            <h3 className="text-[11px] sm:text-xs font-bold text-yellow-900 dark:text-yellow-100 uppercase tracking-wide">Quick Notes</h3>
           </div>
           
           <Textarea
@@ -107,7 +107,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
             maxLength={500}
-            className="flex-1 min-h-[200px] resize-none bg-transparent border-none focus:ring-1 focus:ring-yellow-400 text-yellow-900 dark:text-yellow-50 placeholder:text-yellow-600/60 dark:placeholder:text-yellow-400/60 shadow-none rounded p-2 pl-12 font-mono text-xs leading-7"
+            className="flex-1 min-h-[200px] resize-none bg-transparent border-none focus:ring-1 focus:ring-yellow-400 text-yellow-900 dark:text-yellow-50 placeholder:text-yellow-600/60 dark:placeholder:text-yellow-400/60 shadow-none rounded p-2 pl-12 font-mono text-[11px] sm:text-xs leading-7"
             style={{ lineHeight: '28px' }}
           />
           
@@ -119,7 +119,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
               onClick={handleSaveNote}
               disabled={!newNote.trim()}
               size="sm"
-              className="gap-1.5 bg-yellow-500 hover:bg-yellow-600 text-yellow-950 shadow-md h-7 text-xs px-3"
+              className="gap-1.5 bg-yellow-500 hover:bg-yellow-600 text-yellow-950 shadow-md h-7 text-[11px] sm:text-xs px-3"
             >
               <Save className="h-3 w-3" />
               Save
@@ -159,7 +159,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-display">
           <div className="p-2 rounded-lg bg-gradient-purple-pink">
             <StickyNote className="h-5 w-5 text-primary-foreground" />
           </div>
@@ -177,7 +177,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
               className="min-h-[80px] resize-none brutal-border"
             />
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">
+              <span className="text-[11px] sm:text-xs text-muted-foreground">
                 {newNote.length}/500
               </span>
               <Button
@@ -205,15 +205,15 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
                   key={note.id}
                   className="p-3 rounded-lg bg-muted/30 brutal-border text-sm"
                 >
-                  <p className="text-foreground/90">{note.content}</p>
-                  <p className="text-xs text-muted-foreground mt-2">
+                <p className="text-xs sm:text-sm text-foreground/90">{note.content}</p>
+                  <p className="text-[11px] sm:text-xs text-muted-foreground mt-2">
                     {new Date(note.created_at).toLocaleDateString()}
                   </p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground text-center py-2">
+            <p className="text-xs sm:text-sm text-muted-foreground text-center py-2">
               No notes yet. Start writing!
             </p>
           )}

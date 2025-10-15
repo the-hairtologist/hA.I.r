@@ -74,7 +74,7 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-success/5">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center justify-between gap-2 text-lg font-display">
+        <CardTitle className="flex items-center justify-between gap-2 text-base sm:text-lg font-display">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-gradient-green-emerald">
               <DollarSign className="h-5 w-5 text-on-surface-primary" />
@@ -82,13 +82,13 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
             <span>Revenue Trends</span>
           </div>
           {trend === "up" && (
-            <div className="flex items-center gap-1 text-success text-sm font-bold">
+            <div className="flex items-center gap-1 text-success text-xs sm:text-sm font-bold">
               <TrendingUp className="h-4 w-4" />
               <span>Up</span>
             </div>
           )}
           {trend === "down" && (
-            <div className="flex items-center gap-1 text-destructive text-sm font-bold">
+            <div className="flex items-center gap-1 text-destructive text-xs sm:text-sm font-bold">
               <TrendingDown className="h-4 w-4" />
               <span>Down</span>
             </div>
@@ -101,10 +101,10 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
         ) : (
           <div className="space-y-4">
             <div className="text-center">
-              <div className="text-3xl font-display font-bold text-success">
+              <div className="text-2xl sm:text-3xl font-display font-bold text-success">
                 ${currentMonth?.amount.toFixed(2) || "0.00"}
               </div>
-              <p className="text-sm text-muted-foreground font-medium mt-1">
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">
                 This Month
               </p>
             </div>
@@ -119,7 +119,7 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
                     }}>
                     <div className="absolute inset-0 bg-gradient-to-t from-success to-success/60" />
                   </div>
-                  <span className="text-xs font-bold text-muted-foreground">
+                  <span className="text-[11px] sm:text-xs font-bold text-muted-foreground">
                     {month.month}
                   </span>
                 </div>
