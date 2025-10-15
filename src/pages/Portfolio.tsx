@@ -8,12 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, ArrowLeft, Trash2 } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, ArrowLeft, Trash2, Sparkles } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { PortfolioInsights } from "@/components/PortfolioInsights";
+import { BackgroundRemovalDialog } from "@/components/BackgroundRemovalDialog";
 
 interface PortfolioPhoto {
   id: string;
@@ -42,6 +43,10 @@ const Portfolio = () => {
     description: string;
     onConfirm: () => void;
   }>({ open: false, title: "", description: "", onConfirm: () => {} });
+  const [bgRemovalDialog, setBgRemovalDialog] = useState<{
+    open: boolean;
+    imageUrl: string;
+  }>({ open: false, imageUrl: "" });
 
   useEffect(() => {
     checkUserAndLoadPhotos();
@@ -493,7 +498,21 @@ const Portfolio = () => {
                       {photo.caption && (
                         <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{photo.caption}</p>
                       )}
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 mb-2">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => setBgRemovalDialog({ 
+                            open: true, 
+                            imageUrl: photo.is_before_after && photo.before_photo_url 
+                              ? photo.before_photo_url 
+                              : photo.photo_url 
+                          })}
+                          className="flex-1"
+                          title="Remove background with AI"
+                        >
+                          <Sparkles className="h-4 w-4" />
+                        </Button>
                         <Button
                           size="sm"
                           variant="outline"
@@ -537,6 +556,12 @@ const Portfolio = () => {
           description={confirmDialog.description}
           confirmText="Delete"
           variant="destructive"
+        />
+
+        <BackgroundRemovalDialog
+          open={bgRemovalDialog.open}
+          onOpenChange={(open) => setBgRemovalDialog({ ...bgRemovalDialog, open })}
+          imageUrl={bgRemovalDialog.imageUrl}
         />
       </div>
     </DashboardLayout>

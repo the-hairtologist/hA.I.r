@@ -95,6 +95,7 @@ const GrowthAnalytics = lazy(() => import("./pages/GrowthAnalytics"));
 const FeedbackBoard = lazy(() => import("./pages/FeedbackBoard"));
 const ClientFormulas = lazy(() => import("./pages/ClientFormulas"));
 const InstallPWA = lazy(() => import("./pages/InstallPWA"));
+const ZapierIntegration = lazy(() => import("./pages/ZapierIntegration"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -217,6 +218,11 @@ const App = () => {
           <Route path="/integrations" element={
             <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Integrations />
+            </ProtectedRoute>
+          } />
+          <Route path="/integrations/zapier" element={
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
+              <ZapierIntegration />
             </ProtectedRoute>
           } />
           <Route path="/appointments" element={

@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -354,6 +355,7 @@ const categories = [
 ];
 
 const Integrations = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
   const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
@@ -400,6 +402,12 @@ const Integrations = () => {
   }), []);
 
   const handleConnect = async (integration: Integration) => {
+    // Direct navigation for Zapier to dedicated setup page
+    if (integration.id === "zapier") {
+      navigate("/integrations/zapier");
+      return;
+    }
+
     setIsConnecting(true);
     
     try {
