@@ -89,7 +89,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) throw new Error("Stylist profile not found");
 
@@ -119,7 +119,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
             stylist_id: stylistProfile.id,
           })
           .select()
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
         sequenceId = data.id;

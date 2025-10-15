@@ -22,7 +22,7 @@ export const ClientPreferenceCenter = () => {
         .from("client_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!clientProfile) return null;
 
@@ -53,7 +53,7 @@ export const ClientPreferenceCenter = () => {
         .from("client_profiles")
         .select("id, email")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!clientProfile) throw new Error("Client profile not found");
 

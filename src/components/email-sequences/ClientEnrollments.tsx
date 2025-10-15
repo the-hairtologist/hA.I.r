@@ -28,7 +28,7 @@ export const ClientEnrollments = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       const { data, error } = await supabase
         .from("email_sequence_enrollments")
@@ -54,7 +54,7 @@ export const ClientEnrollments = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       const { data, error } = await supabase
         .from("client_profiles")
@@ -76,7 +76,7 @@ export const ClientEnrollments = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       const { data, error } = await supabase
         .from("email_sequences")
@@ -118,7 +118,7 @@ export const ClientEnrollments = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       const { data, error } = await supabase.functions.invoke('enroll-in-sequence', {
         body: {

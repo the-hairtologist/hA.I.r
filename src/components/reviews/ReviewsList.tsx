@@ -36,7 +36,7 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
         .from("stylist_profiles")
         .select("average_rating, total_reviews")
         .eq("id", stylistId)
-        .single();
+        .maybeSingle();
 
       if (stylistData) {
         setAverageRating(stylistData.average_rating || 0);
@@ -71,7 +71,7 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
               .from("profiles")
               .select("full_name, avatar_url")
               .eq("id", review.client_profiles.user_id)
-              .single();
+              .maybeSingle();
 
             return {
               ...review,

@@ -181,7 +181,7 @@ class PredictiveAnalytics {
       .from('profiles')
       .select('*')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
     
     if (profile) {
       const daysSinceUpdate = Math.ceil((Date.now() - new Date(profile.updated_at).getTime()) / (1000 * 60 * 60 * 24));

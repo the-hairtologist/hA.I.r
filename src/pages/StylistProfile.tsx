@@ -52,7 +52,7 @@ const StylistProfile = () => {
         .from("public_stylist_profiles_safe")
         .select("*")
         .eq("id", stylistId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       setStylist(data);

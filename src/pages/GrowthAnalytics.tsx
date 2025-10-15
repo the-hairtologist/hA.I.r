@@ -24,7 +24,7 @@ const GrowthAnalytics = () => {
         .from('stylist_profiles')
         .select('*')
         .eq('user_id', session?.user?.id)
-        .single();
+        .maybeSingle();
       return data;
     },
     enabled: !!session?.user?.id,
@@ -61,7 +61,7 @@ const GrowthAnalytics = () => {
         .from('stylist_referrals')
         .select('*')
         .eq('stylist_id', stylistProfile.id)
-        .single();
+        .maybeSingle();
       
       return data;
     },

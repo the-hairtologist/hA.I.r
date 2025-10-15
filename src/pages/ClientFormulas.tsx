@@ -35,7 +35,7 @@ const ClientFormulas = () => {
         .from("client_profiles")
         .select("*")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
 
       if (!client) {
         setLoading(false);

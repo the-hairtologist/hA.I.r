@@ -49,7 +49,7 @@ export default function EmailSettings() {
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -67,7 +67,7 @@ export default function EmailSettings() {
         .from("email_settings")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
       return data || { ...DEFAULT_EMAIL_SETTINGS, user_id: user.id };

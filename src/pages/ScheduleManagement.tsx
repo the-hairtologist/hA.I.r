@@ -204,7 +204,7 @@ const ScheduleManagement = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
 
       if (!stylist) return;
 

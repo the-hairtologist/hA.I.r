@@ -78,7 +78,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         .select("id")
         .eq("used_by", session.user.id)
         .eq("is_active", true)
-        .single();
+        .maybeSingle();
       
       const hasValidAccessCode = !!accessCodeData;
       setHasAccessCode(hasValidAccessCode);

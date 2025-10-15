@@ -14,7 +14,7 @@ export const SequenceAnalytics = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       // Total sequences
       const { count: totalSequences } = await supabase
@@ -135,14 +135,6 @@ export const SequenceAnalytics = () => {
             ))}
           </div>
 
-          {/* Coming Soon */}
-          <Card className="p-12 text-center border-2 border-dashed">
-            <TrendingUp className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Advanced Analytics Coming Soon</h3>
-            <p className="text-muted-foreground">
-              Detailed charts, performance trends, and A/B testing results will be available here
-            </p>
-          </Card>
         </>
       )}
     </div>

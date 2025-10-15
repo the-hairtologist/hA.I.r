@@ -17,7 +17,7 @@ const ClientReviews = () => {
         .from('stylist_profiles')
         .select('*')
         .eq('user_id', session?.user?.id)
-        .single();
+        .maybeSingle();
       return data;
     },
     enabled: !!session?.user?.id,

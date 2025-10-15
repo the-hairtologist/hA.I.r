@@ -26,7 +26,7 @@ const Profile = () => {
         .from('profiles')
         .select('*')
         .eq('id', session?.user?.id)
-        .single();
+        .maybeSingle();
       return data;
     },
     enabled: !!session?.user?.id,
@@ -39,7 +39,7 @@ const Profile = () => {
         .from('stylist_profiles')
         .select('*')
         .eq('user_id', session?.user?.id)
-        .single();
+        .maybeSingle();
       return data;
     },
     enabled: !!session?.user?.id && userRole === 'stylist',

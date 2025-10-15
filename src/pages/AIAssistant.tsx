@@ -224,7 +224,7 @@ const Knowledge = () => {
             context_id: selectedClientId
           })
           .select()
-          .single();
+          .maybeSingle();
 
         if (convError) throw convError;
         convId = conv.id;
@@ -257,7 +257,7 @@ const Knowledge = () => {
         .from("stylist_profiles")
         .select("color_line, specialty, years_experience, business_name")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       setStylistContext(data);
@@ -275,7 +275,7 @@ const Knowledge = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistData) return;
 
@@ -306,7 +306,7 @@ const Knowledge = () => {
           client_since
         `)
         .eq("id", clientId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

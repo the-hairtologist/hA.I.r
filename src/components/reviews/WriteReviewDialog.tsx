@@ -59,7 +59,7 @@ export const WriteReviewDialog = ({
         .from("client_profiles")
         .select("id")
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
 
       if (!clientProfile) {
         toast.error("Client profile not found");

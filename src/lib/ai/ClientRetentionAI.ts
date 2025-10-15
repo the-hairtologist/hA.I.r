@@ -240,7 +240,7 @@ class ClientRetentionAISystem {
           .from('client_profiles')
           .select('*, user:profiles(full_name, email)')
           .eq('id', client.clientId)
-          .single();
+          .maybeSingle();
 
         if (!profile) continue;
 

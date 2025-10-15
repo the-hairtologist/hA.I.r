@@ -101,7 +101,7 @@ export const SequenceList = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) throw new Error("Stylist profile not found");
 
@@ -118,7 +118,7 @@ export const SequenceList = () => {
           is_active: false, // Start as inactive
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (seqError) throw seqError;
 
