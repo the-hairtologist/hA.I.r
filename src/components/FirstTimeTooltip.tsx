@@ -82,7 +82,7 @@ export const FirstTimeTooltip = ({
         <TooltipContent 
           side={side} 
           align={align}
-          className="max-w-xs p-4 border-2 border-foreground shadow-brutal bg-yellow-300 text-foreground animate-fade-in"
+          className="max-w-xs p-4 border-2 border-foreground shadow-brutal bg-warning/20 dark:bg-warning/30 text-foreground animate-fade-in"
           sideOffset={8}
         >
           <div className="flex items-start gap-2">

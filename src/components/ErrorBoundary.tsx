@@ -78,7 +78,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-          <Card className="max-w-md w-full brutal-border shadow-brutal-2xl bg-red-400">
+          <Card className="max-w-md w-full brutal-border shadow-brutal-2xl bg-destructive/20 dark:bg-destructive/30">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-12 h-12 rounded-full bg-card border-2 border-foreground flex items-center justify-center brutal-shadow-sm">
@@ -98,8 +98,8 @@ export class ErrorBoundary extends Component<Props, State> {
               </p>
 
               {this.state.errorCount > 0 && (
-                <div className="bg-yellow-100 dark:bg-yellow-900/20 p-3 rounded-lg border-2 border-yellow-600">
-                  <p className="text-sm text-yellow-800 dark:text-yellow-200 font-medium">
+                <div className="bg-warning/10 dark:bg-warning/20 p-3 rounded-lg border-2 border-warning">
+                  <p className="text-sm text-warning-foreground font-medium">
                     This error has occurred {this.state.errorCount} time{this.state.errorCount !== 1 ? 's' : ''}
                   </p>
                 </div>

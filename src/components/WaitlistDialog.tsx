@@ -310,7 +310,7 @@ export function WaitlistDialog() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleRemoveFromWaitlist(entry.id)}
-                          className="h-7 w-7 p-0 text-red-500 hover:text-red-600"
+                          className="h-7 w-7 p-0 text-destructive hover:text-destructive/80"
                           title="Remove from waitlist"
                         >
                           <X className="h-3.5 w-3.5" />

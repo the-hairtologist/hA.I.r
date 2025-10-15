@@ -81,7 +81,7 @@ export const ClientPortalPreview = ({
               )}
               {stylistRating && (
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="text-yellow-500">★</span>
+                  <span className="text-warning">★</span>
                   <span className="font-semibold">{stylistRating.toFixed(1)}</span>
                   {stylistReviews && (
                     <span className="text-muted-foreground">

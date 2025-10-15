@@ -307,7 +307,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteTemplate(template.id)}
-                          className="h-8 w-8 p-0 text-red-500 hover:text-red-600"
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive/80"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>

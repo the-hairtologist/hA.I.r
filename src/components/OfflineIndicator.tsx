@@ -43,13 +43,13 @@ export const OfflineIndicator = () => {
         className={cn(
           "rounded-none border-x-0 border-t-0",
           isOnline
-            ? "bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800"
+            ? "bg-success/10 border-success/30 dark:bg-success/20 dark:border-success/40"
             : "bg-destructive/10 border-destructive/50"
         )}
       >
         <div className="flex items-center gap-3">
           {isOnline ? (
-            <Wifi className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <Wifi className="h-4 w-4 text-success" />
           ) : (
             <WifiOff className="h-4 w-4 text-destructive" />
           )}
