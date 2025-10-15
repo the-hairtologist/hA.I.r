@@ -849,7 +849,7 @@ const Dashboard = () => {
                 }
               }, 100);
             }}
-            userRole={userRole as "stylist" | "client"}
+            userRole={userRole as "stylist" | "client" | "admin"}
           />
         )}
 

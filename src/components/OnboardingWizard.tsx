@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 interface OnboardingWizardProps {
   open: boolean;
   onComplete: () => void;
-  userRole: "stylist" | "client";
+  userRole: "stylist" | "client" | "admin";
 }
 
 interface Step {
@@ -89,7 +89,28 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
     },
   ];
 
-  const steps = userRole === "stylist" ? stylistSteps : clientSteps;
+  const adminSteps: Step[] = [
+    {
+      id: "welcome",
+      title: "Admin Dashboard Ready! 🚀",
+      description: "Welcome to the admin control panel. You have full access to manage users, monitor system health, and oversee platform operations.",
+      icon: Sparkles,
+    },
+    {
+      id: "monitoring",
+      title: "Platform Monitoring",
+      description: "Track user activity, system performance, and business metrics from your dashboard.",
+      icon: Target,
+    },
+    {
+      id: "management",
+      title: "User Management",
+      description: "Manage user accounts, roles, and permissions. Access all administrative tools from the navigation.",
+      icon: Users,
+    },
+  ];
+
+  const steps = userRole === "stylist" ? stylistSteps : userRole === "admin" ? adminSteps : clientSteps;
   const progress = ((currentStep + 1) / steps.length) * 100;
   const currentStepData = steps[currentStep];
 
