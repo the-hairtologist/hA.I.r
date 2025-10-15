@@ -257,7 +257,7 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-display">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg lg:text-xl font-display">
               {isAdmin ? (
                 <Crown className="h-5 w-5 text-amber-500" />
               ) : (
@@ -265,7 +265,7 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
               )}
               {isAdmin ? "Admin Controls" : "Your Quick Actions"}
             </CardTitle>
-            <p className="text-xs sm:text-sm font-semibold mt-1 text-foreground/80">
+            <p className="text-[11px] sm:text-xs lg:text-sm font-semibold mt-1 text-foreground/80">
               {isAdmin ? "Platform management at your fingertips" : "Jump to what matters most"}
             </p>
           </div>
@@ -293,10 +293,10 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
         {isCustomizing ? (
           <div className="space-y-4">
             <div className="p-3 sm:p-4 rounded-lg brutal-border bg-gradient-to-r from-primary/10 to-accent/10 brutal-shadow-sm">
-              <p className="text-xs sm:text-sm font-bold text-foreground">
+              <p className="text-[11px] sm:text-xs lg:text-sm font-bold text-foreground">
                 ✨ Customize Your Actions
               </p>
-              <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+              <p className="text-[10px] sm:text-[11px] lg:text-xs text-muted-foreground mt-1">
                 Click to toggle • Drag selected items to reorder
               </p>
             </div>
@@ -334,12 +334,12 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className={cn(
-                        "font-bold text-sm truncate transition-colors",
+                        "font-bold text-xs sm:text-sm lg:text-base truncate transition-colors",
                         isSelected && "text-primary"
                       )}>
                         {action.label}
                       </p>
-                      <p className="text-xs text-foreground/90 truncate">
+                      <p className="text-[11px] sm:text-xs lg:text-sm text-foreground/90 truncate">
                         {action.description}
                       </p>
                     </div>
@@ -389,12 +389,12 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
                     </div>
                     <div className="relative">
                       <h4 className={cn(
-                        "font-display font-semibold text-base mb-1 transition-colors",
+                        "font-display font-semibold text-sm sm:text-base lg:text-lg mb-1 transition-colors",
                         !action.disabled && "group-hover:text-primary"
                       )}>
                         {action.label}
                       </h4>
-                      <p className="text-sm text-foreground">
+                      <p className="text-xs sm:text-sm lg:text-base text-foreground">
                         {action.description}
                       </p>
                     </div>

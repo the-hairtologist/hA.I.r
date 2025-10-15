@@ -78,7 +78,7 @@ export const QuickTasks = () => {
   return (
     <Card variant="glass" className="backdrop-blur-xl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg lg:text-xl font-display">
           <CheckSquare className="h-5 w-5 text-primary" />
           Quick Tasks
         </CardTitle>
@@ -106,7 +106,7 @@ export const QuickTasks = () => {
 
         <div className="space-y-2">
           {tasks.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-4">
+            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground text-center py-4">
               No tasks yet. Add one above!
             </p>
           ) : (
@@ -122,7 +122,7 @@ export const QuickTasks = () => {
                   }
                 />
                 <span
-                  className={`flex-1 text-sm ${
+                  className={`flex-1 text-xs sm:text-sm lg:text-base ${
                     task.completed ? "line-through text-muted-foreground" : ""
                   }`}
                 >

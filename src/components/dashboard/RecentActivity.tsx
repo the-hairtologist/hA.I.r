@@ -85,7 +85,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
   return (
     <Card className="animate-fade-in brutal-card">
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
-        <CardTitle className="text-base sm:text-lg font-display text-foreground">Recent Activity</CardTitle>
+        <CardTitle className="text-sm sm:text-base lg:text-lg font-display text-foreground">Recent Activity</CardTitle>
       </CardHeader>
       <CardContent className="p-4 sm:p-5 md:p-6">
         <div className="space-y-3 sm:space-y-4">
@@ -107,24 +107,24 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                 <div className={`p-2 rounded-lg ${colorClass} brutal-border shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center`}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs sm:text-sm font-display font-semibold truncate">{activity.title}</p>
-                      <p className="text-[11px] sm:text-xs text-foreground/70 truncate">
-                        {activity.description}
-                      </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] sm:text-xs lg:text-sm font-display font-semibold truncate">{activity.title}</p>
+                        <p className="text-[10px] sm:text-[11px] lg:text-xs text-foreground/70 truncate">
+                          {activity.description}
+                        </p>
+                      </div>
+                      {activity.status && (
+                        <Badge variant="secondary" className={getStatusColor(activity.status)}>
+                          {activity.status}
+                        </Badge>
+                      )}
                     </div>
-                    {activity.status && (
-                      <Badge variant="secondary" className={getStatusColor(activity.status)}>
-                        {activity.status}
-                      </Badge>
-                    )}
+                    <p className="text-[10px] sm:text-[11px] lg:text-xs text-foreground/60 mt-1">
+                      {format(new Date(activity.timestamp), "MMM d, h:mm a")}
+                    </p>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-foreground/60 mt-1">
-                    {format(new Date(activity.timestamp), "MMM d, h:mm a")}
-                  </p>
-                </div>
               </div>
             );
           })}
