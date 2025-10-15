@@ -251,17 +251,9 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
                   {feature.description}
                 </p>
 
-                <Button
-                  className="w-full gap-2"
-                  variant={isSelected ? "default" : "outline"}
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDemoAction(feature.id);
-                  }}
-                >
-                  {playingDemo && isSelected ? "Demo Active" : "Learn More"}
-                </Button>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span className="font-medium">Available in app</span>
+                </div>
               </CardContent>
             </Card>
           );
@@ -274,22 +266,22 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
           <CardContent className="py-8">
             <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">
-              {role === "stylist" ? "Join 1,000+ Stylists" : "50,000+ Happy Clients"}
+              {role === "stylist" ? "Ready to Save Time & Grow?" : "Ready to Book Smarter?"}
             </h3>
             <p className="text-muted-foreground mb-6">
               {role === "stylist" 
-                ? "Already saving time and growing their business"
-                : "Never going back to phone bookings"
+                ? "Join 1,000+ stylists saving 2+ hours daily"
+                : "Join 50,000+ clients booking in seconds"
               }
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <Button size="lg" className="gap-2">
+              <Button size="lg" className="gap-2" onClick={onClose || (() => window.location.href = "/auth")}>
                 <CalendarCheck className="h-5 w-5" />
                 {role === "stylist" ? "Start Free Trial" : "Find Your Stylist"}
               </Button>
               {onClose && (
                 <Button size="lg" variant="outline" onClick={onClose}>
-                  Back to App
+                  Return to App
                 </Button>
               )}
             </div>

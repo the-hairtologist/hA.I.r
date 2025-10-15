@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -526,13 +527,18 @@ const Knowledge = () => {
             {userRole === "stylist" && correctionSteps.length > 0 && (
               <div className="window-chrome bg-gradient-to-br from-accent/5 to-primary/5">
                 <div className="p-3 md:p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckSquare className="h-4 w-4 text-accent" />
-                    <h3 className="text-sm font-display font-bold">Step Tracker</h3>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-2">
+                      <CheckSquare className="h-4 w-4 text-accent" />
+                      <h3 className="text-sm font-display font-bold">Step Tracker</h3>
+                    </div>
+                    <Badge variant="secondary" className="text-xs font-mono">
+                      {correctionSteps.filter(s => s.completed).length}/{correctionSteps.length}
+                    </Badge>
                   </div>
-                  <div className="text-xs font-semibold text-accent mb-3">
-                    {correctionSteps.filter(s => s.completed).length} / {correctionSteps.length} Complete
-                  </div>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Check off steps as you complete them
+                  </p>
                   <div className="space-y-2.5">
                     {correctionSteps.map((step, idx) => (
                       <label key={idx} className="flex items-start gap-3 cursor-pointer group p-2 rounded-lg hover:bg-accent/5 transition-colors touch-manipulation">

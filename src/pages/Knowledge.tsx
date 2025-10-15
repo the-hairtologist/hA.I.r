@@ -303,42 +303,26 @@ const Knowledge = () => {
           </CardContent>
         </Card>
 
-        {/* Quick Access - Hide AI Assistant for Clients */}
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
-          {(isStylist || !isClient) && (
-            <Card 
-              className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400"
-              onClick={() => navigate("/ai-assistant")}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
-                    <Lightbulb className="h-8 w-8 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-display font-bold text-foreground mb-1">AI Assistant</h3>
-                    <p className="text-sm text-foreground/80 font-medium">Get instant answers and custom formulas</p>
-                  </div>
-                  <ExternalLink className="h-5 w-5 text-foreground" />
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <Card className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-blue-400 to-cyan-400 ${(isStylist || !isClient) ? '' : 'md:col-span-2'}`}>
+        {/* Quick Access Card - AI Assistant for Stylists Only */}
+        {(isStylist || !isClient) && (
+          <Card 
+            className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer bg-gradient-to-br from-purple-400 to-pink-400 mb-8"
+            onClick={() => navigate("/ai-assistant")}
+          >
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-background border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
-                  <Video className="h-8 w-8 text-primary" />
+                  <Lightbulb className="h-8 w-8 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-display font-bold text-foreground mb-1">Video Tutorials</h3>
-                  <p className="text-sm text-foreground/80 font-medium">Coming Soon - Watch and learn from experts</p>
+                  <h3 className="text-xl font-display font-bold text-foreground mb-1">Need AI Help?</h3>
+                  <p className="text-sm text-foreground/80 font-medium">Get instant color formulas, corrections, and professional advice from our AI Assistant</p>
                 </div>
+                <ExternalLink className="h-5 w-5 text-foreground" />
               </div>
             </CardContent>
           </Card>
-        </div>
+        )}
 
         {/* Featured Articles */}
         {!searchQuery && (
