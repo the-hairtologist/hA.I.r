@@ -128,7 +128,7 @@ export const SequenceAnalytics = () => {
                     <p className="text-3xl font-bold">{stat.value}</p>
                   </div>
                   <div className={`p-3 rounded-lg bg-gradient-to-br ${stat.gradient} group-hover:scale-110 transition-transform`}>
-                    <stat.icon className="h-6 w-6 text-white" />
+                    <stat.icon className="h-6 w-6 text-on-surface-primary" />
                   </div>
                 </div>
               </Card>

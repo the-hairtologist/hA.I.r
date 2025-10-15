@@ -110,7 +110,7 @@ export function QuickWinDemo() {
                 "w-12 h-12 rounded-lg bg-gradient-to-br flex items-center justify-center",
                 win.color
               )}>
-                <Icon className="h-6 w-6 text-white" />
+                <Icon className="h-6 w-6 text-on-surface-primary" />
               </div>
               <div>
                 <CardTitle className="text-xl">{win.title}</CardTitle>

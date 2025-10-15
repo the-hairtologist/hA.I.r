@@ -129,7 +129,7 @@ export default function DeepLinkTransformation() {
         <div className="text-center mb-8 animate-fade-in">
           <div className="flex justify-center mb-4">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center brutal-border brutal-shadow-md">
-              <Sparkles className="h-10 w-10 text-white" />
+              <Sparkles className="h-10 w-10 text-on-surface-primary" />
             </div>
           </div>
           <h1 className="text-4xl font-bold gradient-text mb-2">

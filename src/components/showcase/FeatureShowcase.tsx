@@ -168,7 +168,7 @@ export function FeatureShowcase({ role = "stylist", onClose, compact = false }: 
                   "w-12 h-12 rounded-lg bg-gradient-to-br flex items-center justify-center mb-3",
                   feature.gradient
                 )}>
-                  <Icon className="h-6 w-6 text-white" />
+                  <Icon className="h-6 w-6 text-on-surface-primary" />
                 </div>
                 <CardTitle className="text-lg">{feature.title}</CardTitle>
                 <CardDescription className="text-sm font-semibold text-primary">

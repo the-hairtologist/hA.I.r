@@ -84,12 +84,12 @@ export function SwipeableAppointmentCard({
     <div className="relative overflow-hidden">
       {/* Left actions (green - positive actions) */}
       {revealed === 'left' && (
-        <div className="absolute left-0 top-0 bottom-0 flex items-center gap-2 pl-4 bg-gradient-to-r from-green-500 to-green-600 text-white animate-fade-in">
+        <div className="absolute left-0 top-0 bottom-0 flex items-center gap-2 pl-4 bg-gradient-to-r from-green-start to-green-end text-on-surface-primary animate-fade-in">
           {onCall && (
             <Button
               size="sm"
               variant="ghost"
-              className="text-white hover:bg-white/20"
+              className="text-on-surface-primary hover:bg-primary/20"
               onClick={() => handleAction(onCall)}
             >
               <Phone className="h-4 w-4" />
@@ -99,7 +99,7 @@ export function SwipeableAppointmentCard({
             <Button
               size="sm"
               variant="ghost"
-              className="text-white hover:bg-white/20"
+              className="text-on-surface-primary hover:bg-primary/20"
               onClick={() => handleAction(onMessage)}
             >
               <MessageSquare className="h-4 w-4" />
@@ -110,12 +110,12 @@ export function SwipeableAppointmentCard({
       
       {/* Right actions (red/yellow - destructive/caution actions) */}
       {revealed === 'right' && (
-        <div className="absolute right-0 top-0 bottom-0 flex items-center gap-2 pr-4 bg-gradient-to-l from-red-500 to-orange-500 text-white animate-fade-in">
+        <div className="absolute right-0 top-0 bottom-0 flex items-center gap-2 pr-4 bg-gradient-to-l from-destructive to-destructive/80 text-on-surface-primary animate-fade-in">
           {onReschedule && (
             <Button
               size="sm"
               variant="ghost"
-              className="text-white hover:bg-white/20"
+              className="text-on-surface-primary hover:bg-primary/20"
               onClick={() => handleAction(onReschedule)}
             >
               <Calendar className="h-4 w-4" />
@@ -125,7 +125,7 @@ export function SwipeableAppointmentCard({
             <Button
               size="sm"
               variant="ghost"
-              className="text-white hover:bg-white/20"
+              className="text-on-surface-primary hover:bg-primary/20"
               onClick={() => handleAction(onCancel)}
             >
               <Trash2 className="h-4 w-4" />

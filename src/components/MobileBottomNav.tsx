@@ -180,8 +180,12 @@ export const MobileBottomNav = () => {
 
   return (
     <>
-      {/* Safe area spacer */}
-      <div className="lg:hidden h-16 flex-shrink-0" aria-hidden="true" />
+      {/* Safe area spacer - accounts for nav height + iOS safe area */}
+      <div 
+        className="lg:hidden flex-shrink-0" 
+        style={{ height: 'calc(4rem + env(safe-area-inset-bottom, 0px))' }}
+        aria-hidden="true" 
+      />
       
       {/* Navigation bar */}
       <nav 

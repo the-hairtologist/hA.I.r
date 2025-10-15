@@ -98,7 +98,7 @@ const SortableNavItem = ({ item, isEnabled, onToggle }: {
         "bg-gradient-to-br",
         item.gradient
       )}>
-        <Icon className="h-5 w-5 text-white" />
+        <Icon className="h-5 w-5 text-on-surface-primary" />
       </div>
 
       <div className="flex-1">
@@ -344,10 +344,10 @@ export const MobileNavCustomizer = ({ userRole }: MobileNavCustomizerProps) => {
   return (
     <Card className="brutal-border brutal-shadow">
       <CardHeader>
-        <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500">
-              <Smartphone className="h-5 w-5 text-white" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-purple-start to-pink-end">
+              <Smartphone className="h-5 w-5 text-on-surface-primary" />
             </div>
             <div>
               <CardTitle>Mobile Bottom Navigation</CardTitle>
