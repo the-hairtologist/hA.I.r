@@ -10,8 +10,8 @@ export const KeyboardShortcut = ({ keys, action }: KeyboardShortcutProps) => {
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
       <span>{action}</span>
       <div className="flex gap-1">
-        {keys.map((key, index) => (
-          <Badge key={index} variant="outline" className="px-1.5 py-0.5 text-xs font-mono">
+        {keys.map((key) => (
+          <Badge key={key} variant="outline" className="px-1.5 py-0.5 text-xs font-mono">
             {key}
           </Badge>
         ))}

@@ -24,7 +24,7 @@ export const ProgressSteps = ({ steps, currentStep, className }: ProgressStepsPr
 
           return (
             <li
-              key={index}
+              key={step.label}
               className={cn(
                 "flex-1 relative",
                 index !== steps.length - 1 && "pr-8"

@@ -33,8 +33,8 @@ export const SimplePricingCTA = () => {
           </div>
 
           <ul className="space-y-3 mb-8 text-left">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-3">
+            {features.map((feature) => (
+              <li key={feature} className="flex items-center gap-3">
                 <div className="flex-shrink-0 w-5 h-5 rounded-full bg-success/10 flex items-center justify-center">
                   <Check className="h-3 w-3 text-success" />
                 </div>

@@ -303,7 +303,7 @@ const Help = () => {
               <CardContent>
                 <Accordion type="single" collapsible className="w-full">
                   {filteredFaqs.map((faq, index) => (
-                    <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionItem key={faq.question} value={`item-${index}`}>
                       <AccordionTrigger>{faq.question}</AccordionTrigger>
                       <AccordionContent>{faq.answer}</AccordionContent>
                     </AccordionItem>

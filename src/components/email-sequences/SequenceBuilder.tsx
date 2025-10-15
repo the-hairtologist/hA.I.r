@@ -312,7 +312,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
         </div>
 
         {steps.map((step, index) => (
-          <Card key={index} className="p-6 border-2 space-y-4">
+          <Card key={`step-${step.step_order}-${index}`} className="p-6 border-2 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <GripVertical className="h-5 w-5 text-muted-foreground" />

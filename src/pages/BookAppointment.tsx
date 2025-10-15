@@ -77,8 +77,8 @@ const BookAppointment = () => {
               { name: "Color & Highlights", price: "$120+", duration: "2-3 hours", icon: Sparkles },
               { name: "Haircut & Style", price: "$60+", duration: "1 hour", icon: Calendar },
               { name: "Full Color Treatment", price: "$150+", duration: "3-4 hours", icon: DollarSign },
-            ].map((service, index) => (
-              <Card key={index} className="brutal-border brutal-shadow-xs hover:brutal-shadow-sm transition-all">
+            ].map((service) => (
+              <Card key={service.name} className="brutal-border brutal-shadow-xs hover:brutal-shadow-sm transition-all">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="p-3 rounded-lg bg-primary/10">

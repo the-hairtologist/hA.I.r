@@ -182,9 +182,9 @@ export const EnhancedSearch = ({
             </div>
             
             <div className="space-y-1">
-              {recentSearches.map((search, index) => (
+              {recentSearches.map((search) => (
                 <div
-                  key={index}
+                  key={search}
                   onClick={() => handleRecentSearchClick(search)}
                   className="flex items-center justify-between px-3 py-2 hover:bg-secondary rounded-md cursor-pointer group transition-colors"
                 >
@@ -230,11 +230,11 @@ export const HighlightedText = ({ text, query, className }: HighlightedTextProps
     <span className={className}>
       {parts.map((part, index) =>
         part.toLowerCase() === query.toLowerCase() ? (
-          <mark key={index} className="bg-primary/20 text-foreground font-medium">
+          <mark key={`${part}-${index}`} className="bg-primary/20 text-foreground font-medium">
             {part}
           </mark>
         ) : (
-          <span key={index}>{part}</span>
+          <span key={`${part}-${index}`}>{part}</span>
         )
       )}
     </span>

@@ -141,7 +141,7 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
       {cards.map((card, index) => (
         <Card
-          key={index}
+          key={card.label}
           className={cn(
             "cursor-pointer border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
             "hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",

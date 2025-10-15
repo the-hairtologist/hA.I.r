@@ -184,10 +184,10 @@ const GrowthAnalytics = () => {
 
           <TabsContent value="overview" className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {stats.map((stat, index) => {
+              {stats.map((stat) => {
                 const Icon = stat.icon;
                 return (
-                  <Card key={index}>
+                  <Card key={stat.title}>
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
                         <CardDescription>{stat.title}</CardDescription>
@@ -276,10 +276,10 @@ const GrowthAnalytics = () => {
 
           <TabsContent value="booking" className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {bookingPageStats.map((stat, index) => {
+              {bookingPageStats.map((stat) => {
                 const Icon = stat.icon;
                 return (
-                  <Card key={index}>
+                  <Card key={stat.title}>
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
                         <CardDescription>{stat.title}</CardDescription>

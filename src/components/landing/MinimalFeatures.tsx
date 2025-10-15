@@ -34,10 +34,10 @@ export const MinimalFeatures = () => {
       </div>
       
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-        {features.map((feature, index) => {
+        {features.map((feature) => {
           const Icon = feature.icon;
           return (
-            <div key={index} className="text-center space-y-3">
+            <div key={feature.title} className="text-center space-y-3">
               <div className="mx-auto w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg border-2 border-primary">
                 <Icon className="h-8 w-8 text-primary-foreground" strokeWidth={2.5} />
               </div>

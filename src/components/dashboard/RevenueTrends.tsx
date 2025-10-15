@@ -110,8 +110,8 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
             </div>
 
             <div className="flex items-end justify-between gap-2 h-24">
-              {revenue.map((month, index) => (
-                <div key={index} className="flex-1 flex flex-col items-center gap-2">
+              {revenue.map((month) => (
+                <div key={month.month} className="flex-1 flex flex-col items-center gap-2">
                   <div className="w-full bg-muted/30 rounded-t-lg relative overflow-hidden" 
                     style={{ 
                       height: `${(month.amount / maxRevenue) * 100}%`,

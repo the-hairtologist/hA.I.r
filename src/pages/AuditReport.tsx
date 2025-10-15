@@ -123,8 +123,8 @@ const AuditReport = () => {
         </Card>
 
         {/* Detailed Sections */}
-        {sections.map((section, index) => (
-          <Card key={index}>
+        {sections.map((section) => (
+          <Card key={section.title}>
             <CardHeader>
               <CardTitle className="flex items-center gap-3">
                 <section.icon className="h-6 w-6 text-primary" />

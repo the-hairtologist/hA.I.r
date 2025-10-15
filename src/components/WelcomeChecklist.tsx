@@ -170,9 +170,9 @@ export const WelcomeChecklist = ({
       <CardContent className="pt-6">
         <Progress value={progress} className="mb-6" />
         <div className="space-y-3">
-          {steps.map((step, index) => (
+          {steps.map((step) => (
             <div
-              key={index}
+              key={step.label}
               className="flex items-center justify-between p-3 rounded-lg brutal-border hover:border-primary/30 transition-colors"
             >
               <div className="flex items-center gap-3">

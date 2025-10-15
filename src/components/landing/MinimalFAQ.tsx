@@ -38,7 +38,7 @@ export const MinimalFAQ = () => {
         <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, index) => (
             <AccordionItem 
-              key={index} 
+              key={faq.question} 
               value={`item-${index}`}
               className="border border-border rounded-lg px-6 bg-card"
             >
