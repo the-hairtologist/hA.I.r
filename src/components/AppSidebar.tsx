@@ -32,7 +32,6 @@ import { useSidebarOrder, SidebarItem } from "@/hooks/useSidebarOrder";
 import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
 import { TodaysScheduleWidget } from "@/components/sidebar/TodaysScheduleWidget";
 import { CalendarSyncIndicator } from "@/components/CalendarSyncIndicator";
-import { SidebarSearch } from "@/components/sidebar/SidebarSearch";
 import {
   stylistNavigationItems,
   clientNavigationItems,
@@ -172,9 +171,6 @@ export function AppSidebar() {
       <SidebarContent className="pb-4">
         {/* Today's Schedule Widget - Only for stylists and admins */}
         {(isStylist || isAdmin) && !collapsed && <TodaysScheduleWidget />}
-        
-        {/* Sidebar Search - Only for admins */}
-        {isAdmin && <SidebarSearch items={items} collapsed={collapsed} />}
         
         {/* Customize Controls - Only for stylists and admins */}
         {!collapsed && (isStylist || isAdmin) && !isClient && (
