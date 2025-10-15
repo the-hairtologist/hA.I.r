@@ -31,6 +31,8 @@ import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useSidebarOrder, SidebarItem } from "@/hooks/useSidebarOrder";
 import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
 import { TodaysScheduleWidget } from "@/components/sidebar/TodaysScheduleWidget";
+import { CalendarSyncIndicator } from "@/components/CalendarSyncIndicator";
+import { SidebarSearch } from "@/components/sidebar/SidebarSearch";
 import {
   stylistNavigationItems,
   clientNavigationItems,
@@ -171,6 +173,9 @@ export function AppSidebar() {
         {/* Today's Schedule Widget - Only for stylists and admins */}
         {(isStylist || isAdmin) && !collapsed && <TodaysScheduleWidget />}
         
+        {/* Sidebar Search - Only for admins */}
+        {isAdmin && <SidebarSearch items={items} collapsed={collapsed} />}
+        
         {/* Customize Controls - Only for stylists and admins */}
         {!collapsed && (isStylist || isAdmin) && !isClient && (
           <div className="px-3 py-2 border-b">
@@ -259,6 +264,8 @@ export function AppSidebar() {
           </SortableContext>
         </DndContext>
 
+        {/* Calendar Sync Indicator - Only for stylists and admins */}
+        {(isStylist || isAdmin) && !collapsed && <CalendarSyncIndicator />}
       </SidebarContent>
     </Sidebar>
   );

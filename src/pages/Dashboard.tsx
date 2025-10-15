@@ -18,6 +18,9 @@ import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
 import { NotificationManager } from "@/components/NotificationManager";
 import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
 import { NextAppointmentWidget } from "@/components/dashboard/NextAppointmentWidget";
+import { LoyaltyProgressWidget } from "@/components/dashboard/LoyaltyProgressWidget";
+import { CommissionTrackerWidget } from "@/components/dashboard/CommissionTrackerWidget";
+import { QuickAddClientFAB } from "@/components/QuickAddClientFAB";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
@@ -88,6 +91,7 @@ const Dashboard = () => {
   // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
+    { id: "commission-tracker", title: "Commission Earnings", component: "CommissionTracker", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
     { id: "weekly-schedule", title: "Weekly Schedule", component: "WeeklySchedule", enabled: false },
     { id: "weekly-overview", title: "This Week's Stats", component: "WeeklyOverview", enabled: true },
@@ -103,6 +107,7 @@ const Dashboard = () => {
   // Client dashboard sections - optimized for client needs
   const defaultClientSections: DashboardSection[] = [
     { id: "next-appointment", title: "Upcoming", component: "NextAppointment", enabled: true },
+    { id: "loyalty-progress", title: "Rewards", component: "LoyaltyProgress", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
     { id: "favorite-stylists", title: "My Stylists", component: "FavoriteStylists", enabled: true },
     { id: "client-milestones", title: "Rewards & Loyalty", component: "ClientMilestones", enabled: true },
@@ -526,6 +531,10 @@ const Dashboard = () => {
         return (userRole === "client" || isAdmin) ? (
           <NextAppointmentWidget />
         ) : null;
+      case "LoyaltyProgress":
+        return (userRole === "client" || isAdmin) ? <LoyaltyProgressWidget /> : null;
+      case "CommissionTracker":
+        return (userRole === "stylist" || isAdmin) ? <CommissionTrackerWidget /> : null;
       case "LiveKPICards":
         return (userRole === "stylist" || isAdmin) && profile?.id ? (
           <LiveKPICards stylistId={profile.id} />
@@ -587,6 +596,9 @@ const Dashboard = () => {
       {user && userRole && (
         <NotificationEnhancer userId={user.id} userRole={userRole as "stylist" | "client"} />
       )}
+      
+      {/* Quick Add Client FAB - Only for stylists */}
+      {userRole === "stylist" && !isAdmin && <QuickAddClientFAB />}
       
       <div className="w-full space-y-4 sm:space-y-6">
         

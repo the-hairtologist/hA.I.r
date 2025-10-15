@@ -9,6 +9,7 @@ import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
 import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
 import { DemoModeIndicator } from "@/components/demo/DemoMode";
+import { CommandPalette } from "@/components/CommandPalette";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -43,6 +44,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user, loading: authLoading } = useAuth();
   const { roles, loading: roleLoading, isAdmin } = useUserRole(user?.id);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const { unreadCount } = useRealtimeNotifications(user?.id);
   const { theme, setTheme } = useTheme();
   
@@ -62,11 +64,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         return;
       }
 
-      // Cmd/Ctrl+K for search - dispatch custom event
+      // Cmd/Ctrl+K for search - Open command palette
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
-        // Dispatch event that search inputs can listen for
-        window.dispatchEvent(new CustomEvent('global-search-focus'));
+        setCommandPaletteOpen(true);
         return;
       }
 
@@ -286,6 +287,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         
         <MobileBottomNav />
       </div>
+      
+      {/* Command Palette - Global keyboard shortcut */}
+      <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
       
       <KeyboardShortcutsDialog 
         open={showShortcuts} 
