@@ -9,11 +9,10 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { NotificationDot } from "./NotificationDot";
 
 interface MobileHeaderProps {
-  userRole?: string;
   notificationCount?: number;
 }
 
-export const MobileHeader = ({ userRole, notificationCount = 0 }: MobileHeaderProps) => {
+export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
   const [scrolled, setScrolled] = useState(false);

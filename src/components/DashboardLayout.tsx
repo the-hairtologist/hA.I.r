@@ -29,7 +29,6 @@ import {
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
-import { RoleSwitcher } from "@/components/RoleSwitcher";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
@@ -46,15 +45,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { unreadCount } = useRealtimeNotifications(user?.id);
   const { theme, setTheme } = useTheme();
   
-  // Admin view switcher - allows admin to preview different role experiences
-  type ViewMode = "admin" | "stylist" | "client";
-  const [adminViewMode, setAdminViewMode] = useState<ViewMode>("admin");
-
-  // Determine actual user role
-  const actualUserRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
-  
-  // If admin is previewing a role, use that view, otherwise use actual role
-  const userRole = isAdmin && adminViewMode !== "admin" ? adminViewMode : actualUserRole;
+  // Determine user role - admin gets full access, no role switching needed
+  const userRole = roles.includes('stylist') ? 'stylist' : roles[0] || 'client';
   const loading = authLoading || roleLoading || (user && roles.length === 0);
 
   // Listen for keyboard shortcuts (stylist only)
@@ -148,13 +140,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         Skip to main content
       </a>
       <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
-        <AppSidebar userRole={userRole || undefined} />
+        <AppSidebar />
         <MobileSidebarOverlay />
         
         <div className="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
           {/* Mobile Header */}
           <MobileHeader 
-            userRole={userRole || undefined} 
             notificationCount={unreadCount}
           />
 
@@ -175,26 +166,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="ml-auto flex items-center gap-2 md:gap-3">
                 <TooltipProvider>
                   {isAdmin && (
-                    <>
-                      <RoleSwitcher 
-                        currentView={adminViewMode}
-                        onViewChange={setAdminViewMode}
-                      />
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Badge className="bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
-                            <Crown className="h-3 w-3 mr-1" />
-                            ADMIN
-                          </Badge>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                          <p className="text-xs">You have administrator privileges</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Badge className="bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
+                          <Crown className="h-3 w-3 mr-1" />
+                          ADMIN - FULL ACCESS
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        <p className="text-xs">Administrator with full platform access</p>
+                      </TooltipContent>
+                    </Tooltip>
                   )}
                   
-                  {userRole && !isAdmin && (
+                  {!isAdmin && userRole && (
                     <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20">
                       {userRole === "stylist" ? (
                         <><Scissors className="h-3 w-3 mr-1" /> Stylist</>
@@ -297,7 +282,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </main>
         </div>
         
-        <MobileBottomNav userRole={userRole || undefined} />
+        <MobileBottomNav />
       </div>
       
       <KeyboardShortcutsDialog 

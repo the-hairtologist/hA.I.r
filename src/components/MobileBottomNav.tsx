@@ -8,10 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useState, useEffect } from "react";
 
-interface MobileBottomNavProps {
-  userRole?: string;
-}
-
 interface NavItem {
   icon: any;
   label: string;
@@ -22,14 +18,17 @@ interface NavItem {
   disabled?: boolean;
 }
 
-export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
+export const MobileBottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  const { isAdmin } = useUserRole(user?.id);
+  const { isAdmin, isStylist, isClient } = useUserRole(user?.id);
   const { unreadCount } = useRealtimeNotifications(user?.id);
 
   const isActive = (path: string) => location.pathname === path;
+  
+  // Determine user role
+  const userRole = isAdmin ? 'admin' : isStylist ? 'stylist' : 'client';
 
   // Stylist bottom nav: Most-used daily actions (optimized for productivity)
   const stylistItems: NavItem[] = [

@@ -35,17 +35,12 @@ import {
   clientNavigationItems,
   getAdminNavigationItems,
   stylistGroupLabels,
-  stylistAdminGroupLabels,
   clientGroupLabels,
-  clientAdminGroupLabels,
+  adminFullAccessGroupLabels,
   type NavigationItem,
 } from "@/config/navigationConfig";
 
-interface AppSidebarProps {
-  userRole?: string;
-}
-
-export function AppSidebar({ userRole }: AppSidebarProps) {
+export function AppSidebar() {
   const { state } = useSidebar();
   const { user } = useAuth();
   const { isAdmin, isStylist, isClient } = useUserRole(user?.id);
@@ -85,43 +80,40 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     }`;
   };
 
-  // Get navigation items based on role - FIXED: Proper client detection
+  // Get navigation items based on role
   const adminItems = getAdminNavigationItems(isAdmin);
   
-  // Determine which navigation items to show based on actual role
+  // Admin sees EVERYTHING organized by role groups
+  // Non-admin sees only their role items
   const baseItems: NavigationItem[] = (() => {
-    // Admin viewing as specific role (via role switcher)
-    if (isAdmin && userRole === 'client') {
-      return [...clientNavigationItems, ...adminItems];
-    }
-    if (isAdmin && userRole === 'stylist') {
-      return [...stylistNavigationItems, ...adminItems];
-    }
-    
-    // Stylist (not in admin mode)
-    if (isStylist && !isAdmin) {
-      return [...stylistNavigationItems];
+    if (isAdmin) {
+      // Prefix client items with "client-" group to differentiate
+      const clientItemsWithPrefix = clientNavigationItems.map(item => ({
+        ...item,
+        group: `client-${item.group}`
+      }));
+      
+      // Admin gets all items: client + stylist + admin
+      return [...clientItemsWithPrefix, ...stylistNavigationItems, ...adminItems];
     }
     
-    // Client (default) - Show client items only
-    return [...clientNavigationItems];
+    // Stylist gets only stylist items
+    if (isStylist) {
+      return stylistNavigationItems;
+    }
+    
+    // Client gets only client items
+    return clientNavigationItems;
   })();
 
   // Get group labels based on role
   const groupLabels = (() => {
-    // Admin viewing as client
-    if (isAdmin && userRole === 'client') {
-      return clientAdminGroupLabels;
-    }
-    // Admin viewing as stylist or default admin view
     if (isAdmin) {
-      return stylistAdminGroupLabels;
+      return adminFullAccessGroupLabels;
     }
-    // Stylist
     if (isStylist) {
       return stylistGroupLabels;
     }
-    // Client
     return clientGroupLabels;
   })();
   

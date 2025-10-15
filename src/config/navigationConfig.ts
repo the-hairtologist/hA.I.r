@@ -469,3 +469,24 @@ export const clientAdminGroupLabels: NavigationGroup = {
   ...clientGroupLabels,
   admin: "Platform Administration",
 };
+
+// Full Admin Access - Shows all features organized by role
+export const adminFullAccessGroupLabels: NavigationGroup = {
+  // Client features
+  "client-main": "Client Experience",
+  "client-info": "Client Records",
+  "client-account": "Client Account",
+  
+  // Stylist features
+  main: "Core Features",
+  scheduling: "Scheduling",
+  business: "Business Tools",
+  growth: "Growth & Marketing",
+  tools: "Professional Tools",
+  
+  // Admin features
+  admin: "Platform Administration",
+  
+  // Shared
+  help: "Support & Resources",
+};
