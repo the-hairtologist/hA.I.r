@@ -3,7 +3,7 @@
  * Provides UI for removing backgrounds from portfolio photos
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -39,9 +39,9 @@ export const BackgroundRemovalDialog = ({
   const [error, setError] = useState<string | null>(null);
 
   // Check WebGPU on mount
-  useState(() => {
+  useEffect(() => {
     isWebGPUAvailable().then(setHasWebGPU);
-  });
+  }, []);
 
   const handleProcess = async () => {
     setProcessing(true);
