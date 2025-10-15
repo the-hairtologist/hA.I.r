@@ -654,41 +654,6 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Clients ONLY - Coming Soon Banner (admins excluded) */}
-              {userRole === "client" && !isAdmin && (
-                <div className="mt-2 sm:mt-3 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 backdrop-blur-sm rounded-lg border-2 border-primary/30 p-4 sm:p-5 md:p-6 text-center animate-fade-in shadow-[0_4px_20px_rgba(var(--primary-rgb),0.1)]" style={{ animationDelay: '200ms' }}>
-                  <div className="max-w-md mx-auto space-y-3 sm:space-y-4">
-                    <div className="mb-2 sm:mb-3">
-                      <span className="text-4xl sm:text-5xl animate-pulse">✨</span>
-                    </div>
-                    <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-foreground uppercase tracking-tight">
-                      Client Features Coming Soon! 🎉
-                    </h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                      We're currently in <span className="font-bold text-primary">stylist-only mode</span>. Full client features like booking appointments, finding stylists, messaging, and reviews will launch soon!
-                    </p>
-                    <div className="pt-2 flex flex-wrap gap-2 justify-center">
-                      <Button 
-                        onClick={() => navigate('/knowledge')}
-                        className="gap-2 h-9 text-xs font-semibold shadow-sm hover:shadow-md transition-shadow"
-                        size="sm"
-                      >
-                        <BookOpen className="h-3.5 w-3.5" />
-                        Hair Care Tips
-                      </Button>
-                      <Button 
-                        variant="outline"
-                        onClick={() => navigate('/feedback')}
-                        className="gap-2 h-9 text-xs font-semibold"
-                        size="sm"
-                      >
-                        <MessageCircle className="h-3.5 w-3.5" />
-                        Share Feedback
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

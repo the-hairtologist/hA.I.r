@@ -179,7 +179,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
         notes: `Rebooked from ${format(new Date(appointment.appointment_date), "MMM d, yyyy")}`,
       })
       .select()
-      .single();
+      .maybeSingle();
 
       if (error) throw error;
 

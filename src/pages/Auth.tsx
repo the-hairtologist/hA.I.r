@@ -426,17 +426,6 @@ const Auth = () => {
                   </div>
                 </div>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full border-[3px] border-foreground/30 bg-gradient-to-br from-blue-100 to-cyan-100 hover:from-blue-200 hover:to-cyan-200 opacity-60 cursor-not-allowed shadow-[3px_3px_0px_0px_hsl(var(--foreground)/0.3)]"
-                  disabled={true}
-                >
-                  <div className="flex flex-col items-center gap-1 py-1">
-                    <span className="text-sm font-semibold">👤 Client Account</span>
-                    <span className="text-xs text-muted-foreground">Coming Soon!</span>
-                  </div>
-                </Button>
               </form>
             </TabsContent>
           </Tabs>

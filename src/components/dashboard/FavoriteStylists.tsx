@@ -90,17 +90,9 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
           </div>
         ) : stylists.length === 0 ? (
           <div className="text-center py-4">
-            <p className="text-sm text-muted-foreground mb-3">
-              No favorite stylists yet
+            <p className="text-sm text-muted-foreground">
+              No favorite stylists yet. Complete some appointments to build your stylist connections!
             </p>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled
-              className="gap-2 opacity-60 cursor-not-allowed"
-            >
-              Find Stylists - Coming Soon
-            </Button>
           </div>
         ) : (
           <div className="space-y-3">

@@ -68,7 +68,7 @@ export const ReferralSystem = () => {
               referral_code: newCode,
             })
             .select()
-            .single();
+            .maybeSingle();
 
           existingRef = newRef;
         }

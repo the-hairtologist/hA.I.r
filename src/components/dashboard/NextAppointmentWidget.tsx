@@ -36,7 +36,7 @@ export function NextAppointmentWidget() {
           .from("client_profiles")
           .select("id")
           .eq("user_id", user.id)
-          .single();
+          .maybeSingle();
 
         if (!clientProfile) return;
 
@@ -57,7 +57,7 @@ export function NextAppointmentWidget() {
           .eq("status", "scheduled")
           .order("appointment_date", { ascending: true })
           .limit(1)
-          .single();
+          .maybeSingle();
 
         if (error && error.code !== 'PGRST116') throw error;
 

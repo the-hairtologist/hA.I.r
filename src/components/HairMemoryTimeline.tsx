@@ -39,7 +39,7 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
         .from("client_profiles")
         .select("*")
         .eq("id", clientId)
-        .single();
+        .maybeSingle();
 
       setClientInfo(client);
 

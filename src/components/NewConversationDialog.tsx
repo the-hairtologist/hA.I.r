@@ -35,6 +35,18 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
       // Get list of potential chat partners based on role
       if (userRole === "stylist") {
         // Stylists can message their clients
+        // Get stylist profile first
+        const { data: stylistProfile } = await supabase
+          .from("stylist_profiles")
+          .select("id")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+
+        if (!stylistProfile) {
+          setUsers([]);
+          return;
+        }
+
         const { data: appointments } = await supabase
           .from("appointments")
           .select(`
@@ -44,7 +56,7 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
               user:profiles(id, full_name, email)
             )
           `)
-          .eq("stylist_id", (await supabase.from("stylist_profiles").select("id").eq("user_id", session.user.id).single()).data?.id);
+          .eq("stylist_id", stylistProfile.id);
 
         const uniqueClients = Array.from(
           new Map(

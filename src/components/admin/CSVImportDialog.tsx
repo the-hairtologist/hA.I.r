@@ -86,7 +86,7 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) throw new Error("Stylist profile not found");
 

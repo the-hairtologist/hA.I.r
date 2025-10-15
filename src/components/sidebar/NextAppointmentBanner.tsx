@@ -49,7 +49,7 @@ export function NextAppointmentBanner() {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) {
         setLoading(false);
@@ -71,7 +71,7 @@ export function NextAppointmentBanner() {
         .gte("appointment_date", now)
         .order("appointment_date", { ascending: true })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
 

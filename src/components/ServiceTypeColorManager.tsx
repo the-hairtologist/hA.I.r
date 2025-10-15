@@ -80,7 +80,7 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
           color: newColor,
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

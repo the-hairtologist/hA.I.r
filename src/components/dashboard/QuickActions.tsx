@@ -69,15 +69,6 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
       gradient: "from-amber-500 to-orange-500",
     },
     {
-      id: "find-clients",
-      label: "Find Clients",
-      description: "Coming Soon",
-      icon: Users,
-      route: "/client-discovery",
-      gradient: "from-cyan-500 to-blue-500",
-      disabled: true,
-    },
-    {
       id: "services",
       label: "Services & Pricing",
       description: "Edit your offerings",

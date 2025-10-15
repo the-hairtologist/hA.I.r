@@ -79,7 +79,7 @@ export function useProfile(userId?: string): UseProfileReturn {
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (profileError) throw profileError;
       setProfile(profileData);
@@ -99,7 +99,7 @@ export function useProfile(userId?: string): UseProfileReturn {
           .from('stylist_profiles')
           .select('*')
           .eq('user_id', userId)
-          .single();
+          .maybeSingle();
 
         if (stylistError && stylistError.code !== 'PGRST116') {
           log.warn('Stylist profile not found', 'useProfile', stylistError);
@@ -113,7 +113,7 @@ export function useProfile(userId?: string): UseProfileReturn {
           .from('client_profiles')
           .select('*')
           .eq('user_id', userId)
-          .single();
+          .maybeSingle();
 
         if (clientError && clientError.code !== 'PGRST116') {
           log.warn('Client profile not found', 'useProfile', clientError);

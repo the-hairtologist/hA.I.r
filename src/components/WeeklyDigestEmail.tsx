@@ -22,7 +22,7 @@ export const WeeklyDigestEmail = () => {
       .from("profiles")
       .select("email_digest_enabled")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
 
     if (profile) {
       setEmailEnabled(profile.email_digest_enabled || false);

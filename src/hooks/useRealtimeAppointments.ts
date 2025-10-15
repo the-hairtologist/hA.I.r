@@ -37,7 +37,7 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
             .from('client_profiles')
             .select('id')
             .eq('user_id', userId)
-            .single();
+            .maybeSingle();
 
           if (clientProfile) {
             query = query.eq('client_id', clientProfile.id);
@@ -47,7 +47,7 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
             .from('stylist_profiles')
             .select('id')
             .eq('user_id', userId)
-            .single();
+            .maybeSingle();
 
           if (stylistProfile) {
             query = query.eq('stylist_id', stylistProfile.id);

@@ -70,20 +70,6 @@ export const WelcomeChecklist = ({
       action: () => navigate("/settings"),
       cta: "Complete Profile"
     },
-    { 
-      label: "Find your stylist", 
-      completed: false,
-      action: undefined,
-      cta: "Coming Soon",
-      disabled: true
-    },
-    { 
-      label: "Book your first appointment", 
-      completed: hasAppointments, 
-      action: undefined,
-      cta: "Coming Soon",
-      disabled: true
-    },
   ];
 
   const steps = userRole === "stylist" ? stylistSteps : clientSteps;
@@ -199,13 +185,11 @@ export const WelcomeChecklist = ({
                   {step.label}
                 </span>
               </div>
-              {!step.completed && (
+              {!step.completed && step.action && (
                 <Button
                   size="sm"
-                  variant={step.disabled ? "outline" : "outline"}
+                  variant="outline"
                   onClick={step.action}
-                  disabled={step.disabled}
-                  className={step.disabled ? "opacity-60 cursor-not-allowed" : ""}
                 >
                   {step.cta}
                 </Button>

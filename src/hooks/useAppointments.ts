@@ -155,7 +155,7 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
         .from('appointments')
         .insert(data as any)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

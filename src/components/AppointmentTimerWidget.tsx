@@ -60,7 +60,7 @@ export function AppointmentTimerWidget() {
         .is("end_time", null)
         .order("start_time", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
       if (data) {
@@ -81,7 +81,7 @@ export function AppointmentTimerWidget() {
           duration_seconds: 0,
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       setActiveSession(data as TimerSession);

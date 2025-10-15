@@ -65,7 +65,7 @@ export function QuickAddClientFAB() {
           preferred_stylist_id: stylistProfile.id,
         })
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

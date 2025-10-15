@@ -409,23 +409,6 @@ const Help = () => {
               </Card>
             )}
 
-            {/* Video Tutorials Coming Soon - Secondary Position */}
-            <Card className="brutal-border animate-fade-in" style={{ animationDelay: '200ms' }}>
-              <CardContent className="py-8">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
-                    <Video className="h-8 w-8 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Video Tutorials Coming Soon</h3>
-                    <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                      Step-by-step video guides will be available in a future update. For now, try our interactive tools above!
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Quick Resources */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
               <Card className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale" onClick={() => navigate("/knowledge")}>
@@ -520,23 +503,6 @@ const Help = () => {
               </CardContent>
             </Card>
 
-            {/* Live Chat Coming Soon */}
-            <Card className="border-[2px] border-muted">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-3">
-                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center shrink-0">
-                    <MessageSquare className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold mb-1">Live Chat Support</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Coming soon! Live chat will be available Monday-Friday, 9am-6pm EST
-                    </p>
-                    <Badge variant="secondary" className="mt-2">Coming Soon</Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
       </div>
