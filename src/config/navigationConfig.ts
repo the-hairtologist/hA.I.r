@@ -36,6 +36,7 @@ import {
   Plus,
   Beaker,
   Heart,
+  ClipboardCheck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -320,6 +321,16 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
       group: "admin", 
       color: "text-purple-400 dark:text-purple-300",
       description: "Security & compliance logs" 
+    },
+    { 
+      id: "audit-report", 
+      title: "Audit Report", 
+      url: "/audit-report", 
+      icon: ClipboardCheck, 
+      gradient: "bg-[image:var(--gradient-green-emerald)]", 
+      group: "admin", 
+      color: "text-emerald-400 dark:text-emerald-300",
+      description: "Comprehensive platform audit" 
     },
     { 
       id: "system-health", 

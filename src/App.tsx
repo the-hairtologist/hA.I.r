@@ -97,6 +97,7 @@ const FeedbackBoard = lazy(() => import("./pages/FeedbackBoard"));
 const ClientFormulas = lazy(() => import("./pages/ClientFormulas"));
 const InstallPWA = lazy(() => import("./pages/InstallPWA"));
 const ZapierIntegration = lazy(() => import("./pages/ZapierIntegration"));
+const AuditReport = lazy(() => import("./pages/AuditReport"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -437,6 +438,13 @@ const App = () => {
           <Route path="/install" element={
             <ProtectedRoute>
               <InstallPWA />
+            </ProtectedRoute>
+          } />
+          
+          {/* Audit Report - Admin Only */}
+          <Route path="/audit-report" element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AuditReport />
             </ProtectedRoute>
           } />
           
