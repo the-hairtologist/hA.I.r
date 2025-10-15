@@ -9,7 +9,7 @@ const features = [
   {
     icon: Palette,
     title: "Color Formulas",
-    description: "Perfect mix every time",
+    description: "Find the perfect mix",
   },
   {
     icon: CreditCard,
