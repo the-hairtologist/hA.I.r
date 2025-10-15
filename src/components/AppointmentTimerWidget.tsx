@@ -135,13 +135,13 @@ export function AppointmentTimerWidget() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm flex items-center gap-2">
+          <CardTitle className="text-xs sm:text-sm flex items-center gap-2">
             <Clock className="h-4 w-4" />
             Appointment Timer
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-muted-foreground mb-3">
+          <p className="text-[11px] sm:text-xs text-muted-foreground mb-3">
             Start tracking time when you begin an appointment
           </p>
           <Button
@@ -155,7 +155,7 @@ export function AppointmentTimerWidget() {
             <Clock className="mr-2 h-4 w-4" />
             How to Start
           </Button>
-          <p className="text-[10px] text-muted-foreground mt-2 text-center">
+          <p className="text-[10px] sm:text-[11px] text-muted-foreground mt-2 text-center">
             Timer becomes active during appointments
           </p>
         </CardContent>
@@ -166,12 +166,12 @@ export function AppointmentTimerWidget() {
   return (
     <Card className="border-primary/50">
       <CardHeader>
-        <CardTitle className="text-sm flex items-center justify-between">
+        <CardTitle className="text-xs sm:text-sm flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 animate-pulse" />
             Active Session
           </div>
-          <Badge variant="outline" className="animate-pulse">
+          <Badge variant="outline" className="text-[11px] sm:text-xs animate-pulse">
             Recording
           </Badge>
         </CardTitle>
@@ -183,7 +183,7 @@ export function AppointmentTimerWidget() {
             {formatTime(elapsed)}
           </div>
           {activeSession.client_name && (
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-xs sm:text-sm text-muted-foreground mt-2">
               {activeSession.client_name}
             </p>
           )}

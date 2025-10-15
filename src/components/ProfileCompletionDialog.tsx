@@ -226,8 +226,8 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           {step === 1 && (
             <div className="space-y-4 animate-fade-in">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold mb-2">Let's Start With the Basics</h3>
-                <p className="text-sm text-muted-foreground">Help us personalize your experience</p>
+                <h3 className="text-base sm:text-lg font-semibold mb-2">Let's Start With the Basics</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Help us personalize your experience</p>
               </div>
 
               <div className="flex flex-col items-center gap-4 mb-6">
@@ -239,7 +239,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                   )}
                 </div>
                 <Label htmlFor="avatar-upload" className="cursor-pointer">
-                  <div className="flex items-center gap-2 text-sm text-primary hover:underline">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-primary hover:underline">
                     <Upload className="h-4 w-4" />
                     {uploading ? "Uploading..." : avatarUrl ? "Change Photo" : "Upload Photo"}
                   </div>
@@ -267,13 +267,13 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                   className={!fullName.trim() ? "border-destructive/50" : ""}
                 />
                 {!fullName.trim() && (
-                  <p className="text-xs text-destructive">This field is required</p>
+                  <p className="text-[11px] sm:text-xs text-destructive">This field is required</p>
                 )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="phone">
-                  Phone Number <span className="text-muted-foreground text-xs">(Optional)</span>
+                  Phone Number <span className="text-muted-foreground text-[11px] sm:text-xs">(Optional)</span>
                 </Label>
                 <Input
                   id="phone"
@@ -289,7 +289,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                   placeholder="5551234567"
                   maxLength={10}
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[11px] sm:text-xs text-muted-foreground">
                   {phone.length}/10 - Clients can reach you at this number
                 </p>
               </div>
@@ -299,14 +299,14 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
           {step === 2 && userRole === "stylist" && (
             <div className="space-y-4 animate-fade-in">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold mb-2">Showcase Your Expertise</h3>
-                <p className="text-sm text-muted-foreground">Stand out and attract more clients</p>
+                <h3 className="text-base sm:text-lg font-semibold mb-2">Showcase Your Expertise</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Stand out and attract more clients</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="businessName">
-                    Business/Salon Name <span className="text-muted-foreground text-xs">(Optional)</span>
+                    Business/Salon Name <span className="text-muted-foreground text-[11px] sm:text-xs">(Optional)</span>
                   </Label>
                   <Input
                     id="businessName"
@@ -315,14 +315,14 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                     placeholder="e.g., Salon Elite"
                     maxLength={100}
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     Helps clients find you
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="specialty">
-                    Specialty <span className="text-muted-foreground text-xs">(Optional)</span>
+                    Specialty <span className="text-muted-foreground text-[11px] sm:text-xs">(Optional)</span>
                   </Label>
                   <Input
                     id="specialty"
@@ -331,7 +331,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                     placeholder="e.g., Color Correction, Balayage"
                     maxLength={50}
                   />
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     Your primary expertise
                   </p>
                 </div>

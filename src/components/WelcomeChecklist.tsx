@@ -112,28 +112,28 @@ export const WelcomeChecklist = ({
               <Calendar className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-semibold">Check your schedule</p>
-                <p className="text-sm text-muted-foreground">Review today's appointments and prepare for clients</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Review today's appointments and prepare for clients</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50">
               <Users className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-semibold">Document client visits</p>
-                <p className="text-sm text-muted-foreground">Save formulas after each service for future reference</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Save formulas after each service for future reference</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50">
               <MessageSquare className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-semibold">Stay connected</p>
-                <p className="text-sm text-muted-foreground">Respond to client messages and appointment requests</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Respond to client messages and appointment requests</p>
               </div>
             </div>
             <div className="flex items-start gap-3 p-3 rounded-lg bg-card/50">
               <Image className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-semibold">Build your portfolio</p>
-                <p className="text-sm text-muted-foreground">Upload photos of your best work to attract new clients</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Upload photos of your best work to attract new clients</p>
               </div>
             </div>
           </div>

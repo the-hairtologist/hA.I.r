@@ -76,7 +76,7 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
             <Calendar className="h-5 w-5 text-primary" />
             <div>
               <p className="font-semibold">You have {count} appointment{count > 1 ? "s" : ""} today</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[11px] sm:text-xs text-muted-foreground">
                 Next: {nextAppt.client?.full_name} at {format(new Date(nextAppt.appointment_date), "h:mm a")}
               </p>
             </div>
@@ -131,7 +131,7 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
                 </div>
                 <div>
                   <p className="font-semibold">Don't forget to save {appt.client?.full_name}'s formula! 💅</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     Archive the perfect mix while it's fresh in your mind
                   </p>
                 </div>
