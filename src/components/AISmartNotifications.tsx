@@ -168,16 +168,16 @@ export const AISmartNotifications = () => {
                 <CardContent className="pt-4">
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="font-medium text-sm">{notification.title}</h4>
+                      <h4 className="font-medium text-xs sm:text-sm">{notification.title}</h4>
                       <Badge variant={
                         notification.priority === 'high' ? 'destructive' : 
                         notification.priority === 'medium' ? 'default' : 
                         'secondary'
-                      } className="text-xs">
+                      } className="text-[11px] sm:text-xs">
                         {notification.priority}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {notification.message}
                     </p>
                     {notification.actionLabel && (

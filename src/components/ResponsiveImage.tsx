@@ -1,9 +1,12 @@
 /**
  * Responsive Image Component
- * Automatically optimizes images for different devices and pixel densities
+ * - Enhanced lazy loading with Intersection Observer
+ * - Device-specific optimization
+ * - Progressive loading with blur placeholder
+ * - Automatic error handling
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getOptimizedImageUrl, getDeviceCapabilities } from '@/lib/performanceOptimizer';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +18,7 @@ interface ResponsiveImageProps {
   className?: string;
   priority?: boolean;
   objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+  aspectRatio?: '1/1' | '16/9' | '4/3' | '3/2' | '21/9';
   onLoad?: () => void;
   onError?: () => void;
 }
@@ -27,29 +31,34 @@ export const ResponsiveImage = ({
   className,
   priority = false,
   objectFit = 'cover',
+  aspectRatio,
   onLoad,
   onError,
 }: ResponsiveImageProps) => {
   const [imageSrc, setImageSrc] = useState<string>('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const imgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const { deviceType, pixelRatio, isSlowConnection } = getDeviceCapabilities();
+    const { pixelRatio } = getDeviceCapabilities();
     
     // For priority images, load immediately
     if (priority) {
-      setImageSrc(src);
+      const optimizedSrc = width 
+        ? getOptimizedImageUrl(src, width, height)
+        : src;
+      setImageSrc(optimizedSrc);
       return;
     }
 
     // For non-priority images, use IntersectionObserver
-    const img = new Image();
+    if (!imgRef.current) return;
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Optimize image URL based on device
             const optimizedSrc = width 
               ? getOptimizedImageUrl(src, width, height)
               : src;
@@ -63,10 +72,7 @@ export const ResponsiveImage = ({
       }
     );
 
-    const element = document.getElementById(`img-${src}`);
-    if (element) {
-      observer.observe(element);
-    }
+    observer.observe(imgRef.current);
 
     return () => observer.disconnect();
   }, [src, width, height, priority]);
@@ -81,11 +87,20 @@ export const ResponsiveImage = ({
     onError?.();
   };
 
+  const aspectRatioClasses = {
+    '1/1': 'aspect-square',
+    '16/9': 'aspect-video',
+    '4/3': 'aspect-[4/3]',
+    '3/2': 'aspect-[3/2]',
+    '21/9': 'aspect-[21/9]',
+  };
+
   return (
     <div
-      id={`img-${src}`}
+      ref={imgRef}
       className={cn(
         'relative overflow-hidden bg-muted',
+        aspectRatio && aspectRatioClasses[aspectRatio],
         className
       )}
       style={{ width, height }}
@@ -112,15 +127,11 @@ export const ResponsiveImage = ({
             objectFit === 'scale-down' && 'object-scale-down',
             'w-full h-full'
           )}
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
         />
       )}
       
       {hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground text-sm">
+        <div className="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground text-xs sm:text-sm">
           Failed to load image
         </div>
       )}

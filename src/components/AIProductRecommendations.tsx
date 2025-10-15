@@ -181,25 +181,25 @@ export const AIProductRecommendations = ({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h4 className="font-semibold text-sm">{product.name}</h4>
-                      <p className="text-xs text-muted-foreground">{product.brand}</p>
+                      <h4 className="font-semibold text-xs sm:text-sm">{product.name}</h4>
+                      <p className="text-[11px] sm:text-xs text-muted-foreground">{product.brand}</p>
                     </div>
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-[11px] sm:text-xs">
                       {product.category}
                     </Badge>
                   </div>
 
-                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-2 line-clamp-2">
                     {product.description}
                   </p>
 
                   <div className="flex items-center gap-4 mt-3">
                     <div>
-                      <span className="text-lg font-bold text-primary">
+                      <span className="text-base sm:text-lg font-bold text-primary">
                         ${product.price.toFixed(2)}
                       </span>
                     </div>
-                    <div className="text-xs text-success font-medium">
+                    <div className="text-[11px] sm:text-xs text-success font-medium">
                       Earn ${commission}
                       <span className="text-muted-foreground ml-1">
                         ({(product.commissionRate * 100).toFixed(0)}%)
@@ -208,7 +208,7 @@ export const AIProductRecommendations = ({
                   </div>
 
                   {/* Match Reason */}
-                  <div className="mt-2 text-xs text-muted-foreground italic">
+                  <div className="mt-2 text-[11px] sm:text-xs text-muted-foreground italic">
                     💡 {product.matchReason}
                   </div>
                 </div>
@@ -229,7 +229,7 @@ export const AIProductRecommendations = ({
 
         {/* Footer Info */}
         <div className="mt-6 p-4 bg-muted/50 rounded-lg border-2 border-foreground/10">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[11px] sm:text-xs text-muted-foreground">
             💰 <strong>Commissions are automatic:</strong> When your client purchases through your link,
             you earn {affiliateCode ? 'with your code' : 'a commission'}. Track all earnings in the Finance tab.
           </p>

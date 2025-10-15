@@ -91,7 +91,7 @@ export const AIFeedbackPrompt = ({
         {!showComment ? (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium">Was this helpful?</p>
+              <p className="text-xs sm:text-sm font-medium">Was this helpful?</p>
               <Button
                 variant="ghost"
                 size="icon"
@@ -130,7 +130,7 @@ export const AIFeedbackPrompt = ({
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <MessageSquare className="h-4 w-4 text-primary" />
-              <p className="text-sm font-medium">What could be better?</p>
+              <p className="text-xs sm:text-sm font-medium">What could be better?</p>
             </div>
             
             <Textarea

@@ -71,7 +71,7 @@ export const AIProgressNarrative = ({ stage, className }: AIProgressNarrativePro
           </div>
         </div>
         <div className="flex-1">
-          <p className="text-lg font-medium gradient-text animate-fade-in">
+          <p className="text-base sm:text-lg font-medium gradient-text animate-fade-in">
             {narratives[stage][messageIndex]}
           </p>
         </div>
@@ -80,7 +80,7 @@ export const AIProgressNarrative = ({ stage, className }: AIProgressNarrativePro
 
       {/* Confidence Bar */}
       <div className="space-y-2">
-        <div className="flex justify-between text-xs text-muted-foreground">
+        <div className="flex justify-between text-[11px] sm:text-xs text-muted-foreground">
           <span>AI Confidence</span>
           <span>{Math.min(progress, stageProgress[stage])}%</span>
         </div>

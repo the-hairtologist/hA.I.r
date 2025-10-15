@@ -136,6 +136,13 @@ const App = () => {
         // Initialize self-healing system
         const { selfHealing } = await import('@/lib/selfHealing');
         await selfHealing.initialize();
+        
+        // Initialize performance monitoring (dev only)
+        if (import.meta.env.DEV) {
+          const { performanceMonitor } = await import('@/lib/performanceMonitor');
+          performanceMonitor.init();
+          setTimeout(() => performanceMonitor.report(), 10000);
+        }
       } catch (error) {
         // Systems will retry on next load
       }

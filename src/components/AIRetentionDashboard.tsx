@@ -97,8 +97,8 @@ export const AIRetentionDashboard = () => {
           <CardContent className="pt-6">
             <div className="text-center">
               <Users className="h-8 w-8 mx-auto mb-2 text-info" />
-              <div className="text-2xl font-bold">{riskScores.length}</div>
-              <div className="text-sm text-muted-foreground">Total Clients</div>
+              <div className="text-xl sm:text-2xl font-bold">{riskScores.length}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Total Clients</div>
             </div>
           </CardContent>
         </Card>
@@ -107,8 +107,8 @@ export const AIRetentionDashboard = () => {
           <CardContent className="pt-6">
             <div className="text-center">
               <TrendingDown className="h-8 w-8 mx-auto mb-2 text-warning" />
-              <div className="text-2xl font-bold">{atRiskCount}</div>
-              <div className="text-sm text-muted-foreground">At Risk</div>
+              <div className="text-xl sm:text-2xl font-bold">{atRiskCount}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">At Risk</div>
             </div>
           </CardContent>
         </Card>
@@ -117,8 +117,8 @@ export const AIRetentionDashboard = () => {
           <CardContent className="pt-6">
             <div className="text-center">
               <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-destructive" />
-              <div className="text-2xl font-bold">{criticalCount}</div>
-              <div className="text-sm text-muted-foreground">Critical</div>
+              <div className="text-xl sm:text-2xl font-bold">{criticalCount}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Critical</div>
             </div>
           </CardContent>
         </Card>
@@ -134,7 +134,7 @@ export const AIRetentionDashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm whitespace-pre-line">{insights}</p>
+            <p className="text-xs sm:text-sm whitespace-pre-line">{insights}</p>
           </CardContent>
         </Card>
       )}
@@ -181,21 +181,21 @@ export const AIRetentionDashboard = () => {
                             >
                               {score.riskLevel}
                             </Badge>
-                            <span className="text-sm text-muted-foreground">
+                            <span className="text-xs sm:text-sm text-muted-foreground">
                               {score.appointmentGap} days since last visit
                             </span>
                           </div>
-                          <div className="text-sm space-y-1">
+                          <div className="text-xs sm:text-sm space-y-1">
                             {score.reasons.map((reason: string, i: number) => (
                               <div key={i} className="text-muted-foreground">
                                 • {reason}
                               </div>
                             ))}
                           </div>
-                          <div className="mt-3 text-sm font-medium text-primary">
+                          <div className="mt-3 text-xs sm:text-sm font-medium text-primary">
                             Recommendations:
                           </div>
-                          <div className="text-sm space-y-1 mt-1">
+                          <div className="text-xs sm:text-sm space-y-1 mt-1">
                             {score.recommendations.slice(0, 3).map((rec: string, i: number) => (
                               <div key={i} className="text-muted-foreground">
                                 {rec}
