@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity } from "lucide-react";
+import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
@@ -81,8 +81,15 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       highlight: false
     },
     { 
+      icon: Plus, 
+      label: "Book", 
+      path: "/book-appointment",
+      gradient: "from-green-start to-green-end",
+      highlight: true // Primary action for clients
+    },
+    { 
       icon: Calendar, 
-      label: "Bookings", 
+      label: "Appointments", 
       path: "/appointments",
       gradient: "from-cyan-start to-cyan-end",
       highlight: false
@@ -93,13 +100,6 @@ export const MobileBottomNav = ({ userRole }: MobileBottomNavProps) => {
       path: "/messages",
       gradient: "from-pink-start to-pink-end",
       badge: unreadCount,
-      highlight: false
-    },
-    { 
-      icon: User, 
-      label: "Profile", 
-      path: "/settings",
-      gradient: "from-blue-start to-blue-end",
       highlight: false
     },
   ];

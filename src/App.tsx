@@ -88,6 +88,7 @@ const BookingHistoryPage = lazy(() => import("./pages/BookingHistoryPage"));
 const GrowthAnalytics = lazy(() => import("./pages/GrowthAnalytics"));
 const FeedbackBoard = lazy(() => import("./pages/FeedbackBoard"));
 const ClientFormulas = lazy(() => import("./pages/ClientFormulas"));
+const InstallPWA = lazy(() => import("./pages/InstallPWA"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -405,6 +406,13 @@ const App = () => {
           <Route path="/client-formulas" element={
             <ProtectedRoute allowedRoles={["client", "admin"]}>
               <ClientFormulas />
+            </ProtectedRoute>
+          } />
+          
+          {/* PWA Installation Guide */}
+          <Route path="/install" element={
+            <ProtectedRoute>
+              <InstallPWA />
             </ProtectedRoute>
           } />
           
