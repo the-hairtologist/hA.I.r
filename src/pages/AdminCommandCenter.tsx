@@ -163,7 +163,7 @@ export default function AdminCommandCenter() {
         <div className="relative overflow-hidden rounded-xl border-4 border-foreground bg-gradient-to-br from-primary via-accent to-secondary p-6 shadow-brutal-2xl">
           <div className="relative z-10">
             <div className="flex items-center gap-3">
-              <Badge className="bg-warning text-warning-foreground border-2 border-foreground text-lg px-4 py-2">
+              <Badge className="bg-warning text-warning-foreground border-2 border-foreground text-sm sm:text-base md:text-lg px-4 py-2">
                 <Crown className="h-4 w-4 mr-2" />
                 GOD MODE
               </Badge>
@@ -183,9 +183,9 @@ export default function AdminCommandCenter() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Stylists</p>
-                  <p className="text-3xl font-bold">{stats.totalStylists}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Active professionals</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Total Stylists</p>
+                  <p className="text-2xl sm:text-3xl md:text-4xl font-bold">{stats.totalStylists}</p>
+                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">Active professionals</p>
                 </div>
                 <Users className="h-8 w-8 text-primary" />
               </div>
@@ -196,9 +196,9 @@ export default function AdminCommandCenter() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Clients</p>
-                  <p className="text-3xl font-bold">{stats.totalClients}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Platform users</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Total Clients</p>
+                  <p className="text-2xl sm:text-3xl md:text-4xl font-bold">{stats.totalClients}</p>
+                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">Platform users</p>
                 </div>
                 <Users className="h-8 w-8 text-accent" />
               </div>
@@ -209,9 +209,9 @@ export default function AdminCommandCenter() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Appointments</p>
-                  <p className="text-3xl font-bold">{stats.totalAppointments}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{stats.completionRate}% completion</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Appointments</p>
+                  <p className="text-2xl sm:text-3xl md:text-4xl font-bold">{stats.totalAppointments}</p>
+                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">{stats.completionRate}% completion</p>
                 </div>
                 <Calendar className="h-8 w-8 text-secondary" />
               </div>
@@ -222,9 +222,9 @@ export default function AdminCommandCenter() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">System Health</p>
-                  <p className="text-3xl font-bold">{stats.recentErrors === 0 ? '100%' : '98%'}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{stats.recentErrors} errors (24h)</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">System Health</p>
+                  <p className="text-2xl sm:text-3xl md:text-4xl font-bold">{stats.recentErrors === 0 ? '100%' : '98%'}</p>
+                  <p className="text-[10px] xs:text-xs text-muted-foreground mt-1">{stats.recentErrors} errors (24h)</p>
                 </div>
                 <Activity className={`h-8 w-8 ${stats.recentErrors === 0 ? 'text-success' : 'text-warning'}`} />
               </div>
@@ -243,22 +243,22 @@ export default function AdminCommandCenter() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Total Revenue</p>
-                <p className="text-3xl font-bold">${businessMetrics.totalRevenue?.toFixed(2) || '0.00'}</p>
-                <p className="text-xs text-success flex items-center gap-1">
+                <p className="text-xs sm:text-sm text-muted-foreground">Total Revenue</p>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold">${businessMetrics.totalRevenue?.toFixed(2) || '0.00'}</p>
+                <p className="text-[10px] xs:text-xs text-success flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" />
                   Platform lifetime
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Avg per Booking</p>
-                <p className="text-3xl font-bold">${businessMetrics.avgRevenue || '0.00'}</p>
-                <p className="text-xs text-muted-foreground">Revenue efficiency</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Avg per Booking</p>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold">${businessMetrics.avgRevenue || '0.00'}</p>
+                <p className="text-[10px] xs:text-xs text-muted-foreground">Revenue efficiency</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Completion Rate</p>
-                <p className="text-3xl font-bold">{stats.completionRate}%</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">Completion Rate</p>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold">{stats.completionRate}%</p>
+                <p className="text-[10px] xs:text-xs text-muted-foreground">
                   {stats.completedAppointments} completed
                 </p>
               </div>
@@ -276,19 +276,19 @@ export default function AdminCommandCenter() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <Button onClick={() => navigate('/admin/users')} variant="outline" className="h-auto flex-col gap-2 p-4">
                 <Users className="h-6 w-6" />
-                <span className="text-xs">Manage Users</span>
+                <span className="text-[10px] xs:text-xs sm:text-sm">Manage Users</span>
               </Button>
               <Button onClick={() => navigate('/system-health')} variant="outline" className="h-auto flex-col gap-2 p-4">
                 <Activity className="h-6 w-6" />
-                <span className="text-xs">System Health</span>
+                <span className="text-[10px] xs:text-xs sm:text-sm">System Health</span>
               </Button>
               <Button onClick={() => navigate('/access-codes')} variant="outline" className="h-auto flex-col gap-2 p-4">
                 <Lock className="h-6 w-6" />
-                <span className="text-xs">Access Codes</span>
+                <span className="text-[10px] xs:text-xs sm:text-sm">Access Codes</span>
               </Button>
               <Button onClick={() => navigate('/settings')} variant="outline" className="h-auto flex-col gap-2 p-4">
                 <SettingsIcon className="h-6 w-6" />
-                <span className="text-xs">Settings</span>
+                <span className="text-[10px] xs:text-xs sm:text-sm">Settings</span>
               </Button>
             </div>
           </CardContent>

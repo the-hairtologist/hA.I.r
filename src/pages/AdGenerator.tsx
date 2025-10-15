@@ -73,7 +73,7 @@ export default function AdGenerator() {
       <div className="space-y-6 max-w-4xl animate-fade-in">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-3xl font-display font-bold mb-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Ad Generator
             </h1>
             <p className="text-muted-foreground">
@@ -111,7 +111,7 @@ export default function AdGenerator() {
                     <span className="font-semibold capitalize">
                       {type.replace("-", " ")}
                     </span>
-                    <span className="text-xs opacity-70 text-left">
+                    <span className="text-[10px] xs:text-xs opacity-70 text-left">
                       {adTypeExamples[type]}
                     </span>
                   </Button>
@@ -130,7 +130,7 @@ export default function AdGenerator() {
                 rows={4}
                 className="resize-none"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
                 Be specific about your offer, target audience, and key benefits
               </p>
             </div>
@@ -214,7 +214,7 @@ export default function AdGenerator() {
                     </Button>
                   </div>
                   <div className="p-4 bg-muted rounded-lg">
-                    <p className="font-bold text-lg">{generatedAd.copy.headline}</p>
+                    <p className="font-bold text-base sm:text-lg md:text-xl">{generatedAd.copy.headline}</p>
                   </div>
                 </div>
 
@@ -294,7 +294,7 @@ export default function AdGenerator() {
                 onClick={() => setPrompt(template)}
                 style={{ animationDelay: `${i * 100}ms` }}
               >
-                <p className="text-sm">{template}</p>
+                <p className="text-xs sm:text-sm">{template}</p>
               </div>
             ))}
           </CardContent>

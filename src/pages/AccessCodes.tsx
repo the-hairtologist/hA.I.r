@@ -91,7 +91,7 @@ export default function AccessCodes() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Access Code Management</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Access Code Management</h1>
           <p className="text-muted-foreground">
             Manage early access codes for testing users
           </p>
@@ -100,31 +100,31 @@ export default function AccessCodes() {
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Codes</CardTitle>
+              <CardTitle className="text-xs sm:text-sm font-medium">Total Codes</CardTitle>
               <Key className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{codes.length}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold">{codes.length}</div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Used Codes</CardTitle>
+              <CardTitle className="text-xs sm:text-sm font-medium">Used Codes</CardTitle>
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{usedCount}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold">{usedCount}</div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Available</CardTitle>
+              <CardTitle className="text-xs sm:text-sm font-medium">Available</CardTitle>
               <XCircle className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{availableCount}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold">{availableCount}</div>
             </CardContent>
           </Card>
         </div>
@@ -145,7 +145,7 @@ export default function AccessCodes() {
                 >
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-3">
-                      <code className="px-3 py-1 bg-muted rounded font-mono text-sm">
+                      <code className="px-3 py-1 bg-muted rounded font-mono text-xs sm:text-sm">
                         {codeItem.code}
                       </code>
                       {codeItem.used_by ? (
@@ -156,10 +156,10 @@ export default function AccessCodes() {
                     </div>
                     
                     {codeItem.notes && (
-                      <p className="text-sm text-muted-foreground">{codeItem.notes}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{codeItem.notes}</p>
                     )}
 
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-4 text-[10px] xs:text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         Created {format(new Date(codeItem.created_at), "MMM d, yyyy")}

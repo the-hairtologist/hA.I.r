@@ -454,7 +454,7 @@ const Knowledge = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
-          <p className="text-sm text-muted-foreground">Loading AI Assistant...</p>
+          <p className="text-xs sm:text-sm text-muted-foreground">Loading AI Assistant...</p>
         </div>
       </div>
     );
@@ -474,11 +474,11 @@ const Knowledge = () => {
           <div className="max-w-2xl mx-auto text-center p-5 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
             <div className="flex items-center justify-center gap-3 mb-2">
               <Sparkles className="h-7 w-7 text-primary animate-pulse" />
-              <h2 className="text-xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                 AI Hair Pro
               </h2>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground leading-relaxed">
               <span className="font-semibold text-foreground">Ask anything hair-related!</span> Get instant color formulas, step-by-step guides for tricky corrections, technique tips, product recommendations, and professional advice—all powered by AI trained on expert hair knowledge.
             </p>
           </div>
