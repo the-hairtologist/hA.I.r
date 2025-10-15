@@ -291,7 +291,21 @@ const Settings = () => {
         if (clientError) throw clientError;
       }
 
-      toast.success("Profile updated successfully");
+      // Visual success confirmation
+      toast.success("Profile updated successfully", {
+        description: "All your changes have been saved",
+        duration: 4000,
+      });
+      
+      // Flash save button with success state
+      const saveButton = document.querySelector('[data-save-profile]');
+      if (saveButton) {
+        saveButton.classList.add('animate-pulse', 'bg-green-500');
+        setTimeout(() => {
+          saveButton.classList.remove('animate-pulse', 'bg-green-500');
+        }, 2000);
+      }
+      
       setHasChanges(false);
     } catch (error: any) {
       console.error("Error saving profile:", error);
@@ -1003,6 +1017,7 @@ const Settings = () => {
                     onClick={handleSaveProfile} 
                     disabled={!hasChanges || isSaving}
                     className="w-full sm:w-auto"
+                    data-save-profile
                   >
                     {isSaving ? (
                       <>
