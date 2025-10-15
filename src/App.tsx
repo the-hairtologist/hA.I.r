@@ -20,6 +20,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { DashboardErrorBoundary } from "@/components/DashboardErrorBoundary";
 import { GlobalErrorBoundary } from "@/components/errors/GlobalErrorBoundary";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { DemoModeProvider } from "@/components/demo/DemoMode";
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
 import { useGlobalKeyboardShortcuts } from "@/hooks/useGlobalKeyboardShortcuts";
 import { SubscriptionGate } from "@/components/SubscriptionGate";
@@ -135,13 +136,14 @@ const App = () => {
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
       <SubscriptionProvider>
-        <TooltipProvider>
-          <GlobalAnnouncer />
-          <OfflineIndicator />
-          <Toaster />
-          <Sonner />
-          <CookieConsent />
-          <PerformanceOverlay />
+        <DemoModeProvider>
+          <TooltipProvider>
+            <GlobalAnnouncer />
+            <OfflineIndicator />
+            <Toaster />
+            <Sonner />
+            <CookieConsent />
+            <PerformanceOverlay />
             <BrowserRouter>
             <AnalyticsInitializer />
             <KeyboardShortcutsInitializer />
@@ -435,7 +437,8 @@ const App = () => {
               </Routes>
             </Suspense>
           </BrowserRouter>
-        </TooltipProvider>
+          </TooltipProvider>
+        </DemoModeProvider>
       </SubscriptionProvider>
     </QueryClientProvider>
       </ErrorBoundary>
