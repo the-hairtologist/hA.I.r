@@ -286,6 +286,47 @@ export type Database = {
           },
         ]
       }
+      appointment_timers: {
+        Row: {
+          appointment_id: string
+          created_at: string | null
+          duration_seconds: number
+          end_time: string | null
+          id: string
+          notes: string | null
+          start_time: string
+          updated_at: string | null
+        }
+        Insert: {
+          appointment_id: string
+          created_at?: string | null
+          duration_seconds?: number
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time?: string
+          updated_at?: string | null
+        }
+        Update: {
+          appointment_id?: string
+          created_at?: string | null
+          duration_seconds?: number
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_timers_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -2982,6 +3023,66 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      waitlist: {
+        Row: {
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          notified_at: string | null
+          preferred_date: string | null
+          preferred_time: string | null
+          service_type: string
+          status: string
+          stylist_id: string
+        }
+        Insert: {
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          notified_at?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_type: string
+          status?: string
+          stylist_id: string
+        }
+        Update: {
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          notified_at?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_type?: string
+          status?: string
+          stylist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waitlist_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waitlist_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

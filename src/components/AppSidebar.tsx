@@ -32,6 +32,8 @@ import { useSidebarOrder, SidebarItem } from "@/hooks/useSidebarOrder";
 import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
 import { TodaysScheduleWidget } from "@/components/sidebar/TodaysScheduleWidget";
 import { CalendarSyncIndicator } from "@/components/CalendarSyncIndicator";
+import { NextAppointmentBanner } from "@/components/sidebar/NextAppointmentBanner";
+import { DarkModeToggle } from "@/components/sidebar/DarkModeToggle";
 import {
   stylistNavigationItems,
   clientNavigationItems,
@@ -169,6 +171,9 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarContent className="pb-4">
+        {/* Next Appointment Banner - Shows time until next appointment */}
+        {(isStylist || isAdmin) && !collapsed && <NextAppointmentBanner />}
+        
         {/* Today's Schedule Widget - Only for stylists and admins */}
         {(isStylist || isAdmin) && !collapsed && <TodaysScheduleWidget />}
         
@@ -262,6 +267,9 @@ export function AppSidebar() {
 
         {/* Calendar Sync Indicator - Only for stylists and admins */}
         {(isStylist || isAdmin) && !collapsed && <CalendarSyncIndicator />}
+        
+        {/* Dark Mode Toggle - For all users */}
+        {!collapsed && <DarkModeToggle />}
       </SidebarContent>
     </Sidebar>
   );
