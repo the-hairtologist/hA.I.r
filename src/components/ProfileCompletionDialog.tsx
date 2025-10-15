@@ -90,21 +90,28 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
       return;
     }
 
-    // Validate file size (5MB limit)
-    const MAX_SIZE = 5 * 1024 * 1024;
+    // Validate file size (10MB limit before compression)
+    const MAX_SIZE = 10 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      toast.error("Image must be less than 5MB");
+      toast.error("Image must be less than 10MB");
       return;
     }
 
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
+      // Import compression utility
+      const { compressAvatar } = await import('@/lib/imageCompression');
+      
+      // Compress image automatically
+      toast.info("Optimizing image...", { duration: 2000 });
+      const compressedFile = await compressAvatar(file);
+      
+      const fileExt = compressedFile.name.split('.').pop();
       const fileName = `${userId}/${Math.random()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(fileName, file, { upsert: true });
+        .upload(fileName, compressedFile, { upsert: true });
 
       if (uploadError) throw uploadError;
 
@@ -174,8 +181,12 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
 
       // Mark profile as completed in localStorage to prevent repeated prompts
       localStorage.setItem('profile_completed', 'true');
+      localStorage.setItem('profile_completed_at', new Date().toISOString());
       
-      toast.success("Profile completed! Welcome to hA.I.r!");
+      toast.success("Profile completed! Welcome to hA.I.r!", {
+        description: "Your profile has been saved successfully",
+        duration: 4000,
+      });
       onOpenChange(false);
       navigate("/dashboard");
     } catch (error: any) {

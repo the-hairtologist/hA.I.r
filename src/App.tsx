@@ -57,6 +57,10 @@ const Portfolio = lazy(() => import("./pages/Portfolio"));
 const Clients = lazy(() => import("./pages/Clients"));
 const AccessCodes = lazy(() => import("./pages/AccessCodes"));
 const Integrations = lazy(() => import("./pages/Integrations"));
+
+// Deep Link Pages
+const DeepLinkAppointment = lazy(() => import("./pages/DeepLinkAppointment"));
+const DeepLinkTransformation = lazy(() => import("./pages/DeepLinkTransformation"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
@@ -409,6 +413,10 @@ const App = () => {
               <StylistProfile />
             </ProtectedRoute>
           } />
+          
+          {/* Deep Link Routes - Public for sharing */}
+          <Route path="/appointment/:id" element={<DeepLinkAppointment />} />
+          <Route path="/transformation/:id" element={<DeepLinkTransformation />} />
           
           {/* Client Hair History - Client-optimized view */}
           <Route path="/client-formulas" element={
