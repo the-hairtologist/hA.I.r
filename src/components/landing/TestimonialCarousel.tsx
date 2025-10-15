@@ -55,39 +55,38 @@ export const TestimonialCarousel = () => {
   const testimonial = testimonials[current];
 
   return (
-    <div className="relative">
+    <div className="max-w-3xl mx-auto">
       <Card className="brutal-border brutal-shadow-lg bg-card p-8 animate-fade-in">
-        <div className="flex items-start gap-4 mb-6">
-          <Avatar className="h-16 w-16 border-2 border-foreground">
-            <AvatarFallback className="bg-primary text-primary-foreground font-bold text-lg">
+        <div className="flex items-start gap-4 mb-4">
+          <Avatar className="h-12 w-12 border-2 border-foreground flex-shrink-0">
+            <AvatarFallback className="bg-primary text-primary-foreground font-bold">
               {testimonial.initials}
             </AvatarFallback>
           </Avatar>
-          <div className="flex-1">
-            <h3 className="font-display font-bold text-lg">{testimonial.name}</h3>
-            <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-            <p className="text-xs text-muted-foreground">{testimonial.location}</p>
-            <div className="flex gap-1 mt-2">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-bold">{testimonial.name}</h3>
+            <p className="text-sm text-muted-foreground">{testimonial.role} • {testimonial.location}</p>
+            <div className="flex gap-0.5 mt-1">
               {[...Array(testimonial.rating)].map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-warning text-warning" />
+                <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />
               ))}
             </div>
           </div>
         </div>
-        <blockquote className="text-foreground/90 text-base font-medium leading-relaxed">
+        <blockquote className="text-foreground/90 leading-relaxed">
           "{testimonial.text}"
         </blockquote>
       </Card>
 
-      <div className="flex items-center justify-center gap-4 mt-6">
+      <div className="flex items-center justify-center gap-3 mt-6">
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={prev}
-          className="h-10 w-10 border-2 border-foreground hover-scale"
-          aria-label="Previous testimonial"
+          className="h-8 w-8"
+          aria-label="Previous"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4 w-4" />
         </Button>
         
         <div className="flex gap-2">
@@ -95,22 +94,22 @@ export const TestimonialCarousel = () => {
             <button
               key={idx}
               onClick={() => setCurrent(idx)}
-              className={`h-2 rounded-full transition-all ${
-                idx === current ? "w-8 bg-primary" : "w-2 bg-muted-foreground/30"
+              className={`h-1.5 rounded-full transition-all ${
+                idx === current ? "w-6 bg-primary" : "w-1.5 bg-muted-foreground/30"
               }`}
-              aria-label={`Go to testimonial ${idx + 1}`}
+              aria-label={`Testimonial ${idx + 1}`}
             />
           ))}
         </div>
 
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={next}
-          className="h-10 w-10 border-2 border-foreground hover-scale"
-          aria-label="Next testimonial"
+          className="h-8 w-8"
+          aria-label="Next"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
     </div>

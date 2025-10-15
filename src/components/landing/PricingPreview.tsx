@@ -56,13 +56,13 @@ export const PricingPreview = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-6xl mx-auto">
       <div className="text-center">
-        <h2 className="font-display font-black text-3xl sm:text-5xl mb-4">
-          Simple Pricing. Real Value.
+        <h2 className="font-display font-black text-3xl sm:text-5xl mb-3">
+          Simple pricing
         </h2>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Start free. Scale when you're ready. Cancel anytime.
+        <p className="text-muted-foreground">
+          Start free. Scale when ready. Cancel anytime.
         </p>
       </div>
 

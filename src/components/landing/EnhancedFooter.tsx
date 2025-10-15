@@ -22,7 +22,7 @@ export const EnhancedFooter = () => {
   };
 
   return (
-    <footer className="border-t-4 border-foreground bg-muted">
+    <footer className="border-t-2 border-foreground bg-muted/50">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand Column */}

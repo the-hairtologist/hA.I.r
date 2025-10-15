@@ -42,13 +42,13 @@ const faqs = [
 
 export const FAQSection = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-3xl mx-auto">
       <div className="text-center">
-        <h2 className="font-display font-black text-3xl sm:text-5xl mb-4">
-          Questions? We've Got Answers.
+        <h2 className="font-display font-black text-3xl sm:text-5xl mb-3">
+          Common questions
         </h2>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Everything you need to know about hA.I.r
+        <p className="text-muted-foreground">
+          Everything you need to know
         </p>
       </div>
 
