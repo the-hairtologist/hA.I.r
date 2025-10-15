@@ -214,16 +214,16 @@ export default function AdminUsers() {
         {/* Users List */}
         <Card className="border-4 border-foreground shadow-brutal">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
-                <CardTitle>All Users ({filteredUsers.length})</CardTitle>
-                <CardDescription>Complete user directory with management controls</CardDescription>
+                <CardTitle className="text-lg sm:text-xl">All Users ({filteredUsers.length})</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Complete user directory with management controls</CardDescription>
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={selectAll}
-                className="gap-2"
+                className="gap-2 w-full sm:w-auto"
               >
                 <Users className="h-4 w-4" />
                 {selectedUsers.size === filteredUsers.length ? 'Deselect All' : 'Select All'}
@@ -231,110 +231,111 @@ export default function AdminUsers() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={`p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors ${
+                  className={`p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors ${
                     selectedUsers.has(user.id) ? 'bg-primary/5 border-primary' : ''
                   }`}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 sm:gap-4">
                     <input
                       type="checkbox"
                       checked={selectedUsers.has(user.id)}
                       onChange={() => toggleUserSelection(user.id)}
-                      className="mt-1 h-5 w-5"
+                      className="mt-1 h-5 w-5 min-w-[20px]"
                     />
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="flex flex-col">
-                          <p className="font-semibold text-lg">{user.full_name || 'Unknown'}</p>
-                          <p className="text-sm text-muted-foreground">{user.email}</p>
+                    <div className="flex-1 min-w-0">
+                      {/* Mobile Layout: Stack everything */}
+                      <div className="flex flex-col gap-3">
+                        {/* User info */}
+                        <div>
+                          <p className="font-semibold text-base sm:text-lg truncate">{user.full_name || 'Unknown'}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground truncate">{user.email}</p>
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-2 mt-2">
-                        {user.user_roles?.map((ur: any) => (
-                          <Badge key={ur.role} variant="secondary">
-                            {ur.role}
-                          </Badge>
-                        ))}
-                        <span className="text-xs text-muted-foreground">
-                          <Calendar className="h-3 w-3 inline mr-1" />
-                          Joined {format(new Date(user.created_at), 'PP')}
-                        </span>
-                      </div>
-                    </div>
-
-                      <div className="flex gap-2">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => setSelectedUser(user)}
-                            >
-                              <Eye className="h-4 w-4 mr-2" />
-                              View
-                            </Button>
-                          </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
-                          <DialogHeader>
-                            <DialogTitle>User Details</DialogTitle>
-                            <DialogDescription>
-                              Complete information for {selectedUser?.full_name}
-                            </DialogDescription>
-                          </DialogHeader>
-                          {selectedUser && (
-                            <div className="space-y-4">
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">Full Name</p>
-                                  <p className="text-lg">{selectedUser.full_name || 'Not set'}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">Email</p>
-                                  <p className="text-lg">{selectedUser.email}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">User ID</p>
-                                  <p className="text-sm font-mono">{selectedUser.id}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">Joined</p>
-                                  <p className="text-sm">{format(new Date(selectedUser.created_at), 'PPp')}</p>
-                                </div>
-                              </div>
-                              
-                              <div>
-                                <p className="text-sm font-medium text-muted-foreground mb-2">Roles</p>
-                                <div className="flex gap-2">
-                                  {selectedUser.user_roles?.map((ur: any) => (
-                                    <Badge key={ur.role}>{ur.role}</Badge>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </DialogContent>
-                        </Dialog>
                         
-                        <Select
-                          onValueChange={(role) => handleAssignRole(user.id, role as 'client' | 'stylist')}
-                        >
-                          <SelectTrigger className="w-[140px]">
-                            <UserCog className="h-4 w-4 mr-2" />
-                            <SelectValue placeholder="Add Role" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="client">Client</SelectItem>
-                            <SelectItem value="stylist">Stylist</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                        {/* Roles and date */}
+                        <div className="flex flex-wrap items-center gap-2">
+                          {user.user_roles?.map((ur: any) => (
+                            <Badge key={ur.role} variant="secondary" className="text-xs">
+                              {ur.role}
+                            </Badge>
+                          ))}
+                          <span className="text-xs text-muted-foreground whitespace-nowrap">
+                            <Calendar className="h-3 w-3 inline mr-1" />
+                            Joined {format(new Date(user.created_at), 'PP')}
+                          </span>
+                        </div>
+
+                        {/* Actions - Full width on mobile */}
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setSelectedUser(user)}
+                                className="w-full sm:w-auto justify-center"
+                              >
+                                <Eye className="h-4 w-4 mr-2" />
+                                View Details
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>User Details</DialogTitle>
+                                <DialogDescription>
+                                  Complete information for {selectedUser?.full_name}
+                                </DialogDescription>
+                              </DialogHeader>
+                              {selectedUser && (
+                                <div className="space-y-4">
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Full Name</p>
+                                      <p className="text-sm sm:text-base break-words">{selectedUser.full_name || 'Not set'}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Email</p>
+                                      <p className="text-sm sm:text-base break-all">{selectedUser.email}</p>
+                                    </div>
+                                    <div className="sm:col-span-2">
+                                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">User ID</p>
+                                      <p className="text-xs font-mono break-all">{selectedUser.id}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Joined</p>
+                                      <p className="text-xs sm:text-sm">{format(new Date(selectedUser.created_at), 'PPp')}</p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div>
+                                    <p className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Roles</p>
+                                    <div className="flex flex-wrap gap-2">
+                                      {selectedUser.user_roles?.map((ur: any) => (
+                                        <Badge key={ur.role} className="text-xs">{ur.role}</Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </DialogContent>
+                          </Dialog>
+                          
+                          <Select
+                            onValueChange={(role) => handleAssignRole(user.id, role as 'client' | 'stylist')}
+                          >
+                            <SelectTrigger className="w-full sm:w-[140px]">
+                              <UserCog className="h-4 w-4 mr-2" />
+                              <SelectValue placeholder="Add Role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="client">Client</SelectItem>
+                              <SelectItem value="stylist">Stylist</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     </div>
                   </div>

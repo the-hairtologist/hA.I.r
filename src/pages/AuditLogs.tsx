@@ -146,7 +146,7 @@ export default function AuditLogs() {
         {/* Filters */}
         <Card className="border-4 border-foreground shadow-brutal">
           <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -198,18 +198,19 @@ export default function AuditLogs() {
               </Select>
             </div>
 
-            <div className="flex justify-between items-center mt-4">
-              <p className="text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-4">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Showing {filteredLogs.length} of {logs.length} logs
               </p>
               <Button
                 variant="outline"
                 onClick={handleExport}
                 disabled={filteredLogs.length === 0}
-                className="gap-2"
+                className="gap-2 w-full sm:w-auto"
+                size="sm"
               >
                 <Download className="h-4 w-4" />
-                Export
+                <span className="sm:inline">Export CSV</span>
               </Button>
             </div>
           </CardContent>
@@ -234,45 +235,46 @@ export default function AuditLogs() {
                 <p>No audit logs found</p>
               </div>
             ) : (
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+              <div className="space-y-2 sm:space-y-3 max-h-[600px] overflow-y-auto">
                 {filteredLogs.map((log) => (
                   <div
                     key={log.id}
-                    className="p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors"
+                    className="p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors"
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          {getActionBadge(log.action)}
-                          <Badge variant="outline">{log.table_name}</Badge>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {format(new Date(log.created_at), "PPp")}
-                          </span>
-                        </div>
-                        
-                        <div className="space-y-1 text-sm">
-                          <p className="font-mono text-xs text-muted-foreground">
-                            User: {log.user_id}
-                          </p>
-                          {log.record_id && (
-                            <p className="font-mono text-xs text-muted-foreground">
-                              Record: {log.record_id}
-                            </p>
-                          )}
-                          
-                          {log.new_data && (
-                            <details className="mt-2">
-                              <summary className="cursor-pointer text-xs font-medium hover:text-primary">
-                                View Changes
-                              </summary>
-                              <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-x-auto">
-                                {JSON.stringify(log.new_data, null, 2)}
-                              </pre>
-                            </details>
-                          )}
-                        </div>
+                    <div className="flex flex-col gap-3">
+                      {/* Badges and timestamp - wrap on mobile */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {getActionBadge(log.action)}
+                        <Badge variant="outline" className="text-xs">{log.table_name}</Badge>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1 whitespace-nowrap">
+                          <Calendar className="h-3 w-3" />
+                          {format(new Date(log.created_at), "PPp")}
+                        </span>
                       </div>
+                      
+                      {/* User and record info */}
+                      <div className="space-y-1">
+                        <p className="font-mono text-xs text-muted-foreground break-all">
+                          User: {log.user_id}
+                        </p>
+                        {log.record_id && (
+                          <p className="font-mono text-xs text-muted-foreground break-all">
+                            Record: {log.record_id}
+                          </p>
+                        )}
+                      </div>
+                      
+                      {/* Changes details */}
+                      {log.new_data && (
+                        <details className="mt-1">
+                          <summary className="cursor-pointer text-xs font-medium hover:text-primary touch-manipulation min-h-[44px] flex items-center">
+                            View Changes
+                          </summary>
+                          <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-x-auto max-w-full">
+                            {JSON.stringify(log.new_data, null, 2)}
+                          </pre>
+                        </details>
+                      )}
                     </div>
                   </div>
                 ))}

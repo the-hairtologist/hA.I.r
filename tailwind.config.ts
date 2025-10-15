@@ -22,7 +22,8 @@ export default {
       },
     },
     screens: {
-      'xs': '475px',
+      'xxs': '320px',  // Extreme small screens (very old devices)
+      'xs': '360px',   // Extra small screens (small modern phones)
       'sm': '640px',
       'md': '768px',
       'lg': '1024px',
