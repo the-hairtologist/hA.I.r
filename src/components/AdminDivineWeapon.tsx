@@ -130,7 +130,7 @@ export const AdminDivineWeapon = () => {
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium">Security</CardTitle>
               <Shield className={`h-5 w-5 ${
-                securityStatus?.status === 'secure' ? 'text-green-500' : 'text-yellow-500'
+                securityStatus?.status === 'secure' ? 'text-success' : 'text-warning'
               }`} />
             </div>
           </CardHeader>
@@ -148,7 +148,7 @@ export const AdminDivineWeapon = () => {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium">System Health</CardTitle>
-              <Activity className="h-5 w-5 text-blue-500" />
+              <Activity className="h-5 w-5 text-info" />
             </div>
           </CardHeader>
           <CardContent>
@@ -165,7 +165,7 @@ export const AdminDivineWeapon = () => {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium">AI Insights</CardTitle>
-              <Brain className="h-5 w-5 text-purple-500" />
+              <Brain className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
@@ -180,7 +180,7 @@ export const AdminDivineWeapon = () => {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium">Auto-Healing</CardTitle>
-              <RefreshCw className="h-5 w-5 text-green-500" />
+              <RefreshCw className="h-5 w-5 text-success" />
             </div>
           </CardHeader>
           <CardContent>
@@ -209,7 +209,7 @@ export const AdminDivineWeapon = () => {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center gap-3">
-                  <Shield className="h-5 w-5 text-green-500" />
+                  <Shield className="h-5 w-5 text-success" />
                   <div>
                     <p className="font-medium">Guardian Angel Active</p>
                     <p className="text-sm text-muted-foreground">
@@ -221,9 +221,9 @@ export const AdminDivineWeapon = () => {
               </div>
 
               {securityStatus?.unresolvedThreats > 0 && (
-                <div className="flex items-center justify-between p-4 border border-yellow-500 rounded-lg bg-yellow-500/10">
+                <div className="flex items-center justify-between p-4 border border-warning rounded-lg bg-warning/10">
                   <div className="flex items-center gap-3">
-                    <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                    <AlertTriangle className="h-5 w-5 text-warning" />
                     <div>
                       <p className="font-medium">Threats Detected</p>
                       <p className="text-sm text-muted-foreground">
@@ -240,14 +240,14 @@ export const AdminDivineWeapon = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 border rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Eye className="h-4 w-4 text-blue-500" />
+                    <Eye className="h-4 w-4 text-info" />
                     <span className="text-sm font-medium">Events Logged</span>
                   </div>
                   <p className="text-2xl font-bold">{securityStatus?.recentEvents || 0}</p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Lock className="h-4 w-4 text-green-500" />
+                    <Lock className="h-4 w-4 text-success" />
                     <span className="text-sm font-medium">Auto-Blocked</span>
                   </div>
                   <p className="text-2xl font-bold">0</p>

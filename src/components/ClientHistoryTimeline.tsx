@@ -56,12 +56,12 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      scheduled: "bg-blue-500",
-      confirmed: "bg-green-500",
-      completed: "bg-gray-500",
-      cancelled: "bg-red-500",
+      scheduled: "bg-info",
+      confirmed: "bg-success",
+      completed: "bg-muted",
+      cancelled: "bg-destructive",
     };
-    return colors[status] || "bg-gray-400";
+    return colors[status] || "bg-muted-foreground";
   };
 
   // Combine and sort by date

@@ -96,7 +96,7 @@ export const AIRetentionDashboard = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <Users className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+              <Users className="h-8 w-8 mx-auto mb-2 text-info" />
               <div className="text-2xl font-bold">{riskScores.length}</div>
               <div className="text-sm text-muted-foreground">Total Clients</div>
             </div>
@@ -106,7 +106,7 @@ export const AIRetentionDashboard = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <TrendingDown className="h-8 w-8 mx-auto mb-2 text-orange-500" />
+              <TrendingDown className="h-8 w-8 mx-auto mb-2 text-warning" />
               <div className="text-2xl font-bold">{atRiskCount}</div>
               <div className="text-sm text-muted-foreground">At Risk</div>
             </div>
@@ -116,7 +116,7 @@ export const AIRetentionDashboard = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-red-500" />
+              <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-destructive" />
               <div className="text-2xl font-bold">{criticalCount}</div>
               <div className="text-sm text-muted-foreground">Critical</div>
             </div>
@@ -156,7 +156,7 @@ export const AIRetentionDashboard = () => {
         <CardContent>
           {riskScores.filter(s => s.riskLevel !== 'low').length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <Users className="h-12 w-12 mx-auto mb-2 text-green-500" />
+              <Users className="h-12 w-12 mx-auto mb-2 text-success" />
               <p>All clients showing healthy engagement! 🎉</p>
             </div>
           ) : (

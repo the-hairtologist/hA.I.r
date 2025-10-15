@@ -19,13 +19,13 @@ export const VideoInsights = ({ analysis }: VideoInsightsProps) => {
   const getDamageLevelColor = (level: string) => {
     switch (level) {
       case "minimal":
-        return "bg-green-500/10 text-green-700 dark:text-green-400";
+        return "bg-success/10 text-success";
       case "moderate":
-        return "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400";
+        return "bg-warning/10 text-warning";
       case "severe":
-        return "bg-red-500/10 text-red-700 dark:text-red-400";
+        return "bg-destructive/10 text-destructive";
       default:
-        return "bg-gray-500/10 text-gray-700 dark:text-gray-400";
+        return "bg-muted/20 text-muted-foreground";
     }
   };
 

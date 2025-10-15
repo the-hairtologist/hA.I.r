@@ -91,7 +91,7 @@ export const FormFieldWithValidation = forwardRef<
       className: cn(
         "transition-all",
         hasError && "border-destructive focus-visible:ring-destructive",
-        isValid && "border-green-500 focus-visible:ring-green-500",
+        isValid && "border-success focus-visible:ring-success",
         className
       ),
     };
@@ -152,7 +152,7 @@ export const FormFieldWithValidation = forwardRef<
               {hasError ? (
                 <AlertCircle className="h-4 w-4 text-destructive" />
               ) : isValid ? (
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               ) : null}
             </div>
           )}
