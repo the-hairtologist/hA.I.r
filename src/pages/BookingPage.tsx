@@ -1,5 +1,5 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -160,20 +160,27 @@ const BookingPage = () => {
         <Card>
           <CardHeader>
             <CardTitle>Your Booking Link</CardTitle>
+            <CardDescription>Share this link with clients to book appointments</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Input
-                value={bookingUrl}
-                readOnly
-                className="font-mono text-sm overflow-x-auto"
-              />
-              <Button onClick={copyToClipboard} variant="outline" className="flex-shrink-0">
-                <Copy className="h-4 w-4" />
-              </Button>
-              <Button onClick={shareLink} variant="outline" className="flex-shrink-0">
-                <Share2 className="h-4 w-4" />
-              </Button>
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <Input
+                  value={bookingUrl}
+                  readOnly
+                  className="font-mono text-sm overflow-x-auto"
+                  title={bookingUrl}
+                />
+                <Button onClick={copyToClipboard} variant="outline" className="flex-shrink-0" title="Copy link">
+                  <Copy className="h-4 w-4" />
+                </Button>
+                <Button onClick={shareLink} variant="outline" className="flex-shrink-0" title="Share link">
+                  <Share2 className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Click to copy or use the share button to send via text/email
+              </p>
             </div>
 
             <div className="flex gap-2">

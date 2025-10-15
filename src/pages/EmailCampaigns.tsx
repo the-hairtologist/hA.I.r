@@ -146,7 +146,7 @@ export default function EmailCampaigns() {
             <CardContent>
               <div className="text-2xl font-bold">{stats?.openRate || 0}%</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.opened || 0} emails opened
+                {stats?.total ? `${stats?.opened || 0} emails opened` : 'No data yet'}
               </p>
             </CardContent>
           </Card>
@@ -159,7 +159,7 @@ export default function EmailCampaigns() {
             <CardContent>
               <div className="text-2xl font-bold">{stats?.clickRate || 0}%</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.clicked || 0} clicks on booking
+                {stats?.total ? `${stats?.clicked || 0} clicks on booking` : 'No data yet'}
               </p>
             </CardContent>
           </Card>
@@ -172,11 +172,28 @@ export default function EmailCampaigns() {
             <CardContent>
               <div className="text-2xl font-bold">{stats?.conversionRate || 0}%</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.converted || 0} rebooked
+                {stats?.total ? `${stats?.converted || 0} rebooked` : 'No data yet'}
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Empty State Helper */}
+        {(!stats || stats.total === 0) && (
+          <Card className="border-dashed">
+            <CardContent className="py-8 text-center">
+              <Mail className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No campaigns sent yet</h3>
+              <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+                Your automated rebooking reminders will start sending once you have clients with appointments 6+ weeks ago. Click "Send Now" to trigger a manual check.
+              </p>
+              <Button onClick={triggerManualSend} disabled={triggering} className="gap-2">
+                <RefreshCw className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`} />
+                {triggering ? "Checking..." : "Check for Eligible Clients"}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Campaign Details */}
         <Tabs defaultValue="recent" className="space-y-4">
