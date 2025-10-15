@@ -47,7 +47,7 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
         .from("stylist_profiles")
         .select("weekly_schedule")
         .eq("id", appointment.stylist_id)
-        .single();
+        .maybeSingle();
 
       if (schedule) {
         setStylistSchedule(schedule.weekly_schedule);

@@ -41,7 +41,7 @@ export const ReferralSystem = () => {
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (!profile) return;
       setStylistProfile(profile);
@@ -51,7 +51,7 @@ export const ReferralSystem = () => {
         .from("stylist_referrals")
         .select("*")
         .eq("stylist_id", profile.id)
-        .single();
+        .maybeSingle();
 
       // Create referral code if doesn't exist
       if (!existingRef) {

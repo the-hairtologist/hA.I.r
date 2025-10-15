@@ -285,9 +285,6 @@ const Auth = () => {
                       <span className="text-xs">Apple</span>
                     </Button>
                   </div>
-                  <p className="text-xs text-center text-muted-foreground">
-                    Additional sign-in methods coming in a future update
-                  </p>
                 </div>
 
                 <div className="relative">
@@ -365,9 +362,6 @@ const Auth = () => {
                       <span className="text-xs">Apple</span>
                     </Button>
                   </div>
-                  <p className="text-xs text-center text-muted-foreground">
-                    Social sign-in coming soon
-                  </p>
                 </div>
 
                 <div className="relative">

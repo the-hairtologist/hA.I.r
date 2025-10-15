@@ -40,7 +40,7 @@ export const RescheduleDialog = ({ open, onOpenChange, appointment, onSuccess }:
         .from("stylist_profiles")
         .select("weekly_schedule")
         .eq("id", appointment.stylist_id)
-        .single();
+        .maybeSingle();
 
       setStylistSchedule(data?.weekly_schedule);
     } catch (error) {

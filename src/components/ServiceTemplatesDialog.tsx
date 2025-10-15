@@ -69,7 +69,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) return;
 
@@ -95,7 +95,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) return;
 
@@ -124,7 +124,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) throw new Error("Stylist profile not found");
 

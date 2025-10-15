@@ -37,7 +37,7 @@ export function CommissionTrackerWidget() {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) return;
 

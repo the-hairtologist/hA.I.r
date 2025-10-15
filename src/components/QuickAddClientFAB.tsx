@@ -48,7 +48,7 @@ export function QuickAddClientFAB() {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) {
         throw new Error("Stylist profile not found");
