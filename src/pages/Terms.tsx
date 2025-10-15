@@ -163,37 +163,49 @@ const Terms = () => {
               <li>Abusive behavior</li>
             </ul>
             
-            <h2>13. Medical Disclaimer</h2>
+            <h2>13. Professional Liability</h2>
+            <p>Stylists using this platform agree to:</p>
+            <ul>
+              <li><strong>Maintain professional liability insurance</strong> as required by their state or local jurisdiction</li>
+              <li><strong>Hold valid state cosmetology licenses</strong> and comply with all professional regulations</li>
+              <li><strong>Operate as independent contractors</strong> - hA.I.r is not responsible for stylist actions, decisions, or outcomes</li>
+              <li><strong>Verify all product formulations</strong> and AI recommendations before use</li>
+              <li><strong>Perform patch tests</strong> when appropriate to prevent allergic reactions</li>
+            </ul>
+            <p><em>hA.I.r provides software tools only. The platform does not provide professional cosmetology services or advice. Stylists are solely responsible for their professional practice, client safety, and compliance with applicable laws and regulations.</em></p>
+            
+            <h2>14. Medical Disclaimer</h2>
             <p>Important: This platform is not a substitute for medical advice. Stylists should:</p>
             <ul>
               <li>Perform patch tests when appropriate</li>
               <li>Recommend medical consultation for scalp conditions</li>
               <li>Document allergies and sensitivities</li>
+              <li>Advise clients to consult healthcare professionals for medical concerns</li>
             </ul>
             
-            <h2>14. Privacy</h2>
+            <h2>15. Privacy</h2>
             <p>Your privacy is important. See our <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a> for details on data handling.</p>
             
-            <h2>15. Modifications to Terms</h2>
+            <h2>16. Modifications to Terms</h2>
             <p>We may update these terms at any time. Continued use of the service constitutes acceptance of new terms.</p>
             
-            <h2>16. Dispute Resolution</h2>
+            <h2>17. Dispute Resolution</h2>
             <ul>
               <li>Disputes should first be attempted to resolve directly</li>
               <li>If unresolved, contact our support team</li>
               <li>Binding arbitration may be required for serious disputes</li>
             </ul>
             
-            <h2>17. Governing Law</h2>
+            <h2>18. Governing Law</h2>
             <p>These terms are governed by the laws of the State of Delaware, United States, without regard to its conflict of law provisions.</p>
             
-            <h2>18. Contact Information</h2>
+            <h2>19. Contact Information</h2>
             <p>For questions about these terms, contact us through the app's support feature.</p>
             
-            <h2>19. Severability</h2>
+            <h2>20. Severability</h2>
             <p>If any provision is found unenforceable, the remaining provisions remain in effect.</p>
             
-            <h2>20. Entire Agreement</h2>
+            <h2>21. Entire Agreement</h2>
             <p>These terms constitute the entire agreement between you and hA.I.r regarding use of the service.</p>
           </div>
         </Card>

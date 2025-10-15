@@ -16,11 +16,11 @@ const faqs = [
   },
   {
     question: "How does the AI work?",
-    answer: "Our AI analyzes your client's hair type, previous colors, and desired results to generate precise formulas and handle scheduling automatically.",
+    answer: "Our AI assists with formula suggestions based on hair type, previous colors, and desired results. You review and approve all recommendations before use.",
   },
   {
     question: "What if I need help?",
-    answer: "We offer 24/7 support via chat and email. Most questions are answered within minutes.",
+    answer: "We offer support via email and chat. Response times typically within 24 hours, with faster responses during business hours.",
   },
 ];
 

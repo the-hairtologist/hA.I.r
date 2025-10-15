@@ -11,8 +11,8 @@ const steps = [
   },
   {
     number: "02",
-    title: "Let AI Handle It",
-    description: "Upload photos for instant formulas. Bookings come in 24/7. Reminders go out automatically.",
+    title: "Let AI Assist You",
+    description: "Get AI-powered formula suggestions. Bookings available 24/7. Set up automated reminders.",
     icon: Zap,
     color: "bg-accent/10"
   },

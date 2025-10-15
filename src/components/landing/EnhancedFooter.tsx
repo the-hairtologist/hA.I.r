@@ -151,18 +151,33 @@ export const EnhancedFooter = () => {
           </div>
         </div>
 
-        <div className="border-t-2 border-foreground pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2025 hA.I.r - AI-Powered Salon Assistant. All rights reserved.</p>
-          <div className="flex gap-4">
-            <button onClick={() => navigate("/dmca")} className="hover:text-foreground transition-colors">
-              DMCA
-            </button>
-            <button onClick={() => navigate("/help")} className="hover:text-foreground transition-colors">
-              Help Center
-            </button>
-            <a href="mailto:support@hair-ai.com" className="hover:text-foreground transition-colors">
-              Contact
-            </a>
+        <div className="border-t-2 border-foreground pt-6 space-y-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+            <p>© 2025 hA.I.r - AI-Powered Salon Assistant. All rights reserved.</p>
+            <div className="flex gap-4">
+              <button onClick={() => navigate("/dmca")} className="hover:text-foreground transition-colors">
+                DMCA
+              </button>
+              <button onClick={() => navigate("/help")} className="hover:text-foreground transition-colors">
+                Help Center
+              </button>
+              <a href="mailto:support@hair-ai.com" className="hover:text-foreground transition-colors">
+                Contact
+              </a>
+            </div>
+          </div>
+          
+          {/* Legal Disclaimer */}
+          <div className="text-center text-xs text-muted-foreground space-y-1 border-t border-border pt-4">
+            <p>
+              <strong>Disclaimer:</strong> Individual results may vary. AI recommendations are assistive tools only and not professional advice.
+            </p>
+            <p>
+              Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
+            </p>
+            <p>
+              Service outcomes depend on individual skill, technique, and client hair characteristics. No guarantees are implied.
+            </p>
           </div>
         </div>
       </div>

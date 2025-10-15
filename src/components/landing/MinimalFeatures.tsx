@@ -13,8 +13,8 @@ const features = [
   },
   {
     icon: CreditCard,
-    title: "Auto Payments",
-    description: "Get paid instantly",
+    title: "Secure Payments",
+    description: "Get paid via Stripe",
   },
   {
     icon: Smartphone,
