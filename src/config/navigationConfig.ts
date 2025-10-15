@@ -33,6 +33,9 @@ import {
   Mail,
   TrendingUp,
   MessageCircle,
+  Plus,
+  Beaker,
+  Heart,
   type LucideIcon,
 } from "lucide-react";
 
@@ -331,16 +334,27 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
   ];
 };
 
-// Client Navigation Items - Client-specific features only
+// Client Navigation Items - Simple, user-friendly navigation
 export const clientNavigationItems: NavigationItem[] = [
   { 
     id: "dashboard", 
-    title: "Dashboard", 
+    title: "Home", 
     url: "/dashboard", 
     icon: Home, 
     gradient: "bg-[image:var(--gradient-purple-pink)]", 
     group: "main", 
-    color: "text-purple-400 dark:text-purple-300" 
+    color: "text-purple-400 dark:text-purple-300",
+    description: "Your dashboard"
+  },
+  { 
+    id: "book-appointment", 
+    title: "Book Appointment", 
+    url: "/book-appointment", 
+    icon: Plus, 
+    gradient: "bg-[image:var(--gradient-green-emerald)]", 
+    group: "main", 
+    color: "text-emerald-400 dark:text-emerald-300",
+    description: "Schedule a new service"
   },
   { 
     id: "my-appointments", 
@@ -353,25 +367,85 @@ export const clientNavigationItems: NavigationItem[] = [
     description: "View & manage bookings"
   },
   { 
+    id: "my-formulas", 
+    title: "My Hair History", 
+    url: "/client-formulas", 
+    icon: Beaker, 
+    gradient: "bg-[image:var(--gradient-purple-pink)]", 
+    group: "main", 
+    color: "text-purple-400 dark:text-purple-300",
+    description: "Your hair formulas & history"
+  },
+  { 
+    id: "favorites", 
+    title: "Favorite Stylists", 
+    url: "/favorites", 
+    icon: Heart, 
+    gradient: "bg-[image:var(--gradient-pink-rose)]", 
+    group: "stylists", 
+    color: "text-pink-400 dark:text-pink-300",
+    description: "Your saved stylists"
+  },
+  { 
     id: "find-stylists", 
     title: "Find Stylists", 
-    url: "/client-discovery", 
+    url: "/stylist-discovery", 
     icon: Search, 
-    gradient: "bg-[image:var(--gradient-green-emerald)]", 
-    group: "main", 
-    color: "text-emerald-400 dark:text-emerald-300",
+    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
+    group: "stylists", 
+    color: "text-cyan-400 dark:text-cyan-300",
     comingSoon: true,
-    description: "Browse and book stylists"
+    description: "Discover new stylists"
   },
   { 
     id: "messages", 
     title: "Messages", 
     url: "/messages", 
     icon: MessageSquare, 
-    gradient: "bg-[image:var(--gradient-pink-rose)]", 
-    group: "main", 
-    color: "text-pink-400 dark:text-pink-300",
+    gradient: "bg-[image:var(--gradient-blue-indigo)]", 
+    group: "communication", 
+    color: "text-blue-400 dark:text-blue-300",
     description: "Chat with your stylist"
+  },
+  { 
+    id: "notifications", 
+    title: "Notifications", 
+    url: "/notifications", 
+    icon: Bell, 
+    gradient: "bg-[image:var(--gradient-orange-red)]", 
+    group: "communication", 
+    color: "text-orange-400 dark:text-orange-300",
+    description: "Stay updated"
+  },
+  { 
+    id: "my-reviews", 
+    title: "My Reviews", 
+    url: "/client-reviews", 
+    icon: Star, 
+    gradient: "bg-[image:var(--gradient-orange-red)]", 
+    group: "account", 
+    color: "text-orange-400 dark:text-orange-300",
+    description: "Reviews you've written"
+  },
+  { 
+    id: "profile", 
+    title: "My Profile", 
+    url: "/profile", 
+    icon: UserCircle, 
+    gradient: "bg-[image:var(--gradient-blue-indigo)]", 
+    group: "account", 
+    color: "text-blue-400 dark:text-blue-300",
+    description: "Personal information"
+  },
+  { 
+    id: "settings", 
+    title: "Settings", 
+    url: "/settings", 
+    icon: Settings, 
+    gradient: "bg-[image:var(--gradient-blue-indigo)]", 
+    group: "account", 
+    color: "text-blue-400 dark:text-blue-300",
+    description: "Preferences & privacy"
   },
   { 
     id: "knowledge", 
@@ -384,41 +458,24 @@ export const clientNavigationItems: NavigationItem[] = [
     description: "Learn & explore"
   },
   { 
-    id: "profile", 
-    title: "My Profile", 
-    url: "/profile", 
-    icon: UserCircle, 
-    gradient: "bg-[image:var(--gradient-blue-indigo)]", 
-    group: "account", 
-    color: "text-blue-400 dark:text-blue-300" 
-  },
-  { 
-    id: "settings", 
-    title: "Settings", 
-    url: "/settings", 
-    icon: Settings, 
-    gradient: "bg-[image:var(--gradient-blue-indigo)]", 
-    group: "account", 
-    color: "text-blue-400 dark:text-blue-300" 
-  },
-  { 
     id: "help", 
     title: "Help & Support", 
     url: "/help", 
     icon: HelpCircle, 
-    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
-    group: "support", 
-    color: "text-cyan-400 dark:text-cyan-300" 
+    gradient: "bg-[image:var(--gradient-purple-pink)]", 
+    group: "resources", 
+    color: "text-purple-400 dark:text-purple-300",
+    description: "Get assistance"
   },
   { 
     id: "feedback", 
     title: "Feedback", 
     url: "/feedback", 
     icon: MessageCircle, 
-    gradient: "bg-[image:var(--gradient-orange-red)]", 
-    group: "support", 
-    color: "text-orange-400 dark:text-orange-300",
-    description: "Share ideas & report issues"
+    gradient: "bg-[image:var(--gradient-green-emerald)]", 
+    group: "resources", 
+    color: "text-emerald-400 dark:text-emerald-300",
+    description: "Share your thoughts"
   },
 ];
 
@@ -440,10 +497,11 @@ export const stylistAdminGroupLabels: NavigationGroup = {
 };
 
 export const clientGroupLabels: NavigationGroup = {
-  main: "Main",
-  resources: "Resources",
-  account: "Account",
-  support: "Support",
+  main: "Appointments",
+  stylists: "Find & Save Stylists",
+  communication: "Stay Connected",
+  account: "My Account",
+  resources: "Help & Resources",
 };
 
 export const clientAdminGroupLabels: NavigationGroup = {

@@ -87,6 +87,7 @@ const ClientReviewsPage = lazy(() => import("./pages/ClientReviewsPage"));
 const BookingHistoryPage = lazy(() => import("./pages/BookingHistoryPage"));
 const GrowthAnalytics = lazy(() => import("./pages/GrowthAnalytics"));
 const FeedbackBoard = lazy(() => import("./pages/FeedbackBoard"));
+const ClientFormulas = lazy(() => import("./pages/ClientFormulas"));
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -216,7 +217,7 @@ const App = () => {
             </ProtectedRoute>
           } />
           <Route path="/formulas" element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["stylist", "admin"]}>
               <Formulas />
             </ProtectedRoute>
           } />
@@ -397,6 +398,13 @@ const App = () => {
           <Route path="/stylist/:id" element={
             <ProtectedRoute>
               <StylistProfile />
+            </ProtectedRoute>
+          } />
+          
+          {/* Client Hair History - Client-optimized view */}
+          <Route path="/client-formulas" element={
+            <ProtectedRoute allowedRoles={["client", "admin"]}>
+              <ClientFormulas />
             </ProtectedRoute>
           } />
           
