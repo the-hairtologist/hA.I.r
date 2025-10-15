@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity } from "lucide-react";
+import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
@@ -70,7 +70,7 @@ export const MobileBottomNav = () => {
     },
   ];
 
-  // Client bottom nav: Core working features only (coming soon features removed)
+  // Client bottom nav: Optimized for core tasks - Book is now primary action
   const clientItems: NavItem[] = [
     { 
       icon: Home, 
@@ -80,11 +80,11 @@ export const MobileBottomNav = () => {
       highlight: false
     },
     { 
-      icon: Calendar, 
+      icon: CalendarCheck, 
       label: "Appointments", 
       path: "/appointments",
       gradient: "from-cyan-start to-cyan-end",
-      highlight: true // Primary action - view and manage appointments
+      highlight: true // Primary action for clients
     },
     { 
       icon: MessageSquare, 
@@ -96,42 +96,28 @@ export const MobileBottomNav = () => {
     },
   ];
 
+  // Admin bottom nav: Admin-focused with Settings instead of full messages list
   const adminItems: NavItem[] = [
     { 
       icon: Home, 
-      label: "Home", 
+      label: "Dashboard", 
       path: "/dashboard",
       gradient: "from-purple-start to-purple-end",
       highlight: false
     },
     { 
-      icon: Shield, 
-      label: "Command", 
-      path: "/admin/command",
-      gradient: "from-orange-start to-orange-end",
-      highlight: false
-    },
-    { 
-      icon: Users, 
-      label: "Users", 
-      path: "/admin/users",
+      icon: Calendar, 
+      label: "Calendar", 
+      path: "/schedule",
       gradient: "from-cyan-start to-cyan-end",
       highlight: false
     },
     { 
-      icon: Activity, 
-      label: "Health", 
-      path: "/system-health",
-      gradient: "from-green-start to-green-end",
-      highlight: false
-    },
-    { 
-      icon: MessageSquare, 
-      label: "Messages", 
-      path: "/messages",
-      gradient: "from-violet-start to-violet-end",
-      badge: unreadCount,
-      highlight: false
+      icon: Settings, 
+      label: "Admin", 
+      path: "/admin/command",
+      gradient: "from-amber-start to-amber-end",
+      highlight: true // Admin command center is priority
     },
   ];
 

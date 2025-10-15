@@ -47,6 +47,7 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
   const { unreadCount } = useRealtimeNotifications(user?.id);
   const [notifications, setNotifications] = useState<Record<string, number>>({
     messages: unreadCount || 0,
@@ -59,6 +60,18 @@ export function AppSidebar() {
         next.delete(id);
       } else {
         next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const toggleGroupCollapsed = (groupKey: string) => {
+    setCollapsedGroups(prev => {
+      const next = new Set(prev);
+      if (next.has(groupKey)) {
+        next.delete(groupKey);
+      } else {
+        next.add(groupKey);
       }
       return next;
     });
@@ -156,7 +169,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r">
       <SidebarContent className="pb-4">
         {/* Customize Controls - Only for stylists and admins */}
-        {!collapsed && (isStylist || isAdmin) && (
+        {!collapsed && (isStylist || isAdmin) && !isClient && (
           <div className="px-3 py-2 border-b">
             <div className="flex items-center gap-2">
               <Button
@@ -164,6 +177,7 @@ export function AppSidebar() {
                 size="sm"
                 onClick={() => setIsEditMode(!isEditMode)}
                 className="flex-1 h-9"
+                title={isEditMode ? "Finish customizing" : "Drag to prioritize your most-used tools"}
               >
                 <Edit3 className="h-3.5 w-3.5 mr-1.5" />
                 {isEditMode ? "Done" : "Customize"}
@@ -174,7 +188,7 @@ export function AppSidebar() {
                   size="sm"
                   onClick={handleReset}
                   className="h-9 px-2"
-                  title="Reset to default"
+                  title="Reset to recommended order"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                 </Button>
@@ -182,7 +196,7 @@ export function AppSidebar() {
             </div>
             {isEditMode && (
               <p className="text-xs text-foreground/70 mt-2">
-                Drag items to reorder
+                Drag items to prioritize your most-used tools
               </p>
             )}
           </div>
@@ -198,29 +212,47 @@ export function AppSidebar() {
             items={items.map((item) => item.id)}
             strategy={verticalListSortingStrategy}
           >
-            {Object.entries(groupedItems).map(([groupKey, groupItems]) => (
-              <SidebarGroup key={groupKey} className="mb-2">
-                <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-                  {labels[groupKey]}
-                </SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {groupItems.map((item) => (
-                      <SortableNavItem
-                        key={item.id}
-                        item={item}
-                        collapsed={collapsed}
-                        getNavClassName={getNavClassName}
-                        isEditMode={isEditMode}
-                        expandedItems={expandedItems}
-                        toggleExpanded={toggleExpanded}
-                        notificationCount={notifications[item.id]}
-                      />
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            ))}
+            {Object.entries(groupedItems).map(([groupKey, groupItems], index) => {
+              const isGroupCollapsed = collapsedGroups.has(groupKey);
+              const showSeparator = isAdmin && index > 0;
+              
+              return (
+                <div key={groupKey}>
+                  {showSeparator && <div className="border-t my-2 mx-3" />}
+                  <SidebarGroup className="mb-2">
+                    <SidebarGroupLabel 
+                      className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/50 rounded px-2 py-1 flex items-center justify-between transition-colors"}`}
+                      onClick={() => !collapsed && toggleGroupCollapsed(groupKey)}
+                    >
+                      <span>{labels[groupKey]}</span>
+                      {!collapsed && (
+                        <span className="text-xs transition-transform" style={{ transform: isGroupCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
+                          ▼
+                        </span>
+                      )}
+                    </SidebarGroupLabel>
+                    {!isGroupCollapsed && (
+                      <SidebarGroupContent>
+                        <SidebarMenu>
+                          {groupItems.map((item) => (
+                            <SortableNavItem
+                              key={item.id}
+                              item={item}
+                              collapsed={collapsed}
+                              getNavClassName={getNavClassName}
+                              isEditMode={isEditMode}
+                              expandedItems={expandedItems}
+                              toggleExpanded={toggleExpanded}
+                              notificationCount={notifications[item.id]}
+                            />
+                          ))}
+                        </SidebarMenu>
+                      </SidebarGroupContent>
+                    )}
+                  </SidebarGroup>
+                </div>
+              );
+            })}
           </SortableContext>
         </DndContext>
 

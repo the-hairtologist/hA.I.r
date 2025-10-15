@@ -64,3 +64,15 @@ export function useDemoMode() {
   }
   return context;
 }
+
+export function DemoModeIndicator() {
+  const { isDemoMode } = useDemoMode();
+  
+  if (!isDemoMode) return null;
+  
+  return (
+    <div className="fixed top-16 right-4 z-50 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium shadow-lg animate-pulse">
+      🎭 Demo Mode
+    </div>
+  );
+}

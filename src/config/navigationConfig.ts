@@ -334,10 +334,8 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
   ];
 };
 
-// Client Navigation Items - Minimal working features only
-// Coming Soon features removed until implementation
+// Client Navigation Items - Simplified to core essentials (5 items max)
 export const clientNavigationItems: NavigationItem[] = [
-  // MAIN (Core working features)
   { 
     id: "dashboard", 
     title: "Home", 
@@ -350,7 +348,7 @@ export const clientNavigationItems: NavigationItem[] = [
   },
   { 
     id: "my-appointments", 
-    title: "Appointments", 
+    title: "My Appointments", 
     url: "/appointments", 
     icon: Calendar, 
     gradient: "bg-[image:var(--gradient-cyan-blue)]", 
@@ -368,33 +366,9 @@ export const clientNavigationItems: NavigationItem[] = [
     color: "text-blue-400 dark:text-blue-300",
     description: "Chat with stylist"
   },
-  
-  // INFO (Client records - working)
-  { 
-    id: "my-formulas", 
-    title: "Hair History", 
-    url: "/client-formulas", 
-    icon: Beaker, 
-    gradient: "bg-[image:var(--gradient-purple-pink)]", 
-    group: "info", 
-    color: "text-purple-400 dark:text-purple-300",
-    description: "Your formulas"
-  },
-  { 
-    id: "notifications", 
-    title: "Notifications", 
-    url: "/notifications", 
-    icon: Bell, 
-    gradient: "bg-[image:var(--gradient-orange-red)]", 
-    group: "info", 
-    color: "text-orange-400 dark:text-orange-300",
-    description: "Updates"
-  },
-  
-  // ACCOUNT (Settings & profile - working)
   { 
     id: "profile", 
-    title: "Profile", 
+    title: "My Profile", 
     url: "/profile", 
     icon: UserCircle, 
     gradient: "bg-[image:var(--gradient-blue-indigo)]", 
@@ -412,28 +386,6 @@ export const clientNavigationItems: NavigationItem[] = [
     color: "text-blue-400 dark:text-blue-300",
     description: "Preferences"
   },
-  
-  // HELP (Support resources - working)
-  { 
-    id: "knowledge", 
-    title: "Hair Tips", 
-    url: "/knowledge", 
-    icon: BookOpen, 
-    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
-    group: "help", 
-    color: "text-cyan-400 dark:text-cyan-300",
-    description: "Learn more"
-  },
-  { 
-    id: "help", 
-    title: "Help", 
-    url: "/help", 
-    icon: HelpCircle, 
-    gradient: "bg-[image:var(--gradient-purple-pink)]", 
-    group: "help", 
-    color: "text-purple-400 dark:text-purple-300",
-    description: "Support"
-  },
 ];
 
 // REMOVED ITEMS (Coming Soon - will be re-added when implemented):
@@ -441,14 +393,14 @@ export const clientNavigationItems: NavigationItem[] = [
 // - Favorites (broken feature)
 // These will be added back once the features are built
 
-// Group Labels
+// Group Labels - Action-oriented naming
 export const stylistGroupLabels: NavigationGroup = {
-  main: "Main",
+  main: "Daily Tasks",
   marketplace: "Marketplace",
-  scheduling: "Scheduling",
-  business: "Business",
-  growth: "Growth & Marketing",
-  tools: "Tools",
+  scheduling: "Calendar & Bookings",
+  business: "Client Management",
+  growth: "Business Growth",
+  tools: "Business Tools",
   account: "Account",
   help: "Support",
 };
@@ -459,10 +411,8 @@ export const stylistAdminGroupLabels: NavigationGroup = {
 };
 
 export const clientGroupLabels: NavigationGroup = {
-  main: "Main",
-  info: "My Info",
-  account: "Account",
-  help: "Resources",
+  main: "Quick Actions",
+  account: "My Account",
 };
 
 export const clientAdminGroupLabels: NavigationGroup = {
@@ -470,23 +420,22 @@ export const clientAdminGroupLabels: NavigationGroup = {
   admin: "Platform Administration",
 };
 
-// Full Admin Access - Shows all features organized by role
+// Full Admin Access - Shows all features with role icons for clarity
 export const adminFullAccessGroupLabels: NavigationGroup = {
   // Client features
-  "client-main": "Client Experience",
-  "client-info": "Client Records",
-  "client-account": "Client Account",
+  "client-main": "👤 Client Experience",
+  "client-account": "👤 Client Account",
   
   // Stylist features
-  main: "Core Features",
-  scheduling: "Scheduling",
-  business: "Business Tools",
-  growth: "Growth & Marketing",
-  tools: "Professional Tools",
+  main: "✂️ Daily Operations",
+  scheduling: "✂️ Calendar & Bookings",
+  business: "✂️ Client Management",
+  growth: "✂️ Business Growth",
+  tools: "✂️ Business Tools",
   
   // Admin features
-  admin: "Platform Administration",
+  admin: "🛡️ Platform Administration",
   
   // Shared
-  help: "Support & Resources",
+  help: "📚 Support & Resources",
 };

@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
 import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
+import { DemoModeIndicator } from "@/components/demo/DemoMode";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -142,6 +143,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
         <AppSidebar />
         <MobileSidebarOverlay />
+        <DemoModeIndicator />
         
         <div className="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
           {/* Mobile Header */}
@@ -170,7 +172,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       <TooltipTrigger asChild>
                         <Badge className="bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
                           <Crown className="h-3 w-3 mr-1" />
-                          ADMIN - FULL ACCESS
+                          🛡️ ADMIN - FULL ACCESS
                         </Badge>
                       </TooltipTrigger>
                       <TooltipContent side="bottom">
