@@ -4,7 +4,6 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
 
 interface PredictiveInsight {
   type: 'performance' | 'security' | 'user_experience' | 'revenue';

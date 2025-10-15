@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Scissors } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { log } from "@/lib/logger";
 import { handleError, createSafeHandler } from "@/lib/errorHandler";
 import { authSchema } from "@/lib/validation";
 

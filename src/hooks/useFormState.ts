@@ -4,7 +4,6 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
-import { log } from '@/lib/logger';
 
 export interface FieldState<T = any> {
   value: T;

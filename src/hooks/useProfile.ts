@@ -5,7 +5,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { log } from '@/lib/logger';
 import { handleError } from '@/lib/errorHandler';
 
 interface ProfileData {

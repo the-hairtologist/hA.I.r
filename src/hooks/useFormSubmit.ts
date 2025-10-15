@@ -5,7 +5,6 @@
 
 import { useState, useRef } from 'react';
 import { toast } from 'sonner';
-import { log } from '@/lib/logger';
 import { withRetry } from '@/lib/errorHandler';
 
 interface UseFormSubmitOptions<T = any> {
