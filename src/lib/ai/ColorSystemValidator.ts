@@ -3,6 +3,8 @@
  * Ensures all colors are using HSL format and semantic tokens
  */
 
+import { logger } from '@/lib/logger';
+
 interface ColorValidationResult {
   valid: boolean;
   issues: string[];

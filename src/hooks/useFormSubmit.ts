@@ -6,6 +6,7 @@
 import { useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { withRetry } from '@/lib/errorHandler';
+import { log } from '@/lib/logger';
 
 interface UseFormSubmitOptions<T = any> {
   onSuccess?: (data?: T) => void;

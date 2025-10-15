@@ -4,6 +4,7 @@
  */
 
 import { Platform } from '@/platform/detector';
+import { logger } from '@/lib/logger';
 
 interface DeviceCapabilities {
   supportsHaptics: boolean;

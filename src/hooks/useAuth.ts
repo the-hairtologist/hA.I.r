@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { handleError } from '@/lib/errorHandler';
+import { log } from '@/lib/logger';
 
 interface AuthState {
   user: User | null;

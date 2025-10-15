@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { log } from '@/lib/logger';
 
 export type UserRole = 'admin' | 'stylist' | 'client';
 

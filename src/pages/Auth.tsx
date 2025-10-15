@@ -13,6 +13,7 @@ import { Scissors } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { handleError, createSafeHandler } from "@/lib/errorHandler";
 import { authSchema } from "@/lib/validation";
+import { log } from '@/lib/logger';
 
 type AuthState = {
   email: string;

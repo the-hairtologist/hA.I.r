@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { handleError } from '@/lib/errorHandler';
 import { toast } from 'sonner';
+import { log } from '@/lib/logger';
 
 export interface Appointment {
   id: string;

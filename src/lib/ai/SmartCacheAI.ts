@@ -4,6 +4,7 @@
  */
 
 import { queryCache } from '@/lib/data/QueryCache';
+import { logger } from '@/lib/logger';
 
 interface CachePattern {
   key: string;

@@ -12,6 +12,7 @@ import { codeAnalyzer } from './CodeAnalyzer';
 import { performanceOptimizer } from './PerformanceOptimizer';
 import { clientRetentionAI } from '@/lib/ai/ClientRetentionAI';
 import { smartCacheAI } from '@/lib/ai/SmartCacheAI';
+import { logger } from '@/lib/logger';
 
 class SelfHealingSystem {
   private initialized = false;

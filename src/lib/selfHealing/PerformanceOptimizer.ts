@@ -5,6 +5,7 @@
 
 import { queryCache } from '@/lib/data/QueryCache';
 import { realtimeManager } from '@/lib/realtime/SubscriptionManager';
+import { logger } from '@/lib/logger';
 
 interface OptimizationResult {
   action: string;

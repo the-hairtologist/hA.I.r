@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from '@/lib/logger';
 
 interface ErrorAnalysis {
   severity: 'low' | 'medium' | 'high' | 'critical';
