@@ -124,7 +124,7 @@ export const HelpButton = () => {
               </div>
 
               {/* Articles */}
-              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+              <div className="space-y-3 max-h-[min(60vh,400px)] overflow-y-auto pr-2">
                 {filteredArticles.length === 0 ? (
                   <p className="text-center text-muted-foreground py-8">
                     No articles found. Try a different search term.

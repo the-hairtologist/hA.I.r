@@ -126,7 +126,7 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
               <p className="text-sm">No users found</p>
             </div>
           ) : (
-            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+            <div className="space-y-2 max-h-[min(60vh,400px)] overflow-y-auto">
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}

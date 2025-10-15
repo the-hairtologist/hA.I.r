@@ -78,7 +78,7 @@ export const ConversationSelector = ({
             New Conversation
           </Button>
 
-          <ScrollArea className="h-[400px] pr-4">
+          <ScrollArea className="h-[min(70vh,400px)] pr-4">
             <div className="space-y-2">
               {conversations.length === 0 ? (
                 <div className="text-center text-sm text-muted-foreground py-8">

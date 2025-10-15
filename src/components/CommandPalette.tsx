@@ -120,7 +120,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           />
         </div>
 
-        <ScrollArea className="max-h-[400px] overflow-y-auto">
+        <ScrollArea className="max-h-[min(60vh,400px)] overflow-y-auto">
           <div className="px-2 pb-4">
             {filteredItems.length === 0 ? (
               <div className="py-8 text-center text-sm text-muted-foreground">

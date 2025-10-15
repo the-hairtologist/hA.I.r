@@ -86,7 +86,7 @@ export const AIEnhancedEmptyState = ({
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[400px] p-4">
+    <div className="flex items-center justify-center min-h-[min(50vh,400px)] p-4">
       <Card className="max-w-md w-full brutal-border shadow-brutal-xl bg-gradient-to-br from-muted/30 to-background">
         <CardContent className="pt-8 pb-6 px-6 text-center space-y-6">
           {/* Icon */}
