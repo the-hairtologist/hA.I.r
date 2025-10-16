@@ -10,21 +10,46 @@
  */
 
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";  // Back to full app
+import App from "./App.tsx";
 import "./index.css";
+
+// CEO-Level: Initialize error detection FIRST
+import { initializeErrorDetection } from "./lib/errorDetection";
+import { initializePreventiveMaintenance } from "./lib/preventiveMaintenance";
+import { registerCoreModules } from "./lib/dependencyValidator";
+
+// Initialize all safety systems
+initializeErrorDetection();
+registerCoreModules();
+initializePreventiveMaintenance();
+
+// Safe imports with fallbacks
 import { addCopyrightNotice, detectSuspiciousActivity, logSuspiciousActivity } from "./lib/ipProtection";
-import { initMobileOptimizations, setupInputHandlers } from "./lib/mobileOptimizations";
 
-// Initialize mobile optimizations
-initMobileOptimizations();
-setupInputHandlers();
-
-// Add copyright notice
-addCopyrightNotice();
-
-// Detect suspicious activity
-if (detectSuspiciousActivity()) {
-  logSuspiciousActivity('Automated tool detected');
+// Initialize mobile optimizations safely
+try {
+  const { initMobileOptimizations, setupInputHandlers } = require("./lib/mobileOptimizations");
+  initMobileOptimizations();
+  setupInputHandlers();
+} catch (error) {
+  console.warn('Mobile optimizations failed to load:', error);
 }
 
+// Add copyright notice
+try {
+  addCopyrightNotice();
+} catch (error) {
+  console.warn('Copyright notice failed:', error);
+}
+
+// Detect suspicious activity
+try {
+  if (detectSuspiciousActivity()) {
+    logSuspiciousActivity('Automated tool detected');
+  }
+} catch (error) {
+  console.warn('Suspicious activity detection failed:', error);
+}
+
+// Render app with error boundary
 createRoot(document.getElementById("root")!).render(<App />);
