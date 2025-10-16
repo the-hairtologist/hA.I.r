@@ -69,11 +69,46 @@ export const SmartUpsell = ({ currentService, clientId, stylistId, onAddUpsell, 
   const loadAISuggestion = async () => {
     setLoading(true);
     try {
+      // Gather context data
+      let clientHistory: string[] = [];
+      let clientProfile: any = null;
+      let availableServices: string[] = [];
+
+      if (clientId) {
+        const { data: appointments } = await supabase
+          .from('appointments')
+          .select('service_type')
+          .eq('client_id', clientId)
+          .order('created_at', { ascending: false })
+          .limit(10);
+        
+        clientHistory = appointments?.map(a => a.service_type) || [];
+
+        const { data: profile } = await supabase
+          .from('client_profiles')
+          .select('hair_type, hair_concerns, hair_goals')
+          .eq('id', clientId)
+          .maybeSingle();
+        
+        clientProfile = profile;
+      }
+
+      if (stylistId) {
+        const { data: services } = await supabase
+          .from('stylist_services')
+          .select('service_name')
+          .eq('stylist_id', stylistId)
+          .limit(20);
+        
+        availableServices = services?.map(s => s.service_name) || [];
+      }
+
       const { data, error } = await supabase.functions.invoke('ai-smart-upsell', {
         body: { 
-          currentService, 
-          clientId,
-          stylistId
+          currentService,
+          clientHistory,
+          clientProfile,
+          availableServices
         }
       });
 

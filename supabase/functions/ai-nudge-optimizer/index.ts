@@ -1,6 +1,5 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,51 +12,15 @@ serve(async (req) => {
   }
 
   try {
-    const { userId, currentTrigger, stats } = await req.json();
+    const { 
+      currentTrigger, 
+      stats,
+      engagementMetrics = {}
+    } = await req.json();
 
-    if (!userId) {
-      throw new Error('userId is required');
+    if (!currentTrigger) {
+      throw new Error('currentTrigger is required');
     }
-
-    // Initialize Supabase client
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    );
-
-    // Gather user engagement data
-    const { data: profile } = await supabaseClient
-      .from('profiles')
-      .select('created_at, role')
-      .eq('id', userId)
-      .single();
-
-    // Get recent activity patterns
-    const { data: recentLogins } = await supabaseClient
-      .from('ai_analytics_events')
-      .select('created_at, event_type')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(50);
-
-    // Get subscription info
-    const { data: subscription } = await supabaseClient
-      .from('user_subscriptions')
-      .select('trial_ends_at, status')
-      .eq('user_id', userId)
-      .single();
-
-    // Calculate engagement metrics
-    const daysSinceSignup = profile ? 
-      Math.floor((Date.now() - new Date(profile.created_at).getTime()) / (1000 * 60 * 60 * 24)) : 0;
-    
-    const daysUntilTrialEnd = subscription?.trial_ends_at ?
-      Math.floor((new Date(subscription.trial_ends_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : 0;
-
-    const recentEngagement = recentLogins?.filter(l => {
-      const daysSince = (Date.now() - new Date(l.created_at).getTime()) / (1000 * 60 * 60 * 24);
-      return daysSince <= 7;
-    }).length || 0;
 
     // Call Lovable AI for optimization
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
@@ -80,12 +43,7 @@ Consider psychological principles:
     const userContext = {
       currentTrigger,
       stats: stats || {},
-      engagement: {
-        daysSinceSignup,
-        daysUntilTrialEnd,
-        recentActivityCount: recentEngagement,
-        role: profile?.role
-      },
+      engagementMetrics,
       timestamp: new Date().toISOString()
     };
 
@@ -175,19 +133,6 @@ Consider psychological principles:
     }
 
     const optimization = JSON.parse(toolCall.function.arguments);
-
-    // Log analytics
-    await supabaseClient.from('ai_analytics_events').insert({
-      user_id: userId,
-      event_type: 'nudge_optimized',
-      feature: 'subscription_nudge',
-      metadata: {
-        currentTrigger,
-        shouldShow: optimization.shouldShow,
-        timing: optimization.timing,
-        conversionProbability: optimization.conversionProbability
-      }
-    });
 
     return new Response(JSON.stringify({
       ...optimization,
