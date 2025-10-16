@@ -22,14 +22,14 @@ export const EnhancedFooter = () => {
   };
 
   return (
-    <footer className="border-t-4 border-black bg-accent" style={{
+    <footer className="border-t-4 border-black bg-primary" style={{
       backgroundImage: `
         linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
         linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand Column */}
           <div className="space-y-4">
@@ -37,9 +37,9 @@ export const EnhancedFooter = () => {
               <div className="w-10 h-10 border-4 border-black bg-primary flex items-center justify-center">
                 <Scissors className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="font-pixel text-xl text-accent-foreground uppercase">hA.I.r</span>
+              <span className="font-pixel text-xl text-primary-foreground uppercase">hA.I.r</span>
             </div>
-            <p className="text-xs font-sans text-accent-foreground/80 leading-relaxed border-l-4 border-black pl-3">
+            <p className="text-xs font-sans text-primary-foreground/80 leading-relaxed border-l-4 border-black pl-3">
               Your hair, smarter. Your salon, effortless.
             </p>
             <div className="flex gap-2">
@@ -83,7 +83,7 @@ export const EnhancedFooter = () => {
             
             {/* App Store Badges */}
             <div className="pt-4 space-y-2">
-              <p className="font-pixel text-xs text-accent-foreground uppercase">AVAILABLE ON</p>
+              <p className="font-pixel text-xs text-primary-foreground uppercase">AVAILABLE ON</p>
               <div className="flex gap-2">
                 <div className="border-4 border-black bg-white px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <Smartphone className="h-4 w-4" />
@@ -100,20 +100,20 @@ export const EnhancedFooter = () => {
 
           {/* Product Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-accent-foreground">PRODUCT</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">PRODUCT</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                   Features
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                   Demo
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                   Integrations
                 </button>
               </li>
@@ -122,20 +122,20 @@ export const EnhancedFooter = () => {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-accent-foreground">COMPANY</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">COMPANY</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                   About
                 </button>
               </li>
               <li>
-                <a href="mailto:support@hair-ai.com" className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                <a href="mailto:support@hair-ai.com" className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                   Contact
                 </a>
               </li>
               <li>
-                <button onClick={() => navigate("/terms")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                <button onClick={() => navigate("/terms")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                   Terms
                 </button>
               </li>
@@ -144,8 +144,8 @@ export const EnhancedFooter = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-accent-foreground">UPDATES</h3>
-            <p className="text-xs font-sans text-accent-foreground/80 mb-4">
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">UPDATES</h3>
+            <p className="text-xs font-sans text-primary-foreground/80 mb-4">
               Get tips and exclusive offers.
             </p>
             <form onSubmit={handleNewsletterSignup} className="space-y-2">
@@ -159,7 +159,7 @@ export const EnhancedFooter = () => {
               />
               <Button 
                 type="submit" 
-                className="w-full font-pixel text-xs uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all rounded-none"
+                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all rounded-none"
               >
                 <Mail className="h-3 w-3 mr-2" />
                 SUBSCRIBE
@@ -168,17 +168,17 @@ export const EnhancedFooter = () => {
           </div>
         </div>
 
-        <div className="border-t-4 border-black pt-6 space-y-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-sans text-accent-foreground/80">
+        <div className="border-t-4 border-black pt-8 space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-sans text-primary-foreground/80">
             <p className="font-pixel text-xs">© 2025 hA.I.r • ALL RIGHTS RESERVED</p>
-            <div className="flex gap-4">
-              <button onClick={() => navigate("/dmca")} className="hover:text-accent-foreground transition-colors">
+            <div className="flex gap-6">
+              <button onClick={() => navigate("/dmca")} className="hover:text-primary-foreground transition-colors">
                 DMCA
               </button>
-              <button onClick={() => navigate("/help")} className="hover:text-accent-foreground transition-colors">
+              <button onClick={() => navigate("/help")} className="hover:text-primary-foreground transition-colors">
                 Help
               </button>
-              <a href="mailto:support@hair-ai.com" className="hover:text-accent-foreground transition-colors">
+              <a href="mailto:support@hair-ai.com" className="hover:text-primary-foreground transition-colors">
                 Contact
               </a>
             </div>

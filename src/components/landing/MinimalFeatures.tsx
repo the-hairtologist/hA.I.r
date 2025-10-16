@@ -74,13 +74,13 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: n
 export const MinimalFeatures = () => {
   return (
     <div className="container mx-auto px-4">
-      <div className="text-center mb-12">
+      <div className="text-center mb-16">
         <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
           FEATURES THAT WORK
         </h2>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
         {features.map((feature, index) => (
           <FeatureCard key={feature.title} feature={feature} index={index} />
         ))}

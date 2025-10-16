@@ -29,7 +29,7 @@ const Index = () => {
         `,
         backgroundSize: '8px 8px'
       }}>
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={() => navigate("/")} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 border-2 border-white bg-primary flex items-center justify-center">
               <Scissors className="h-4 w-4 text-primary-foreground" />
@@ -39,7 +39,7 @@ const Index = () => {
           <Button 
             onClick={() => navigate("/auth")} 
             size="sm" 
-            className="font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 rounded-none px-4 py-2"
+            className="font-pixel text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-3 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none px-6 py-2.5"
           >
             Get Started
           </Button>
@@ -69,7 +69,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle"
+                  className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle"
                 >
                   UNLOCK YOUR SMARTER HAIR JOURNEY
                 </Button>
@@ -84,7 +84,7 @@ const Index = () => {
         </section>
 
         {/* How It Works - Clean white background */}
-        <section className="py-16 bg-background" style={{
+        <section className="py-20 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)
@@ -95,7 +95,7 @@ const Index = () => {
         </section>
 
         {/* Testimonial Section - Blue background */}
-        <section className="py-16 bg-accent" style={{
+        <section className="py-20 bg-accent" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
@@ -106,7 +106,7 @@ const Index = () => {
         </section>
 
         {/* FOMO/CTA Section - Bold yellow */}
-        <section className="py-16 bg-secondary" style={{
+        <section className="py-20 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -117,7 +117,7 @@ const Index = () => {
         </section>
 
         {/* FAQ Section - Blue background */}
-        <section className="py-16 bg-accent" style={{
+        <section className="py-20 bg-accent" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
@@ -129,7 +129,7 @@ const Index = () => {
       </main>
 
       {/* Stats Section - Blue background for balance */}
-      <section className="py-12 bg-accent border-t-4 border-black" style={{
+      <section className="py-16 bg-accent border-t-4 border-black" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
@@ -137,10 +137,10 @@ const Index = () => {
         backgroundSize: '8px 8px'
       }}>
         <div className="container mx-auto px-4">
-          <h2 className="text-center font-pixel text-xl sm:text-2xl text-white mb-8 uppercase tracking-wider">
+          <h2 className="text-center font-pixel text-xl sm:text-2xl text-white mb-12 uppercase tracking-wider">
             STYLISTS USING hA.I.r<br/>CUT ADMIN TIME BY 40%
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 max-w-5xl mx-auto">
             <AnimatedCounter end={2000} suffix="+" icon={Scissors} label="STYLISTS" />
             <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" />
             <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" />

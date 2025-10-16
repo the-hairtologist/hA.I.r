@@ -31,13 +31,13 @@ export const MinimalFAQ = () => {
   return (
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-2xl mx-auto">
-        <div className={`text-center mb-10 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <div className={`text-center mb-12 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-white uppercase tracking-wider">
             Questions?
           </h2>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {faqs.map((faq, index) => (
             <div 
               key={faq.question} 
@@ -61,11 +61,11 @@ export const MinimalFAQ = () => {
           ))}
         </div>
 
-        <div className="text-center mt-10">
-          <p className="text-white/80 mb-2 font-sans text-sm">Still have questions?</p>
+        <div className="text-center mt-12">
+          <p className="text-white/80 mb-4 font-sans text-base">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
-            className="font-pixel text-xs text-primary hover:text-primary/90 transition-colors uppercase border-4 border-black bg-white px-6 py-3 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300"
+            className="font-pixel text-sm text-primary hover:text-primary/90 transition-colors uppercase border-4 border-black bg-white px-8 py-4 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300"
           >
             Contact Support
           </a>

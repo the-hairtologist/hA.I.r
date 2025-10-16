@@ -10,8 +10,8 @@ export const SimplePricingCTA = () => {
   return (
     <div className="container mx-auto px-4" ref={ref}>
       <div className={`max-w-4xl mx-auto text-center transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-        <div className="mb-8">
-          <div className="flex justify-center gap-4 mb-6">
+        <div className="mb-10">
+          <div className="flex justify-center gap-6 mb-8">
             <div className="w-16 h-16 border-4 border-black bg-accent flex items-center justify-center animate-bounce">
               <Sparkles className="h-8 w-8 text-accent-foreground" />
             </div>
@@ -23,28 +23,28 @@ export const SimplePricingCTA = () => {
             </div>
           </div>
 
-          <h2 className="font-pixel text-3xl sm:text-4xl mb-6 text-secondary-foreground uppercase tracking-wider leading-relaxed">
+          <h2 className="font-pixel text-3xl sm:text-4xl mb-8 text-secondary-foreground uppercase tracking-wider leading-relaxed">
             READY TO SEE WHAT YOUR HAIR COULD REALLY DO?
           </h2>
 
-          <p className="text-base sm:text-lg font-pixel text-secondary-foreground/90 max-w-2xl mx-auto mb-8 leading-loose">
+          <p className="text-base sm:text-lg font-pixel text-secondary-foreground/90 max-w-2xl mx-auto mb-10 leading-loose">
             AI-DRIVEN INSIGHTS, EFFORTLESS BOOKING, AND PERSONALIZED CARE - EXPERIENCE A SALON VISIT LIKE NEVER BEFORE.
           </p>
         </div>
 
-        <div className="border-4 border-black bg-white p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-8">
-          <div className="space-y-6">
+        <div className="border-4 border-black bg-white p-10 sm:p-14 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-10">
+          <div className="space-y-8">
             <div className="flex items-center justify-center gap-4">
-              <div className="w-3 h-3 border-2 border-black bg-primary"></div>
-              <p className="font-sans text-sm text-foreground">AI-powered recommendations</p>
+              <div className="w-4 h-4 border-2 border-black bg-primary"></div>
+              <p className="font-sans text-base text-foreground">AI-powered recommendations</p>
             </div>
             <div className="flex items-center justify-center gap-4">
-              <div className="w-3 h-3 border-2 border-black bg-secondary"></div>
-              <p className="font-sans text-sm text-foreground">Seamless booking system</p>
+              <div className="w-4 h-4 border-2 border-black bg-secondary"></div>
+              <p className="font-sans text-base text-foreground">Seamless booking system</p>
             </div>
             <div className="flex items-center justify-center gap-4">
-              <div className="w-3 h-3 border-2 border-black bg-accent"></div>
-              <p className="font-sans text-sm text-foreground">Personalized care tracking</p>
+              <div className="w-4 h-4 border-2 border-black bg-accent"></div>
+              <p className="font-sans text-base text-foreground">Personalized care tracking</p>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@ export const SimplePricingCTA = () => {
           TRY hA.I.r TODAY - FREE TRIAL
         </Button>
 
-        <p className="text-xs sm:text-sm font-pixel text-secondary-foreground/80 uppercase mt-4">
+        <p className="text-sm font-pixel text-secondary-foreground/80 uppercase mt-6">
           No Credit Card • Start In Seconds
         </p>
       </div>
