@@ -27,7 +27,7 @@ export const useFormSubmit = <T = any>(
   const lastSubmitRef = useRef<number>(0);
 
   const {
-    enableRetry = false,
+    enableRetry = true, // Changed default to true
     preventDoubleSubmit = true,
   } = options;
 

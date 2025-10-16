@@ -34,14 +34,16 @@ import { SubscriptionNudge } from "@/components/SubscriptionNudge";
 import { useSubscriptionNudges } from "@/hooks/useSubscriptionNudges";
 import { MobileOptimizationsProvider } from "@/components/MobileOptimizationsProvider";
 import { initMobileOptimizations } from "@/lib/mobileOptimizations";
+import { TourProvider } from "@/components/onboarding/TourProvider";
 
-// Optimized QueryClient with caching
+// Optimized QueryClient with caching and retry logic
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 60 * 1000, // 1 minute
       gcTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1,
+      retry: 3, // Retry failed requests 3 times
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
       refetchOnWindowFocus: false,
     },
   },
@@ -131,26 +133,28 @@ const App = () => {
             <DemoModeProvider>
               <MobileOptimizationsProvider>
                 <TooltipProvider>
-                  <GlobalAnnouncer />
-                  <OfflineIndicator />
-                  <Toaster />
-                  <Sonner />
-                  <CookieConsent />
-                  <PerformanceOverlay />
-                  <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                    <EnhancedAuthProvider>
-                      <AnalyticsInitializer />
-                      <KeyboardShortcutsInitializer />
-                      <ServiceIntegrationTracker />
-                      <RoleSwitchProtection />
-                      <SubscriptionNudgeWrapper />
-                      <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
-                        <Routes>
-                          {AppRoutes()}
-                        </Routes>
-                      </Suspense>
-                    </EnhancedAuthProvider>
-                  </BrowserRouter>
+                  <TourProvider>
+                    <GlobalAnnouncer />
+                    <OfflineIndicator />
+                    <Toaster />
+                    <Sonner />
+                    <CookieConsent />
+                    <PerformanceOverlay />
+                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                      <EnhancedAuthProvider>
+                        <AnalyticsInitializer />
+                        <KeyboardShortcutsInitializer />
+                        <ServiceIntegrationTracker />
+                        <RoleSwitchProtection />
+                        <SubscriptionNudgeWrapper />
+                        <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
+                          <Routes>
+                            {AppRoutes()}
+                          </Routes>
+                        </Suspense>
+                      </EnhancedAuthProvider>
+                    </BrowserRouter>
+                  </TourProvider>
                 </TooltipProvider>
               </MobileOptimizationsProvider>
             </DemoModeProvider>

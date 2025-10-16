@@ -38,6 +38,8 @@ import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { AIMessageComposer } from "@/components/AIMessageComposer";
 import { HairPhotoAnalyzer } from "@/components/HairPhotoAnalyzer";
 import { clientSchema } from "@/lib/validation/clientSchemas";
+import { usePagination } from "@/hooks/usePagination";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 interface ClientProfile {
   id: string;
@@ -406,6 +408,29 @@ export default function Clients() {
 
     return filtered;
   }, [clients, debouncedSearch, sortBy, riskFilter]);
+
+  // Pagination
+  const {
+    currentPage,
+    pageSize,
+    totalPages,
+    canGoNext,
+    canGoPrevious,
+    goToPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    getPaginatedData,
+    paginationInfo,
+  } = usePagination<ClientProfile>({
+    totalItems: filteredClients.length,
+    initialPageSize: typeof window !== 'undefined' && window.innerWidth < 768 ? 25 : 50,
+  });
+
+  const paginatedClients = useMemo(
+    () => getPaginatedData(filteredClients),
+    [filteredClients, getPaginatedData]
+  );
 
   const handleExportCSV = () => {
     if (filteredClients.length === 0) {
@@ -880,8 +905,23 @@ export default function Clients() {
             </div>
           )
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredClients.map((client) => {
+          <>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm text-muted-foreground font-pixel">{paginationInfo}</span>
+              <Select value={pageSize.toString()} onValueChange={(value) => setPageSize(Number(value))}>
+                <SelectTrigger className="w-32 border-[2px] border-foreground">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="25">25 per page</SelectItem>
+                  <SelectItem value="50">50 per page</SelectItem>
+                  <SelectItem value="100">100 per page</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {paginatedClients.map((client) => {
               const selected = isSelected(client.id);
               const daysSince = getDaysSinceLastVisit(client.last_appointment_date);
               
@@ -1043,6 +1083,63 @@ export default function Clients() {
             );
           })}
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="mt-8">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={previousPage}
+                      className={cn(
+                        "cursor-pointer border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+                        !canGoPrevious && "opacity-50 cursor-not-allowed"
+                      )}
+                      aria-disabled={!canGoPrevious}
+                    />
+                  </PaginationItem>
+
+                  {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+
+                    return (
+                      <PaginationItem key={pageNum}>
+                        <PaginationLink
+                          onClick={() => goToPage(pageNum)}
+                          isActive={currentPage === pageNum}
+                          className="cursor-pointer border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                        >
+                          {pageNum}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  })}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={nextPage}
+                      className={cn(
+                        "cursor-pointer border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+                        !canGoNext && "opacity-50 cursor-not-allowed"
+                      )}
+                      aria-disabled={!canGoNext}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
+          </>
         )}
 
         {selectedClient && (
