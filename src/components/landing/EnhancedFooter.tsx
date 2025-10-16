@@ -39,7 +39,7 @@ export const EnhancedFooter = () => {
               </div>
               <span className="font-pixel text-xl text-primary-foreground uppercase">hA.I.r</span>
             </div>
-            <p className="text-xs font-sans text-primary-foreground/80 leading-relaxed border-l-4 border-black pl-3">
+            <p className="text-xs font-sans text-primary-foreground/80 leading-relaxed border-l-4 border-accent pl-3">
               Your hair, smarter. Your salon, effortless.
             </p>
             <div className="flex gap-2">
@@ -81,18 +81,17 @@ export const EnhancedFooter = () => {
               </a>
             </div>
             
-            {/* App Store Badges */}
             <div className="pt-4 space-y-2">
               <p className="font-pixel text-xs text-primary-foreground uppercase">AVAILABLE ON</p>
               <div className="flex gap-2">
-                <div className="border-4 border-black bg-white px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                  <Smartphone className="h-4 w-4" />
+                <div className="border-4 border-black bg-accent px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <Smartphone className="h-4 w-4 text-accent-foreground" />
                 </div>
                 <div className="border-4 border-black bg-white px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <span className="font-pixel text-xs">iOS</span>
                 </div>
-                <div className="border-4 border-black bg-white px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                  <span className="font-pixel text-xs">AND</span>
+                <div className="border-4 border-black bg-accent px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="font-pixel text-xs text-accent-foreground">AND</span>
                 </div>
               </div>
             </div>
