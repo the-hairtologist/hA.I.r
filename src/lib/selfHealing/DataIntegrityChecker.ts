@@ -192,10 +192,8 @@ class DataIntegrityChecker {
 
     logger.info(`Auto-fixed ${fixedCount} issues`);
     
-    if (fixedCount > 0) {
-      toast.success(`Auto-fixed ${fixedCount} data issues`);
-    }
-
+    // Silent in production - only admins see this in System Health dashboard
+    
     return fixedCount;
   }
 
