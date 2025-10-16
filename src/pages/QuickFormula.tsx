@@ -273,16 +273,16 @@ export default function QuickFormula() {
                   
                   {lastModelUsed && responseTime > 0 && (
                     <ModelPerformanceIndicator 
-                      modelName={lastModelUsed}
-                      responseTime={responseTime}
+                      modelUsed={lastModelUsed}
+                      responseTimeMs={responseTime}
                     />
                   )}
                   
-                  {outcomeTrackingEnabled && (
+                  {outcomeTrackingEnabled && formula && (
                     <FormulaOutcomeFeedback 
-                      formulaId={null}
-                      onFeedbackSubmit={async (outcome) => {
-                        analytics.trackOutcome(outcome.rating);
+                      formulaId={'quick-formula-' + Date.now()}
+                      onComplete={() => {
+                        analytics.trackOutcome('feedback_submitted');
                         toast.success("Thank you for your feedback!");
                       }}
                     />
