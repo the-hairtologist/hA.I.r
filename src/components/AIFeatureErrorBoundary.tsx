@@ -66,7 +66,7 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
         <div className="p-4">
           <Alert variant="destructive" className="border-2">
             <AlertCircle className="h-5 w-5" />
-            <AlertTitle className="text-lg font-semibold">
+            <AlertTitle className="text-lg font-pixel">
               {this.props.featureName} Temporarily Unavailable
             </AlertTitle>
             <AlertDescription className="mt-2 space-y-3">

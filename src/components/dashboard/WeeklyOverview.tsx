@@ -50,7 +50,7 @@ export const WeeklyOverview = () => {
   return (
     <Card variant="glass" className="backdrop-blur-xl border-primary/10 hover:border-primary/20 transition-all duration-300">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-sm sm:text-base font-semibold">
+        <CardTitle className="flex items-center gap-2 text-sm sm:text-base font-pixel">
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
             <TrendingUp className="h-4 w-4 text-primary" />
           </div>

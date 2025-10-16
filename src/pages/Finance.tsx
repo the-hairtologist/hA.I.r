@@ -327,7 +327,7 @@ const Finance = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">Total Revenue</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-pixel text-primary">
@@ -358,7 +358,7 @@ const Finance = () => {
 
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Service Payments</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">Service Payments</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-pixel text-primary">
@@ -370,7 +370,7 @@ const Finance = () => {
 
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Commissions</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">Commissions</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-pixel text-chart-3">

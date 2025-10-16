@@ -92,7 +92,7 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-destructive" />
               At Risk
             </CardTitle>
@@ -107,7 +107,7 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-green-600" />
               Healthy Clients
             </CardTitle>
@@ -122,7 +122,7 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" />
               Avg Score
             </CardTitle>

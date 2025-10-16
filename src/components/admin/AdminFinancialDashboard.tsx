@@ -195,7 +195,7 @@ export const AdminFinancialDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="border-2 border-emerald-500/50 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <DollarSign className="h-4 w-4 text-emerald-600" />
               Monthly Revenue
             </CardTitle>
@@ -216,7 +216,7 @@ export const AdminFinancialDashboard = () => {
 
         <Card className="border-2 border-blue-500/50 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-blue-600" />
               Total Platform Revenue
             </CardTitle>
@@ -231,7 +231,7 @@ export const AdminFinancialDashboard = () => {
 
         <Card className="border-2 border-purple-500/50 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <Target className="h-4 w-4 text-purple-600" />
               Avg. Ticket Size
             </CardTitle>
@@ -246,7 +246,7 @@ export const AdminFinancialDashboard = () => {
 
         <Card className="border-2 border-amber-500/50 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950 dark:to-amber-900">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <Award className="h-4 w-4 text-amber-600" />
               Total Commissions
             </CardTitle>
@@ -264,7 +264,7 @@ export const AdminFinancialDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="border-2 border-border">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <Users className="h-4 w-4 text-primary" />
               Active Stylists
             </CardTitle>
@@ -277,7 +277,7 @@ export const AdminFinancialDashboard = () => {
 
         <Card className="border-2 border-border">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <Activity className="h-4 w-4 text-primary" />
               Total Clients
             </CardTitle>
@@ -290,7 +290,7 @@ export const AdminFinancialDashboard = () => {
 
         <Card className="border-2 border-border">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2">
               <Calendar className="h-4 w-4 text-primary" />
               Appointments (MTD)
             </CardTitle>

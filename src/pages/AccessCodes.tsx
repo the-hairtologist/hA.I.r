@@ -98,7 +98,7 @@ export default function AccessCodes() {
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Total Codes</CardTitle>
+              <CardTitle className="text-xs sm:text-sm">Total Codes</CardTitle>
               <Key className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -108,7 +108,7 @@ export default function AccessCodes() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Used Codes</CardTitle>
+              <CardTitle className="text-xs sm:text-sm">Used Codes</CardTitle>
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
@@ -118,7 +118,7 @@ export default function AccessCodes() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">Available</CardTitle>
+              <CardTitle className="text-xs sm:text-sm">Available</CardTitle>
               <XCircle className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>

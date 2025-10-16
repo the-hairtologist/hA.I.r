@@ -128,7 +128,7 @@ export const AdminDivineWeapon = () => {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium">Security</CardTitle>
+              <CardTitle className="text-sm">Security</CardTitle>
               <Shield className={`h-5 w-5 ${
                 securityStatus?.status === 'secure' ? 'text-success' : 'text-warning'
               }`} />
@@ -147,7 +147,7 @@ export const AdminDivineWeapon = () => {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium">System Health</CardTitle>
+              <CardTitle className="text-sm">System Health</CardTitle>
               <Activity className="h-5 w-5 text-info" />
             </div>
           </CardHeader>
@@ -164,7 +164,7 @@ export const AdminDivineWeapon = () => {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium">AI Insights</CardTitle>
+              <CardTitle className="text-sm">AI Insights</CardTitle>
               <Brain className="h-5 w-5 text-primary" />
             </div>
           </CardHeader>
@@ -179,7 +179,7 @@ export const AdminDivineWeapon = () => {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium">Auto-Healing</CardTitle>
+              <CardTitle className="text-sm">Auto-Healing</CardTitle>
               <RefreshCw className="h-5 w-5 text-success" />
             </div>
           </CardHeader>

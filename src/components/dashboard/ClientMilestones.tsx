@@ -39,7 +39,7 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
   return (
     <Card variant="glass" className="backdrop-blur-xl">
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
-        <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
+        <CardTitle className="text-base sm:text-lg font-pixel flex items-center gap-2">
           <Trophy className="h-5 w-5 text-primary" />
           Your Rewards & Milestones
         </CardTitle>
@@ -59,7 +59,7 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
     return (
       <Card variant="glass" className="backdrop-blur-xl border-primary/10">
         <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
-          <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
+          <CardTitle className="text-base sm:text-lg font-pixel flex items-center gap-2">
             <Trophy className="h-5 w-5 text-primary" />
             Your Rewards & Milestones
           </CardTitle>
@@ -79,7 +79,7 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
   return (
     <Card variant="glass" className="backdrop-blur-xl border-primary/10 hover:border-primary/20 transition-all duration-300">
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
-        <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
+        <CardTitle className="text-base sm:text-lg font-pixel flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
             <Trophy className="h-5 w-5 text-primary" />
           </div>
