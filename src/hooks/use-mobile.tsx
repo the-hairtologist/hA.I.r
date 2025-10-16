@@ -1,3 +1,15 @@
+/**
+ * Simple mobile detection hook for Shadcn sidebar component.
+ * 
+ * Note: For more advanced responsive features, consider using useResponsive hook which provides:
+ * - Touch device detection
+ * - Orientation tracking  
+ * - Pixel ratio information
+ * - Multiple breakpoint checks
+ * 
+ * This hook is kept for backward compatibility with Shadcn UI sidebar component.
+ */
+
 import * as React from "react";
 
 const MOBILE_BREAKPOINT = 768;

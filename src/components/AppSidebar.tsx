@@ -159,8 +159,21 @@ export function AppSidebar() {
   if (isLoading) {
     return (
       <Sidebar collapsible="icon" className="border-r">
-        <SidebarContent className="flex items-center justify-center">
-          <div className="text-muted-foreground text-sm font-sans">Loading menu...</div>
+        <SidebarContent className="flex flex-col gap-3 p-4">
+          {/* Skeleton loaders for better UX */}
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-md bg-muted/50 animate-pulse" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-3/4 bg-muted/50 rounded animate-pulse" />
+              <div className="h-3 w-1/2 bg-muted/30 rounded animate-pulse" />
+            </div>
+          </div>
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="flex items-center gap-3" style={{ animationDelay: `${i * 100}ms` }}>
+              <div className="h-8 w-8 rounded-md bg-muted/40 animate-pulse" />
+              <div className="h-4 w-2/3 bg-muted/40 rounded animate-pulse" />
+            </div>
+          ))}
         </SidebarContent>
       </Sidebar>
     );
@@ -225,7 +238,14 @@ export function AppSidebar() {
               
               return (
                 <div key={groupKey}>
-                  {showSeparator && <div className="border-t my-2 mx-3" />}
+                  {showSeparator && (
+                    <div className="relative my-3 mx-3">
+                      <div className="border-t-2 border-primary/20" />
+                      {groupKey.startsWith('admin-') && (
+                        <div className="absolute -top-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
+                      )}
+                    </div>
+                  )}
                   <SidebarGroup className="mb-2">
                     <SidebarGroupLabel 
                       className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/50 rounded px-2 py-1 flex items-center justify-between transition-colors"}`}

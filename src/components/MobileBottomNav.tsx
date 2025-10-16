@@ -197,13 +197,17 @@ export const MobileBottomNav = () => {
         className={cn(
           "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
           "border-t-[3px]",
-          isAdmin ? "border-t-amber-500/50" : "border-foreground"
+          isAdmin ? "border-t-amber-500 bg-gradient-to-r from-amber-500/5 to-amber-600/5" : "border-foreground"
         )}
         aria-label="Mobile navigation"
         style={{
           paddingBottom: 'env(safe-area-inset-bottom, 0px)'
         }}
       >
+        {/* Admin visual indicator */}
+        {isAdmin && (
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500 to-transparent animate-pulse-subtle" />
+        )}
         <div className="flex justify-evenly items-stretch h-16 px-3">{/* Better spacing with justify-evenly */}
           {items.map((item) => {
             const Icon = item.icon;
