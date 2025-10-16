@@ -35,6 +35,8 @@ import { BulkActionsBar } from "@/components/admin/BulkActionsBar";
 import { CSVImportDialog } from "@/components/admin/CSVImportDialog";
 import { ClientRiskIndicator } from "@/components/ClientRiskIndicator";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { AIMessageComposer } from "@/components/AIMessageComposer";
+import { HairPhotoAnalyzer } from "@/components/HairPhotoAnalyzer";
 import { clientSchema } from "@/lib/validation/clientSchemas";
 
 interface ClientProfile {
@@ -719,6 +721,22 @@ export default function Clients() {
             }
           }}
         />
+
+        {/* AI Message Composer - For first selected client */}
+        {selectedCount > 0 && clients.length > 0 && (
+          <div className="mb-6">
+            <AIFeatureErrorBoundary featureName="message_composer">
+              <AIMessageComposer
+                clientName={clients.find(c => c.id === Array.from(selectedIds)[0])?.full_name || "Client"}
+                stylistName={stylistName}
+                lastVisit={clients.find(c => c.id === Array.from(selectedIds)[0])?.last_appointment_date || undefined}
+                onSendMessage={(message) => {
+                  toast.success("Message ready to send!");
+                }}
+              />
+            </AIFeatureErrorBoundary>
+          </div>
+        )}
 
         {/* Keyboard shortcut hints */}
         <div className="flex justify-end text-[10px] xs:text-xs sm:text-sm text-muted-foreground gap-4">

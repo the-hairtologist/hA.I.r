@@ -29,6 +29,7 @@ import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 import { EnhancedSearch, HighlightedText, fuzzyMatch } from "@/components/EnhancedSearch";
 import { FormulaSuccessPredictor } from "@/components/FormulaSuccessPredictor";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { AIFormulaAnalyzer } from "@/components/AIFormulaAnalyzer";
 import { formulaSchema } from "@/lib/validation/formulaSchemas";
 import { cn } from "@/lib/utils";
 
@@ -615,7 +616,21 @@ const Formulas = () => {
               </Card>
             )}
 
-            {/* Formulas List */}
+        {/* AI Formula Analyzer - Shows insights for selected formulas */}
+        {selectedFormulas.size > 0 && (
+          <div className="mb-6">
+            <AIFeatureErrorBoundary featureName="formula_analyzer">
+              <AIFormulaAnalyzer 
+                formulas={filteredFormulas.filter(f => selectedFormulas.has(f.id))}
+                onAnalysisComplete={(results) => {
+                  toast.success("Formula analysis complete!");
+                }}
+              />
+            </AIFeatureErrorBoundary>
+          </div>
+        )}
+
+        {/* Formulas List */}
             <div className="grid gap-4">
               {filteredFormulas.length === 0 ? (
             <div className="py-16 px-4 text-center animate-fade-in">
