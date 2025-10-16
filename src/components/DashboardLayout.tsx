@@ -160,7 +160,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
                 <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-bold font-display">hA.I.r</h1>
+                <h1 className="text-xl font-bold font-pixel">hA.I.r</h1>
               </button>
 
               <div className="ml-auto flex items-center gap-2 md:gap-3">

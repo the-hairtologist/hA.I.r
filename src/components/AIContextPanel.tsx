@@ -23,7 +23,7 @@ export const AIContextPanel = ({
   return (
     <Card className="brutal-border bg-gradient-to-br from-primary/5 to-accent/5">
       <CardHeader>
-        <CardTitle className="text-xs sm:text-sm lg:text-base font-display flex items-center gap-2">
+        <CardTitle className="text-xs sm:text-sm lg:text-base font-pixel flex items-center gap-2">
           <Brain className="h-4 w-4 text-primary" />
           AI Context Data
         </CardTitle>

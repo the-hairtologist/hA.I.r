@@ -92,7 +92,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
           aria-label="Go to dashboard"
         >
           <Scissors className="h-6 w-6 text-primary" />
-          <h1 className="text-lg font-bold font-display bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          <h1 className="text-lg font-bold font-pixel bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
             hA.I.r
           </h1>
         </button>

@@ -350,8 +350,8 @@ const Knowledge = () => {
                         </Badge>
                         <ExternalLink className="h-4 w-4 text-foreground" />
                       </div>
-                      <CardTitle className="text-lg font-display text-foreground">{article.title}</CardTitle>
-                      <CardDescription className="text-foreground/80 font-medium">
+                      <CardTitle className="text-lg font-pixel text-foreground">{article.title}</CardTitle>
+                      <CardDescription className="font-sans text-foreground/80 font-medium">
                         {article.description}
                       </CardDescription>
                     </CardHeader>

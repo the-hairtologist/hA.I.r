@@ -210,11 +210,11 @@ const Auth = () => {
             <div className="p-2 rounded-lg bg-primary border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
               <Scissors className="h-7 w-7 sm:h-8 sm:w-8 text-primary-foreground" />
             </div>
-            <CardTitle className="text-2xl sm:text-3xl font-bold font-display">hA.I.r</CardTitle>
+            <CardTitle className="text-2xl sm:text-3xl font-bold font-pixel">hA.I.r</CardTitle>
           </div>
-          <CardDescription className="text-sm sm:text-base font-medium text-center px-2">
-            {state.isRecoveryMode ? "Create your new password" : "For Professional Hair Stylists"}
-          </CardDescription>
+            <CardDescription className="text-sm sm:text-base font-sans font-medium text-center px-2">
+              {state.isRecoveryMode ? "Create your new password" : "For Professional Hair Stylists"}
+            </CardDescription>
         </CardHeader>
         <CardContent className="px-4 sm:px-6 pb-6">
           {state.isRecoveryMode ? (
