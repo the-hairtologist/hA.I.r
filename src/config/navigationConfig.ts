@@ -219,6 +219,26 @@ export const stylistNavigationItems: NavigationItem[] = [
         description: "Automated email campaigns"
       },
       { 
+        id: "intake-forms", 
+        title: "Client Forms", 
+        url: "/intake-forms", 
+        icon: FileText, 
+        gradient: "bg-[image:var(--gradient-purple-blue)]", 
+        group: "growth",
+        color: "text-purple-400 dark:text-purple-300",
+        description: "Client intake forms"
+      },
+      { 
+        id: "aftercare-guides", 
+        title: "Care Guides", 
+        url: "/aftercare-guides", 
+        icon: Sparkles, 
+        gradient: "bg-[image:var(--gradient-green-teal)]", 
+        group: "growth",
+        color: "text-green-400 dark:text-green-300",
+        description: "Aftercare instructions"
+      },
+      { 
         id: "ad-generator", 
         title: "Ad Generator", 
         url: "/ad-generator", 

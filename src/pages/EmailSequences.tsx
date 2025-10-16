@@ -7,7 +7,8 @@ import { SequenceBuilder } from "@/components/email-sequences/SequenceBuilder";
 import { SequenceAnalytics } from "@/components/email-sequences/SequenceAnalytics";
 import { EmailTemplates } from "@/components/email-sequences/EmailTemplates";
 import { ClientEnrollments } from "@/components/email-sequences/ClientEnrollments";
-import { Mail, TrendingUp, Users, Layout } from "lucide-react";
+import { EmailTestPanel } from "@/components/email-automation/EmailTestPanel";
+import { Mail, TrendingUp, Users, Layout, Zap } from "lucide-react";
 
 const EmailSequences = () => {
   const { user } = useAuth();
@@ -42,7 +43,7 @@ const EmailSequences = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="sequences" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid border-2">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid border-2">
             <TabsTrigger value="sequences" className="gap-2">
               <Mail className="h-4 w-4" />
               <span className="hidden sm:inline">Sequences</span>
@@ -58,6 +59,10 @@ const EmailSequences = () => {
             <TabsTrigger value="analytics" className="gap-2">
               <TrendingUp className="h-4 w-4" />
               <span className="hidden sm:inline">Analytics</span>
+            </TabsTrigger>
+            <TabsTrigger value="test" className="gap-2">
+              <Zap className="h-4 w-4" />
+              <span className="hidden sm:inline">Test</span>
             </TabsTrigger>
           </TabsList>
 
@@ -75,6 +80,10 @@ const EmailSequences = () => {
 
           <TabsContent value="analytics" className="space-y-6">
             <SequenceAnalytics />
+          </TabsContent>
+
+          <TabsContent value="test" className="space-y-6">
+            <EmailTestPanel />
           </TabsContent>
         </Tabs>
       </div>
