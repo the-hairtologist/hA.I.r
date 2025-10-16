@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
+import { initAnalytics } from "@/lib/analytics";
 
 const COOKIE_CONSENT_KEY = "hair-cookie-consent";
 
@@ -41,6 +42,12 @@ export const CookieConsent = () => {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(consentData));
+    
+    // 🔐 GDPR Compliance: Only initialize analytics if user consents
+    if (prefs.analytics) {
+      initAnalytics();
+    }
+    
     setShowBanner(false);
     setShowPreferences(false);
   };

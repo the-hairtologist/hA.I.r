@@ -12,13 +12,12 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { initAnalytics } from "./lib/analytics";
 import { addCopyrightNotice, detectSuspiciousActivity, logSuspiciousActivity } from "./lib/ipProtection";
 import { PerformanceMonitor } from "./components/PerformanceMonitor";
 import { initMobileOptimizations, setupInputHandlers } from "./lib/mobileOptimizations";
 
-// Initialize analytics on app load
-initAnalytics();
+// Analytics will be initialized AFTER user consents via CookieConsent component
+// This ensures GDPR compliance (no tracking before explicit consent)
 
 // Initialize mobile optimizations for better performance
 initMobileOptimizations();
