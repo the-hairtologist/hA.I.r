@@ -243,9 +243,9 @@ const Auth = () => {
                   placeholder="Confirm new password"
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Updating..." : "Update Password"}
-              </Button>
+            <Button type="submit" className="w-full font-bold uppercase tracking-wide" disabled={loading}>
+              {loading ? "Updating..." : "Update Password"}
+            </Button>
             </form>
           ) : (
           <Tabs defaultValue="signin" className="w-full">
@@ -278,9 +278,9 @@ const Auth = () => {
                     required
                   />
                 </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Signing in..." : "Sign In"}
-                  </Button>
+                <Button type="submit" className="w-full font-bold uppercase tracking-wide" disabled={loading}>
+                  {loading ? "Signing in..." : "Sign In"}
+                </Button>
                 <Button
                   type="button" 
                   variant="link" 
@@ -368,15 +368,15 @@ const Auth = () => {
                   />
                 </div>
                 
-                <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
-                  <p className="text-sm font-semibold text-foreground mb-1">💼 Professional Stylist Account</p>
-                  <p className="text-xs text-foreground/80 font-medium">
-                    Immediate access • 7-day free trial, then $15/month
-                  </p>
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : "Create Account"}
-                </Button>
+              <div className="p-4 rounded-lg border-[3px] border-foreground bg-gradient-to-br from-purple-300 to-pink-300 shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+                <p className="text-sm font-pixel text-foreground mb-1">💼 Professional Stylist Account</p>
+                <p className="text-xs font-sans text-foreground/80">
+                  Immediate access • 7-day free trial, then $15/month
+                </p>
+              </div>
+              <Button type="submit" className="w-full font-bold uppercase tracking-wide" disabled={loading}>
+                {loading ? "Creating account..." : "Create Account"}
+              </Button>
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -417,7 +417,7 @@ const Auth = () => {
             <Button 
               onClick={handlePasswordReset} 
               disabled={state.resetLoading}
-              className="w-full"
+              className="w-full font-bold uppercase tracking-wide"
             >
               {state.resetLoading ? "Sending..." : "Send Reset Link"}
             </Button>
