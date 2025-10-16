@@ -204,19 +204,19 @@ const Auth = () => {
         Skip to main content
       </a>
       <main id="main-content" role="main" aria-label="Authentication" className="w-full max-w-md">
-        <Card className="w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card">
-        <CardHeader className="text-center space-y-2">
+        <Card className="w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-card max-w-md mx-auto">
+        <CardHeader className="text-center space-y-2 px-4 sm:px-6 pt-6">
           <div className="flex items-center justify-center gap-2 mb-2">
             <div className="p-2 rounded-lg bg-primary border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
-              <Scissors className="h-8 w-8 text-primary-foreground" />
+              <Scissors className="h-7 w-7 sm:h-8 sm:w-8 text-primary-foreground" />
             </div>
-            <CardTitle className="text-3xl font-bold font-display">hA.I.r</CardTitle>
+            <CardTitle className="text-2xl sm:text-3xl font-bold font-display">hA.I.r</CardTitle>
           </div>
-          <CardDescription className="text-base font-medium text-center">
+          <CardDescription className="text-sm sm:text-base font-medium text-center px-2">
             {state.isRecoveryMode ? "Create your new password" : "For Professional Hair Stylists"}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6 pb-6">
           {state.isRecoveryMode ? (
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <div className="space-y-2">
@@ -249,9 +249,9 @@ const Auth = () => {
             </form>
           ) : (
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="w-full">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="w-full grid grid-cols-2 h-11">
+              <TabsTrigger value="signin" className="text-sm sm:text-base">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="text-sm sm:text-base">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">

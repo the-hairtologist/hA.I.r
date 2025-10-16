@@ -167,26 +167,26 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="max-w-2xl p-0 gap-0 overflow-hidden brutal-border brutal-shadow-lg">
+      <DialogContent className="max-w-2xl p-0 gap-0 overflow-hidden brutal-border brutal-shadow-lg sm:max-w-[95vw] max-h-[90vh]">
         {/* Progress Bar */}
         <div className="w-full bg-muted">
           <Progress value={progress} className="h-2 rounded-none" />
         </div>
 
         {/* Content */}
-        <div className="p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5">
-          <div className="flex flex-col items-center text-center space-y-6">
+        <div className="p-6 sm:p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5 overflow-y-auto max-h-[calc(90vh-120px)]">
+          <div className="flex flex-col items-center text-center space-y-4 sm:space-y-6">
             {/* Icon */}
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center brutal-border brutal-shadow-sm">
-              <Icon className="h-10 w-10 text-on-surface-primary" />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center brutal-border brutal-shadow-sm">
+              <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-on-surface-primary" />
             </div>
 
             {/* Title */}
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold gradient-text">
+              <h2 className="text-2xl sm:text-3xl font-bold gradient-text px-4">
                 {currentStepData.title}
               </h2>
-              <p className="text-muted-foreground max-w-md">
+              <p className="text-sm sm:text-base text-muted-foreground max-w-md px-4">
                 {currentStepData.description}
               </p>
             </div>
@@ -246,16 +246,17 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between p-6 bg-muted/50 brutal-border-t">
+        <div className="flex items-center justify-between p-4 sm:p-6 bg-muted/50 brutal-border-t gap-3">
           <div className="flex items-center gap-2">
             {currentStep > 0 && (
               <Button
                 variant="outline"
                 onClick={handleBack}
-                className="gap-1"
+                className="gap-1 min-w-[44px] min-h-[44px] touch-manipulation"
+                size="sm"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Back
+                <span className="hidden xs:inline">Back</span>
               </Button>
             )}
           </div>
@@ -264,23 +265,25 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
             <Button
               variant="ghost"
               onClick={handleSkip}
-              className="text-muted-foreground"
+              className="text-muted-foreground text-xs sm:text-sm min-h-[44px] touch-manipulation"
+              size="sm"
             >
               Skip Tour
             </Button>
             <Button
               onClick={handleNext}
-              className="gap-1 brutal-shadow-sm brutal-hover"
+              className="gap-1 brutal-shadow-sm brutal-hover min-w-[44px] min-h-[44px] touch-manipulation"
+              size="sm"
             >
               {currentStep < steps.length - 1 ? (
                 <>
-                  Next
+                  <span className="hidden xs:inline">Next</span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               ) : (
                 <>
                   <Check className="h-4 w-4" />
-                  Get Started
+                  <span className="hidden xs:inline">Get Started</span>
                 </>
               )}
             </Button>

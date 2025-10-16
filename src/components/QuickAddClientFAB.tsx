@@ -94,12 +94,12 @@ export function QuickAddClientFAB() {
           "lg:bottom-6 lg:right-6",
           "bg-gradient-to-br from-emerald-500 to-green-600",
           "hover:from-emerald-600 hover:to-green-700",
-          "transition-all duration-200 hover:scale-110",
-          "group"
+          "transition-all duration-200 hover:scale-110 active:scale-95",
+          "group touch-manipulation"
         )}
         aria-label="Quick add client"
       >
-        <Plus className="h-6 w-6 transition-transform group-hover:rotate-90" />
+        <Plus className="h-7 w-7 transition-transform group-hover:rotate-90" />
       </Button>
 
       {/* Quick Add Dialog */}
