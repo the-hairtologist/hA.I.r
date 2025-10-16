@@ -40,6 +40,68 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Server-side rate limiting check
+    const RATE_LIMIT_WINDOW = 60; // 60 seconds
+    const MAX_REQUESTS = 30; // 30 requests per minute
+    
+    const { data: recentRequests, error: rateLimitError } = await supabase
+      .from('api_rate_limits')
+      .select('request_count, window_start')
+      .eq('user_id', user.id)
+      .eq('endpoint', 'validate-formula')
+      .gte('window_start', new Date(Date.now() - RATE_LIMIT_WINDOW * 1000).toISOString())
+      .maybeSingle();
+
+    if (rateLimitError && rateLimitError.code !== 'PGRST116') {
+      console.error('Rate limit check error:', rateLimitError);
+    }
+
+    // Check if rate limit exceeded
+    if (recentRequests && recentRequests.request_count >= MAX_REQUESTS) {
+      const resetTime = new Date(new Date(recentRequests.window_start).getTime() + RATE_LIMIT_WINDOW * 1000);
+      const remainingSeconds = Math.ceil((resetTime.getTime() - Date.now()) / 1000);
+      
+      return new Response(JSON.stringify({ 
+        error: 'Rate limit exceeded',
+        resetInSeconds: remainingSeconds,
+        message: `Too many requests. Please try again in ${remainingSeconds} seconds.`
+      }), {
+        status: 429,
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json',
+          'X-RateLimit-Limit': MAX_REQUESTS.toString(),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': remainingSeconds.toString(),
+        },
+      });
+    }
+
+    // Update or insert rate limit record
+    const now = new Date().toISOString();
+    if (recentRequests) {
+      await supabase
+        .from('api_rate_limits')
+        .update({ 
+          request_count: recentRequests.request_count + 1,
+          last_request_at: now 
+        })
+        .eq('user_id', user.id)
+        .eq('endpoint', 'validate-formula');
+    } else {
+      await supabase
+        .from('api_rate_limits')
+        .insert({
+          user_id: user.id,
+          endpoint: 'validate-formula',
+          request_count: 1,
+          window_start: now,
+          last_request_at: now
+        });
+    }
+
+    const remaining = MAX_REQUESTS - (recentRequests?.request_count || 0) - 1;
+
     const { formulaText, clientId, clientAllergies } = await req.json();
 
     if (!formulaText) {

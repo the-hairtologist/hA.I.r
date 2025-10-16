@@ -58,6 +58,23 @@ const ChartContainer = React.forwardRef<
 });
 ChartContainer.displayName = "Chart";
 
+// Validate CSS color values to prevent XSS
+const isValidColor = (color: string): boolean => {
+  if (!color || typeof color !== 'string') return false;
+  
+  // Allow HSL, RGB, hex colors, and CSS color keywords
+  const validColorPatterns = [
+    /^#[0-9A-Fa-f]{3,8}$/, // hex colors
+    /^hsl\(\s*\d+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*\)$/, // hsl
+    /^hsla\(\s*\d+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*,\s*[\d.]+\s*\)$/, // hsla
+    /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/, // rgb
+    /^rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[\d.]+\s*\)$/, // rgba
+    /^[a-z]+$/, // color keywords like 'red', 'blue'
+  ];
+  
+  return validColorPatterns.some(pattern => pattern.test(color.trim()));
+};
+
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(([_, config]) => config.theme || config.color);
 
@@ -65,26 +82,27 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null;
   }
 
-  return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
-  })
-  .join("\n")}
-}
-`,
-          )
-          .join("\n"),
-      }}
-    />
-  );
+  // Build CSS using style object instead of dangerouslySetInnerHTML
+  const cssText = Object.entries(THEMES)
+    .map(([theme, prefix]) => {
+      const variables = colorConfig
+        .map(([key, itemConfig]) => {
+          const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
+          // Only include valid colors
+          if (color && isValidColor(color)) {
+            return `  --color-${key}: ${color};`;
+          }
+          return null;
+        })
+        .filter(Boolean)
+        .join("\n");
+      
+      return variables ? `${prefix} [data-chart=${id}] {\n${variables}\n}` : null;
+    })
+    .filter(Boolean)
+    .join("\n");
+
+  return cssText ? <style dangerouslySetInnerHTML={{ __html: cssText }} /> : null;
 };
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
