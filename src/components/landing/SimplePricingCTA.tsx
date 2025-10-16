@@ -24,29 +24,12 @@ export const SimplePricingCTA = () => {
           </div>
 
           <h2 className="font-pixel text-3xl sm:text-4xl mb-8 text-secondary-foreground uppercase tracking-wider leading-relaxed">
-            READY TO SEE WHAT YOUR HAIR COULD REALLY DO?
+            START YOUR FREE TRIAL
           </h2>
 
-          <p className="text-base sm:text-lg font-pixel text-secondary-foreground/90 max-w-2xl mx-auto mb-10 leading-loose">
-            AI-DRIVEN INSIGHTS, EFFORTLESS BOOKING, AND PERSONALIZED CARE - EXPERIENCE A SALON VISIT LIKE NEVER BEFORE.
+          <p className="text-base sm:text-lg font-sans text-secondary-foreground/90 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Join 2,000+ stylists cutting admin time by 40%. Try hA.I.r risk-free for 14 days.
           </p>
-        </div>
-
-        <div className="border-4 border-black bg-white p-10 sm:p-14 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-10">
-          <div className="space-y-8">
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-4 h-4 border-2 border-black bg-primary"></div>
-              <p className="font-sans text-base text-foreground">AI-powered recommendations</p>
-            </div>
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-4 h-4 border-2 border-black bg-secondary"></div>
-              <p className="font-sans text-base text-foreground">Seamless booking system</p>
-            </div>
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-4 h-4 border-2 border-black bg-accent"></div>
-              <p className="font-sans text-base text-foreground">Personalized care tracking</p>
-            </div>
-          </div>
         </div>
 
         <Button

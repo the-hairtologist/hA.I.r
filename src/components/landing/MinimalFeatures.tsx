@@ -76,8 +76,11 @@ export const MinimalFeatures = () => {
     <div className="container mx-auto px-4">
       <div className="text-center mb-16">
         <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
-          FEATURES THAT WORK
+          WHY HAIR PROS CHOOSE hA.I.r
         </h2>
+        <p className="font-sans text-base text-muted-foreground max-w-2xl mx-auto">
+          Everything you need for smarter bookings, better results, and happier clients
+        </p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">

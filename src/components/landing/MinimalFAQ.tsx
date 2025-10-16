@@ -33,7 +33,7 @@ export const MinimalFAQ = () => {
       <div className="max-w-2xl mx-auto">
         <div className={`text-center mb-12 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-white uppercase tracking-wider">
-            Questions?
+            GOT QUESTIONS? WE GOT ANSWERS
           </h2>
         </div>
 

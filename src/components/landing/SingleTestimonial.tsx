@@ -79,22 +79,6 @@ export const SingleTestimonial = () => {
             </div>
           ))}
         </div>
-        
-        {/* Press logos section */}
-        <div className="mt-12 flex flex-wrap justify-center items-center gap-6">
-          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            TC
-          </div>
-          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            TECHCRUNCH
-          </div>
-          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            VOGUE
-          </div>
-          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            ALLURE
-          </div>
-        </div>
       </div>
     </div>
   );
