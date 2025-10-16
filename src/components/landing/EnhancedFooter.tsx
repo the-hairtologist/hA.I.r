@@ -97,8 +97,8 @@ export const EnhancedFooter = () => {
 
           {/* Product Column */}
           <div>
-            <h3 className="font-pixel text-xs sm:text-sm uppercase mb-3 sm:mb-4 text-primary-foreground">PRODUCT</h3>
-            <ul className="space-y-2">
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">PRODUCT</h3>
+            <ul className="space-y-2.5">
               <li>
                 <button onClick={() => navigate("/auth")} className="font-sans text-sm text-primary-foreground/90 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   Features
@@ -119,8 +119,8 @@ export const EnhancedFooter = () => {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-pixel text-xs sm:text-sm uppercase mb-3 sm:mb-4 text-primary-foreground">COMPANY</h3>
-            <ul className="space-y-2">
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">COMPANY</h3>
+            <ul className="space-y-2.5">
               <li>
                 <button onClick={() => navigate("/auth")} className="font-sans text-sm text-primary-foreground/90 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   About
@@ -141,17 +141,17 @@ export const EnhancedFooter = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="font-pixel text-xs sm:text-sm uppercase mb-3 sm:mb-4 text-primary-foreground">UPDATES</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">UPDATES</h3>
             <p className="text-sm font-sans text-primary-foreground/80 mb-3 leading-relaxed">
               Get tips and exclusive offers.
             </p>
-            <form onSubmit={handleNewsletterSignup} className="space-y-2">
+            <form onSubmit={handleNewsletterSignup} className="space-y-2.5">
               <Input
                 type="email"
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-11 sm:h-12 bg-white text-foreground text-sm"
+                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-11 sm:h-12 bg-white text-foreground"
                 required
               />
               <Button 
