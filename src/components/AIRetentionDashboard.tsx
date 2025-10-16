@@ -92,7 +92,7 @@ export const AIRetentionDashboard = () => {
   return (
     <div className="space-y-4">
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
@@ -142,14 +142,14 @@ export const AIRetentionDashboard = () => {
       {/* At-Risk Clients */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
               <CardTitle>At-Risk Clients</CardTitle>
               <CardDescription>AI-detected churn risk</CardDescription>
             </div>
-            <Button onClick={sendRetentionMessages} disabled={loading || atRiskCount === 0}>
+            <Button onClick={sendRetentionMessages} disabled={loading || atRiskCount === 0} size="sm" className="w-full sm:w-auto">
               <Mail className="h-4 w-4 mr-2" />
-              Send Retention Messages
+              <span className="text-xs sm:text-sm">Send Messages</span>
             </Button>
           </div>
         </CardHeader>
@@ -165,43 +165,43 @@ export const AIRetentionDashboard = () => {
                 .filter(s => s.riskLevel !== 'low')
                 .slice(0, 10)
                 .map((score, idx) => (
-                  <Card key={idx}>
-                    <CardContent className="pt-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge
-                              variant={
-                                score.riskLevel === 'critical'
-                                  ? 'destructive'
-                                  : score.riskLevel === 'high'
-                                  ? 'default'
-                                  : 'secondary'
-                              }
-                            >
-                              {score.riskLevel}
-                            </Badge>
-                            <span className="text-xs sm:text-sm text-muted-foreground">
-                              {score.appointmentGap} days since last visit
-                            </span>
-                          </div>
-                          <div className="text-xs sm:text-sm space-y-1">
-                            {score.reasons.map((reason: string, i: number) => (
-                              <div key={i} className="text-muted-foreground">
-                                • {reason}
-                              </div>
-                            ))}
-                          </div>
-                          <div className="mt-3 text-xs sm:text-sm font-medium text-primary">
-                            Recommendations:
-                          </div>
-                          <div className="text-xs sm:text-sm space-y-1 mt-1">
-                            {score.recommendations.slice(0, 3).map((rec: string, i: number) => (
-                              <div key={i} className="text-muted-foreground">
-                                {rec}
-                              </div>
-                            ))}
-                          </div>
+                   <Card key={idx}>
+                    <CardContent className="p-3 sm:p-4">
+                      <div className="flex flex-col gap-3">
+                        <div className="flex items-start justify-between gap-2">
+                          <Badge
+                            variant={
+                              score.riskLevel === 'critical'
+                                ? 'destructive'
+                                : score.riskLevel === 'high'
+                                ? 'default'
+                                : 'secondary'
+                            }
+                            className="text-xs"
+                          >
+                            {score.riskLevel}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground text-right">
+                            {score.appointmentGap} days since last visit
+                          </span>
+                        </div>
+                        
+                        <div className="text-xs sm:text-sm space-y-1">
+                          <div className="font-medium text-muted-foreground mb-1">Reasons:</div>
+                          {score.reasons.map((reason: string, i: number) => (
+                            <div key={i} className="text-muted-foreground pl-2">
+                              • {reason}
+                            </div>
+                          ))}
+                        </div>
+                        
+                        <div className="text-xs sm:text-sm space-y-1">
+                          <div className="font-medium text-primary mb-1">Recommendations:</div>
+                          {score.recommendations.slice(0, 3).map((rec: string, i: number) => (
+                            <div key={i} className="text-muted-foreground pl-2">
+                              {rec}
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </CardContent>

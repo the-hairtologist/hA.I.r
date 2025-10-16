@@ -14,7 +14,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes } from "react-router-dom";
 import { useEffect, lazy, Suspense, useState } from "react";
-import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";
+import { EnhancedAuthProvider, useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { GlobalErrorBoundary } from "@/components/errors/GlobalErrorBoundary";
@@ -63,13 +63,18 @@ const KeyboardShortcutsInitializer = () => {
 
 const SubscriptionNudgeWrapper = () => {
   const { shouldShowNudge, dismissNudge, trialDaysRemaining, clientCount, appointmentCount } = useSubscriptionNudges();
+  const { isAdmin } = useEnhancedAuth();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (shouldShowNudge) {
+    // Never show nudges to admins
+    if (!isAdmin && shouldShowNudge) {
       setOpen(true);
     }
-  }, [shouldShowNudge]);
+  }, [shouldShowNudge, isAdmin]);
+
+  // Don't render anything for admins
+  if (isAdmin) return null;
 
   const handleDismiss = () => {
     dismissNudge(shouldShowNudge);
