@@ -134,7 +134,7 @@ Deno.serve(async (req) => {
     const warnings = issues.filter(i => i.severity === 'warning');
 
     // Log validation for analytics
-    await supabase.from('formula_validations').insert({
+    const { error: logError } = await supabase.from('formula_validations').insert({
       user_id: user.id,
       formula_text: formulaText,
       client_id: clientId,
@@ -142,7 +142,11 @@ Deno.serve(async (req) => {
       blocker_count: blockers.length,
       warning_count: warnings.length,
       validation_result: { issues }
-    }).catch(err => console.error('Failed to log validation:', err));
+    });
+    
+    if (logError) {
+      console.error('Failed to log validation:', logError);
+    }
 
     return new Response(
       JSON.stringify({
@@ -161,7 +165,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Validation error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Validation failed' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Validation failed' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

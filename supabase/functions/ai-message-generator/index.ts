@@ -68,7 +68,7 @@ Never use: generic templates, excessive exclamation marks, pushy sales language,
 Client Context:
 - Name: ${clientProfile?.full_name || 'Valued Client'}
 - Last visit: ${lastAppointment?.appointment_date ? new Date(lastAppointment.appointment_date).toLocaleDateString() : 'Unknown'}
-- Favorite services: ${recentAppointments?.map(a => a.service_type).filter((v, i, a) => a.indexOf(v) === i).slice(0, 2).join(', ') || 'None yet'}
+- Favorite services: ${recentAppointments?.map((a: any) => a.service_type).filter((v: any, i: number, a: any[]) => a.indexOf(v) === i).slice(0, 2).join(', ') || 'None yet'}
 - Days since last visit: ${daysSinceLastVisit || 'Never visited'}
 
 Stylist Context:
@@ -154,7 +154,7 @@ Generate a ${messageType} message.`
   } catch (error) {
     console.error("Error in ai-message-generator:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

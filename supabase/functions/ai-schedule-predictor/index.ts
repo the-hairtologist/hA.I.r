@@ -52,7 +52,7 @@ Current date: ${new Date().toISOString()}`
 Client: ${clientProfile.full_name}
 Preferred time of day: ${clientProfile.preferred_time_of_day || 'Not specified'}
 Appointment history (last 20):
-${JSON.stringify(appointments?.map(a => ({
+${JSON.stringify(appointments?.map((a: any) => ({
   date: a.appointment_date,
   service: a.service_type,
   status: a.status
@@ -150,7 +150,7 @@ Consider:
   } catch (error) {
     console.error("Error in ai-schedule-predictor:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

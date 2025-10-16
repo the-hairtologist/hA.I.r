@@ -6,13 +6,46 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Rate limiting
+const rateLimiter = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_REQUESTS = 30;
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const limit = rateLimiter.get(userId);
+  
+  if (!limit || now > limit.resetAt) {
+    rateLimiter.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  
+  if (limit.count >= MAX_REQUESTS) {
+    return false;
+  }
+  
+  limit.count++;
+  return true;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { 
+    // Rate limit check
+    const authHeader = req.headers.get('authorization');
+    const userId = authHeader?.split('Bearer ')[1]?.substring(0, 20) || 'anonymous';
+    
+    if (!checkRateLimit(userId)) {
+      return new Response(
+        JSON.stringify({ error: 'Rate limit exceeded. Please wait 60 seconds.' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const {
       currentTrigger, 
       stats,
       engagementMetrics = {}
@@ -151,7 +184,7 @@ Consider psychological principles:
       personalizedMessage: null,
       emphasize: 'value',
       conversionProbability: 50,
-      reasoning: error.message,
+      reasoning: error instanceof Error ? error.message : 'Unknown error',
       fallback: true
     }), {
       status: 200,
