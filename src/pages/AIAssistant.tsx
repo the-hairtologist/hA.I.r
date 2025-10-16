@@ -19,6 +19,8 @@ import { AIDisclaimer } from "@/components/AIDisclaimer";
 import { AIContextPanel } from "@/components/AIContextPanel";
 import { ConversationSelector } from "@/components/ConversationSelector";
 import { ClientSelectorDialog } from "@/components/ClientSelectorDialog";
+import { StructuredFormulaDisplay } from "@/components/StructuredFormulaDisplay";
+import { AIFormulaQuickStart } from "@/components/AIFormulaQuickStart";
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -623,7 +625,7 @@ const Knowledge = () => {
                     </div>
                   </div>
                 ) : aiMessages.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center space-y-5 px-4">
+                  <div className="h-full flex flex-col items-center justify-center space-y-6 px-4">
                     <div className="relative animate-bounce-gentle">
                       <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)] border-4 border-foreground">
                         <Sparkles className="h-12 w-12 text-primary-foreground" />
@@ -632,13 +634,26 @@ const Knowledge = () => {
                         <span className="text-sm">✨</span>
                       </div>
                     </div>
-                    <div className="space-y-3 max-w-md">
+                    <div className="space-y-3 max-w-md text-center">
                       <p className="text-lg font-display font-bold gradient-text">
                         Ready to Create Magic ✨
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        Ask me anything! I can create custom color formulas ("warm blonde balayage for level 5 hair"), guide you through corrections ("fix brassy orange tones"), or provide step-by-step techniques ("how to do a root melt"). Let's get started!
+                        <span className="font-semibold text-foreground">Ask anything hair-related!</span> Get instant color formulas, step-by-step guides for tricky corrections, technique tips, product recommendations, and professional advice—all powered by AI trained on expert hair knowledge.
                       </p>
+                    </div>
+                    {/* Quick Start Templates */}
+                    <div className="w-full max-w-2xl mt-6">
+                      <AIFormulaQuickStart 
+                        onSelectTemplate={(prompt) => {
+                          setAiInput(prompt);
+                          // Auto-focus the input
+                          setTimeout(() => {
+                            const input = document.querySelector('input[placeholder*="Ask me anything"]') as HTMLInputElement;
+                            input?.focus();
+                          }, 100);
+                        }}
+                      />
                     </div>
                   </div>
                 ) : (
@@ -648,29 +663,45 @@ const Knowledge = () => {
                         key={idx}
                         className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
                       >
-                        <div
-                          className={`max-w-[80%] rounded-2xl px-5 py-4 border-3 ${
-                            msg.role === "user"
-                              ? "bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.2)]"
-                              : "bg-background border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]"
-                          }`}
-                          style={{ border: "3px solid" }}
-                        >
-                          <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
-                          {/* Save Formula Button - STYLIST ONLY */}
-                          {userRole === "stylist" && msg.role === "assistant" && idx === aiMessages.length - 1 && typeof msg.content === "string" && msg.content.toLowerCase().includes("formula") && (
-                            <button
-                              onClick={() => {
-                                setFormulaToSave(msg.content);
+                        {msg.role === "assistant" ? (
+                          <div className="max-w-[90%] w-full">
+                            {/* Try to render as structured formula first */}
+                            <StructuredFormulaDisplay 
+                              data={msg.content}
+                              onSave={(formula) => {
+                                setFormulaToSave(formula);
                                 setShowSaveDialog(true);
                               }}
-                              className="mt-4 retro-button bg-gradient-to-r from-secondary to-accent text-secondary-foreground px-4 py-2 rounded-lg font-display font-bold text-sm flex items-center gap-2"
-                            >
-                              <Save className="h-4 w-4" />
-                              Save Formula
-                            </button>
-                          )}
-                        </div>
+                            />
+                            
+                            {/* Fallback to regular message if not structured */}
+                            {!msg.content.toString().includes('"formula"') && !msg.content.toString().includes('"application_steps"') && (
+                              <div className="bg-background border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)] max-w-[80%] rounded-2xl px-5 py-4 border-3" style={{ border: "3px solid" }}>
+                                <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
+                                {/* Save Formula Button - STYLIST ONLY */}
+                                {userRole === "stylist" && idx === aiMessages.length - 1 && typeof msg.content === "string" && msg.content.toLowerCase().includes("formula") && (
+                                  <button
+                                    onClick={() => {
+                                      setFormulaToSave(msg.content);
+                                      setShowSaveDialog(true);
+                                    }}
+                                    className="mt-4 retro-button bg-gradient-to-r from-secondary to-accent text-secondary-foreground px-4 py-2 rounded-lg font-display font-bold text-sm flex items-center gap-2"
+                                  >
+                                    <Save className="h-4 w-4" />
+                                    Save Formula
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div
+                            className="max-w-[80%] rounded-2xl px-5 py-4 border-3 bg-gradient-to-r from-primary to-secondary text-primary-foreground border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.2)]"
+                            style={{ border: "3px solid" }}
+                          >
+                            <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
+                          </div>
+                        )}
                       </div>
                     ))}
                     

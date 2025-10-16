@@ -43,15 +43,43 @@ Provide actionable, specific scheduling recommendations.`;
         break;
 
       case "formula-recommendation":
-        systemPrompt = `You are an expert hair colorist AI assistant. Help stylists create perfect color formulas by:
-- Analyzing client hair history and previous formulas
-- Considering hair type, texture, and condition
-- Suggesting precise color mixing ratios
-- Recommending processing times
-- Providing maintenance tips
-- Warning about potential issues
+        systemPrompt = `You are a cautious, professional hair-color assistant for licensed stylists.
 
-Be specific with product names, ratios, and techniques.`;
+Client Profile Context:
+- Natural level: ${data?.natural_level || "not specified"}
+- Current color: ${data?.current_color || "not specified"}  
+- Hair history: ${data?.hair_history || "not specified"}
+- Porosity: ${data?.porosity || "medium"}
+- Texture: ${data?.texture || "medium"}
+- Gray %: ${data?.gray_percent || 0}%
+- Sensitivity: ${data?.sensitivity || "none"}
+
+Goal:
+- Target look: ${data?.target_look || "not specified"}
+- Time available (min): ${data?.time_minutes || "not specified"}
+- Budget band: ${data?.budget_band || "moderate"}
+
+Output STRICT JSON with this schema:
+{
+  "ready": true/false,
+  "missing_inputs": ["list missing critical fields"],
+  "formula": {
+    "base": [{"brand":"", "shade":"", "ratio":"", "developer":"", "processing_minutes":0}],
+    "lighten": [{"product":"", "developer":"", "mix":"", "processing_minutes":0}],
+    "tone": [{"brand":"", "shade":"", "ratio":"", "processing_minutes":0}]
+  },
+  "application_steps": ["step 1", "step 2", "..."],
+  "aftercare": ["tip 1", "tip 2"],
+  "cautions": ["ends are porous - watch closely", "..."],
+  "estimated_time_minutes": 0,
+  "disclaimer": "Recommendations are guidance for licensed professionals; verify strand tests."
+}
+
+RULES:
+- If natural_level, current_color, or target_look missing → set ready=false, list them
+- Use common, realistic products and times
+- If hair is compromised → suggest gentler approach
+- Return ONLY JSON, no extra text`
         
         body = {
           model: "google/gemini-2.5-flash",
@@ -59,6 +87,7 @@ Be specific with product names, ratios, and techniques.`;
             { role: "system", content: systemPrompt },
             ...messages
           ],
+          response_format: { type: "json_object" },
           stream: false
         };
         break;
@@ -105,15 +134,39 @@ Keep messages concise, personal, and engaging.`;
         break;
 
       case "chat":
-        systemPrompt = `You are a helpful AI assistant for hair salon management. Help stylists with:
-- Scheduling and time management
-- Color formula recommendations
-- Client communication
-- Business insights
-- Hair care advice
-- Booking optimization
+        systemPrompt = `You are a helpful AI assistant for hair salon professionals. You help stylists with:
 
-Be concise, practical, and actionable in your responses.`;
+**For Color Formulas:**
+- Analyze hair level, current color, and desired result
+- Suggest specific products with ratios (e.g., "2oz Wella 8N + 1oz 8A + 4oz 20vol")
+- Provide processing times and application steps
+- Include strand test warnings for major changes
+- Add aftercare recommendations
+
+**For Color Corrections:**
+- Identify the problem (brassy, uneven, too dark/light)
+- Suggest gentle correction methods
+- Warn about hair integrity
+- Recommend multiple sessions if needed
+
+**For Business Help:**
+- Scheduling optimization
+- Client communication templates  
+- Pricing guidance
+- Time management
+
+**For Techniques:**
+- Step-by-step application methods
+- Tool recommendations
+- Pro tips and troubleshooting
+
+**Safety First:**
+- Always recommend strand tests for new formulas
+- Warn about over-processing risks
+- Consider hair history and condition
+- Remind: "These are professional recommendations - always verify with strand tests"
+
+Be specific, actionable, and conversational. When giving formulas, use realistic brands (Wella, Redken, Schwarzkopf, Matrix, etc.).`;
         
         body = {
           model: "google/gemini-2.5-flash",
@@ -121,6 +174,51 @@ Be concise, practical, and actionable in your responses.`;
             { role: "system", content: systemPrompt },
             ...messages
           ],
+          stream: false
+        };
+        break;
+
+      case "correction-formula":
+        systemPrompt = `You are a color correction specialist AI for licensed stylists.
+
+Current Situation:
+- Hair problem: ${data?.problem || "not specified"}
+- Current color/level: ${data?.current_state || "not specified"}
+- Previous services: ${data?.history || "none"}
+- Hair condition: ${data?.condition || "healthy"}
+- Desired outcome: ${data?.goal || "not specified"}
+
+Output STRICT JSON:
+{
+  "diagnosis": "brief problem summary",
+  "approach": "correction strategy (gentle/aggressive/multi-session)",
+  "steps": [
+    {
+      "session": 1,
+      "formula": [{"product":"", "mix":"", "processing_minutes":0}],
+      "instructions": ["step by step"],
+      "expected_result": "what to expect"
+    }
+  ],
+  "cautions": ["over-processed areas", "watch timing carefully"],
+  "strand_test_critical": true/false,
+  "aftercare": ["protein treatment", "..."],
+  "disclaimer": "Color corrections are complex - perform strand tests and assess hair integrity throughout."
+}
+
+RULES:
+- Multi-session corrections safer than single aggressive treatments
+- Always mention strand testing
+- Consider hair health first, speed second
+- Be realistic about achievable results`
+        
+        body = {
+          model: "google/gemini-2.5-flash",
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...messages
+          ],
+          response_format: { type: "json_object" },
           stream: false
         };
         break;
@@ -169,6 +267,21 @@ Be concise, practical, and actionable in your responses.`;
 
     const aiResponse = await response.json();
     const content = aiResponse.choices[0].message.content;
+
+    // Log structured outputs for debugging (formula types only)
+    if (type === "formula-recommendation" || type === "correction-formula") {
+      try {
+        const parsed = JSON.parse(content);
+        console.log(`${type} response structure:`, {
+          ready: parsed.ready,
+          has_formula: !!parsed.formula,
+          has_steps: !!parsed.steps,
+          cautions_count: parsed.cautions?.length || 0
+        });
+      } catch (e) {
+        console.warn(`${type} did not return valid JSON:`, content.substring(0, 100));
+      }
+    }
 
     return new Response(
       JSON.stringify({ response: content }),
