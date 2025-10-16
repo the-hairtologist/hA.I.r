@@ -98,31 +98,8 @@ const SubscriptionNudgeWrapper = () => {
 
 const App = () => {
   useEffect(() => {
-    const initializeSystems = async () => {
-      try {
-        // Initialize mobile optimizations first (critical for mobile UX)
-        initMobileOptimizations();
-        
-        // Initialize cross-platform optimizer
-        const { crossPlatformOptimizer } = await import('@/lib/platform/CrossPlatformOptimizer');
-        await crossPlatformOptimizer.initialize();
-        
-        // Initialize self-healing system
-        const { selfHealing } = await import('@/lib/selfHealing');
-        await selfHealing.initialize();
-        
-        // Initialize performance monitoring (dev only)
-        if (import.meta.env.DEV) {
-          const { performanceMonitor } = await import('@/lib/performanceMonitor');
-          performanceMonitor.init();
-          setTimeout(() => performanceMonitor.report(), 10000);
-        }
-      } catch (error) {
-        // Systems will retry on next load
-      }
-    };
-    
-    initializeSystems();
+    // Mobile optimizations are already initialized in main.tsx
+    // Additional systems will initialize on-demand for maximum stability
   }, []);
 
   return (
