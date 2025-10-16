@@ -192,6 +192,36 @@ TONE: Professional, personalized, supportive. You know their history - use it to
       { role: 'user', content: message }
     ];
 
+    // PHASE 1: Smart Model Selection for Cost Optimization
+    const selectOptimalModel = (query: string): string => {
+      const lowerQuery = query.toLowerCase();
+      
+      // Simple queries - use fastest/cheapest model
+      if (query.length < 50 || lowerQuery.match(/^(hi|hello|thanks|thank you|yes|no|okay|ok)$/i)) {
+        return 'google/gemini-2.5-flash-lite';
+      }
+      
+      // Color correction (complex reasoning) - use pro model
+      if (lowerQuery.includes('correction') || lowerQuery.includes('fix') || 
+          lowerQuery.includes('problem') || lowerQuery.includes('damaged')) {
+        return 'google/gemini-2.5-pro';
+      }
+      
+      // Formula generation (balanced) - use flash
+      if (lowerQuery.includes('formula') || lowerQuery.includes('color') || 
+          lowerQuery.includes('tone') || lowerQuery.includes('dye')) {
+        return 'google/gemini-2.5-flash';
+      }
+      
+      // Default balanced model
+      return 'google/gemini-2.5-flash';
+    };
+
+    const selectedModel = selectOptimalModel(message);
+    const startTime = Date.now();
+    
+    console.log(`Smart routing: Using ${selectedModel} for query type`);
+
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -199,7 +229,7 @@ TONE: Professional, personalized, supportive. You know their history - use it to
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: selectedModel,
         messages: messages,
         max_tokens: 2000,
       }),
@@ -221,13 +251,37 @@ TONE: Professional, personalized, supportive. You know their history - use it to
     }
 
     const data = await response.json();
-    console.log('AI response received successfully');
+    const responseTime = Date.now() - startTime;
+    console.log(`AI response received in ${responseTime}ms using ${selectedModel}`);
+    
+    // Track model performance for optimization
+    if (userId) {
+      try {
+        const supabase = createClient(
+          Deno.env.get('SUPABASE_URL') ?? '',
+          Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+        );
+        
+        await supabase.from('ai_model_performance').insert({
+          user_id: userId,
+          query_text: message.substring(0, 500),
+          query_type: message.toLowerCase().includes('formula') ? 'formula' : 'general',
+          model_used: selectedModel,
+          response_time_ms: responseTime,
+          tokens_used: data.usage?.total_tokens || 0,
+        });
+      } catch (err) {
+        console.log('Could not log performance metrics:', err);
+      }
+    }
     
     const assistantMessage = addWatermark(data.choices[0].message.content, userId);
 
     return await compressedJsonResponse({ 
       response: assistantMessage,
-      usage: data.usage 
+      usage: data.usage,
+      model_used: selectedModel,
+      response_time_ms: responseTime
     }, 200);
   } catch (error: any) {
     console.error('Error in hair-assistant-chat function:', error);

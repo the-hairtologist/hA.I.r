@@ -1,5 +1,20 @@
 project_id = "iyotklwiwyljospfqnoy"
 
+[functions.validate-formula]
+verify_jwt = true
+
+[functions.analyze-hair-photo]
+verify_jwt = true
+
+[functions.quick-formula]
+verify_jwt = true
+
+[functions.track-formula-outcome]
+verify_jwt = true
+
+[functions.predict-needs]
+verify_jwt = true
+
 [functions.automated-reminders]
 verify_jwt = false
 

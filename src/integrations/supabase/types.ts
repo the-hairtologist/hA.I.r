@@ -289,6 +289,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_model_performance: {
+        Row: {
+          created_at: string | null
+          id: string
+          model_used: string
+          query_text: string
+          query_type: string | null
+          response_time_ms: number | null
+          tokens_used: number | null
+          user_id: string | null
+          user_satisfaction: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          model_used: string
+          query_text: string
+          query_type?: string | null
+          response_time_ms?: number | null
+          tokens_used?: number | null
+          user_id?: string | null
+          user_satisfaction?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          model_used?: string
+          query_text?: string
+          query_type?: string | null
+          response_time_ms?: number | null
+          tokens_used?: number | null
+          user_id?: string | null
+          user_satisfaction?: number | null
+        }
+        Relationships: []
+      }
       appointment_calendar_events: {
         Row: {
           appointment_id: string
@@ -504,6 +540,42 @@ export type Database = {
           record_id?: string | null
           table_name?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      cached_formulas: {
+        Row: {
+          condition: string
+          created_at: string | null
+          current_level: number
+          formula_json: Json
+          id: string
+          last_used_at: string | null
+          target_level: number
+          tone: string
+          usage_count: number | null
+        }
+        Insert: {
+          condition: string
+          created_at?: string | null
+          current_level: number
+          formula_json: Json
+          id?: string
+          last_used_at?: string | null
+          target_level: number
+          tone: string
+          usage_count?: number | null
+        }
+        Update: {
+          condition?: string
+          created_at?: string | null
+          current_level?: number
+          formula_json?: Json
+          id?: string
+          last_used_at?: string | null
+          target_level?: number
+          tone?: string
+          usage_count?: number | null
         }
         Relationships: []
       }
@@ -1614,6 +1686,91 @@ export type Database = {
           },
         ]
       }
+      formula_outcomes: {
+        Row: {
+          client_id: string | null
+          conversation_message_id: string | null
+          created_at: string | null
+          formula_id: string | null
+          id: string
+          outcome_notes: string | null
+          outcome_rating: string | null
+          stylist_id: string | null
+          what_didnt_work: string | null
+          what_worked: string | null
+          would_use_again: boolean | null
+        }
+        Insert: {
+          client_id?: string | null
+          conversation_message_id?: string | null
+          created_at?: string | null
+          formula_id?: string | null
+          id?: string
+          outcome_notes?: string | null
+          outcome_rating?: string | null
+          stylist_id?: string | null
+          what_didnt_work?: string | null
+          what_worked?: string | null
+          would_use_again?: boolean | null
+        }
+        Update: {
+          client_id?: string | null
+          conversation_message_id?: string | null
+          created_at?: string | null
+          formula_id?: string | null
+          id?: string
+          outcome_notes?: string | null
+          outcome_rating?: string | null
+          stylist_id?: string | null
+          what_didnt_work?: string | null
+          what_worked?: string | null
+          would_use_again?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formula_outcomes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "formula_outcomes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "formula_outcomes_conversation_message_id_fkey"
+            columns: ["conversation_message_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conversation_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "formula_outcomes_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "formulas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "formula_outcomes_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "formula_outcomes_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       formula_products: {
         Row: {
           created_at: string
@@ -1652,6 +1809,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      formula_validations: {
+        Row: {
+          blockers: string[] | null
+          created_at: string | null
+          formula_content: Json
+          id: string
+          is_safe: boolean
+          user_id: string | null
+          validated_at: string | null
+          validation_result: Json
+          warnings: string[] | null
+        }
+        Insert: {
+          blockers?: string[] | null
+          created_at?: string | null
+          formula_content: Json
+          id?: string
+          is_safe: boolean
+          user_id?: string | null
+          validated_at?: string | null
+          validation_result: Json
+          warnings?: string[] | null
+        }
+        Update: {
+          blockers?: string[] | null
+          created_at?: string | null
+          formula_content?: Json
+          id?: string
+          is_safe?: boolean
+          user_id?: string | null
+          validated_at?: string | null
+          validation_result?: Json
+          warnings?: string[] | null
+        }
+        Relationships: []
       }
       formulas: {
         Row: {
@@ -1736,6 +1929,51 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "stylist_profiles"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      hair_analysis_results: {
+        Row: {
+          analysis_result: Json
+          client_id: string | null
+          confidence_scores: Json | null
+          created_at: string | null
+          id: string
+          image_url: string
+          user_id: string | null
+        }
+        Insert: {
+          analysis_result: Json
+          client_id?: string | null
+          confidence_scores?: Json | null
+          created_at?: string | null
+          id?: string
+          image_url: string
+          user_id?: string | null
+        }
+        Update: {
+          analysis_result?: Json
+          client_id?: string | null
+          confidence_scores?: Json | null
+          created_at?: string | null
+          id?: string
+          image_url?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hair_analysis_results_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hair_analysis_results_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
           },
         ]
       }
@@ -2161,6 +2399,51 @@ export type Database = {
           },
           {
             foreignKeyName: "portfolio_photos_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      predictive_insights: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          insight_data: Json
+          insight_type: string
+          stylist_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          insight_data: Json
+          insight_type: string
+          stylist_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          insight_data?: Json
+          insight_type?: string
+          stylist_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "predictive_insights_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "predictive_insights_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
             referencedRelation: "stylist_profiles"
@@ -2748,6 +3031,62 @@ export type Database = {
           },
         ]
       }
+      stylist_formula_history: {
+        Row: {
+          client_id: string | null
+          created_at: string | null
+          formula_json: Json
+          id: string
+          outcome_rating: string | null
+          stylist_id: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string | null
+          formula_json: Json
+          id?: string
+          outcome_rating?: string | null
+          stylist_id?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string | null
+          formula_json?: Json
+          id?: string
+          outcome_rating?: string | null
+          stylist_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stylist_formula_history_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stylist_formula_history_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "stylist_formula_history_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stylist_formula_history_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stylist_notes: {
         Row: {
           content: string
@@ -2771,6 +3110,57 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      stylist_preferences: {
+        Row: {
+          formula_patterns: Json | null
+          id: string
+          last_analyzed_at: string | null
+          preferred_brands: Json | null
+          processing_time_tendency: string | null
+          stylist_id: string | null
+          tone_adjustment_style: string | null
+          typical_developer_volumes: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          formula_patterns?: Json | null
+          id?: string
+          last_analyzed_at?: string | null
+          preferred_brands?: Json | null
+          processing_time_tendency?: string | null
+          stylist_id?: string | null
+          tone_adjustment_style?: string | null
+          typical_developer_volumes?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          formula_patterns?: Json | null
+          id?: string
+          last_analyzed_at?: string | null
+          preferred_brands?: Json | null
+          processing_time_tendency?: string | null
+          stylist_id?: string | null
+          tone_adjustment_style?: string | null
+          typical_developer_volumes?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stylist_preferences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: true
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stylist_preferences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: true
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       stylist_profiles: {
         Row: {
@@ -3407,6 +3797,10 @@ export type Database = {
       }
       check_client_milestones: {
         Args: { p_client_id: string; p_stylist_id: string }
+        Returns: undefined
+      }
+      cleanup_expired_insights: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       cleanup_old_error_logs: {

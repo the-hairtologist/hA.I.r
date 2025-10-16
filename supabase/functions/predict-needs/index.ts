@@ -1,0 +1,188 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) throw new Error('Missing authorization header');
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Unauthorized');
+
+    // Get stylist ID
+    const { data: stylist } = await supabase
+      .from('stylist_profiles')
+      .select('id, business_name')
+      .eq('user_id', user.id)
+      .single();
+
+    if (!stylist) {
+      throw new Error('Stylist profile not found');
+    }
+
+    console.log('Generating predictions for stylist:', stylist.id);
+
+    // Get upcoming appointments (next 7 days)
+    const now = new Date();
+    const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+    const { data: appointments } = await supabase
+      .from('appointments')
+      .select(`
+        id,
+        appointment_date,
+        service_type,
+        notes,
+        client_profiles (
+          full_name,
+          hair_type,
+          hair_goals
+        )
+      `)
+      .eq('stylist_id', stylist.id)
+      .gte('appointment_date', now.toISOString())
+      .lte('appointment_date', nextWeek.toISOString())
+      .eq('status', 'scheduled')
+      .order('appointment_date', { ascending: true });
+
+    if (!appointments || appointments.length === 0) {
+      return new Response(
+        JSON.stringify({
+          insights: [],
+          message: 'No upcoming appointments in the next 7 days'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log(`Found ${appointments.length} upcoming appointments`);
+
+    // Analyze patterns
+    const serviceTypes: Record<string, number> = {};
+    appointments.forEach(apt => {
+      serviceTypes[apt.service_type] = (serviceTypes[apt.service_type] || 0) + 1;
+    });
+
+    const insights = [];
+
+    // Pattern 1: Multiple balayages
+    if (serviceTypes['Balayage'] >= 2) {
+      insights.push({
+        type: 'service_pattern',
+        title: `${serviceTypes['Balayage']} Balayage Appointments This Week`,
+        description: 'High volume of blonde work scheduled',
+        actions: [
+          'Pre-generate blonde balayage formulas',
+          'Check inventory: lightener, toner, bond builder',
+          'Review balayage placement techniques'
+        ],
+        confidence: 0.95,
+        inventory_items: ['Bleach/Lightener', 'T18/T14 Toner', 'Olaplex/Bond Builder', '20-30vol Developer']
+      });
+    }
+
+    // Pattern 2: Color corrections
+    if (serviceTypes['Color Correction'] >= 1) {
+      insights.push({
+        type: 'service_pattern',
+        title: `${serviceTypes['Color Correction']} Color Correction${serviceTypes['Color Correction'] > 1 ? 's' : ''} Scheduled`,
+        description: 'Complex correction work ahead',
+        actions: [
+          'Review correction formulas and techniques',
+          'Ensure extra time allocated',
+          'Check strand test supplies',
+          'Prepare client expectation scripts'
+        ],
+        confidence: 0.90,
+        inventory_items: ['Color Remover', 'Multiple Developer Volumes', 'Bond Treatment', 'Filler Colors']
+      });
+    }
+
+    // Pattern 3: Root touch-ups
+    const rootTouchups = (serviceTypes['Root Touch-up'] || 0) + (serviceTypes['Root Retouch'] || 0);
+    if (rootTouchups >= 3) {
+      insights.push({
+        type: 'service_pattern',
+        title: `${rootTouchups} Root Touch-ups This Week`,
+        description: 'High maintenance client volume',
+        actions: [
+          'Pre-measure common root formulas',
+          'Streamline application setup',
+          'Prepare consultation shortcuts'
+        ],
+        confidence: 0.85,
+        inventory_items: ['Common Root Shades', '20vol Developer', 'Application Brushes']
+      });
+    }
+
+    // Pattern 4: New vs returning clients
+    const clientNames = appointments
+      .map(a => {
+        const profiles = a.client_profiles as any;
+        return Array.isArray(profiles) ? profiles[0]?.full_name : profiles?.full_name;
+      })
+      .filter((name): name is string => Boolean(name));
+    const uniqueClients = new Set(clientNames).size;
+    if (uniqueClients !== appointments.length) {
+      insights.push({
+        type: 'client_pattern',
+        title: 'Mix of New and Returning Clients',
+        description: `${uniqueClients} unique clients across ${appointments.length} appointments`,
+        actions: [
+          'Review returning client history before appointments',
+          'Prepare new client consultation forms',
+          'Check previous formulas for returning clients'
+        ],
+        confidence: 0.80
+      });
+    }
+
+    // Store predictions in database
+    for (const insight of insights) {
+      await supabase.from('predictive_insights').insert({
+        stylist_id: stylist.id,
+        insight_type: insight.type,
+        insight_data: insight,
+        confidence_score: insight.confidence,
+        expires_at: nextWeek.toISOString()
+      });
+    }
+
+    console.log(`Generated ${insights.length} predictions`);
+
+    return new Response(
+      JSON.stringify({
+        insights,
+        period: {
+          start: now.toISOString(),
+          end: nextWeek.toISOString()
+        },
+        appointments_analyzed: appointments.length
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    console.error('Prediction error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    return new Response(
+      JSON.stringify({ error: errorMessage }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+});
