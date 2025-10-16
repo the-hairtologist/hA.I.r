@@ -52,6 +52,13 @@ export default function AppDirectory() {
       color: "text-green-500"
     },
     {
+      title: "Design System",
+      description: "Visual design tokens, components showcase, style guide",
+      icon: Palette,
+      path: "/design-system",
+      color: "text-purple-500"
+    },
+    {
       title: "Access Codes",
       description: "Generate and manage platform access codes",
       icon: Lock,

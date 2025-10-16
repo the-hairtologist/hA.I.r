@@ -78,6 +78,7 @@ const InstallPWA = lazy(() => import('@/pages/InstallPWA'));
 const ZapierIntegration = lazy(() => import('@/pages/ZapierIntegration'));
 const AuditReport = lazy(() => import('@/pages/AuditReport'));
 const ClientRetention = lazy(() => import('@/pages/ClientRetention'));
+const DesignSystem = lazy(() => import('@/pages/DesignSystem'));
 
 export const AppRoutes = () => (
   <>
@@ -324,6 +325,10 @@ export const AppRoutes = () => (
     <Route
       path="/system-health"
       element={<ProtectedRoute allowedRoles={['admin']}><SystemHealth /></ProtectedRoute>}
+    />
+    <Route
+      path="/design-system"
+      element={<ProtectedRoute allowedRoles={['admin']}><DesignSystem /></ProtectedRoute>}
     />
 
     {/* Error Routes */}
