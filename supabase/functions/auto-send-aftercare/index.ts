@@ -69,12 +69,38 @@ serve(async (req) => {
       template.products as string[]
     );
 
+    // Check email preferences
+    const { data: prefs } = await supabase
+      .from("email_preferences")
+      .select("*")
+      .eq("email", appointment.client_profiles.email)
+      .maybeSingle();
+
+    if (prefs && !prefs.appointment_reminders_enabled) {
+      console.log(`⏭️ Skipping aftercare email - user opted out: ${appointment.client_profiles.email}`);
+      return new Response(
+        JSON.stringify({ success: true, message: "User opted out of emails" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Send email
-    await resend.emails.send({
+    const emailResult = await resend.emails.send({
       from: "hA.I.r Aftercare <onboarding@resend.dev>",
       to: [appointment.client_profiles.email],
       subject: `${template.title} - Your Care Guide`,
       html: emailHtml,
+    });
+
+    // Log to email_sequence_logs
+    await supabase.from("email_sequence_logs").insert({
+      client_id: appointment.client_id,
+      stylist_id: appointment.stylist_id,
+      enrollment_id: null,
+      step_id: null,
+      email_address: appointment.client_profiles.email,
+      subject: `${template.title} - Your Care Guide`,
+      resend_email_id: emailResult.data?.id,
     });
 
     console.log(`✅ Aftercare email sent for appointment ${appointment_id}`);
