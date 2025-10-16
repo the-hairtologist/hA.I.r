@@ -72,50 +72,50 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-green-500" />
-          Weekly Revenue Optimizer
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <TrendingUp className="h-5 w-5 text-success flex-shrink-0" />
+          <span className="truncate">Weekly Revenue Optimizer</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Current Week Status */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <div className="text-sm text-muted-foreground">This Week</div>
-            <div className="text-2xl font-bold text-green-600">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2 p-3 rounded-lg bg-success/10 border border-success/20">
+            <div className="text-sm text-muted-foreground font-medium">This Week</div>
+            <div className="text-2xl sm:text-3xl font-bold text-success">
               ${analysis.currentRevenue.toLocaleString()}
             </div>
             <div className="text-xs text-muted-foreground">
-              {analysis.thisWeekAppointments} appointments
+              {analysis.thisWeekAppointments} appointments booked
             </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="text-sm text-muted-foreground">Potential</div>
-            <div className="text-2xl font-bold text-blue-600">
+          <div className="space-y-2 p-3 rounded-lg bg-info/10 border border-info/20">
+            <div className="text-sm text-muted-foreground font-medium">Potential</div>
+            <div className="text-2xl sm:text-3xl font-bold text-info">
               ${analysis.totalPotential.toLocaleString()}
             </div>
-            <Badge variant={upliftPercentage > 30 ? "default" : "secondary"}>
-              +{upliftPercentage}% possible
+            <Badge variant={upliftPercentage > 30 ? "default" : "secondary"} className="text-xs">
+              +{upliftPercentage}% possible uplift
             </Badge>
           </div>
         </div>
 
         {/* Opportunities */}
-        <div className="space-y-3 border-t pt-4">
-          <div className="text-sm font-semibold">Growth Opportunities</div>
+        <div className="space-y-3 border-t border-border/50 pt-4">
+          <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Growth Opportunities</div>
 
           {analysis.rebookOpportunities > 0 && (
-            <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <Calendar className="h-4 w-4 text-blue-600 mt-0.5" />
-              <div className="flex-1 space-y-1">
+            <div className="flex items-start gap-3 p-3 sm:p-4 bg-info/10 border border-info/20 rounded-lg">
+              <Calendar className="h-5 w-5 text-info mt-1 flex-shrink-0" />
+              <div className="flex-1 space-y-2 min-w-0">
                 <div className="text-sm font-medium">
                   {analysis.rebookOpportunities} Rebook Opportunities
                 </div>
                 <div className="text-xs text-muted-foreground">
                   Potential revenue: ${analysis.potentialRebookRevenue.toLocaleString()}
                 </div>
-                <button className="text-xs font-medium text-blue-600 underline hover:no-underline">
+                <button className="min-h-[44px] px-3 py-2 text-sm font-medium text-info bg-info/10 hover:bg-info/20 rounded-md transition-colors">
                   Send rebook reminders
                 </button>
               </div>
@@ -123,16 +123,16 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
           )}
 
           {analysis.emptySlots > 10 && (
-            <div className="flex items-start gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
-              <div className="flex-1 space-y-1">
+            <div className="flex items-start gap-3 p-3 sm:p-4 bg-warning/10 border border-warning/20 rounded-lg">
+              <AlertCircle className="h-5 w-5 text-warning mt-1 flex-shrink-0" />
+              <div className="flex-1 space-y-2 min-w-0">
                 <div className="text-sm font-medium">
                   {analysis.emptySlots} Empty Time Slots
                 </div>
                 <div className="text-xs text-muted-foreground">
                   Potential revenue: ${analysis.potentialEmptySlotRevenue.toLocaleString()}
                 </div>
-                <button className="text-xs font-medium text-yellow-600 underline hover:no-underline">
+                <button className="min-h-[44px] px-3 py-2 text-sm font-medium text-warning bg-warning/10 hover:bg-warning/20 rounded-md transition-colors">
                   Fill with waitlist clients
                 </button>
               </div>
@@ -140,8 +140,8 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
           )}
 
           {analysis.rebookOpportunities === 0 && analysis.emptySlots < 10 && (
-            <div className="flex items-center gap-2 text-sm text-green-600">
-              <DollarSign className="h-4 w-4" />
+            <div className="flex items-center gap-3 p-3 text-sm text-success bg-success/10 border border-success/20 rounded-lg">
+              <DollarSign className="h-5 w-5 flex-shrink-0" />
               <span>Great job! Your week is well-optimized.</span>
             </div>
           )}

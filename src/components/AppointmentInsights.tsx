@@ -118,42 +118,42 @@ export const AppointmentInsights = ({
       {noShowRisk.risk !== 'unknown' && (
         <Alert className={cn(
           "border-l-4",
-          noShowRisk.risk === 'critical' && "border-red-500 bg-red-50",
-          noShowRisk.risk === 'high' && "border-orange-500 bg-orange-50",
-          noShowRisk.risk === 'medium' && "border-yellow-500 bg-yellow-50",
-          noShowRisk.risk === 'low' && "border-green-500 bg-green-50"
+          noShowRisk.risk === 'critical' && "border-destructive bg-destructive/10",
+          noShowRisk.risk === 'high' && "border-warning bg-warning/10",
+          noShowRisk.risk === 'medium' && "border-warning/60 bg-warning/5",
+          noShowRisk.risk === 'low' && "border-success bg-success/10"
         )}>
           <AlertTriangle className={cn(
-            "h-4 w-4",
-            noShowRisk.risk === 'critical' && "text-red-500",
-            noShowRisk.risk === 'high' && "text-orange-500",
-            noShowRisk.risk === 'medium' && "text-yellow-500",
-            noShowRisk.risk === 'low' && "text-green-500"
+            "h-5 w-5",
+            noShowRisk.risk === 'critical' && "text-destructive",
+            noShowRisk.risk === 'high' && "text-warning",
+            noShowRisk.risk === 'medium' && "text-warning/80",
+            noShowRisk.risk === 'low' && "text-success"
           )} />
           <AlertDescription>
-            <div className="font-semibold">No-Show Prediction</div>
-            <div className="text-sm text-muted-foreground">{noShowRisk.message}</div>
+            <div className="font-semibold text-base">No-Show Prediction</div>
+            <div className="text-sm text-muted-foreground mt-1">{noShowRisk.message}</div>
           </AlertDescription>
         </Alert>
       )}
 
       {/* Revenue Potential */}
       {revenuePotential.potential !== 'unknown' && (
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-3 text-sm p-2 rounded-lg bg-accent/5">
           <DollarSign className={cn(
-            "h-4 w-4",
-            revenuePotential.potential === 'vip' && "text-purple-500",
-            revenuePotential.potential === 'high' && "text-blue-500",
-            revenuePotential.potential === 'medium' && "text-green-500",
-            revenuePotential.potential === 'low' && "text-gray-500"
+            "h-5 w-5 flex-shrink-0",
+            revenuePotential.potential === 'vip' && "text-primary",
+            revenuePotential.potential === 'high' && "text-info",
+            revenuePotential.potential === 'medium' && "text-success",
+            revenuePotential.potential === 'low' && "text-muted-foreground"
           )} />
           <span className="text-muted-foreground">{revenuePotential.message}</span>
         </div>
       )}
 
       {/* Rebook Timing */}
-      <div className="flex items-center gap-2 text-sm">
-        <Calendar className="h-4 w-4 text-blue-500" />
+      <div className="flex items-center gap-3 text-sm p-2 rounded-lg bg-accent/5">
+        <Calendar className="h-5 w-5 flex-shrink-0 text-info" />
         <span className="text-muted-foreground">
           Suggest rebooking in {rebookTiming.weeks} weeks
         </span>
@@ -161,8 +161,8 @@ export const AppointmentInsights = ({
 
       {/* Client Reliability Badge */}
       {clientHistory && clientHistory.totalAppointments > 0 && (
-        <div className="flex items-center gap-2">
-          <CheckCircle className="h-4 w-4 text-green-500" />
+        <div className="flex items-center gap-3 p-2 rounded-lg bg-accent/5">
+          <CheckCircle className="h-5 w-5 flex-shrink-0 text-success" />
           <span className="text-sm text-muted-foreground">
             {clientHistory.completedAppointments} of {clientHistory.totalAppointments} appointments completed
           </span>

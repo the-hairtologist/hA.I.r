@@ -51,7 +51,7 @@ export const ClientRiskIndicator = ({
       case 'critical':
         return {
           icon: AlertTriangle,
-          color: 'text-red-500 border-red-200 bg-red-50',
+          color: 'text-destructive border-destructive/30 bg-destructive/10',
           badgeVariant: 'destructive' as const,
           title: '⚠️ High Churn Risk',
           message: `${risk.days} days since last visit. Immediate action recommended.`,
@@ -60,7 +60,7 @@ export const ClientRiskIndicator = ({
       case 'high':
         return {
           icon: TrendingDown,
-          color: 'text-orange-500 border-orange-200 bg-orange-50',
+          color: 'text-warning border-warning/30 bg-warning/10',
           badgeVariant: 'default' as const,
           title: '⚡ At Risk',
           message: `${risk.days} days since last visit. Consider reaching out.`,
@@ -69,7 +69,7 @@ export const ClientRiskIndicator = ({
       case 'medium':
         return {
           icon: Clock,
-          color: 'text-yellow-500 border-yellow-200 bg-yellow-50',
+          color: 'text-warning/80 border-warning/20 bg-warning/5',
           badgeVariant: 'secondary' as const,
           title: '👀 Watch List',
           message: `${risk.days} days since last visit. Monitor engagement.`,
@@ -78,7 +78,7 @@ export const ClientRiskIndicator = ({
       case 'new':
         return {
           icon: CheckCircle,
-          color: 'text-blue-500 border-blue-200 bg-blue-50',
+          color: 'text-info border-info/30 bg-info/10',
           badgeVariant: 'outline' as const,
           title: '🎉 New Client',
           message: 'No appointment history yet. Great opportunity!',
@@ -87,7 +87,7 @@ export const ClientRiskIndicator = ({
       default:
         return {
           icon: CheckCircle,
-          color: 'text-green-500 border-green-200 bg-green-50',
+          color: 'text-success border-success/30 bg-success/10',
           badgeVariant: 'outline' as const,
           title: '✅ Healthy',
           message: 'Client is engaged and active.',
@@ -124,7 +124,8 @@ export const ClientRiskIndicator = ({
         {config.action && onActionClick && (
           <button
             onClick={onActionClick}
-            className="text-sm font-medium underline hover:no-underline"
+            className="text-sm font-medium underline hover:no-underline min-h-[44px] min-w-[44px] flex items-center justify-start"
+            aria-label={config.action}
           >
             {config.action}
           </button>
