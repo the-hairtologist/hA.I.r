@@ -37,21 +37,29 @@ class Logger implements LoggerInterface {
       this.logs.shift();
     }
 
-    // Console output with color coding
     const prefix = label ? `[${label}]` : '';
     const fullMessage = `${prefix} ${message}`;
+    const isDevelopment = import.meta.env.DEV;
 
+    // Only output to console in development or for errors
     switch (level) {
       case 'DEBUG':
-        console.debug(fullMessage, logContext);
+        if (isDevelopment) {
+          console.debug(fullMessage, logContext);
+        }
         break;
       case 'INFO':
-        console.info(fullMessage, logContext);
+        if (isDevelopment) {
+          console.info(fullMessage, logContext);
+        }
         break;
       case 'WARN':
-        console.warn(fullMessage, logContext);
+        if (isDevelopment) {
+          console.warn(fullMessage, logContext);
+        }
         break;
       case 'ERROR':
+        // Always log errors
         console.error(fullMessage, logContext);
         break;
     }
