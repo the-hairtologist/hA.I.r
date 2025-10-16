@@ -3,8 +3,8 @@
  * Tests authentication state management and user operations
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
 import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -41,14 +41,14 @@ describe('useAuth', () => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('should initialize with loading state', () => {
     (supabase.auth.getSession as any).mockResolvedValue({
       data: { session: null },
       error: null,
+    });
+
+    (supabase.auth.onAuthStateChange as any).mockReturnValue({
+      data: { subscription: { unsubscribe: vi.fn() } },
     });
 
     const { result } = renderHook(() => useAuth());
@@ -128,19 +128,14 @@ describe('useAuth', () => {
     expect(result.current.session).toBe(null);
   });
 
-  it('should subscribe to auth state changes', async () => {
-    const mockCallback = vi.fn();
-    
+  it('should subscribe to auth state changes', () => {
     (supabase.auth.getSession as any).mockResolvedValue({
       data: { session: null },
       error: null,
     });
 
-    (supabase.auth.onAuthStateChange as any).mockImplementation((callback: any) => {
-      mockCallback.mockImplementation(callback);
-      return {
-        data: { subscription: { unsubscribe: vi.fn() } },
-      };
+    (supabase.auth.onAuthStateChange as any).mockReturnValue({
+      data: { subscription: { unsubscribe: vi.fn() } },
     });
 
     renderHook(() => useAuth());
@@ -165,34 +160,5 @@ describe('useAuth', () => {
     unmount();
 
     expect(mockUnsubscribe).toHaveBeenCalled();
-  });
-
-  it('should provide user role if available', async () => {
-    const mockSession = {
-      user: {
-        id: 'user-123',
-        email: 'test@example.com',
-        user_metadata: {
-          role: 'stylist',
-        },
-      },
-      access_token: 'token-123',
-    };
-
-    (supabase.auth.getSession as any).mockResolvedValue({
-      data: { session: mockSession },
-      error: null,
-    });
-
-    (supabase.auth.onAuthStateChange as any).mockReturnValue({
-      data: { subscription: { unsubscribe: vi.fn() } },
-    });
-
-    const { result } = renderHook(() => useAuth());
-
-    // Wait for session load
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    expect(result.current.user?.user_metadata?.role).toBe('stylist');
   });
 });

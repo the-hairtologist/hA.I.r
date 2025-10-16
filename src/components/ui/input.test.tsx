@@ -3,29 +3,27 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Input } from './input';
 
 describe('Input', () => {
   it('should render input element', () => {
-    render(<Input placeholder="Enter text" />);
-    
-    const input = screen.getByPlaceholderText('Enter text');
+    const { container } = render(<Input placeholder="Enter text" />);
+    const input = container.querySelector('input');
     expect(input).toBeInTheDocument();
+    expect(input?.placeholder).toBe('Enter text');
   });
 
   it('should apply validation state styling for valid input', () => {
-    render(<Input validationState="valid" showValidationIcon={true} />);
-    
-    const container = screen.getByRole('textbox').parentElement;
-    expect(container).toHaveClass('border-green-500');
+    const { container } = render(<Input validationState="valid" showValidationIcon={true} />);
+    const input = container.querySelector('input');
+    expect(input).toHaveClass('border-green-600');
   });
 
   it('should apply validation state styling for invalid input', () => {
-    render(<Input validationState="invalid" showValidationIcon={true} />);
-    
-    const container = screen.getByRole('textbox').parentElement;
-    expect(container).toHaveClass('border-red-500');
+    const { container } = render(<Input validationState="invalid" showValidationIcon={true} />);
+    const input = container.querySelector('input');
+    expect(input).toHaveClass('border-destructive');
   });
 
   it('should show validation icon when enabled', () => {
@@ -51,17 +49,15 @@ describe('Input', () => {
   });
 
   it('should render with neutral state by default', () => {
-    render(<Input />);
-    
-    const input = screen.getByRole('textbox');
-    expect(input.parentElement).not.toHaveClass('border-green-500');
-    expect(input.parentElement).not.toHaveClass('border-red-500');
+    const { container } = render(<Input />);
+    const input = container.querySelector('input');
+    expect(input).not.toHaveClass('border-green-600');
+    expect(input).not.toHaveClass('border-destructive');
   });
 
   it('should pass through standard input props', () => {
-    render(<Input type="email" required disabled value="test@example.com" readOnly />);
-    
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const { container } = render(<Input type="email" required disabled value="test@example.com" readOnly />);
+    const input = container.querySelector('input') as HTMLInputElement;
     expect(input.type).toBe('email');
     expect(input.required).toBe(true);
     expect(input.disabled).toBe(true);
@@ -70,9 +66,15 @@ describe('Input', () => {
   });
 
   it('should render with custom className', () => {
-    render(<Input className="custom-class" />);
-    
-    const input = screen.getByRole('textbox');
+    const { container } = render(<Input className="custom-class" />);
+    const input = container.querySelector('input');
     expect(input).toHaveClass('custom-class');
+  });
+
+  it('should apply error styling when error prop is provided', () => {
+    const { container } = render(<Input error="Invalid input" />);
+    const input = container.querySelector('input');
+    expect(input).toHaveClass('border-destructive');
+    expect(input?.getAttribute('aria-invalid')).toBe('true');
   });
 });

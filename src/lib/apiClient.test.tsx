@@ -47,8 +47,9 @@ describe('apiClient', () => {
         error: new Error('Query failed') 
       });
       
-      const result = await withQueryRetry(mockQuery);
+      const result = await withQueryRetry(mockQuery) as { data: null; error: Error };
       
+      expect(result.data).toBe(null);
       expect(result.error).toBeDefined();
       expect(mockQuery).toHaveBeenCalledTimes(1);
     });
