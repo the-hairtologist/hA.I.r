@@ -47,37 +47,37 @@ export const EnhancedFooter = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Instagram"
               >
-                <Instagram className="h-4 w-4" />
+                <Instagram className="h-4 w-4 text-accent-foreground" />
               </a>
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Facebook"
               >
-                <Facebook className="h-4 w-4" />
+                <Facebook className="h-4 w-4 text-accent-foreground" />
               </a>
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Twitter"
               >
-                <Twitter className="h-4 w-4" />
+                <Twitter className="h-4 w-4 text-accent-foreground" />
               </a>
               <a
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="YouTube"
               >
-                <Youtube className="h-4 w-4" />
+                <Youtube className="h-4 w-4 text-accent-foreground" />
               </a>
             </div>
             
@@ -99,7 +99,7 @@ export const EnhancedFooter = () => {
 
           {/* Product Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">PRODUCT</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground border-l-4 border-accent pl-3">PRODUCT</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
@@ -121,7 +121,7 @@ export const EnhancedFooter = () => {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">COMPANY</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground border-l-4 border-accent pl-3">COMPANY</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
@@ -143,7 +143,7 @@ export const EnhancedFooter = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">UPDATES</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground border-l-4 border-accent pl-3">UPDATES</h3>
             <p className="text-xs font-sans text-primary-foreground/80 mb-4">
               Get tips and exclusive offers.
             </p>
