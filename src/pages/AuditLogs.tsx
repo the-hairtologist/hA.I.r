@@ -14,8 +14,7 @@ import { FileText, Search, Download, Filter, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Navigate } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { exportToCSV } from "@/lib/csvExport";
@@ -32,22 +31,21 @@ interface AuditLog {
 }
 
 export default function AuditLogs() {
-  const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
+  const { user, isAdmin, loading: authLoading } = useEnhancedAuth();
   const [logs, setLogs] = useState<AuditLog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingLogs, setLoadingLogs] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [actionFilter, setActionFilter] = useState("all");
   const [tableFilter, setTableFilter] = useState("all");
   const [dateRange, setDateRange] = useState("7");
 
   // Redirect non-admins
-  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
+  if (!authLoading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
   }
 
   // Show loading while checking permissions
-  if (authLoading || roleLoading) {
+  if (authLoading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
 
@@ -57,7 +55,7 @@ export default function AuditLogs() {
 
   const loadLogs = async () => {
     try {
-      setLoading(true);
+      setLoadingLogs(true);
       
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - parseInt(dateRange));
@@ -75,7 +73,7 @@ export default function AuditLogs() {
       console.error("Error loading audit logs:", error);
       toast.error("Failed to load audit logs");
     } finally {
-      setLoading(false);
+      setLoadingLogs(false);
     }
   };
 
@@ -225,7 +223,7 @@ export default function AuditLogs() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {loadingLogs ? (
               <div className="py-8 text-center">
                 <LoadingSpinner message="Loading logs..." />
               </div>

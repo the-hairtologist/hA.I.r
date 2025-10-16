@@ -14,22 +14,20 @@ import {
 import { useNavigate, Navigate } from "react-router-dom";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function AdminCommandCenter() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
+  const { user, isAdmin, loading: authLoading } = useEnhancedAuth();
   const [stats, setStats] = useState<any>({});
   const [recentUsers, setRecentUsers] = useState<any[]>([]);
   const [recentAppointments, setRecentAppointments] = useState<any[]>([]);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [errorLogs, setErrorLogs] = useState<any[]>([]);
   const [businessMetrics, setBusinessMetrics] = useState<any>({});
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
     loadCommandCenterData();
@@ -39,7 +37,7 @@ export default function AdminCommandCenter() {
 
   const loadCommandCenterData = async () => {
     try {
-      setLoading(true);
+      setLoadingData(true);
 
       // Parallel data fetching for performance
       const [
@@ -97,7 +95,7 @@ export default function AdminCommandCenter() {
         variant: "destructive"
       });
     } finally {
-      setLoading(false);
+      setLoadingData(false);
     }
   };
 
@@ -129,12 +127,12 @@ export default function AdminCommandCenter() {
   };
 
   // Redirect non-admins
-  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
+  if (!authLoading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
   }
 
   // Show loading while checking permissions
-  if (authLoading || roleLoading) {
+  if (authLoading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
 
@@ -151,7 +149,7 @@ export default function AdminCommandCenter() {
               <span className="hidden sm:inline">Maintenance</span>
             </Button>
             <Button onClick={loadCommandCenterData} variant="outline" size="sm" className="gap-2">
-              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 ${loadingData ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">Refresh</span>
             </Button>
           </div>

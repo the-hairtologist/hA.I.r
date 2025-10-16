@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,29 +20,28 @@ interface AccessCode {
 }
 
 export default function AccessCodes() {
-  const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
+  const { user, isAdmin, loading: authLoading } = useEnhancedAuth();
   
   const [codes, setCodes] = useState<AccessCode[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingCodes, setLoadingCodes] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !roleLoading) {
+    if (!authLoading) {
       if (!user) {
         toast.error("Please sign in");
-        setLoading(false);
+        setLoadingCodes(false);
         return;
       }
       
       if (!isAdmin) {
         toast.error("Admin access required");
-        setLoading(false);
+        setLoadingCodes(false);
         return;
       }
       
       loadCodes();
     }
-  }, [authLoading, roleLoading, user, isAdmin]);
+  }, [authLoading, user, isAdmin]);
 
   const loadCodes = async () => {
     try {
@@ -58,7 +56,7 @@ export default function AccessCodes() {
       console.error("Error loading access codes:", error);
       toast.error("Failed to load access codes");
     } finally {
-      setLoading(false);
+      setLoadingCodes(false);
     }
   };
 

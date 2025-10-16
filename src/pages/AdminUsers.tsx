@@ -9,8 +9,7 @@ import { Users, Search, Eye, Shield, Ban, Mail, Calendar, Trash2, UserCog } from
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Dialog,
@@ -29,8 +28,7 @@ import {
 } from "@/components/ui/select";
 
 export default function AdminUsers() {
-  const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
+  const { user, isAdmin, loading } = useEnhancedAuth();
   const [users, setUsers] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
@@ -39,12 +37,12 @@ export default function AdminUsers() {
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
   // Redirect non-admins
-  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
+  if (!loading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
   }
 
   // Show loading while checking permissions
-  if (authLoading || roleLoading) {
+  if (loading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
 
