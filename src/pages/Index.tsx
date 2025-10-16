@@ -128,16 +128,16 @@ const Index = () => {
         </section>
       </main>
 
-      {/* Stats Section - Blue background for balance */}
-      <section className="py-16 bg-accent border-t-4 border-black" style={{
+      {/* Stats Section - Yellow background for excitement */}
+      <section className="py-16 bg-secondary border-t-4 border-black" style={{
         backgroundImage: `
-          linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
-          linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
+          linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+          linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
         `,
         backgroundSize: '8px 8px'
       }}>
         <div className="container mx-auto px-4">
-          <h2 className="text-center font-pixel text-xl sm:text-2xl text-white mb-12 uppercase tracking-wider">
+          <h2 className="text-center font-pixel text-xl sm:text-2xl text-secondary-foreground mb-12 uppercase tracking-wider">
             STYLISTS USING hA.I.r<br/>CUT ADMIN TIME BY 40%
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 max-w-5xl mx-auto">
