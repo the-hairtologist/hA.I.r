@@ -117,9 +117,9 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
                   </div>
                   {milestone.discount_code && (
                     <div className="flex flex-col items-end gap-2">
-                      <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30">
-                        <Gift className="h-3 w-3 text-green-600 dark:text-green-400" />
-                        <span className="text-[11px] sm:text-xs font-bold text-green-600 dark:text-green-400">
+                      <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-success/10 border border-success/30">
+                        <Gift className="h-3 w-3 text-success" />
+                        <span className="text-[11px] sm:text-xs font-bold text-success">
                           ${milestone.discount_amount} OFF
                         </span>
                       </div>

@@ -224,7 +224,7 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
                   <Badge variant="outline">
                     Total: {result.total}
                   </Badge>
-                  <Badge className="bg-green-500">
+                  <Badge className="bg-success text-on-surface-primary">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Success: {result.success}
                   </Badge>
@@ -244,7 +244,7 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
                     </p>
                     <div className="max-h-[150px] overflow-y-auto space-y-1">
                       {result.errors.map((error, i) => (
-                        <p key={i} className="text-xs text-red-500">
+                        <p key={i} className="text-xs text-destructive">
                           {error}
                         </p>
                       ))}

@@ -121,7 +121,7 @@ export const AftercareManager = () => {
                     {selectedTemplate.tips.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-3 flex items-center gap-2">
-                          <Check className="h-4 w-4 text-green-600" />
+                          <Check className="h-4 w-4 text-success" />
                           Care Instructions
                         </h4>
                         <ul className="space-y-2">
@@ -138,13 +138,13 @@ export const AftercareManager = () => {
                     {selectedTemplate.products.length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-3 flex items-center gap-2">
-                          <Sparkles className="h-4 w-4 text-purple-600" />
+                          <Sparkles className="h-4 w-4 text-primary" />
                           Recommended Products
                         </h4>
                         <ul className="space-y-2">
                           {selectedTemplate.products.map((product, idx) => (
                             <li key={idx} className="flex gap-2 text-sm">
-                              <span className="text-purple-600 mt-1">✓</span>
+                              <span className="text-primary mt-1">✓</span>
                               <span className="flex-1">{product}</span>
                             </li>
                           ))}

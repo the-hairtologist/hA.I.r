@@ -46,7 +46,7 @@ export const EmailTestPanel = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Zap className="h-5 w-5 text-yellow-500" />
+          <Zap className="h-5 w-5 text-warning" />
           Test Automated Emails
         </CardTitle>
         <CardDescription>
@@ -92,8 +92,8 @@ export const EmailTestPanel = () => {
           {sendTestMutation.isPending ? "Sending..." : "Send Test Email"}
         </Button>
 
-        <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-          <p className="text-sm text-blue-900 dark:text-blue-100">
+        <div className="bg-info/10 dark:bg-info/20 p-4 rounded-lg border border-info/30">
+          <p className="text-sm text-info">
             <strong>💡 Pro Tip:</strong> Test emails include a yellow banner at the top so you can distinguish them from real automated emails.
           </p>
         </div>

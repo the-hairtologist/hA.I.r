@@ -202,13 +202,13 @@ export function BulkActionsBar({
                 <>
                   <SelectItem value="complete">
                     <div className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                       Mark Completed
                     </div>
                   </SelectItem>
                   <SelectItem value="cancel">
                     <div className="flex items-center gap-2">
-                      <XCircle className="h-4 w-4 text-red-500" />
+                      <XCircle className="h-4 w-4 text-destructive" />
                       Cancel
                     </div>
                   </SelectItem>
@@ -229,7 +229,7 @@ export function BulkActionsBar({
                 </div>
               </SelectItem>
               <SelectItem value="delete">
-                <div className="flex items-center gap-2 text-red-500">
+                <div className="flex items-center gap-2 text-destructive">
                   <Trash2 className="h-4 w-4" />
                   Delete
                 </div>
@@ -263,7 +263,7 @@ export function BulkActionsBar({
             <AlertDialogAction
               onClick={() => executeBulkAction(action)}
               disabled={loading}
-              className="bg-red-500 hover:bg-red-600"
+              className="bg-destructive hover:bg-destructive/90"
             >
               {loading ? "Processing..." : "Confirm"}
             </AlertDialogAction>

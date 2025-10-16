@@ -24,14 +24,14 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
       <Card className="brutal-border brutal-shadow-xs animate-fade-in">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-display">
-            <Star className="h-5 w-5 text-yellow-500" />
+            <Star className="h-5 w-5 text-warning" />
             Recent Reviews
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-12 px-6">
-            <div className="inline-flex p-4 rounded-2xl bg-yellow-500/10 mb-4 brutal-border brutal-shadow-xs">
-              <Star className="h-10 w-10 text-yellow-500" />
+            <div className="inline-flex p-4 rounded-2xl bg-warning/10 mb-4 brutal-border brutal-shadow-xs">
+              <Star className="h-10 w-10 text-warning" />
             </div>
             <h4 className="font-display font-semibold text-base mb-2">No Reviews Yet</h4>
             <p className="text-foreground/70 text-sm max-w-xs mx-auto">
@@ -47,7 +47,7 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
     <Card className="brutal-border brutal-shadow-xs animate-fade-in">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-display">
-          <Star className="h-5 w-5 text-yellow-500" />
+          <Star className="h-5 w-5 text-warning" />
           Recent Reviews ({reviews.length})
         </CardTitle>
       </CardHeader>
@@ -67,7 +67,7 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
                   <Star
                     key={i}
                     className={`h-4 w-4 transition-colors ${
-                      i < review.rating ? "fill-yellow-500 text-yellow-500" : "text-foreground/20"
+                      i < review.rating ? "fill-warning text-warning" : "text-foreground/20"
                     }`}
                   />
                 ))}

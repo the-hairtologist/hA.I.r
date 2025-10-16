@@ -92,7 +92,7 @@ export function CommissionTrackerWidget() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-green-500" />
+          <DollarSign className="h-5 w-5 text-success" />
           Commission Tracker
         </CardTitle>
       </CardHeader>
@@ -101,19 +101,19 @@ export function CommissionTrackerWidget() {
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">This Month</p>
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-2xl font-bold text-success">
               ${totalThisMonth.toFixed(2)}
             </p>
           </div>
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">Pending</p>
-            <p className="text-2xl font-bold text-amber-600">
+            <p className="text-2xl font-bold text-warning">
               ${totalPending.toFixed(2)}
             </p>
           </div>
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">Paid</p>
-            <p className="text-2xl font-bold text-emerald-600">
+            <p className="text-2xl font-bold text-success">
               ${totalPaid.toFixed(2)}
             </p>
           </div>
@@ -131,9 +131,9 @@ export function CommissionTrackerWidget() {
                 >
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     {commission.status === 'paid' ? (
-                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <CheckCircle className="h-4 w-4 text-success flex-shrink-0" />
                     ) : (
-                      <Clock className="h-4 w-4 text-amber-500 flex-shrink-0" />
+                      <Clock className="h-4 w-4 text-warning flex-shrink-0" />
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate">
@@ -144,7 +144,7 @@ export function CommissionTrackerWidget() {
                       </p>
                     </div>
                   </div>
-                  <span className="text-sm font-bold text-green-600 flex-shrink-0 ml-2">
+                  <span className="text-sm font-bold text-success flex-shrink-0 ml-2">
                     ${Number(commission.commission_amount).toFixed(2)}
                   </span>
                 </div>
