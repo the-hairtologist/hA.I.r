@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { corsHeaders, compressedJsonResponse, compressedErrorResponse } from '../_shared/compression.ts';
+import { authenticateRequest } from '../_shared/auth.ts';
+import { handleError, checkRateLimit } from '../_shared/error-handler.ts';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,30 +9,29 @@ serve(async (req) => {
   }
 
   try {
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) throw new Error('Missing authorization header');
+    // Authenticate and verify stylist/admin role
+    const { user, supabase, stylistId } = await authenticateRequest(req, { allowStylistOrAdmin: true });
+    
+    if (!stylistId) {
+      throw new Error('Stylist profile not found');
+    }
+    
+    // Rate limiting (1 prediction per minute - expensive operation)
+    if (!checkRateLimit(user.id, 1, 60000)) {
+      return await compressedErrorResponse('Please wait before requesting new predictions.', 429);
+    }
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('Unauthorized');
-
-    // Get stylist ID
     const { data: stylist } = await supabase
       .from('stylist_profiles')
-      .select('id, business_name')
-      .eq('user_id', user.id)
+      .select('business_name')
+      .eq('id', stylistId)
       .single();
 
     if (!stylist) {
       throw new Error('Stylist profile not found');
     }
 
-    console.log('Generating predictions for stylist:', stylist.id);
+    console.log('Generating predictions for stylist:', stylistId);
 
     // Get upcoming appointments (next 7 days)
     const now = new Date();
@@ -54,7 +50,7 @@ serve(async (req) => {
           hair_goals
         )
       `)
-      .eq('stylist_id', stylist.id)
+      .eq('stylist_id', stylistId)
       .gte('appointment_date', now.toISOString())
       .lte('appointment_date', nextWeek.toISOString())
       .eq('status', 'scheduled')
@@ -155,7 +151,7 @@ serve(async (req) => {
     // Store predictions in database
     for (const insight of insights) {
       await supabase.from('predictive_insights').insert({
-        stylist_id: stylist.id,
+        stylist_id: stylistId,
         insight_type: insight.type,
         insight_data: insight,
         confidence_score: insight.confidence,
@@ -165,24 +161,17 @@ serve(async (req) => {
 
     console.log(`Generated ${insights.length} predictions`);
 
-    return new Response(
-      JSON.stringify({
-        insights,
-        period: {
-          start: now.toISOString(),
-          end: nextWeek.toISOString()
-        },
-        appointments_analyzed: appointments.length
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return await compressedJsonResponse({
+      insights,
+      period: {
+        start: now.toISOString(),
+        end: nextWeek.toISOString()
+      },
+      appointments_analyzed: appointments.length
+    }, 200);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Prediction error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return handleError(error);
   }
 });

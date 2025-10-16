@@ -98,6 +98,36 @@ export type Database = {
           },
         ]
       }
+      ai_analytics_events: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          feature: string
+          id: string
+          metadata: Json | null
+          performance_ms: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          feature: string
+          id?: string
+          metadata?: Json | null
+          performance_ms?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          feature?: string
+          id?: string
+          metadata?: Json | null
+          performance_ms?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_chat_messages: {
         Row: {
           content: string

@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { corsHeaders, compressedJsonResponse, compressedErrorResponse } from '../_shared/compression.ts';
+import { authenticateRequest } from '../_shared/auth.ts';
+import { handleError, validateRequestBody, checkRateLimit } from '../_shared/error-handler.ts';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,19 +9,18 @@ serve(async (req) => {
   }
 
   try {
-    const { formula, clientId } = await req.json();
+    // Authenticate and verify stylist/admin role
+    const { user, supabase } = await authenticateRequest(req, { allowStylistOrAdmin: true });
     
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) throw new Error('Missing authorization header');
+    // Rate limiting (20 validations per minute)
+    if (!checkRateLimit(user.id, 20, 60000)) {
+      return await compressedErrorResponse('Rate limit exceeded. Please slow down.', 429);
+    }
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } }
-    );
+    const body = await req.json();
+    validateRequestBody(body, ['formula']);
+    const { formula, clientId } = body;
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('Unauthorized');
 
     const warnings: string[] = [];
     const blockers: string[] = [];
@@ -135,17 +131,10 @@ serve(async (req) => {
       is_safe: isSafe,
     });
 
-    return new Response(
-      JSON.stringify(validationResult),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return await compressedJsonResponse(validationResult, 200);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Formula validation error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return handleError(error);
   }
 });
