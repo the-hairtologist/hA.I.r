@@ -34,8 +34,8 @@ export const EnhancedFooter = () => {
           {/* Brand Column */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 border-4 border-black bg-primary flex items-center justify-center">
-                <Scissors className="h-5 w-5 text-primary-foreground" />
+              <div className="w-10 h-10 border-4 border-black bg-secondary flex items-center justify-center">
+                <Scissors className="h-5 w-5 text-secondary-foreground" />
               </div>
               <span className="font-pixel text-xl text-primary-foreground uppercase">hA.I.r</span>
             </div>
