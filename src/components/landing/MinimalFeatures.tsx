@@ -32,9 +32,9 @@ const features = [
   },
   {
     icon: Smartphone,
-    title: "Intuitive & Engaging Interface",
-    headline: "Simple enough for anyone, powerful enough for pros.",
-    description: "Navigate, book, and explore AI recommendations without confusion. Beautiful design meets functionality for a seamless experience.",
+    title: "Formula Tracking & Hair History",
+    headline: "Never forget a formula again.",
+    description: "Save every color formula, treatment, and product used. Access complete client hair history instantly—no more guessing what worked last time.",
     number: "⑤",
   },
 ];

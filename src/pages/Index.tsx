@@ -62,7 +62,7 @@ const Index = () => {
               </h1>
               
               <p className="text-sm xs:text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-loose animate-fade-in" style={{ animationDelay: '100ms' }}>
-                DISCOVER AI-POWERED RECOMMENDATIONS, SEAMLESS BOOKING, AND PERSONALIZED CARE - ALL IN ONE APP.
+                BOOK SMARTER. STYLE BETTER. GET PAID FASTER.
               </p>
               
               <div className="pt-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
@@ -71,7 +71,7 @@ const Index = () => {
                   onClick={() => navigate("/auth")} 
                   className="text-sm xs:text-base sm:text-lg px-6 xs:px-8 sm:px-12 py-5 xs:py-6 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle"
                 >
-                  UNLOCK YOUR SMARTER HAIR JOURNEY
+                  GET STARTED FREE
                 </Button>
               </div>
               

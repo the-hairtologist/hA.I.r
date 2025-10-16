@@ -8,20 +8,24 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const faqs = [
   {
-    question: "Do I need a credit card to start?",
-    answer: "No. Start your 14-day free trial without entering any payment information.",
+    question: "Will this actually save me time, or is it just another app?",
+    answer: "Real talk: Most stylists save 5-7 hours per week on scheduling, payments, and client notes. That's time back for clients (or yourself). Plus, no more double-bookings or missed appointments.",
   },
   {
-    question: "Can I cancel anytime?",
-    answer: "Yes. Cancel with one click, no questions asked. You'll have access until the end of your billing period.",
+    question: "What happens to my client data if I cancel?",
+    answer: "You own your data, period. Export everything (client history, formulas, photos) anytime. Even after you cancel, you get 30 days to download your records.",
   },
   {
-    question: "How does the AI work?",
-    answer: "Our AI assists with formula suggestions based on hair type, previous colors, and desired results. You review and approve all recommendations before use.",
+    question: "Does the AI replace my expertise as a stylist?",
+    answer: "Never. The AI is like a smart assistant—it suggests formulas based on hair history and type, but YOU make the final call. Think of it as a second opinion, not a replacement.",
   },
   {
-    question: "What if I need help?",
-    answer: "We offer support via email and chat. Response times typically within 24 hours, with faster responses during business hours.",
+    question: "How quickly can I get up and running?",
+    answer: "Most stylists are booking their first client within 10 minutes. Import existing clients via CSV, or start fresh. No training videos required—it just works.",
+  },
+  {
+    question: "What if my clients aren't tech-savvy?",
+    answer: "Good news: Clients don't need an account to book. They get a simple link, pick a time, and they're done. Works on any phone or computer—no app download needed.",
   },
 ];
 
@@ -33,8 +37,11 @@ export const MinimalFAQ = () => {
       <div className="max-w-2xl mx-auto">
         <div className={`text-center mb-12 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-accent-foreground uppercase tracking-wider">
-            GOT QUESTIONS? WE GOT ANSWERS
+            THE REAL QUESTIONS YOU'RE ASKING
           </h2>
+          <p className="font-sans text-sm xs:text-base text-accent-foreground/80 max-w-2xl mx-auto">
+            No fluff. Just honest answers.
+          </p>
         </div>
 
         <div className="space-y-6">

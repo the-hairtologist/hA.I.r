@@ -28,7 +28,7 @@ export const SimplePricingCTA = () => {
           </h2>
 
           <p className="text-sm xs:text-base sm:text-lg font-sans text-secondary-foreground/90 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Join 2,000+ stylists cutting admin time by 40%. Try hA.I.r risk-free for 14 days.
+            Join 2,000+ stylists who love hA.I.r. Try it risk-free for 14 days.
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export const SimplePricingCTA = () => {
           onClick={() => navigate("/auth")}
           className="text-sm xs:text-base sm:text-lg px-8 xs:px-12 py-6 xs:py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none"
         >
-          TRY hA.I.r TODAY - FREE TRIAL
+          START FREE TRIAL
         </Button>
 
         <p className="text-xs xs:text-sm font-pixel text-secondary-foreground/80 uppercase mt-6">
