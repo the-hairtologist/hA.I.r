@@ -102,7 +102,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           <DialogTitle className="flex items-center gap-2 text-sm sm:text-base lg:text-lg">
             <Command className="h-4 w-4" />
             Quick Navigation
-            <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[11px] font-medium text-muted-foreground">
               <span className="text-xs">⌘</span>K
             </kbd>
           </DialogTitle>
@@ -146,7 +146,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-xs sm:text-sm">{item.title}</span>
                           {item.comingSoon && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                            <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
                               SOON
                             </span>
                           )}

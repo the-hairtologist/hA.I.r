@@ -141,7 +141,7 @@ export function NextAppointmentBanner() {
               {timeUntil}
             </span>
           </div>
-          <div className="text-[10px] text-muted-foreground truncate">
+          <div className="text-[11px] text-muted-foreground truncate">
             {format(appointmentDate, "h:mm a")} • {nextAppointment.service_type}
           </div>
         </div>

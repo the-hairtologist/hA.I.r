@@ -116,7 +116,7 @@ export function CalendarSyncIndicator() {
                 <CheckCircle className="h-3 w-3 text-success flex-shrink-0" />
               )}
             </div>
-            <p className="text-[10px] text-muted-foreground truncate">
+            <p className="text-[11px] text-muted-foreground truncate">
               Last sync: {lastSyncText}
             </p>
           </div>

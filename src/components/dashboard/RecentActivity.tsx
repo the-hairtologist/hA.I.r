@@ -111,7 +111,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="text-[11px] sm:text-xs lg:text-sm font-display font-semibold truncate">{activity.title}</p>
-                        <p className="text-[10px] sm:text-[11px] lg:text-xs text-foreground/70 truncate">
+                        <p className="text-[11px] sm:text-xs lg:text-sm text-foreground/70 truncate">
                           {activity.description}
                         </p>
                       </div>
@@ -121,7 +121,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-[10px] sm:text-[11px] lg:text-xs text-foreground/60 mt-1">
+                    <p className="text-[11px] sm:text-xs lg:text-sm text-foreground/60 mt-1">
                       {format(new Date(activity.timestamp), "MMM d, h:mm a")}
                     </p>
                   </div>
