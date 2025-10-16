@@ -27,6 +27,9 @@ import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
 import { FormulaFiltersComponent, FormulaFilters } from "@/components/FormulaFilters";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 import { EnhancedSearch, HighlightedText, fuzzyMatch } from "@/components/EnhancedSearch";
+import { FormulaSuccessPredictor } from "@/components/FormulaSuccessPredictor";
+import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { formulaSchema } from "@/lib/validation/formulaSchemas";
 import { cn } from "@/lib/utils";
 
 const Formulas = () => {
@@ -50,6 +53,8 @@ const Formulas = () => {
   const [processingTimeSort, setProcessingTimeSort] = useState<"asc" | "desc" | null>(null);
   const [tagInput, setTagInput] = useState("");
   const [selectedFormulas, setSelectedFormulas] = useState<Set<string>>(new Set());
+  const [similarFormulasCount, setSimilarFormulasCount] = useState(0);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   
   // Form state
   const [selectedClient, setSelectedClient] = useState("");
@@ -148,8 +153,30 @@ const Formulas = () => {
   };
 
   const handleSaveFormula = async () => {
-    if (!selectedClient || !formulaText) {
-      toast.error("Pick a client and add your formula magic! ✨");
+    // Validate with zod schema
+    try {
+      const validatedData = formulaSchema.parse({
+        client_id: selectedClient,
+        formula_text: formulaText,
+        instructions,
+        color_line: colorLine,
+        result_notes: resultNotes,
+        processing_time_minutes: processingTime ? parseInt(processingTime) : null,
+        developer_volume: developerVolume,
+        application_notes: applicationNotes,
+        what_worked: whatWorked,
+        what_to_avoid: whatToAvoid,
+        tags: tags.length > 0 ? tags : undefined
+      });
+      
+      setValidationErrors({});
+    } catch (error: any) {
+      const errors: Record<string, string> = {};
+      error.errors?.forEach((err: any) => {
+        errors[err.path[0]] = err.message;
+      });
+      setValidationErrors(errors);
+      toast.error("Please fix validation errors");
       return;
     }
 
