@@ -50,7 +50,7 @@ describe('useFormulaAnalyzer', () => {
     const { result } = renderHook(() => useFormulaAnalyzer());
 
     expect(result.current.analyzing).toBe(false);
-    expect(result.current.analysis).toBeNull();
+    expect(result.current.analysis).toEqual({});
   });
 
   it('should handle successful formula analysis', async () => {

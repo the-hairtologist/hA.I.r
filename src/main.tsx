@@ -10,13 +10,10 @@
  */
 
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import App from "./App.tsx";  // Back to full app
 import "./index.css";
 import { addCopyrightNotice, detectSuspiciousActivity, logSuspiciousActivity } from "./lib/ipProtection";
 import { initMobileOptimizations, setupInputHandlers } from "./lib/mobileOptimizations";
-
-// Analytics will be initialized AFTER user consents via CookieConsent component
-// This ensures GDPR compliance (no tracking before explicit consent)
 
 // Initialize mobile optimizations
 initMobileOptimizations();
