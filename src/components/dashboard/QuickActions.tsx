@@ -296,7 +296,7 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
               <p className="text-[11px] sm:text-xs lg:text-sm font-bold text-foreground">
                 ✨ Customize Your Actions
               </p>
-              <p className="text-[10px] sm:text-[11px] lg:text-xs text-muted-foreground mt-1">
+              <p className="text-[11px] sm:text-xs lg:text-sm text-muted-foreground mt-1">
                 Click to toggle • Drag selected items to reorder
               </p>
             </div>

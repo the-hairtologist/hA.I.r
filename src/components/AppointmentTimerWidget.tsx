@@ -155,7 +155,7 @@ export function AppointmentTimerWidget() {
             <Clock className="mr-2 h-4 w-4" />
             How to Start
           </Button>
-          <p className="text-[10px] sm:text-[11px] text-muted-foreground mt-2 text-center">
+          <p className="text-[11px] sm:text-xs text-muted-foreground mt-2 text-center">
             Timer becomes active during appointments
           </p>
         </CardContent>

@@ -53,7 +53,7 @@ export const CalendarView = ({ appointments, onDateSelect, onAppointmentClick }:
       <CardContent className="p-2 sm:p-6">
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="text-center text-[10px] sm:text-sm font-semibold text-muted-foreground p-1 sm:p-2">
+            <div key={day} className="text-center text-xs sm:text-sm font-semibold text-muted-foreground p-1 sm:p-2">
               {day}
             </div>
           ))}
@@ -82,7 +82,7 @@ export const CalendarView = ({ appointments, onDateSelect, onAppointmentClick }:
                 }}
               >
                 <div className="flex flex-col h-full">
-                  <span className={`text-[10px] sm:text-sm ${isToday(day) ? 'font-bold text-primary' : ''}`}>
+                  <span className={`text-xs sm:text-sm ${isToday(day) ? 'font-bold text-primary' : ''}`}>
                     {format(day, 'd')}
                   </span>
                   {hasAppointments && (
@@ -90,13 +90,13 @@ export const CalendarView = ({ appointments, onDateSelect, onAppointmentClick }:
                       {dayAppointments.slice(0, 2).map((apt, idx) => (
                         <div
                           key={apt.id}
-                          className="text-[8px] sm:text-xs truncate bg-primary/10 px-0.5 sm:px-1 rounded"
+                          className="text-[11px] sm:text-xs truncate bg-primary/10 px-0.5 sm:px-1 rounded"
                         >
                           {format(new Date(apt.appointment_date), 'h:mm a')}
                         </div>
                       ))}
                       {dayAppointments.length > 2 && (
-                        <Badge variant="secondary" className="text-[8px] sm:text-xs h-3 sm:h-4 px-0.5 sm:px-1">
+                        <Badge variant="secondary" className="text-[11px] sm:text-xs h-3 sm:h-4 px-0.5 sm:px-1">
                           +{dayAppointments.length - 2}
                         </Badge>
                       )}

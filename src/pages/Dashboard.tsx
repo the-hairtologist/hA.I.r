@@ -676,7 +676,7 @@ const Dashboard = () => {
                   <Edit3 className="h-3.5 w-3.5 text-primary" />
                   Customize Your Dashboard
                 </h3>
-                <p className="text-[10px] xs:text-[11px] sm:text-xs text-muted-foreground">
+                <p className="text-[11px] sm:text-xs text-muted-foreground">
                   <span className="hidden sm:inline">Drag sections to reorder • Click eye icon to show/hide sections</span>
                   <span className="sm:hidden">Long-press to drag • Tap eye to toggle</span>
                 </p>
@@ -686,7 +686,7 @@ const Dashboard = () => {
                   size="sm"
                   variant="outline"
                   onClick={handleReset}
-                  className="text-[10px] xs:text-xs"
+                  className="text-xs"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
                   Reset
@@ -694,7 +694,7 @@ const Dashboard = () => {
                 <Button
                   size="sm"
                   onClick={handleSave}
-                  className="text-[10px] xs:text-xs"
+                  className="text-xs"
                 >
                   <Save className="h-3.5 w-3.5 mr-1" />
                   Done
