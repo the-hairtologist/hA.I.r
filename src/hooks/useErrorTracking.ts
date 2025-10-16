@@ -50,7 +50,7 @@ const logError = async (errorData: {
   userId?: string;
 }) => {
   try {
-    await supabase.functions.invoke('sentry-error-tracking', {
+    await supabase.functions.invoke('log-error', {
       body: errorData,
     });
   } catch (error) {

@@ -27,6 +27,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { initAnalytics } from "@/lib/analytics";
+import { initSentry } from "@/lib/monitoring";
 import { ServiceIntegrationTracker } from "@/components/ServiceIntegrationTracker";
 import { AppRoutes } from "@/routes";
 
@@ -44,7 +45,9 @@ const queryClient = new QueryClient({
 
 const AnalyticsInitializer = () => {
   useEffect(() => {
+    // Initialize analytics and crash logging
     initAnalytics();
+    initSentry();
   }, []);
   
   useAnalytics();

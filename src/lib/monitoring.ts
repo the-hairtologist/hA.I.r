@@ -18,12 +18,8 @@
  * - Source map uploads for stack traces
  */
 
-// IMPORTANT: Uncomment these imports after installing @sentry/react
-// import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/react";
 import type { ReactNode } from 'react';
-
-// Type definitions for when Sentry is not installed
-type SentryType = any;
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || '';
 const ENVIRONMENT = import.meta.env.DEV ? 'development' : 'production';
@@ -33,25 +29,14 @@ let sentryInitialized = false;
 /**
  * Initialize Sentry error monitoring
  * Call this once in your App.tsx or main.tsx
- * 
- * IMPORTANT: This will only work after installing @sentry/react
- * Run: npm install @sentry/react
- * Then uncomment the Sentry import at the top of this file
  */
 export const initSentry = () => {
   if (sentryInitialized || !SENTRY_DSN) {
-    // Sentry not available - silent return
-    return;
-  }
-
-  // Check if Sentry is available
-  if (typeof window === 'undefined' || !(window as any).Sentry) {
-    // Sentry package not installed - silent return
+    console.log('Sentry not configured - error monitoring disabled');
     return;
   }
 
   try {
-    const Sentry = (window as any).Sentry;
     
     Sentry.init({
       dsn: SENTRY_DSN,
@@ -59,9 +44,7 @@ export const initSentry = () => {
       
       // Performance Monitoring
       integrations: [
-        Sentry.browserTracingIntegration({
-          tracePropagationTargets: ["localhost", /^https:\/\/.*\.lovableproject\.com/],
-        }),
+        Sentry.browserTracingIntegration(),
         Sentry.replayIntegration({
           maskAllText: true,
           blockAllMedia: true,
@@ -107,87 +90,65 @@ export const initSentry = () => {
  * Manually capture an error
  */
 export const captureError = (error: Error, context?: Record<string, any>) => {
-  if (!sentryInitialized || typeof window === 'undefined') return;
+  if (!sentryInitialized) return;
 
-  const Sentry = (window as any).Sentry;
-  if (Sentry) {
-    Sentry.captureException(error, {
-      extra: context,
-    });
-  }
+  Sentry.captureException(error, {
+    extra: context,
+  });
 };
 
 /**
  * Capture a message (not an error)
  */
 export const captureMessage = (message: string, level: 'info' | 'warning' | 'error' = 'info') => {
-  if (!sentryInitialized || typeof window === 'undefined') return;
+  if (!sentryInitialized) return;
 
-  const Sentry = (window as any).Sentry;
-  if (Sentry) {
-    Sentry.captureMessage(message, level);
-  }
+  Sentry.captureMessage(message, level);
 };
 
 /**
  * Set user context for error tracking
  */
 export const setUser = (userId: string, email?: string, username?: string) => {
-  if (!sentryInitialized || typeof window === 'undefined') return;
+  if (!sentryInitialized) return;
 
-  const Sentry = (window as any).Sentry;
-  if (Sentry) {
-    Sentry.setUser({
-      id: userId,
-      email,
-      username,
-    });
-  }
+  Sentry.setUser({
+    id: userId,
+    email,
+    username,
+  });
 };
 
 /**
  * Clear user context (on logout)
  */
 export const clearUser = () => {
-  if (!sentryInitialized || typeof window === 'undefined') return;
+  if (!sentryInitialized) return;
 
-  const Sentry = (window as any).Sentry;
-  if (Sentry) {
-    Sentry.setUser(null);
-  }
+  Sentry.setUser(null);
 };
 
 /**
  * Add breadcrumb for debugging context
  */
 export const addBreadcrumb = (message: string, category: string, data?: Record<string, any>) => {
-  if (!sentryInitialized || typeof window === 'undefined') return;
+  if (!sentryInitialized) return;
 
-  const Sentry = (window as any).Sentry;
-  if (Sentry) {
-    Sentry.addBreadcrumb({
-      message,
-      category,
-      level: 'info',
-      data,
-    });
-  }
+  Sentry.addBreadcrumb({
+    message,
+    category,
+    level: 'info',
+    data,
+  });
 };
 
 /**
- * Start a performance transaction
+ * Start a performance transaction (span)
  */
 export const startTransaction = (name: string, operation: string) => {
-  if (!sentryInitialized || typeof window === 'undefined') return null;
+  if (!sentryInitialized) return null;
 
-  const Sentry = (window as any).Sentry;
-  if (Sentry) {
-    return Sentry.startTransaction({
-      name,
-      op: operation,
-    });
-  }
-  return null;
+  return Sentry.startSpan({ name, op: operation }, (span) => span);
 };
 
 /**
@@ -195,18 +156,15 @@ export const startTransaction = (name: string, operation: string) => {
  * Example: const SentryRoutes = withSentryRouting(Routes);
  */
 export const withSentryRouting = (component: any) => {
-  if (typeof window === 'undefined') return component;
-  const Sentry = (window as any).Sentry;
-  return Sentry?.withSentryRouting?.(component) || component;
+  if (!sentryInitialized) return component;
+  return Sentry.withSentryRouting?.(component) || component;
 };
 
 /**
- * Error Boundary component (only available after installing @sentry/react)
+ * Error Boundary component
  * Wrap your app with this to catch React errors
  */
-export const SentryErrorBoundary = ({ children }: { children: ReactNode }): ReactNode => {
-  return children;
-};
+export const SentryErrorBoundary = Sentry.ErrorBoundary;
 
 /**
  * Check if Sentry is initialized
