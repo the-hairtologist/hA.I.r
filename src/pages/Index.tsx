@@ -57,11 +57,11 @@ const Index = () => {
         }}>
           <div className="container mx-auto px-4 text-center relative z-10 w-full">
             <div className="max-w-4xl mx-auto space-y-8">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-pixel uppercase text-secondary leading-relaxed tracking-wider drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in" style={{ lineHeight: '1.6' }}>
+              <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-pixel uppercase text-secondary leading-relaxed tracking-wider drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in" style={{ lineHeight: '1.6' }}>
                 YOUR HAIR, SMARTER.<br />YOUR SALON, EFFORTLESS.
               </h1>
               
-              <p className="text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-loose animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <p className="text-sm xs:text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-loose animate-fade-in" style={{ animationDelay: '100ms' }}>
                 DISCOVER AI-POWERED RECOMMENDATIONS, SEAMLESS BOOKING, AND PERSONALIZED CARE - ALL IN ONE APP.
               </p>
               
@@ -69,7 +69,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle"
+                  className="text-sm xs:text-base sm:text-lg px-6 xs:px-8 sm:px-12 py-5 xs:py-6 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle"
                 >
                   UNLOCK YOUR SMARTER HAIR JOURNEY
                 </Button>
@@ -86,8 +86,8 @@ const Index = () => {
         {/* How It Works - Clean white background */}
         <section className="py-20 bg-background" style={{
           backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>
@@ -95,13 +95,7 @@ const Index = () => {
         </section>
 
         {/* Testimonial Section - Blue background */}
-        <section className="py-20 bg-accent" style={{
-          backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
-          `,
-          backgroundSize: '8px 8px'
-        }}>
+        <section className="py-20 bg-accent">
           <SingleTestimonial />
         </section>
 
@@ -117,13 +111,7 @@ const Index = () => {
         </section>
 
         {/* FAQ Section - Blue background */}
-        <section className="py-20 bg-accent" style={{
-          backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
-          `,
-          backgroundSize: '8px 8px'
-        }}>
+        <section className="py-20 bg-accent">
           <MinimalFAQ />
         </section>
       </main>
@@ -137,7 +125,7 @@ const Index = () => {
         backgroundSize: '8px 8px'
       }}>
         <div className="container mx-auto px-4">
-          <h2 className="text-center font-pixel text-xl sm:text-2xl text-secondary-foreground mb-12 uppercase tracking-wider">
+          <h2 className="text-center font-pixel text-lg xs:text-xl sm:text-2xl text-secondary-foreground mb-12 uppercase tracking-wider">
             STYLISTS USING hA.I.r<br/>CUT ADMIN TIME BY 40%
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 max-w-5xl mx-auto">
