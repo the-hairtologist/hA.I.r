@@ -27,6 +27,8 @@ import { HairAnalysisPanel } from "@/components/HairAnalysisPanel";
 import { ModelPerformanceIndicator } from "@/components/ModelPerformanceIndicator";
 import { FormulaOutcomeFeedback } from "@/components/FormulaOutcomeFeedback";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { CameraCapture } from "@/components/CameraCapture";
+import { VoiceControl } from "@/components/VoiceControl";
 import { useAIAnalytics } from "@/hooks/useAIAnalytics";
 import { useFeatureFlag } from "@/lib/featureFlags";
 
@@ -821,6 +823,20 @@ const Knowledge = () => {
               {/* Input Form */}
               <form onSubmit={handleAiSubmit} className="p-3 md:p-4 bg-gradient-to-r from-muted/50 to-muted/30 border-t-4 border-foreground">
                 <div className="flex gap-2 md:gap-3">
+                  <CameraCapture
+                    variant="compact"
+                    context="analysis"
+                    onCapture={(imageUrl) => {
+                      setUploadedImages([...uploadedImages, imageUrl]);
+                      toast.success("Photo added for AI analysis");
+                    }}
+                  />
+                  <VoiceControl
+                    variant="minimal"
+                    context="chat"
+                    onTranscription={(text) => setAiInput(text)}
+                    enableCommands={true}
+                  />
                   <Input
                     value={aiInput}
                     onChange={(e) => setAiInput(e.target.value)}

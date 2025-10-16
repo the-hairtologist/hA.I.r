@@ -113,17 +113,47 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
+          // Critical user data - cache for 7 days
           {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
+            urlPattern: /client_profiles|stylist_profiles|appointments|formulas/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'supabase-cache',
+              cacheName: 'user-data-cache',
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 5 // 5 minutes
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
               },
+              networkTimeoutSeconds: 5,
               cacheableResponse: {
                 statuses: [0, 200]
+              }
+            }
+          },
+          // API responses - shorter cache
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 30 // 30 minutes
+              },
+              networkTimeoutSeconds: 3,
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          // Images - cache for 30 days
+          {
+            urlPattern: /\.(jpg|jpeg|png|gif|webp)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'image-cache',
+              expiration: {
+                maxEntries: 500,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
               }
             }
           },

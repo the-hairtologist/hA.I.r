@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -15,6 +14,9 @@ import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { PortfolioInsights } from "@/components/PortfolioInsights";
 import { BackgroundRemovalDialog } from "@/components/BackgroundRemovalDialog";
+import { CameraCapture } from "@/components/CameraCapture";
+import { VoiceControl } from "@/components/VoiceControl";
+import { offlineQueue } from "@/lib/offlineQueue";
 
 interface PortfolioPhoto {
   id: string;
@@ -108,28 +110,11 @@ const Portfolio = () => {
   // Real-time updates
   useRealtimeUpdates("portfolio_photos", () => loadPhotos(stylistProfileId), stylistProfileId);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, isBefore: boolean = false) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please select an image file");
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image must be less than 5MB");
-      return;
-    }
-
+  const handleFileSelect = async (imageUrl: string, isBefore: boolean = false) => {
     if (isBefore) {
-      setBeforePhoto(file);
-      const preview = URL.createObjectURL(file);
-      setBeforePhotoPreview(preview);
+      setBeforePhotoPreview(imageUrl);
     } else {
-      setNewPhoto(file);
-      const preview = URL.createObjectURL(file);
-      setNewPhotoPreview(preview);
+      setNewPhotoPreview(imageUrl);
     }
   };
 
@@ -152,39 +137,63 @@ const Portfolio = () => {
   };
 
   const handleUpload = async () => {
-    if (!newPhoto) {
-      toast.error("Please select a photo");
+    if (!newPhotoPreview) {
+      toast.error("Please capture a photo");
       return;
     }
 
-    if (isBeforeAfter && !beforePhoto) {
-      toast.error("Please select a before photo");
+    if (isBeforeAfter && !beforePhotoPreview) {
+      toast.error("Please capture a before photo");
       return;
     }
 
     setUploading(true);
     try {
-      const afterUrl = await uploadPhoto(newPhoto, "portfolio");
+      // Convert data URLs to blobs
+      const afterBlob = await (await fetch(newPhotoPreview)).blob();
+      const afterUrl = await uploadPhoto(afterBlob as any, "portfolio");
       let beforeUrl = null;
 
-      if (isBeforeAfter && beforePhoto) {
-        beforeUrl = await uploadPhoto(beforePhoto, "portfolio");
+      if (isBeforeAfter && beforePhotoPreview) {
+        const beforeBlob = await (await fetch(beforePhotoPreview)).blob();
+        beforeUrl = await uploadPhoto(beforeBlob as any, "portfolio");
       }
 
-      const { error } = await supabase
-        .from("portfolio_photos")
-        .insert({
-          stylist_id: stylistProfileId,
-          photo_url: afterUrl,
-          caption: caption || null,
-          is_before_after: isBeforeAfter,
-          before_photo_url: beforeUrl,
-          display_order: photos.length,
+      if (!navigator.onLine) {
+        // Queue for later if offline
+        offlineQueue.enqueue({
+          type: 'insert',
+          table: 'portfolio_photos',
+          data: {
+            stylist_id: stylistProfileId,
+            photo_url: afterUrl,
+            caption: caption || null,
+            is_before_after: isBeforeAfter,
+            before_photo_url: beforeUrl,
+            display_order: photos.length,
+          },
+          userId: (await supabase.auth.getSession()).data.session!.user.id
         });
+        
+        toast.success("Photo queued for upload!", {
+          description: "Will sync when you're back online"
+        });
+      } else {
+        const { error } = await supabase
+          .from("portfolio_photos")
+          .insert({
+            stylist_id: stylistProfileId,
+            photo_url: afterUrl,
+            caption: caption || null,
+            is_before_after: isBeforeAfter,
+            before_photo_url: beforeUrl,
+            display_order: photos.length,
+          });
 
-      if (error) throw error;
+        if (error) throw error;
+        toast.success("Photo uploaded successfully!");
+      }
 
-      toast.success("Photo uploaded successfully!");
       setNewPhoto(null);
       setNewPhotoPreview("");
       setBeforePhoto(null);
@@ -336,79 +345,74 @@ const Portfolio = () => {
               {isBeforeAfter && (
                 <div className="space-y-2">
                   <Label className="text-foreground font-medium">Before Photo</Label>
-                  <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-card/10 hover:bg-card/20 transition-colors">
-                    {beforePhotoPreview ? (
-                      <div className="relative">
-                        <img src={beforePhotoPreview} alt="Before preview" className="w-full h-48 object-cover rounded-lg" />
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          className="absolute top-2 right-2"
-                          onClick={() => {
-                            setBeforePhoto(null);
-                            setBeforePhotoPreview("");
-                          }}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <Label htmlFor="before-photo" className="cursor-pointer flex flex-col items-center gap-2 text-foreground">
-                        <ImageIcon className="h-12 w-12" />
-                        <span className="font-medium">Click to upload before photo</span>
-                        <Input
-                          id="before-photo"
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => handleFileSelect(e, true)}
-                        />
-                      </Label>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <Label className="text-foreground font-medium">{isBeforeAfter ? "After Photo" : "Photo"}</Label>
-                <div className="border-2 border-dashed border-foreground rounded-lg p-4 bg-card/10 hover:bg-card/20 transition-colors">
-                  {newPhotoPreview ? (
+                  {beforePhotoPreview ? (
                     <div className="relative">
-                      <img src={newPhotoPreview} alt="Photo preview" className="w-full h-48 object-cover rounded-lg" />
+                      <img src={beforePhotoPreview} alt="Before preview" className="w-full h-48 object-cover rounded-lg" />
                       <Button
                         size="sm"
                         variant="destructive"
                         className="absolute top-2 right-2"
                         onClick={() => {
-                          setNewPhoto(null);
-                          setNewPhotoPreview("");
+                          setBeforePhoto(null);
+                          setBeforePhotoPreview("");
                         }}
                       >
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
                   ) : (
-                    <Label htmlFor="new-photo" className="cursor-pointer flex flex-col items-center gap-2 text-foreground">
-                      <ImageIcon className="h-12 w-12" />
-                      <span className="font-medium">Click to upload {isBeforeAfter ? "after" : ""} photo</span>
-                      <Input
-                        id="new-photo"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => handleFileSelect(e, false)}
-                      />
-                    </Label>
+                    <CameraCapture
+                      context="portfolio"
+                      variant="default"
+                      onCapture={(imageUrl) => handleFileSelect(imageUrl, true)}
+                      maxSizeMB={3}
+                      quality={0.92}
+                    />
                   )}
                 </div>
+              )}
+
+              <div className="space-y-2">
+                <Label className="text-foreground font-medium">{isBeforeAfter ? "After Photo" : "Photo"}</Label>
+                {newPhotoPreview ? (
+                  <div className="relative">
+                    <img src={newPhotoPreview} alt="Photo preview" className="w-full h-48 object-cover rounded-lg" />
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      className="absolute top-2 right-2"
+                      onClick={() => {
+                        setNewPhoto(null);
+                        setNewPhotoPreview("");
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <CameraCapture
+                    context="portfolio"
+                    variant="default"
+                    onCapture={(imageUrl) => handleFileSelect(imageUrl, false)}
+                    maxSizeMB={3}
+                    quality={0.92}
+                  />
+                )}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="caption" className="text-foreground font-medium">Caption (Optional)</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="caption" className="text-foreground font-medium">Caption (Optional)</Label>
+                <VoiceControl
+                  variant="minimal"
+                  context="notes"
+                  onTranscription={(text) => setCaption(prev => prev ? `${prev}\n${text}` : text)}
+                />
+              </div>
               <Textarea
                 id="caption"
-                placeholder="Describe the style, technique, or products used..."
+                placeholder="Describe the style, technique, or products used... (or use voice input)"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 rows={3}
@@ -418,7 +422,7 @@ const Portfolio = () => {
 
             <Button
               onClick={handleUpload}
-              disabled={uploading || !newPhoto || (isBeforeAfter && !beforePhoto)}
+              disabled={uploading || !newPhotoPreview || (isBeforeAfter && !beforePhotoPreview)}
               className="w-full"
             >
               {uploading ? (
