@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState } from "react";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export type NudgeTrigger = 
   | 'trial_day_5'
@@ -11,14 +12,58 @@ export type NudgeTrigger =
 
 export const useSubscriptionNudges = () => {
   const { inTrial, subscribed, loading } = useSubscription();
-  const [clientCount] = useState(0); // Will be populated from context/props in real implementation
-  const [appointmentCount] = useState(0);
-  const [trialDaysRemaining] = useState(10); // Default to 10 days, will be calculated from subscription context
+  const [clientCount, setClientCount] = useState(0);
+  const [appointmentCount, setAppointmentCount] = useState(0);
+  const [trialDaysRemaining, setTrialDaysRemaining] = useState(10);
   const [dismissedNudges, setDismissedNudges] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadDismissedNudges();
+    loadRealData();
   }, []);
+
+  const loadRealData = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      // Get stylist profile
+      const { data: stylistData } = await supabase
+        .from("stylist_profiles")
+        .select("id, trial_end_date")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      if (!stylistData) return;
+
+      // Calculate trial days remaining
+      if (stylistData.trial_end_date) {
+        const trialEnd = new Date(stylistData.trial_end_date);
+        const now = new Date();
+        const daysLeft = Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+        setTrialDaysRemaining(daysLeft);
+      }
+
+      // Get client count
+      const { count: clients } = await supabase
+        .from("client_profiles")
+        .select("*", { count: 'exact', head: true })
+        .eq("preferred_stylist_id", stylistData.id);
+
+      setClientCount(clients || 0);
+
+      // Get appointment count
+      const { count: appointments } = await supabase
+        .from("appointments")
+        .select("*", { count: 'exact', head: true })
+        .eq("stylist_id", stylistData.id)
+        .eq("status", "completed");
+
+      setAppointmentCount(appointments || 0);
+    } catch (error) {
+      console.error('Error loading subscription nudge data:', error);
+    }
+  };
 
   const loadDismissedNudges = () => {
     const dismissed = localStorage.getItem('dismissed_nudges');

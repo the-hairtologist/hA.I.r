@@ -50,6 +50,7 @@ import { useAIAnalytics } from "@/hooks/useAIAnalytics";
 import { useFeatureFlag } from "@/lib/featureFlags";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles, BookOpen } from "lucide-react";
+import { ProgressTracker } from "@/components/ProgressTracker";
 import {
   DndContext,
   closestCenter,
@@ -103,6 +104,7 @@ const Dashboard = () => {
 
   // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
+    { id: "progress-tracker", title: "Your Progress", component: "ProgressTracker", enabled: true },
     { id: "predictive-insights", title: "AI Predictions", component: "PredictiveInsights", enabled: true },
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "appointment-timer", title: "Session Timer", component: "AppointmentTimer", enabled: true },
@@ -583,6 +585,8 @@ const Dashboard = () => {
         return (userRole === "client" || isAdmin) ? <LoyaltyProgressWidget /> : null;
       case "AppointmentTimer":
         return (userRole === "stylist" || isAdmin) ? <AppointmentTimerWidget /> : null;
+      case "ProgressTracker":
+        return (userRole === "stylist" || isAdmin) ? <ProgressTracker /> : null;
       case "BirthdayAlerts":
         return (userRole === "stylist" || isAdmin) ? <BirthdayAlertsWidget /> : null;
       case "CommissionTracker":

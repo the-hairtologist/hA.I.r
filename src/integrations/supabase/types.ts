@@ -3211,6 +3211,7 @@ export type Database = {
           bio: string | null
           booking_instructions: string | null
           booking_link: string | null
+          booking_page_active: boolean | null
           buffer_time_minutes: number | null
           business_email: string | null
           business_name: string | null
@@ -3236,6 +3237,7 @@ export type Database = {
           specialty: string | null
           timezone: string | null
           total_reviews: number | null
+          trial_end_date: string | null
           updated_at: string
           user_id: string
           weekly_schedule: Json | null
@@ -3247,6 +3249,7 @@ export type Database = {
           bio?: string | null
           booking_instructions?: string | null
           booking_link?: string | null
+          booking_page_active?: boolean | null
           buffer_time_minutes?: number | null
           business_email?: string | null
           business_name?: string | null
@@ -3272,6 +3275,7 @@ export type Database = {
           specialty?: string | null
           timezone?: string | null
           total_reviews?: number | null
+          trial_end_date?: string | null
           updated_at?: string
           user_id: string
           weekly_schedule?: Json | null
@@ -3283,6 +3287,7 @@ export type Database = {
           bio?: string | null
           booking_instructions?: string | null
           booking_link?: string | null
+          booking_page_active?: boolean | null
           buffer_time_minutes?: number | null
           business_email?: string | null
           business_name?: string | null
@@ -3308,6 +3313,7 @@ export type Database = {
           specialty?: string | null
           timezone?: string | null
           total_reviews?: number | null
+          trial_end_date?: string | null
           updated_at?: string
           user_id?: string
           weekly_schedule?: Json | null
@@ -3680,6 +3686,51 @@ export type Database = {
           },
           {
             foreignKeyName: "waitlist_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      zapier_webhooks: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          is_active: boolean | null
+          stylist_id: string
+          updated_at: string
+          webhook_url: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          is_active?: boolean | null
+          stylist_id: string
+          updated_at?: string
+          webhook_url: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          is_active?: boolean | null
+          stylist_id?: string
+          updated_at?: string
+          webhook_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zapier_webhooks_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "zapier_webhooks_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
             referencedRelation: "stylist_profiles"
