@@ -33,6 +33,9 @@ import { ClientHistoryTimeline } from "@/components/ClientHistoryTimeline";
 import { ClientCSVImport } from "@/components/ClientCSVImport";
 import { BulkActionsBar } from "@/components/admin/BulkActionsBar";
 import { CSVImportDialog } from "@/components/admin/CSVImportDialog";
+import { ClientRiskIndicator } from "@/components/ClientRiskIndicator";
+import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { clientSchema } from "@/lib/validation/clientSchemas";
 
 interface ClientProfile {
   id: string;
@@ -221,59 +224,34 @@ export default function Clients() {
     e.preventDefault();
     
     // Prevent double submission
-    if (isSubmitting) {
-      return;
-    }
-    
+    if (isSubmitting) return;
     if (!stylistId) return;
 
-    // Validate required fields
-    if (!formData.full_name.trim()) {
-      toast.error("We'd love to know your client's name! 👤");
-      return;
-    }
-
-    // Validate field lengths
-    if (formData.full_name.trim().length > 100) {
-      toast.error("That name's a bit long - keep it under 100 characters 📝");
-      return;
-    }
-
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      toast.error("Hmm, that email doesn't look quite right 📧");
-      return;
-    }
-
-    if (formData.email && formData.email.length > 255) {
-      toast.error("Email's too long - keep it under 255 characters ✂️");
-      return;
-    }
-
-    if (formData.notes.length > 1000) {
-      toast.error("Notes are a bit lengthy - keep it under 1000 characters 📝");
-      return;
-    }
-
-    if (formData.allergies.length > 500) {
-      toast.error("Allergies field is too long - keep it under 500 characters ✂️");
-      return;
-    }
-
-    setIsSubmitting(true);
+    // Validate with zod schema
     try {
+      const validatedData = clientSchema.parse({
+        full_name: formData.full_name,
+        email: formData.email || null,
+        phone: formData.phone || null,
+        hair_type: formData.hair_type || null,
+        allergies: formData.allergies || null,
+        notes: formData.notes || null,
+        preferred_stylist_id: stylistId
+      });
+
+      setIsSubmitting(true);
       const { error } = await supabase.from("client_profiles").insert({
         preferred_stylist_id: stylistId,
-        full_name: formData.full_name.trim(),
-        email: formData.email.trim() || null,
-        phone: formData.phone.trim() || null,
-        hair_type: formData.hair_type.trim() || null,
-        allergies: formData.allergies.trim() || null,
-        notes: formData.notes.trim() || null,
+        full_name: validatedData.full_name.trim(),
+        email: validatedData.email?.trim() || null,
+        phone: validatedData.phone?.trim() || null,
+        hair_type: validatedData.hair_type?.trim() || null,
+        allergies: validatedData.allergies?.trim() || null,
+        notes: validatedData.notes?.trim() || null,
       });
 
       if (error) throw error;
 
-      // Show celebration
       showCelebration("client-added", undefined, clients.length + 1);
       setIsDialogOpen(false);
       setFormData({
@@ -285,9 +263,14 @@ export default function Clients() {
         notes: "",
       });
       loadClients();
-    } catch (error) {
-      console.error("Error adding client:", error);
-      toast.error("Unable to add client. Please check all fields and try again.");
+    } catch (error: any) {
+      if (error.name === 'ZodError') {
+        const firstError = error.errors[0];
+        toast.error(firstError.message);
+      } else {
+        console.error("Error adding client:", error);
+        toast.error("Unable to add client. Please check all fields and try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -296,45 +279,30 @@ export default function Clients() {
   const handleEditClient = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Prevent double submission
-    if (isEditSubmitting) {
-      return;
-    }
-    
+    if (isEditSubmitting) return;
     if (!selectedClient) return;
 
-    // Validate required fields
-    if (!editFormData.full_name.trim()) {
-      toast.error("We need a name for this client! 👤");
-      return;
-    }
-
-    if (editFormData.full_name.trim().length > 100) {
-      toast.error("That name's a bit long - keep it under 100 characters 📝");
-      return;
-    }
-
-    if (editFormData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editFormData.email)) {
-      toast.error("Hmm, that email doesn't look quite right 📧");
-      return;
-    }
-
-    if (editFormData.notes.length > 1000) {
-      toast.error("Notes are a bit lengthy - keep it under 1000 characters 📝");
-      return;
-    }
-
-    setIsEditSubmitting(true);
+    // Validate with zod schema
     try {
+      const validatedData = clientSchema.parse({
+        full_name: editFormData.full_name,
+        email: editFormData.email || null,
+        phone: editFormData.phone || null,
+        hair_type: editFormData.hair_type || null,
+        allergies: editFormData.allergies || null,
+        notes: editFormData.notes || null
+      });
+
+      setIsEditSubmitting(true);
       const { error } = await supabase
         .from("client_profiles")
         .update({
-          full_name: editFormData.full_name.trim(),
-          email: editFormData.email.trim() || null,
-          phone: editFormData.phone.trim() || null,
-          hair_type: editFormData.hair_type.trim() || null,
-          allergies: editFormData.allergies.trim() || null,
-          notes: editFormData.notes.trim() || null,
+          full_name: validatedData.full_name.trim(),
+          email: validatedData.email?.trim() || null,
+          phone: validatedData.phone?.trim() || null,
+          hair_type: validatedData.hair_type?.trim() || null,
+          allergies: validatedData.allergies?.trim() || null,
+          notes: validatedData.notes?.trim() || null,
         })
         .eq("id", selectedClient.id);
 
@@ -343,9 +311,14 @@ export default function Clients() {
       toast.success("Client updated successfully!");
       setEditDialogOpen(false);
       loadClients();
-    } catch (error) {
-      console.error("Error updating client:", error);
-      toast.error("Unable to update client information. Please try again.");
+    } catch (error: any) {
+      if (error.name === 'ZodError') {
+        const firstError = error.errors[0];
+        toast.error(firstError.message);
+      } else {
+        console.error("Error updating client:", error);
+        toast.error("Unable to update client information. Please try again.");
+      }
     } finally {
       setIsEditSubmitting(false);
     }
@@ -985,6 +958,20 @@ export default function Clients() {
                       <span className="font-semibold text-destructive">Allergies:</span> {client.allergies}
                     </div>
                   )}
+
+                  {/* AI Risk Indicator */}
+                  <AIFeatureErrorBoundary featureName="client_risk_indicator">
+                    <ClientRiskIndicator
+                      lastAppointmentDate={client.last_appointment_date}
+                      totalAppointments={client.total_appointments || 0}
+                      missedAppointments={0}
+                      onActionClick={() => {
+                        toast.success("Opening engagement tools...");
+                        // Could navigate to messaging or appointment booking
+                      }}
+                    />
+                  </AIFeatureErrorBoundary>
+
                   <div className="text-xs sm:text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
                     <span className="font-semibold text-secondary">Notes: </span>
                     <span className="text-foreground">

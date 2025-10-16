@@ -25,25 +25,32 @@
   ],
   "shortcuts": [
     {
-      "name": "New Appointment",
-      "short_name": "Appointment",
-      "description": "Book a new appointment",
-      "url": "/book-appointment",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "name": "AI Assistant",
+      "short_name": "AI Chat",
+      "description": "Chat with AI for formula help",
+      "url": "/ai-assistant",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "My Clients",
+      "name": "Quick Formula",
+      "short_name": "Formula",
+      "description": "Generate formula instantly",
+      "url": "/quick-formula",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Appointments",
+      "short_name": "Schedule",
+      "description": "View your schedule",
+      "url": "/appointments",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Clients",
       "short_name": "Clients",
-      "description": "View and manage clients",
+      "description": "Manage your clients",
       "url": "/clients",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
-    },
-    {
-      "name": "Messages",
-      "short_name": "Messages",
-      "description": "Check messages",
-      "url": "/messages",
-      "icons": [{ "src": "/placeholder.svg", "sizes": "96x96" }]
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ],
   "screenshots": [

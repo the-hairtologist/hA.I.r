@@ -1,140 +1,172 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { corsHeaders, compressedJsonResponse, compressedErrorResponse } from '../_shared/compression.ts';
-import { authenticateRequest } from '../_shared/auth.ts';
-import { handleError, validateRequestBody, checkRateLimit } from '../_shared/error-handler.ts';
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
-serve(async (req) => {
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+interface ValidationIssue {
+  severity: 'blocker' | 'warning' | 'info';
+  message: string;
+  category: 'safety' | 'completeness' | 'optimization';
+}
+
+Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Authenticate and verify stylist/admin role
-    const { user, supabase } = await authenticateRequest(req, { allowStylistOrAdmin: true });
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Authenticate user
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Missing authorization header' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     
-    // Rate limiting (20 validations per minute)
-    if (!checkRateLimit(user.id, 20, 60000)) {
-      return await compressedErrorResponse('Rate limit exceeded. Please slow down.', 429);
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    const body = await req.json();
-    validateRequestBody(body, ['formula']);
-    const { formula, clientId } = body;
+    const { formulaText, clientId, clientAllergies } = await req.json();
 
-
-    const warnings: string[] = [];
-    const blockers: string[] = [];
-    let isSafe = true;
-
-    // Validation 1: Developer Volume (10-40 max)
-    if (formula.base?.developer) {
-      const devVolume = parseInt(formula.base.developer.replace('vol', ''));
-      if (devVolume > 40) {
-        blockers.push(`Developer volume ${devVolume} exceeds safe maximum (40 vol). Risk of severe damage.`);
-        isSafe = false;
-      } else if (devVolume > 30) {
-        warnings.push(`High developer volume (${devVolume} vol). Monitor processing closely.`);
-      }
+    if (!formulaText) {
+      return new Response(JSON.stringify({ error: 'Formula text required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    // Validation 2: Color-to-Developer Ratio (1:1 to 1:2)
-    if (formula.base?.amount && formula.base?.developer_amount) {
-      const colorAmount = parseFloat(formula.base.amount);
-      const devAmount = parseFloat(formula.base.developer_amount);
-      const ratio = devAmount / colorAmount;
+    const issues: ValidationIssue[] = [];
+    
+    // Safety checks
+    if (clientAllergies && clientAllergies.trim()) {
+      const allergies = clientAllergies.toLowerCase().split(',').map((a: string) => a.trim());
+      const formulaLower = formulaText.toLowerCase();
       
-      if (ratio < 1 || ratio > 2) {
-        warnings.push(`Ratio ${ratio.toFixed(2)}:1 is outside recommended range (1:1 to 1:2).`);
+      const dangerousIngredients = ['ppd', 'ammonia', 'peroxide', 'bleach'];
+      const hasNoAllergyCheck = allergies.some((allergy: string) => {
+        const allergyWords = allergy.split(' ');
+        return !allergyWords.some((word: string) => formulaLower.includes(word));
+      });
+
+      if (hasNoAllergyCheck) {
+        issues.push({
+          severity: 'blocker',
+          message: `⚠️ CRITICAL: Client has documented allergies (${clientAllergies}). Ensure formula addresses these sensitivities.`,
+          category: 'safety'
+        });
       }
-    }
 
-    // Validation 3: Processing Time (5-45 minutes)
-    if (formula.base?.processing_minutes) {
-      const procTime = parseInt(formula.base.processing_minutes);
-      if (procTime > 45) {
-        blockers.push(`Processing time ${procTime} minutes exceeds safe maximum (45 min). Risk of over-processing.`);
-        isSafe = false;
-      } else if (procTime < 5) {
-        warnings.push(`Processing time ${procTime} minutes is very short. May not achieve desired result.`);
-      } else if (procTime > 35) {
-        warnings.push(`Extended processing time (${procTime} min). Monitor hair integrity closely.`);
-      }
-    }
-
-    // Validation 4: Product Compatibility
-    const incompatiblePairs = [
-      { a: 'bleach', b: 'permanent color', reason: 'Cannot mix bleach with permanent color' },
-      { a: 'toner', b: 'high volume developer', reason: 'Toners require low volume developer (10-20 vol)' },
-    ];
-
-    for (const pair of incompatiblePairs) {
-      const hasA = JSON.stringify(formula).toLowerCase().includes(pair.a);
-      const hasB = JSON.stringify(formula).toLowerCase().includes(pair.b);
-      if (hasA && hasB) {
-        blockers.push(pair.reason);
-        isSafe = false;
-      }
-    }
-
-    // Validation 5: Client Allergy Check
-    if (clientId) {
-      const { data: client } = await supabase
-        .from('client_profiles')
-        .select('allergies')
-        .eq('id', clientId)
-        .single();
-
-      if (client?.allergies) {
-        const allergies = client.allergies.toLowerCase();
-        const formulaStr = JSON.stringify(formula).toLowerCase();
-        
-        const commonAllergens = ['ppd', 'ammonia', 'peroxide', 'resorcinol', 'parabens'];
-        for (const allergen of commonAllergens) {
-          if (allergies.includes(allergen) && formulaStr.includes(allergen)) {
-            blockers.push(`⚠️ ALLERGY ALERT: Client is allergic to ${allergen.toUpperCase()}. Do not proceed!`);
-            isSafe = false;
-          }
+      // Check for dangerous ingredients with known allergies
+      dangerousIngredients.forEach(ingredient => {
+        if (formulaLower.includes(ingredient) && allergies.some((a: string) => a.includes(ingredient))) {
+          issues.push({
+            severity: 'blocker',
+            message: `🚨 DANGER: Formula contains ${ingredient} but client is allergic!`,
+            category: 'safety'
+          });
         }
-      }
+      });
     }
 
-    // Validation 6: Multi-Level Lift Warning
-    if (formula.base?.current_level && formula.base?.target_level) {
-      const currentLevel = parseInt(formula.base.current_level);
-      const targetLevel = parseInt(formula.base.target_level);
-      const lift = targetLevel - currentLevel;
+    // Completeness checks
+    const hasTiming = /\d+\s*(min|minutes|hour|hr|hrs)/i.test(formulaText);
+    const hasRatios = /\d+:\d+/.test(formulaText) || /\d+\s*(oz|ml|g|gram)/i.test(formulaText);
+    const hasSteps = /step\s*\d+|first|second|then|next|finally/i.test(formulaText);
 
-      if (lift > 3) {
-        warnings.push(`Large lift (${lift} levels). Consider multi-session approach for hair integrity.`);
-      }
+    if (!hasTiming) {
+      issues.push({
+        severity: 'warning',
+        message: 'No processing time specified. Add timing for reproducibility (e.g., "30 minutes").',
+        category: 'completeness'
+      });
     }
 
-    // Add educational context
-    if (warnings.length === 0 && blockers.length === 0) {
-      warnings.push('✅ Formula passes all safety checks. Remember to perform strand test.');
+    if (!hasRatios) {
+      issues.push({
+        severity: 'warning',
+        message: 'No product ratios found. Include measurements for consistent results (e.g., "2:1 ratio" or "30ml").',
+        category: 'completeness'
+      });
     }
 
-    const validationResult = {
-      isSafe,
-      warnings,
-      blockers,
-      checkedAt: new Date().toISOString(),
-    };
+    if (!hasSteps && formulaText.length < 50) {
+      issues.push({
+        severity: 'warning',
+        message: 'Formula seems brief. Consider adding step-by-step instructions.',
+        category: 'completeness'
+      });
+    }
 
-    // Store validation in database
+    // Optimization suggestions
+    if (formulaText.length > 2000) {
+      issues.push({
+        severity: 'info',
+        message: 'Formula is quite detailed. Consider breaking into sections for easier reading.',
+        category: 'optimization'
+      });
+    }
+
+    const hasColorTheory = /warm|cool|neutral|ash|golden|red|violet/i.test(formulaText);
+    if (!hasColorTheory) {
+      issues.push({
+        severity: 'info',
+        message: 'Consider adding color theory notes (warm/cool tones) for better results.',
+        category: 'optimization'
+      });
+    }
+
+    // Determine overall safety
+    const blockers = issues.filter(i => i.severity === 'blocker');
+    const warnings = issues.filter(i => i.severity === 'warning');
+
+    // Log validation for analytics
     await supabase.from('formula_validations').insert({
       user_id: user.id,
-      formula_content: formula,
-      validation_result: validationResult,
-      warnings,
-      blockers,
-      is_safe: isSafe,
-    });
+      formula_text: formulaText,
+      client_id: clientId,
+      is_safe: blockers.length === 0,
+      blocker_count: blockers.length,
+      warning_count: warnings.length,
+      validation_result: { issues }
+    }).catch(err => console.error('Failed to log validation:', err));
 
-    return await compressedJsonResponse(validationResult, 200);
-
-  } catch (error: any) {
-    console.error('Formula validation error:', error);
-    return handleError(error);
+    return new Response(
+      JSON.stringify({
+        isSafe: blockers.length === 0,
+        issues,
+        summary: {
+          blockers: blockers.length,
+          warnings: warnings.length,
+          infos: issues.filter(i => i.severity === 'info').length
+        }
+      }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
+  } catch (error) {
+    console.error('Validation error:', error);
+    return new Response(
+      JSON.stringify({ error: error.message || 'Validation failed' }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
   }
 });

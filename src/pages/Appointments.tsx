@@ -30,7 +30,9 @@ import { QuickReviewButton } from "@/components/QuickReviewButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { RescheduleDialog } from "@/components/RescheduleDialog";
 import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
-
+import { AppointmentInsights } from "@/components/AppointmentInsights";
+import { RevenueOptimizer } from "@/components/RevenueOptimizer";
+import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 
 const Appointments = () => {
@@ -417,6 +419,23 @@ const Appointments = () => {
               </div>
             )}
 
+            {/* Revenue Optimizer (stylist only) */}
+            {userRole === "stylist" && appointments.length > 0 && (
+              <div className="mb-6">
+                <AIFeatureErrorBoundary featureName="revenue_optimizer">
+                  <RevenueOptimizer
+                    appointments={appointments}
+                    clientData={appointments.map(apt => ({
+                      id: apt.client_id,
+                      last_appointment_date: apt.appointment_date,
+                      total_appointments: 1,
+                      average_revenue: undefined
+                    }))}
+                  />
+                </AIFeatureErrorBoundary>
+              </div>
+            )}
+
             {/* Search and Filters */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
               <SearchInput
@@ -719,6 +738,23 @@ const Appointments = () => {
                 <Label>Status</Label>
                 <div className="mt-2">{getStatusBadge(selectedAppointment.status)}</div>
               </div>
+
+              {/* AI Appointment Insights (stylist only) */}
+              {userRole === "stylist" && selectedAppointment.client_id && (
+                <div className="pt-4 border-t">
+                  <AIFeatureErrorBoundary featureName="appointment_insights">
+                    <AppointmentInsights
+                      appointment={selectedAppointment}
+                      clientHistory={{
+                        totalAppointments: 0, // Will be calculated from actual data
+                        completedAppointments: 0,
+                        cancelledAppointments: 0,
+                        noShowAppointments: 0
+                      }}
+                    />
+                  </AIFeatureErrorBoundary>
+                </div>
+              )}
 
               {/* Quick Context Links */}
               {userRole === "stylist" && (

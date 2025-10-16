@@ -972,9 +972,24 @@ const Formulas = () => {
                 value={formulaText}
                 onChange={(e) => setFormulaText(e.target.value)}
                 rows={6}
-                className="resize-none"
+                className={cn("resize-none", validationErrors.formula_text && "border-red-500")}
               />
+              {validationErrors.formula_text && (
+                <p className="text-sm text-red-500">{validationErrors.formula_text}</p>
+              )}
             </div>
+
+            {/* AI Success Prediction */}
+            {formulaText && selectedClient && (
+              <AIFeatureErrorBoundary featureName="formula_success_predictor">
+                <FormulaSuccessPredictor
+                  formulaText={formulaText}
+                  clientHairType={selectedClientData?.hair_type || undefined}
+                  clientAllergies={selectedClientData?.allergies || undefined}
+                  similarFormulasCount={similarFormulasCount}
+                />
+              </AIFeatureErrorBoundary>
+            )}
 
             {/* Instructions */}
             <div className="space-y-2">
