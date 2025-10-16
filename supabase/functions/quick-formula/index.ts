@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { corsHeaders, compressedJsonResponse } from '../_shared/compression.ts';
+import { authenticateRequest } from '../_shared/auth.ts';
+import { handleError, validateRequestBody, checkRateLimit } from '../_shared/error-handler.ts';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,19 +9,17 @@ serve(async (req) => {
   }
 
   try {
-    const { currentLevel, targetLevel, tone, condition } = await req.json();
+    // SECURITY: Require stylist or admin role
+    const { user, supabase } = await authenticateRequest(req, { allowStylistOrAdmin: true });
     
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) throw new Error('Missing authorization header');
+    // Rate limiting (20 quick formulas per minute)
+    if (!checkRateLimit(user.id, 20, 60000)) {
+      return await compressedJsonResponse({ error: 'Rate limit exceeded. Please slow down.' }, 429);
+    }
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('Unauthorized');
+    const body = await req.json();
+    validateRequestBody(body, ['currentLevel', 'targetLevel', 'tone', 'condition']);
+    const { currentLevel, targetLevel, tone, condition } = body;
 
     console.log('Quick formula request:', { currentLevel, targetLevel, tone, condition });
 

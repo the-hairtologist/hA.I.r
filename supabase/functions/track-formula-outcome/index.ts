@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { corsHeaders, compressedJsonResponse } from '../_shared/compression.ts';
+import { authenticateRequest } from '../_shared/auth.ts';
+import { handleError, validateRequestBody } from '../_shared/error-handler.ts';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,6 +9,16 @@ serve(async (req) => {
   }
 
   try {
+    // SECURITY: Require stylist or admin role
+    const { user, supabase, stylistId } = await authenticateRequest(req, { allowStylistOrAdmin: true });
+    
+    if (!stylistId) {
+      throw new Error('Stylist profile not found');
+    }
+
+    const body = await req.json();
+    validateRequestBody(body, ['formulaId', 'outcomeRating']);
+    
     const { 
       formulaId, 
       conversationMessageId,
@@ -21,30 +28,7 @@ serve(async (req) => {
       whatWorked, 
       whatDidntWork,
       wouldUseAgain 
-    } = await req.json();
-    
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) throw new Error('Missing authorization header');
-
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('Unauthorized');
-
-    // Get stylist ID
-    const { data: stylist } = await supabase
-      .from('stylist_profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (!stylist) {
-      throw new Error('Stylist profile not found');
-    }
+    } = body;
 
     console.log('Recording formula outcome:', { formulaId, outcomeRating });
 
@@ -54,7 +38,7 @@ serve(async (req) => {
       .insert({
         formula_id: formulaId,
         conversation_message_id: conversationMessageId,
-        stylist_id: stylist.id,
+        stylist_id: stylistId,
         client_id: clientId,
         outcome_rating: outcomeRating,
         outcome_notes: outcomeNotes,
@@ -77,7 +61,7 @@ serve(async (req) => {
 
       if (formula) {
         await supabase.from('stylist_formula_history').insert({
-          stylist_id: stylist.id,
+          stylist_id: stylistId,
           formula_json: formula.formula_data,
           client_id: clientId,
           outcome_rating: outcomeRating,
@@ -91,7 +75,7 @@ serve(async (req) => {
     const { data: allOutcomes } = await supabase
       .from('formula_outcomes')
       .select('outcome_rating')
-      .eq('stylist_id', stylist.id);
+      .eq('stylist_id', stylistId);
 
     const successRate = allOutcomes && allOutcomes.length > 0
       ? parseFloat((allOutcomes.filter(o => ['perfect', 'good'].includes(o.outcome_rating)).length / allOutcomes.length * 100).toFixed(1))
