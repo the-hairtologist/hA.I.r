@@ -3,15 +3,15 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const testimonials = [
   {
-    quote: "Finally, a salon app that understands my hair!",
+    quote: "Saved me 2 hours every week on scheduling. My clients love the reminders!",
     author: "Sarah M.",
-    role: "Client",
+    role: "Independent Stylist",
     initials: "SM",
   },
   {
-    quote: "Booking and payments are effortless - love it!",
+    quote: "First app that actually tracks my color formulas. Game changer for repeat clients.",
     author: "Jessica P.",
-    role: "Stylist",
+    role: "Salon Owner",
     initials: "JP",
   },
 ];

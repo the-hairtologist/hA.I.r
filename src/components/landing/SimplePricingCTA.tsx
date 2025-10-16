@@ -37,7 +37,7 @@ export const SimplePricingCTA = () => {
           onClick={() => navigate("/auth")}
           className="text-sm xs:text-base sm:text-lg px-8 xs:px-12 py-6 xs:py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none"
         >
-          START FREE TRIAL
+          GET STARTED FREE
         </Button>
 
         <p className="text-xs xs:text-sm font-pixel text-secondary-foreground/80 uppercase mt-6">

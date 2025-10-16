@@ -69,7 +69,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-sm xs:text-base sm:text-lg px-6 xs:px-8 sm:px-12 py-5 xs:py-6 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle"
+                  className="text-sm xs:text-base sm:text-lg px-6 xs:px-8 sm:px-12 py-4 xs:py-5 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle"
                 >
                   GET STARTED FREE
                 </Button>
