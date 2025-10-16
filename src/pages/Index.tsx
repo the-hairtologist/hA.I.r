@@ -6,14 +6,12 @@ import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
 import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
-import { BetaAccessGate } from "@/components/BetaAccessGate";
 
 const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <BetaAccessGate>
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
       {/* Skip to main content for accessibility */}
       <a 
         href="#main-content" 
@@ -130,8 +128,7 @@ const Index = () => {
       </section>
 
       <EnhancedFooter />
-      </div>
-    </BetaAccessGate>
+    </div>
   );
 };
 
