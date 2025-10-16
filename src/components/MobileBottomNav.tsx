@@ -247,11 +247,11 @@ export const MobileBottomNav = () => {
                       "transition-all duration-200",
                       // Enhanced Home highlight
                       item.highlight && !active && [
-                        "w-11 h-11", // Slightly larger for center home
+                        "w-12 h-12", // Larger highlight container
                         "bg-gradient-to-br from-primary/10 to-secondary/10",
                         "ring-1 ring-primary/20"
                       ],
-                      !item.highlight && "w-10 h-10",
+                      !item.highlight && "w-11 h-11", // Increased from w-10 h-10
                       active && [
                         "bg-gradient-to-br",
                         item.gradient,
@@ -263,11 +263,12 @@ export const MobileBottomNav = () => {
                   >
                     <Icon 
                       className={cn(
-                        "h-5 w-5 transition-all duration-200",
+                        "h-6 w-6 transition-all duration-200",
                         active ? "text-on-surface-primary" : "text-muted-foreground",
                         item.highlight && !active && "text-primary/60"
                       )} 
                       strokeWidth={active ? 2.5 : 2}
+                      aria-hidden="true"
                     />
                   </div>
                   

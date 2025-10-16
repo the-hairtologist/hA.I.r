@@ -56,26 +56,27 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
           "flex items-center justify-between px-4 h-16"
         )}
       >
-        {/* Left: Menu button with "More" indicator */}
+        {/* Left: Menu button with "More" indicator - ENHANCED for better discoverability */}
         <Button
           variant="ghost"
           size="icon"
           onClick={handleMenuClick}
           className={cn(
-            "min-w-[44px] min-h-[44px] touch-manipulation",
-            "relative group hover:bg-primary/10 transition-all duration-200"
+            "min-w-[48px] min-h-[48px] touch-manipulation",
+            "relative group hover:bg-primary/10 transition-all duration-200",
+            "ring-1 ring-primary/20 hover:ring-primary/40"
           )}
           aria-label="Open full navigation menu - More options available"
         >
           <div className="relative">
-            <Menu className="h-6 w-6 group-hover:text-primary transition-colors" />
-            {/* "More" indicator - small badge showing there's more in the menu */}
-            <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse" 
+            <Menu className="h-7 w-7 group-hover:text-primary transition-colors" strokeWidth={2.5} />
+            {/* "More" indicator - enhanced visibility */}
+            <div className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-primary rounded-full animate-pulse shadow-lg" 
                  title="More menu items available" 
                  aria-hidden="true" />
           </div>
-          {/* Subtle pulse background for discoverability */}
-          <div className="absolute inset-0 rounded-md bg-primary/5 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity" />
+          {/* Enhanced pulse background */}
+          <div className="absolute inset-0 rounded-md bg-primary/10 animate-pulse opacity-50 group-hover:opacity-100 transition-opacity" />
         </Button>
 
         {/* Center: Logo */}
@@ -109,7 +110,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
             className="min-w-[44px] min-h-[44px] touch-manipulation"
             aria-label="Open search"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-6 w-6" />
           </Button>
 
           {/* Notifications button */}
@@ -123,7 +124,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
             className="relative min-w-[44px] min-h-[44px] touch-manipulation"
             aria-label={`Notifications${notificationCount > 0 ? `, ${notificationCount} unread` : ''}`}
           >
-            <Bell className="h-5 w-5" />
+            <Bell className="h-6 w-6" />
             {notificationCount > 0 && (
               <NotificationDot 
                 count={notificationCount} 
