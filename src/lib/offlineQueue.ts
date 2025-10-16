@@ -15,6 +15,7 @@ export interface QueuedAction {
 const QUEUE_KEY = 'offline_action_queue';
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 2000;
+const MAX_QUEUE_AGE_DAYS = 30; // Auto-cleanup old items
 
 class OfflineQueue {
   private queue: QueuedAction[] = [];
@@ -31,12 +32,41 @@ class OfflineQueue {
       const stored = localStorage.getItem(QUEUE_KEY);
       if (stored) {
         this.queue = JSON.parse(stored);
+        this.cleanupOldItems();
         console.log(`Loaded ${this.queue.length} queued actions`);
       }
     } catch (error) {
       console.error('Failed to load offline queue:', error);
       this.queue = [];
     }
+  }
+
+  /**
+   * Remove items older than MAX_QUEUE_AGE_DAYS
+   */
+  private cleanupOldItems() {
+    const cutoffTime = Date.now() - (MAX_QUEUE_AGE_DAYS * 24 * 60 * 60 * 1000);
+    const originalLength = this.queue.length;
+    this.queue = this.queue.filter(item => item.timestamp > cutoffTime);
+    
+    if (this.queue.length < originalLength) {
+      console.log(`Cleaned up ${originalLength - this.queue.length} old queued items`);
+      this.saveQueue();
+    }
+  }
+
+  /**
+   * Clear all queue data (call on logout)
+   */
+  public clearOnLogout() {
+    console.log('Clearing offline queue on logout');
+    this.queue = [];
+    try {
+      localStorage.removeItem(QUEUE_KEY);
+    } catch (error) {
+      console.error('Failed to clear offline queue:', error);
+    }
+    this.notifyListeners();
   }
 
   private saveQueue() {

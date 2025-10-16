@@ -8,6 +8,7 @@ import { captureImage } from "@/platform/camera";
 import { haptic } from "@/platform/haptics";
 import { cn } from "@/lib/utils";
 import imageCompression from 'browser-image-compression';
+import { PrivacyConsentDialog, getStoredConsent } from "./PrivacyConsentDialog";
 
 interface CameraCaptureProps {
   onCapture: (imageUrl: string, metadata?: CaptureMetadata) => void | Promise<void>;
@@ -41,6 +42,8 @@ export const CameraCapture = ({
   const [uploadProgress, setUploadProgress] = useState(0);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showConsentDialog, setShowConsentDialog] = useState(false);
+  const [pendingCapture, setPendingCapture] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const contextMessages = {
@@ -107,6 +110,29 @@ export const CameraCapture = ({
   const handleCapture = async () => {
     if (disabled || capturing) return;
 
+    // Check for stored consent first
+    const hasConsent = getStoredConsent('camera');
+    if (!hasConsent) {
+      setPendingCapture(true);
+      setShowConsentDialog(true);
+      return;
+    }
+
+    await executeCapture();
+  };
+
+  const handleConsentResponse = async (granted: boolean) => {
+    setPendingCapture(false);
+    if (granted) {
+      await executeCapture();
+    } else {
+      toast.error("Camera permission denied", {
+        description: "You can grant permission later in Settings"
+      });
+    }
+  };
+
+  const executeCapture = async () => {
     setCapturing(true);
     setError(null);
     setUploadProgress(0);
@@ -236,8 +262,16 @@ export const CameraCapture = ({
 
   // Default full-featured variant
   return (
-    <Card className={cn("p-6 space-y-4", className)}>
-      {preview && processing ? (
+    <>
+      <PrivacyConsentDialog
+        open={showConsentDialog}
+        onOpenChange={setShowConsentDialog}
+        type="camera"
+        onConsent={handleConsentResponse}
+        context={context}
+      />
+      <Card className={cn("p-6 space-y-4", className)}>
+        {preview && processing ? (
         <div className="space-y-4 animate-in fade-in-50">
           <div className="relative rounded-lg overflow-hidden">
             <img 
@@ -289,6 +323,8 @@ export const CameraCapture = ({
             onClick={handleCapture}
             disabled={disabled || capturing || processing}
             className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground"
+            aria-label={messages.capture}
+            aria-live="polite"
           >
             {capturing || processing ? (
               <>
@@ -304,6 +340,7 @@ export const CameraCapture = ({
           </Button>
         </div>
       )}
-    </Card>
+      </Card>
+    </>
   );
 };

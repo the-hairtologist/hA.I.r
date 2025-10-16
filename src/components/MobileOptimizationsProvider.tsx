@@ -15,13 +15,16 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
   const warmUpCache = async () => {
     // Prefetch critical data from Supabase
     try {
+      // Small delay to ensure env vars are loaded
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       console.log('🔥 Warming up cache...');
       
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
       if (!supabaseUrl || !supabaseKey) {
-        console.warn('Supabase credentials not found, skipping cache warmup');
+        console.warn('Supabase credentials not available yet, will retry on next load');
         return;
       }
       

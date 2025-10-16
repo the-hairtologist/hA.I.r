@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
+import { PrivacyConsentDialog, getStoredConsent } from "./PrivacyConsentDialog";
 
 interface VoiceControlProps {
   onTranscription: (text: string, metadata?: VoiceMetadata) => void;
@@ -45,6 +46,7 @@ export const VoiceControl = ({
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0);
   const [liveTranscript, setLiveTranscript] = useState("");
+  const [showConsentDialog, setShowConsentDialog] = useState(false);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -135,8 +137,29 @@ export const VoiceControl = ({
   };
 
   const startRecording = async () => {
+    // Check for stored consent first
+    const hasConsent = getStoredConsent('microphone');
+    if (!hasConsent) {
+      setShowConsentDialog(true);
+      return;
+    }
+
+    await executeRecording();
+  };
+
+  const handleConsentResponse = async (granted: boolean) => {
+    if (granted) {
+      await executeRecording();
+    } else {
+      toast.error("Microphone permission denied", {
+        description: "You can grant permission later in Settings"
+      });
+    }
+  };
+
+  const executeRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
           sampleRate: 16000,
@@ -379,19 +402,27 @@ export const VoiceControl = ({
 
   // Full-featured variant
   return (
-    <Card className={cn("p-6 space-y-4", className)}>
-      <div className="flex items-center justify-between">
+    <>
+      <PrivacyConsentDialog
+        open={showConsentDialog}
+        onOpenChange={setShowConsentDialog}
+        type="microphone"
+        onConsent={handleConsentResponse}
+        context={context}
+      />
+      <Card className={cn("p-6 space-y-4", className)}>
+        <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className={cn(
             "p-2 rounded-full transition-all",
             isRecording 
               ? "bg-destructive animate-pulse" 
-              : "bg-gradient-to-br from-purple-500 to-pink-500"
+              : "bg-gradient-to-br from-primary to-secondary"
           )}>
             {isRecording ? (
-              <MicOff className="h-5 w-5 text-white" />
+              <MicOff className="h-5 w-5 text-primary-foreground" />
             ) : (
-              <Mic className="h-5 w-5 text-white" />
+              <Mic className="h-5 w-5 text-primary-foreground" />
             )}
           </div>
           <div>
@@ -402,7 +433,7 @@ export const VoiceControl = ({
           </div>
         </div>
         {enableCommands && !isRecording && (
-          <Sparkles className="h-5 w-5 text-purple-500" />
+          <Sparkles className="h-5 w-5 text-primary" />
         )}
       </div>
 
@@ -441,8 +472,11 @@ export const VoiceControl = ({
         variant={isRecording ? "destructive" : "default"}
         className={cn(
           "w-full h-12",
-          !isRecording && "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+          !isRecording && "bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground"
         )}
+        aria-label={isRecording ? "Stop recording" : "Start voice recording"}
+        aria-live="polite"
+        aria-atomic="true"
       >
         {isProcessing ? (
           <>
@@ -474,6 +508,7 @@ export const VoiceControl = ({
           </div>
         </div>
       )}
-    </Card>
+      </Card>
+    </>
   );
 };

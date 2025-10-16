@@ -217,6 +217,10 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
    * Sign out
    */
   const signOut = useCallback(async () => {
+    // Clear offline queue data before signing out
+    const { offlineQueue } = await import('@/lib/offlineQueue');
+    offlineQueue.clearOnLogout();
+    
     await supabase.auth.signOut();
     navigate("/auth");
   }, [navigate]);
