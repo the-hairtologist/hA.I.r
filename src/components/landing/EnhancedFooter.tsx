@@ -87,8 +87,8 @@ export const EnhancedFooter = () => {
                 <div className="border-4 border-black bg-accent px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <Smartphone className="h-4 w-4 text-accent-foreground" />
                 </div>
-                <div className="border-4 border-black bg-white px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                  <span className="font-pixel text-xs">iOS</span>
+                <div className="border-4 border-black bg-accent px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="font-pixel text-xs text-accent-foreground">iOS</span>
                 </div>
                 <div className="border-4 border-black bg-accent px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <span className="font-pixel text-xs text-accent-foreground">AND</span>
