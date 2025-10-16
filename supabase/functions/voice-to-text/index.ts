@@ -6,6 +6,27 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Rate limiting: max 30 requests per minute per user
+const rateLimiter = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 30;
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const userRequests = rateLimiter.get(userId) || [];
+  
+  // Remove old requests outside the window
+  const recentRequests = userRequests.filter(time => now - time < RATE_LIMIT_WINDOW);
+  
+  if (recentRequests.length >= MAX_REQUESTS_PER_WINDOW) {
+    return false;
+  }
+  
+  recentRequests.push(now);
+  rateLimiter.set(userId, recentRequests);
+  return true;
+}
+
 // Process base64 in chunks to prevent memory issues
 function processBase64Chunks(base64String: string, chunkSize = 32768) {
   const chunks: Uint8Array[] = [];
@@ -42,6 +63,23 @@ serve(async (req) => {
   }
 
   try {
+    // Extract user ID from authorization header
+    const authHeader = req.headers.get('authorization');
+    const userId = authHeader?.split('Bearer ')[1]?.substring(0, 20) || 'anonymous';
+    
+    // Check rate limit
+    if (!checkRateLimit(userId)) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Rate limit exceeded. Maximum 30 requests per minute.' 
+        }),
+        { 
+          status: 429, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     const { audio } = await req.json();
     
     if (!audio) {

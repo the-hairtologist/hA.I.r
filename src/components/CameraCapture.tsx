@@ -9,6 +9,8 @@ import { haptic } from "@/platform/haptics";
 import { cn } from "@/lib/utils";
 import imageCompression from 'browser-image-compression';
 import { PrivacyConsentDialog, getStoredConsent } from "./PrivacyConsentDialog";
+import { z } from "zod";
+import { MediaErrorBoundary } from "./MediaErrorBoundary";
 
 interface CameraCaptureProps {
   onCapture: (imageUrl: string, metadata?: CaptureMetadata) => void | Promise<void>;
@@ -27,6 +29,15 @@ export interface CaptureMetadata {
   capturedAt: string;
   context: string;
 }
+
+// Validation schema for metadata
+const metadataSchema = z.object({
+  originalSize: z.number().positive("Original size must be positive"),
+  compressedSize: z.number().positive("Compressed size must be positive"),
+  compressionRatio: z.number().min(0).max(100, "Compression ratio must be 0-100%"),
+  capturedAt: z.string().datetime("Invalid capture timestamp"),
+  context: z.enum(['portfolio', 'profile', 'analysis', 'client_post'])
+});
 
 export const CameraCapture = ({ 
   onCapture, 
@@ -100,9 +111,15 @@ export const CameraCapture = ({
         context
       };
 
+      // Validate metadata before returning
+      metadataSchema.parse(metadata);
+
       return { blob: compressedBlob, metadata };
     } catch (error) {
       console.error('Compression error:', error);
+      if (error instanceof z.ZodError) {
+        throw new Error('Invalid image metadata: ' + error.errors[0].message);
+      }
       throw new Error('Failed to optimize image');
     }
   };
@@ -262,7 +279,12 @@ export const CameraCapture = ({
 
   // Default full-featured variant
   return (
-    <>
+    <MediaErrorBoundary fallbackType="camera" onReset={() => {
+      setPreview(null);
+      setError(null);
+      setCapturing(false);
+      setProcessing(false);
+    }}>
       <PrivacyConsentDialog
         open={showConsentDialog}
         onOpenChange={setShowConsentDialog}
@@ -341,6 +363,6 @@ export const CameraCapture = ({
         </div>
       )}
       </Card>
-    </>
+    </MediaErrorBoundary>
   );
 };

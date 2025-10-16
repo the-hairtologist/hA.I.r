@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { PrivacyConsentDialog, getStoredConsent } from "./PrivacyConsentDialog";
+import { MediaErrorBoundary } from "./MediaErrorBoundary";
 
 interface VoiceControlProps {
   onTranscription: (text: string, metadata?: VoiceMetadata) => void;
@@ -402,7 +403,12 @@ export const VoiceControl = ({
 
   // Full-featured variant
   return (
-    <>
+    <MediaErrorBoundary fallbackType="microphone" onReset={() => {
+      setIsRecording(false);
+      setIsProcessing(false);
+      setLiveTranscript("");
+      setRecordingDuration(0);
+    }}>
       <PrivacyConsentDialog
         open={showConsentDialog}
         onOpenChange={setShowConsentDialog}
@@ -509,6 +515,6 @@ export const VoiceControl = ({
         </div>
       )}
       </Card>
-    </>
+    </MediaErrorBoundary>
   );
 };
