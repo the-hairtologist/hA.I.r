@@ -323,6 +323,16 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
       description: "Full platform control" 
     },
     { 
+      id: "admin-revenue", 
+      title: "Revenue Analytics", 
+      url: "/admin/revenue", 
+      icon: TrendingUp, 
+      gradient: "bg-gradient-to-br from-emerald-500 to-green-600", 
+      group: "admin", 
+      color: "text-emerald-400 dark:text-emerald-300", 
+      description: "Financial intelligence & profits" 
+    },
+    { 
       id: "admin-users", 
       title: "User Management", 
       url: "/admin/users", 

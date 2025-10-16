@@ -54,6 +54,7 @@ const Accessibility = lazy(() => import('@/pages/Accessibility'));
 const Notifications = lazy(() => import('@/pages/Notifications'));
 const ClientReviews = lazy(() => import('@/pages/ClientReviews'));
 const BookingPage = lazy(() => import('@/pages/BookingPage'));
+const AdminRevenue = lazy(() => import('@/pages/AdminRevenue'));
 const Profile = lazy(() => import('@/pages/Profile'));
 const Help = lazy(() => import('@/pages/Help'));
 const ComingSoon = lazy(() => import('@/pages/ComingSoon'));
@@ -197,6 +198,10 @@ export const AppRoutes = () => (
     <Route
       path="/analytics"
       element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><GrowthAnalytics /></ProtectedRoute>}
+    />
+    <Route
+      path="/admin/revenue"
+      element={<ProtectedRoute allowedRoles={['admin']}><AdminRevenue /></ProtectedRoute>}
     />
     <Route
       path="/ad-generator"
