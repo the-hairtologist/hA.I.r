@@ -61,10 +61,10 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: n
           </span>
         </div>
       </div>
-      <h3 className="font-pixel text-sm text-foreground uppercase tracking-wide">
+      <h3 className="font-pixel text-xs xs:text-sm text-foreground uppercase tracking-wide">
         {feature.headline}
       </h3>
-      <p className="text-xs font-sans text-muted-foreground leading-relaxed">
+      <p className="text-xs xs:text-sm font-sans text-muted-foreground leading-relaxed">
         {feature.description}
       </p>
     </div>
@@ -75,10 +75,10 @@ export const MinimalFeatures = () => {
   return (
     <div className="container mx-auto px-4">
       <div className="text-center mb-16">
-        <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
+        <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
           WHY HAIR PROS CHOOSE hA.I.r
         </h2>
-        <p className="font-sans text-base text-muted-foreground max-w-2xl mx-auto">
+        <p className="font-sans text-sm xs:text-base text-muted-foreground max-w-2xl mx-auto">
           Everything you need for smarter bookings, better results, and happier clients
         </p>
       </div>
