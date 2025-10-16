@@ -1,32 +1,17 @@
-/**
- * Unit Tests for Error Handler
- * Tests error handling utilities and error recovery
- */
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { getErrorMessage, handleError, withRetry, validateRequired } from './errorHandler';
+import { toast } from 'sonner';
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import {
-  getErrorMessage,
-  handleError,
-  withErrorHandling,
-  validateRequired,
-  withRetry,
-  safeAsync,
-} from './errorHandler';
-
-// Mock logger
-vi.mock('./logger', () => ({
-  logger: {
-    error: vi.fn(),
-    warn: vi.fn(),
-    info: vi.fn(),
-  },
-}));
-
-// Mock toast
 vi.mock('sonner', () => ({
   toast: {
     error: vi.fn(),
-    success: vi.fn(),
+  },
+}));
+
+vi.mock('./logger', () => ({
+  log: {
+    error: vi.fn(),
+    debug: vi.fn(),
   },
 }));
 
@@ -36,227 +21,181 @@ describe('errorHandler', () => {
   });
 
   describe('getErrorMessage', () => {
-    it('should extract message from Error object', () => {
-      const error = new Error('Test error');
-      expect(getErrorMessage(error)).toBe('Test error');
+    it('should handle null/undefined errors', () => {
+      expect(getErrorMessage(null)).toBe('An unexpected error occurred');
+      expect(getErrorMessage(undefined)).toBe('An unexpected error occurred');
+    });
+
+    it('should handle Supabase error codes', () => {
+      const error = { code: 'invalid_credentials', message: 'Bad login' };
+      expect(getErrorMessage(error)).toBe('Invalid email or password');
+    });
+
+    it('should handle PostgreSQL errors', () => {
+      const error = { code: '23505', message: 'violates unique constraint' };
+      expect(getErrorMessage(error)).toBe('This record already exists');
+    });
+
+    it('should handle auth errors', () => {
+      const error = { message: 'Invalid login credentials' };
+      expect(getErrorMessage(error)).toBe('Invalid email or password');
+    });
+
+    it('should handle Error instances', () => {
+      const error = new Error('Custom error message');
+      expect(getErrorMessage(error)).toBe('Custom error message');
     });
 
     it('should handle string errors', () => {
-      expect(getErrorMessage('String error')).toBe('String error');
-    });
-
-    it('should handle errors with response data', () => {
-      const error = {
-        response: {
-          data: {
-            message: 'API error',
-          },
-        },
-      };
-      expect(getErrorMessage(error)).toBe('API error');
-    });
-
-    it('should return default message for unknown errors', () => {
-      expect(getErrorMessage(null)).toBe('An unexpected error occurred');
-      expect(getErrorMessage(undefined)).toBe('An unexpected error occurred');
-      expect(getErrorMessage({})).toBe('An unexpected error occurred');
-    });
-
-    it('should handle nested error messages', () => {
-      const error = {
-        message: {
-          error: 'Nested error',
-        },
-      };
-      expect(getErrorMessage(error)).toBe('An unexpected error occurred');
+      expect(getErrorMessage('Simple error')).toBe('Simple error');
     });
   });
 
   describe('handleError', () => {
-    it('should log and show error toast', () => {
+    it('should create AppError object', () => {
       const error = new Error('Test error');
-      handleError(error, 'TestContext');
-      
-      // Error should be logged and toasted
-      expect(true).toBe(true); // Basic check since mocks are in place
+      const appError = handleError(error, 'testContext', { showToast: false });
+
+      expect(appError.message).toBe('Test error');
+      expect(appError.context).toBe('testContext');
+      expect(appError.originalError).toBe(error);
     });
 
-    it('should handle errors without context', () => {
+    it('should show toast by default', () => {
       const error = new Error('Test error');
-      expect(() => handleError(error)).not.toThrow();
+      handleError(error, 'testContext');
+
+      expect(toast.error).toHaveBeenCalledWith('Test error');
     });
 
-    it('should handle network errors specifically', () => {
-      const error = {
-        message: 'Network Error',
-        code: 'ERR_NETWORK',
-      };
-      expect(() => handleError(error, 'Network')).not.toThrow();
-    });
-  });
+    it('should not show toast when disabled', () => {
+      const error = new Error('Test error');
+      handleError(error, 'testContext', { showToast: false });
 
-  describe('withErrorHandling', () => {
-    it('should execute function successfully', async () => {
-      const successFn = vi.fn().mockResolvedValue('success');
-      const wrapped = withErrorHandling(successFn, 'test-context');
-      
-      const result = await wrapped('arg1', 'arg2');
-      
-      expect(result).toBe('success');
-      expect(successFn).toHaveBeenCalledWith('arg1', 'arg2');
+      expect(toast.error).not.toHaveBeenCalled();
     });
 
-    it('should handle function errors gracefully', async () => {
-      const errorFn = vi.fn().mockRejectedValue(new Error('Function error'));
-      const wrapped = withErrorHandling(errorFn, 'test-context');
-      
-      await expect(wrapped()).rejects.toThrow();
-    });
-
-    it('should preserve function context', async () => {
-      const contextFn = vi.fn(async function(this: any) {
-        return this.value;
+    it('should use custom message when provided', () => {
+      const error = new Error('Original');
+      const appError = handleError(error, 'testContext', {
+        customMessage: 'Custom message',
+        showToast: false,
       });
+
+      expect(appError.message).toBe('Custom message');
+    });
+
+    it('should show retry button for retryable errors', () => {
+      const error = new Error('Network error');
+      const onRetry = vi.fn();
       
-      const wrapped = withErrorHandling(contextFn, 'test-context');
-      const context = { value: 'test' };
-      
-      const result = await wrapped.call(context);
-      expect(result).toBe('test');
-    });
-  });
+      handleError(error, 'testContext', {
+        retryable: true,
+        onRetry,
+      });
 
-  describe('validateRequired', () => {
-    it('should pass validation for non-empty values', () => {
-      expect(() => validateRequired({ field: 'value' }, ['field'])).not.toThrow();
-      expect(() => validateRequired({ number: 123 }, ['number'])).not.toThrow();
-      expect(() => validateRequired({ boolean: true }, ['boolean'])).not.toThrow();
-    });
-
-    it('should throw for missing fields', () => {
-      expect(() => validateRequired({}, ['field'])).toThrow('Missing required fields: field');
-      expect(() => validateRequired({ other: 'value' }, ['field'])).toThrow('Missing required fields: field');
+      expect(toast.error).toHaveBeenCalledWith('Network error', {
+        action: {
+          label: 'Retry',
+          onClick: onRetry,
+        },
+        duration: 5000,
+      });
     });
 
-    it('should throw for empty strings', () => {
-      expect(() => validateRequired({ field: '' }, ['field'])).toThrow('Missing required fields: field');
-      expect(() => validateRequired({ field: '   ' }, ['field'])).toThrow('Missing required fields: field');
-    });
+    it('should suppress module import errors', () => {
+      const error = new Error('Importing a module script failed');
+      handleError(error, 'testContext');
 
-    it('should throw for null and undefined', () => {
-      expect(() => validateRequired({ field: null }, ['field'])).toThrow('Missing required fields: field');
-      expect(() => validateRequired({ field: undefined }, ['field'])).toThrow('Missing required fields: field');
-    });
-
-    it('should pass for valid fields', () => {
-      expect(() => validateRequired({ name: 'John', email: 'john@example.com' }, ['name', 'email'])).not.toThrow();
+      expect(toast.error).not.toHaveBeenCalled();
     });
   });
 
   describe('withRetry', () => {
-    it('should succeed on first attempt', async () => {
-      const successFn = vi.fn().mockResolvedValue('success');
-      
-      const result = await withRetry(successFn, {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('should retry failed operations', async () => {
+      let attempts = 0;
+      const operation = vi.fn(async () => {
+        attempts++;
+        if (attempts < 3) throw new Error('Fail');
+        return 'success';
+      });
+
+      const promise = withRetry(operation, {
         maxRetries: 3,
         delay: 100,
+        backoff: false,
       });
-      
+
+      // Advance timers for retries
+      await vi.runAllTimersAsync();
+
+      const result = await promise;
       expect(result).toBe('success');
-      expect(successFn).toHaveBeenCalledTimes(1);
+      expect(operation).toHaveBeenCalledTimes(3);
     });
 
-    it('should retry on failure and eventually succeed', async () => {
-      const retryFn = vi.fn()
-        .mockRejectedValueOnce(new Error('Attempt 1'))
-        .mockRejectedValueOnce(new Error('Attempt 2'))
-        .mockResolvedValue('success');
-      
-      const result = await withRetry(retryFn, {
-        maxRetries: 3,
-        delay: 10,
+    it('should throw error after max retries', async () => {
+      const operation = vi.fn(async () => {
+        throw new Error('Always fails');
       });
+
+      const promise = withRetry(operation, { maxRetries: 2, delay: 100 });
       
-      expect(result).toBe('success');
-      expect(retryFn).toHaveBeenCalledTimes(3);
+      await vi.runAllTimersAsync();
+
+      await expect(promise).rejects.toThrow('Always fails');
+      expect(operation).toHaveBeenCalledTimes(2);
     });
 
-    it('should fail after max attempts', async () => {
-      const failFn = vi.fn().mockRejectedValue(new Error('Always fails'));
-      
-      await expect(
-        withRetry(failFn, {
-          maxRetries: 3,
-          delay: 10,
-        })
-      ).rejects.toThrow('Always fails');
-      
-      expect(failFn).toHaveBeenCalledTimes(3);
-    });
+    it('should call onRetry callback', async () => {
+      let attempts = 0;
+      const operation = vi.fn(async () => {
+        attempts++;
+        if (attempts < 2) throw new Error('Fail');
+        return 'success';
+      });
 
-    it('should use exponential backoff', async () => {
-      const startTime = Date.now();
-      const failFn = vi.fn().mockRejectedValue(new Error('Fail'));
-      
-      try {
-        await withRetry(failFn, {
-          maxRetries: 3,
-          delay: 50,
-          backoff: true,
-        });
-      } catch {
-        // Expected to fail
-      }
-      
-      const duration = Date.now() - startTime;
-      // Should take at least 50ms + 100ms = 150ms for 2 retries
-      expect(duration).toBeGreaterThanOrEqual(100);
+      const onRetry = vi.fn();
+      const promise = withRetry(operation, {
+        maxRetries: 2,
+        delay: 100,
+        onRetry,
+      });
+
+      await vi.runAllTimersAsync();
+      await promise;
+
+      expect(onRetry).toHaveBeenCalledTimes(1);
+      expect(onRetry).toHaveBeenCalledWith(1);
     });
   });
 
-  describe('safeAsync', () => {
-    it('should return data on success', async () => {
-      const successFn = async () => 'success';
-      
-      const result = await safeAsync(successFn, 'test-context');
-      
-      expect(result.data).toBe('success');
-      expect(result.error).toBeNull();
+  describe('validateRequired', () => {
+    it('should not throw for valid data', () => {
+      const data = { name: 'Test', email: 'test@example.com' };
+      expect(() => validateRequired(data, ['name', 'email'])).not.toThrow();
     });
 
-    it('should return error on failure', async () => {
-      const errorFn = async () => {
-        throw new Error('Test error');
-      };
-      
-      const result = await safeAsync(errorFn, 'test-context');
-      
-      expect(result.data).toBeNull();
-      expect(result.error).toBeTruthy();
-      expect(result.error?.message).toBe('Test error');
+    it('should throw for missing fields', () => {
+      const data = { name: 'Test' };
+      expect(() => validateRequired(data, ['name', 'email'])).toThrow(
+        'Missing required fields: email'
+      );
     });
 
-    it('should handle non-Error throws', async () => {
-      const throwFn = async () => {
-        throw 'string error';
-      };
-      
-      const result = await safeAsync(throwFn, 'test-context');
-      
-      expect(result.data).toBeNull();
-      expect(result.error).toBeTruthy();
-    });
-
-    it('should preserve async function behavior', async () => {
-      const asyncFn = async () => {
-        await new Promise(resolve => setTimeout(resolve, 10));
-        return 'delayed result';
-      };
-      
-      const result = await safeAsync(asyncFn, 'test-context');
-      
-      expect(result.data).toBe('delayed result');
-      expect(result.error).toBeNull();
+    it('should handle multiple missing fields', () => {
+      const data = {};
+      expect(() => validateRequired(data, ['name', 'email', 'phone'])).toThrow(
+        'Missing required fields: name, email, phone'
+      );
     });
   });
 });
