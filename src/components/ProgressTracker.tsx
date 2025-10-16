@@ -156,75 +156,75 @@ export const ProgressTracker = () => {
 
   return (
     <Card className="brutal-border brutal-shadow-xs">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-primary" />
-            Your Progress
+      <CardHeader className="p-4 sm:p-6">
+        <div className="flex items-center justify-between gap-3">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <span className="truncate">Your Progress</span>
           </CardTitle>
-          <Badge variant="default" className="text-lg px-4">
+          <Badge variant="default" className="text-sm sm:text-lg px-3 sm:px-4 shrink-0">
             Level {level}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
         {/* Overall Progress */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between text-xs sm:text-sm gap-2">
             <span className="text-muted-foreground">Overall Progress</span>
-            <span className="font-semibold">{completedCount}/{milestones.length} milestones</span>
+            <span className="font-semibold shrink-0">{completedCount}/{milestones.length} milestones</span>
           </div>
-          <Progress value={progressPercentage} className="h-3" />
+          <Progress value={progressPercentage} className="h-2 sm:h-3" />
         </div>
 
         {/* Points to Next Level */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Points to Level {level + 1}</span>
-            <span className="font-semibold">{totalPoints}/{nextLevelPoints}</span>
+          <div className="flex items-center justify-between text-xs sm:text-sm gap-2">
+            <span className="text-muted-foreground truncate">Points to Level {level + 1}</span>
+            <span className="font-semibold shrink-0">{totalPoints}/{nextLevelPoints}</span>
           </div>
           <Progress value={(totalPoints % 50) * 2} className="h-2" />
         </div>
 
         {/* Milestones List */}
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Milestones</h3>
-            <div className="flex items-center gap-1 text-primary">
-              <Sparkles className="h-4 w-4" />
-              <span className="text-sm font-semibold">{totalPoints} pts</span>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-semibold text-sm sm:text-base">Milestones</h3>
+            <div className="flex items-center gap-1 text-primary shrink-0">
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="text-xs sm:text-sm font-semibold">{totalPoints} pts</span>
             </div>
           </div>
           
-          <div className="space-y-2 max-h-80 overflow-y-auto">
+          <div className="space-y-2 max-h-[60vh] sm:max-h-80 overflow-y-auto pr-1">
             {milestones.map((milestone) => (
               <div
                 key={milestone.id}
                 className={cn(
-                  "flex items-start gap-3 p-3 rounded-lg border transition-all",
+                  "flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border transition-all touch-manipulation",
                   milestone.completed
                     ? "bg-success/10 border-success/20"
-                    : "bg-card hover:bg-muted/50"
+                    : "bg-card hover:bg-muted/50 active:bg-muted"
                 )}
               >
-                <div className="flex-shrink-0 text-2xl">{milestone.icon}</div>
+                <div className="flex-shrink-0 text-xl sm:text-2xl" aria-hidden="true">{milestone.icon}</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className={cn(
-                      "font-medium text-sm",
+                      "font-medium text-xs sm:text-sm flex-1",
                       milestone.completed && "line-through text-muted-foreground"
                     )}>
                       {milestone.title}
                     </h4>
                     {milestone.completed ? (
-                      <CheckCircle className="h-4 w-4 text-success flex-shrink-0" />
+                      <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-success flex-shrink-0" />
                     ) : (
-                      <Circle className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <Circle className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground">{milestone.description}</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground leading-snug">{milestone.description}</p>
                 </div>
-                <Badge variant="secondary" className="flex-shrink-0">
+                <Badge variant="secondary" className="flex-shrink-0 text-[10px] sm:text-xs px-2 sm:px-2.5">
                   +{milestone.points}
                 </Badge>
               </div>
