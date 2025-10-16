@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 
 const features = [
@@ -16,29 +15,26 @@ export const SimplePricingCTA = () => {
   return (
     <div className="container mx-auto px-4">
       <div className="max-w-lg mx-auto text-center">
-        <h2 className="font-display font-black text-3xl sm:text-4xl mb-3 text-foreground">
-          Simple pricing
+        <h2 className="font-pixel text-2xl sm:text-3xl mb-8 text-secondary-foreground uppercase tracking-wider">
+          Simple Pricing
         </h2>
-        <p className="text-muted-foreground mb-8">
-          Everything you need, one price
-        </p>
 
-        <Card className="p-8 bg-card border-border">
-          <div className="mb-6">
-            <div className="text-5xl font-display font-black text-foreground mb-2">
-              $49
-              <span className="text-xl text-muted-foreground font-normal">/month</span>
+        <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="mb-8">
+            <div className="flex items-start justify-center gap-2 mb-4">
+              <span className="font-pixel text-5xl sm:text-6xl text-foreground">$49</span>
+              <span className="font-pixel text-base text-muted-foreground mt-2">/mo</span>
             </div>
-            <p className="text-muted-foreground">14-day free trial</p>
+            <p className="font-pixel text-xs text-muted-foreground uppercase">14-Day Free Trial</p>
           </div>
 
-          <ul className="space-y-3 mb-8 text-left">
+          <ul className="space-y-4 mb-8 text-left">
             {features.map((feature) => (
               <li key={feature} className="flex items-center gap-3">
-                <div className="flex-shrink-0 w-5 h-5 rounded-full bg-success/10 flex items-center justify-center">
-                  <Check className="h-3 w-3 text-success" />
+                <div className="flex-shrink-0 w-6 h-6 border-2 border-black bg-success flex items-center justify-center">
+                  <Check className="h-4 w-4 text-success-foreground" strokeWidth={3} />
                 </div>
-                <span className="text-card-foreground">{feature}</span>
+                <span className="font-sans text-sm text-foreground">{feature}</span>
               </li>
             ))}
           </ul>
@@ -46,11 +42,11 @@ export const SimplePricingCTA = () => {
           <Button
             size="lg"
             onClick={() => navigate("/auth")}
-            className="w-full text-lg font-bold"
+            className="w-full text-base sm:text-lg py-6 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 rounded-none"
           >
             Start Free Trial
           </Button>
-        </Card>
+        </div>
       </div>
     </div>
   );

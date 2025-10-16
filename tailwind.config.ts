@@ -34,6 +34,7 @@ export default {
       fontFamily: {
         sans: ['DM Sans', 'system-ui', 'sans-serif'],
         display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        pixel: ['"Press Start 2P"', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",

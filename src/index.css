@@ -226,19 +226,19 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 20 14% 10%;
 
-    /* Vibrant, fun color palette */
-    --primary: 270 85% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 270 100% 75%;
+    /* Pixelated LEGO-inspired color palette */
+    --primary: 8 100% 55%;          /* Vibrant red/orange */
+    --primary-foreground: 0 0% 0%;   /* Black text on red */
+    --primary-glow: 8 100% 65%;
 
-    --secondary: 340 90% 65%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 45 100% 50%;        /* Bold yellow */
+    --secondary-foreground: 0 0% 0%; /* Black text on yellow */
 
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 30%; /* Darkened for better readability (WCAG AAA: 10.5:1) */
+    --muted-foreground: 0 0% 30%;
 
-    --accent: 190 95% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 215 100% 50%;          /* Bright blue */
+    --accent-foreground: 0 0% 100%; /* White text on blue */
 
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -313,11 +313,11 @@ All colors MUST be HSL.
     --focus-ring: 0 0 0 4px hsla(var(--primary), 0.3);
     --focus-ring-offset: 0 0 0 2px hsl(var(--background));
     
-    /* Gradients - Vibrant with proper contrast for white text */
-    --gradient-primary: linear-gradient(135deg, hsl(270 85% 50%) 0%, hsl(340 90% 55%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(190 95% 45%) 0%, hsl(270 85% 50%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(270 85% 50%) 0%, hsl(340 90% 55%) 50%, hsl(40 92% 48%) 100%);
-    --gradient-bg-main: linear-gradient(135deg, hsl(210 100% 55%) 0%, hsl(270 90% 55%) 50%, hsl(330 90% 55%) 100%);
+    /* Pixelated gradients - LEGO brick colors */
+    --gradient-primary: linear-gradient(135deg, hsl(8 100% 55%) 0%, hsl(45 100% 50%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(45 100% 50%) 0%, hsl(215 100% 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(8 100% 55%) 0%, hsl(45 100% 50%) 50%, hsl(215 100% 50%) 100%);
+    --gradient-bg-main: linear-gradient(135deg, hsl(8 100% 55%) 0%, hsl(45 100% 50%) 50%, hsl(215 100% 50%) 100%);
     
     /* Icon background gradients for sidebar - darkened for white text */
     --gradient-purple-pink: linear-gradient(135deg, hsl(270 85% 48%) 0%, hsl(330 85% 52%) 100%);
@@ -1435,5 +1435,47 @@ All colors MUST be HSL.
       padding-top: 10px !important;
       border-top: 1px solid #ccc !important;
     }
+  }
+}
+
+/* Pixelated LEGO design utilities */
+@layer utilities {
+  .pixel-border {
+    border: 4px solid black;
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+  }
+  
+  .pixel-shadow-sm {
+    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  }
+  
+  .pixel-shadow-md {
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+  }
+  
+  .pixel-shadow-lg {
+    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  }
+  
+  .pixel-texture {
+    background-image: 
+      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+      linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
+    background-size: 8px 8px;
+  }
+  
+  .pixel-texture-light {
+    background-image: 
+      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%),
+      linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    background-size: 8px 8px;
+  }
+  
+  /* Prevent font smoothing for pixel font to keep it crisp */
+  .font-pixel {
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
   }
 }

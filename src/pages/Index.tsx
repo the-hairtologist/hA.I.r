@@ -20,108 +20,151 @@ const Index = () => {
         Skip to main content
       </a>
       
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border" role="banner">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b-4 border-black" role="banner" style={{
+        backgroundImage: `
+          linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%),
+          linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)
+        `,
+        backgroundSize: '8px 8px'
+      }}>
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <button onClick={() => navigate("/")} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Scissors className="h-5 w-5 text-primary" />
-            <span className="text-lg font-display font-bold text-foreground">hA.I.r</span>
+            <div className="w-8 h-8 border-2 border-white bg-primary flex items-center justify-center">
+              <Scissors className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <span className="text-base font-pixel text-white uppercase">hA.I.r</span>
           </button>
-          <Button onClick={() => navigate("/auth")} size="sm" variant="default">
+          <Button 
+            onClick={() => navigate("/auth")} 
+            size="sm" 
+            className="font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 rounded-none px-4 py-2"
+          >
             Get Started
           </Button>
         </div>
       </header>
 
       <main id="main-content" className="pt-16">
-        {/* Hero Section - Above the fold */}
-        <section className="relative bg-primary py-24 sm:py-32">
-          <div className="container mx-auto px-4 text-center">
-            <div className="max-w-3xl mx-auto space-y-6">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-black text-primary-foreground leading-tight">
-                Your salon assistant.<br />Powered by AI.
+        {/* Hero Section - Pixelated LEGO vibes */}
+        <section className="relative bg-primary py-24 sm:py-32 overflow-hidden" style={{
+          backgroundImage: `
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+          `,
+          backgroundSize: '8px 8px'
+        }}>
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <div className="max-w-4xl mx-auto space-y-8">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-pixel uppercase text-secondary leading-relaxed tracking-wider drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)]" style={{ lineHeight: '1.6' }}>
+                YOUR HAIR, SMARTER.<br />YOUR SALON, EFFORTLESS.
               </h1>
               
-              <p className="text-xl text-primary-foreground/90 max-w-xl mx-auto">
-                Bookings, color formulas, and payments—handled automatically.
+              <p className="text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-loose">
+                Bookings + Color Formulas + Payments = Handled.
               </p>
               
               <div className="pt-6">
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-lg px-10 py-6 font-bold"
+                  className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 rounded-none"
                 >
-                  Start Free Trial
+                  GET EARLY ACCESS
                 </Button>
               </div>
               
-              <p className="text-sm text-primary-foreground/70">
-                No credit card • 14 days free
+              <p className="text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase">
+                No Credit Card • 14 Days Free
               </p>
             </div>
           </div>
         </section>
 
-        {/* How It Works - Icons only */}
-        <section className="py-16 bg-background">
+        {/* How It Works - Pixelated style */}
+        <section className="py-16 bg-secondary" style={{
+          backgroundImage: `
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%)
+          `,
+          backgroundSize: '8px 8px'
+        }}>
           <MinimalFeatures />
         </section>
 
-        {/* Single Testimonial */}
-        <section className="py-16 bg-muted/30">
+        {/* Testimonial Section */}
+        <section className="py-16 bg-accent" style={{
+          backgroundImage: `
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+          `,
+          backgroundSize: '8px 8px'
+        }}>
           <SingleTestimonial />
         </section>
 
-        {/* Simple Pricing CTA */}
-        <section className="py-16 bg-background">
+        {/* Pricing Section */}
+        <section className="py-16 bg-secondary" style={{
+          backgroundImage: `
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%)
+          `,
+          backgroundSize: '8px 8px'
+        }}>
           <SimplePricingCTA />
         </section>
 
-        {/* Minimal FAQ */}
-        <section className="py-16 bg-muted/30">
+        {/* FAQ Section */}
+        <section className="py-16 bg-accent" style={{
+          backgroundImage: `
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+          `,
+          backgroundSize: '8px 8px'
+        }}>
           <MinimalFAQ />
         </section>
       </main>
 
-      {/* Social Proof / Trust Indicators */}
-      <section className="py-8 bg-background border-t-2 border-border">
+      {/* Stats Section - Pixelated Stats */}
+      <section className="py-12 bg-accent border-t-4 border-black" style={{
+        backgroundImage: `
+          linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+          linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+        `,
+        backgroundSize: '8px 8px'
+      }}>
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center items-center gap-8 text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
-                <Scissors className="h-6 w-6 text-primary" />
+          <h2 className="text-center font-pixel text-xl sm:text-2xl text-accent-foreground mb-8 uppercase tracking-wider">
+            STYLISTS USING hA.I.r<br/>CUT ADMIN TIME BY 40%
+          </h2>
+          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 border-4 border-black bg-primary flex items-center justify-center mb-2">
+                <Scissors className="h-8 w-8 text-primary-foreground" />
               </div>
-              <div className="text-left">
-                <p className="font-bold text-foreground">2,000+</p>
-                <p className="text-xs">Active Stylists</p>
-              </div>
+              <p className="font-pixel text-lg text-accent-foreground">2,000+</p>
+              <p className="text-xs font-pixel text-accent-foreground/80 uppercase">Stylists</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
-                <Calendar className="h-6 w-6 text-primary" />
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 border-4 border-black bg-primary flex items-center justify-center mb-2">
+                <Calendar className="h-8 w-8 text-primary-foreground" />
               </div>
-              <div className="text-left">
-                <p className="font-bold text-foreground">50,000+</p>
-                <p className="text-xs">Appointments</p>
-              </div>
+              <p className="font-pixel text-lg text-accent-foreground">50,000+</p>
+              <p className="text-xs font-pixel text-accent-foreground/80 uppercase">Bookings</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
-                <Palette className="h-6 w-6 text-primary" />
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 border-4 border-black bg-primary flex items-center justify-center mb-2">
+                <Palette className="h-8 w-8 text-primary-foreground" />
               </div>
-              <div className="text-left">
-                <p className="font-bold text-foreground">10,000+</p>
-                <p className="text-xs">Formulas Created</p>
-              </div>
+              <p className="font-pixel text-lg text-accent-foreground">10,000+</p>
+              <p className="text-xs font-pixel text-accent-foreground/80 uppercase">Formulas</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
-                <Smartphone className="h-6 w-6 text-primary" />
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 border-4 border-black bg-primary flex items-center justify-center mb-2">
+                <Smartphone className="h-8 w-8 text-primary-foreground" />
               </div>
-              <div className="text-left">
-                <p className="font-bold text-foreground">4.9/5</p>
-                <p className="text-xs">User Rating</p>
-              </div>
+              <p className="font-pixel text-lg text-accent-foreground">4.9/5</p>
+              <p className="text-xs font-pixel text-accent-foreground/80 uppercase">Rating</p>
             </div>
           </div>
         </div>
