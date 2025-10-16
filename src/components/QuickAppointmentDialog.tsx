@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { format, setHours, setMinutes, addMinutes, parseISO } from "date-fns";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
 
 interface QuickAppointmentDialogProps {
   open: boolean;
@@ -164,6 +165,24 @@ export const QuickAppointmentDialog = ({
         .maybeSingle();
 
       if (error) throw error;
+
+      // Trigger Zapier webhook for new appointment
+      if (newAppointment) {
+        try {
+          const clientData = clients.find(c => c.id === selectedClient);
+          await triggerAppointmentBooked(stylistId, {
+            appointment_id: newAppointment.id,
+            client_name: clientData?.user?.full_name || clientData?.full_name,
+            service_type: selectedServiceData.service_name,
+            appointment_date: appointmentDate.toISOString(),
+            duration_minutes: selectedServiceData.duration_minutes,
+            price: selectedServiceData.price,
+          });
+        } catch (zapierError) {
+          console.error("Zapier webhook failed:", zapierError);
+          // Don't block success if Zapier fails
+        }
+      }
 
       // Send SMS notification
       try {

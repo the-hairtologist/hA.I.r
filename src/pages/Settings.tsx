@@ -23,6 +23,8 @@ import { Switch as ThemeSwitch } from "@/components/ui/switch";
 import { ClientPreferenceCenter } from "@/components/email-sequences/ClientPreferenceCenter";
 import { MobileNavCustomizer } from "@/components/MobileNavCustomizer";
 import { FirstTimeTooltip } from "@/components/FirstTimeTooltip";
+import { ZapierSettings } from "@/pages/Settings/ZapierSettings";
+import { cn } from "@/lib/utils";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -441,7 +443,7 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className={cn("grid w-full", userRole === "stylist" ? "grid-cols-7" : "grid-cols-6")}>
             <TabsTrigger value="profile" className="text-xs sm:text-sm">
               <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Profile</span>
@@ -462,6 +464,12 @@ const Settings = () => {
               <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">AI</span>
             </TabsTrigger>
+            {userRole === "stylist" && (
+              <TabsTrigger value="zapier" className="text-xs sm:text-sm">
+                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Zapier</span>
+              </TabsTrigger>
+            )}
             <TabsTrigger value="preferences" className="text-xs sm:text-sm">
               <SettingsIcon className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Prefs</span>
@@ -1520,6 +1528,13 @@ const Settings = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Zapier Tab - Stylist Only */}
+          {userRole === "stylist" && (
+            <TabsContent value="zapier" className="space-y-6">
+              <ZapierSettings />
+            </TabsContent>
+          )}
 
           {/* Preferences Tab */}
           <TabsContent value="preferences" className="space-y-6">

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { addWeeks, format, isSameDay, isBefore, startOfDay } from "date-fns";
 import { Calendar, Clock, AlertCircle, CheckCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
 
 interface RebookDialogProps {
   open: boolean;
@@ -182,6 +183,23 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
       .maybeSingle();
 
       if (error) throw error;
+
+      // Trigger Zapier webhook for new appointment
+      if (newAppointment) {
+        try {
+          await triggerAppointmentBooked(appointment.stylist_id, {
+            appointment_id: newAppointment.id,
+            client_name: appointment.client?.user?.full_name,
+            service_type: appointment.service_type,
+            appointment_date: appointmentDateTime.toISOString(),
+            duration_minutes: appointment.duration_minutes,
+            is_rebook: true,
+          });
+        } catch (zapierError) {
+          console.error("Zapier webhook failed:", zapierError);
+          // Don't block success if Zapier fails
+        }
+      }
 
       // Send SMS notification for the rebooked appointment
       try {
