@@ -99,10 +99,6 @@ const App = () => {
                     <CookieConsent />
                     {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                     <GlobalAnnouncer />
-                    {/* Service integration tracking */}
-                    <ReactSuspense fallback={null}>
-                      <ServiceIntegrationTracker />
-                    </ReactSuspense>
                     {/* Performance monitoring (dev only) */}
                     <ReactSuspense fallback={null}>
                       <PerformanceMonitor />
@@ -114,6 +110,10 @@ const App = () => {
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <EnhancedAuthProvider>
                         <AnalyticsInitializer />
+                        {/* Service integration tracking - requires Router context */}
+                        <ReactSuspense fallback={null}>
+                          <ServiceIntegrationTracker />
+                        </ReactSuspense>
                         <TourProvider>
                           {/* Role switch protection */}
                           <ReactSuspense fallback={null}>
