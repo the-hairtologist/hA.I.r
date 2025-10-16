@@ -186,9 +186,9 @@ export const EnhancedFooter = () => {
           </div>
           
           {/* Legal Disclaimer */}
-          <div className="border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <p className="text-xs font-sans text-muted-foreground leading-relaxed text-center max-w-4xl mx-auto">
-              <strong>Disclaimer:</strong> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
+          <div className="border-t-2 border-black/20 pt-4 mt-4">
+            <p className="text-xs font-sans text-primary-foreground/50 leading-relaxed text-center max-w-4xl mx-auto">
+              <span className="font-semibold">Disclaimer:</span> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
             </p>
           </div>
         </div>
