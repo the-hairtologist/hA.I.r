@@ -75,28 +75,38 @@ export function useAuth(): UseAuthReturn {
       });
     });
 
-    // Set up automatic token refresh check
-    const refreshInterval = setInterval(async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        // Check if token is about to expire (within 5 minutes)
-        const expiresAt = session.expires_at ? session.expires_at * 1000 : 0;
+    // Supabase automatically handles token refresh
+    // The client is configured with autoRefreshToken: true by default
+    // Manual refresh is only needed in edge cases
+    // Commenting out aggressive refresh logic to prevent unexpected logouts
+    
+    // Optional: Set up session validation (less aggressive than refresh)
+    const sessionCheckInterval = setInterval(async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        log.error('Session check failed', 'useAuth', { error });
+        // Don't force logout on network errors - let Supabase handle it
+        return;
+      }
+      
+      // Only log if session is about to expire (within 10 minutes)
+      if (session?.expires_at) {
+        const expiresAt = session.expires_at * 1000;
         const now = Date.now();
-        const fiveMinutes = 5 * 60 * 1000;
+        const tenMinutes = 10 * 60 * 1000;
         
-        if (expiresAt - now < fiveMinutes) {
-          log.info('Token expiring soon, refreshing...', 'useAuth');
-          const { error } = await supabase.auth.refreshSession();
-          if (error) {
-            log.error('Token refresh failed', 'useAuth', { error });
-          }
+        if (expiresAt - now < tenMinutes && expiresAt - now > 0) {
+          log.info('Session expiring soon - Supabase will auto-refresh', 'useAuth', {
+            expiresIn: Math.floor((expiresAt - now) / 1000 / 60) + ' minutes'
+          });
         }
       }
-    }, 60000); // Check every minute
+    }, 5 * 60 * 1000); // Check every 5 minutes (less aggressive)
 
     return () => {
       subscription.unsubscribe();
-      clearInterval(refreshInterval);
+      clearInterval(sessionCheckInterval);
     };
   }, [navigate]);
 
