@@ -260,11 +260,6 @@ serve(async (req) => {
           results.errors.push(`Cancellation email failed for ${apt.client_profiles.full_name}`);
         }
       }
-        } catch (error) {
-          console.error(`❌ Failed to send cancellation email:`, error);
-          results.errors.push(`Cancellation email failed for ${apt.client_profiles.full_name}`);
-        }
-      }
     }
 
     console.log("✅ Email processing complete:", results);
