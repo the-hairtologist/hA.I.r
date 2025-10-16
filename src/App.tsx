@@ -23,6 +23,9 @@ import { initSentry } from "@/lib/monitoring";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 
+// Import advanced accessibility features
+import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
+
 // Optimized QueryClient
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -60,6 +63,8 @@ const App = () => {
                   <Toaster />
                   <Sonner />
                   <CookieConsent />
+                  {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
+                  <GlobalAnnouncer />
                   <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                     <EnhancedAuthProvider>
                       <AnalyticsInitializer />

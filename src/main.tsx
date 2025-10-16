@@ -18,10 +18,27 @@ import { initializeErrorDetection } from "./lib/errorDetection";
 import { initializePreventiveMaintenance } from "./lib/preventiveMaintenance";
 import { registerCoreModules } from "./lib/dependencyValidator";
 
-// Initialize all safety systems
+// Initialize all safety systems FIRST
 initializeErrorDetection();
 registerCoreModules();
 initializePreventiveMaintenance();
+
+// NOW initialize advanced features with error protection
+try {
+  const { injectCriticalCSS } = require("./lib/advancedPerformance");
+  injectCriticalCSS();
+  console.log('✅ Critical CSS injected');
+} catch (error) {
+  console.warn('⚠️ Critical CSS injection failed:', error);
+}
+
+try {
+  const { CSPManager } = require("./lib/advancedSecurity");
+  CSPManager.inject();
+  console.log('✅ Content Security Policy active');
+} catch (error) {
+  console.warn('⚠️ CSP injection failed:', error);
+}
 
 // Safe imports with fallbacks
 import { addCopyrightNotice, detectSuspiciousActivity, logSuspiciousActivity } from "./lib/ipProtection";

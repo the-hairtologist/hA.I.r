@@ -100,6 +100,42 @@ class PreventiveMaintenanceSystem {
         };
       },
     });
+
+    // Check 6: Verify CSP is active
+    this.addCheck({
+      name: 'Content Security Policy Check',
+      severity: 'high',
+      check: async () => {
+        const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+        return {
+          passed: !!cspMeta,
+          message: cspMeta 
+            ? 'CSP active'
+            : 'CSP not loaded',
+        };
+      },
+    });
+
+    // Check 7: Verify advanced components loaded
+    this.addCheck({
+      name: 'Advanced Components Check',
+      severity: 'low',
+      check: async () => {
+        // Check if advanced features are available
+        const criticalCSS = !!document.getElementById('critical-css');
+        const cspActive = !!document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+        const announcerActive = !!document.querySelector('[role="status"][aria-live="polite"]');
+        
+        const allLoaded = criticalCSS && cspActive && announcerActive;
+        
+        return {
+          passed: allLoaded,
+          message: allLoaded 
+            ? 'All advanced features loaded (CSS, CSP, Accessibility)'
+            : `Missing: ${!criticalCSS ? 'CSS ' : ''}${!cspActive ? 'CSP ' : ''}${!announcerActive ? 'Announcer' : ''}`,
+        };
+      },
+    });
   }
 
   /**
