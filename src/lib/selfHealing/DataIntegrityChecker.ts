@@ -45,6 +45,14 @@ class DataIntegrityChecker {
    * Run full integrity check
    */
   async runFullCheck(): Promise<IntegrityIssue[]> {
+    // Check if user is authenticated before running checks
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      logger.debug('Skipping data integrity check - user not authenticated');
+      return [];
+    }
+
     logger.info('Starting full data integrity check');
     const issues: IntegrityIssue[] = [];
 
@@ -59,9 +67,8 @@ class DataIntegrityChecker {
 
     logger.info(`Integrity check complete: ${issues.length} issues found`);
     
-    if (issues.length > 0) {
-      toast.warning(`Found ${issues.length} data integrity issues`);
-    }
+    // Don't show toast to users - this is a background system check
+    // Issues are logged and can be viewed in admin tools
 
     return issues;
   }
