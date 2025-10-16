@@ -44,14 +44,14 @@ export const FeatureCard = ({
           )}>
             <Icon className="h-6 w-6 text-primary-foreground" />
           </div>
-          <CardTitle className="text-xl font-display group-hover:text-primary transition-colors">{title}</CardTitle>
+          <CardTitle className="text-xl font-pixel group-hover:text-primary transition-colors">{title}</CardTitle>
         </div>
         <CardDescription className="text-base leading-relaxed">{description}</CardDescription>
       </CardHeader>
       <CardContent className="relative">
         <Button 
           variant="outline" 
-          className="w-full font-display brutal-border brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5 transition-all group-hover:border-primary group-hover:text-primary"
+          className="w-full font-bold uppercase tracking-wide brutal-border brutal-shadow-xs hover:brutal-shadow-sm hover:-translate-y-0.5 transition-all group-hover:border-primary group-hover:text-primary"
           onClick={handleClick}
         >
           Open →

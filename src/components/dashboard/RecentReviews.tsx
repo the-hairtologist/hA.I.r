@@ -23,7 +23,7 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
     return (
       <Card className="brutal-border brutal-shadow-xs animate-fade-in">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-display">
+          <CardTitle className="flex items-center gap-2 font-pixel">
             <Star className="h-5 w-5 text-warning" />
             Recent Reviews
           </CardTitle>
@@ -33,8 +33,8 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
             <div className="inline-flex p-4 rounded-2xl bg-warning/10 mb-4 brutal-border brutal-shadow-xs">
               <Star className="h-10 w-10 text-warning" />
             </div>
-            <h4 className="font-display font-semibold text-base mb-2">No Reviews Yet</h4>
-            <p className="text-foreground/70 text-sm max-w-xs mx-auto">
+            <h4 className="font-pixel font-semibold text-base mb-2">No Reviews Yet</h4>
+            <p className="font-sans text-foreground/70 text-sm max-w-xs mx-auto">
               Your first client review will appear here once completed
             </p>
           </div>
@@ -46,7 +46,7 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
   return (
     <Card className="brutal-border brutal-shadow-xs animate-fade-in">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 font-display">
+        <CardTitle className="flex items-center gap-2 font-pixel">
           <Star className="h-5 w-5 text-warning" />
           Recent Reviews ({reviews.length})
         </CardTitle>
@@ -59,7 +59,7 @@ export const RecentReviews = ({ reviews }: RecentReviewsProps) => {
             style={{ animationDelay: `${index * 50}ms` }}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="font-display font-semibold">
+              <span className="font-pixel font-semibold">
                 {review.client?.user?.full_name || "Anonymous"}
               </span>
               <div className="flex gap-1">

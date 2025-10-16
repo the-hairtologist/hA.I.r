@@ -52,7 +52,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-secondary/5">
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
-        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-pixel">
           <div className="p-2 rounded-lg bg-gradient-pink-rose">
             <Repeat className="h-5 w-5 text-on-surface-primary" />
           </div>
@@ -70,7 +70,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
               <div className="text-3xl sm:text-4xl font-display font-bold text-secondary">
                 {stats.retentionRate}%
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">
+              <p className="text-xs sm:text-sm font-sans text-muted-foreground font-medium mt-1">
                 Retention Rate
               </p>
             </div>
@@ -81,7 +81,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
                 <div className="text-xl sm:text-2xl font-display font-bold">
                   {stats.totalClients}
                 </div>
-                <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                <p className="text-[11px] sm:text-xs font-sans text-muted-foreground mt-1">
                   Total Clients
                 </p>
               </div>
@@ -91,7 +91,7 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
                 <div className="text-xl sm:text-2xl font-display font-bold">
                   {stats.returningClients}
                 </div>
-                <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                <p className="text-[11px] sm:text-xs font-sans text-muted-foreground mt-1">
                   Returning
                 </p>
               </div>

@@ -81,8 +81,8 @@ export const SmartSchedulingSuggestions = ({
             <Sparkles className="h-4 w-4 text-on-surface-primary" />
           </div>
           <div>
-            <CardTitle className="text-base font-display">Smart Scheduling</CardTitle>
-            <CardDescription className="text-xs">AI-powered time suggestions</CardDescription>
+            <CardTitle className="text-base font-pixel">Smart Scheduling</CardTitle>
+            <CardDescription className="font-sans text-xs">AI-powered time suggestions</CardDescription>
           </div>
         </div>
       </CardHeader>

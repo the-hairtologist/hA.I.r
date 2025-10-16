@@ -73,7 +73,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
     return (
       <Card className="animate-fade-in brutal-card">
         <CardHeader>
-          <CardTitle className="font-display text-foreground">Recent Activity</CardTitle>
+          <CardTitle className="font-pixel text-foreground">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-foreground/80 text-center py-8 font-medium">No recent activity</p>
@@ -85,7 +85,7 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
   return (
     <Card className="animate-fade-in brutal-card">
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
-        <CardTitle className="text-sm sm:text-base lg:text-lg font-display text-foreground">Recent Activity</CardTitle>
+        <CardTitle className="text-sm sm:text-base lg:text-lg font-pixel text-foreground">Recent Activity</CardTitle>
       </CardHeader>
       <CardContent className="p-4 sm:p-5 md:p-6">
         <div className="space-y-3 sm:space-y-4">
@@ -110,8 +110,8 @@ export const RecentActivity = ({ activities }: RecentActivityProps) => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <p className="text-[11px] sm:text-xs lg:text-sm font-display font-semibold truncate">{activity.title}</p>
-                        <p className="text-[11px] sm:text-xs lg:text-sm text-foreground/70 truncate">
+                        <p className="text-[11px] sm:text-xs lg:text-sm font-pixel font-semibold truncate">{activity.title}</p>
+                        <p className="text-[11px] sm:text-xs lg:text-sm font-sans text-foreground/70 truncate">
                           {activity.description}
                         </p>
                       </div>

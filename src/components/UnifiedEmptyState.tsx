@@ -48,8 +48,8 @@ export const UnifiedEmptyState: React.FC<UnifiedEmptyStateProps> = ({
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
           <Icon className="h-8 w-8 text-foreground" />
         </div>
-        <h3 className="text-lg font-bold text-foreground mb-2 font-display">{title}</h3>
-        <p className="text-foreground/80 font-medium mb-4 max-w-sm mx-auto">
+        <h3 className="text-lg font-bold text-foreground mb-2 font-pixel">{title}</h3>
+        <p className="font-sans text-foreground/80 font-medium mb-4 max-w-sm mx-auto">
           {description}
         </p>
         {actionLabel && onAction && (

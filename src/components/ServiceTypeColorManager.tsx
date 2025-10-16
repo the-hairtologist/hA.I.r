@@ -139,11 +139,11 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
       <CardHeader className="brutal-border-b">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex-1">
-            <CardTitle className="font-display flex items-center gap-2">
+            <CardTitle className="font-pixel flex items-center gap-2">
               <Palette className="h-5 w-5" />
               Service Type Colors
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="font-sans">
               Customize colors for your service types in the schedule view
             </CardDescription>
           </div>

@@ -65,12 +65,12 @@ export const InteractiveCard = ({
           </div>
         )}
         
-        <CardTitle className="font-display text-xl text-foreground">
+        <CardTitle className="font-pixel text-xl text-foreground">
           {title}
         </CardTitle>
         
         {description && (
-          <CardDescription className="text-foreground/80 font-medium">
+          <CardDescription className="font-sans text-foreground/80 font-medium">
             {description}
           </CardDescription>
         )}

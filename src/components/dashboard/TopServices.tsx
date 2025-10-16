@@ -71,7 +71,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-primary/5">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-pixel">
           <div className="p-2 rounded-lg bg-gradient-amber-orange">
             <Award className="h-5 w-5 text-on-surface-primary" />
           </div>

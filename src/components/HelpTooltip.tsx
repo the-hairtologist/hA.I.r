@@ -64,8 +64,8 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
       </AlertDialogTrigger>
       <AlertDialogContent className="brutal-border brutal-shadow-lg max-w-lg">
         <AlertDialogHeader>
-          <AlertDialogTitle className="font-display text-2xl">{title}</AlertDialogTitle>
-          <AlertDialogDescription className="text-base leading-relaxed space-y-4">
+          <AlertDialogTitle className="font-pixel text-2xl">{title}</AlertDialogTitle>
+          <AlertDialogDescription className="font-sans text-base leading-relaxed space-y-4">
             <div className="text-foreground/90 whitespace-pre-wrap">{displayContent}</div>
             
             {examples && examples.length > 0 && (

@@ -58,10 +58,10 @@ export const PricingPreview = () => {
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       <div className="text-center">
-        <h2 className="font-display font-black text-3xl sm:text-5xl mb-3">
+        <h2 className="font-pixel font-black text-3xl sm:text-5xl mb-3">
           Simple pricing
         </h2>
-        <p className="text-muted-foreground">
+        <p className="font-sans text-muted-foreground">
           Start free. Scale when ready. Cancel anytime.
         </p>
       </div>
@@ -85,8 +85,8 @@ export const PricingPreview = () => {
             )}
 
             <div className="mb-6">
-              <h3 className="font-display font-bold text-2xl mb-2">{plan.name}</h3>
-              <p className={`text-sm mb-4 ${plan.popular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+              <h3 className="font-pixel font-bold text-2xl mb-2">{plan.name}</h3>
+              <p className={`text-sm font-sans mb-4 ${plan.popular ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
                 {plan.description}
               </p>
               <div className="flex items-baseline gap-1">

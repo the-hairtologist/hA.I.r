@@ -43,8 +43,8 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
             <TrendingUp className="h-4 w-4 text-on-surface-primary" />
           </div>
           <div>
-            <CardTitle className="text-base font-display">Client Insights</CardTitle>
-            <CardDescription className="text-xs">AI predicts who's due for a visit</CardDescription>
+            <CardTitle className="text-base font-pixel">Client Insights</CardTitle>
+            <CardDescription className="font-sans text-xs">AI predicts who's due for a visit</CardDescription>
           </div>
         </div>
       </CardHeader>

@@ -29,10 +29,10 @@ export const HowItWorks = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-12">
       <div className="text-center space-y-3">
-        <h2 className="font-display font-black text-3xl sm:text-5xl">
+        <h2 className="font-pixel font-black text-3xl sm:text-5xl">
           Three steps to freedom
         </h2>
-        <p className="text-muted-foreground">
+        <p className="font-sans text-muted-foreground">
           Setup takes 60 seconds. No tech skills needed.
         </p>
       </div>
@@ -49,11 +49,11 @@ export const HowItWorks = () => {
                   <span className="text-xs font-bold px-2 py-1 rounded border border-foreground bg-muted">
                     {step.number}
                   </span>
-                  <h3 className="font-display font-bold text-lg">
+                  <h3 className="font-pixel font-bold text-lg">
                     {step.title}
                   </h3>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm font-sans text-muted-foreground">
                   {step.description}
                 </p>
               </div>

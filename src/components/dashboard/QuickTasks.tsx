@@ -78,7 +78,7 @@ export const QuickTasks = () => {
   return (
     <Card variant="glass" className="backdrop-blur-xl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base sm:text-lg lg:text-xl font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg lg:text-xl font-pixel">
           <CheckSquare className="h-5 w-5 text-primary" />
           Quick Tasks
         </CardTitle>

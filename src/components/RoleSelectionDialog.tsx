@@ -80,10 +80,10 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
     <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent className="max-w-md"  onPointerDownOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle className="text-2xl font-display text-center">
+          <DialogTitle className="text-2xl font-pixel text-center">
             Welcome to hA.I.r! 👋
           </DialogTitle>
-          <DialogDescription className="text-center">
+          <DialogDescription className="font-sans text-center">
             Let's get you set up. Are you a stylist or a client?
           </DialogDescription>
         </DialogHeader>

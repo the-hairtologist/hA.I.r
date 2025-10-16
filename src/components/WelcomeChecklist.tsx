@@ -151,8 +151,8 @@ export const WelcomeChecklist = ({
               <Sparkles className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <CardTitle className="font-display">Getting Started</CardTitle>
-              <CardDescription>
+              <CardTitle className="font-pixel">Getting Started</CardTitle>
+              <CardDescription className="font-sans">
                 {completedCount} of {steps.length} steps complete
               </CardDescription>
             </div>

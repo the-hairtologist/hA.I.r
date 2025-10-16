@@ -63,12 +63,12 @@ export const ModernEmptyState = React.forwardRef<HTMLDivElement, ModernEmptyStat
           )}
           
           <div className="space-y-3 max-w-md">
-            <h3 className="text-2xl font-display font-bold text-foreground">
+            <h3 className="text-2xl font-pixel font-bold text-foreground">
               {title}
             </h3>
             
             {description && (
-              <p className="text-base text-muted-foreground leading-relaxed">
+              <p className="text-base font-sans text-muted-foreground leading-relaxed">
                 {description}
               </p>
             )}

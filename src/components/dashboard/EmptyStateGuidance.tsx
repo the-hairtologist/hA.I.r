@@ -46,10 +46,10 @@ export const EmptyStateGuidance = ({ type }: EmptyStateGuidanceProps) => {
         <div className="mx-auto w-16 h-16 rounded-full bg-background border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] flex items-center justify-center mb-4">
           <Icon className="h-8 w-8 text-primary" />
         </div>
-        <h3 className="text-xl font-display font-bold text-foreground mb-2">
+        <h3 className="text-xl font-pixel font-bold text-foreground mb-2">
           {config.title}
         </h3>
-        <p className="text-foreground/80 font-medium mb-6 max-w-md mx-auto">
+        <p className="font-sans text-foreground/80 font-medium mb-6 max-w-md mx-auto">
           {config.description}
         </p>
         <Button 

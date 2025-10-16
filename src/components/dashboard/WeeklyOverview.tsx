@@ -78,7 +78,7 @@ export const WeeklyOverview = () => {
                   </div>
                   <div>
                     <p className="text-2xl sm:text-3xl font-bold font-display tracking-tight">{stat.value}</p>
-                    <p className="text-[11px] sm:text-xs text-muted-foreground font-medium">{stat.label}</p>
+                    <p className="text-[11px] sm:text-xs font-sans text-muted-foreground font-medium">{stat.label}</p>
                   </div>
                 </div>
               </div>

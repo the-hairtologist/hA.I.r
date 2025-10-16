@@ -60,7 +60,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow bg-gradient-to-br from-card to-accent/5">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center justify-between gap-2 text-base sm:text-lg font-display">
+        <CardTitle className="flex items-center justify-between gap-2 text-base sm:text-lg font-pixel">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-gradient-purple-pink">
               <Smile className="h-5 w-5 text-on-surface-primary" />
@@ -90,7 +90,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
               <div className="text-3xl sm:text-4xl font-display font-bold text-primary">
                 {positivePercent}%
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">
+              <p className="text-xs sm:text-sm font-sans text-muted-foreground font-medium mt-1">
                 Positive Reviews
               </p>
             </div>

@@ -159,7 +159,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
   return (
     <Card className="brutal-border brutal-shadow-lg hover:brutal-shadow-xl transition-shadow">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-display">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-pixel">
           <div className="p-2 rounded-lg bg-gradient-purple-pink">
             <StickyNote className="h-5 w-5 text-primary-foreground" />
           </div>

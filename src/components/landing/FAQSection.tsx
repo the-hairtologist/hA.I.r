@@ -44,10 +44,10 @@ export const FAQSection = () => {
   return (
     <div className="space-y-8 max-w-3xl mx-auto">
       <div className="text-center">
-        <h2 className="font-display font-black text-3xl sm:text-5xl mb-3">
+        <h2 className="font-pixel font-black text-3xl sm:text-5xl mb-3">
           Common questions
         </h2>
-        <p className="text-muted-foreground">
+        <p className="font-sans text-muted-foreground">
           Everything you need to know
         </p>
       </div>
@@ -60,10 +60,10 @@ export const FAQSection = () => {
               value={`item-${idx}`}
               className="brutal-border brutal-shadow-lg bg-card px-6 rounded-lg data-[state=open]:brutal-shadow-xl transition-all"
             >
-              <AccordionTrigger className="font-display font-bold text-left hover:no-underline py-4">
+              <AccordionTrigger className="font-pixel font-bold text-left hover:no-underline py-4">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed pb-4">
+              <AccordionContent className="font-sans text-muted-foreground leading-relaxed pb-4">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

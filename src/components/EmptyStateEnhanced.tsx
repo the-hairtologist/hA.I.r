@@ -50,11 +50,11 @@ export const EmptyStateEnhanced = ({
         </div>
       )}
       
-      <h2 className="text-2xl font-display font-bold mb-2 gradient-text">
+      <h2 className="text-2xl font-pixel font-bold mb-2 gradient-text">
         {title}
       </h2>
       
-      <p className="text-muted-foreground mb-6 max-w-md">
+      <p className="font-sans text-muted-foreground mb-6 max-w-md">
         {description}
       </p>
       

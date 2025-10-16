@@ -23,7 +23,7 @@ export const CollapsibleSection = ({
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between w-full group"
       >
-        <h2 className="text-xl font-bold font-display">{title}</h2>
+        <h2 className="text-xl font-bold font-pixel">{title}</h2>
         <ChevronDown
           className={cn(
             "h-5 w-5 transition-transform duration-200 text-muted-foreground group-hover:text-foreground",

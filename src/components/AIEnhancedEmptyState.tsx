@@ -98,8 +98,8 @@ export const AIEnhancedEmptyState = ({
 
           {/* Text */}
           <div className="space-y-2">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-bold">{title}</h3>
-            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground">{description}</p>
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-pixel font-bold">{title}</h3>
+            <p className="text-xs sm:text-sm lg:text-base font-sans text-muted-foreground">{description}</p>
           </div>
 
           {/* AI Suggestions */}
@@ -128,7 +128,7 @@ export const AIEnhancedEmptyState = ({
           {actionLabel && onAction && (
             <Button
               onClick={onAction}
-              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-on-surface-primary font-display brutal-border shadow-brutal-lg-soft hover:shadow-brutal-xl-soft transition-all"
+              className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-on-surface-primary font-bold uppercase tracking-wide brutal-border shadow-brutal-lg-soft hover:shadow-brutal-xl-soft transition-all"
             >
               {actionLabel}
             </Button>

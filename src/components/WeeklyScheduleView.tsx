@@ -179,7 +179,7 @@ export const WeeklyScheduleView = ({
         {!compact && (
           <div className="flex items-center w-full gap-2">
             <div className="flex items-center gap-1.5 flex-1 min-w-0">
-              <CardTitle className="font-display text-xs sm:text-sm truncate">
+              <CardTitle className="font-pixel text-xs sm:text-sm truncate">
                 {selectedDay ? format(selectedDay, 'EEEE, MMM d') : 'Your Weekly Schedule'}
               </CardTitle>
               {selectedDay && (
@@ -204,7 +204,7 @@ export const WeeklyScheduleView = ({
           </div>
         )}
         {compact && (
-          <CardTitle className="font-display text-xs sm:text-sm text-center">
+          <CardTitle className="font-pixel text-xs sm:text-sm text-center">
             {format(currentWeek, 'MMM d')} - {format(addDays(weekStart, 6), 'MMM d')}
           </CardTitle>
         )}
