@@ -155,8 +155,8 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
             <div className={cn("rounded-lg p-1.5 sm:p-2 w-fit mb-2 sm:mb-3 bg-gradient-to-br", card.color)}>
               <card.icon className={cn("h-4 w-4 sm:h-5 sm:w-5", card.iconColor)} />
             </div>
-            <p className="text-[11px] sm:text-xs font-medium text-muted-foreground mb-0.5">{card.label}</p>
-            <p className="text-lg sm:text-xl lg:text-2xl font-display font-bold gradient-text">
+            <p className="text-[11px] sm:text-xs font-sans font-medium text-muted-foreground mb-0.5">{card.label}</p>
+            <p className="text-lg sm:text-xl lg:text-2xl font-pixel font-bold gradient-text">
               {card.value}
             </p>
           </CardContent>

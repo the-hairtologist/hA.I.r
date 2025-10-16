@@ -686,14 +686,14 @@ const Dashboard = () => {
             <div className="window-scrollbar"></div>
             
             <div className="w-full">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-display font-black mb-2 sm:mb-3 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-pixel font-bold mb-2 sm:mb-3 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
               {/* Stylists and Admins */}
               {(userRole === "stylist" || isAdmin) && (
                 <div className="space-y-2 sm:space-y-3">
-                  <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                  <p className="text-xs sm:text-sm md:text-base lg:text-lg font-sans font-medium text-pink-200 animate-fade-in" style={{ animationDelay: '200ms' }}>
                     Your schedule at a glance 📅
                   </p>
                   <div className="bg-card rounded-lg border-2 border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary)_/_0.6)] animate-fade-in overflow-hidden" style={{ animationDelay: '250ms' }}>
@@ -721,11 +721,11 @@ const Dashboard = () => {
           <div className="mb-4 sm:mb-6 p-4 sm:p-5 md:p-6 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex-1">
-                <h3 className="text-xs sm:text-sm font-bold text-foreground mb-1 flex items-center gap-2">
+                <h3 className="text-xs sm:text-sm font-pixel text-foreground mb-1 flex items-center gap-2">
                   <Edit3 className="h-3.5 w-3.5 text-primary" />
-                  Customize Your Dashboard
+                  Customize Dashboard
                 </h3>
-                <p className="text-[11px] sm:text-xs text-muted-foreground">
+                <p className="text-[11px] sm:text-xs font-sans text-muted-foreground">
                   <span className="hidden sm:inline">Drag sections to reorder • Click eye icon to show/hide sections</span>
                   <span className="sm:hidden">Long-press to drag • Tap eye to toggle</span>
                 </p>
@@ -735,7 +735,7 @@ const Dashboard = () => {
                   size="sm"
                   variant="outline"
                   onClick={handleReset}
-                  className="text-xs"
+                  className="text-xs font-bold uppercase tracking-wide"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
                   Reset
@@ -743,7 +743,7 @@ const Dashboard = () => {
                 <Button
                   size="sm"
                   onClick={handleSave}
-                  className="text-xs"
+                  className="text-xs font-bold uppercase tracking-wide"
                 >
                   <Save className="h-3.5 w-3.5 mr-1" />
                   Done
