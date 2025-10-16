@@ -76,11 +76,47 @@ const Terms = () => {
             </ul>
             
             <h3>Refund Policy</h3>
+            
+            <h4>Platform Subscriptions</h4>
             <ul>
-              <li>Service refunds are at stylist's discretion</li>
-              <li>Platform subscription refunds within 14 days of purchase</li>
-              <li>Disputes should be resolved directly with stylist first</li>
+              <li><strong>14-Day Money-Back Guarantee:</strong> If you're not satisfied with your Stylist Pro subscription, request a full refund within 14 days of your initial purchase</li>
+              <li><strong>How to Request:</strong> Contact support through the app or email support@hair-ai.app within the 14-day period</li>
+              <li><strong>Processing Time:</strong> Refunds are processed within 5-7 business days to your original payment method</li>
+              <li><strong>Recurring Subscriptions:</strong> You may cancel your subscription at any time to prevent future charges, but partial-month refunds are not provided</li>
+              <li><strong>Non-Refundable After 14 Days:</strong> Subscription fees paid more than 14 days ago are non-refundable</li>
+              <li><strong>One-Time Refund:</strong> The 14-day guarantee applies only to your first subscription purchase. Subsequent renewals are non-refundable</li>
             </ul>
+            
+            <h4>Service Appointments (Stylist-Client Transactions)</h4>
+            <ul>
+              <li><strong>Stylist Discretion:</strong> Refunds for hair services are at the individual stylist's discretion and subject to their personal policies</li>
+              <li><strong>Platform Role:</strong> hA.I.r facilitates payments but does not control service refunds between stylists and clients</li>
+              <li><strong>Direct Resolution:</strong> Service quality disputes should be resolved directly with the stylist first</li>
+              <li><strong>Deposit Refunds:</strong> Deposits are typically non-refundable if appointments are missed or cancelled within 24 hours</li>
+              <li><strong>No-Show Policy:</strong> Clients who fail to show for appointments forfeit any deposits or prepayments</li>
+            </ul>
+            
+            <h4>Special Circumstances</h4>
+            <ul>
+              <li><strong>Technical Issues:</strong> If you were charged due to a technical error, contact support for a full refund</li>
+              <li><strong>Duplicate Charges:</strong> Accidental duplicate charges will be refunded in full within 3-5 business days</li>
+              <li><strong>Unauthorized Charges:</strong> Report unauthorized transactions immediately for investigation and refund</li>
+              <li><strong>Service Unavailability:</strong> If platform features become unavailable due to our error, pro-rated refunds may be issued</li>
+            </ul>
+            
+            <h4>Dispute Resolution for Refunds</h4>
+            <ol>
+              <li><strong>Contact Support First:</strong> Email support@hair-ai.app with your order details and reason for refund</li>
+              <li><strong>24-Hour Response:</strong> We aim to respond to all refund requests within 24 hours</li>
+              <li><strong>Documentation Required:</strong> You may need to provide transaction ID, screenshots, or other relevant information</li>
+              <li><strong>Fair Review:</strong> All refund requests are reviewed fairly based on the circumstances and these policies</li>
+            </ol>
+            
+            <p className="text-sm text-muted-foreground mt-4">
+              <strong>Note:</strong> This refund policy complies with Google Play Store and Apple App Store requirements. 
+              Refunds processed through app stores (in-app purchases) are subject to the respective store's refund policies 
+              in addition to ours.
+            </p>
             
             <h2>7. Cancellation Policy</h2>
             <ul>

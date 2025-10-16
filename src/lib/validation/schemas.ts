@@ -1,191 +1,222 @@
 /**
  * Centralized Validation Schemas
- * 
- * Uses Zod for type-safe validation across all forms.
- * Provides consistent error messages and validation rules.
+ * Using Zod for type-safe input validation
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
- * Common field validations
+ * Common field validators
  */
-export const commonSchemas = {
-  email: z
-    .string()
-    .email("Hmm, that email doesn't look quite right 📧")
-    .max(255, "Email's too long - keep it under 255 characters ✂️")
-    .optional()
-    .or(z.literal("")),
-
-  phone: z
-    .string()
-    .regex(
-      /^[\d\s\-\(\)]+$/,
-      "Phone number can only contain numbers, spaces, and - ( )"
-    )
-    .min(10, "Phone number seems a bit short 📱")
-    .max(20, "Phone number seems a bit long 📱")
-    .optional()
-    .or(z.literal("")),
-
-  name: z
-    .string()
+export const commonValidators = {
+  email: z.string()
     .trim()
-    .min(1, "We'd love to know the name! 👤")
-    .max(100, "That name's a bit long - keep it under 100 characters 📝"),
-
-  notes: z
-    .string()
-    .max(1000, "Notes are a bit lengthy - keep it under 1000 characters 📝")
+    .email({ message: "Please enter a valid email address" })
+    .max(255, { message: "Email must be less than 255 characters" })
+    .toLowerCase(),
+  
+  phone: z.string()
+    .trim()
+    .regex(/^[\d\s\-\+\(\)]+$/, { message: "Please enter a valid phone number" })
+    .min(10, { message: "Phone number must be at least 10 digits" })
+    .max(20, { message: "Phone number must be less than 20 characters" })
     .optional()
-    .or(z.literal("")),
-
-  shortText: z
-    .string()
-    .max(255, "Keep it under 255 characters please ✂️")
+    .or(z.literal('')),
+  
+  name: z.string()
+    .trim()
+    .min(1, { message: "Name cannot be empty" })
+    .max(100, { message: "Name must be less than 100 characters" })
+    .regex(/^[a-zA-Z\s\-\.\']+$/, { message: "Name can only contain letters, spaces, hyphens, periods, and apostrophes" }),
+  
+  message: z.string()
+    .trim()
+    .min(1, { message: "Message cannot be empty" })
+    .max(2000, { message: "Message must be less than 2000 characters" }),
+  
+  url: z.string()
+    .trim()
+    .url({ message: "Please enter a valid URL" })
+    .max(500, { message: "URL must be less than 500 characters" })
     .optional()
-    .or(z.literal("")),
-
-  longText: z
-    .string()
-    .max(2000, "That's a bit too long - keep it under 2000 characters 📝")
-    .optional()
-    .or(z.literal("")),
+    .or(z.literal('')),
+  
+  password: z.string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .max(128, { message: "Password must be less than 128 characters" })
+    .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
+    .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
+    .regex(/[0-9]/, { message: "Password must contain at least one number" }),
+  
+  price: z.number()
+    .min(0, { message: "Price cannot be negative" })
+    .max(99999.99, { message: "Price is too large" })
+    .multipleOf(0.01, { message: "Price can have at most 2 decimal places" }),
+  
+  duration: z.number()
+    .int({ message: "Duration must be a whole number" })
+    .min(5, { message: "Duration must be at least 5 minutes" })
+    .max(1440, { message: "Duration cannot exceed 24 hours" }),
 };
 
 /**
- * Client Profile Schema
+ * Contact Form Schema
  */
-export const clientProfileSchema = z.object({
-  full_name: commonSchemas.name,
-  email: commonSchemas.email,
-  phone: commonSchemas.phone,
-  hair_type: commonSchemas.shortText,
-  allergies: z
-    .string()
-    .max(500, "Allergies field is too long - keep it under 500 characters ✂️")
-    .optional()
-    .or(z.literal("")),
-  notes: commonSchemas.notes,
+export const contactFormSchema = z.object({
+  name: commonValidators.name,
+  email: commonValidators.email,
+  phone: commonValidators.phone,
+  message: commonValidators.message,
 });
 
-export type ClientProfileFormData = z.infer<typeof clientProfileSchema>;
+export type ContactFormData = z.infer<typeof contactFormSchema>;
 
 /**
- * Stylist Profile Schema
+ * Profile Update Schema
  */
-export const stylistProfileSchema = z.object({
-  business_name: commonSchemas.name.optional(),
-  bio: commonSchemas.longText,
-  color_line: commonSchemas.shortText,
-  specialty: commonSchemas.shortText,
-  location: commonSchemas.shortText,
-  years_experience: z
-    .number()
-    .int()
-    .min(0, "Years of experience can't be negative")
-    .max(100, "That's quite a career! 👴")
-    .optional(),
+export const profileUpdateSchema = z.object({
+  full_name: commonValidators.name,
+  email: commonValidators.email,
+  phone: commonValidators.phone,
+  bio: z.string()
+    .trim()
+    .max(500, { message: "Bio must be less than 500 characters" })
+    .optional()
+    .or(z.literal('')),
+  website: commonValidators.url,
 });
 
-export type StylistProfileFormData = z.infer<typeof stylistProfileSchema>;
+export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>;
+
+/**
+ * Service Creation Schema
+ */
+export const serviceSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(1, { message: "Service name is required" })
+    .max(100, { message: "Service name must be less than 100 characters" }),
+  description: z.string()
+    .trim()
+    .max(1000, { message: "Description must be less than 1000 characters" })
+    .optional()
+    .or(z.literal('')),
+  price: commonValidators.price,
+  duration: commonValidators.duration,
+  category: z.string()
+    .trim()
+    .min(1, { message: "Category is required" })
+    .max(50, { message: "Category must be less than 50 characters" }),
+});
+
+export type ServiceData = z.infer<typeof serviceSchema>;
 
 /**
  * Formula Schema
  */
 export const formulaSchema = z.object({
-  client_id: z.string().uuid("Please select a client"),
-  formula_text: z
-    .string()
+  formula_name: z.string()
     .trim()
-    .min(1, "Formula can't be empty! ✨")
-    .max(2000, "Formula is too long - keep it under 2000 characters 📝"),
-  instructions: commonSchemas.longText,
-  color_line: commonSchemas.shortText,
-  result_notes: commonSchemas.notes,
+    .min(1, { message: "Formula name is required" })
+    .max(200, { message: "Formula name must be less than 200 characters" }),
+  formula_details: z.string()
+    .trim()
+    .min(1, { message: "Formula details are required" })
+    .max(5000, { message: "Formula details must be less than 5000 characters" }),
+  notes: z.string()
+    .trim()
+    .max(2000, { message: "Notes must be less than 2000 characters" })
+    .optional()
+    .or(z.literal('')),
 });
 
-export type FormulaFormData = z.infer<typeof formulaSchema>;
+export type FormulaData = z.infer<typeof formulaSchema>;
 
 /**
- * Appointment Schema
+ * Client Note Schema
+ */
+export const clientNoteSchema = z.object({
+  note_type: z.enum(['general', 'allergy', 'preference', 'caution'], {
+    errorMap: () => ({ message: "Please select a valid note type" }),
+  }),
+  content: z.string()
+    .trim()
+    .min(1, { message: "Note content cannot be empty" })
+    .max(1000, { message: "Note must be less than 1000 characters" }),
+});
+
+export type ClientNoteData = z.infer<typeof clientNoteSchema>;
+
+/**
+ * Appointment Booking Schema
  */
 export const appointmentSchema = z.object({
-  client_id: z.string().uuid("Please select a client"),
-  service_type: z.string().min(1, "Please select a service type"),
+  stylist_id: z.string().uuid({ message: "Invalid stylist selected" }),
+  service_id: z.string().uuid({ message: "Invalid service selected" }),
   appointment_date: z.date({
-    required_error: "Please select a date and time",
+    required_error: "Please select an appointment date",
     invalid_type_error: "Invalid date format",
   }),
-  duration_minutes: z
-    .number()
-    .int()
-    .min(15, "Minimum appointment duration is 15 minutes")
-    .max(480, "Maximum appointment duration is 8 hours"),
-  notes: commonSchemas.notes,
-});
-
-export type AppointmentFormData = z.infer<typeof appointmentSchema>;
-
-/**
- * Message Schema
- */
-export const messageSchema = z.object({
-  message_text: z
-    .string()
+  notes: z.string()
     .trim()
-    .min(1, "Message can't be empty")
-    .max(1000, "Message is too long - keep it under 1000 characters"),
+    .max(500, { message: "Notes must be less than 500 characters" })
+    .optional()
+    .or(z.literal('')),
 });
 
-export type MessageFormData = z.infer<typeof messageSchema>;
+export type AppointmentData = z.infer<typeof appointmentSchema>;
 
 /**
  * Review Schema
  */
 export const reviewSchema = z.object({
-  rating: z
-    .number()
-    .int()
-    .min(1, "Please select a rating")
-    .max(5, "Maximum rating is 5 stars"),
-  review_text: z
-    .string()
-    .min(10, "Please write at least 10 characters")
-    .max(1000, "Review is too long - keep it under 1000 characters")
-    .optional()
-    .or(z.literal("")),
+  rating: z.number()
+    .int({ message: "Rating must be a whole number" })
+    .min(1, { message: "Rating must be at least 1 star" })
+    .max(5, { message: "Rating cannot exceed 5 stars" }),
+  comment: z.string()
+    .trim()
+    .min(10, { message: "Review must be at least 10 characters" })
+    .max(1000, { message: "Review must be less than 1000 characters" }),
 });
 
-export type ReviewFormData = z.infer<typeof reviewSchema>;
+export type ReviewData = z.infer<typeof reviewSchema>;
 
 /**
- * Helper to get user-friendly error messages
+ * Sanitize HTML helper
  */
-export const getFormErrors = (error: z.ZodError): Record<string, string> => {
-  const errors: Record<string, string> = {};
-  
-  error.errors.forEach((err) => {
-    const field = err.path.join(".");
-    errors[field] = err.message;
-  });
-
-  return errors;
+export const sanitizeHtml = (html: string): string => {
+  // Remove script tags and event handlers
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/javascript:/gi, '');
 };
 
 /**
- * Helper to validate form data
+ * Validate and encode URL parameters
  */
-export const validateForm = <T>(
-  schema: z.ZodSchema<T>,
-  data: unknown
-): { success: true; data: T } | { success: false; errors: Record<string, string> } => {
-  const result = schema.safeParse(data);
+export const encodeUrlParam = (param: string): string => {
+  return encodeURIComponent(param.trim().substring(0, 500));
+};
 
-  if (result.success) {
-    return { success: true, data: result.data };
-  } else {
-    return { success: false, errors: getFormErrors(result.error) };
+/**
+ * Validate file upload
+ */
+export const validateFileUpload = (file: File, options: {
+  maxSizeMB?: number;
+  allowedTypes?: string[];
+} = {}) => {
+  const maxSizeMB = options.maxSizeMB || 10;
+  const allowedTypes = options.allowedTypes || ['image/jpeg', 'image/png', 'image/webp'];
+  
+  if (file.size > maxSizeMB * 1024 * 1024) {
+    throw new Error(`File size must be less than ${maxSizeMB}MB`);
   }
+  
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error(`File type must be one of: ${allowedTypes.join(', ')}`);
+  }
+  
+  return true;
 };
