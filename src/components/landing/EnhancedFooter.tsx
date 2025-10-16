@@ -29,25 +29,25 @@ export const EnhancedFooter = () => {
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-4 gap-6 mb-6">
+      <div className="container mx-auto px-4 py-10">
+        <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand Column */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 border-4 border-black bg-secondary flex items-center justify-center">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-11 h-11 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                 <Scissors className="h-5 w-5 text-secondary-foreground" />
               </div>
               <span className="font-pixel text-xl text-primary-foreground uppercase">hA.I.r</span>
             </div>
-            <p className="text-xs font-sans text-primary-foreground/80 leading-relaxed border-l-4 border-accent pl-3">
+            <p className="text-sm font-sans text-primary-foreground/80 leading-relaxed">
               Your hair, smarter. Your salon, effortless.
             </p>
-            <div className="flex gap-1.5 pt-2">
+            <div className="flex gap-2 pt-2">
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Instagram"
               >
                 <Instagram className="h-4 w-4 text-accent-foreground" />
@@ -56,16 +56,16 @@ export const EnhancedFooter = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-secondary hover:bg-secondary/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Facebook"
               >
-                <Facebook className="h-4 w-4 text-accent-foreground" />
+                <Facebook className="h-4 w-4 text-secondary-foreground" />
               </a>
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Twitter"
               >
                 <Twitter className="h-4 w-4 text-accent-foreground" />
@@ -74,30 +74,30 @@ export const EnhancedFooter = () => {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 border-4 border-black bg-secondary hover:bg-secondary/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="YouTube"
               >
-                <Youtube className="h-4 w-4 text-accent-foreground" />
+                <Youtube className="h-4 w-4 text-secondary-foreground" />
               </a>
             </div>
           </div>
 
           {/* Product Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-3 text-primary-foreground border-l-4 border-accent pl-3">PRODUCT</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">PRODUCT</h3>
+            <ul className="space-y-2.5">
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-primary-foreground/80 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   Features
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-primary-foreground/80 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   Demo
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-primary-foreground/80 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   Integrations
                 </button>
               </li>
@@ -106,20 +106,20 @@ export const EnhancedFooter = () => {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-3 text-primary-foreground border-l-4 border-accent pl-3">COMPANY</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">COMPANY</h3>
+            <ul className="space-y-2.5">
               <li>
-                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-sm text-primary-foreground/80 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   About
                 </button>
               </li>
               <li>
-                <a href="mailto:support@hair-ai.com" className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                <a href="mailto:support@hair-ai.com" className="font-sans text-sm text-primary-foreground/80 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   Contact
                 </a>
               </li>
               <li>
-                <button onClick={() => navigate("/terms")} className="font-sans text-xs text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                <button onClick={() => navigate("/terms")} className="font-sans text-sm text-primary-foreground/80 hover:text-primary-foreground hover:translate-x-1 transition-all inline-block">
                   Terms
                 </button>
               </li>
@@ -128,109 +128,65 @@ export const EnhancedFooter = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="font-pixel text-sm uppercase mb-3 text-primary-foreground border-l-4 border-accent pl-3">UPDATES</h3>
-            <p className="text-xs font-sans text-primary-foreground/80 mb-3">
+            <h3 className="font-pixel text-sm uppercase mb-4 text-primary-foreground">UPDATES</h3>
+            <p className="text-sm font-sans text-primary-foreground/80 mb-3 leading-relaxed">
               Get tips and exclusive offers.
             </p>
-            <form onSubmit={handleNewsletterSignup} className="space-y-2">
+            <form onSubmit={handleNewsletterSignup} className="space-y-2.5">
               <Input
                 type="email"
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-10"
+                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-11 bg-white"
                 required
               />
               <Button 
                 type="submit" 
-                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all rounded-none h-10"
+                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11"
               >
-                <Mail className="h-3 w-3 mr-2" />
+                <Mail className="h-4 w-4 mr-2" />
                 SUBSCRIBE
               </Button>
             </form>
           </div>
         </div>
 
-        <div className="border-t-4 border-black pt-4 space-y-3">
-          {/* Row 1: Copyright, App Badges, Social Links */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-            <p className="font-pixel text-xs text-primary-foreground/80">© 2025 hA.I.r</p>
+        <div className="border-t-4 border-black pt-6 mt-2">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-6">
+            {/* Copyright */}
+            <p className="font-pixel text-sm text-primary-foreground/80">© 2025 hA.I.r</p>
             
-            <div className="flex gap-1.5">
-              <div className="border-3 border-black bg-secondary px-2.5 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                <Smartphone className="h-3 w-3 text-secondary-foreground" />
+            {/* App Badges */}
+            <div className="flex gap-2">
+              <div className="border-4 border-black bg-secondary px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <Smartphone className="h-4 w-4 text-secondary-foreground" />
               </div>
-              <div className="border-3 border-black bg-accent px-2 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              <div className="border-4 border-black bg-accent px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
                 <span className="font-pixel text-xs text-accent-foreground">iOS</span>
               </div>
-              <div className="border-3 border-black bg-accent px-2 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                <span className="font-pixel text-xs text-accent-foreground">AND</span>
+              <div className="border-4 border-black bg-secondary px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <span className="font-pixel text-xs text-secondary-foreground">ANDROID</span>
               </div>
             </div>
 
-            <div className="flex gap-1.5">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-7 h-7 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-3.5 w-3.5 text-accent-foreground" />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-7 h-7 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                aria-label="Facebook"
-              >
-                <Facebook className="h-3.5 w-3.5 text-accent-foreground" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-7 h-7 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-3.5 w-3.5 text-accent-foreground" />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-7 h-7 border-3 border-black bg-accent hover:bg-accent/80 transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                aria-label="YouTube"
-              >
-                <Youtube className="h-3.5 w-3.5 text-accent-foreground" />
-              </a>
+            {/* Footer Links */}
+            <div className="flex gap-3 text-sm font-sans">
+              <button onClick={() => navigate("/dmca")} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                DMCA
+              </button>
+              <button onClick={() => navigate("/help")} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                Help
+              </button>
+              <button onClick={() => navigate("/terms")} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
+                Terms
+              </button>
             </div>
-          </div>
-
-          {/* Row 2: Footer Links */}
-          <div className="flex justify-center gap-4 text-xs font-sans">
-            <button onClick={() => navigate("/dmca")} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
-              DMCA
-            </button>
-            <span className="text-primary-foreground/40">•</span>
-            <button onClick={() => navigate("/help")} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
-              Help
-            </button>
-            <span className="text-primary-foreground/40">•</span>
-            <a href="mailto:support@hair-ai.com" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
-              Contact
-            </a>
-            <span className="text-primary-foreground/40">•</span>
-            <button onClick={() => navigate("/terms")} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
-              Terms
-            </button>
           </div>
           
           {/* Legal Disclaimer */}
-          <div className="text-center border-3 border-black bg-white p-3 mt-2">
-            <p className="text-xs font-sans text-muted-foreground leading-relaxed">
+          <div className="border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <p className="text-xs font-sans text-muted-foreground leading-relaxed text-center max-w-4xl mx-auto">
               <strong>Disclaimer:</strong> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
             </p>
           </div>
