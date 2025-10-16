@@ -1,6 +1,52 @@
 # Hair AI Design System
 
-## Spacing Scale
+## 🎨 Adaptive Brutalism Philosophy
+
+Hair AI uses **Adaptive Brutalism** - a design approach that maintains our bold, pixelated brand identity from the landing page while ensuring usability throughout the app. This system combines retro-gaming aesthetics with modern UX principles.
+
+**Core Principles:**
+- **Visual Consistency**: Bold colors, thick borders, hard shadows everywhere
+- **Typography Hierarchy**: Right font for the right purpose
+- **Readability First**: Never sacrifice usability for aesthetics
+- **Touch-Friendly**: Minimum 44px touch targets on all interactive elements
+
+---
+
+## Typography System
+
+### When to Use Each Font
+
+#### Press Start 2P (Pixelated Headers)
+**Use for:** Page titles, section headers, card titles, dialog titles, labels
+```tsx
+<h1 className="font-pixel text-2xl sm:text-3xl lg:text-4xl">Dashboard</h1>
+<h2 className="font-pixel text-xl sm:text-2xl">Your Clients</h2>
+<h3 className="font-pixel text-base sm:text-lg">Appointment Details</h3>
+```
+
+#### Bold Sans (CTAs & Buttons)
+**Use for:** All buttons, navigation items, badges, action text
+```tsx
+<Button className="font-bold uppercase tracking-wide">
+  Book Now
+</Button>
+```
+
+#### DM Sans (Readable Body Text)
+**Use for:** Paragraphs, descriptions, form labels, table data
+```tsx
+<p className="font-sans text-sm sm:text-base text-muted-foreground">
+  Your appointment is confirmed for tomorrow at 3pm.
+</p>
+```
+
+#### Space Grotesk (Data & Numbers)
+**Use for:** Statistics, metrics, prices, dates, large numbers
+```tsx
+<div className="font-display text-3xl font-bold">247</div>
+```
+
+---
 Use these standardized spacing values across all components:
 
 ### Component Spacing
@@ -201,11 +247,95 @@ Use these standardized spacing values across all components:
 - Minimum: 4.5:1 for normal text
 - Large text: 3:1
 - UI components: 3:1
+- **Target**: WCAG AAA (7:1) for critical text
 
 ### Focus States
 - All interactive elements must have visible focus rings
-- Use `focus-visible:ring-2 focus-visible:ring-primary`
+- Use `focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2`
 
 ### Touch Targets
-- Minimum 44x44px for mobile
+- Minimum 44x44px for mobile (iOS standard)
+- Comfortable: 48x48px
 - Adequate spacing between clickable elements (min 8px gap)
+
+### Motion Preferences
+- Respect `prefers-reduced-motion`
+- Provide alternatives to animations
+- No auto-playing animations
+
+---
+
+## Helper Components
+
+### BrutalCard
+Pre-built card with brutalist styling:
+```tsx
+import { BrutalCard } from "@/components/adaptive-brutalism";
+
+<BrutalCard hover gradient>
+  {/* Content */}
+</BrutalCard>
+```
+
+### BrutalHeader
+Pixelated headers with responsive sizing:
+```tsx
+import { BrutalHeader } from "@/components/adaptive-brutalism";
+
+<BrutalHeader size="lg" as="h1">Page Title</BrutalHeader>
+```
+
+### BrutalText
+Readable body text:
+```tsx
+import { BrutalText } from "@/components/adaptive-brutalism";
+
+<BrutalText size="normal" muted>
+  Your description here
+</BrutalText>
+```
+
+---
+
+## Implementation Checklist
+
+Before committing new UI components:
+
+- [ ] Page titles use Press Start 2P (`font-pixel`)
+- [ ] Buttons have bold, uppercase text with tracking
+- [ ] Body text uses DM Sans (`font-sans`)
+- [ ] Cards have 3px borders and brutalist shadows
+- [ ] Gradient backgrounds use design system tokens
+- [ ] All interactive elements ≥ 44px touch target
+- [ ] Focus states are visible
+- [ ] Text contrast meets WCAG AAA
+- [ ] No hardcoded colors outside design system
+
+---
+
+## Quick Reference
+
+### Import Utilities
+```tsx
+import { typography, brutalist, spacing } from "@/lib/brutalismUtils";
+```
+
+### Common Patterns
+```tsx
+// Stat card
+<div className={brutalist.card}>
+  <div className={typography.stat}>247</div>
+  <p className={typography.statLabel}>Bookings</p>
+</div>
+
+// Action button
+<button className={cn(brutalist.buttonFull, typography.cta)}>
+  Get Started
+</button>
+```
+
+---
+
+**For complete guidelines, see:** `ADAPTIVE_BRUTALISM.md`
+**Design System Version:** 2.0.0 (Adaptive Brutalism)
+

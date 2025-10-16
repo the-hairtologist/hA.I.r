@@ -347,7 +347,8 @@ All colors MUST be HSL.
     --sidebar-ring: 210 100% 50%;
     
     /* ============================================ */
-    /* BRUTAL DESIGN SYSTEM - Standardized Tokens */
+    /* ADAPTIVE BRUTALISM DESIGN SYSTEM */
+    /* Visual Language + Typography Tokens */
     /* ============================================ */
     
     /* Brutal Border Widths */
@@ -359,7 +360,7 @@ All colors MUST be HSL.
     --brutal-shadow-xs: 1px 1px 0px 0px hsl(var(--foreground));
     --brutal-shadow-sm: 2px 2px 0px 0px hsl(var(--foreground));
     --brutal-shadow-md: 3px 3px 0px 0px hsl(var(--foreground));
-    --brutal-shadow-lg: 4px 4px 0px 0px hsl(var(--foreground));
+    --brutal-shadow-lg: 5px 5px 0px 0px hsl(var(--foreground));
     --brutal-shadow-xl: 6px 6px 0px 0px hsl(var(--foreground));
     --brutal-shadow-2xl: 8px 8px 0px 0px hsl(var(--foreground));
     
@@ -1477,5 +1478,67 @@ All colors MUST be HSL.
     -moz-osx-font-smoothing: grayscale;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+  }
+  
+  /* ============================================ */
+  /* ADAPTIVE BRUTALISM TYPOGRAPHY UTILITIES */
+  /* ============================================ */
+  
+  /* Brutalist Headers - Press Start 2P */
+  .brutal-header-xl {
+    @apply font-pixel text-2xl sm:text-3xl lg:text-4xl;
+  }
+  
+  .brutal-header-lg {
+    @apply font-pixel text-xl sm:text-2xl lg:text-3xl;
+  }
+  
+  .brutal-header-md {
+    @apply font-pixel text-lg sm:text-xl lg:text-2xl;
+  }
+  
+  .brutal-header-sm {
+    @apply font-pixel text-base sm:text-lg;
+  }
+  
+  /* Brutalist CTA Text - Bold Sans */
+  .brutal-cta-text {
+    @apply font-bold uppercase tracking-wide;
+  }
+  
+  /* Readable Body Text - DM Sans */
+  .brutal-body-lg {
+    @apply font-sans text-sm sm:text-base;
+  }
+  
+  .brutal-body {
+    @apply font-sans text-xs sm:text-sm;
+  }
+  
+  .brutal-body-sm {
+    @apply font-sans text-[11px] sm:text-xs;
+  }
+  
+  /* Brutalist Card - Complete pattern */
+  .brutal-card {
+    @apply border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl bg-card;
+  }
+  
+  .brutal-card-hover {
+    @apply hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all;
+  }
+  
+  /* Brutalist Button Effects */
+  .brutal-button {
+    @apply border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))];
+  }
+  
+  .brutal-button-hover {
+    @apply hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] active:shadow-none active:translate-x-[4px] active:translate-y-[4px];
+  }
+  
+  /* Glass Brutal (modern + brutalist fusion) */
+  .glass-brutal {
+    @apply backdrop-blur-xl bg-background/80 border-[3px] border-foreground/20;
   }
 }
