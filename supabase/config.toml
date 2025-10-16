@@ -101,3 +101,15 @@ verify_jwt = false
 
 [functions.ai-nudge-optimizer]
 verify_jwt = false
+
+[functions.ai-formula-analyzer]
+verify_jwt = true
+
+[functions.ai-schedule-predictor]
+verify_jwt = true
+
+[functions.ai-visual-analysis]
+verify_jwt = true
+
+[functions.ai-message-generator]
+verify_jwt = true
