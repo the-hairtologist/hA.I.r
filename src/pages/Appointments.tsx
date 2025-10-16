@@ -34,6 +34,7 @@ import { AppointmentInsights } from "@/components/AppointmentInsights";
 import { RevenueOptimizer } from "@/components/RevenueOptimizer";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
+import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
 
 const Appointments = () => {
   const navigate = useNavigate();

@@ -173,6 +173,16 @@ export const stylistNavigationItems: NavigationItem[] = [
     color: "text-emerald-400 dark:text-emerald-300",
     children: [
       { 
+        id: "retention", 
+        title: "Client Retention", 
+        url: "/client-retention", 
+        icon: Heart, 
+        gradient: "bg-[image:var(--gradient-pink-rose)]", 
+        group: "growth",
+        color: "text-pink-400 dark:text-pink-300",
+        description: "AI-powered client retention insights"
+      },
+      { 
         id: "analytics", 
         title: "Analytics", 
         url: "/analytics", 

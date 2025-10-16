@@ -22,6 +22,7 @@ import { ClientSelectorDialog } from "@/components/ClientSelectorDialog";
 import { StructuredFormulaDisplay } from "@/components/StructuredFormulaDisplay";
 import { AIFormulaQuickStart } from "@/components/AIFormulaQuickStart";
 import { FormulaSafetyBadge } from "@/components/FormulaSafetyBadge";
+import { AIFeedbackPrompt } from "@/components/AIFeedbackPrompt";
 import { HairAnalysisPanel } from "@/components/HairAnalysisPanel";
 import { ModelPerformanceIndicator } from "@/components/ModelPerformanceIndicator";
 import { FormulaOutcomeFeedback } from "@/components/FormulaOutcomeFeedback";
@@ -766,7 +767,7 @@ const Knowledge = () => {
                               }}
                             />
                             
-                            {/* Fallback to regular message if not structured */}
+                             {/* Fallback to regular message if not structured */}
                             {!msg.content.toString().includes('"formula"') && !msg.content.toString().includes('"application_steps"') && (
                               <div className="bg-background border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)] max-w-[80%] rounded-2xl px-5 py-4 border-3" style={{ border: "3px solid" }}>
                                 <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
@@ -782,6 +783,13 @@ const Knowledge = () => {
                                     <Save className="h-4 w-4" />
                                     Save Formula
                                   </button>
+                                )}
+                                
+                                {/* AI Feedback Prompt - Show after AI responses */}
+                                {idx === aiMessages.length - 1 && (
+                                  <div className="mt-4">
+                                    <AIFeedbackPrompt context="formula" />
+                                  </div>
                                 )}
                               </div>
                             )}

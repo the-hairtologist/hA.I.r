@@ -77,6 +77,7 @@ const ClientFormulas = lazy(() => import('@/pages/ClientFormulas'));
 const InstallPWA = lazy(() => import('@/pages/InstallPWA'));
 const ZapierIntegration = lazy(() => import('@/pages/ZapierIntegration'));
 const AuditReport = lazy(() => import('@/pages/AuditReport'));
+const ClientRetention = lazy(() => import('@/pages/ClientRetention'));
 
 export const AppRoutes = () => (
   <>
@@ -239,6 +240,10 @@ export const AppRoutes = () => (
     <Route
       path="/aftercare-guides"
       element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><AftercareGuides /></ProtectedRoute>}
+    />
+    <Route
+      path="/client-retention"
+      element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><ClientRetention /></ProtectedRoute>}
     />
 
     {/* Client Routes */}

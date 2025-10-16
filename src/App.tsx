@@ -13,7 +13,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes } from "react-router-dom";
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense, useState } from "react";
 import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";
 import { PerformanceOverlay } from "@/components/PerformanceOverlay";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -30,6 +30,8 @@ import { initAnalytics } from "@/lib/analytics";
 import { initSentry } from "@/lib/monitoring";
 import { ServiceIntegrationTracker } from "@/components/ServiceIntegrationTracker";
 import { AppRoutes } from "@/routes";
+import { SubscriptionNudge } from "@/components/SubscriptionNudge";
+import { useSubscriptionNudges } from "@/hooks/useSubscriptionNudges";
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -57,6 +59,32 @@ const AnalyticsInitializer = () => {
 const KeyboardShortcutsInitializer = () => {
   useGlobalKeyboardShortcuts();
   return null;
+};
+
+const SubscriptionNudgeWrapper = () => {
+  const { shouldShowNudge, dismissNudge, trialDaysRemaining, clientCount, appointmentCount } = useSubscriptionNudges();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (shouldShowNudge) {
+      setOpen(true);
+    }
+  }, [shouldShowNudge]);
+
+  const handleDismiss = () => {
+    dismissNudge(shouldShowNudge);
+    setOpen(false);
+  };
+
+  return (
+    <SubscriptionNudge
+      trigger={shouldShowNudge}
+      open={open}
+      onOpenChange={setOpen}
+      onDismiss={handleDismiss}
+      stats={{ trialDaysRemaining, clientCount, appointmentCount }}
+    />
+  );
 };
 
 const App = () => {
@@ -104,6 +132,7 @@ const App = () => {
                 <KeyboardShortcutsInitializer />
                 <ServiceIntegrationTracker />
                 <RoleSwitchProtection />
+                <SubscriptionNudgeWrapper />
             <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
               <Routes>
                 {AppRoutes()}
