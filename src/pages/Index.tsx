@@ -57,17 +57,11 @@ const Index = () => {
         }}>
           <div className="container mx-auto px-4 text-center relative z-10 w-full">
             <div className="max-w-4xl mx-auto space-y-8">
-              <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-pixel uppercase text-secondary-foreground leading-relaxed tracking-wider drop-shadow-[0_0_12px_rgba(255,221,0,0.8)] animate-fade-in" style={{ 
-                lineHeight: '1.6',
-                textShadow: '3px 3px 0px rgba(0,0,0,0.4), 0 0 20px rgba(255,221,0,0.6)'
-              }}>
+              <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-pixel uppercase text-secondary leading-relaxed tracking-wider drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in" style={{ lineHeight: '1.6' }}>
                 YOUR HAIR, SMARTER.<br />YOUR SALON, EFFORTLESS.
               </h1>
               
-              <p className="text-sm xs:text-base sm:text-lg font-pixel text-primary-foreground max-w-2xl mx-auto leading-loose animate-fade-in" style={{ 
-                animationDelay: '100ms',
-                textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-              }}>
+              <p className="text-sm xs:text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-loose animate-fade-in" style={{ animationDelay: '100ms' }}>
                 BOOK SMARTER. STYLE BETTER. GET PAID FASTER.
               </p>
               
@@ -81,10 +75,7 @@ const Index = () => {
                 </Button>
               </div>
               
-              <p className="text-xs sm:text-sm font-pixel text-primary-foreground/90 uppercase animate-fade-in" style={{ 
-                animationDelay: '300ms',
-                textShadow: '1px 1px 2px rgba(0,0,0,0.4)'
-              }}>
+              <p className="text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase animate-fade-in" style={{ animationDelay: '300ms' }}>
                 Free Trial • No Credit Card Required
               </p>
             </div>
