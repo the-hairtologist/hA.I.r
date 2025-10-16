@@ -192,10 +192,11 @@ export const CameraCapture = ({
         disabled={disabled || capturing || processing}
         className={cn(
           "fixed bottom-20 right-6 h-16 w-16 rounded-full shadow-2xl z-50",
-          "bg-gradient-to-br from-purple-500 to-pink-500",
-          "hover:from-purple-600 hover:to-pink-600",
+          "bg-gradient-to-br from-primary to-secondary",
+          "hover:opacity-90",
           "transform transition-all duration-300 hover:scale-110",
-          "ring-4 ring-purple-500/20",
+          "ring-4 ring-primary/20",
+          "text-primary-foreground",
           className
         )}
       >
@@ -264,8 +265,8 @@ export const CameraCapture = ({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-gradient-to-br from-purple-500 to-pink-500">
-                <Camera className="h-5 w-5 text-white" />
+              <div className="p-2 rounded-full bg-gradient-to-br from-primary to-secondary">
+                <Camera className="h-5 w-5 text-primary-foreground" />
               </div>
               <div>
                 <h3 className="font-semibold">{messages.capture}</h3>
@@ -273,7 +274,7 @@ export const CameraCapture = ({
               </div>
             </div>
             {context === 'analysis' && (
-              <Sparkles className="h-5 w-5 text-purple-500" />
+              <Sparkles className="h-5 w-5 text-primary" />
             )}
           </div>
 
@@ -287,7 +288,7 @@ export const CameraCapture = ({
           <Button
             onClick={handleCapture}
             disabled={disabled || capturing || processing}
-            className="w-full h-12 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+            className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground"
           >
             {capturing || processing ? (
               <>

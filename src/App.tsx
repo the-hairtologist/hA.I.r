@@ -32,6 +32,8 @@ import { ServiceIntegrationTracker } from "@/components/ServiceIntegrationTracke
 import { AppRoutes } from "@/routes";
 import { SubscriptionNudge } from "@/components/SubscriptionNudge";
 import { useSubscriptionNudges } from "@/hooks/useSubscriptionNudges";
+import { MobileOptimizationsProvider } from "@/components/MobileOptimizationsProvider";
+import { initMobileOptimizations } from "@/lib/mobileOptimizations";
 
 // Optimized QueryClient with caching
 const queryClient = new QueryClient({
@@ -96,6 +98,9 @@ const App = () => {
   useEffect(() => {
     const initializeSystems = async () => {
       try {
+        // Initialize mobile optimizations first (critical for mobile UX)
+        initMobileOptimizations();
+        
         // Initialize cross-platform optimizer
         const { crossPlatformOptimizer } = await import('@/lib/platform/CrossPlatformOptimizer');
         await crossPlatformOptimizer.initialize();
@@ -122,33 +127,35 @@ const App = () => {
     <GlobalErrorBoundary>
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-      <SubscriptionProvider>
-        <DemoModeProvider>
-          <TooltipProvider>
-            <GlobalAnnouncer />
-            <OfflineIndicator />
-            <Toaster />
-            <Sonner />
-            <CookieConsent />
-            <PerformanceOverlay />
-            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-              <EnhancedAuthProvider>
-                <AnalyticsInitializer />
-                <KeyboardShortcutsInitializer />
-                <ServiceIntegrationTracker />
-                <RoleSwitchProtection />
-                <SubscriptionNudgeWrapper />
-            <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
-              <Routes>
-                {AppRoutes()}
-              </Routes>
-            </Suspense>
-              </EnhancedAuthProvider>
-          </BrowserRouter>
-          </TooltipProvider>
-        </DemoModeProvider>
-      </SubscriptionProvider>
-    </QueryClientProvider>
+          <SubscriptionProvider>
+            <DemoModeProvider>
+              <MobileOptimizationsProvider>
+                <TooltipProvider>
+                  <GlobalAnnouncer />
+                  <OfflineIndicator />
+                  <Toaster />
+                  <Sonner />
+                  <CookieConsent />
+                  <PerformanceOverlay />
+                  <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                    <EnhancedAuthProvider>
+                      <AnalyticsInitializer />
+                      <KeyboardShortcutsInitializer />
+                      <ServiceIntegrationTracker />
+                      <RoleSwitchProtection />
+                      <SubscriptionNudgeWrapper />
+                      <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
+                        <Routes>
+                          {AppRoutes()}
+                        </Routes>
+                      </Suspense>
+                    </EnhancedAuthProvider>
+                  </BrowserRouter>
+                </TooltipProvider>
+              </MobileOptimizationsProvider>
+            </DemoModeProvider>
+          </SubscriptionProvider>
+        </QueryClientProvider>
       </ErrorBoundary>
     </GlobalErrorBoundary>
   );

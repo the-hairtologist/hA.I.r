@@ -34,31 +34,31 @@ export const OfflineStatusBar = () => {
     <div 
       className={cn(
         "fixed top-0 left-0 right-0 z-50 px-4 py-2 backdrop-blur-lg border-b transition-all animate-in slide-in-from-top-2",
-        quality === 'offline' && "bg-destructive/90 border-destructive",
-        quality === 'poor' && "bg-yellow-500/90 border-yellow-500",
-        quality === 'fair' && "bg-blue-500/90 border-blue-500",
-        (pendingActions > 0 || failedActions > 0) && isOnline && "bg-purple-500/90 border-purple-500"
+        quality === 'offline' && "bg-destructive/90 border-destructive text-destructive-foreground",
+        quality === 'poor' && "bg-warning/90 border-warning text-warning-foreground",
+        quality === 'fair' && "bg-info/90 border-info text-info-foreground",
+        (pendingActions > 0 || failedActions > 0) && isOnline && "bg-primary/90 border-primary text-primary-foreground"
       )}
     >
       <div className="container max-w-6xl mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           {!isOnline ? (
-            <WifiOff className="h-5 w-5 text-white" />
+            <WifiOff className="h-5 w-5" />
           ) : pendingActions > 0 ? (
-            <RefreshCw className="h-5 w-5 text-white animate-spin" />
+            <RefreshCw className="h-5 w-5 animate-spin" />
           ) : failedActions > 0 ? (
-            <AlertTriangle className="h-5 w-5 text-white" />
+            <AlertTriangle className="h-5 w-5" />
           ) : (
-            <CheckCircle2 className="h-5 w-5 text-white" />
+            <CheckCircle2 className="h-5 w-5" />
           )}
           
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white">
+            <p className="text-sm font-medium">
               {!isOnline && "You're offline"}
               {isOnline && pendingActions > 0 && `Syncing ${pendingActions} ${pendingActions === 1 ? 'change' : 'changes'}...`}
               {isOnline && pendingActions === 0 && failedActions > 0 && `${failedActions} ${failedActions === 1 ? 'action' : 'actions'} failed`}
             </p>
-            <p className="text-xs text-white/80">
+            <p className="text-xs opacity-80">
               {!isOnline && "Changes will sync automatically when you reconnect"}
               {isOnline && pendingActions > 0 && "Your changes are being saved"}
               {isOnline && pendingActions === 0 && failedActions > 0 && "Tap retry to sync again"}
@@ -68,7 +68,7 @@ export const OfflineStatusBar = () => {
 
         <div className="flex items-center gap-2">
           {quality === 'poor' && isOnline && (
-            <span className="text-xs text-white/80 hidden sm:inline">
+            <span className="text-xs opacity-80 hidden sm:inline">
               Slow connection
             </span>
           )}
@@ -78,7 +78,7 @@ export const OfflineStatusBar = () => {
               size="sm"
               variant="ghost"
               onClick={retryFailed}
-              className="text-white hover:bg-white/20 h-8"
+              className="hover:bg-background/20 h-8"
             >
               <RefreshCw className="h-3 w-3 mr-1" />
               Retry
@@ -90,7 +90,7 @@ export const OfflineStatusBar = () => {
       {pendingActions > 0 && (
         <Progress 
           value={0} 
-          className="h-1 mt-2 bg-white/20" 
+          className="h-1 mt-2 bg-background/20" 
           style={{ 
             animation: 'progress 2s ease-in-out infinite'
           }}

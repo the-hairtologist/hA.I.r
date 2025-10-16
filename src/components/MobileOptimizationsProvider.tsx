@@ -13,15 +13,32 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
   }, [isOnline]);
 
   const warmUpCache = async () => {
-    // Prefetch critical data
+    // Prefetch critical data from Supabase
     try {
       console.log('🔥 Warming up cache...');
       
-      // This triggers cache population for these endpoints
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        console.warn('Supabase credentials not found, skipping cache warmup');
+        return;
+      }
+      
+      // This triggers cache population for critical tables
       await Promise.allSettled([
-        fetch('/api/client_profiles?limit=50'),
-        fetch('/api/appointments?limit=100'),
-        fetch('/api/formulas?limit=50')
+        fetch(`${supabaseUrl}/rest/v1/client_profiles?select=*&limit=50`, {
+          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+        }),
+        fetch(`${supabaseUrl}/rest/v1/appointments?select=*&limit=100`, {
+          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+        }),
+        fetch(`${supabaseUrl}/rest/v1/formulas?select=*&limit=50`, {
+          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+        }),
+        fetch(`${supabaseUrl}/rest/v1/stylist_profiles?select=*&limit=50`, {
+          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+        })
       ]);
       
       console.log('✅ Cache warmed successfully');
