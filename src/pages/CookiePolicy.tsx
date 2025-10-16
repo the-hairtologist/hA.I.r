@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/PageHeader";
 import { Cookie } from "lucide-react";
 
@@ -96,42 +97,85 @@ const CookiePolicy = () => {
             </ul>
             
             <h2>Specific Cookies We Use</h2>
-            <table className="w-full border-collapse mt-4">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left p-2">Cookie Name</th>
-                  <th className="text-left p-2">Purpose</th>
-                  <th className="text-left p-2">Type</th>
-                  <th className="text-left p-2">Duration</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b">
-                  <td className="p-2"><code>hair-cookie-consent</code></td>
-                  <td className="p-2">Stores your cookie preferences</td>
-                  <td className="p-2">Essential</td>
-                  <td className="p-2">1 year</td>
-                </tr>
-                <tr className="border-b">
-                  <td className="p-2"><code>sidebar:state</code></td>
-                  <td className="p-2">Remembers sidebar open/closed state</td>
-                  <td className="p-2">Essential</td>
-                  <td className="p-2">7 days</td>
-                </tr>
-                <tr className="border-b">
-                  <td className="p-2"><code>sb-access-token</code></td>
-                  <td className="p-2">Authentication token</td>
-                  <td className="p-2">Essential</td>
-                  <td className="p-2">Session</td>
-                </tr>
-                <tr className="border-b">
-                  <td className="p-2"><code>sb-refresh-token</code></td>
-                  <td className="p-2">Refresh authentication</td>
-                  <td className="p-2">Essential</td>
-                  <td className="p-2">30 days</td>
-                </tr>
-              </tbody>
-            </table>
+            
+            {/* Mobile Card Layout */}
+            <div className="md:hidden space-y-3 mt-4">
+              <div className="p-4 border-2 border-foreground rounded-lg space-y-2">
+                <code className="text-sm font-bold block">hair-cookie-consent</code>
+                <p className="text-sm">Stores your cookie preferences</p>
+                <div className="flex gap-2 text-xs">
+                  <Badge variant="outline">Essential</Badge>
+                  <Badge variant="secondary">1 year</Badge>
+                </div>
+              </div>
+              
+              <div className="p-4 border-2 border-foreground rounded-lg space-y-2">
+                <code className="text-sm font-bold block">sidebar:state</code>
+                <p className="text-sm">Remembers sidebar open/closed state</p>
+                <div className="flex gap-2 text-xs">
+                  <Badge variant="outline">Essential</Badge>
+                  <Badge variant="secondary">7 days</Badge>
+                </div>
+              </div>
+
+              <div className="p-4 border-2 border-foreground rounded-lg space-y-2">
+                <code className="text-sm font-bold block">sb-access-token</code>
+                <p className="text-sm">Authentication token</p>
+                <div className="flex gap-2 text-xs">
+                  <Badge variant="outline">Essential</Badge>
+                  <Badge variant="secondary">Session</Badge>
+                </div>
+              </div>
+
+              <div className="p-4 border-2 border-foreground rounded-lg space-y-2">
+                <code className="text-sm font-bold block">sb-refresh-token</code>
+                <p className="text-sm">Refresh authentication</p>
+                <div className="flex gap-2 text-xs">
+                  <Badge variant="outline">Essential</Badge>
+                  <Badge variant="secondary">30 days</Badge>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Table Layout */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full border-collapse mt-4 min-w-[600px]">
+                <thead>
+                  <tr className="border-b-2 border-foreground">
+                    <th className="text-left p-3 font-semibold">Cookie Name</th>
+                    <th className="text-left p-3 font-semibold">Purpose</th>
+                    <th className="text-left p-3 font-semibold">Type</th>
+                    <th className="text-left p-3 font-semibold">Duration</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b">
+                    <td className="p-3"><code className="bg-muted px-2 py-1 rounded">hair-cookie-consent</code></td>
+                    <td className="p-3">Stores your cookie preferences</td>
+                    <td className="p-3"><Badge variant="outline">Essential</Badge></td>
+                    <td className="p-3">1 year</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-3"><code className="bg-muted px-2 py-1 rounded">sidebar:state</code></td>
+                    <td className="p-3">Remembers sidebar open/closed state</td>
+                    <td className="p-3"><Badge variant="outline">Essential</Badge></td>
+                    <td className="p-3">7 days</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-3"><code className="bg-muted px-2 py-1 rounded">sb-access-token</code></td>
+                    <td className="p-3">Authentication token</td>
+                    <td className="p-3"><Badge variant="outline">Essential</Badge></td>
+                    <td className="p-3">Session</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-3"><code className="bg-muted px-2 py-1 rounded">sb-refresh-token</code></td>
+                    <td className="p-3">Refresh authentication</td>
+                    <td className="p-3"><Badge variant="outline">Essential</Badge></td>
+                    <td className="p-3">30 days</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             
             <h2>Do Not Track</h2>
             <p>

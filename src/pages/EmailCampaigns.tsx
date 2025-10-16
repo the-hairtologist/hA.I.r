@@ -211,58 +211,106 @@ export default function EmailCampaigns() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Sent Date</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Engagement</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {stats?.recent?.map((reminder: any) => (
-                      <TableRow key={reminder.id}>
-                        <TableCell>
+                {/* Mobile Card Layout */}
+                <div className="md:hidden space-y-3">
+                  {stats?.recent?.map((reminder: any) => (
+                    <div 
+                      key={reminder.id}
+                      className="p-4 border-2 border-foreground rounded-lg space-y-3 shadow-brutal-xs"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-medium">
                           {new Date(reminder.sent_at).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric',
                           })}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {reminder.reminder_type === 'six_week' ? '6-Week Reminder' : reminder.reminder_type}
+                        </span>
+                        <Badge variant={reminder.status === 'sent' ? 'default' : 'secondary'}>
+                          {reminder.status}
+                        </Badge>
+                      </div>
+                      
+                      <Badge variant="outline" className="text-xs">
+                        {reminder.reminder_type === 'six_week' ? '6-Week Reminder' : reminder.reminder_type}
+                      </Badge>
+                      
+                      <div className="flex flex-wrap gap-2">
+                        {reminder.email_opened && (
+                          <Badge variant="outline" className="text-xs">
+                            📖 Opened
                           </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={reminder.status === 'sent' ? 'default' : 'secondary'}>
-                            {reminder.status}
+                        )}
+                        {reminder.email_clicked && (
+                          <Badge variant="outline" className="text-xs">
+                            👆 Clicked
                           </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            {reminder.email_opened && (
-                              <Badge variant="outline" className="text-xs">
-                                📖 Opened
-                              </Badge>
-                            )}
-                            {reminder.email_clicked && (
-                              <Badge variant="outline" className="text-xs">
-                                👆 Clicked
-                              </Badge>
-                            )}
-                            {reminder.booked_after_reminder && (
-                              <Badge variant="outline" className="text-xs bg-success/10">
-                                ✅ Booked
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
+                        )}
+                        {reminder.booked_after_reminder && (
+                          <Badge variant="outline" className="text-xs bg-success/10">
+                            ✅ Booked
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop Table Layout */}
+                <div className="hidden md:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Sent Date</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Engagement</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {stats?.recent?.map((reminder: any) => (
+                        <TableRow key={reminder.id}>
+                          <TableCell>
+                            {new Date(reminder.sent_at).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline">
+                              {reminder.reminder_type === 'six_week' ? '6-Week Reminder' : reminder.reminder_type}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant={reminder.status === 'sent' ? 'default' : 'secondary'}>
+                              {reminder.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              {reminder.email_opened && (
+                                <Badge variant="outline" className="text-xs">
+                                  📖 Opened
+                                </Badge>
+                              )}
+                              {reminder.email_clicked && (
+                                <Badge variant="outline" className="text-xs">
+                                  👆 Clicked
+                                </Badge>
+                              )}
+                              {reminder.booked_after_reminder && (
+                                <Badge variant="outline" className="text-xs bg-success/10">
+                                  ✅ Booked
+                                </Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
