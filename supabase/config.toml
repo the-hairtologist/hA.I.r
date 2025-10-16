@@ -95,3 +95,9 @@ verify_jwt = false
 
 [functions.waitlist-notifications]
 verify_jwt = true
+
+[functions.ai-smart-upsell]
+verify_jwt = false
+
+[functions.ai-nudge-optimizer]
+verify_jwt = false

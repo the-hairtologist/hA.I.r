@@ -1,8 +1,11 @@
-import { Sparkles, TrendingUp } from "lucide-react";
+import { Sparkles, TrendingUp, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface UpsellSuggestion {
   service: string;
@@ -13,8 +16,18 @@ interface UpsellSuggestion {
 
 interface SmartUpsellProps {
   currentService: string;
+  clientId?: string;
+  stylistId?: string;
   onAddUpsell?: (addon: string) => void;
   className?: string;
+}
+
+interface AISuggestion {
+  addon: string;
+  reasoning: string;
+  incomeBoost: number;
+  confidence: number;
+  fallback?: boolean;
 }
 
 const upsellMap: Record<string, UpsellSuggestion> = {
@@ -44,21 +57,74 @@ const upsellMap: Record<string, UpsellSuggestion> = {
   },
 };
 
-export const SmartUpsell = ({ currentService, onAddUpsell, className }: SmartUpsellProps) => {
-  const suggestion = upsellMap[currentService];
+export const SmartUpsell = ({ currentService, clientId, stylistId, onAddUpsell, className }: SmartUpsellProps) => {
+  const { user } = useAuth();
+  const [aiSuggestion, setAiSuggestion] = useState<AISuggestion | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!suggestion) return null;
+  useEffect(() => {
+    loadAISuggestion();
+  }, [currentService, clientId, stylistId]);
+
+  const loadAISuggestion = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-smart-upsell', {
+        body: { 
+          currentService, 
+          clientId,
+          stylistId
+        }
+      });
+
+      if (error) throw error;
+      
+      console.log('AI Upsell Suggestion:', data);
+      setAiSuggestion(data);
+    } catch (error) {
+      console.error('Error loading AI suggestion:', error);
+      // Fallback to static suggestion
+      const fallbackSuggestion = upsellMap[currentService];
+      if (fallbackSuggestion) {
+        setAiSuggestion({
+          addon: fallbackSuggestion.addon,
+          reasoning: fallbackSuggestion.reasoning,
+          incomeBoost: fallbackSuggestion.incomeBoost,
+          confidence: 50,
+          fallback: true
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAdd = () => {
     haptic.tap();
-    onAddUpsell?.(suggestion.addon);
+    if (aiSuggestion) {
+      onAddUpsell?.(aiSuggestion.addon);
+    }
   };
+
+  if (loading) {
+    return (
+      <Card className={cn("brutal-border border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5", className)}>
+        <CardContent className="p-4 flex items-center justify-center">
+          <Loader2 className="h-5 w-5 animate-spin text-primary" />
+          <span className="ml-2 text-sm text-muted-foreground">Getting smart suggestions...</span>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!aiSuggestion) return null;
 
   return (
     <Card
       className={cn(
         "brutal-border border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5",
         "animate-fade-in",
+        aiSuggestion.fallback && "border-warning/30",
         className
       )}
     >
@@ -71,20 +137,27 @@ export const SmartUpsell = ({ currentService, onAddUpsell, className }: SmartUps
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
               <Sparkles className="h-3 w-3 text-primary" />
-              <p className="text-xs font-semibold text-primary">Smart Upsell Suggestion</p>
+              <p className="text-xs font-semibold text-primary">
+                {aiSuggestion.fallback ? 'Smart' : 'AI-Powered'} Upsell Suggestion
+              </p>
+              {aiSuggestion.confidence >= 75 && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-success/20 text-success font-medium">
+                  High Match
+                </span>
+              )}
             </div>
             
             <p className="text-sm font-medium">
-              Add <span className="gradient-text font-bold">{suggestion.addon}</span>
+              Add <span className="gradient-text font-bold">{aiSuggestion.addon}</span>
             </p>
             
             <p className="text-xs text-muted-foreground">
-              {suggestion.reasoning}
+              {aiSuggestion.reasoning}
             </p>
             
             <div className="flex items-center justify-between pt-2">
               <div className="flex items-center gap-1">
-                <span className="text-xs font-medium text-success">+{suggestion.incomeBoost}%</span>
+                <span className="text-xs font-medium text-success">+{aiSuggestion.incomeBoost}%</span>
                 <span className="text-xs text-muted-foreground">income boost</span>
               </div>
               
