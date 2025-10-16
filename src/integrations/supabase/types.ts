@@ -4231,6 +4231,10 @@ export type Database = {
         Args: { _stylist_id: string; _user_id: string }
         Returns: boolean
       }
+      can_view_client_medical: {
+        Args: { _client_id: string; _user_id: string }
+        Returns: boolean
+      }
       can_view_client_stats: {
         Args: { _client_id: string }
         Returns: boolean
