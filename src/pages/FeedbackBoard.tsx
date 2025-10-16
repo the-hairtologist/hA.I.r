@@ -169,10 +169,10 @@ const FeedbackBoard = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold font-display bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold font-pixel bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Feedback Board
             </h1>
-            <p className="text-muted-foreground">
+            <p className="font-sans text-muted-foreground">
               💡 Share your ideas and help us improve hA.I.r
             </p>
           </div>
@@ -305,7 +305,7 @@ const FeedbackBoard = () => {
                       <div className="space-y-1 flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-2xl">{getTypeIcon(item.feedback_type)}</span>
-                          <h3 className="font-bold text-lg font-display">{item.title}</h3>
+                          <h3 className="font-bold text-lg font-pixel">{item.title}</h3>
                         </div>
                         <p className="text-muted-foreground text-xs">
                           {format(new Date(item.created_at), "MMM d, yyyy 'at' h:mm a")}

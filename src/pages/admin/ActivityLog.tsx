@@ -184,8 +184,8 @@ const ActivityLog = () => {
               <div className="flex items-center gap-2">
                 <Activity className="h-6 w-6 text-primary" />
                 <div>
-                  <h1 className="text-2xl font-display font-bold gradient-text">Activity Log</h1>
-                  <p className="text-sm text-muted-foreground">System-wide activity tracking</p>
+                  <h1 className="text-2xl font-pixel gradient-text">Activity Log</h1>
+                  <p className="text-sm font-sans text-muted-foreground">System-wide activity tracking</p>
                 </div>
               </div>
             </div>

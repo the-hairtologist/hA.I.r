@@ -73,10 +73,10 @@ export default function AdGenerator() {
       <div className="space-y-6 max-w-4xl animate-fade-in">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel mb-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Ad Generator
             </h1>
-            <p className="text-muted-foreground">
+            <p className="font-sans text-muted-foreground">
               Create professional marketing content using AI
             </p>
           </div>

@@ -24,10 +24,10 @@ const BookAppointment = () => {
       <div className="container mx-auto p-4 sm:p-6 max-w-5xl">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold mb-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-pixel mb-2">
             Book Your Appointment
           </h1>
-          <p className="text-muted-foreground text-sm sm:text-base lg:text-lg">
+          <p className="font-sans text-muted-foreground text-sm sm:text-base lg:text-lg">
             Choose a service and find the perfect time for your next transformation
           </p>
         </div>
@@ -71,7 +71,7 @@ const BookAppointment = () => {
 
         {/* Popular Services */}
         <div className="mb-8">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-display font-bold mb-4">Popular Services</h2>
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-pixel mb-4">Popular Services</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { name: "Color & Highlights", price: "$120+", duration: "2-3 hours", icon: Sparkles },
@@ -103,10 +103,10 @@ const BookAppointment = () => {
         <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 brutal-border">
           <CardContent className="p-6 sm:p-8 text-center">
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-primary" />
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-bold mb-2">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-pixel mb-2">
               Ready to Transform Your Look?
             </h3>
-            <p className="text-xs sm:text-sm lg:text-base text-muted-foreground mb-6 max-w-2xl mx-auto">
+            <p className="text-xs sm:text-sm lg:text-base font-sans text-muted-foreground mb-6 max-w-2xl mx-auto">
               Browse our curated selection of expert stylists and book your appointment in seconds
             </p>
             <Button size="lg" onClick={() => navigate("/client-discovery")} className="gap-2">

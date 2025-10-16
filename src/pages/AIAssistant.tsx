@@ -571,11 +571,11 @@ const Knowledge = () => {
           <div className="max-w-2xl mx-auto text-center p-5 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground)_/_0.2)]">
             <div className="flex items-center justify-center gap-3 mb-2">
               <Sparkles className="h-7 w-7 text-primary animate-pulse" />
-              <h2 className="text-lg sm:text-xl md:text-2xl font-display font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-pixel bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                 AI Hair Pro
               </h2>
             </div>
-            <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <p className="text-[10px] xs:text-xs sm:text-sm font-sans text-muted-foreground leading-relaxed">
               <span className="font-semibold text-foreground">Ask anything hair-related!</span> Get instant color formulas, step-by-step guides for tricky corrections, technique tips, product recommendations, and professional advice—all powered by AI trained on expert hair knowledge.
             </p>
           </div>
@@ -600,7 +600,7 @@ const Knowledge = () => {
                 <div className="p-3 md:p-4">
                   <div className="flex items-center gap-2 mb-3 md:mb-4">
                     <History className="h-4 w-4 text-secondary" />
-                    <h3 className="text-sm font-display font-bold">Saved Formulas</h3>
+                    <h3 className="text-sm font-pixel">Saved Formulas</h3>
                   </div>
                   <div className="space-y-2">
                     {savedFormulas.map((formula) => (
@@ -627,13 +627,13 @@ const Knowledge = () => {
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
                       <CheckSquare className="h-4 w-4 text-accent" />
-                      <h3 className="text-sm font-display font-bold">Step Tracker</h3>
+                      <h3 className="text-sm font-pixel">Step Tracker</h3>
                     </div>
                     <Badge variant="secondary" className="text-xs font-mono">
                       {correctionSteps.filter(s => s.completed).length}/{correctionSteps.length}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground mb-3">
+                  <p className="text-xs font-sans text-muted-foreground mb-3">
                     Check off steps as you complete them
                   </p>
                   <div className="space-y-2.5">
@@ -668,7 +668,7 @@ const Knowledge = () => {
                       <div className="window-control bg-warning"></div>
                       <div className="window-control bg-accent"></div>
                     </div>
-                    <h2 className="text-primary-foreground font-display font-bold text-xs md:text-sm flex items-center gap-1 md:gap-2 truncate">
+                    <h2 className="text-primary-foreground font-pixel text-xs md:text-sm flex items-center gap-1 md:gap-2 truncate">
                       <Sparkles className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
                       <span className="truncate">AI Hair Pro{clientContext ? ` - ${clientContext.full_name}` : ''}</span>
                     </h2>
@@ -730,10 +730,10 @@ const Knowledge = () => {
                       </div>
                     </div>
                     <div className="space-y-3 max-w-md text-center">
-                      <p className="text-lg font-display font-bold gradient-text">
+                      <p className="text-lg font-pixel gradient-text">
                         Ready to Create Magic ✨
                       </p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-sm font-sans text-muted-foreground leading-relaxed">
                         <span className="font-semibold text-foreground">Ask anything hair-related!</span> Get instant color formulas, step-by-step guides for tricky corrections, technique tips, product recommendations, and professional advice—all powered by AI trained on expert hair knowledge.
                       </p>
                     </div>
@@ -780,7 +780,7 @@ const Knowledge = () => {
                                       setFormulaToSave(msg.content);
                                       setShowSaveDialog(true);
                                     }}
-                                    className="mt-4 retro-button bg-gradient-to-r from-secondary to-accent text-secondary-foreground px-4 py-2 rounded-lg font-display font-bold text-sm flex items-center gap-2"
+                                    className="mt-4 retro-button bg-gradient-to-r from-secondary to-accent text-secondary-foreground px-4 py-2 rounded-lg font-bold uppercase tracking-wide text-sm flex items-center gap-2"
                                   >
                                     <Save className="h-4 w-4" />
                                     Save Formula
@@ -848,7 +848,7 @@ const Knowledge = () => {
                   <button
                     type="submit" 
                     disabled={aiLoading || !aiInput.trim()} 
-                    className="retro-button bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 md:px-6 rounded-xl font-display font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm md:text-base touch-manipulation min-h-[44px]"
+                    className="retro-button bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 md:px-6 rounded-xl font-bold uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm md:text-base touch-manipulation min-h-[44px]"
                     aria-label="Send message"
                   >
                     <Send className="h-4 w-4" />

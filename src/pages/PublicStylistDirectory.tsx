@@ -83,7 +83,7 @@ const PublicStylistDirectory = () => {
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Scissors className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
-              <h1 className="text-xl sm:text-2xl font-display font-bold">hA.I.r</h1>
+              <h1 className="text-xl sm:text-2xl font-pixel">hA.I.r</h1>
             </div>
             <div className="flex gap-2">
               <Button 
@@ -103,10 +103,10 @@ const PublicStylistDirectory = () => {
         <main className="container mx-auto px-4 py-8 sm:py-12">
           {/* Hero Section */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-pixel mb-4">
               Find Your Perfect Stylist
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl font-sans text-muted-foreground max-w-2xl mx-auto">
               Browse certified professionals. Read real reviews. Book instantly.
             </p>
           </div>
@@ -183,7 +183,7 @@ const PublicStylistDirectory = () => {
                         {stylist.business_name?.charAt(0).toUpperCase() || <User className="h-8 w-8" />}
                       </div>
                       <div className="flex-1">
-                        <CardTitle className="font-display text-foreground">
+                        <CardTitle className="font-pixel text-foreground">
                           {stylist.business_name || 'Professional Stylist'}
                         </CardTitle>
                         {stylist.total_reviews > 0 && (

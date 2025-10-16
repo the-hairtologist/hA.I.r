@@ -111,8 +111,8 @@ const Notifications = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-display font-bold">Notifications</h1>
-            <p className="text-muted-foreground">Stay updated with your activity</p>
+            <h1 className="text-3xl font-pixel">Notifications</h1>
+            <p className="font-sans text-muted-foreground">Stay updated with your activity</p>
           </div>
           {unreadCount > 0 && (
             <Button onClick={() => markAllAsRead.mutate()} variant="outline">

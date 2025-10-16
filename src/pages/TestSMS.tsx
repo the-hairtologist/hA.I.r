@@ -67,7 +67,7 @@ const TestSMS = () => {
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back
             </Button>
-            <h1 className="text-2xl font-display font-bold">Test SMS</h1>
+            <h1 className="text-2xl font-pixel">Test SMS</h1>
           </div>
         </div>
       </header>

@@ -70,8 +70,8 @@ const ClientFormulas = () => {
       <DashboardLayout>
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-display font-bold">My Hair History</h1>
-            <p className="text-muted-foreground">Your hair formulas and color history</p>
+            <h1 className="text-3xl font-pixel">My Hair History</h1>
+            <p className="font-sans text-muted-foreground">Your hair formulas and color history</p>
           </div>
           <SkeletonList count={3} />
         </div>
@@ -98,8 +98,8 @@ const ClientFormulas = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-5xl">
         <div>
-          <h1 className="text-3xl font-display font-bold">My Hair History</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-pixel">My Hair History</h1>
+          <p className="font-sans text-muted-foreground">
             Your personalized hair formulas and color history
           </p>
         </div>

@@ -61,8 +61,8 @@ const InstallPWA = () => {
           <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
             <Smartphone className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-display font-bold">Install hA.I.r</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-pixel">Install hA.I.r</h1>
+          <p className="font-sans text-muted-foreground">
             Install our app for quick access, offline support, and a better experience
           </p>
         </div>

@@ -630,7 +630,7 @@ const ScheduleManagement = () => {
               <div className="w-10 h-10 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
                 <CalendarIcon className="h-5 w-5 text-primary" />
               </div>
-              <h1 className="text-xl sm:text-2xl font-display font-bold">Schedule Management</h1>
+              <h1 className="text-xl sm:text-2xl font-pixel">Schedule Management</h1>
             </div>
           </div>
         </div>

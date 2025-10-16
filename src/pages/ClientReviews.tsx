@@ -53,8 +53,8 @@ const ClientReviews = () => {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-display font-bold">Client Reviews</h1>
-          <p className="text-muted-foreground">Manage and respond to client feedback</p>
+          <h1 className="text-3xl font-pixel">Client Reviews</h1>
+          <p className="font-sans text-muted-foreground">Manage and respond to client feedback</p>
         </div>
 
         {/* Stats Overview */}

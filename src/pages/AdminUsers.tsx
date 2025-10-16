@@ -143,11 +143,11 @@ export default function AdminUsers() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-display font-bold flex items-center gap-2">
+            <h1 className="text-3xl font-pixel flex items-center gap-2">
               <Shield className="h-8 w-8 text-primary" />
               User Management
             </h1>
-            <p className="text-muted-foreground">Manage all platform users</p>
+            <p className="font-sans text-muted-foreground">Manage all platform users</p>
           </div>
           <Badge className="bg-warning text-warning-foreground border-2 border-foreground">
             ADMIN ACCESS

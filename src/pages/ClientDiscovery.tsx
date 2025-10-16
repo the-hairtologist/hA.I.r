@@ -36,17 +36,17 @@ const ClientDiscovery = () => {
             <div className="mx-auto w-20 h-20 rounded-full bg-background border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] flex items-center justify-center mb-4">
               <Sparkles className="h-10 w-10 text-primary" />
             </div>
-            <CardTitle className="text-3xl font-display text-foreground">
+            <CardTitle className="text-3xl font-pixel text-foreground">
               {comingSoonTitle}
             </CardTitle>
-            <CardDescription className="text-foreground/80 text-lg font-medium pt-2">
+            <CardDescription className="font-sans text-foreground/80 text-lg font-medium pt-2">
               {comingSoonDescription}
             </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-6">
             <div className="bg-background/90 rounded-xl p-6 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <h3 className="text-xl font-display font-bold mb-4 flex items-center gap-2">
+              <h3 className="text-xl font-pixel mb-4 flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
                 What's Coming
               </h3>

@@ -111,7 +111,7 @@ const ZapierIntegration = () => {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 font-display flex items-center gap-2">
+          <h1 className="text-4xl font-bold mb-2 font-pixel flex items-center gap-2">
             <Zap className="h-10 w-10 text-primary" />
             Zapier Integration
           </h1>
@@ -204,7 +204,7 @@ const ZapierIntegration = () => {
 
         {/* Use Cases */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4 font-display">Popular Use Cases</h2>
+          <h2 className="text-2xl font-bold mb-4 font-pixel">Popular Use Cases</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {useCases.map((useCase) => (
               <Card key={useCase.title} className="border-2 hover:border-primary transition-colors">

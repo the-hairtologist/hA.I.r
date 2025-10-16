@@ -352,11 +352,11 @@ export default function AppDirectory() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-4xl font-display font-bold flex items-center gap-3 mb-2">
+          <h1 className="text-4xl font-pixel flex items-center gap-3 mb-2">
             <Book className="h-10 w-10 text-primary" />
             Complete App Directory
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="font-sans text-muted-foreground text-lg">
             Your comprehensive guide to every feature, page, and function in the platform
           </p>
         </div>
@@ -365,7 +365,7 @@ export default function AppDirectory() {
         <section>
           <div className="flex items-center gap-3 mb-4">
             <Crown className="h-7 w-7 text-purple-500" />
-            <h2 className="text-3xl font-display font-bold">Admin Features</h2>
+            <h2 className="text-3xl font-pixel">Admin Features</h2>
             <Badge className="bg-purple-500">God Mode</Badge>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -388,7 +388,7 @@ export default function AppDirectory() {
         <section>
           <div className="flex items-center gap-3 mb-4">
             <Palette className="h-7 w-7 text-primary" />
-            <h2 className="text-3xl font-display font-bold">Stylist Features</h2>
+            <h2 className="text-3xl font-pixel">Stylist Features</h2>
             <Badge variant="secondary">{stylistFeatures.length} Features</Badge>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -411,7 +411,7 @@ export default function AppDirectory() {
         <section>
           <div className="flex items-center gap-3 mb-4">
             <Users className="h-7 w-7 text-blue-500" />
-            <h2 className="text-3xl font-display font-bold">Client Features</h2>
+            <h2 className="text-3xl font-pixel">Client Features</h2>
             <Badge variant="outline">{clientFeatures.length} Features</Badge>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -434,7 +434,7 @@ export default function AppDirectory() {
         <section>
           <div className="flex items-center gap-3 mb-4">
             <Brain className="h-7 w-7 text-violet-500" />
-            <h2 className="text-3xl font-display font-bold">AI-Powered Features</h2>
+            <h2 className="text-3xl font-pixel">AI-Powered Features</h2>
             <Badge className="bg-violet-500">Intelligent</Badge>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -457,7 +457,7 @@ export default function AppDirectory() {
         <section>
           <div className="flex items-center gap-3 mb-4">
             <Zap className="h-7 w-7 text-yellow-500" />
-            <h2 className="text-3xl font-display font-bold">Backend Functions</h2>
+            <h2 className="text-3xl font-pixel">Backend Functions</h2>
             <Badge variant="secondary">{backendFeatures.length} Functions</Badge>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">

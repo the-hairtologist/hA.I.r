@@ -315,8 +315,8 @@ const Knowledge = () => {
                   <Lightbulb className="h-8 w-8 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-display font-bold text-foreground mb-1">Need AI Help?</h3>
-                  <p className="text-sm text-foreground/80 font-medium">Get instant color formulas, corrections, and professional advice from our AI Assistant</p>
+                  <h3 className="text-xl font-pixel text-foreground mb-1">Need AI Help?</h3>
+                  <p className="text-sm font-sans text-foreground/80 font-medium">Get instant color formulas, corrections, and professional advice from our AI Assistant</p>
                 </div>
                 <ExternalLink className="h-5 w-5 text-foreground" />
               </div>
@@ -327,7 +327,7 @@ const Knowledge = () => {
         {/* Featured Articles */}
         {!searchQuery && (
           <div className="mb-8">
-            <h2 className="text-2xl font-display font-bold mb-4 flex items-center gap-2">
+            <h2 className="text-2xl font-pixel mb-4 flex items-center gap-2">
               <TrendingUp className="h-6 w-6 text-primary" />
               Featured Articles
             </h2>
@@ -379,7 +379,7 @@ const Knowledge = () => {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-4 px-4 font-display font-bold text-sm md:text-base transition-all border-r-[3px] last:border-r-0 border-foreground ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-4 px-4 font-bold uppercase tracking-wide text-sm md:text-base transition-all border-r-[3px] last:border-r-0 border-foreground ${
                     selectedCategory === cat.id
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-background text-foreground hover:bg-muted'
@@ -439,8 +439,8 @@ const Knowledge = () => {
                           <ExternalLink className="h-4 w-4 text-foreground" />
                         </div>
                       </div>
-                      <CardTitle className="font-display text-foreground">{article.title}</CardTitle>
-                      <CardDescription className="text-foreground/80 font-medium">
+                      <CardTitle className="font-pixel text-foreground">{article.title}</CardTitle>
+                      <CardDescription className="font-sans text-foreground/80 font-medium">
                         {article.description}
                       </CardDescription>
                     </CardHeader>

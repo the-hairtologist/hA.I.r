@@ -152,8 +152,8 @@ const BookingPage = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl">
         <div>
-          <h1 className="text-3xl font-display font-bold">My Booking Page</h1>
-          <p className="text-muted-foreground">Share your booking link with clients</p>
+          <h1 className="text-3xl font-pixel">My Booking Page</h1>
+          <p className="font-sans text-muted-foreground">Share your booking link with clients</p>
         </div>
 
         {/* Booking Link Card */}

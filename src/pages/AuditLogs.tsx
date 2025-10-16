@@ -128,11 +128,11 @@ export default function AuditLogs() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-display font-bold flex items-center gap-2">
+            <h1 className="text-3xl font-pixel flex items-center gap-2">
               <FileText className="h-8 w-8 text-primary" />
               Audit Logs
             </h1>
-            <p className="text-muted-foreground">
+            <p className="font-sans text-muted-foreground">
               Complete activity log for security and compliance
             </p>
           </div>

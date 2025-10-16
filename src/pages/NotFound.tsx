@@ -28,11 +28,11 @@ const NotFound = () => {
             </div>
           </div>
           
-          <h1 className="mb-4 text-4xl font-bold font-display text-foreground">
+          <h1 className="mb-4 text-4xl font-bold font-pixel text-foreground">
             Oops! Page Not Found
           </h1>
           
-          <p className="mb-8 text-lg text-muted-foreground">
+          <p className="mb-8 text-lg font-sans text-muted-foreground">
             Looks like this page got a bad haircut and disappeared. Let's get you back on track!
           </p>
           

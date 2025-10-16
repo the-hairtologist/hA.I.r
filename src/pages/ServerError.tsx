@@ -27,11 +27,11 @@ const ServerError = () => {
             </div>
           </div>
           
-          <h1 className="mb-4 text-4xl font-bold font-display text-foreground">
+          <h1 className="mb-4 text-4xl font-bold font-pixel text-foreground">
             Server Error
           </h1>
           
-          <p className="mb-8 text-lg text-muted-foreground">
+          <p className="mb-8 text-lg font-sans text-muted-foreground">
             Something went wrong on our end. Our team has been notified and is working on a fix.
           </p>
           

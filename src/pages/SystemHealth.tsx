@@ -47,11 +47,11 @@ export default function SystemHealth() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-display font-bold mb-2 flex items-center gap-2">
+          <h1 className="text-3xl font-pixel mb-2 flex items-center gap-2">
             <Shield className="h-8 w-8 text-primary" />
             System Health & Monitoring
           </h1>
-          <p className="text-muted-foreground">
+          <p className="font-sans text-muted-foreground">
             Real-time system health, automated maintenance, and AI-powered diagnostics
           </p>
         </div>
