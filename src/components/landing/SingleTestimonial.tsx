@@ -1,4 +1,5 @@
 import { Quote } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const testimonials = [
   {
@@ -16,10 +17,12 @@ const testimonials = [
 ];
 
 export const SingleTestimonial = () => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
+
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
+        <div className={`text-center mb-12 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-accent-foreground uppercase tracking-wider">
             STYLISTS AND CLIENTS ARE RAVING
           </h2>
@@ -32,11 +35,24 @@ export const SingleTestimonial = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+              className={`border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{
+                transitionDelay: `${(index + 2) * 100}ms`,
+              }}
             >
               <div className="flex gap-2 mb-6">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="w-6 h-6 border-2 border-black bg-secondary flex items-center justify-center">
+                  <div 
+                    key={i} 
+                    className={`w-6 h-6 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
+                      isVisible ? 'scale-100' : 'scale-0'
+                    }`}
+                    style={{
+                      transitionDelay: `${(index * 200) + (i * 50)}ms`,
+                    }}
+                  >
                     <span className="font-pixel text-secondary-foreground text-xs">★</span>
                   </div>
                 ))}

@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Zap, Heart } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export const SimplePricingCTA = () => {
   const navigate = useNavigate();
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.3 });
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="max-w-4xl mx-auto text-center">
+    <div className="container mx-auto px-4" ref={ref}>
+      <div className={`max-w-4xl mx-auto text-center transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
         <div className="mb-8">
           <div className="flex justify-center gap-4 mb-6">
             <div className="w-16 h-16 border-4 border-black bg-accent flex items-center justify-center animate-bounce">
@@ -50,7 +52,7 @@ export const SimplePricingCTA = () => {
         <Button
           size="lg"
           onClick={() => navigate("/auth")}
-          className="text-base sm:text-lg px-12 py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 rounded-none"
+          className="text-base sm:text-lg px-12 py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none"
         >
           TRY hA.I.r TODAY - FREE TRIAL
         </Button>

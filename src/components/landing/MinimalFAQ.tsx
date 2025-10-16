@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const faqs = [
   {
@@ -25,10 +26,12 @@ const faqs = [
 ];
 
 export const MinimalFAQ = () => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
+
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-10">
+        <div className={`text-center mb-10 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-accent-foreground uppercase tracking-wider">
             Questions?
           </h2>
@@ -38,12 +41,17 @@ export const MinimalFAQ = () => {
           {faqs.map((faq, index) => (
             <div 
               key={faq.question} 
-              className="border-4 border-black bg-white"
+              className={`border-4 border-black bg-white hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:translate-x-1 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
+              style={{
+                transitionDelay: `${index * 100}ms`,
+              }}
             >
               <details className="group">
-                <summary className="cursor-pointer list-none p-4 font-bold text-foreground hover:bg-secondary/10 transition-colors flex justify-between items-center">
+                <summary className="cursor-pointer list-none p-4 font-bold text-foreground hover:bg-secondary/10 transition-colors duration-200 flex justify-between items-center">
                   <span className="font-sans text-sm sm:text-base">{faq.question}</span>
-                  <span className="font-pixel text-xl group-open:rotate-90 transition-transform">▶</span>
+                  <span className="font-pixel text-xl group-open:rotate-90 transition-transform duration-300">▶</span>
                 </summary>
                 <div className="px-4 pb-4 border-t-2 border-black pt-4 bg-muted/30">
                   <p className="font-sans text-sm text-muted-foreground">{faq.answer}</p>

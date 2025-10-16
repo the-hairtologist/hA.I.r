@@ -1,4 +1,5 @@
 import { Sparkles, Calendar, CreditCard, Heart, Smartphone } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const features = [
   {
@@ -38,6 +39,38 @@ const features = [
   },
 ];
 
+const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: number }) => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
+  const Icon = feature.icon;
+
+  return (
+    <div
+      ref={ref}
+      className={`space-y-4 border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}
+      style={{
+        transitionDelay: `${index * 100}ms`,
+      }}
+    >
+      <div className="relative w-16 h-16 border-4 border-black bg-accent flex items-center justify-center group">
+        <Icon className="h-8 w-8 text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" strokeWidth={2} />
+        <div className="absolute -top-3 -right-3 w-8 h-8 border-4 border-black bg-primary flex items-center justify-center">
+          <span className="font-pixel text-primary-foreground text-sm">
+            {feature.number}
+          </span>
+        </div>
+      </div>
+      <h3 className="font-pixel text-sm text-foreground uppercase tracking-wide">
+        {feature.headline}
+      </h3>
+      <p className="text-xs font-sans text-muted-foreground leading-relaxed">
+        {feature.description}
+      </p>
+    </div>
+  );
+};
+
 export const MinimalFeatures = () => {
   return (
     <div className="container mx-auto px-4">
@@ -48,27 +81,9 @@ export const MinimalFeatures = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {features.map((feature) => {
-          const Icon = feature.icon;
-          return (
-            <div key={feature.title} className="space-y-4 border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-              <div className="relative w-16 h-16 border-4 border-black bg-accent flex items-center justify-center">
-                <Icon className="h-8 w-8 text-accent-foreground" strokeWidth={2} />
-                <div className="absolute -top-3 -right-3 w-8 h-8 border-4 border-black bg-primary flex items-center justify-center">
-                  <span className="font-pixel text-primary-foreground text-sm">
-                    {feature.number}
-                  </span>
-                </div>
-              </div>
-              <h3 className="font-pixel text-sm text-foreground uppercase tracking-wide">
-                {feature.headline}
-              </h3>
-              <p className="text-xs font-sans text-muted-foreground leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          );
-        })}
+        {features.map((feature, index) => (
+          <FeatureCard key={feature.title} feature={feature} index={index} />
+        ))}
       </div>
     </div>
   );
