@@ -83,44 +83,44 @@ const Index = () => {
           <ScrollIndicator />
         </section>
 
-        {/* How It Works - Pixelated style */}
-        <section className="py-16 bg-secondary" style={{
+        {/* How It Works - Clean white background */}
+        <section className="py-16 bg-background" style={{
           backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%)
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>
           <MinimalFeatures />
         </section>
 
-        {/* Testimonial Section */}
+        {/* Testimonial Section - Blue background */}
         <section className="py-16 bg-accent" style={{
           backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+            linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>
           <SingleTestimonial />
         </section>
 
-        {/* FOMO/CTA Section */}
+        {/* FOMO/CTA Section - Bold yellow */}
         <section className="py-16 bg-secondary" style={{
           backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%)
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>
           <SimplePricingCTA />
         </section>
 
-        {/* FAQ Section */}
+        {/* FAQ Section - Blue background */}
         <section className="py-16 bg-accent" style={{
           backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+            linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>
@@ -128,16 +128,16 @@ const Index = () => {
         </section>
       </main>
 
-      {/* Stats Section - Pixelated Stats with Animated Counters */}
+      {/* Stats Section - Blue background for balance */}
       <section className="py-12 bg-accent border-t-4 border-black" style={{
         backgroundImage: `
-          linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-          linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+          linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
+          linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%)
         `,
         backgroundSize: '8px 8px'
       }}>
         <div className="container mx-auto px-4">
-          <h2 className="text-center font-pixel text-xl sm:text-2xl text-accent-foreground mb-8 uppercase tracking-wider">
+          <h2 className="text-center font-pixel text-xl sm:text-2xl text-white mb-8 uppercase tracking-wider">
             STYLISTS USING hA.I.r<br/>CUT ADMIN TIME BY 40%
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">

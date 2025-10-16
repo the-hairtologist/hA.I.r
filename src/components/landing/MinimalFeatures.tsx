@@ -75,7 +75,7 @@ export const MinimalFeatures = () => {
   return (
     <div className="container mx-auto px-4">
       <div className="text-center mb-12">
-        <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-secondary-foreground uppercase tracking-wider">
+        <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
           FEATURES THAT WORK
         </h2>
       </div>

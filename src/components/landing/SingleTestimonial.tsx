@@ -23,10 +23,10 @@ export const SingleTestimonial = () => {
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-5xl mx-auto">
         <div className={`text-center mb-12 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-accent-foreground uppercase tracking-wider">
+          <h2 className="font-pixel text-2xl sm:text-3xl mb-4 text-white uppercase tracking-wider">
             STYLISTS AND CLIENTS ARE RAVING
           </h2>
-          <p className="font-pixel text-sm text-accent-foreground/80 uppercase">
+          <p className="font-pixel text-sm text-white/90 uppercase">
             About hA.I.r!
           </p>
         </div>
@@ -82,16 +82,16 @@ export const SingleTestimonial = () => {
         
         {/* Press logos section */}
         <div className="mt-12 flex flex-wrap justify-center items-center gap-6">
-          <div className="font-pixel text-xs sm:text-sm text-accent-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             TC
           </div>
-          <div className="font-pixel text-xs sm:text-sm text-accent-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             TECHCRUNCH
           </div>
-          <div className="font-pixel text-xs sm:text-sm text-accent-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             VOGUE
           </div>
-          <div className="font-pixel text-xs sm:text-sm text-accent-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="font-pixel text-xs sm:text-sm text-foreground border-4 border-black bg-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             ALLURE
           </div>
         </div>
