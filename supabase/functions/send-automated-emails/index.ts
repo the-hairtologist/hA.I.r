@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "npm:resend@4.0.0";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -87,13 +87,17 @@ serve(async (req) => {
               continue;
             }
 
+            const stylistProfile = Array.isArray(client.stylist_profiles)
+              ? client.stylist_profiles[0]
+              : client.stylist_profiles;
+
             const emailResult = await resend.emails.send({
               from: "hA.I.r <onboarding@resend.dev>",
               to: [client.email],
               subject: `Happy Birthday ${client.full_name}! 🎂 Special Gift Inside`,
               html: generateBirthdayEmail(
                 client.full_name,
-                client.stylist_profiles?.full_name || "Your Stylist",
+                stylistProfile?.full_name || "Your Stylist",
                 discountAmount.toString(),
                 discountCode
               ),
@@ -150,28 +154,35 @@ serve(async (req) => {
 
     if (recentAppointments) {
       for (const apt of recentAppointments) {
-        if (!apt.client_profiles?.email) continue;
+        const clientProfile = Array.isArray(apt.client_profiles)
+          ? apt.client_profiles[0]
+          : apt.client_profiles;
+        const stylistProfile = Array.isArray(apt.stylist_profiles)
+          ? apt.stylist_profiles[0]
+          : apt.stylist_profiles;
+
+        if (!clientProfile?.email) continue;
 
         try {
           // Check email preferences
           const { data: prefs } = await supabase
             .from("email_preferences")
             .select("*")
-            .eq("email", apt.client_profiles.email)
+            .eq("email", clientProfile.email)
             .maybeSingle();
 
           if (prefs && !prefs.appointment_reminders_enabled) {
-            console.log(`⏭️ Skipping review email - user opted out: ${apt.client_profiles.email}`);
+            console.log(`⏭️ Skipping review email - user opted out: ${clientProfile.email}`);
             continue;
           }
 
           const emailResult = await resend.emails.send({
             from: "hA.I.r <onboarding@resend.dev>",
-            to: [apt.client_profiles.email],
-            subject: `How was your visit with ${apt.stylist_profiles?.full_name}? ⭐`,
+            to: [clientProfile.email],
+            subject: `How was your visit with ${stylistProfile?.full_name}? ⭐`,
             html: generateReviewEmail(
-              apt.client_profiles.full_name,
-              apt.stylist_profiles?.full_name || "your stylist"
+              clientProfile.full_name,
+              stylistProfile?.full_name || "your stylist"
             ),
           });
 
@@ -181,16 +192,16 @@ serve(async (req) => {
             stylist_id: apt.stylist_id,
             enrollment_id: null,
             step_id: null,
-            email_address: apt.client_profiles.email,
-            subject: `How was your visit with ${apt.stylist_profiles?.full_name}? ⭐`,
+            email_address: clientProfile.email,
+            subject: `How was your visit with ${stylistProfile?.full_name}? ⭐`,
             resend_email_id: emailResult.data?.id,
           });
 
           results.reviews++;
-          console.log(`✅ Review request sent to ${apt.client_profiles.full_name}`);
+          console.log(`✅ Review request sent to ${clientProfile.full_name}`);
         } catch (error) {
           console.error(`❌ Failed to send review email:`, error);
-          results.errors.push(`Review email failed for ${apt.client_profiles.full_name}`);
+          results.errors.push(`Review email failed for ${clientProfile?.full_name || 'unknown'}`);
         }
       }
     }
@@ -217,28 +228,35 @@ serve(async (req) => {
 
     if (cancelledAppointments) {
       for (const apt of cancelledAppointments) {
-        if (!apt.client_profiles?.email) continue;
+        const clientProfile = Array.isArray(apt.client_profiles)
+          ? apt.client_profiles[0]
+          : apt.client_profiles;
+        const stylistProfile = Array.isArray(apt.stylist_profiles)
+          ? apt.stylist_profiles[0]
+          : apt.stylist_profiles;
+
+        if (!clientProfile?.email) continue;
 
         try {
           // Check email preferences
           const { data: prefs } = await supabase
             .from("email_preferences")
             .select("*")
-            .eq("email", apt.client_profiles.email)
+            .eq("email", clientProfile.email)
             .maybeSingle();
 
           if (prefs && !prefs.marketing_emails_enabled) {
-            console.log(`⏭️ Skipping cancellation email - user unsubscribed: ${apt.client_profiles.email}`);
+            console.log(`⏭️ Skipping cancellation email - user unsubscribed: ${clientProfile.email}`);
             continue;
           }
 
           const emailResult = await resend.emails.send({
             from: "hA.I.r <onboarding@resend.dev>",
-            to: [apt.client_profiles.email],
-            subject: `We missed you, ${apt.client_profiles.full_name} - Let's reschedule! 💇`,
+            to: [clientProfile.email],
+            subject: `We missed you, ${clientProfile.full_name} - Let's reschedule! 💇`,
             html: generateCancellationEmail(
-              apt.client_profiles.full_name,
-              apt.stylist_profiles?.full_name || "Your Stylist"
+              clientProfile.full_name,
+              stylistProfile?.full_name || "Your Stylist"
             ),
           });
 
@@ -248,16 +266,16 @@ serve(async (req) => {
             stylist_id: apt.stylist_id,
             enrollment_id: null,
             step_id: null,
-            email_address: apt.client_profiles.email,
-            subject: `We missed you, ${apt.client_profiles.full_name} - Let's reschedule! 💇`,
+            email_address: clientProfile.email,
+            subject: `We missed you, ${clientProfile.full_name} - Let's reschedule! 💇`,
             resend_email_id: emailResult.data?.id,
           });
 
           results.cancellations++;
-          console.log(`✅ Cancellation follow-up sent to ${apt.client_profiles.full_name}`);
+          console.log(`✅ Cancellation follow-up sent to ${clientProfile.full_name}`);
         } catch (error) {
           console.error(`❌ Failed to send cancellation email:`, error);
-          results.errors.push(`Cancellation email failed for ${apt.client_profiles.full_name}`);
+          results.errors.push(`Cancellation email failed for ${clientProfile?.full_name || 'unknown'}`);
         }
       }
     }

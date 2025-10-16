@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "npm:resend@4.0.0";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -39,7 +39,15 @@ serve(async (req) => {
       throw new Error("Appointment not found");
     }
 
-    if (!appointment.client_profiles?.email) {
+    const clientProfile = Array.isArray(appointment.client_profiles) 
+      ? appointment.client_profiles[0] 
+      : appointment.client_profiles;
+    
+    const stylistProfile = Array.isArray(appointment.stylist_profiles) 
+      ? appointment.stylist_profiles[0] 
+      : appointment.stylist_profiles;
+
+    if (!clientProfile?.email) {
       throw new Error("Client email not found");
     }
 
@@ -61,8 +69,8 @@ serve(async (req) => {
 
     // Generate email HTML
     const emailHtml = generateAftercareEmail(
-      appointment.client_profiles.full_name,
-      appointment.stylist_profiles?.full_name || "Your Stylist",
+      clientProfile.full_name,
+      stylistProfile?.full_name || "Your Stylist",
       template.title,
       template.content,
       template.tips as string[],
@@ -73,11 +81,11 @@ serve(async (req) => {
     const { data: prefs } = await supabase
       .from("email_preferences")
       .select("*")
-      .eq("email", appointment.client_profiles.email)
+      .eq("email", clientProfile.email)
       .maybeSingle();
 
     if (prefs && !prefs.appointment_reminders_enabled) {
-      console.log(`⏭️ Skipping aftercare email - user opted out: ${appointment.client_profiles.email}`);
+      console.log(`⏭️ Skipping aftercare email - user opted out: ${clientProfile.email}`);
       return new Response(
         JSON.stringify({ success: true, message: "User opted out of emails" }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -87,7 +95,7 @@ serve(async (req) => {
     // Send email
     const emailResult = await resend.emails.send({
       from: "hA.I.r Aftercare <onboarding@resend.dev>",
-      to: [appointment.client_profiles.email],
+      to: [clientProfile.email],
       subject: `${template.title} - Your Care Guide`,
       html: emailHtml,
     });
@@ -98,7 +106,7 @@ serve(async (req) => {
       stylist_id: appointment.stylist_id,
       enrollment_id: null,
       step_id: null,
-      email_address: appointment.client_profiles.email,
+      email_address: clientProfile.email,
       subject: `${template.title} - Your Care Guide`,
       resend_email_id: emailResult.data?.id,
     });
