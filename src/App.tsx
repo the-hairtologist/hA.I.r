@@ -93,28 +93,28 @@ const App = () => {
               <ReactSuspense fallback={null}>
                 <MobileOptimizationsProvider>
                   <TooltipProvider>
-                    <TourProvider>
-                      <OfflineIndicator />
-                      <Toaster />
-                      <Sonner />
-                      <CookieConsent />
-                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
-                      <GlobalAnnouncer />
-                      {/* Service integration tracking */}
-                      <ReactSuspense fallback={null}>
-                        <ServiceIntegrationTracker />
-                      </ReactSuspense>
-                      {/* Performance monitoring (dev only) */}
-                      <ReactSuspense fallback={null}>
-                        <PerformanceMonitor />
-                      </ReactSuspense>
-                      {/* Performance overlay (dev only) */}
-                      <ReactSuspense fallback={null}>
-                        <PerformanceOverlay />
-                      </ReactSuspense>
-                      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                        <EnhancedAuthProvider>
-                          <AnalyticsInitializer />
+                    <OfflineIndicator />
+                    <Toaster />
+                    <Sonner />
+                    <CookieConsent />
+                    {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
+                    <GlobalAnnouncer />
+                    {/* Service integration tracking */}
+                    <ReactSuspense fallback={null}>
+                      <ServiceIntegrationTracker />
+                    </ReactSuspense>
+                    {/* Performance monitoring (dev only) */}
+                    <ReactSuspense fallback={null}>
+                      <PerformanceMonitor />
+                    </ReactSuspense>
+                    {/* Performance overlay (dev only) */}
+                    <ReactSuspense fallback={null}>
+                      <PerformanceOverlay />
+                    </ReactSuspense>
+                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                      <EnhancedAuthProvider>
+                        <AnalyticsInitializer />
+                        <TourProvider>
                           {/* Role switch protection */}
                           <ReactSuspense fallback={null}>
                             <RoleSwitchProtection />
@@ -124,9 +124,9 @@ const App = () => {
                               {AppRoutes()}
                             </Routes>
                           </Suspense>
-                        </EnhancedAuthProvider>
-                      </BrowserRouter>
-                    </TourProvider>
+                        </TourProvider>
+                      </EnhancedAuthProvider>
+                    </BrowserRouter>
                   </TooltipProvider>
                 </MobileOptimizationsProvider>
               </ReactSuspense>
