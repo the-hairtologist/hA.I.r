@@ -80,6 +80,19 @@ export const EnhancedFooter = () => {
                 <Youtube className="h-4 w-4 text-secondary-foreground" />
               </a>
             </div>
+            
+            {/* App Badges */}
+            <div className="flex gap-2 pt-4">
+              <div className="w-12 h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <Smartphone className="h-5 w-5 text-accent-foreground" />
+              </div>
+              <div className="px-4 h-12 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <span className="font-pixel text-sm text-secondary-foreground">iOS</span>
+              </div>
+              <div className="px-4 h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <span className="font-pixel text-sm text-accent-foreground">ANDROID</span>
+              </div>
+            </div>
           </div>
 
           {/* Product Column */}
@@ -157,18 +170,6 @@ export const EnhancedFooter = () => {
             {/* Copyright */}
             <p className="font-pixel text-sm text-primary-foreground/80">© 2025 hA.I.r</p>
             
-            {/* App Badges */}
-            <div className="flex gap-2">
-              <div className="border-4 border-black bg-secondary px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <Smartphone className="h-4 w-4 text-secondary-foreground" />
-              </div>
-              <div className="border-4 border-black bg-accent px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <span className="font-pixel text-xs text-accent-foreground">iOS</span>
-              </div>
-              <div className="border-4 border-black bg-secondary px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <span className="font-pixel text-xs text-secondary-foreground">ANDROID</span>
-              </div>
-            </div>
 
             {/* Footer Links */}
             <div className="flex gap-3 text-sm font-sans">
