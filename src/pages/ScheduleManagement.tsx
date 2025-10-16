@@ -613,29 +613,30 @@ const ScheduleManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 pb-20">
+      <header className="border-b-[3px] border-foreground bg-card/95 backdrop-blur-sm sticky top-0 z-10 shadow-brutal-sm">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center gap-3">
             <Button 
               variant="outline" 
-              size="sm" 
+              size="icon" 
               onClick={() => navigate("/dashboard")}
-              className="border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
+              className="border-[3px] border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all h-10 w-10"
+              aria-label="Back to dashboard"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-5 w-5" />
             </Button>
-              <div className="flex items-center gap-2">
-                <CalendarIcon className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold">Schedule Management</h1>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
+                <CalendarIcon className="h-5 w-5 text-primary" />
               </div>
+              <h1 className="text-xl sm:text-2xl font-display font-bold">Schedule Management</h1>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl">
+      <main className="container mx-auto px-4 py-6 max-w-5xl space-y-6">
         {/* Contextual AI Suggestions */}
         <ContextualAI
           context="schedule"
@@ -650,63 +651,81 @@ const ScheduleManagement = () => {
         />
 
         <Tabs defaultValue="availability" className="space-y-6">
-          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
-            <TabsTrigger value="availability" className="gap-2 text-xs">
+          <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 p-1 bg-muted/50 border-[3px] border-foreground rounded-xl">
+            <TabsTrigger value="availability" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
               <Clock className="h-4 w-4" />
               Weekly
             </TabsTrigger>
-            <TabsTrigger value="overrides" className="gap-2 text-xs">
+            <TabsTrigger value="overrides" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
               <CalendarIcon className="h-4 w-4" />
               Overrides
             </TabsTrigger>
-            <TabsTrigger value="blocked" className="gap-2 text-xs">
+            <TabsTrigger value="blocked" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
               <X className="h-4 w-4" />
-              Blocked Dates
+              Blocked
             </TabsTrigger>
-            <TabsTrigger value="month" className="gap-2">
+            <TabsTrigger value="month" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
               <CalendarDays className="h-4 w-4" />
-              Month View
+              Month
             </TabsTrigger>
-            <TabsTrigger value="year" className="gap-2">
+            <TabsTrigger value="year" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
               <CalendarRange className="h-4 w-4" />
-              Year View
+              Year
             </TabsTrigger>
-            <TabsTrigger value="calendar-sync" className="gap-2">
+            <TabsTrigger value="calendar-sync" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
               <CalendarIcon className="h-4 w-4" />
-              Calendar Sync
+              Sync
             </TabsTrigger>
-            <TabsTrigger value="service-colors" className="gap-2">
+            <TabsTrigger value="service-colors" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
               <Sparkles className="h-4 w-4" />
-              Service Colors
+              Colors
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="availability" className="space-y-6">
-            <div className="flex justify-end">
-              <Button onClick={handleSave} disabled={saving}>
-                {saving ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-4 w-4 mr-2" />
-                    Save Changes
-                  </>
-                )}
-              </Button>
-            </div>
+            <Card className="border-[3px] border-foreground shadow-brutal overflow-hidden">
+              <CardHeader className="bg-muted/30 border-b-[3px] border-foreground">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Weekly Availability</CardTitle>
+                    <CardDescription>Set your regular working hours for each day</CardDescription>
+                  </div>
+                  <Button 
+                    onClick={handleSave} 
+                    disabled={saving}
+                    className="border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                  >
+                    {saving ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4 mr-2" />
+                        Save Changes
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                {/* Weekly schedule will continue here */}
+              </CardContent>
+            </Card>
 
             {/* General Availability Toggle */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Booking Status</CardTitle>
+            <Card className="border-[3px] border-foreground shadow-brutal overflow-hidden">
+              <CardHeader className="bg-muted/30">
+                <CardTitle className="flex items-center gap-2">
+                  <CalendarDays className="h-5 w-5 text-primary" />
+                  Booking Status
+                </CardTitle>
                 <CardDescription>Control whether clients can book appointments with you</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1 space-y-1">
                     <Label htmlFor="general-availability" className="text-base font-semibold">
                       Accepting New Bookings
                     </Label>
@@ -714,14 +733,18 @@ const ScheduleManagement = () => {
                       Turn off to temporarily stop accepting appointments
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Badge variant={stylistProfile?.is_available ? "default" : "secondary"}>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    <Badge 
+                      variant={stylistProfile?.is_available ? "default" : "secondary"}
+                      className="border-[2px] border-foreground"
+                    >
                       {stylistProfile?.is_available ? "Available" : "Unavailable"}
                     </Badge>
                     <Switch
                       id="general-availability"
                       checked={stylistProfile?.is_available}
                       onCheckedChange={toggleGeneralAvailability}
+                      className="data-[state=checked]:bg-primary"
                     />
                   </div>
                 </div>
@@ -729,8 +752,8 @@ const ScheduleManagement = () => {
             </Card>
 
             {/* Buffer Time Configuration */}
-            <Card className="border-[3px] border-primary/20 shadow-[4px_4px_0px_0px_hsl(var(--primary)_/_0.2)]">
-              <CardHeader>
+            <Card className="border-[3px] border-primary/30 shadow-brutal overflow-hidden">
+              <CardHeader className="bg-primary/5">
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" />
                   <CardTitle>Buffer Time Between Appointments</CardTitle>
@@ -739,7 +762,7 @@ const ScheduleManagement = () => {
                   Prevent burnout and allow time for cleanup, prep, and client notes
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="pt-6 space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="bufferTime" className="text-base">
@@ -814,57 +837,60 @@ const ScheduleManagement = () => {
             </Card>
 
             {/* Weekly Schedule */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Weekly Schedule</CardTitle>
-                <CardDescription>Set your working hours for each day of the week</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {days.map(({ key, label }) => (
-                  <div key={key} className="flex items-center gap-4 pb-4 border-b last:border-0">
-                    <div className="w-32">
-                      <div className="flex items-center gap-2">
+            <div className="space-y-4">
+              {days.map(({ key, label }) => (
+                <Card key={key} className="border-[3px] border-foreground shadow-brutal overflow-hidden">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
+                      <div className="w-full sm:w-40 flex items-center gap-3">
                         <Switch
                           checked={schedule[key].enabled}
                           onCheckedChange={() => handleDayToggle(key)}
+                          className="data-[state=checked]:bg-primary"
                         />
-                        <Label className="font-semibold">{label}</Label>
+                        <Label className="text-base font-bold cursor-pointer" onClick={() => handleDayToggle(key)}>
+                          {label}
+                        </Label>
                       </div>
-                    </div>
 
-                    {schedule[key].enabled ? (
-                      <div className="flex items-center gap-4 flex-1">
-                        <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-muted-foreground" />
-                          <input
+                      <div className={cn(
+                        "flex-1 flex gap-3 items-center transition-opacity",
+                        !schedule[key].enabled && "opacity-40"
+                      )}>
+                        <div className="flex-1">
+                          <Label className="text-xs text-muted-foreground mb-1 block">Start</Label>
+                          <Input
                             type="time"
                             value={schedule[key].startTime}
                             onChange={(e) => handleTimeChange(key, "startTime", e.target.value)}
-                            className="px-3 py-2 border rounded-md bg-background text-sm"
+                            disabled={!schedule[key].enabled}
+                            className="border-[2px] border-foreground"
                           />
                         </div>
-                        <span className="text-muted-foreground">to</span>
-                        <input
-                          type="time"
-                          value={schedule[key].endTime}
-                          onChange={(e) => handleTimeChange(key, "endTime", e.target.value)}
-                          className="px-3 py-2 border rounded-md bg-background text-sm"
-                        />
+                        <div className="flex-1">
+                          <Label className="text-xs text-muted-foreground mb-1 block">End</Label>
+                          <Input
+                            type="time"
+                            value={schedule[key].endTime}
+                            onChange={(e) => handleTimeChange(key, "endTime", e.target.value)}
+                            disabled={!schedule[key].enabled}
+                            className="border-[2px] border-foreground"
+                          />
+                        </div>
                       </div>
-                    ) : (
-                      <p className="text-sm text-muted-foreground flex-1">Closed</p>
-                    )}
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
 
             {/* Quick Actions */}
-            <Card>
-              <CardHeader>
+            <Card className="border-[3px] border-foreground shadow-brutal">
+              <CardHeader className="bg-muted/30">
                 <CardTitle>Quick Actions</CardTitle>
+                <CardDescription>Apply common schedule templates</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="pt-6 space-y-3">
                 <Button
                   variant="outline"
                   className="w-full justify-start"

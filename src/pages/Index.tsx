@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Scissors } from "lucide-react";
+import { Scissors, Calendar, Palette, Smartphone } from "lucide-react";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
@@ -84,6 +84,50 @@ const Index = () => {
           <MinimalFAQ />
         </section>
       </main>
+
+      {/* Social Proof / Trust Indicators */}
+      <section className="py-8 bg-background border-t-2 border-border">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-center items-center gap-8 text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
+                <Scissors className="h-6 w-6 text-primary" />
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-foreground">2,000+</p>
+                <p className="text-xs">Active Stylists</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
+                <Calendar className="h-6 w-6 text-primary" />
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-foreground">50,000+</p>
+                <p className="text-xs">Appointments</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
+                <Palette className="h-6 w-6 text-primary" />
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-foreground">10,000+</p>
+                <p className="text-xs">Formulas Created</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
+                <Smartphone className="h-6 w-6 text-primary" />
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-foreground">4.9/5</p>
+                <p className="text-xs">User Rating</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <EnhancedFooter />
       </div>

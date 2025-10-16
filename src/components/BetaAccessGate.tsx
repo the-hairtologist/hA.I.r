@@ -79,15 +79,15 @@ export const BetaAccessGate = ({ children }: BetaAccessGateProps) => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <div className="bg-card border border-border rounded-lg shadow-lg p-8 space-y-6">
-            <div className="text-center space-y-2">
-              <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                <Lock className="w-6 h-6 text-primary" />
+          <div className="bg-card border-[3px] border-foreground rounded-2xl shadow-brutal-lg p-8 space-y-6">
+            <div className="text-center space-y-3">
+              <div className="mx-auto w-16 h-16 bg-primary/10 rounded-2xl border-[3px] border-foreground flex items-center justify-center">
+                <Lock className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-2xl font-display font-bold text-foreground">
+              <h1 className="text-3xl font-display font-bold text-foreground">
                 Beta Access
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 Enter your access code to continue
               </p>
             </div>
@@ -100,14 +100,20 @@ export const BetaAccessGate = ({ children }: BetaAccessGateProps) => {
                   type="text"
                   placeholder="Enter code"
                   value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="text-center font-mono text-lg tracking-wider"
+                  onChange={(e) => setCode(e.target.value.toUpperCase())}
+                  className="text-center font-mono text-lg tracking-wider border-[3px] border-foreground focus:ring-primary focus:ring-2"
                   autoComplete="off"
                   autoFocus
+                  maxLength={50}
                 />
               </div>
 
-              <Button type="submit" className="w-full" size="lg">
+              <Button 
+                type="submit" 
+                className="w-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all" 
+                size="lg"
+                disabled={!code.trim()}
+              >
                 Access Beta
               </Button>
             </form>
