@@ -44,6 +44,60 @@ export type Database = {
         }
         Relationships: []
       }
+      aftercare_templates: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_global: boolean | null
+          products: Json | null
+          service_type: string
+          stylist_id: string | null
+          tips: Json | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_global?: boolean | null
+          products?: Json | null
+          service_type: string
+          stylist_id?: string | null
+          tips?: Json | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_global?: boolean | null
+          products?: Json | null
+          service_type?: string
+          stylist_id?: string | null
+          tips?: Json | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "aftercare_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "aftercare_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_chat_messages: {
         Row: {
           content: string
@@ -1714,6 +1768,123 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      intake_form_responses: {
+        Row: {
+          client_id: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          responses: Json
+          stylist_id: string
+          template_id: string
+        }
+        Insert: {
+          client_id: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          responses?: Json
+          stylist_id: string
+          template_id: string
+        }
+        Update: {
+          client_id?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          responses?: Json
+          stylist_id?: string
+          template_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_form_responses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "intake_form_responses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "intake_form_responses_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "intake_form_responses_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "intake_form_responses_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "intake_form_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      intake_form_templates: {
+        Row: {
+          created_at: string
+          description: string | null
+          fields: Json
+          id: string
+          is_active: boolean | null
+          is_global: boolean | null
+          name: string
+          stylist_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          fields?: Json
+          id?: string
+          is_active?: boolean | null
+          is_global?: boolean | null
+          name: string
+          stylist_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          fields?: Json
+          id?: string
+          is_active?: boolean | null
+          is_global?: boolean | null
+          name?: string
+          stylist_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_form_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "intake_form_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       knowledge_resources: {
         Row: {

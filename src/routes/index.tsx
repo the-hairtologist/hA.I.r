@@ -60,6 +60,8 @@ const Unsubscribe = lazy(() => import('@/pages/Unsubscribe'));
 const EmailCampaigns = lazy(() => import('@/pages/EmailCampaigns'));
 const EmailSettings = lazy(() => import('@/pages/EmailSettings'));
 const EmailSequences = lazy(() => import('@/pages/EmailSequences'));
+const ClientIntakeForms = lazy(() => import('@/pages/ClientIntakeForms'));
+const AftercareGuides = lazy(() => import('@/pages/AftercareGuides'));
 const ShowcaseDemo = lazy(() => import('@/pages/ShowcaseDemo'));
 const AdGenerator = lazy(() => import('@/pages/AdGenerator'));
 const FavoriteStylistsPage = lazy(() => import('@/pages/FavoriteStylistsPage'));
@@ -214,6 +216,14 @@ export const AppRoutes = () => (
     <Route
       path="/email-sequences"
       element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><EmailSequences /></ProtectedRoute>}
+    />
+    <Route
+      path="/intake-forms"
+      element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><ClientIntakeForms /></ProtectedRoute>}
+    />
+    <Route
+      path="/aftercare-guides"
+      element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><AftercareGuides /></ProtectedRoute>}
     />
 
     {/* Client Routes */}
