@@ -264,7 +264,7 @@ const Services = () => {
               </Button>
               <div className="flex items-center gap-2 min-w-0">
                 <DollarSign className="h-6 w-6 text-primary flex-shrink-0" />
-                <h1 className="text-2xl font-bold font-display truncate">Service Pricing</h1>
+                <h1 className="text-2xl font-pixel truncate">Service Pricing</h1>
               </div>
               </div>
             </div>
@@ -541,9 +541,9 @@ const Services = () => {
           <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-yellow-400 to-amber-400">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <DollarSign className="h-16 w-16 text-foreground mb-4" />
-              <p className="text-xl font-semibold mb-2 text-foreground font-display">No services yet</p>
-              <p className="text-foreground/80 mb-1 font-medium text-center max-w-md">Define your service menu with clear pricing</p>
-              <p className="text-sm text-foreground/70 mb-4 text-center max-w-md">This helps clients know what you offer and book with confidence</p>
+              <p className="text-xl font-sans font-semibold mb-2 text-foreground">No services yet</p>
+              <p className="text-foreground/80 mb-1 font-sans font-medium text-center max-w-md">Define your service menu with clear pricing</p>
+              <p className="text-sm font-sans text-foreground/70 mb-4 text-center max-w-md">This helps clients know what you offer and book with confidence</p>
               <Button onClick={() => setDialogOpen(true)} className="border-2 border-foreground min-h-[44px]">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Your First Service
@@ -561,11 +561,11 @@ const Services = () => {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="flex items-center gap-2 text-foreground font-display">
+                      <CardTitle className="flex items-center gap-2 text-foreground font-pixel">
                         {service.service_name}
                         {!service.is_active && <span className="text-xs text-foreground/70 font-normal">(Inactive)</span>}
                       </CardTitle>
-                      <CardDescription className="mt-1 text-foreground/80 font-medium space-y-1">
+                      <CardDescription className="mt-1 text-foreground/80 font-sans font-medium space-y-1">
                         <div>
                           ⏱️ {service.duration_minutes} min service
                           {service.buffer_time_minutes !== null && (
@@ -628,9 +628,9 @@ const Services = () => {
           <div className="mt-8">
             <div className="flex items-center gap-3 mb-4">
               <Palette className="h-6 w-6 text-primary" />
-              <h2 className="text-xl font-bold font-display">Service Colors</h2>
+              <h2 className="text-xl font-pixel">Service Colors</h2>
             </div>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm font-sans text-muted-foreground mb-4">
               Customize the colors that appear in your weekly schedule for each service type.
             </p>
             <ServiceTypeColorManager stylistId={stylistProfile.id} />

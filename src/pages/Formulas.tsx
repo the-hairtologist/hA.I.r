@@ -472,8 +472,8 @@ const Formulas = () => {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Client Formulas</h1>
-            <p className="text-muted-foreground">View and manage your client formulas</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">Client Formulas</h1>
+            <p className="text-muted-foreground font-sans">View and manage your client formulas</p>
           </div>
           <div className="flex gap-2">
             <Button 
@@ -638,8 +638,8 @@ const Formulas = () => {
                 <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
                   <CardContent className="py-12">
                     <Palette className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-2">No formulas match your filters</h3>
-                    <p className="text-muted-foreground mb-4">
+                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">No formulas match your filters</h3>
+                    <p className="text-muted-foreground font-sans mb-4">
                       Try adjusting your search or filters to find what you're looking for
                     </p>
                     <Button 
@@ -670,10 +670,10 @@ const Formulas = () => {
                   <span className="text-xl sm:text-2xl md:text-3xl" role="img" aria-label="magic">🔮</span>
                 </div>
               </div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-2 gradient-text">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-pixel mb-2 gradient-text">
                 Your Formula Library Awaits!
               </h2>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              <p className="text-muted-foreground font-sans mb-6 max-w-md mx-auto">
                 {searchTerm 
                   ? "No formulas match your search. Try different keywords or create a new formula!"
                   : clients.length === 0 

@@ -160,7 +160,7 @@ export function AppSidebar() {
     return (
       <Sidebar collapsible="icon" className="border-r">
         <SidebarContent className="flex items-center justify-center">
-          <div className="text-muted-foreground text-sm">Loading menu...</div>
+          <div className="text-muted-foreground text-sm font-sans">Loading menu...</div>
         </SidebarContent>
       </Sidebar>
     );
@@ -202,7 +202,7 @@ export function AppSidebar() {
               )}
             </div>
             {isEditMode && (
-              <p className="text-xs text-foreground/70 mt-2">
+              <p className="text-xs font-sans text-foreground/70 mt-2">
                 Drag items to prioritize your most-used tools
               </p>
             )}

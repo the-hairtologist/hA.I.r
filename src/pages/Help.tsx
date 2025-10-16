@@ -207,8 +207,8 @@ const Help = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl">
         <div>
-          <h1 className="text-3xl font-display font-bold">Help & Support</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-pixel">Help & Support</h1>
+          <p className="text-muted-foreground font-sans">
             {isStylist 
               ? "Get help managing your salon business"
               : isClient

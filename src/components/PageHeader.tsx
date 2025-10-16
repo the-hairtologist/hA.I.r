@@ -38,7 +38,7 @@ export const PageHeader = ({ title, icon, actions, backTo = "/dashboard", classN
             </Button>
             <div className="flex items-center gap-3 min-w-0">
               {icon && <div className="text-primary flex-shrink-0">{icon}</div>}
-              <h1 className="text-2xl md:text-3xl font-display font-bold gradient-text truncate">{title}</h1>
+              <h1 className="text-2xl md:text-3xl font-pixel gradient-text truncate">{title}</h1>
             </div>
           </div>
           {actions && <div className="flex items-center gap-2 flex-shrink-0">{actions}</div>}

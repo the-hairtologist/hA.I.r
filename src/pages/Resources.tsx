@@ -279,7 +279,7 @@ const Resources = () => {
         {/* FAQ Sections */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
+            <h2 className="text-2xl font-pixel">Frequently Asked Questions</h2>
             {searchQuery && (
               <Badge variant="secondary">
                 {filteredFAQs.reduce((acc, cat) => acc + cat.faqs.length, 0)} results

@@ -100,8 +100,8 @@ const Profile = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-3xl">
         <div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold">My Profile</h1>
-          <p className="text-muted-foreground">Manage your personal information</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">My Profile</h1>
+          <p className="text-muted-foreground font-sans">Manage your personal information</p>
         </div>
 
         <Card>
@@ -111,7 +111,7 @@ const Profile = () => {
           <CardContent className="flex items-center gap-6">
             <Avatar className="h-24 w-24">
               <AvatarImage src={profile?.avatar_url || ""} />
-              <AvatarFallback className="text-xl sm:text-2xl md:text-3xl">
+              <AvatarFallback className="text-xl sm:text-2xl md:text-3xl font-pixel">
                 {profile?.full_name?.[0] || "U"}
               </AvatarFallback>
             </Avatar>
@@ -120,7 +120,7 @@ const Profile = () => {
                 <Camera className="h-4 w-4 mr-2" />
                 Change Photo
               </Button>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+              <p className="text-xs sm:text-sm font-sans text-muted-foreground mt-2">
                 JPG, GIF or PNG. Max size 2MB
               </p>
             </div>

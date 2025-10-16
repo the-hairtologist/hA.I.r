@@ -556,8 +556,8 @@ export default function Clients() {
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold mb-2 gradient-text">Clients & Formulas</h1>
-            <p className="text-muted-foreground">Manage your client profiles, formulas, and preferences</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel mb-2 gradient-text">Clients & Formulas</h1>
+            <p className="text-muted-foreground font-sans">Manage your client profiles, formulas, and preferences</p>
           </div>
           <div className="flex gap-2">
             <Button 
@@ -594,7 +594,7 @@ export default function Clients() {
               </DialogTrigger>
           <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-xl sm:text-2xl md:text-3xl gradient-text">Add a New Client</DialogTitle>
+              <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-pixel gradient-text">Add a New Client</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -823,16 +823,16 @@ export default function Clients() {
                 {riskFilter !== "all" ? (
                   <>
                     <User className="h-12 w-12 mx-auto mb-4 text-green-500" />
-                    <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-2">Great News! 🎉</h3>
-                    <p className="text-muted-foreground mb-4">
+                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">Great News! 🎉</h3>
+                    <p className="text-muted-foreground font-sans mb-4">
                       No at-risk clients found - you're doing an amazing job keeping your clients engaged!
                     </p>
                   </>
                 ) : (
                   <>
                     <User className="h-12 w-12 mx-auto mb-4 text-secondary" />
-                    <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-2">No matches found</h3>
-                    <p className="text-muted-foreground mb-4">
+                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">No matches found</h3>
+                    <p className="text-muted-foreground font-sans mb-4">
                       Try adjusting your search criteria or clear the filters
                     </p>
                   </>
@@ -865,8 +865,8 @@ export default function Clients() {
                   <span className="text-xl sm:text-2xl md:text-3xl" role="img" aria-label="sparkles">✨</span>
                 </div>
               </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-2 gradient-text">Your Client Roster Awaits!</h3>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-pixel mb-2 gradient-text">Your Client Roster Awaits!</h3>
+              <p className="text-muted-foreground font-sans mb-6 max-w-md mx-auto">
                 Build your dream client list! Track hair profiles, preferences, and formula history all in one beautiful place
               </p>
               <Button 
@@ -913,7 +913,7 @@ export default function Clients() {
                           className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1 focus:ring-2 focus:ring-primary focus:ring-offset-2"
                           aria-label={`Select ${client.full_name || 'client'}`}
                         />
-                        <CardTitle className="flex items-center gap-2 font-display flex-1">
+                        <CardTitle className="flex items-center gap-2 font-pixel flex-1">
                           <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground">
                             <User className="h-5 w-5 text-secondary-foreground" />
                           </div>
@@ -1059,7 +1059,7 @@ export default function Clients() {
         <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-xl sm:text-2xl md:text-3xl gradient-text">Client Profile</DialogTitle>
+              <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-pixel gradient-text">Client Profile</DialogTitle>
             </DialogHeader>
             
             <Tabs defaultValue="info" className="w-full">
@@ -1073,7 +1073,7 @@ export default function Clients() {
                 <div className="grid md:grid-cols-2 gap-6">
               {/* Client Info Form */}
               <div>
-                <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-4 text-secondary">Client Information</h3>
+                <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-4 text-secondary">Client Information</h3>
                 <form onSubmit={handleEditClient} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="edit_full_name">Full Name *</Label>
@@ -1149,7 +1149,7 @@ export default function Clients() {
 
               {/* Formulas List */}
               <div>
-                <h3 className="text-base sm:text-lg md:text-xl font-display font-bold mb-4 text-primary flex items-center gap-2">
+                <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-4 text-primary flex items-center gap-2">
                   <FileText className="h-5 w-5" />
                   Formula History ({clientFormulas.length})
                 </h3>

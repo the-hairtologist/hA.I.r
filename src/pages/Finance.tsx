@@ -330,11 +330,11 @@ const Finance = () => {
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-primary">
+              <div className="text-3xl font-pixel text-primary">
                 ${totalRevenue.toFixed(2)}
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs font-sans text-muted-foreground">
                   {timePeriod === "30d" ? "Last 30 days" : 
                    timePeriod === "90d" ? "Last 90 days" :
                    timePeriod === "year" ? "Last year" : "All time"}
@@ -361,10 +361,10 @@ const Finance = () => {
               <CardTitle className="text-sm font-medium text-muted-foreground">Service Payments</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-primary">
+              <div className="text-3xl font-pixel text-primary">
                 ${totalPayments.toFixed(2)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Client payments</p>
+              <p className="text-xs font-sans text-muted-foreground mt-1">Client payments</p>
             </CardContent>
           </Card>
 
@@ -373,10 +373,10 @@ const Finance = () => {
               <CardTitle className="text-sm font-medium text-muted-foreground">Commissions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-chart-3">
+              <div className="text-3xl font-pixel text-chart-3">
                 ${totalCommissions.toFixed(2)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs font-sans text-muted-foreground mt-1">
                 ${pendingCommissions.toFixed(2)} pending
               </p>
             </CardContent>

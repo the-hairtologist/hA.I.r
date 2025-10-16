@@ -321,7 +321,7 @@ const Appointments = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-6 w-6 text-primary" />
-              <h1 className="text-xl sm:text-2xl font-bold">My Appointments</h1>
+              <h1 className="text-xl sm:text-2xl font-pixel">My Appointments</h1>
             </div>
           </div>
         </header>
@@ -356,7 +356,7 @@ const Appointments = () => {
                 </Button>
                 <div className="flex items-center gap-2 min-w-0">
                   <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
-                  <h1 className="text-xl sm:text-2xl font-display font-bold gradient-text truncate">
+                  <h1 className="text-xl sm:text-2xl font-pixel gradient-text truncate">
                     {userRole === "client" ? "My Appointments" : "Appointments"}
                   </h1>
                 </div>
@@ -517,7 +517,7 @@ const Appointments = () => {
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader className="border-b-[2px] border-border py-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="font-display text-base sm:text-lg">
+                  <CardTitle className="font-pixel text-base sm:text-lg">
                     Today's Schedule - {format(new Date(), 'EEEE, MMMM d')}
                   </CardTitle>
                   {todayAppointments.length > 0 && (

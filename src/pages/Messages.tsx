@@ -346,7 +346,7 @@ const Messages = () => {
             </Button>
           <div className="flex items-center gap-2">
             <MessageSquare className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold font-display">Messages</h1>
+            <h1 className="text-2xl font-pixel">Messages</h1>
           </div>
           <Button size="sm" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
             <Plus className="h-4 w-4 mr-2" />
@@ -360,15 +360,15 @@ const Messages = () => {
           {/* Conversations List */}
           <Card className="w-80 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
             <CardHeader>
-              <CardTitle className="font-display text-foreground">Conversations</CardTitle>
-              <CardDescription className="text-foreground/80 font-medium">Your recent chats</CardDescription>
+              <CardTitle className="font-pixel text-foreground">Conversations</CardTitle>
+              <CardDescription className="text-foreground/80 font-sans font-medium">Your recent chats</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto space-y-2">
               {conversations.length === 0 ? (
                 <div className="text-center py-8">
                   <MessageSquare className="h-12 w-12 mx-auto mb-3 text-foreground/40" />
-                  <p className="text-sm font-semibold text-foreground mb-1">No conversations yet</p>
-                  <p className="text-xs text-foreground/70 mb-3">Start chatting with stylists or clients</p>
+                  <p className="text-sm font-sans font-semibold text-foreground mb-1">No conversations yet</p>
+                  <p className="text-xs font-sans text-foreground/70 mb-3">Start chatting with stylists or clients</p>
                   <Button size="sm" variant="outline" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
                     <Plus className="h-3 w-3 mr-2" />
                     Start a Chat
