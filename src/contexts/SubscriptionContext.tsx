@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { appleIAP, shouldUseAppleIAP, getPaymentMethod } from "@/lib/iap/appleIAP";
 
 interface SubscriptionContextType {
   subscribed: boolean;
@@ -11,6 +12,8 @@ interface SubscriptionContextType {
   hasAccessCode: boolean;
   checkSubscription: () => Promise<void>;
   isFeatureAllowed: (feature: string) => boolean;
+  paymentMethod: 'apple-iap' | 'stripe';
+  isAppleIAP: boolean;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
@@ -40,6 +43,17 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [hasAccessCode, setHasAccessCode] = useState(false);
+  const [paymentMethod] = useState<'apple-iap' | 'stripe'>(getPaymentMethod());
+  const [isAppleIAP] = useState(shouldUseAppleIAP());
+
+  // Initialize Apple IAP if on iOS
+  useEffect(() => {
+    if (isAppleIAP) {
+      appleIAP.initialize().catch((error) => {
+        console.error('[Subscription] Failed to initialize Apple IAP:', error);
+      });
+    }
+  }, [isAppleIAP]);
 
   const checkSubscription = async () => {
     try {
@@ -98,7 +112,18 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      // Check subscription status for stylists
+      // On iOS, check both Apple IAP and backend
+      if (isAppleIAP) {
+        console.log('[Subscription] Checking Apple IAP subscription');
+        const hasActiveIAP = await appleIAP.checkActiveSubscription();
+        
+        if (hasActiveIAP) {
+          // Restore purchases to sync with backend
+          await appleIAP.restorePurchases();
+        }
+      }
+
+      // Check subscription status for stylists (works for both Stripe and Apple IAP)
       const { data, error } = await supabase.functions.invoke("check-subscription", {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
@@ -184,6 +209,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         hasAccessCode,
         checkSubscription,
         isFeatureAllowed,
+        paymentMethod,
+        isAppleIAP,
       }}
     >
       {children}

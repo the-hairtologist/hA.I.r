@@ -2588,6 +2588,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          apple_receipt: string | null
           avatar_url: string | null
           created_at: string
           dashboard_preferences: Json | null
@@ -2603,10 +2604,14 @@ export type Database = {
           share_contact_with_stylists: boolean | null
           sms_consent: boolean | null
           sms_consent_date: string | null
+          subscription_end: string | null
+          subscription_product_id: string | null
+          subscription_status: string | null
           theme_preference: string | null
           updated_at: string
         }
         Insert: {
+          apple_receipt?: string | null
           avatar_url?: string | null
           created_at?: string
           dashboard_preferences?: Json | null
@@ -2622,10 +2627,14 @@ export type Database = {
           share_contact_with_stylists?: boolean | null
           sms_consent?: boolean | null
           sms_consent_date?: string | null
+          subscription_end?: string | null
+          subscription_product_id?: string | null
+          subscription_status?: string | null
           theme_preference?: string | null
           updated_at?: string
         }
         Update: {
+          apple_receipt?: string | null
           avatar_url?: string | null
           created_at?: string
           dashboard_preferences?: Json | null
@@ -2641,6 +2650,9 @@ export type Database = {
           share_contact_with_stylists?: boolean | null
           sms_consent?: boolean | null
           sms_consent_date?: string | null
+          subscription_end?: string | null
+          subscription_product_id?: string | null
+          subscription_status?: string | null
           theme_preference?: string | null
           updated_at?: string
         }

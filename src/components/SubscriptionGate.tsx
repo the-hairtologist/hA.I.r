@@ -7,6 +7,7 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AccessCodeDialog } from "./AccessCodeDialog";
+import { AppleIAPSubscription } from "./AppleIAPSubscription";
 
 interface SubscriptionGateProps {
   children: ReactNode;
@@ -15,9 +16,10 @@ interface SubscriptionGateProps {
 }
 
 export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGateProps) => {
-  const { isFeatureAllowed, loading, inTrial, subscribed, hasAccessCode, checkSubscription } = useSubscription();
+  const { isFeatureAllowed, loading, inTrial, subscribed, hasAccessCode, checkSubscription, isAppleIAP } = useSubscription();
   const [subscribing, setSubscribing] = useState(false);
   const [showAccessCodeDialog, setShowAccessCodeDialog] = useState(false);
+  const [showIAPPlans, setShowIAPPlans] = useState(false);
 
   if (loading) {
     return (
@@ -29,6 +31,13 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
 
   if (!isFeatureAllowed(feature)) {
     const handleSubscribe = async () => {
+      // On iOS, show Apple IAP options
+      if (isAppleIAP) {
+        setShowIAPPlans(true);
+        return;
+      }
+
+      // On web/Android, use Stripe
       setSubscribing(true);
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -66,6 +75,23 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
       return <>{fallback}</>;
     }
 
+    // Show Apple IAP subscription page if on iOS and user clicked subscribe
+    if (isAppleIAP && showIAPPlans) {
+      return (
+        <div className="container mx-auto p-6 max-w-4xl">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => setShowIAPPlans(false)}
+            className="mb-4"
+          >
+            ← Back
+          </Button>
+          <AppleIAPSubscription />
+        </div>
+      );
+    }
+
     return (
       <>
         <div className="flex items-center justify-center min-h-[min(60vh,400px)] p-6">
@@ -95,7 +121,7 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
                 className="w-full"
                 size="lg"
               >
-                {subscribing ? "Starting trial..." : "Start 7-Day Free Trial"}
+                {subscribing ? "Starting trial..." : isAppleIAP ? "View Subscription Plans" : "Start 7-Day Free Trial"}
               </Button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
