@@ -45,7 +45,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
       className={cn(
         "lg:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md",
         "transition-all duration-300 ease-out",
-        scrolled && "border-b-2 border-foreground shadow-lg"
+        scrolled && "border-b-[3px] border-foreground shadow-brutal-sm"
       )}
       style={{
         paddingTop: 'env(safe-area-inset-top, 0px)'
@@ -53,8 +53,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
     >
       <div 
         className={cn(
-          "flex items-center justify-between px-4 transition-all duration-300",
-          scrolled ? "h-14" : "h-16"
+          "flex items-center justify-between px-4 h-16"
         )}
       >
         {/* Left: Menu button with "More" indicator */}
@@ -86,9 +85,8 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
             navigate("/dashboard");
           }}
           className={cn(
-            "flex items-center gap-2 transition-all duration-300 touch-manipulation",
-            "hover:opacity-80 active:scale-95",
-            scrolled && "scale-90"
+            "flex items-center gap-2 transition-all duration-200 touch-manipulation",
+            "hover:opacity-80 active:scale-95"
           )}
           aria-label="Go to dashboard"
         >

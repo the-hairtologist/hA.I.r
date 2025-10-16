@@ -178,10 +178,9 @@ export const MobileBottomNav = () => {
 
   return (
     <>
-      {/* Safe area spacer - accounts for nav height + iOS safe area */}
+      {/* Safe area spacer - accounts for nav height only */}
       <div 
-        className="lg:hidden flex-shrink-0" 
-        style={{ height: 'calc(4rem + env(safe-area-inset-bottom, 0px))' }}
+        className="lg:hidden flex-shrink-0 h-16"
         aria-hidden="true" 
       />
       
@@ -189,7 +188,7 @@ export const MobileBottomNav = () => {
       <nav 
         className={cn(
           "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
-          "border-t-2",
+          "border-t-[3px]",
           isAdmin ? "border-t-amber-500/50" : "border-foreground"
         )}
         aria-label="Mobile navigation"
@@ -197,7 +196,7 @@ export const MobileBottomNav = () => {
           paddingBottom: 'env(safe-area-inset-bottom, 0px)'
         }}
       >
-        <div className="flex justify-around items-stretch h-16 px-2">{/* Increased padding */}
+        <div className="flex justify-evenly items-stretch h-16 px-3">{/* Better spacing with justify-evenly */}
           {items.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -209,7 +208,7 @@ export const MobileBottomNav = () => {
                 disabled={item.disabled}
                 className={cn(
                   "relative flex flex-col items-center justify-center flex-1",
-                  "min-w-[60px] min-h-[56px] gap-1",
+                  "min-w-[60px] min-h-[60px] gap-0.5",
                   "transition-all duration-200 ease-out",
                   "active:scale-95",
                   "touch-manipulation",
@@ -226,7 +225,7 @@ export const MobileBottomNav = () => {
                         "absolute inset-0 rounded-2xl",
                         "bg-gradient-to-br",
                         item.gradient,
-                        isAdmin ? "opacity-20" : "opacity-10"
+                        isAdmin ? "opacity-30" : "opacity-20"
                       )}
                       aria-hidden="true"
                     />
@@ -277,7 +276,7 @@ export const MobileBottomNav = () => {
                 {/* Label */}
                 <span 
                   className={cn(
-                    "text-xs font-medium transition-all duration-200",
+                    "text-xs font-medium transition-all duration-200 truncate max-w-[70px]",
                     active ? "text-primary scale-105" : "text-muted-foreground"
                   )}
                 >
@@ -289,10 +288,10 @@ export const MobileBottomNav = () => {
                   <div 
                     className={cn(
                       "absolute bottom-0 left-1/2 -translate-x-1/2",
-                      "h-1.5 w-10 rounded-t-full",
+                      "h-2 w-12 rounded-t-full",
                       "bg-gradient-to-r",
                       item.gradient,
-                      "animate-fade-in"
+                      "animate-fade-in shadow-lg"
                     )}
                     aria-hidden="true"
                   />
