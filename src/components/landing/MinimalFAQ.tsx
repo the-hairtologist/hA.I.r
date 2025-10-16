@@ -39,7 +39,7 @@ export const MinimalFAQ = () => {
           <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-accent-foreground uppercase tracking-wider">
             THE REAL QUESTIONS YOU'RE ASKING
           </h2>
-          <p className="font-sans font-bold text-sm xs:text-base text-accent-foreground/80 max-w-2xl mx-auto uppercase tracking-wide">
+          <p className="font-sans text-sm xs:text-base text-accent-foreground/80 max-w-2xl mx-auto">
             No fluff. Just honest answers.
           </p>
         </div>
