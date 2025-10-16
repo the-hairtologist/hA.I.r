@@ -71,6 +71,7 @@ const PaymentMethodsPage = lazy(() => import('@/pages/PaymentMethodsPage'));
 const ClientReviewsPage = lazy(() => import('@/pages/ClientReviewsPage'));
 const BookingHistoryPage = lazy(() => import('@/pages/BookingHistoryPage'));
 const GrowthAnalytics = lazy(() => import('@/pages/GrowthAnalytics'));
+const CommissionTracking = lazy(() => import('@/pages/CommissionTracking'));
 const FeedbackBoard = lazy(() => import('@/pages/FeedbackBoard'));
 const ClientFormulas = lazy(() => import('@/pages/ClientFormulas'));
 const InstallPWA = lazy(() => import('@/pages/InstallPWA'));
@@ -198,6 +199,10 @@ export const AppRoutes = () => (
     <Route
       path="/analytics"
       element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><GrowthAnalytics /></ProtectedRoute>}
+    />
+    <Route
+      path="/commissions"
+      element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><CommissionTracking /></ProtectedRoute>}
     />
     <Route
       path="/admin/revenue"
