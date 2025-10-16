@@ -27,7 +27,7 @@ export const SimplePricingCTA = () => {
             START YOUR FREE TRIAL
           </h2>
 
-          <p className="text-xs xs:text-sm sm:text-base font-pixel text-secondary-foreground/90 max-w-2xl mx-auto mb-10 leading-loose tracking-wide uppercase">
+          <p className="text-sm xs:text-base sm:text-lg font-sans text-secondary-foreground/90 max-w-2xl mx-auto mb-10 leading-relaxed">
             Join 2,000+ stylists who love hA.I.r. Try it risk-free for 14 days.
           </p>
         </div>
