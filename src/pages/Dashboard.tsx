@@ -832,7 +832,7 @@ const Dashboard = () => {
             items={sections.map(s => s.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-6 md:space-y-8">
               {sections.map((section, index) => (
                 <DraggableSection
                   key={section.id}

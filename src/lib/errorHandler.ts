@@ -137,8 +137,18 @@ export function handleError(
     log.error(errorMessage, context, error);
   }
 
-  // Show toast notification with retry option
+  // Show toast notification with retry option (but not for module import errors)
   if (showToast) {
+    // Skip toast for module import errors to prevent spam
+    const isModuleError = errorMessage.includes('Importing a module script failed') || 
+                          errorMessage.includes('Failed to fetch dynamically imported module');
+    
+    if (isModuleError) {
+      // Log silently instead of showing toast
+      console.warn('Module load error (suppressed toast):', errorMessage);
+      return appError;
+    }
+    
     if (isRetryable && onRetry) {
       toast.error(errorMessage, {
         action: {
