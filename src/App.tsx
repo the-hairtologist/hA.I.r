@@ -26,6 +26,39 @@ import { TourProvider } from "@/components/onboarding/TourProvider";
 // Import advanced accessibility features
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
 
+// Safely import optional enhancement components
+import { Suspense as ReactSuspense, lazy } from "react";
+
+const PerformanceMonitor = lazy(() => 
+  import("@/components/PerformanceMonitor")
+    .then(m => ({ default: m.PerformanceMonitor }))
+    .catch(() => ({ default: () => null }))
+);
+
+const PerformanceOverlay = lazy(() => 
+  import("@/components/PerformanceOverlay")
+    .then(m => ({ default: m.PerformanceOverlay }))
+    .catch(() => ({ default: () => null }))
+);
+
+const MobileOptimizationsProvider = lazy(() => 
+  import("@/components/MobileOptimizationsProvider")
+    .then(m => ({ default: m.MobileOptimizationsProvider }))
+    .catch(() => ({ default: () => null }))
+);
+
+const ServiceIntegrationTracker = lazy(() => 
+  import("@/components/ServiceIntegrationTracker")
+    .then(m => ({ default: m.ServiceIntegrationTracker }))
+    .catch(() => ({ default: () => null }))
+);
+
+const RoleSwitchProtection = lazy(() => 
+  import("@/components/RoleSwitchProtection")
+    .then(m => ({ default: m.RoleSwitchProtection }))
+    .catch(() => ({ default: () => null }))
+);
+
 // Optimized QueryClient
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -57,26 +90,46 @@ const App = () => {
         <QueryClientProvider client={queryClient}>
           <SubscriptionProvider>
             <DemoModeProvider>
-              <TooltipProvider>
-                <TourProvider>
-                  <OfflineIndicator />
-                  <Toaster />
-                  <Sonner />
-                  <CookieConsent />
-                  {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
-                  <GlobalAnnouncer />
-                  <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                    <EnhancedAuthProvider>
-                      <AnalyticsInitializer />
-                      <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
-                        <Routes>
-                          {AppRoutes()}
-                        </Routes>
-                      </Suspense>
-                    </EnhancedAuthProvider>
-                  </BrowserRouter>
-                </TourProvider>
-              </TooltipProvider>
+              <ReactSuspense fallback={null}>
+                <MobileOptimizationsProvider>
+                  <TooltipProvider>
+                    <TourProvider>
+                      <OfflineIndicator />
+                      <Toaster />
+                      <Sonner />
+                      <CookieConsent />
+                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
+                      <GlobalAnnouncer />
+                      {/* Service integration tracking */}
+                      <ReactSuspense fallback={null}>
+                        <ServiceIntegrationTracker />
+                      </ReactSuspense>
+                      {/* Performance monitoring (dev only) */}
+                      <ReactSuspense fallback={null}>
+                        <PerformanceMonitor />
+                      </ReactSuspense>
+                      {/* Performance overlay (dev only) */}
+                      <ReactSuspense fallback={null}>
+                        <PerformanceOverlay />
+                      </ReactSuspense>
+                      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                        <EnhancedAuthProvider>
+                          <AnalyticsInitializer />
+                          {/* Role switch protection */}
+                          <ReactSuspense fallback={null}>
+                            <RoleSwitchProtection />
+                          </ReactSuspense>
+                          <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
+                            <Routes>
+                              {AppRoutes()}
+                            </Routes>
+                          </Suspense>
+                        </EnhancedAuthProvider>
+                      </BrowserRouter>
+                    </TourProvider>
+                  </TooltipProvider>
+                </MobileOptimizationsProvider>
+              </ReactSuspense>
             </DemoModeProvider>
           </SubscriptionProvider>
         </QueryClientProvider>
