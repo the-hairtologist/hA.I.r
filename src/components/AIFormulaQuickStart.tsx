@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Zap, Palette } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles, Zap, Palette, Info } from "lucide-react";
 
 interface AIFormulaQuickStartProps {
   onSelectTemplate: (prompt: string) => void;
@@ -34,13 +35,19 @@ export const AIFormulaQuickStart = ({ onSelectTemplate }: AIFormulaQuickStartPro
   return (
     <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
       <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          Quick Start Templates
-        </CardTitle>
-        <CardDescription>
-          Click a template to get professional formulas instantly
-        </CardDescription>
+        <div className="space-y-2">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            Quick Start Templates
+          </CardTitle>
+          <CardDescription className="space-y-1">
+            <div>Click a template to get professional formulas instantly</div>
+            <Badge variant="outline" className="text-xs border-primary/30 bg-primary/5 mt-2">
+              <Info className="h-3 w-3 mr-1" />
+              AI-generated • Always verify with strand tests
+            </Badge>
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

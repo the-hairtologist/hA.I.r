@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Clock, CheckCircle2, Save, Copy } from "lucide-react";
+import { AlertTriangle, Clock, CheckCircle2, Save, Copy, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -113,9 +113,15 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
     <Card className="my-4 border-primary/20 shadow-lg">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-success" />
-            <CardTitle className="text-lg">Professional Formula</CardTitle>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-success" />
+              <CardTitle className="text-lg">Professional Formula</CardTitle>
+            </div>
+            <Badge variant="outline" className="w-fit text-xs border-primary/30 bg-primary/5">
+              <Sparkles className="h-3 w-3 mr-1" />
+              AI-Generated • Verify with Professional
+            </Badge>
           </div>
           <div className="flex gap-2">
             <Button

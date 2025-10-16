@@ -146,15 +146,62 @@ const Terms = () => {
               <li>Missed appointments or cancellations</li>
             </ul>
             
-            <h2>11. Disclaimers</h2>
+            <h2>11. AI-Powered Features & Disclaimers</h2>
+            <p><strong>AI-Generated Content Limitations:</strong></p>
+            <p>
+              hA.I.r uses artificial intelligence to provide hair formula suggestions, styling recommendations, 
+              and consultation assistance. <strong>All AI-generated content is for informational and reference 
+              purposes only and should not be considered professional cosmetology advice.</strong>
+            </p>
+            
+            <h3>How We Use AI</h3>
             <ul>
-              <li>Service provided "as is" without warranties</li>
-              <li>We do not guarantee availability or uptime</li>
-              <li>AI features are assistive tools, not medical advice</li>
-              <li>Stylists are independent contractors</li>
+              <li><strong>Formula Generation:</strong> AI analyzes hair characteristics to suggest color formulas and mixing ratios</li>
+              <li><strong>Hair Analysis:</strong> AI processes photos to identify hair type, condition, and potential concerns</li>
+              <li><strong>Consultation Chat:</strong> AI answers general hair care questions and provides styling suggestions</li>
+              <li><strong>Product Recommendations:</strong> AI suggests products based on hair needs and preferences</li>
             </ul>
             
-            <h2>12. Termination</h2>
+            <h3>AI Content Disclaimers</h3>
+            <p className="bg-warning/10 p-4 rounded-lg border-l-4 border-warning">
+              <strong>⚠️ CRITICAL DISCLAIMERS:</strong>
+            </p>
+            <ul>
+              <li><strong>Not Professional Advice:</strong> AI recommendations are informational only. Always verify with a licensed cosmetologist</li>
+              <li><strong>Strand & Patch Tests Required:</strong> Never apply any formula without performing proper tests first</li>
+              <li><strong>Individual Results Vary:</strong> Hair reactions differ based on porosity, health, previous treatments, and individual chemistry</li>
+              <li><strong>Stylist Verification:</strong> Licensed stylists must independently verify all AI suggestions before application</li>
+              <li><strong>No Liability:</strong> We are not liable for adverse reactions, unexpected results, or damages from AI-recommended formulas</li>
+              <li><strong>Human Oversight Required:</strong> All final styling decisions must be made by licensed professionals</li>
+              <li><strong>Accuracy Not Guaranteed:</strong> AI may make errors or provide outdated information. Cross-reference all suggestions</li>
+            </ul>
+            
+            <h3>Your Responsibilities When Using AI Features</h3>
+            <ol>
+              <li><strong>Verify Everything:</strong> Cross-check AI recommendations with professional resources and product specifications</li>
+              <li><strong>Perform Tests:</strong> Always conduct strand tests, patch tests, and porosity assessments</li>
+              <li><strong>Consult Professionals:</strong> For complex cases, color corrections, or clients with sensitivities, consult experienced stylists</li>
+              <li><strong>Document Thoroughly:</strong> Keep detailed records of all formulas, timing, and client reactions</li>
+              <li><strong>Stay Licensed:</strong> Maintain your professional cosmetology license and continuing education</li>
+              <li><strong>Report Issues:</strong> If AI provides unsafe or inappropriate suggestions, report them immediately</li>
+            </ol>
+            
+            <h3>AI Model Information</h3>
+            <p>
+              We use industry-leading AI models including Google Gemini and OpenAI GPT. These models are trained 
+              on general knowledge and do not replace specialized cosmetology training or experience.
+            </p>
+            
+            <h2>12. General Service Disclaimers</h2>
+            <ul>
+              <li>Service provided "as is" without warranties of any kind</li>
+              <li>We do not guarantee availability, uptime, or uninterrupted service</li>
+              <li>Platform features may change or be discontinued at any time</li>
+              <li>Stylists are independent contractors, not employees of hA.I.r</li>
+              <li>We do not guarantee the quality, safety, or legality of services provided by stylists</li>
+            </ul>
+            
+            <h2>13. Termination</h2>
             <p>We reserve the right to suspend or terminate accounts for:</p>
             <ul>
               <li>Violation of these terms</li>
@@ -163,7 +210,7 @@ const Terms = () => {
               <li>Abusive behavior</li>
             </ul>
             
-            <h2>13. Professional Liability</h2>
+            <h2>14. Professional Liability</h2>
             <p>Stylists using this platform agree to:</p>
             <ul>
               <li><strong>Maintain professional liability insurance</strong> as required by their state or local jurisdiction</li>
@@ -174,7 +221,7 @@ const Terms = () => {
             </ul>
             <p><em>hA.I.r provides software tools only. The platform does not provide professional cosmetology services or advice. Stylists are solely responsible for their professional practice, client safety, and compliance with applicable laws and regulations.</em></p>
             
-            <h2>14. Medical Disclaimer</h2>
+            <h2>15. Medical Disclaimer</h2>
             <p>Important: This platform is not a substitute for medical advice. Stylists should:</p>
             <ul>
               <li>Perform patch tests when appropriate</li>
@@ -183,29 +230,29 @@ const Terms = () => {
               <li>Advise clients to consult healthcare professionals for medical concerns</li>
             </ul>
             
-            <h2>15. Privacy</h2>
+            <h2>16. Privacy</h2>
             <p>Your privacy is important. See our <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a> for details on data handling.</p>
             
-            <h2>16. Modifications to Terms</h2>
+            <h2>17. Modifications to Terms</h2>
             <p>We may update these terms at any time. Continued use of the service constitutes acceptance of new terms.</p>
             
-            <h2>17. Dispute Resolution</h2>
+            <h2>18. Dispute Resolution</h2>
             <ul>
               <li>Disputes should first be attempted to resolve directly</li>
               <li>If unresolved, contact our support team</li>
               <li>Binding arbitration may be required for serious disputes</li>
             </ul>
             
-            <h2>18. Governing Law</h2>
+            <h2>19. Governing Law</h2>
             <p>These terms are governed by the laws of the State of Delaware, United States, without regard to its conflict of law provisions.</p>
             
-            <h2>19. Contact Information</h2>
+            <h2>20. Contact Information</h2>
             <p>For questions about these terms, contact us through the app's support feature.</p>
             
-            <h2>20. Severability</h2>
+            <h2>21. Severability</h2>
             <p>If any provision is found unenforceable, the remaining provisions remain in effect.</p>
             
-            <h2>21. Entire Agreement</h2>
+            <h2>22. Entire Agreement</h2>
             <p>These terms constitute the entire agreement between you and hA.I.r regarding use of the service.</p>
           </div>
         </Card>
