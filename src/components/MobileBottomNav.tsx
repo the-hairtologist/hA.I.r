@@ -91,6 +91,14 @@ export const MobileBottomNav = () => {
       gradient: "from-cyan-start to-cyan-end",
       highlight: false
     },
+    { 
+      icon: MessageSquare, 
+      label: "Messages", 
+      path: "/messages",
+      gradient: "from-pink-start to-pink-end",
+      badge: unreadCount,
+      highlight: false
+    },
   ];
 
   // Admin bottom nav: Admin-focused with Settings instead of full messages list
