@@ -24,7 +24,7 @@ export const ModelPerformanceIndicator = ({
     if (model.includes('flash-lite')) {
       return { 
         name: 'Flash Lite', 
-        color: 'bg-blue-500', 
+        color: 'bg-info text-info-foreground', 
         icon: Zap,
         description: 'Fastest model for simple queries'
       };
@@ -32,7 +32,7 @@ export const ModelPerformanceIndicator = ({
     if (model.includes('flash')) {
       return { 
         name: 'Flash', 
-        color: 'bg-purple-500', 
+        color: 'bg-primary text-primary-foreground', 
         icon: Zap,
         description: 'Balanced model for most queries'
       };
@@ -40,7 +40,7 @@ export const ModelPerformanceIndicator = ({
     if (model.includes('pro')) {
       return { 
         name: 'Pro', 
-        color: 'bg-gradient-to-r from-purple-500 to-pink-500', 
+        color: 'bg-gradient-primary text-primary-foreground', 
         icon: Sparkles,
         description: 'Most powerful model for complex reasoning'
       };
@@ -48,24 +48,24 @@ export const ModelPerformanceIndicator = ({
     if (model.includes('gpt-5')) {
       return { 
         name: 'GPT-5', 
-        color: 'bg-green-500', 
+        color: 'bg-success text-success-foreground', 
         icon: Sparkles,
         description: 'Premium model for advanced tasks'
       };
     }
     return { 
       name: 'AI', 
-      color: 'bg-gray-500', 
+      color: 'bg-muted text-muted-foreground', 
       icon: Sparkles,
       description: 'AI model'
     };
   };
 
   const getSpeedBadge = (timeMs: number) => {
-    if (timeMs < 1000) return { text: 'Instant', color: 'bg-green-500' };
-    if (timeMs < 3000) return { text: 'Fast', color: 'bg-blue-500' };
-    if (timeMs < 5000) return { text: 'Normal', color: 'bg-yellow-500' };
-    return { text: 'Slow', color: 'bg-red-500' };
+    if (timeMs < 1000) return { text: 'Instant', color: 'bg-success text-success-foreground' };
+    if (timeMs < 3000) return { text: 'Fast', color: 'bg-info text-info-foreground' };
+    if (timeMs < 5000) return { text: 'Normal', color: 'bg-warning text-warning-foreground' };
+    return { text: 'Slow', color: 'bg-destructive text-destructive-foreground' };
   };
 
   const modelInfo = modelUsed ? getModelInfo(modelUsed) : null;

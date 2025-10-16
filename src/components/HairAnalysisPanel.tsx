@@ -32,15 +32,15 @@ interface HairAnalysisPanelProps {
 
 export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
   const getPorosityColor = (porosity: string) => {
-    if (porosity === 'high') return 'bg-red-500';
-    if (porosity === 'low') return 'bg-blue-500';
-    return 'bg-green-500';
+    if (porosity === 'high') return 'bg-destructive';
+    if (porosity === 'low') return 'bg-info';
+    return 'bg-success';
   };
 
   const getElasticityColor = (elasticity: string) => {
-    if (elasticity === 'compromised') return 'bg-red-500';
-    if (elasticity === 'fair') return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (elasticity === 'compromised') return 'bg-destructive';
+    if (elasticity === 'fair') return 'bg-warning';
+    return 'bg-success';
   };
 
   const getLevelColor = (level: number) => {
@@ -117,9 +117,9 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
             <span className="text-xs text-muted-foreground">Split Ends</span>
             <div className="flex items-center gap-2 mt-1">
               {analysis.damage_indicators.split_ends ? (
-                <AlertCircle className="h-4 w-4 text-yellow-500" />
+                <AlertCircle className="h-4 w-4 text-warning" />
               ) : (
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
               )}
               <span className="text-sm">{analysis.damage_indicators.split_ends ? 'Detected' : 'None'}</span>
             </div>
@@ -128,9 +128,9 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
             <span className="text-xs text-muted-foreground">Previous Color</span>
             <div className="flex items-center gap-2 mt-1">
               {analysis.previous_color_detected ? (
-                <AlertCircle className="h-4 w-4 text-blue-500" />
+                <AlertCircle className="h-4 w-4 text-info" />
               ) : (
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-success" />
               )}
               <span className="text-sm">{analysis.previous_color_detected ? 'Yes' : 'No'}</span>
             </div>
@@ -150,9 +150,9 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
 
         {/* Cautions */}
         {analysis.cautions && analysis.cautions.length > 0 && (
-          <Alert className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950">
-            <AlertCircle className="h-4 w-4 text-yellow-600" />
-            <AlertDescription className="text-yellow-900 dark:text-yellow-100">
+          <Alert className="border-warning bg-warning/10">
+            <AlertCircle className="h-4 w-4 text-warning" />
+            <AlertDescription className="text-warning-foreground">
               <div className="font-semibold mb-1">Important Cautions:</div>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 {analysis.cautions.map((caution, i) => (

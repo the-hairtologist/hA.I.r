@@ -68,7 +68,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Badge variant="default" className="flex items-center gap-1 bg-yellow-500 hover:bg-yellow-600">
+              <Badge className="flex items-center gap-1 bg-warning hover:bg-warning/90 text-warning-foreground">
                 <AlertCircle className="h-3 w-3" />
                 Safe with Cautions
               </Badge>
@@ -86,9 +86,9 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
           </Tooltip>
         </TooltipProvider>
         
-        <Alert className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950">
-          <AlertCircle className="h-4 w-4 text-yellow-600" />
-          <AlertDescription className="text-yellow-900 dark:text-yellow-100">
+        <Alert className="border-warning bg-warning/10">
+          <AlertCircle className="h-4 w-4 text-warning" />
+          <AlertDescription className="text-warning-foreground">
             <div className="font-semibold mb-1">Cautions:</div>
             <ul className="list-disc list-inside space-y-1 text-sm">
               {warnings.map((warning, i) => (
@@ -106,7 +106,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <Badge variant="default" className="flex items-center gap-1 bg-green-500 hover:bg-green-600">
+          <Badge className="flex items-center gap-1 bg-success hover:bg-success/90 text-success-foreground">
             <CheckCircle className="h-3 w-3" />
             Safe
           </Badge>

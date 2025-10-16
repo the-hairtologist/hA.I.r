@@ -59,10 +59,10 @@ export const FormulaOutcomeFeedback = ({
   };
 
   const ratings = [
-    { value: 'perfect', label: '✅ Perfect', color: 'bg-green-500' },
-    { value: 'good', label: '👍 Good', color: 'bg-blue-500' },
-    { value: 'okay', label: '😐 Okay', color: 'bg-yellow-500' },
-    { value: 'poor', label: '👎 Poor', color: 'bg-red-500' }
+    { value: 'perfect', label: '✅ Perfect', color: 'bg-success text-success-foreground' },
+    { value: 'good', label: '👍 Good', color: 'bg-info text-info-foreground' },
+    { value: 'okay', label: '😐 Okay', color: 'bg-warning text-warning-foreground' },
+    { value: 'poor', label: '👎 Poor', color: 'bg-destructive text-destructive-foreground' }
   ];
 
   return (
