@@ -113,14 +113,9 @@ class EnhancedAnalytics {
     
     try {
       // In production, send to analytics backend
-      // For now, just log batch size
+      // Currently using local storage for analytics data
+      // Future enhancement: Implement backend analytics service
       logger.debug(`[Analytics] Flushed ${eventsToSend.length} events`, 'enhancedAnalytics');
-      
-      // TODO: Send to backend analytics service
-      // await fetch('/api/analytics/batch', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ events: eventsToSend })
-      // });
     } catch (error) {
       logger.error('[Analytics] Failed to flush events', 'enhancedAnalytics', error);
       // Re-queue on failure

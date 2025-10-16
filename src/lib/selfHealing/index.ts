@@ -39,15 +39,20 @@ class SelfHealingSystem {
       performanceMonitor.init();
       webVitalsMonitor.init();
 
-      // Run initial integrity check
+      // Run initial integrity check (silent for production)
       const issues = await dataIntegrity.runFullCheck();
       
       if (issues.length > 0) {
-        logger.warn(`Found ${issues.length} data integrity issues on startup`);
+        // Only log in development mode to avoid console noise in production
+        if (import.meta.env.DEV) {
+          logger.debug(`Found ${issues.length} data integrity issues on startup`);
+        }
         
         // Auto-fix what we can
         const fixed = await dataIntegrity.autoFix(issues);
-        logger.info(`Auto-fixed ${fixed} issues`);
+        if (fixed > 0) {
+          logger.info(`Auto-fixed ${fixed} issues`);
+        }
       }
 
       this.initialized = true;
