@@ -29,6 +29,7 @@ const Finance = lazy(() => import('@/pages/Finance'));
 const Products = lazy(() => import('@/pages/Products'));
 const Resources = lazy(() => import('@/pages/Resources'));
 const Knowledge = lazy(() => import('@/pages/Knowledge'));
+const QuickFormula = lazy(() => import('@/pages/QuickFormula'));
 const AIKnowledge = lazy(() => import('@/pages/AIAssistant'));
 const Portfolio = lazy(() => import('@/pages/Portfolio'));
 const Clients = lazy(() => import('@/pages/Clients'));
@@ -124,6 +125,10 @@ export const AppRoutes = () => (
     <Route
       path="/ai-assistant"
       element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><AIKnowledge /></ProtectedRoute>}
+    />
+    <Route
+      path="/quick-formula"
+      element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><QuickFormula /></ProtectedRoute>}
     />
     <Route
       path="/integrations"

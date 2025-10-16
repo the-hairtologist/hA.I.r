@@ -1,30 +1,66 @@
+/**
+ * Quick Formula Generator - Lightning Fast (<2s) Formula Generation
+ * Uses cached formulas for instant results, falls back to AI if needed
+ */
+
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { Zap, Loader2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { PageHeader } from "@/components/PageHeader";
+import { Zap, Sparkles, Clock, TrendingUp } from "lucide-react";
+import { toast } from "sonner";
 import { StructuredFormulaDisplay } from "@/components/StructuredFormulaDisplay";
 import { FormulaSafetyBadge } from "@/components/FormulaSafetyBadge";
+import { HairAnalysisPanel } from "@/components/HairAnalysisPanel";
+import { ModelPerformanceIndicator } from "@/components/ModelPerformanceIndicator";
+import { FormulaOutcomeFeedback } from "@/components/FormulaOutcomeFeedback";
+import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { useAIAnalytics } from "@/hooks/useAIAnalytics";
+import { useFeatureFlag } from "@/lib/featureFlags";
+import { Badge } from "@/components/ui/badge";
 
 export default function QuickFormula() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { roles } = useUserRole(user?.id);
+  const analytics = useAIAnalytics();
+  
   const [currentLevel, setCurrentLevel] = useState<string>("");
   const [targetLevel, setTargetLevel] = useState<string>("");
   const [tone, setTone] = useState<string>("");
   const [condition, setCondition] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const [formula, setFormula] = useState<any>(null);
+  const [cached, setCached] = useState(false);
+  const [responseTime, setResponseTime] = useState<number>(0);
   const [validation, setValidation] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const [lastAnalysis, setLastAnalysis] = useState<any>(null);
+  const [lastModelUsed, setLastModelUsed] = useState<string>('');
+  const [validatingFormula, setValidatingFormula] = useState(false);
+  const [analyzingPhoto, setAnalyzingPhoto] = useState(false);
+  const outcomeTrackingEnabled = useFeatureFlag('OUTCOME_TRACKING');
+
+  // Redirect non-stylists
+  if (!roles.includes('stylist') && !roles.includes('admin')) {
+    navigate('/dashboard');
+    return null;
+  }
 
   const handleGenerate = async () => {
     if (!currentLevel || !targetLevel || !tone || !condition) {
-      toast({ title: "Please fill all fields", variant: "destructive" });
+      toast.error("Please fill all fields");
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
+    const startTime = performance.now();
+
     try {
       const { data, error } = await supabase.functions.invoke('quick-formula', {
         body: {
@@ -35,123 +71,322 @@ export default function QuickFormula() {
         }
       });
 
+      const endTime = performance.now();
+      const timeMs = Math.round(endTime - startTime);
+      setResponseTime(timeMs);
+
       if (error) throw error;
+
       setFormula(data.formula);
+      setCached(data.cached || false);
+      
+      // Track analytics
+      analytics.trackQuickFormula({
+        cached: data.cached || false,
+        responseTimeMs: timeMs
+      });
 
       // Validate formula
-      const { data: validationData } = await supabase.functions.invoke('validate-formula', {
-        body: { formula: data.formula }
-      });
-      setValidation(validationData);
+      try {
+        const { data: validationData } = await supabase.functions.invoke('validate-formula', {
+          body: { formula: data.formula }
+        });
+        
+      if (validationData && !validationData.error) {
+        setValidation(validationData);
+        setLastModelUsed('google/gemini-2.5-flash-lite');
+        analytics.trackFormulaValidation({
+          isSafe: validationData.isSafe,
+          warningCount: validationData.warnings?.length || 0,
+          blockerCount: validationData.blockers?.length || 0
+        });
+      }
+    } catch (validationError) {
+      console.warn('Validation failed, continuing without it:', validationError);
+    }
 
-      toast({ 
-        title: data.cached ? "⚡ Retrieved from cache" : "✅ Formula generated",
-        description: data.cached ? "Instant result!" : "New formula created"
+      toast.success(`Formula generated in ${timeMs}ms!`, {
+        description: data.cached ? "Instant result from cache ⚡" : "Freshly generated by AI 🌟"
       });
+
     } catch (error: any) {
-      toast({ title: "Failed to generate formula", description: error.message, variant: "destructive" });
+      console.error('Quick formula error:', error);
+      toast.error("Failed to generate formula", {
+        description: error.message || "Please try again"
+      });
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-primary" />
-            Quick Formula Generator
-            <span className="text-sm text-muted-foreground ml-auto">⚡ 2-second results</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Current Level</label>
-              <Select value={currentLevel} onValueChange={setCurrentLevel}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select level" />
-                </SelectTrigger>
-                <SelectContent>
-                  {[1,2,3,4,5,6,7,8,9,10].map(l => (
-                    <SelectItem key={l} value={l.toString()}>Level {l}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+    <AIFeatureErrorBoundary featureName="Quick Formula Generator">
+      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
+        <PageHeader
+          title="Quick Formula"
+          icon={<Zap className="h-6 w-6" />}
+          backTo="/dashboard"
+        />
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Target Level</label>
-              <Select value={targetLevel} onValueChange={setTargetLevel}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select level" />
-                </SelectTrigger>
-                <SelectContent>
-                  {[1,2,3,4,5,6,7,8,9,10].map(l => (
-                    <SelectItem key={l} value={l.toString()}>Level {l}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+        <main className="container mx-auto px-4 py-6 max-w-5xl">
+          {/* Header */}
+          <div className="mb-6 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4 animate-pulse">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <span className="text-sm font-semibold">85% Faster Than Chat Mode</span>
             </div>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">Lightning Fast Formula Generation</h1>
+            <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+              Get professional hair color formulas in under 2 seconds. Perfect for experienced stylists who know exactly what they need.
+            </p>
+          </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Desired Tone</label>
-              <Select value={tone} onValueChange={setTone}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select tone" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cool">Cool/Ash</SelectItem>
-                  <SelectItem value="warm">Warm/Golden</SelectItem>
-                  <SelectItem value="neutral">Neutral</SelectItem>
-                  <SelectItem value="fashion">Fashion Colors</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Input Form */}
+            <Card className="border-2 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-primary" />
+                  Formula Parameters
+                </CardTitle>
+                <CardDescription>
+                  Select your parameters for instant generation
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="current-level" className="text-base">Current Level</Label>
+                  <Select value={currentLevel} onValueChange={setCurrentLevel}>
+                    <SelectTrigger id="current-level" className="h-12 text-base">
+                      <SelectValue placeholder="Select current level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(level => (
+                        <SelectItem key={level} value={level.toString()} className="h-10">
+                          Level {level}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Hair Condition</label>
-              <Select value={condition} onValueChange={setCondition}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select condition" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="healthy">Healthy/Virgin</SelectItem>
-                  <SelectItem value="damaged">Damaged/Compromised</SelectItem>
-                  <SelectItem value="previously_colored">Previously Colored</SelectItem>
-                </SelectContent>
-              </Select>
+                <div className="space-y-2">
+                  <Label htmlFor="target-level" className="text-base">Target Level</Label>
+                  <Select value={targetLevel} onValueChange={setTargetLevel}>
+                    <SelectTrigger id="target-level" className="h-12 text-base">
+                      <SelectValue placeholder="Select target level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(level => (
+                        <SelectItem key={level} value={level.toString()} className="h-10">
+                          Level {level}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tone" className="text-base">Desired Tone</Label>
+                  <Select value={tone} onValueChange={setTone}>
+                    <SelectTrigger id="tone" className="h-12 text-base">
+                      <SelectValue placeholder="Select tone" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cool" className="h-10">Cool (Ash/Silver)</SelectItem>
+                      <SelectItem value="neutral" className="h-10">Neutral (Natural)</SelectItem>
+                      <SelectItem value="warm" className="h-10">Warm (Golden/Honey)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="condition" className="text-base">Hair Condition</Label>
+                  <Select value={condition} onValueChange={setCondition}>
+                    <SelectTrigger id="condition" className="h-12 text-base">
+                      <SelectValue placeholder="Select condition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="healthy" className="h-10">Healthy (Virgin Hair)</SelectItem>
+                      <SelectItem value="damaged" className="h-10">Damaged (Needs Care)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button
+                  onClick={handleGenerate}
+                  disabled={loading || !currentLevel || !targetLevel || !tone || !condition}
+                  className="w-full h-14 text-lg font-semibold"
+                  size="lg"
+                >
+                  {loading ? (
+                    <>
+                      <Clock className="mr-2 h-5 w-5 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="mr-2 h-5 w-5" />
+                      Generate Formula
+                    </>
+                  )}
+                </Button>
+
+                {responseTime > 0 && (
+                  <div className="flex items-center justify-center gap-2 pt-2">
+                    <Badge variant={cached ? "secondary" : "default"} className="text-xs">
+                      <TrendingUp className="h-3 w-3 mr-1" />
+                      {responseTime}ms
+                    </Badge>
+                    {cached && (
+                      <Badge variant="outline" className="text-xs">
+                        ⚡ Cached
+                      </Badge>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Formula Display */}
+            <div className="space-y-4">
+                {formula ? (
+                <>
+                  {validation && <FormulaSafetyBadge validation={validation} />}
+                  <StructuredFormulaDisplay data={formula} />
+                  
+                  {validatingFormula && (
+                    <div className="text-center text-xs text-muted-foreground animate-pulse">
+                      Validating formula safety...
+                    </div>
+                  )}
+                  
+                  {lastAnalysis && (
+                    <HairAnalysisPanel analysis={lastAnalysis} />
+                  )}
+                  
+                  {analyzingPhoto && (
+                    <div className="text-center text-xs text-muted-foreground animate-pulse">
+                      Analyzing hair photo...
+                    </div>
+                  )}
+                  
+                  {lastModelUsed && responseTime > 0 && (
+                    <ModelPerformanceIndicator 
+                      modelName={lastModelUsed}
+                      responseTime={responseTime}
+                    />
+                  )}
+                  
+                  {outcomeTrackingEnabled && (
+                    <FormulaOutcomeFeedback 
+                      formulaId={null}
+                      onFeedbackSubmit={async (outcome) => {
+                        analytics.trackOutcome(outcome.rating);
+                        toast.success("Thank you for your feedback!");
+                      }}
+                    />
+                  )}
+                  
+                  <Card className="border-2 border-primary/20 bg-primary/5">
+                    <CardContent className="pt-6">
+                      <div className="flex items-start gap-3">
+                        <Sparkles className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div className="space-y-1">
+                          <p className="text-sm font-semibold">Pro Tip</p>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            Quick Formula uses a cache of proven formulas for instant results. 
+                            If your exact combination isn't cached, we generate it fresh using AI in under 2 seconds.
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              ) : (
+                <Card className="border-2 border-dashed h-full">
+                  <CardContent className="pt-6 flex items-center justify-center h-full min-h-[400px]">
+                    <div className="text-center py-12">
+                      <Zap className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+                      <p className="text-base text-muted-foreground font-medium">
+                        Select parameters above<br />to generate your formula
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
 
-          <Button 
-            onClick={handleGenerate} 
-            disabled={isLoading}
-            className="w-full"
-            size="lg"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              <>
-                <Zap className="h-4 w-4 mr-2" />
-                Generate Formula
-              </>
-            )}
-          </Button>
-        </CardContent>
-      </Card>
-
-      {formula && (
-        <div className="space-y-4">
-          <FormulaSafetyBadge validation={validation} />
-          <StructuredFormulaDisplay data={formula} />
-        </div>
-      )}
-    </div>
+          {/* Feature Comparison */}
+          <Card className="mt-8 border-2">
+            <CardHeader>
+              <CardTitle className="text-xl">Quick Formula vs AI Chat</CardTitle>
+              <CardDescription>Choose the right tool for your workflow</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-3 p-4 rounded-lg bg-primary/5 border-2 border-primary/20">
+                  <p className="font-semibold text-primary flex items-center gap-2">
+                    <Zap className="h-4 w-4" />
+                    Quick Formula (This Page)
+                  </p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">•</span>
+                      <span>Lightning fast (&lt;2 seconds)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">•</span>
+                      <span>Simple parameter selection</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">•</span>
+                      <span>Perfect for experienced stylists</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">•</span>
+                      <span>Cached proven formulas</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary">•</span>
+                      <span>Best for: Quick, standard color jobs</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="space-y-3 p-4 rounded-lg bg-muted/50 border-2">
+                  <p className="font-semibold flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    AI Chat Assistant
+                  </p>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Conversational (8-15 seconds)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Complex queries and corrections</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Photo analysis support</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Learning from your feedback</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Best for: Complex corrections, consultations</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </main>
+      </div>
+    </AIFeatureErrorBoundary>
   );
 }

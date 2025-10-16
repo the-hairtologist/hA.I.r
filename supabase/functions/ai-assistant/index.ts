@@ -5,6 +5,21 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Smart model selection for cost optimization
+function selectOptimalModel(type: string, hasImages: boolean, queryLength: number): string {
+  // Vision required
+  if (hasImages) return 'google/gemini-2.5-pro';
+  
+  // Simple/short queries
+  if (queryLength < 50 || type === 'automated-followup') return 'google/gemini-2.5-flash-lite';
+  
+  // Complex corrections need reasoning
+  if (type === 'correction-formula' || type === 'formula-recommendation') return 'google/gemini-2.5-pro';
+  
+  // Default balanced model
+  return 'google/gemini-2.5-flash';
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -20,6 +35,15 @@ serve(async (req) => {
 
     let systemPrompt = "";
     let body: any = {};
+    
+    // Determine optimal model based on request type
+    const queryText = messages?.[messages.length - 1]?.content || '';
+    const queryLength = typeof queryText === 'string' ? queryText.length : 100;
+    const hasImages = messages?.some((m: any) => Array.isArray(m.content) && 
+      m.content.some((c: any) => c.type === 'image_url'));
+    const selectedModel = selectOptimalModel(type, hasImages, queryLength);
+    
+    console.log(`Smart routing: ${type} -> ${selectedModel} (query: ${queryLength}chars, images: ${hasImages})`);
 
     switch (type) {
       case "smart-scheduling":
@@ -33,7 +57,7 @@ serve(async (req) => {
 Provide actionable, specific scheduling recommendations.`;
         
         body = {
-          model: "google/gemini-2.5-flash",
+          model: selectedModel,
           messages: [
             { role: "system", content: systemPrompt },
             ...messages
@@ -82,7 +106,7 @@ RULES:
 - Return ONLY JSON, no extra text`
         
         body = {
-          model: "google/gemini-2.5-flash",
+          model: selectedModel,
           messages: [
             { role: "system", content: systemPrompt },
             ...messages
@@ -104,7 +128,7 @@ RULES:
 Provide actionable insights to improve client retention and satisfaction.`;
         
         body = {
-          model: "google/gemini-2.5-flash",
+          model: selectedModel,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: `Analyze this client data: ${JSON.stringify(data)}` }
@@ -124,7 +148,7 @@ Provide actionable insights to improve client retention and satisfaction.`;
 Keep messages concise, personal, and engaging.`;
         
         body = {
-          model: "google/gemini-2.5-flash",
+          model: selectedModel,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: `Draft a follow-up message for: ${JSON.stringify(data)}` }
@@ -169,7 +193,7 @@ Keep messages concise, personal, and engaging.`;
 Be specific, actionable, and conversational. When giving formulas, use realistic brands (Wella, Redken, Schwarzkopf, Matrix, etc.).`;
         
         body = {
-          model: "google/gemini-2.5-flash",
+          model: selectedModel,
           messages: [
             { role: "system", content: systemPrompt },
             ...messages
@@ -213,7 +237,7 @@ RULES:
 - Be realistic about achievable results`
         
         body = {
-          model: "google/gemini-2.5-flash",
+          model: selectedModel,
           messages: [
             { role: "system", content: systemPrompt },
             ...messages
@@ -267,6 +291,12 @@ RULES:
 
     const aiResponse = await response.json();
     const content = aiResponse.choices[0].message.content;
+    
+    // Return model used for frontend tracking
+    const responseData = { 
+      response: content,
+      model_used: selectedModel 
+    };
 
     // Log structured outputs for debugging (formula types only)
     if (type === "formula-recommendation" || type === "correction-formula") {
@@ -284,7 +314,7 @@ RULES:
     }
 
     return new Response(
-      JSON.stringify({ response: content }),
+      JSON.stringify(responseData),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }

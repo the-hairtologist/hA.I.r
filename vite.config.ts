@@ -24,28 +24,64 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png', 'og-image.png'],
-      manifest: {
-        name: 'hA.I.r - AI-Powered Salon Assistant',
-        short_name: 'hA.I.r',
-        description: 'Professional color formulas in seconds. AI-powered booking, client management, and formula generation for hair stylists.',
-        theme_color: '#f97316',
-        background_color: '#ffffff',
-        display: 'standalone',
-        icons: [
-          {
-            src: '/icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            src: '/icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
-      },
+        manifest: {
+          name: 'Hair AI Pro - Professional Hair Color Assistant',
+          short_name: 'Hair AI Pro',
+          description: 'AI-powered hair color formulas, corrections, and salon management for professional stylists. Quick formulas in 2 seconds!',
+          theme_color: '#8B5CF6',
+          background_color: '#ffffff',
+          display: 'standalone',
+          orientation: 'portrait',
+          scope: '/',
+          start_url: '/',
+          categories: ['business', 'productivity', 'utilities'],
+          icons: [
+            {
+              src: '/icon-192.png',
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any maskable'
+            },
+            {
+              src: '/icon-512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable'
+            }
+          ],
+          screenshots: [
+            {
+              src: '/screenshot-1.png',
+              sizes: '1170x2532',
+              type: 'image/png',
+              form_factor: 'narrow',
+              label: 'AI Assistant Chat'
+            }
+          ],
+          shortcuts: [
+            {
+              name: 'AI Assistant',
+              short_name: 'AI Chat',
+              description: 'Get instant AI formula help',
+              url: '/ai-assistant',
+              icons: [{ src: '/icon-192.png', sizes: '192x192' }]
+            },
+            {
+              name: 'Quick Formula',
+              short_name: 'Quick',
+              description: 'Generate formula in 2 seconds',
+              url: '/quick-formula',
+              icons: [{ src: '/icon-192.png', sizes: '192x192' }]
+            },
+            {
+              name: 'Dashboard',
+              short_name: 'Home',
+              description: 'View your dashboard',
+              url: '/dashboard',
+              icons: [{ src: '/icon-192.png', sizes: '192x192' }]
+            }
+          ]
+        },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [

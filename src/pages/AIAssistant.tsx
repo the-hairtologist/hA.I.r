@@ -21,6 +21,13 @@ import { ConversationSelector } from "@/components/ConversationSelector";
 import { ClientSelectorDialog } from "@/components/ClientSelectorDialog";
 import { StructuredFormulaDisplay } from "@/components/StructuredFormulaDisplay";
 import { AIFormulaQuickStart } from "@/components/AIFormulaQuickStart";
+import { FormulaSafetyBadge } from "@/components/FormulaSafetyBadge";
+import { HairAnalysisPanel } from "@/components/HairAnalysisPanel";
+import { ModelPerformanceIndicator } from "@/components/ModelPerformanceIndicator";
+import { FormulaOutcomeFeedback } from "@/components/FormulaOutcomeFeedback";
+import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { useAIAnalytics } from "@/hooks/useAIAnalytics";
+import { useFeatureFlag } from "@/lib/featureFlags";
 
 const Knowledge = () => {
   const navigate = useNavigate();
@@ -55,6 +62,24 @@ const Knowledge = () => {
   
   // Color Correction specific state
   const [correctionSteps, setCorrectionSteps] = useState<Array<{ step: string; completed: boolean }>>([]);
+  
+  // AI Analytics & Features
+  const analytics = useAIAnalytics();
+  const formulaValidationEnabled = useFeatureFlag('FORMULA_VALIDATION');
+  const visualAnalysisEnabled = useFeatureFlag('VISUAL_HAIR_ANALYSIS');
+  const outcomeTrackingEnabled = useFeatureFlag('OUTCOME_TRACKING');
+  
+  // Formula safety validation state
+  const [lastFormulaValidation, setLastFormulaValidation] = useState<any>(null);
+  const [validatingFormula, setValidatingFormula] = useState(false);
+  
+  // Hair analysis state
+  const [analyzingPhoto, setAnalyzingPhoto] = useState(false);
+  const [lastAnalysis, setLastAnalysis] = useState<any>(null);
+  
+  // Model performance tracking
+  const [lastModelUsed, setLastModelUsed] = useState<string>('');
+  const [lastResponseTime, setLastResponseTime] = useState<number>(0);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -375,8 +400,39 @@ const Knowledge = () => {
     setAiInput("");
     setAiMessages(prev => [...prev, messageWithImages]);
     setAiLoading(true);
+    
+    const startTime = performance.now();
 
     try {
+      // Hair photo analysis if images uploaded
+      if (visualAnalysisEnabled && uploadedImages.length > 0) {
+        setAnalyzingPhoto(true);
+        try {
+          const { data: analysisData } = await supabase.functions.invoke('analyze-hair-photo', {
+            body: { 
+              imageUrl: uploadedImages[0],
+              clientId: selectedClientId 
+            }
+          });
+          
+          if (analysisData && !analysisData.error) {
+            setLastAnalysis(analysisData);
+            analytics.trackVisualAnalysis({
+              confidence: analysisData.level_confidence || 0.85,
+              detectedLevel: analysisData.current_level || 0,
+              processingTimeMs: Math.round(performance.now() - startTime)
+            });
+            
+            toast.success("Hair analysis complete!", {
+              description: `Detected Level ${analysisData.current_level} with ${Math.round(analysisData.level_confidence * 100)}% confidence`
+            });
+          }
+        } catch (analysisError) {
+          console.warn('Hair analysis failed, continuing with chat:', analysisError);
+        } finally {
+          setAnalyzingPhoto(false);
+        }
+      }
       // Build conversation history with images
       const historyWithImages = aiMessages.map(msg => {
         if (msg.imageUrls && msg.imageUrls.length > 0) {
@@ -401,19 +457,55 @@ const Knowledge = () => {
           conversationHistory: historyWithImages,
           images: uploadedImages.length > 0 ? uploadedImages : undefined,
           clientContext: clientContext,
-          stylistContext: stylistContext
+          stylistContext: stylistContext,
+          hairAnalysis: lastAnalysis // Pass analysis to AI
         }
       });
+
+      // Track performance
+      const responseTime = Math.round(performance.now() - startTime);
+      setLastResponseTime(responseTime);
+      if (data?.model_used) {
+        setLastModelUsed(data.model_used);
+      }
 
       // Save user message
       await saveConversationMessage("user", userMessage, uploadedImages.length > 0 ? uploadedImages : undefined);
 
       if (error) throw error;
 
-      setAiMessages(prev => [...prev, { role: "assistant", content: data.response }]);
+      const assistantResponse = data.response;
+      setAiMessages(prev => [...prev, { role: "assistant", content: assistantResponse }]);
       
       // Save assistant message
-      await saveConversationMessage("assistant", data.response);
+      await saveConversationMessage("assistant", assistantResponse);
+      
+      // Validate formula if response contains formula-like content
+      if (formulaValidationEnabled && typeof assistantResponse === 'string' && 
+          (assistantResponse.includes('developer') || assistantResponse.includes('processing'))) {
+        setValidatingFormula(true);
+        try {
+          const { data: validation } = await supabase.functions.invoke('validate-formula', {
+            body: {
+              formula: { base: { /* extracted from response */ } },
+              clientId: selectedClientId
+            }
+          });
+          
+          if (validation && !validation.error) {
+            setLastFormulaValidation(validation);
+            analytics.trackFormulaValidation({
+              isSafe: validation.isSafe,
+              warningCount: validation.warnings?.length || 0,
+              blockerCount: validation.blockers?.length || 0
+            });
+          }
+        } catch (validationError) {
+          console.warn('Formula validation failed:', validationError);
+        } finally {
+          setValidatingFormula(false);
+        }
+      }
       
       // Auto-parse steps from any response that contains numbered lists
       const steps = parseStepsFromResponse(data.response);

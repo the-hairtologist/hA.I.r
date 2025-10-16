@@ -44,6 +44,10 @@ import { ClientRetention } from "@/components/dashboard/ClientRetention";
 import { QuickNotes } from "@/components/dashboard/QuickNotes";
 import { FavoriteStylists } from "@/components/dashboard/FavoriteStylists";
 import { ClientMilestones } from "@/components/dashboard/ClientMilestones";
+import { PredictiveSuggestions } from "@/components/PredictiveSuggestions";
+import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { useAIAnalytics } from "@/hooks/useAIAnalytics";
+import { useFeatureFlag } from "@/lib/featureFlags";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles, BookOpen } from "lucide-react";
 import {
@@ -88,12 +92,18 @@ const Dashboard = () => {
     minute: number;
   } | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  
+  // AI Features
+  const analytics = useAIAnalytics();
+  const predictiveInsightsEnabled = useFeatureFlag('PREDICTIVE_INSIGHTS');
+  const [predictiveInsights, setPredictiveInsights] = useState<any[]>([]);
 
   // Enable analytics tracking
   useAnalytics();
 
   // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
+    { id: "predictive-insights", title: "AI Predictions", component: "PredictiveInsights", enabled: true },
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "appointment-timer", title: "Session Timer", component: "AppointmentTimer", enabled: true },
     { id: "birthday-alerts", title: "Client Birthdays", component: "BirthdayAlerts", enabled: true },
@@ -277,6 +287,24 @@ const Dashboard = () => {
     setIsEditMode(false);
     toast.success("Dashboard layout saved");
   };
+  
+  const loadPredictiveInsights = async (stylistId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('predictive_insights')
+        .select('*')
+        .eq('stylist_id', stylistId)
+        .gt('expires_at', new Date().toISOString())
+        .order('created_at', { ascending: false })
+        .limit(3);
+      
+      if (!error && data) {
+        setPredictiveInsights(data);
+      }
+    } catch (error) {
+      console.warn('Failed to load predictive insights:', error);
+    }
+  };
 
   const checkUser = async (sessionUser: any, primaryRole: string) => {
     try {
@@ -328,6 +356,11 @@ const Dashboard = () => {
         .maybeSingle();
 
       setUserProfile(profileData);
+      
+      // Load predictive insights for stylists
+      if (primaryRole === "stylist" && predictiveInsightsEnabled && profile?.id) {
+        loadPredictiveInsights(profile.id);
+      }
 
       // Only show profile completion if not already marked as complete
       const profileComplete = localStorage.getItem('profile_completed');
@@ -580,6 +613,18 @@ const Dashboard = () => {
         ) : null;
       case "QuickNotes":
         return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;
+      case "PredictiveInsights":
+        return (userRole === "stylist" || isAdmin) && predictiveInsightsEnabled && predictiveInsights.length > 0 ? (
+          <AIFeatureErrorBoundary featureName="Predictive Insights">
+            <PredictiveSuggestions 
+              insights={predictiveInsights}
+              onAction={(insightId) => {
+                toast.success("Action taken on prediction");
+                analytics.trackPrediction(predictiveInsights.length);
+              }}
+            />
+          </AIFeatureErrorBoundary>
+        ) : null;
       case "WeeklySchedule":
         return null; // Now rendered in welcome box
       case "RecentActivity":

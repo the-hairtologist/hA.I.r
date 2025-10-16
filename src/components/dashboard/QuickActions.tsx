@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, Users, Calendar, MessageSquare, Scissors, Settings2, Plus, X, Palette, DollarSign, BookOpen, CreditCard, GripVertical, Crown, Shield, Activity, FileText } from "lucide-react";
+import { Sparkles, Users, Calendar, MessageSquare, Scissors, Settings2, Plus, X, Palette, DollarSign, BookOpen, CreditCard, GripVertical, Crown, Shield, Activity, FileText, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -28,6 +28,14 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   const allStylistActions: ActionButton[] = [
+    {
+      id: "quick-formula",
+      label: "⚡ Quick Formula",
+      icon: Zap,
+      route: "/quick-formula",
+      description: "Generate formulas in 2 seconds",
+      gradient: "from-yellow-500 to-orange-500",
+    },
     {
       id: "ai-chat",
       label: "AI Expert Chat",
