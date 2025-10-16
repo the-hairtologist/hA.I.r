@@ -29,8 +29,8 @@ export const EnhancedFooter = () => {
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-4 py-10">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {/* Brand Column */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
@@ -42,55 +42,55 @@ export const EnhancedFooter = () => {
             <p className="text-sm font-sans text-primary-foreground/80 leading-relaxed">
               Your hair, smarter. Your salon, effortless.
             </p>
-            <div className="flex gap-2 pt-2">
+            <div className="flex flex-wrap gap-2 pt-2">
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Instagram"
               >
-                <Instagram className="h-4 w-4 text-accent-foreground" />
+                <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
               </a>
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-secondary hover:bg-secondary/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Facebook"
               >
-                <Facebook className="h-4 w-4 text-secondary-foreground" />
+                <Facebook className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-foreground" />
               </a>
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-accent hover:bg-accent/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Twitter"
               >
-                <Twitter className="h-4 w-4 text-accent-foreground" />
+                <Twitter className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
               </a>
               <a
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 border-4 border-black bg-secondary hover:bg-secondary/80 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="YouTube"
               >
-                <Youtube className="h-4 w-4 text-secondary-foreground" />
+                <Youtube className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-foreground" />
               </a>
             </div>
             
             {/* App Badges */}
-            <div className="flex gap-2 pt-3">
-              <div className="w-12 h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <Smartphone className="h-5 w-5 text-accent-foreground" />
+            <div className="flex flex-wrap gap-2 pt-3">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <Smartphone className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
               </div>
-              <div className="px-4 h-12 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <span className="font-pixel text-sm text-secondary-foreground">iOS</span>
+              <div className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <span className="font-pixel text-xs sm:text-sm text-secondary-foreground">iOS</span>
               </div>
-              <div className="px-4 h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
-                <span className="font-pixel text-sm text-accent-foreground">ANDROID</span>
+              <div className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                <span className="font-pixel text-xs sm:text-sm text-accent-foreground">ANDROID</span>
               </div>
             </div>
           </div>
@@ -151,12 +151,12 @@ export const EnhancedFooter = () => {
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-11 bg-white"
+                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-11 sm:h-12 bg-white text-foreground"
                 required
               />
               <Button 
                 type="submit" 
-                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11"
+                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11 sm:h-12"
               >
                 <Mail className="h-4 w-4 mr-2" />
                 SUBSCRIBE
@@ -165,13 +165,13 @@ export const EnhancedFooter = () => {
           </div>
         </div>
 
-        <div className="border-t-4 border-black pt-6 mt-2">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+        <div className="border-t-4 border-black pt-4 sm:pt-6 mt-2">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
             {/* Copyright */}
             <p className="font-pixel text-sm text-primary-foreground/80">© 2025 hA.I.r</p>
 
             {/* Footer Links */}
-            <div className="flex gap-6 text-sm font-sans">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm font-sans">
               <button onClick={() => navigate("/dmca")} className="text-primary-foreground/80 hover:text-primary-foreground transition-colors">
                 DMCA
               </button>
