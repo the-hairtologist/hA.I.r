@@ -60,7 +60,7 @@ const Index = () => {
               </h1>
               
               <p className="text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-loose">
-                Bookings + Color Formulas + Payments = Handled.
+                DISCOVER AI-POWERED RECOMMENDATIONS, SEAMLESS BOOKING, AND PERSONALIZED CARE - ALL IN ONE APP.
               </p>
               
               <div className="pt-6">
@@ -69,12 +69,12 @@ const Index = () => {
                   onClick={() => navigate("/auth")} 
                   className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 rounded-none"
                 >
-                  GET EARLY ACCESS
+                  UNLOCK YOUR SMARTER HAIR JOURNEY
                 </Button>
               </div>
               
               <p className="text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase">
-                No Credit Card • 14 Days Free
+                Free Trial • No Credit Card Required
               </p>
             </div>
           </div>
@@ -102,7 +102,7 @@ const Index = () => {
           <SingleTestimonial />
         </section>
 
-        {/* Pricing Section */}
+        {/* FOMO/CTA Section */}
         <section className="py-16 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.03) 50%, transparent 100%),

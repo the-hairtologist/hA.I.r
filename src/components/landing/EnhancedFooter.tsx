@@ -1,4 +1,4 @@
-import { Scissors, Instagram, Facebook, Twitter, Youtube, Mail } from "lucide-react";
+import { Scissors, Instagram, Facebook, Twitter, Youtube, Mail, Smartphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,32 +14,40 @@ export const EnhancedFooter = () => {
     e.preventDefault();
     if (email) {
       toast({
-        title: "Thanks for subscribing!",
-        description: "We'll keep you updated with tips and product news.",
+        title: "SUBSCRIBED!",
+        description: "We'll keep you updated!",
       });
       setEmail("");
     }
   };
 
   return (
-    <footer className="border-t-2 border-foreground bg-muted/50">
+    <footer className="border-t-4 border-black bg-accent" style={{
+      backgroundImage: `
+        linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
+        linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+      `,
+      backgroundSize: '8px 8px'
+    }}>
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand Column */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Scissors className="h-6 w-6 text-primary" />
-              <span className="font-display font-bold text-xl">hA.I.r</span>
+              <div className="w-10 h-10 border-4 border-black bg-primary flex items-center justify-center">
+                <Scissors className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <span className="font-pixel text-xl text-accent-foreground uppercase">hA.I.r</span>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              AI-powered salon assistant that handles bookings, color formulas, and payments—so you can focus on your craft.
+            <p className="text-xs font-sans text-accent-foreground/80 leading-relaxed border-l-4 border-black pl-3">
+              Your hair, smarter. Your salon, effortless.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-9 w-9 rounded-lg border-2 border-foreground bg-card hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center"
+                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Instagram"
               >
                 <Instagram className="h-4 w-4" />
@@ -48,7 +56,7 @@ export const EnhancedFooter = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-9 w-9 rounded-lg border-2 border-foreground bg-card hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center"
+                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Facebook"
               >
                 <Facebook className="h-4 w-4" />
@@ -57,7 +65,7 @@ export const EnhancedFooter = () => {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-9 w-9 rounded-lg border-2 border-foreground bg-card hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center"
+                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="Twitter"
               >
                 <Twitter className="h-4 w-4" />
@@ -66,35 +74,46 @@ export const EnhancedFooter = () => {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-9 w-9 rounded-lg border-2 border-foreground bg-card hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center"
+                className="w-10 h-10 border-4 border-black bg-white hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 aria-label="YouTube"
               >
                 <Youtube className="h-4 w-4" />
               </a>
             </div>
+            
+            {/* App Store Badges */}
+            <div className="pt-4 space-y-2">
+              <p className="font-pixel text-xs text-accent-foreground uppercase">AVAILABLE ON</p>
+              <div className="flex gap-2">
+                <div className="border-4 border-black bg-white px-4 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <Smartphone className="h-4 w-4" />
+                </div>
+                <div className="border-4 border-black bg-white px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="font-pixel text-xs">iOS</span>
+                </div>
+                <div className="border-4 border-black bg-white px-3 py-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="font-pixel text-xs">AND</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Product Column */}
           <div>
-            <h3 className="font-display font-bold text-sm uppercase mb-4">Product</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-accent-foreground">PRODUCT</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <button onClick={() => navigate("/auth")} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
                   Features
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="text-muted-foreground hover:text-foreground transition-colors">
-                  Pricing
-                </button>
-              </li>
-              <li>
-                <button onClick={() => navigate("/auth")} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
                   Demo
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/auth")} className="text-muted-foreground hover:text-foreground transition-colors">
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
                   Integrations
                 </button>
               </li>
@@ -103,26 +122,21 @@ export const EnhancedFooter = () => {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-display font-bold text-sm uppercase mb-4">Company</h3>
+            <h3 className="font-pixel text-sm uppercase mb-4 text-accent-foreground">COMPANY</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <button onClick={() => navigate("/privacy")} className="text-muted-foreground hover:text-foreground transition-colors">
-                  Privacy Policy
+                <button onClick={() => navigate("/auth")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                  About
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate("/terms")} className="text-muted-foreground hover:text-foreground transition-colors">
-                  Terms of Service
-                </button>
+                <a href="mailto:support@hair-ai.com" className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                  Contact
+                </a>
               </li>
               <li>
-                <button onClick={() => navigate("/cookie-policy")} className="text-muted-foreground hover:text-foreground transition-colors">
-                  Cookie Policy
-                </button>
-              </li>
-              <li>
-                <button onClick={() => navigate("/accessibility")} className="text-muted-foreground hover:text-foreground transition-colors">
-                  Accessibility
+                <button onClick={() => navigate("/terms")} className="font-sans text-xs text-accent-foreground/80 hover:text-accent-foreground transition-colors">
+                  Terms
                 </button>
               </li>
             </ul>
@@ -130,9 +144,9 @@ export const EnhancedFooter = () => {
 
           {/* Newsletter Column */}
           <div>
-            <h3 className="font-display font-bold text-sm uppercase mb-4">Stay Updated</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Get styling tips, product updates, and exclusive offers.
+            <h3 className="font-pixel text-sm uppercase mb-4 text-accent-foreground">UPDATES</h3>
+            <p className="text-xs font-sans text-accent-foreground/80 mb-4">
+              Get tips and exclusive offers.
             </p>
             <form onSubmit={handleNewsletterSignup} className="space-y-2">
               <Input
@@ -140,43 +154,40 @@ export const EnhancedFooter = () => {
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-2 border-foreground"
+                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 required
               />
-              <Button type="submit" className="w-full">
-                <Mail className="h-4 w-4 mr-2" />
-                Subscribe
+              <Button 
+                type="submit" 
+                className="w-full font-pixel text-xs uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all rounded-none"
+              >
+                <Mail className="h-3 w-3 mr-2" />
+                SUBSCRIBE
               </Button>
             </form>
           </div>
         </div>
 
-        <div className="border-t-2 border-foreground pt-6 space-y-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>© 2025 hA.I.r - AI-Powered Salon Assistant. All rights reserved.</p>
+        <div className="border-t-4 border-black pt-6 space-y-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-sans text-accent-foreground/80">
+            <p className="font-pixel text-xs">© 2025 hA.I.r • ALL RIGHTS RESERVED</p>
             <div className="flex gap-4">
-              <button onClick={() => navigate("/dmca")} className="hover:text-foreground transition-colors">
+              <button onClick={() => navigate("/dmca")} className="hover:text-accent-foreground transition-colors">
                 DMCA
               </button>
-              <button onClick={() => navigate("/help")} className="hover:text-foreground transition-colors">
-                Help Center
+              <button onClick={() => navigate("/help")} className="hover:text-accent-foreground transition-colors">
+                Help
               </button>
-              <a href="mailto:support@hair-ai.com" className="hover:text-foreground transition-colors">
+              <a href="mailto:support@hair-ai.com" className="hover:text-accent-foreground transition-colors">
                 Contact
               </a>
             </div>
           </div>
           
           {/* Legal Disclaimer */}
-          <div className="text-center text-xs text-muted-foreground space-y-1 border-t border-border pt-4">
-            <p>
-              <strong>Disclaimer:</strong> Individual results may vary. AI recommendations are assistive tools only and not professional advice.
-            </p>
-            <p>
-              Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
-            </p>
-            <p>
-              Service outcomes depend on individual skill, technique, and client hair characteristics. No guarantees are implied.
+          <div className="text-center border-4 border-black bg-white p-4">
+            <p className="text-xs font-sans text-muted-foreground">
+              <strong>Disclaimer:</strong> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses. Service outcomes depend on individual skill, technique, and client hair characteristics. No guarantees are implied.
             </p>
           </div>
         </div>

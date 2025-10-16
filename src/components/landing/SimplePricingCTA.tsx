@@ -1,52 +1,63 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
-
-const features = [
-  "Unlimited bookings",
-  "AI color formulas",
-  "Payment processing",
-  "Client management",
-];
+import { Sparkles, Zap, Heart } from "lucide-react";
 
 export const SimplePricingCTA = () => {
   const navigate = useNavigate();
 
   return (
     <div className="container mx-auto px-4">
-      <div className="max-w-lg mx-auto text-center">
-        <h2 className="font-pixel text-2xl sm:text-3xl mb-8 text-secondary-foreground uppercase tracking-wider">
-          Simple Pricing
-        </h2>
-
-        <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <div className="mb-8">
-            <div className="flex items-start justify-center gap-2 mb-4">
-              <span className="font-pixel text-5xl sm:text-6xl text-foreground">$49</span>
-              <span className="font-pixel text-base text-muted-foreground mt-2">/mo</span>
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="mb-8">
+          <div className="flex justify-center gap-4 mb-6">
+            <div className="w-16 h-16 border-4 border-black bg-accent flex items-center justify-center animate-bounce">
+              <Sparkles className="h-8 w-8 text-accent-foreground" />
             </div>
-            <p className="font-pixel text-xs text-muted-foreground uppercase">14-Day Free Trial</p>
+            <div className="w-16 h-16 border-4 border-black bg-secondary flex items-center justify-center animate-bounce" style={{ animationDelay: '0.1s' }}>
+              <Zap className="h-8 w-8 text-secondary-foreground" />
+            </div>
+            <div className="w-16 h-16 border-4 border-black bg-primary flex items-center justify-center animate-bounce" style={{ animationDelay: '0.2s' }}>
+              <Heart className="h-8 w-8 text-primary-foreground" />
+            </div>
           </div>
 
-          <ul className="space-y-4 mb-8 text-left">
-            {features.map((feature) => (
-              <li key={feature} className="flex items-center gap-3">
-                <div className="flex-shrink-0 w-6 h-6 border-2 border-black bg-success flex items-center justify-center">
-                  <Check className="h-4 w-4 text-success-foreground" strokeWidth={3} />
-                </div>
-                <span className="font-sans text-sm text-foreground">{feature}</span>
-              </li>
-            ))}
-          </ul>
+          <h2 className="font-pixel text-3xl sm:text-4xl mb-6 text-secondary-foreground uppercase tracking-wider leading-relaxed">
+            READY TO SEE WHAT YOUR HAIR COULD REALLY DO?
+          </h2>
 
-          <Button
-            size="lg"
-            onClick={() => navigate("/auth")}
-            className="w-full text-base sm:text-lg py-6 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 rounded-none"
-          >
-            Start Free Trial
-          </Button>
+          <p className="text-base sm:text-lg font-pixel text-secondary-foreground/90 max-w-2xl mx-auto mb-8 leading-loose">
+            AI-DRIVEN INSIGHTS, EFFORTLESS BOOKING, AND PERSONALIZED CARE - EXPERIENCE A SALON VISIT LIKE NEVER BEFORE.
+          </p>
         </div>
+
+        <div className="border-4 border-black bg-white p-8 sm:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-8">
+          <div className="space-y-6">
+            <div className="flex items-center justify-center gap-4">
+              <div className="w-3 h-3 border-2 border-black bg-primary"></div>
+              <p className="font-sans text-sm text-foreground">AI-powered recommendations</p>
+            </div>
+            <div className="flex items-center justify-center gap-4">
+              <div className="w-3 h-3 border-2 border-black bg-secondary"></div>
+              <p className="font-sans text-sm text-foreground">Seamless booking system</p>
+            </div>
+            <div className="flex items-center justify-center gap-4">
+              <div className="w-3 h-3 border-2 border-black bg-accent"></div>
+              <p className="font-sans text-sm text-foreground">Personalized care tracking</p>
+            </div>
+          </div>
+        </div>
+
+        <Button
+          size="lg"
+          onClick={() => navigate("/auth")}
+          className="text-base sm:text-lg px-12 py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 rounded-none"
+        >
+          TRY hA.I.r TODAY - FREE TRIAL
+        </Button>
+
+        <p className="text-xs sm:text-sm font-pixel text-secondary-foreground/80 uppercase mt-4">
+          No Credit Card • Start In Seconds
+        </p>
       </div>
     </div>
   );
