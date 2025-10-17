@@ -23,6 +23,7 @@ import { initSentry } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
+import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 
 // Import advanced accessibility features
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
@@ -75,9 +76,15 @@ const queryClient = new QueryClient({
 
 const AnalyticsInitializer = () => {
   useEffect(() => {
+    // Initialize analytics and monitoring
     initAnalytics();
     initSentry();
-    initUTMTracking(); // Track campaign parameters
+    initUTMTracking();
+    
+    // Initialize comprehensive performance optimizations
+    performanceOptimizer.init().catch((error) => {
+      console.error('Failed to initialize performance optimizations:', error);
+    });
   }, []);
   
   useAnalytics();

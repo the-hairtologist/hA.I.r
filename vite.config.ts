@@ -183,16 +183,72 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     minify: 'esbuild',
+    cssMinify: 'lightningcss',
+    target: 'es2020',
+    sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select'],
-          'query-vendor': ['@tanstack/react-query'],
+        manualChunks: (id) => {
+          // React ecosystem
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-core';
+          }
+          if (id.includes('node_modules/react-router')) {
+            return 'react-router';
+          }
+          
+          // UI libraries
+          if (id.includes('node_modules/@radix-ui')) {
+            return 'radix-ui';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'icons';
+          }
+          
+          // Data fetching and state
+          if (id.includes('node_modules/@tanstack/react-query')) {
+            return 'react-query';
+          }
+          if (id.includes('node_modules/@supabase')) {
+            return 'supabase';
+          }
+          
+          // Charts and visualization
+          if (id.includes('node_modules/recharts')) {
+            return 'charts';
+          }
+          
+          // AI and transformers
+          if (id.includes('node_modules/@huggingface')) {
+            return 'ai-models';
+          }
+          
+          // Forms and validation
+          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/zod')) {
+            return 'forms';
+          }
+          
+          // Utilities
+          if (id.includes('node_modules/date-fns')) {
+            return 'date-utils';
+          }
         },
+        // Optimize output filenames
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+      },
+      // Tree shaking optimizations
+      treeshake: {
+        moduleSideEffects: 'no-external',
+        propertyReadSideEffects: false,
+        unknownGlobalSideEffects: false,
       },
     },
     chunkSizeWarningLimit: 1000,
+    reportCompressedSize: true,
+    // Enable compression
+    cssCodeSplit: true,
   },
   esbuild: {
     drop: mode === 'production' ? ['console', 'debugger'] : [],
