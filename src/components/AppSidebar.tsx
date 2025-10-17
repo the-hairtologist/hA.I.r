@@ -158,20 +158,20 @@ export function AppSidebar() {
 
   if (isLoading) {
     return (
-      <Sidebar collapsible="icon" className="border-r">
+      <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
         <SidebarContent className="flex flex-col gap-3 p-4">
-          {/* Skeleton loaders for better UX */}
+          {/* Skeleton loaders with brutal styling */}
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-md bg-muted/50 animate-pulse" />
+            <div className="h-10 w-10 rounded-md bg-muted/50 border-[2px] border-foreground/10 shadow-[var(--brutal-shadow-sm)] animate-pulse" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 w-3/4 bg-muted/50 rounded animate-pulse" />
-              <div className="h-3 w-1/2 bg-muted/30 rounded animate-pulse" />
+              <div className="h-4 w-3/4 bg-muted/50 border-[2px] border-foreground/5 rounded animate-pulse" />
+              <div className="h-3 w-1/2 bg-muted/30 border-[2px] border-foreground/5 rounded animate-pulse" />
             </div>
           </div>
           {[...Array(5)].map((_, i) => (
             <div key={i} className="flex items-center gap-3" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="h-8 w-8 rounded-md bg-muted/40 animate-pulse" />
-              <div className="h-4 w-2/3 bg-muted/40 rounded animate-pulse" />
+              <div className="h-8 w-8 rounded-md bg-muted/40 border-[2px] border-foreground/10 shadow-[var(--brutal-shadow-sm)] animate-pulse" />
+              <div className="h-4 w-2/3 bg-muted/40 border-[2px] border-foreground/5 rounded animate-pulse" />
             </div>
           ))}
         </SidebarContent>
@@ -180,7 +180,7 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
       <SidebarContent className="pb-4">
         {/* Next Appointment Banner - Shows time until next appointment */}
         {(isStylist || isAdmin) && !collapsed && <NextAppointmentBanner />}
@@ -190,13 +190,13 @@ export function AppSidebar() {
         
         {/* Customize Controls - Only for stylists and admins */}
         {!collapsed && (isStylist || isAdmin) && !isClient && (
-          <div className="px-3 py-2 border-b">
+          <div className="px-3 py-3 border-b-[3px] border-foreground/10">
             <div className="flex items-center gap-2">
               <Button
-                variant={isEditMode ? "default" : "ghost"}
+                variant={isEditMode ? "default" : "outline"}
                 size="sm"
                 onClick={() => setIsEditMode(!isEditMode)}
-                className="flex-1 h-9"
+                className="flex-1 h-9 font-bold border-[2px] shadow-[var(--brutal-shadow-sm)] hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5 active:shadow-none active:translate-y-0 transition-all"
                 title={isEditMode ? "Finish customizing" : "Drag to prioritize your most-used tools"}
               >
                 <Edit3 className="h-3.5 w-3.5 mr-1.5" />
@@ -204,10 +204,10 @@ export function AppSidebar() {
               </Button>
               {isEditMode && (
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
                   onClick={handleReset}
-                  className="h-9 px-2"
+                  className="h-9 px-2 border-[2px] shadow-[var(--brutal-shadow-sm)] hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5 active:shadow-none active:translate-y-0 transition-all"
                   title="Reset to recommended order"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -215,7 +215,7 @@ export function AppSidebar() {
               )}
             </div>
             {isEditMode && (
-              <p className="text-xs font-sans text-foreground/70 mt-2">
+              <p className="text-[10px] font-sans text-foreground/70 mt-2 leading-tight">
                 Drag items to prioritize your most-used tools
               </p>
             )}
@@ -239,21 +239,21 @@ export function AppSidebar() {
               return (
                 <div key={groupKey}>
                   {showSeparator && (
-                    <div className="relative my-3 mx-3">
-                      <div className="border-t-2 border-primary/20" />
+                    <div className="relative my-4 mx-3">
+                      <div className="border-t-[3px] border-foreground/20" />
                       {groupKey.startsWith('admin-') && (
-                        <div className="absolute -top-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
+                        <div className="absolute -top-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500/60 to-transparent shadow-[0_2px_8px_rgba(251,191,36,0.3)]" />
                       )}
                     </div>
                   )}
                   <SidebarGroup className="mb-2">
                     <SidebarGroupLabel 
-                      className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/50 rounded px-2 py-1 flex items-center justify-between transition-colors"}`}
+                      className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/80 px-2 py-2 flex items-center justify-between transition-all border-l-[3px] border-transparent hover:border-primary/50"}`}
                       onClick={() => !collapsed && toggleGroupCollapsed(groupKey)}
                     >
-                      <span>{labels[groupKey]}</span>
+                      <span className="drop-shadow-sm">{labels[groupKey]}</span>
                       {!collapsed && (
-                        <span className="text-xs transition-transform" style={{ transform: isGroupCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
+                        <span className="text-[10px] transition-transform duration-200 font-bold" style={{ transform: isGroupCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
                           ▼
                         </span>
                       )}
