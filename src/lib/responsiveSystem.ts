@@ -221,7 +221,7 @@ export const isResponsiveValue = (value: string): boolean => {
  * Development mode warning for fixed sizing
  */
 export const warnFixedSizing = (componentName: string, property: string, value: string) => {
-  if (process.env.NODE_ENV === 'development' && hasFixedPixels(value)) {
+  if (import.meta.env.DEV && hasFixedPixels(value)) {
     console.warn(
       `⚠️ [Responsive System] ${componentName}: "${property}: ${value}" uses fixed pixels. Consider using responsive units (rem, %, clamp, etc.) for better device consistency.`
     );

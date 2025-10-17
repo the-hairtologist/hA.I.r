@@ -52,7 +52,7 @@ class CustomMetricsTracker {
 
       this.measures.push(customMeasure);
 
-      if (process.env.NODE_ENV === 'development') {
+      if (import.meta.env.DEV) {
         logger.debug(`⏱️ ${name}: ${Math.round(measure.duration)}ms`, 'customMetrics');
       }
 
@@ -114,7 +114,7 @@ class CustomMetricsTracker {
       fullPageLoad: navigation.loadEventEnd - navigation.loadEventStart,
     };
 
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       logger.info('📈 Navigation Metrics', 'customMetrics', metrics);
     }
     return metrics;

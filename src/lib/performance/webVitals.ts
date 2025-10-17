@@ -57,18 +57,32 @@ class WebVitalsMonitor {
     this.callbacks.forEach(cb => cb(webVitalMetric));
 
     // Log in development
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       logger.debug(`${metric.name}`, 'webVitals', {
         value: `${Math.round(metric.value)}ms`,
         rating: webVitalMetric.rating,
-        ...metric
+        description: this.getDescription(metric.name),
       });
     }
 
     // Send to analytics in production
-    if (process.env.NODE_ENV === 'production') {
+    if (!import.meta.env.DEV) {
       this.sendToAnalytics(webVitalMetric);
     }
+  }
+
+  /**
+   * Get description for metric
+   */
+  private getDescription(name: string): string {
+    const descriptions: Record<string, string> = {
+      CLS: 'Cumulative Layout Shift - visual stability',
+      INP: 'Interaction to Next Paint - responsiveness',
+      FCP: 'First Contentful Paint - perceived load speed',
+      LCP: 'Largest Contentful Paint - loading performance',
+      TTFB: 'Time to First Byte - server response time',
+    };
+    return descriptions[name] || 'Unknown metric';
   }
 
   /**

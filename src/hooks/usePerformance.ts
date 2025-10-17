@@ -35,7 +35,7 @@ export const usePerformance = ({
       measurePerformance(`${componentName}-mount`);
 
       const loadTime = Date.now() - mountTime.current;
-      if (loadTime > 100 && process.env.NODE_ENV === 'development') {
+      if (loadTime > 100 && import.meta.env.DEV) {
         logger.warn('Slow component mount detected', 'performance', {
           component: componentName,
           loadTime: `${loadTime}ms`
@@ -77,7 +77,7 @@ export const usePerformance = ({
       }
 
       // Warn about excessive renders
-      if (process.env.NODE_ENV === 'development' && renderCount.current > 10) {
+      if (import.meta.env.DEV && renderCount.current > 10) {
         logger.warn('Excessive renders detected', 'performance', {
           component: componentName,
           renderCount: renderCount.current

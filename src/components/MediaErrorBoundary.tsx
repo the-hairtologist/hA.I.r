@@ -119,7 +119,7 @@ export class MediaErrorBoundary extends Component<Props, State> {
           <CardContent>
             <div className="space-y-3">
               {/* Error details for debugging */}
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {import.meta.env.DEV && this.state.error && (
                 <details className="p-3 rounded-lg bg-muted text-xs">
                   <summary className="cursor-pointer font-medium mb-2">
                     Technical Details (Dev Only)

@@ -319,14 +319,6 @@ const Settings = () => {
 
   const handleGenderChange = (value: string) => {
     setSelectedGender(value);
-    const genderAvatars: Record<string, string> = {
-      male: "/src/assets/avatar-male-lego.png",
-      female: "/src/assets/avatar-female-lego.png",
-      neutral: "/src/assets/avatar-neutral-lego.png",
-    };
-    if (genderAvatars[value]) {
-      setAvatarUrl(genderAvatars[value]);
-    }
     setHasChanges(true);
   };
 

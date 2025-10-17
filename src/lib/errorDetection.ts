@@ -43,7 +43,7 @@ class ErrorDetectionSystem {
     }
     
     // In production, send to monitoring service
-    if (process.env.NODE_ENV === 'production') {
+    if (!import.meta.env.DEV) {
       this.sendToMonitoring(error);
     }
   }

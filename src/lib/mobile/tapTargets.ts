@@ -58,7 +58,7 @@ export const scanTapTargets = (): TapTarget[] => {
  * Log tap target violations to console
  */
 export const logTapTargetViolations = () => {
-  if (process.env.NODE_ENV !== 'development') return;
+  if (!import.meta.env.DEV) return;
 
   const targets = scanTapTargets();
   const violations = targets.filter(t => t.isTooSmall);

@@ -37,7 +37,7 @@ export const detectSuspiciousActivity = (): boolean => {
  * Console protection
  */
 export const protectConsole = () => {
-  if (process.env.NODE_ENV === 'production') {
+  if (!import.meta.env.DEV) {
     const noop = () => {};
     const methods = ['log', 'debug', 'info', 'warn', 'error'] as const;
     
@@ -74,7 +74,7 @@ Contact us through official channels.
  * Disable right-click context menu (optional - can be annoying to users)
  */
 export const disableRightClick = (enable: boolean = true) => {
-  if (enable && process.env.NODE_ENV === 'production') {
+  if (enable && !import.meta.env.DEV) {
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       return false;
