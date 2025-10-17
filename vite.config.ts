@@ -84,6 +84,12 @@ export default defineConfig(({ mode }) => ({
         },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api/, /^\/auth/],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 5000000, // 5MB
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -129,12 +135,12 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          // API responses - shorter cache
+          // Supabase REST API - NetworkFirst with background sync
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'api-cache',
+              cacheName: 'supabase-api-cache',
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 30 // 30 minutes
@@ -142,7 +148,36 @@ export default defineConfig(({ mode }) => ({
               networkTimeoutSeconds: 3,
               cacheableResponse: {
                 statuses: [0, 200]
+              },
+              backgroundSync: {
+                name: 'supabase-queue',
+                options: {
+                  maxRetentionTime: 24 * 60 // Retry for 24 hours
+                }
               }
+            }
+          },
+          // Supabase Storage - optimized for images/files
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/storage/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'supabase-storage-cache',
+              expiration: {
+                maxEntries: 300,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          // Supabase Auth - never cache
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/auth/i,
+            handler: 'NetworkOnly',
+            options: {
+              networkTimeoutSeconds: 10
             }
           },
           // Images - cache for 30 days
@@ -157,14 +192,27 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
+          // Generic API - NetworkFirst
           {
             urlPattern: /\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'api-cache',
+              cacheName: 'generic-api-cache',
               expiration: {
                 maxEntries: 50,
                 maxAgeSeconds: 60 * 5 // 5 minutes
+              }
+            }
+          },
+          // Static assets from CDN
+          {
+            urlPattern: /^https:\/\/cdn\./i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'cdn-cache',
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 90 // 90 days
               }
             }
           }
