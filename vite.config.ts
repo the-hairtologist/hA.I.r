@@ -255,5 +255,16 @@ export default defineConfig(({ mode }) => ({
   },
   esbuild: {
     drop: mode === 'production' ? ['console', 'debugger'] : [],
+    legalComments: 'none',
   },
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@tanstack/react-query',
+      '@supabase/supabase-js'
+    ],
+    exclude: ['@huggingface/transformers']
+  }
 }));
