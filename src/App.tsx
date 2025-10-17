@@ -7,7 +7,8 @@ import React, { useEffect, Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
@@ -60,19 +61,6 @@ const RoleSwitchProtection = lazy(() =>
     .then(m => ({ default: m.RoleSwitchProtection }))
     .catch(() => ({ default: () => null }))
 );
-
-// Optimized QueryClient
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60 * 1000,
-      gcTime: 5 * 60 * 1000,
-      retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-      refetchOnWindowFocus: false,
-    },
-  },
-});
 
 const AnalyticsInitializer = () => {
   useEffect(() => {
