@@ -3,14 +3,13 @@
  * Copyright © 2025 hA.I.r. All Rights Reserved.
  */
 
-import React from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes } from "react-router-dom";
-import { useEffect, Suspense } from "react";
 import { HelmetProvider } from 'react-helmet-async';
 import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -30,12 +29,7 @@ import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { selfHealing } from "@/lib/selfHealing";
-
-// Import advanced accessibility features
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
-
-// Safely import optional enhancement components
-import { Suspense as ReactSuspense, lazy } from "react";
 
 const PerformanceMonitor = lazy(() => 
   import("@/components/PerformanceMonitor")
@@ -111,7 +105,7 @@ const App = () => {
           <QueryClientProvider client={queryClient}>
             <SubscriptionProvider>
               <DemoModeProvider>
-                <ReactSuspense fallback={null}>
+                <Suspense fallback={null}>
                   <MobileOptimizationsProvider>
                     <TooltipProvider>
                       <OfflineIndicator />
@@ -124,25 +118,25 @@ const App = () => {
                       {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                       <GlobalAnnouncer />
                     {/* Performance monitoring (dev only) */}
-                    <ReactSuspense fallback={null}>
+                    <Suspense fallback={null}>
                       <PerformanceMonitor />
-                    </ReactSuspense>
+                    </Suspense>
                     {/* Performance overlay (dev only) */}
-                    <ReactSuspense fallback={null}>
+                    <Suspense fallback={null}>
                       <PerformanceOverlay />
-                    </ReactSuspense>
+                    </Suspense>
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <EnhancedAuthProvider>
                         <AnalyticsInitializer />
                         {/* Service integration tracking - requires Router context */}
-                        <ReactSuspense fallback={null}>
+                        <Suspense fallback={null}>
                           <ServiceIntegrationTracker />
-                        </ReactSuspense>
+                        </Suspense>
                         <TourProvider>
                           {/* Role switch protection */}
-                          <ReactSuspense fallback={null}>
+                          <Suspense fallback={null}>
                             <RoleSwitchProtection />
-                          </ReactSuspense>
+                          </Suspense>
                           <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
                             <Routes>
                               {AppRoutes()}
@@ -153,7 +147,7 @@ const App = () => {
                     </BrowserRouter>
                   </TooltipProvider>
                 </MobileOptimizationsProvider>
-              </ReactSuspense>
+              </Suspense>
             </DemoModeProvider>
           </SubscriptionProvider>
         </QueryClientProvider>
