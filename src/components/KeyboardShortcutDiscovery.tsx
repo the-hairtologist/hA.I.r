@@ -25,6 +25,12 @@ export const KeyboardShortcutDiscovery = () => {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
+    // CRITICAL: Never show on landing page (/) or auth pages
+    const currentPath = window.location.pathname;
+    if (currentPath === '/' || currentPath === '/auth' || currentPath === '/install') {
+      return;
+    }
+
     // Show hint after 5 seconds if not dismissed
     const hasSeenHint = localStorage.getItem("keyboard-hint-seen");
     if (hasSeenHint || dismissed) return;
@@ -46,7 +52,7 @@ export const KeyboardShortcutDiscovery = () => {
 
   return (
     <Card className={cn(
-      "fixed bottom-4 right-4 z-50 max-w-sm",
+      "fixed bottom-24 left-4 z-40 max-w-sm lg:bottom-6 lg:left-auto lg:right-24",
       "brutal-border brutal-shadow-md",
       "animate-slide-in-right"
     )}>

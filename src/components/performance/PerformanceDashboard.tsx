@@ -1,20 +1,39 @@
 /**
  * Performance Dashboard
  * Displays real-time performance metrics for debugging
+ * DEV ONLY - Never shows in production or on landing/auth pages
  */
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Activity, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Activity, Zap, X } from 'lucide-react';
 import { webVitalsMonitor } from '@/lib/performance/webVitals';
 import { customMetrics } from '@/lib/performance/customMetrics';
 
 export const PerformanceDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState(webVitalsMonitor.getMetrics());
   const [customMeasures, setCustomMeasures] = useState(customMetrics.getMeasures());
+  const [isVisible, setIsVisible] = useState(false);
+
+  // CRITICAL: Only show in dev mode, exclude landing/auth pages
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+
+    const currentPath = window.location.pathname;
+    if (currentPath === '/' || currentPath === '/auth' || currentPath === '/install') {
+      return;
+    }
+    
+    // Auto-show after 3 seconds on app pages
+    const timer = setTimeout(() => setIsVisible(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
+    if (!isVisible) return;
+
     // Update metrics every 2 seconds
     const interval = setInterval(() => {
       setMetrics(webVitalsMonitor.getMetrics());
@@ -22,7 +41,7 @@ export const PerformanceDashboard: React.FC = () => {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isVisible]);
 
   const getRatingColor = (rating: string) => {
     switch (rating) {
@@ -33,18 +52,28 @@ export const PerformanceDashboard: React.FC = () => {
     }
   };
 
-  if (!import.meta.env.DEV) {
+  if (!import.meta.env.DEV || !isVisible) {
     return null;
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 max-w-md">
-      <Card className="shadow-lg">
+    <div className="fixed top-20 left-4 z-40 max-w-md">
+      <Card className="shadow-lg border-2 border-foreground">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Activity className="h-4 w-4" />
-            Performance Metrics
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Activity className="h-4 w-4" />
+              Performance Metrics
+            </CardTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsVisible(false)}
+              className="h-6 w-6"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Web Vitals */}
@@ -82,6 +111,10 @@ export const PerformanceDashboard: React.FC = () => {
               </div>
             </div>
           )}
+
+          <div className="pt-2 border-t text-xs text-muted-foreground">
+            Dev mode only • Updates every 2s
+          </div>
         </CardContent>
       </Card>
     </div>

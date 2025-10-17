@@ -48,7 +48,13 @@ export const QuickTips = () => {
   const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
-    // Only show to new users (first 3 sessions)
+    // CRITICAL: Never show on landing page (/) or auth pages - only show in app
+    const currentPath = window.location.pathname;
+    if (currentPath === '/' || currentPath === '/auth' || currentPath === '/install') {
+      return;
+    }
+
+    // Only show to new users (first 3 sessions) who are logged in
     const sessionCount = parseInt(localStorage.getItem('session_count') || '0');
     const tipsDismissed = localStorage.getItem('quick_tips_dismissed');
 
@@ -85,7 +91,7 @@ export const QuickTips = () => {
   const Icon = currentTip.icon;
 
   return (
-    <Card className="fixed bottom-20 right-4 w-80 p-4 shadow-xl z-40 animate-slide-in-right">
+    <Card className="fixed bottom-24 left-4 w-80 p-4 shadow-xl z-40 animate-slide-in-right lg:left-auto lg:right-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">

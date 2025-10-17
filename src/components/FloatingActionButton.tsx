@@ -90,7 +90,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      className="fixed right-4 sm:right-6 md:right-8 z-[60] flex flex-col-reverse items-end gap-3"
+      className="fixed left-4 sm:left-6 md:left-auto md:right-8 z-[60] flex flex-col-reverse items-end gap-3"
       style={{
         bottom: 'max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 5.5rem))' // 88px + safe area
       }}

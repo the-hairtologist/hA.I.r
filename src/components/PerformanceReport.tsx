@@ -16,8 +16,13 @@ interface PerformanceMetrics {
 }
 
 export const PerformanceReport = () => {
-  // CRITICAL: Only show in development builds
+  // CRITICAL: Only show in development builds AND exclude landing/auth pages
   if (!import.meta.env.DEV) return null;
+
+  const currentPath = window.location.pathname;
+  if (currentPath === '/' || currentPath === '/auth' || currentPath === '/install') {
+    return null;
+  }
 
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     fcp: null,
@@ -69,7 +74,7 @@ export const PerformanceReport = () => {
   };
 
   return (
-    <Card className="fixed bottom-4 right-4 p-4 w-80 z-50 shadow-lg">
+    <Card className="fixed bottom-6 right-6 p-4 w-80 z-40 shadow-lg border-2 border-foreground lg:bottom-24 lg:right-4">
       <div className="flex items-center gap-2 mb-3">
         <Activity className="h-4 w-4 text-primary" />
         <h3 className="font-semibold text-sm">Performance Metrics</h3>
