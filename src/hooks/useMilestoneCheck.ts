@@ -54,7 +54,7 @@ export const useMilestoneCheck = (clientId?: string, enabled: boolean = true) =>
           filter: `client_id=eq.${clientId}`,
         },
         (payload) => {
-          console.log("New milestone detected:", payload);
+          logger.info("New milestone detected:", payload);
           checkMilestones();
         }
       )

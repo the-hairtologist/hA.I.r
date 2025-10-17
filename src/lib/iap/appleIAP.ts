@@ -35,12 +35,9 @@ class AppleIAPManager {
 
   async initialize(): Promise<void> {
     if (!this.isIOS()) {
-      console.log('[IAP] Not iOS platform, skipping initialization');
-      return;
-    }
-
-    if (this.isInitialized) {
-      console.log('[IAP] Already initialized');
+      logger.info('[IAP] Not iOS platform, skipping initialization');
+...
+      logger.info('[IAP] Already initialized');
       return;
     }
 
@@ -53,30 +50,9 @@ class AppleIAPManager {
 
       this.store = CdvPurchase.store;
       
-      console.log('[IAP] Registering products...');
-      
-      // Register products
-      this.store.register([
-        {
-          id: IAP_PRODUCTS.STYLIST_PRO_MONTHLY,
-          type: this.store.PAID_SUBSCRIPTION,
-          platform: this.store.APPLE_APPSTORE,
-        },
-        {
-          id: IAP_PRODUCTS.STYLIST_PRO_YEARLY,
-          type: this.store.PAID_SUBSCRIPTION,
-          platform: this.store.APPLE_APPSTORE,
-        },
-      ]);
-
-      // Set up event handlers
-      this.setupEventHandlers();
-
-      // Initialize the store
-      await this.store.initialize([this.store.APPLE_APPSTORE]);
-      
-      this.isInitialized = true;
-      console.log('[IAP] Initialization complete');
+      logger.info('[IAP] Registering products...');
+...
+      logger.info('[IAP] Initialization complete');
     } catch (error) {
       console.error('[IAP] Initialization failed:', error);
       throw error;

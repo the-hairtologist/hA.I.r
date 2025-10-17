@@ -114,7 +114,7 @@ export const SmartUpsell = ({ currentService, clientId, stylistId, onAddUpsell, 
 
       if (error) throw error;
       
-      console.log('AI Upsell Suggestion:', data);
+      logger.debug('AI Upsell Suggestion:', data);
       setAiSuggestion(data);
     } catch (error) {
       console.error('Error loading AI suggestion:', error);

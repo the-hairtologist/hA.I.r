@@ -78,7 +78,7 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
           table: 'appointments',
         },
         (payload) => {
-          console.log('Appointment change received:', payload);
+          logger.debug('Appointment change received:', payload);
 
           if (payload.eventType === 'INSERT') {
             setAppointments((prev) => {

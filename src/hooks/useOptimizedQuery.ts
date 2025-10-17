@@ -36,7 +36,7 @@ export const useOptimizedQuery = ({
 
   // Log cache hits for monitoring
   if (result.data && Array.isArray(result.data) && result.data.length > 0) {
-    console.log(`[Query Cache] ${result.data.length} items for`, queryKey);
+    logger.debug(`[Query Cache] ${result.data.length} items for`, queryKey);
   }
 
   return result;

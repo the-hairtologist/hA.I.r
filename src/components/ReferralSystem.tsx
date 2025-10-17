@@ -113,7 +113,7 @@ export const ReferralSystem = () => {
           url: referralLink,
         });
       } catch (error) {
-        console.log("Share cancelled");
+        logger.debug("Share cancelled");
       }
     } else {
       navigator.clipboard.writeText(`${shareText}\n${referralLink}`);

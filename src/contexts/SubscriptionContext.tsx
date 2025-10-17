@@ -114,7 +114,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
       // On iOS, check both Apple IAP and backend
       if (isAppleIAP) {
-        console.log('[Subscription] Checking Apple IAP subscription');
+        logger.debug('[Subscription] Checking Apple IAP subscription');
         const hasActiveIAP = await appleIAP.checkActiveSubscription();
         
         if (hasActiveIAP) {

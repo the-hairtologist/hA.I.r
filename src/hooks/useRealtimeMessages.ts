@@ -63,7 +63,7 @@ export const useRealtimeMessages = (userId?: string) => {
           filter: `recipient_id=eq.${userId}`,
         },
         (payload) => {
-          console.log('Message change received:', payload);
+          logger.debug('Message change received:', payload);
 
           if (payload.eventType === 'INSERT') {
             setMessages((prev) => [payload.new as Message, ...prev]);

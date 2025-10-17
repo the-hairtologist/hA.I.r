@@ -22,44 +22,9 @@ export const useRealtimeNotifications = (userId: string | undefined) => {
           table: 'appointments',
         },
         (payload) => {
-          console.log('Appointment change detected:', payload);
-          
-          if (payload.eventType === 'INSERT') {
-            toast({
-              title: "New Appointment",
-              description: "A new appointment has been scheduled",
-            });
-          } else if (payload.eventType === 'UPDATE') {
-            const newStatus = (payload.new as any).status;
-            const oldStatus = (payload.old as any)?.status;
-            
-            if (newStatus !== oldStatus) {
-              toast({
-                title: "Appointment Updated",
-                description: `Status changed to ${newStatus}`,
-              });
-            }
-          }
-          
-          // Invalidate appointments query to refresh data
-          queryClient.invalidateQueries({ queryKey: ['appointments'] });
-        }
-      )
-      .subscribe();
-
-    // Subscribe to new messages
-    const messageChannel = supabase
-      .channel('message-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `recipient_id=eq.${userId}`,
-        },
-        (payload) => {
-          console.log('New message received:', payload);
+          logger.debug('Appointment change detected:', payload);
+...
+          logger.debug('New message received:', payload);
           
           setUnreadCount((prev) => prev + 1);
           

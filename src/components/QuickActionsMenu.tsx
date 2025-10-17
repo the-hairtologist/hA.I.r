@@ -82,7 +82,7 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
         break;
 
       default:
-        console.log("Unknown action:", action);
+        logger.warn("Unknown action:", action);
     }
   };
 

@@ -78,7 +78,7 @@ export const ShareButtons = ({ url, title, description }: ShareButtonsProps) => 
           url: fullUrl,
         });
       } catch (err) {
-        console.log('Share cancelled');
+        logger.debug('Share cancelled');
       }
     }
   };

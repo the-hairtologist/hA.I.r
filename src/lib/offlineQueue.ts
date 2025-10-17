@@ -33,24 +33,9 @@ class OfflineQueue {
       if (stored) {
         this.queue = JSON.parse(stored);
         this.cleanupOldItems();
-        console.log(`Loaded ${this.queue.length} queued actions`);
-      }
-    } catch (error) {
-      console.error('Failed to load offline queue:', error);
-      this.queue = [];
-    }
-  }
-
-  /**
-   * Remove items older than MAX_QUEUE_AGE_DAYS
-   */
-  private cleanupOldItems() {
-    const cutoffTime = Date.now() - (MAX_QUEUE_AGE_DAYS * 24 * 60 * 60 * 1000);
-    const originalLength = this.queue.length;
-    this.queue = this.queue.filter(item => item.timestamp > cutoffTime);
-    
-    if (this.queue.length < originalLength) {
-      console.log(`Cleaned up ${originalLength - this.queue.length} old queued items`);
+        logger.info(`Loaded ${this.queue.length} queued actions`);
+...
+      logger.info(`Cleaned up ${originalLength - this.queue.length} old queued items`);
       this.saveQueue();
     }
   }
