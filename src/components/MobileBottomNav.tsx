@@ -249,6 +249,7 @@ export const MobileBottomNav = () => {
                     className={cn(
                       "flex items-center justify-center rounded-2xl",
                       "transition-all duration-200",
+                      "retro-nav-icon-container", // Retro styling
                       // Enhanced Home highlight
                       item.highlight && !active && [
                         "w-12 h-12", // Larger highlight container
@@ -260,6 +261,7 @@ export const MobileBottomNav = () => {
                         "bg-gradient-to-br",
                         item.gradient,
                         "shadow-lg",
+                        "active", // Active state for retro styling
                         item.highlight ? "scale-115" : "scale-110"
                       ],
                       !active && !item.highlight && "hover:bg-accent/50"
