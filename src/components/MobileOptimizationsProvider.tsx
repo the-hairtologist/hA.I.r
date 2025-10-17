@@ -13,9 +13,8 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
   }, [isOnline]);
 
   const warmUpCache = async () => {
-    // Prefetch critical data from Supabase
+    // Prefetch critical data - non-blocking
     try {
-      // Small delay to ensure env vars are loaded
       await new Promise(resolve => setTimeout(resolve, 500));
       
       console.log('🔥 Warming up cache...');
@@ -24,29 +23,23 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
       if (!supabaseUrl || !supabaseKey) {
-        console.warn('Supabase credentials not available yet, will retry on next load');
+        console.warn('Credentials not available, skipping cache warmup');
         return;
       }
       
-      // This triggers cache population for critical tables
-      await Promise.allSettled([
-        fetch(`${supabaseUrl}/rest/v1/client_profiles?select=*&limit=50`, {
-          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-        }),
-        fetch(`${supabaseUrl}/rest/v1/appointments?select=*&limit=100`, {
-          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-        }),
-        fetch(`${supabaseUrl}/rest/v1/formulas?select=*&limit=50`, {
-          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-        }),
-        fetch(`${supabaseUrl}/rest/v1/stylist_profiles?select=*&limit=50`, {
-          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-        })
-      ]);
+      // Prefetch critical tables in background
+      const tables = ['client_profiles', 'appointments', 'formulas', 'stylist_profiles'];
+      await Promise.allSettled(
+        tables.map(table => 
+          fetch(`${supabaseUrl}/rest/v1/${table}?select=*&limit=50`, {
+            headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+          })
+        )
+      );
       
       console.log('✅ Cache warmed successfully');
     } catch (error) {
-      console.warn('Cache warming failed:', error);
+      console.warn('Cache warming failed (non-critical):', error);
     }
   };
 

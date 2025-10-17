@@ -82,8 +82,8 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
   if (!analyticsInitialized) return;
 
   // Google Analytics 4
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'page_view', {
+  if (typeof window !== 'undefined' && 'gtag' in window) {
+    (window as unknown as { gtag: Function }).gtag('event', 'page_view', {
       page_path: pagePath,
       page_title: pageTitle || document.title,
       platform: Platform.platform,
@@ -109,8 +109,8 @@ export const trackEvent = (
   };
 
   // Google Analytics 4
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', eventName, eventData);
+  if (typeof window !== 'undefined' && 'gtag' in window) {
+    (window as unknown as { gtag: Function }).gtag('event', eventName, eventData);
   }
 
   logger.debug('Event tracked', 'analytics', { eventName, eventData });
@@ -123,8 +123,8 @@ export const setUserProperties = (userId: string, properties?: Record<string, an
   if (!analyticsInitialized) return;
 
   // Google Analytics 4
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('set', 'user_properties', {
+  if (typeof window !== 'undefined' && 'gtag' in window) {
+    (window as unknown as { gtag: Function }).gtag('set', 'user_properties', {
       user_id: userId,
       ...properties,
     });
@@ -140,8 +140,8 @@ export const identifyUser = (userId: string, traits?: Record<string, any>) => {
   if (!analyticsInitialized) return;
 
   // Google Analytics 4
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('config', GA4_MEASUREMENT_ID, {
+  if (typeof window !== 'undefined' && 'gtag' in window) {
+    (window as unknown as { gtag: Function }).gtag('config', GA4_MEASUREMENT_ID, {
       user_id: userId,
       ...traits,
     });
@@ -209,9 +209,9 @@ class Analytics {
   }
 
   /**
-   * Track formula generation (legacy)
+   * Track formula generation
    */
-  formulaGeneratedLegacy(colorLine?: string): void {
+  formulaGeneratedWithColor(colorLine?: string): void {
     this.track('formula_generated', { color_line: colorLine });
   }
 
@@ -353,18 +353,6 @@ class Analytics {
     this.track('portfolio_upload');
   }
 
-  // Legacy appointment tracking methods (use new versions above)
-  appointmentBookedLegacy(stylistId: string, serviceId: string): void {
-    this.track('appointment_booked', { stylist_id: stylistId, service_id: serviceId });
-  }
-
-  appointmentCanceledLegacy(appointmentId: string): void {
-    this.track('appointment_canceled', { appointment_id: appointmentId });
-  }
-
-  appointmentRescheduledLegacy(appointmentId: string): void {
-    this.track('appointment_rescheduled', { appointment_id: appointmentId });
-  }
 
   // Subscriptions
   subscriptionStarted(tier: string): void {

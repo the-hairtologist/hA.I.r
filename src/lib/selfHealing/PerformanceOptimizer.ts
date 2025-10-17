@@ -5,6 +5,7 @@
 
 import { queryCache } from '@/lib/data/QueryCache';
 import { realtimeManager } from '@/lib/realtime/SubscriptionManager';
+import { cacheOptimizer } from './CacheOptimizer';
 import { logger } from '@/lib/logger';
 
 interface OptimizationResult {
@@ -100,21 +101,17 @@ class PerformanceOptimizerSystem {
   }
 
   /**
-   * Cleanup memory
+   * Cleanup memory using intelligent cache optimizer
    */
   private async cleanupMemory(): Promise<void> {
     try {
-      // Clear old cache entries
-      const oldSize = queryCache.getStats().size;
-      
-      // Clear cache entries older than 10 minutes
-      queryCache.clear();
+      const result = await cacheOptimizer.optimize();
 
       this.optimizations.push({
         action: 'Memory Cleanup',
         impact: 'medium',
         applied: true,
-        details: `Cleared ${oldSize} cache entries`
+        details: `Cleaned ${result.cleaned} entries, retained ${result.retained}`
       });
     } catch (error) {
       this.optimizations.push({

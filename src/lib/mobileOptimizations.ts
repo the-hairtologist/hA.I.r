@@ -31,25 +31,15 @@ export const preventElasticScroll = () => {
  */
 export const enableSmoothScrolling = () => {
   if (Platform.isMobile) {
-    (document.documentElement.style as any).webkitOverflowScrolling = 'touch';
+    const style = document.documentElement.style as CSSStyleDeclaration & { webkitOverflowScrolling?: string };
+    style.webkitOverflowScrolling = 'touch';
   }
 };
 
 /**
- * Prevent zoom on input focus (mobile) - DEPRECATED
- * Note: This function is kept for backwards compatibility but should not be used
- * as it impacts accessibility. Modern browsers handle input zoom appropriately.
+ * Ensure zoom is enabled (for accessibility)
  */
-export const preventInputZoom = () => {
-  // DEPRECATED: Disabling zoom hurts accessibility
-  // Modern mobile browsers handle input zoom intelligently
-  console.warn('preventInputZoom is deprecated and should not be used for accessibility reasons');
-};
-
-/**
- * Re-enable zoom (call when input loses focus)
- */
-export const enableZoom = () => {
+export const ensureZoomEnabled = () => {
   const viewportMeta = document.querySelector('meta[name="viewport"]');
   if (viewportMeta) {
     viewportMeta.setAttribute(
@@ -72,7 +62,13 @@ export const getOptimizedImageSrc = (baseSrc: string, pixelRatio: number = windo
  * Detect slow connection and adjust quality
  */
 export const isSlowConnection = (): boolean => {
-  const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+  type NetworkConnection = {
+    effectiveType?: string;
+    saveData?: boolean;
+  };
+  const connection = (navigator as unknown as { connection?: NetworkConnection; mozConnection?: NetworkConnection; webkitConnection?: NetworkConnection }).connection || 
+                     (navigator as unknown as { mozConnection?: NetworkConnection }).mozConnection || 
+                     (navigator as unknown as { webkitConnection?: NetworkConnection }).webkitConnection;
   if (!connection) return false;
   
   return (
@@ -131,15 +127,8 @@ export const setupInputHandlers = () => {
 
   document.addEventListener('focusin', (e) => {
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-      // Allow zoom for better accessibility
-      enableZoom();
-    }
-  });
-
-  document.addEventListener('focusout', (e) => {
-    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-      // Keep zoom enabled for accessibility
-      // Only disable if specifically needed
+      // Ensure zoom is enabled for accessibility
+      ensureZoomEnabled();
     }
   });
 };
@@ -150,7 +139,7 @@ export const setupInputHandlers = () => {
 export const isStandalone = (): boolean => {
   return (
     window.matchMedia('(display-mode: standalone)').matches ||
-    (window.navigator as any).standalone === true ||
+    (window.navigator as Navigator & { standalone?: boolean }).standalone === true ||
     document.referrer.includes('android-app://')
   );
 };
@@ -181,8 +170,7 @@ export const getAnimationDuration = (baseDuration: number): number => {
 export const mobileOptimizations = {
   preventElasticScroll,
   enableSmoothScrolling,
-  preventInputZoom,
-  enableZoom,
+  ensureZoomEnabled,
   getOptimizedImageSrc,
   isSlowConnection,
   prefetchRoutes,
