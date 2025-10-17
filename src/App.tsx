@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes } from "react-router-dom";
 import { useEffect, Suspense } from "react";
+import { HelmetProvider } from 'react-helmet-async';
 import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { GlobalErrorBoundary } from "@/components/errors/GlobalErrorBoundary";
@@ -17,6 +18,7 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { DemoModeProvider } from "@/components/demo/DemoMode";
 import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { PerformanceReport } from "@/components/PerformanceReport";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { initAnalytics } from "@/lib/analytics";
 import { initSentry } from "@/lib/monitoring";
@@ -100,20 +102,22 @@ const AnalyticsInitializer = () => {
 
 const App = () => {
   return (
-    <GlobalErrorBoundary>
-      <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
-          <SubscriptionProvider>
-            <DemoModeProvider>
-              <ReactSuspense fallback={null}>
-                <MobileOptimizationsProvider>
-                  <TooltipProvider>
-                    <OfflineIndicator />
-                    <Toaster />
-                    <Sonner />
-                    <CookieConsent />
-                    {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
-                    <GlobalAnnouncer />
+    <HelmetProvider>
+      <GlobalErrorBoundary>
+        <ErrorBoundary>
+          <QueryClientProvider client={queryClient}>
+            <SubscriptionProvider>
+              <DemoModeProvider>
+                <ReactSuspense fallback={null}>
+                  <MobileOptimizationsProvider>
+                    <TooltipProvider>
+                      <OfflineIndicator />
+                      <Toaster />
+                      <Sonner />
+                      <CookieConsent />
+                      <PerformanceReport />
+                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
+                      <GlobalAnnouncer />
                     {/* Performance monitoring (dev only) */}
                     <ReactSuspense fallback={null}>
                       <PerformanceMonitor />
@@ -150,6 +154,7 @@ const App = () => {
         </QueryClientProvider>
       </ErrorBoundary>
     </GlobalErrorBoundary>
+    </HelmetProvider>
   );
 };
 

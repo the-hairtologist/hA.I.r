@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Scissors, Calendar, Palette, Smartphone, Download } from "lucide-react";
+import { SEO } from "@/components/SEO";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
@@ -14,6 +15,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background scroll-smooth">
+      <SEO 
+        title="hA.I.r - AI-Powered Salon Assistant | Transform Every Color Service"
+        description="Professional color formulas in seconds. AI-powered booking, client management, and formula generation for hair stylists. No guesswork, just flawless results every time."
+        keywords="hair salon software, color formula generator, salon booking, stylist app, hair color AI, salon management, professional hair color, salon assistant"
+      />
+      
       {/* Skip to main content for accessibility */}
       <a 
         href="#main-content" 
