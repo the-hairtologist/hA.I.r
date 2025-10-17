@@ -16,6 +16,9 @@ interface PerformanceMetrics {
 }
 
 export const PerformanceReport = () => {
+  // CRITICAL: Only show in development builds
+  if (!import.meta.env.DEV) return null;
+
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     fcp: null,
     lcp: null,
@@ -25,9 +28,6 @@ export const PerformanceReport = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Only show in development
-    if (process.env.NODE_ENV !== 'development') return;
-
     const checkPerformance = () => {
       if ('PerformanceObserver' in window) {
         // First Contentful Paint
@@ -59,7 +59,7 @@ export const PerformanceReport = () => {
     setIsVisible(true);
   }, []);
 
-  if (!isVisible || process.env.NODE_ENV !== 'development') return null;
+  if (!isVisible) return null;
 
   const getScoreColor = (value: number | null, good: number, poor: number) => {
     if (!value) return 'secondary';
