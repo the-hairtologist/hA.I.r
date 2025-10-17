@@ -208,7 +208,7 @@ export const MobileBottomNav = () => {
         {isAdmin && (
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500 to-transparent animate-pulse-subtle" />
         )}
-        <div className="flex justify-evenly items-stretch h-16 px-3">{/* Better spacing with justify-evenly */}
+        <div className="flex justify-evenly items-stretch h-16 px-2">{/* Better spacing with justify-evenly and reduced padding */}
           {items.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);

@@ -55,7 +55,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-24 sm:py-32 overflow-hidden min-h-[90vh] flex items-center" style={{
+        <section className="relative bg-primary py-16 sm:py-24 overflow-hidden min-h-[65vh] sm:min-h-[85vh] flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -103,7 +103,7 @@ const Index = () => {
         </section>
 
         {/* How It Works - Clean white background */}
-        <section className="py-20 bg-background" style={{
+        <section className="py-12 sm:py-20 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
@@ -114,12 +114,12 @@ const Index = () => {
         </section>
 
         {/* Testimonial Section - Blue background */}
-        <section className="py-20 bg-accent">
+        <section className="py-12 sm:py-20 bg-accent">
           <SingleTestimonial />
         </section>
 
         {/* FOMO/CTA Section - Bold yellow */}
-        <section className="py-20 bg-secondary" style={{
+        <section className="py-12 sm:py-20 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -130,13 +130,13 @@ const Index = () => {
         </section>
 
         {/* FAQ Section - Blue background */}
-        <section className="py-20 bg-accent">
+        <section className="py-12 sm:py-20 bg-accent">
           <MinimalFAQ />
         </section>
       </main>
 
       {/* Stats Section - Yellow background for excitement */}
-      <section className="py-16 bg-secondary border-t-[4px] border-black" style={{
+      <section className="py-12 sm:py-16 bg-secondary border-t-[4px] border-black" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)

@@ -30,6 +30,8 @@ import { AppointmentTimerWidget } from "@/components/AppointmentTimerWidget";
 import { BirthdayAlertsWidget } from "@/components/BirthdayAlertsWidget";
 import { StatsToggleButton } from "@/components/admin/StatsToggleButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
+import { useResponsive } from "@/hooks/useResponsive";
+import { MobileDashboardDrawer } from "@/components/dashboard/MobileDashboardDrawer";
 
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
@@ -74,6 +76,7 @@ const Dashboard = () => {
   const { user: authUser, loading: authLoading } = useAuth();
   const { roles, isAdmin, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
+  const { isMobile } = useResponsive();
   
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
@@ -832,19 +835,86 @@ const Dashboard = () => {
             items={sections.map(s => s.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-6 md:space-y-8">
-              {sections.map((section, index) => (
-                <DraggableSection
-                  key={section.id}
-                  section={section}
-                  isEditMode={isEditMode}
-                  onToggle={() => toggleSection(section.id)}
-                  animationDelay={`${350 + index * 50}ms`}
-                >
-                  {renderSection(section)}
-                </DraggableSection>
-              ))}
-            </div>
+            {isMobile && !isEditMode ? (
+              // Mobile 3-tier layout
+              <>
+                {/* Tier 1: Primary sections - always visible */}
+                <div className="space-y-3">
+                  {sections
+                    .filter(s => 
+                      ['appointment-timer', 'next-appointment', 'kpi-cards', 'quick-actions', 'recent-activity'].includes(s.id)
+                    )
+                    .slice(0, 4)
+                    .map((section, index) => (
+                      <DraggableSection
+                        key={section.id}
+                        section={section}
+                        isEditMode={false}
+                        onToggle={() => toggleSection(section.id)}
+                        animationDelay={`${350 + index * 50}ms`}
+                      >
+                        {renderSection(section)}
+                      </DraggableSection>
+                    ))}
+                </div>
+
+                {/* Tier 2: Secondary sections - collapsible */}
+                {sections.filter(s => 
+                  ['weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
+                ).length > 0 && (
+                  <div className="space-y-3 mt-4">
+                    {sections
+                      .filter(s => 
+                        ['weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
+                      )
+                      .map((section, index) => (
+                        <DraggableSection
+                          key={section.id}
+                          section={section}
+                          isEditMode={false}
+                          onToggle={() => toggleSection(section.id)}
+                          animationDelay={`${550 + index * 50}ms`}
+                        >
+                          {renderSection(section)}
+                        </DraggableSection>
+                      ))}
+                  </div>
+                )}
+
+                {/* Tier 3: Drawer sections - "More Stats" */}
+                {sections.filter(s => 
+                  !['appointment-timer', 'next-appointment', 'kpi-cards', 'quick-actions', 'recent-activity',
+                    'weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
+                ).length > 0 && (
+                  <MobileDashboardDrawer
+                    sections={sections.filter(s => 
+                      !['appointment-timer', 'next-appointment', 'kpi-cards', 'quick-actions', 'recent-activity',
+                        'weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
+                    )}
+                    renderSection={(section) => (
+                      <div key={section.id}>
+                        {renderSection(section)}
+                      </div>
+                    )}
+                  />
+                )}
+              </>
+            ) : (
+              // Desktop or Edit Mode: Show all sections
+              <div className="space-y-4 sm:space-y-6">
+                {sections.map((section, index) => (
+                  <DraggableSection
+                    key={section.id}
+                    section={section}
+                    isEditMode={isEditMode}
+                    onToggle={() => toggleSection(section.id)}
+                    animationDelay={`${350 + index * 50}ms`}
+                  >
+                    {renderSection(section)}
+                  </DraggableSection>
+                ))}
+              </div>
+            )}
           </SortableContext>
         </DndContext>
 
