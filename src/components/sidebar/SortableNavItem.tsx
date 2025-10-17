@@ -82,8 +82,8 @@ export function SortableNavItem({
               </div>
             )}
             <div className="relative flex-shrink-0">
-              <div className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${item.gradient}`}>
-                <item.icon className="h-5 w-5 text-on-surface-primary" />
+              <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${item.gradient}`}>
+                <item.icon className="h-6 w-6 text-on-surface-primary" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
@@ -127,8 +127,8 @@ export function SortableNavItem({
               </div>
             )}
             <div className="relative flex-shrink-0">
-              <div className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${item.gradient}`}>
-                <item.icon className="h-5 w-5 text-on-surface-primary" />
+              <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${item.gradient}`}>
+                <item.icon className="h-6 w-6 text-on-surface-primary" />
               </div>
               {notificationCount !== undefined && notificationCount > 0 && (
                 <NotificationDot count={notificationCount} size="sm" />
@@ -177,10 +177,10 @@ export function SortableNavItem({
                       }`}
                     >
                       <div className="relative flex-shrink-0">
-                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${child.gradient} ${
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${child.gradient} ${
                           isChildActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'
                         }`}>
-                          <child.icon className="h-4 w-4 text-on-surface-primary" />
+                          <child.icon className="h-5 w-5 text-on-surface-primary" />
                         </div>
                       </div>
                       <span className={`text-sm truncate ${child.color || 'text-foreground'}`}>

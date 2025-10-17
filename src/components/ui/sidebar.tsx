@@ -14,9 +14,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = "clamp(14rem, 18vw, 18rem)"; // Responsive: 224px-288px
-const SIDEBAR_WIDTH_MOBILE = "18rem";
-const SIDEBAR_WIDTH_ICON = "clamp(3.5rem, 5vw, 4rem)"; // Responsive: 56px-64px for better visibility
+const SIDEBAR_WIDTH = "clamp(16rem, 20vw, 20rem)"; // Responsive: 256px-320px (increased)
+const SIDEBAR_WIDTH_MOBILE = "20rem";
+const SIDEBAR_WIDTH_ICON = "clamp(4.5rem, 6vw, 5rem)"; // Responsive: 72px-80px for better visibility (increased)
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
 type SidebarContext = {

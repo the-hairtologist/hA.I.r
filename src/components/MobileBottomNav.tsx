@@ -220,7 +220,7 @@ export const MobileBottomNav = () => {
                 disabled={item.disabled}
                 className={cn(
                   "relative flex flex-col items-center justify-center flex-1",
-                  "min-w-[60px] min-h-[60px] gap-0.5",
+                  "min-w-[70px] min-h-[68px] gap-1", // Increased from min-w-[60px] min-h-[60px] gap-0.5
                   "transition-all duration-200 ease-out",
                   "active:scale-95",
                   "touch-manipulation",
@@ -252,11 +252,11 @@ export const MobileBottomNav = () => {
                       "retro-nav-icon-container", // Retro styling
                       // Enhanced Home highlight
                       item.highlight && !active && [
-                        "w-12 h-12", // Larger highlight container
+                        "w-14 h-14", // Larger highlight container (increased from w-12 h-12)
                         "bg-gradient-to-br from-primary/10 to-secondary/10",
                         "ring-1 ring-primary/20"
                       ],
-                      !item.highlight && "w-11 h-11", // Increased from w-10 h-10
+                      !item.highlight && "w-13 h-13", // Increased from w-11 h-11 (52px)
                       active && [
                         "bg-gradient-to-br",
                         item.gradient,
@@ -269,7 +269,7 @@ export const MobileBottomNav = () => {
                   >
                     <Icon 
                       className={cn(
-                        "h-6 w-6 transition-all duration-200",
+                        "h-7 w-7 transition-all duration-200", // Increased from h-6 w-6 (28px)
                         active ? "text-on-surface-primary" : "text-muted-foreground",
                         item.highlight && !active && "text-primary/60"
                       )} 
