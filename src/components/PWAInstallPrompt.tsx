@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { SparkleButton } from "@/components/ui/sparkle-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Download, X } from "lucide-react";
 import { toast } from "sonner";
@@ -65,14 +66,14 @@ export function PWAInstallPrompt() {
                 Get instant access with one tap. Works offline!
               </p>
               <div className="flex gap-2">
-                <Button
+                <SparkleButton
                   onClick={handleInstall}
-                  className="gap-2"
-                  size="sm"
+                  variant="primary"
+                  className="py-2 px-4 text-sm"
                 >
                   <Download className="h-4 w-4" />
                   Install Now
-                </Button>
+                </SparkleButton>
                 <Button
                   onClick={handleDismiss}
                   variant="outline"

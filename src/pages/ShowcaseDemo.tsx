@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { SparkleButton } from "@/components/ui/sparkle-button";
 import { Badge } from "@/components/ui/badge";
 import { SEO } from "@/components/SEO";
 import { FeatureShowcase } from "@/components/showcase/FeatureShowcase";
@@ -120,14 +121,14 @@ export default function ShowcaseDemo() {
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <div className="mb-4">
-            <Button 
+            <SparkleButton 
               variant="outline"
               onClick={() => navigate("/install")}
-              className="gap-2"
+              className="py-2 px-4"
             >
               <Download className="h-4 w-4" />
               Install App
-            </Button>
+            </SparkleButton>
           </div>
           <p>© 2025 hA.I.r. All rights reserved.</p>
           <p className="mt-2">
