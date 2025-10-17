@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { OfflineStatusBar } from './OfflineStatusBar';
 import { useOfflineStatus } from '@/hooks/useOfflineStatus';
+import { logger } from '@/lib/logger';
 
 export const MobileOptimizationsProvider = ({ children }: { children: React.ReactNode }) => {
   const { isOnline } = useOfflineStatus();
@@ -17,7 +18,7 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      console.log('🔥 Warming up cache...');
+      logger.info('Warming up cache...');
       
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -37,7 +38,7 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
         )
       );
       
-      console.log('✅ Cache warmed successfully');
+      logger.info('Cache warmed successfully');
     } catch (error) {
       console.warn('Cache warming failed (non-critical):', error);
     }

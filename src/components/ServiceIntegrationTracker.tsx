@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useErrorTracking } from '@/hooks/useErrorTracking';
 import { performanceTracker } from '@/lib/monitoring/PerformanceTracker';
 import { selfHealing } from '@/lib/selfHealing';
+import { logger } from '@/lib/logger';
 
 /**
  * Global service integration tracker
@@ -17,7 +18,7 @@ export const ServiceIntegrationTracker = () => {
       performanceTracker.initialize();
       await selfHealing.initialize();
       
-      console.log('[Services] All integrations initialized');
+      logger.info('[Services] All integrations initialized');
     };
 
     init();

@@ -20,6 +20,7 @@
 
 import * as Sentry from "@sentry/react";
 import type { ReactNode } from 'react';
+import { logger } from '@/lib/logger';
 
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || '';
 const ENVIRONMENT = import.meta.env.DEV ? 'development' : 'production';
@@ -32,7 +33,7 @@ let sentryInitialized = false;
  */
 export const initSentry = () => {
   if (sentryInitialized || !SENTRY_DSN) {
-    console.log('Sentry not configured - error monitoring disabled');
+    logger.info('Sentry not configured - error monitoring disabled');
     return;
   }
 
