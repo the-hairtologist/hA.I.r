@@ -175,10 +175,7 @@ export default defineConfig(({ mode }) => ({
           // Supabase Auth - never cache
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/auth/i,
-            handler: 'NetworkOnly',
-            options: {
-              networkTimeoutSeconds: 10
-            }
+            handler: 'NetworkOnly'
           },
           // Images - cache for 30 days
           {
