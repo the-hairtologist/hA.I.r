@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FeatureShowcase } from "@/components/showcase/FeatureShowcase";
-import { Scissors, ArrowRight, X, Sparkles } from "lucide-react";
+import { Scissors, ArrowRight, X, Sparkles, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ShowcaseDemo() {
@@ -112,6 +112,16 @@ export default function ShowcaseDemo() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+          <div className="mb-4">
+            <Button 
+              variant="outline"
+              onClick={() => navigate("/install")}
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Install App
+            </Button>
+          </div>
           <p>© 2025 hA.I.r. All rights reserved.</p>
           <p className="mt-2">
             No credit card required • Cancel anytime • 14-day free trial

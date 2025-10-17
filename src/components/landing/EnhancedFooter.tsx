@@ -83,15 +83,27 @@ export const EnhancedFooter = () => {
             
             {/* App Badges */}
             <div className="flex flex-wrap gap-2 pt-3">
-              <div className="w-11 h-11 sm:w-12 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+              <button 
+                onClick={() => navigate("/install")}
+                className="w-11 h-11 sm:w-12 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                aria-label="Install App"
+              >
                 <Smartphone className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
-              </div>
-              <div className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+              </button>
+              <button 
+                onClick={() => navigate("/install")}
+                className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                aria-label="Install on iOS"
+              >
                 <span className="font-pixel text-xs sm:text-sm text-secondary-foreground">iOS</span>
-              </div>
-              <div className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+              </button>
+              <button 
+                onClick={() => navigate("/install")}
+                className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                aria-label="Install on Android"
+              >
                 <span className="font-pixel text-xs sm:text-sm text-accent-foreground">ANDROID</span>
-              </div>
+              </button>
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Scissors, Calendar, Palette, Smartphone } from "lucide-react";
+import { Scissors, Calendar, Palette, Smartphone, Download } from "lucide-react";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
@@ -78,6 +78,18 @@ const Index = () => {
               <p className="text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase animate-fade-in" style={{ animationDelay: '300ms' }}>
                 Free Trial • No Credit Card Required
               </p>
+
+              <div className="pt-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/install")}
+                  className="font-pixel text-xs uppercase border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-0.5 rounded-none bg-background text-foreground hover:bg-background/90"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Install App
+                </Button>
+              </div>
             </div>
           </div>
           <ScrollIndicator />
