@@ -187,7 +187,7 @@ export const PrivacyConsentDialog = ({
                 </p>
                 <p className="mt-2">
                   Read our full{" "}
-                  <a href="/privacy" target="_blank" className="text-primary hover:underline">
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                     Privacy Policy
                   </a>
                 </p>
