@@ -8,31 +8,32 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SubscriptionGate } from '@/components/SubscriptionGate';
 import { DashboardErrorBoundary } from '@/components/DashboardErrorBoundary';
 import { lazyWithRetry } from '@/lib/performance/ReactOptimizations';
+import { AdminPages, StylistPages, ClientPages, SharedPages } from '@/lib/performance/CodeSplitting';
 
 // Lazy load pages with retry logic for failed chunks
 const Index = lazyWithRetry(() => import('@/pages/Index'));
 const Auth = lazyWithRetry(() => import('@/pages/Auth'));
 const Dashboard = lazyWithRetry(() => import('@/pages/Dashboard'));
 const StylistDiscovery = lazyWithRetry(() => import('@/pages/StylistDiscovery'));
-const Formulas = lazyWithRetry(() => import('@/pages/Formulas'));
-const Appointments = lazyWithRetry(() => import('@/pages/Appointments'));
-const BookAppointment = lazyWithRetry(() => import('@/pages/BookAppointment'));
+const Formulas = StylistPages.Formulas; // Role-based code splitting
+const Appointments = SharedPages.Appointments; // Role-based code splitting
+const BookAppointment = ClientPages.BookAppointment; // Role-based code splitting
 const StylistProfile = lazyWithRetry(() => import('@/pages/StylistProfile'));
 const ClientRequests = lazyWithRetry(() => import('@/pages/ClientRequests'));
 const ClientDiscovery = lazyWithRetry(() => import('@/pages/ClientDiscovery'));
-const Reviews = lazyWithRetry(() => import('@/pages/Reviews'));
-const Messages = lazyWithRetry(() => import('@/pages/Messages'));
+const Reviews = StylistPages.Reviews; // Role-based code splitting
+const Messages = SharedPages.Messages; // Role-based code splitting
 const ScheduleManagement = lazyWithRetry(() => import('@/pages/ScheduleManagement'));
 const Services = lazyWithRetry(() => import('@/pages/Services'));
-const Settings = lazyWithRetry(() => import('@/pages/Settings'));
-const Finance = lazyWithRetry(() => import('@/pages/Finance'));
+const Settings = SharedPages.Settings; // Role-based code splitting
+const Finance = StylistPages.Finance; // Role-based code splitting
 const Products = lazyWithRetry(() => import('@/pages/Products'));
 const Resources = lazyWithRetry(() => import('@/pages/Resources'));
 const Knowledge = lazyWithRetry(() => import('@/pages/Knowledge'));
-const QuickFormula = lazyWithRetry(() => import('@/pages/QuickFormula'));
-const AIKnowledge = lazyWithRetry(() => import('@/pages/AIAssistant'));
-const Portfolio = lazyWithRetry(() => import('@/pages/Portfolio'));
-const Clients = lazyWithRetry(() => import('@/pages/Clients'));
+const QuickFormula = StylistPages.QuickFormula; // Role-based code splitting
+const AIKnowledge = SharedPages.AIAssistant; // Role-based code splitting
+const Portfolio = StylistPages.Portfolio; // Role-based code splitting
+const Clients = StylistPages.Clients; // Role-based code splitting
 const AccessCodes = lazyWithRetry(() => import('@/pages/AccessCodes'));
 const Integrations = lazyWithRetry(() => import('@/pages/Integrations'));
 const DeepLinkAppointment = lazyWithRetry(() => import('@/pages/DeepLinkAppointment'));
@@ -44,18 +45,18 @@ const NotFound = lazyWithRetry(() => import('@/pages/NotFound'));
 const ServerError = lazyWithRetry(() => import('@/pages/ServerError'));
 const Referrals = lazyWithRetry(() => import('@/pages/Referrals'));
 const SystemHealth = lazyWithRetry(() => import('@/pages/SystemHealth'));
-const AdminCommandCenter = lazyWithRetry(() => import('@/pages/AdminCommandCenter'));
-const AdminUsers = lazyWithRetry(() => import('@/pages/AdminUsers'));
-const AuditLogs = lazyWithRetry(() => import('@/pages/AuditLogs'));
+const AdminCommandCenter = AdminPages.CommandCenter; // Role-based code splitting
+const AdminUsers = AdminPages.Users; // Role-based code splitting
+const AuditLogs = AdminPages.AuditLogs; // Role-based code splitting
 const ActivityLog = lazyWithRetry(() => import('@/pages/admin/ActivityLog'));
 const AppDirectory = lazyWithRetry(() => import('@/pages/AppDirectory'));
 const DMCA = lazyWithRetry(() => import('@/pages/DMCA'));
 const Accessibility = lazyWithRetry(() => import('@/pages/Accessibility'));
-const Notifications = lazyWithRetry(() => import('@/pages/Notifications'));
-const ClientReviews = lazyWithRetry(() => import('@/pages/ClientReviews'));
+const Notifications = SharedPages.Notifications; // Role-based code splitting
+const ClientReviews = ClientPages.ClientReviews; // Role-based code splitting
 const BookingPage = lazyWithRetry(() => import('@/pages/BookingPage'));
-const AdminRevenue = lazyWithRetry(() => import('@/pages/AdminRevenue'));
-const Profile = lazyWithRetry(() => import('@/pages/Profile'));
+const AdminRevenue = AdminPages.Revenue; // Role-based code splitting
+const Profile = SharedPages.Profile; // Role-based code splitting
 const Help = lazyWithRetry(() => import('@/pages/Help'));
 const ComingSoon = lazyWithRetry(() => import('@/pages/ComingSoon'));
 const Unsubscribe = lazyWithRetry(() => import('@/pages/Unsubscribe'));
@@ -71,7 +72,7 @@ const PaymentMethodsPage = lazyWithRetry(() => import('@/pages/PaymentMethodsPag
 const ClientReviewsPage = lazyWithRetry(() => import('@/pages/ClientReviewsPage'));
 const BookingHistoryPage = lazyWithRetry(() => import('@/pages/BookingHistoryPage'));
 const GrowthAnalytics = lazyWithRetry(() => import('@/pages/GrowthAnalytics'));
-const CommissionTracking = lazyWithRetry(() => import('@/pages/CommissionTracking'));
+const CommissionTracking = StylistPages.CommissionTracking; // Role-based code splitting
 const FeedbackBoard = lazyWithRetry(() => import('@/pages/FeedbackBoard'));
 const ClientFormulas = lazyWithRetry(() => import('@/pages/ClientFormulas'));
 const InstallPWA = lazyWithRetry(() => import('@/pages/InstallPWA'));

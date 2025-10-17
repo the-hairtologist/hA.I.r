@@ -32,6 +32,9 @@ import { StatsToggleButton } from "@/components/admin/StatsToggleButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { useResponsive } from "@/hooks/useResponsive";
 import { MobileDashboardDrawer } from "@/components/dashboard/MobileDashboardDrawer";
+import { useSwipeGestures } from "@/hooks/useSwipeGestures";
+import { playHapticForAction } from "@/lib/mobile/HapticPatterns";
+import { useRef } from "react";
 
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
@@ -77,6 +80,21 @@ const Dashboard = () => {
   const { roles, isAdmin, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
   const { isMobile } = useResponsive();
+  
+  // Swipe gestures for mobile navigation
+  const swipeRef = useSwipeGestures({
+    onSwipeRight: () => {
+      if (isMobile) {
+        navigate(-1); // Go back
+      }
+    },
+    onSwipeDown: () => {
+      if (isMobile) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        playHapticForAction('refresh');
+      }
+    },
+  });
   
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
@@ -671,7 +689,7 @@ const Dashboard = () => {
       {/* Quick Add Client FAB - Only for stylists */}
       {userRole === "stylist" && !isAdmin && <QuickAddClientFAB />}
       
-      <div className="w-full space-y-4 sm:space-y-6">
+      <div ref={swipeRef as any} className="w-full space-y-4 sm:space-y-6">
         
         <div className="mb-6 sm:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">

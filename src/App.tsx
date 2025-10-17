@@ -31,6 +31,7 @@ import { TourProvider } from "@/components/onboarding/TourProvider";
 import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { selfHealing } from "@/lib/selfHealing";
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
+import { initPreloadStrategies } from "@/lib/performance/PreloadStrategy";
 
 const PerformanceMonitor = lazy(() => 
   import("@/components/PerformanceMonitor")
@@ -78,6 +79,9 @@ const AnalyticsInitializer = () => {
     selfHealing.initialize().catch((error) => {
       console.error('Failed to initialize self-healing system:', error);
     });
+    
+    // Initialize resource preloading strategy
+    initPreloadStrategies();
   }, []);
   
   useAnalytics();

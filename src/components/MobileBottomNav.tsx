@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
+import { playHapticForAction } from "@/lib/mobile/HapticPatterns";
 import { NotificationDot } from "./NotificationDot";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
@@ -180,7 +181,8 @@ export const MobileBottomNav = () => {
   const items = mounted && customizedItems.length > 0 ? customizedItems : allItems;
 
   const handleNavigation = (path: string) => {
-    haptic.tap();
+    // Use contextual haptic feedback
+    playHapticForAction('navigate');
     navigate(path);
   };
 
