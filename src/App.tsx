@@ -3,6 +3,7 @@
  * Copyright © 2025 hA.I.r. All Rights Reserved.
  */
 
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
