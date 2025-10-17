@@ -101,8 +101,6 @@ const App = () => {
                       <Sonner />
                       <CookieConsent />
                       <PerformanceReport />
-                      <AccessibilityShortcuts />
-                      <CommandPalette />
                       {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                       <GlobalAnnouncer />
                     {/* Performance monitoring (dev only) */}
@@ -116,6 +114,9 @@ const App = () => {
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <EnhancedAuthProvider>
                         <AnalyticsInitializer />
+                        {/* Components requiring Router context */}
+                        <AccessibilityShortcuts />
+                        <CommandPalette />
                         {/* Service integration tracking - requires Router context */}
                         <Suspense fallback={null}>
                           <ServiceIntegrationTracker />
