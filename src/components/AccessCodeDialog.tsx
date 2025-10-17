@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Key } from "lucide-react";
+import { sanitizeInput, detectSQLInjection } from "@/lib/security/inputSanitization";
 
 interface AccessCodeDialogProps {
   open: boolean;
@@ -47,6 +48,26 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
       return;
     }
 
+    // Enhanced input validation for defense-in-depth
+    const sanitizedCode = sanitizeInput(code, 'text');
+    
+    if (!sanitizedCode) {
+      toast.error("Invalid access code format");
+      return;
+    }
+
+    if (detectSQLInjection(sanitizedCode)) {
+      console.warn("Potential SQL injection attempt detected in access code");
+      toast.error("Invalid access code format");
+      return;
+    }
+
+    // Validate code format (alphanumeric, hyphens, max 50 chars)
+    if (!/^[A-Za-z0-9\-_]{4,50}$/.test(sanitizedCode)) {
+      toast.error("Access code must be 4-50 characters (letters, numbers, hyphens)");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -62,7 +83,7 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
 
       const result = await retryRequest(async () => {
         const { data, error } = await supabase.rpc('redeem_access_code', {
-          _code: code.trim(),
+          _code: sanitizedCode,
           _user_id: session.user.id
         });
         if (error) throw error;

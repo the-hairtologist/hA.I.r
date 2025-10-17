@@ -83,6 +83,43 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   /**
+   * Verify role consistency (defense-in-depth against state manipulation)
+   */
+  const verifyRoleIntegrity = useCallback(async (userId: string, currentRoles: AppRole[]): Promise<boolean> => {
+    try {
+      // Only verify critical roles periodically
+      const criticalRoles = currentRoles.filter(r => r === 'admin' || r === 'stylist');
+      if (criticalRoles.length === 0) return true;
+
+      // Re-fetch roles directly from database
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId);
+
+      if (error) {
+        console.error("Role verification failed:", error);
+        return false;
+      }
+
+      const verifiedRoles = (data || []).map(r => r.role as AppRole);
+      
+      // Check if all critical roles are still valid
+      const isValid = criticalRoles.every(role => verifiedRoles.includes(role));
+      
+      if (!isValid) {
+        console.warn("Role verification failed - forcing re-authentication");
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error verifying roles:", error);
+      return false;
+    }
+  }, []);
+
+  /**
    * Load all auth data in ONE optimized request
    */
   const loadAuthData = useCallback(async (user: User) => {
@@ -224,6 +261,28 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     await supabase.auth.signOut();
     navigate("/auth");
   }, [navigate]);
+
+  /**
+   * Periodic role integrity verification (defense-in-depth)
+   */
+  useEffect(() => {
+    if (!state.user || !state.initialized || state.roles.length === 0) return;
+
+    // Verify role integrity every 5 minutes for critical roles
+    const criticalRoles = state.roles.filter(r => r === 'admin' || r === 'stylist');
+    if (criticalRoles.length === 0) return;
+
+    const intervalId = setInterval(async () => {
+      const isValid = await verifyRoleIntegrity(state.user!.id, state.roles);
+      if (!isValid) {
+        // Force re-authentication if role verification fails
+        console.warn("Role integrity check failed - signing out for security");
+        await signOut();
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(intervalId);
+  }, [state.user, state.initialized, state.roles, verifyRoleIntegrity, signOut]);
 
   /**
    * Refresh auth data (for profile updates)
