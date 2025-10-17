@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export type ReachabilityZone = 'green' | 'yellow' | 'red';
 
@@ -46,7 +46,7 @@ export const useReachabilityZone = () => {
   /**
    * Calculate which zone an element is in based on its position
    */
-  const getZoneForPosition = (yPosition: number): ReachabilityZone => {
+  const getZoneForPosition = useCallback((yPosition: number): ReachabilityZone => {
     const { height } = state;
     const greenThreshold = height * 0.6; // Bottom 40%
     const yellowThreshold = height * 0.3; // Top 30%
@@ -54,17 +54,17 @@ export const useReachabilityZone = () => {
     if (yPosition >= greenThreshold) return 'green';
     if (yPosition >= yellowThreshold) return 'yellow';
     return 'red';
-  };
+  }, [state]);
 
   /**
    * Get recommended position for critical actions
    */
-  const getOptimalActionPosition = () => {
+  const getOptimalActionPosition = useCallback(() => {
     return {
       bottom: '5vh', // Green zone
       position: 'fixed' as const,
     };
-  };
+  }, []);
 
   return {
     ...state,

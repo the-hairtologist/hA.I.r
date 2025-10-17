@@ -16,7 +16,8 @@ class PerformanceOptimizerService {
   async init() {
     if (this.initialized) return;
 
-    console.log('🚀 Initializing performance optimizations...');
+    const isDev = import.meta.env.DEV;
+    if (isDev) console.log('🚀 Initializing performance optimizations...');
 
     // Phase 1: Critical resource hints (immediate)
     initResourceHints();
@@ -42,7 +43,7 @@ class PerformanceOptimizerService {
     this.monitorPerformance();
 
     this.initialized = true;
-    console.log('✅ Performance optimizations complete');
+    if (isDev) console.log('✅ Performance optimizations complete');
   }
 
   /**
@@ -86,12 +87,14 @@ class PerformanceOptimizerService {
    * Monitor performance metrics
    */
   private monitorPerformance() {
+    const isDev = import.meta.env.DEV;
+    
     // Monitor long tasks
     if ('PerformanceObserver' in window) {
       try {
         const observer = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
-            if (entry.duration > 50) {
+            if (entry.duration > 50 && isDev) {
               console.warn('⚠️ Long task detected:', {
                 duration: entry.duration,
                 startTime: entry.startTime,
@@ -114,7 +117,7 @@ class PerformanceOptimizerService {
               clsScore += (entry as any).value;
             }
           }
-          if (clsScore > 0.1) {
+          if (clsScore > 0.1 && isDev) {
             console.warn('⚠️ High CLS detected:', clsScore);
           }
         });
@@ -130,10 +133,11 @@ class PerformanceOptimizerService {
    * Optimize fonts loading
    */
   optimizeFonts() {
+    const isDev = import.meta.env.DEV;
     // Use font-display: swap for better perceived performance
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
-        console.log('✅ Fonts loaded');
+        if (isDev) console.log('✅ Fonts loaded');
       });
     }
   }
@@ -142,13 +146,16 @@ class PerformanceOptimizerService {
    * Compress and optimize data transfers
    */
   enableCompression() {
+    const isDev = import.meta.env.DEV;
     // Check if compression is supported
     const supportsCompression = 'CompressionStream' in window;
     
-    if (supportsCompression) {
-      console.log('✅ Compression API available');
-    } else {
-      console.log('ℹ️ Compression API not available');
+    if (isDev) {
+      if (supportsCompression) {
+        console.log('✅ Compression API available');
+      } else {
+        console.log('ℹ️ Compression API not available');
+      }
     }
   }
 
