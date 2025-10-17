@@ -14,6 +14,7 @@ import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2, Info, Palette } fro
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
+import { FormFieldError } from "@/components/FormFieldError";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -35,6 +36,13 @@ const Services = () => {
   const [depositType, setDepositType] = useState<"fixed" | "percentage">("fixed");
   const [customBufferTime, setCustomBufferTime] = useState<string>("");
   const [useCustomBuffer, setUseCustomBuffer] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{
+    serviceName?: string;
+    description?: string;
+    price?: string;
+    duration?: string;
+    depositAmount?: string;
+  }>({});
 
   useEffect(() => {
     loadData();
@@ -96,6 +104,7 @@ const Services = () => {
     setCustomBufferTime("");
     setUseCustomBuffer(false);
     setEditingService(null);
+    setValidationErrors({});
   };
 
   const handleEdit = (service: any) => {
@@ -121,56 +130,55 @@ const Services = () => {
       return;
     }
 
-    // Validate required fields
-    if (!serviceName.trim() || !price || !duration) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
+    const errors: {
+      serviceName?: string;
+      description?: string;
+      price?: string;
+      duration?: string;
+      depositAmount?: string;
+    } = {};
 
-    // Validate field lengths
-    if (serviceName.trim().length > 100) {
-      toast.error("Service name must be less than 100 characters");
-      return;
+    // Validate required fields
+    if (!serviceName.trim()) {
+      errors.serviceName = "Service name is required";
+    } else if (serviceName.trim().length > 100) {
+      errors.serviceName = "Service name must be less than 100 characters";
     }
 
     if (description.trim().length > 500) {
-      toast.error("Description must be less than 500 characters");
-      return;
+      errors.description = "Description must be less than 500 characters";
     }
 
     const priceNum = parseFloat(price);
-    if (isNaN(priceNum) || priceNum <= 0) {
-      toast.error("Please enter a valid price");
-      return;
-    }
-
-    if (priceNum > 10000) {
-      toast.error("Price cannot exceed $10,000");
-      return;
+    if (!price || isNaN(priceNum) || priceNum <= 0) {
+      errors.price = "Please enter a valid price";
+    } else if (priceNum > 10000) {
+      errors.price = "Price cannot exceed $10,000";
     }
 
     const durationNum = parseInt(duration);
-    if (durationNum < 15 || durationNum > 480) {
-      toast.error("Duration must be between 15 and 480 minutes");
-      return;
+    if (!duration || durationNum < 15 || durationNum > 480) {
+      errors.duration = "Duration must be between 15 and 480 minutes";
     }
 
     // Validate deposit if required
     if (requireDeposit) {
       const depositNum = parseFloat(depositAmount);
-      if (isNaN(depositNum) || depositNum <= 0) {
-        toast.error("Please enter a valid deposit amount");
-        return;
-      }
-      if (depositType === "percentage" && depositNum > 100) {
-        toast.error("Percentage must be 100 or less");
-        return;
-      }
-      if (depositType === "fixed" && depositNum > priceNum) {
-        toast.error("Deposit cannot exceed service price");
-        return;
+      if (!depositAmount || isNaN(depositNum) || depositNum <= 0) {
+        errors.depositAmount = "Please enter a valid deposit amount";
+      } else if (depositType === "percentage" && depositNum > 100) {
+        errors.depositAmount = "Percentage must be 100 or less";
+      } else if (depositType === "fixed" && depositNum > priceNum) {
+        errors.depositAmount = "Deposit cannot exceed service price";
       }
     }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    setValidationErrors({});
 
     setSubmitting(true);
     try {
@@ -291,9 +299,14 @@ const Services = () => {
                       id="serviceName"
                       placeholder="e.g., Color & Cut"
                       value={serviceName}
-                      onChange={(e) => setServiceName(e.target.value)}
+                      onChange={(e) => {
+                        setServiceName(e.target.value);
+                        setValidationErrors(prev => ({ ...prev, serviceName: undefined }));
+                      }}
                       required
+                      aria-invalid={!!validationErrors.serviceName}
                     />
+                    {validationErrors.serviceName && <FormFieldError message={validationErrors.serviceName} />}
                   </div>
 
                   <div className="space-y-2">
@@ -302,9 +315,14 @@ const Services = () => {
                       id="description"
                       placeholder="Brief description of the service"
                       value={description}
-                      onChange={(e) => setDescription(e.target.value)}
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                        setValidationErrors(prev => ({ ...prev, description: undefined }));
+                      }}
                       rows={3}
+                      aria-invalid={!!validationErrors.description}
                     />
+                    {validationErrors.description && <FormFieldError message={validationErrors.description} />}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -336,9 +354,14 @@ const Services = () => {
                       min="15"
                       step="15"
                       value={duration}
-                      onChange={(e) => setDuration(e.target.value)}
+                      onChange={(e) => {
+                        setDuration(e.target.value);
+                        setValidationErrors(prev => ({ ...prev, duration: undefined }));
+                      }}
                       required
+                      aria-invalid={!!validationErrors.duration}
                     />
+                    {validationErrors.duration && <FormFieldError message={validationErrors.duration} />}
                   </div>
 
                   <div className="space-y-2">
@@ -369,9 +392,14 @@ const Services = () => {
                       min="0"
                       placeholder="0.00"
                       value={price}
-                      onChange={(e) => setPrice(e.target.value)}
+                      onChange={(e) => {
+                        setPrice(e.target.value);
+                        setValidationErrors(prev => ({ ...prev, price: undefined }));
+                      }}
                       required
+                      aria-invalid={!!validationErrors.price}
                     />
+                    {validationErrors.price && <FormFieldError message={validationErrors.price} />}
                   </div>
                   </div>
 
@@ -506,9 +534,14 @@ const Services = () => {
                             max={depositType === "percentage" ? "100" : undefined}
                             placeholder={depositType === "fixed" ? "50.00" : "50"}
                             value={depositAmount}
-                            onChange={(e) => setDepositAmount(e.target.value)}
+                            onChange={(e) => {
+                              setDepositAmount(e.target.value);
+                              setValidationErrors(prev => ({ ...prev, depositAmount: undefined }));
+                            }}
                             required={requireDeposit}
+                            aria-invalid={!!validationErrors.depositAmount}
                           />
+                          {validationErrors.depositAmount && <FormFieldError message={validationErrors.depositAmount} />}
                           {depositType === "percentage" && depositAmount && (
                             <p className="text-sm text-muted-foreground">
                               = ${((parseFloat(price) || 0) * (parseFloat(depositAmount) / 100)).toFixed(2)} deposit

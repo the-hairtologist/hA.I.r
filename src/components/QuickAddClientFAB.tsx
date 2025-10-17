@@ -20,6 +20,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { FormFieldError } from "@/components/FormFieldError";
 
 export function QuickAddClientFAB() {
   const { user } = useAuth();
@@ -31,14 +32,32 @@ export function QuickAddClientFAB() {
     phone: "",
     notes: "",
   });
+  const [errors, setErrors] = useState<{
+    fullName?: string;
+    email?: string;
+  }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.fullName || !formData.email) {
-      toast.error("Name and email are required");
+    const newErrors: { fullName?: string; email?: string } = {};
+    
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Name is required";
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email address";
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+    
+    setErrors({});
 
     setLoading(true);
 
@@ -72,6 +91,7 @@ export function QuickAddClientFAB() {
       toast.success("Client added successfully! 🎉");
       setOpen(false);
       setFormData({ fullName: "", email: "", phone: "", notes: "" });
+      setErrors({});
       
       // Optional: Navigate to client profile
       // navigate(`/clients/${newClient.id}`);
@@ -118,10 +138,15 @@ export function QuickAddClientFAB() {
               <Input
                 id="fullName"
                 value={formData.fullName}
-                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, fullName: e.target.value });
+                  setErrors(prev => ({ ...prev, fullName: undefined }));
+                }}
                 placeholder="Jane Smith"
                 required
+                aria-invalid={!!errors.fullName}
               />
+              {errors.fullName && <FormFieldError message={errors.fullName} />}
             </div>
 
             <div className="space-y-2">
@@ -130,10 +155,15 @@ export function QuickAddClientFAB() {
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                  setErrors(prev => ({ ...prev, email: undefined }));
+                }}
                 placeholder="jane@example.com"
                 required
+                aria-invalid={!!errors.email}
               />
+              {errors.email && <FormFieldError message={errors.email} />}
             </div>
 
             <div className="space-y-2">
