@@ -716,9 +716,23 @@ const Settings = () => {
                             id="businessPhone"
                             type="tel"
                             value={businessPhone}
-                            onChange={(e) => { setBusinessPhone(e.target.value); setHasChanges(true); }}
+                            onChange={(e) => { 
+                              const value = e.target.value;
+                              setBusinessPhone(value);
+                              setHasChanges(true);
+                              
+                              // Validate phone if provided
+                              if (value.trim()) {
+                                const validation = validatePhone(value);
+                                setPhoneError(validation.valid ? undefined : validation.error);
+                              } else {
+                                setPhoneError(undefined);
+                              }
+                            }}
                             placeholder="(555) 123-4567"
+                            aria-invalid={!!phoneError}
                           />
+                          {phoneError && <FormFieldError message={phoneError} />}
                         </div>
                         <div>
                           <Label htmlFor="businessEmail">Business Email</Label>
