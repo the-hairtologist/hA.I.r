@@ -189,9 +189,12 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // React ecosystem
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'react-core';
+          // React ecosystem - keep React and ReactDOM separate to ensure proper initialization
+          if (id.includes('node_modules/react-dom')) {
+            return 'react-dom';
+          }
+          if (id.includes('node_modules/react') && !id.includes('react-dom') && !id.includes('react-router')) {
+            return 'react';
           }
           if (id.includes('node_modules/react-router')) {
             return 'react-router';
@@ -240,7 +243,7 @@ export default defineConfig(({ mode }) => ({
       },
       // Tree shaking optimizations
       treeshake: {
-        moduleSideEffects: 'no-external',
+        moduleSideEffects: true, // Allow React's side effects for proper initialization
         propertyReadSideEffects: false,
         unknownGlobalSideEffects: false,
       },
