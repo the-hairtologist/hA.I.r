@@ -11,6 +11,7 @@ import imageCompression from 'browser-image-compression';
 import { PrivacyConsentDialog, getStoredConsent } from "./PrivacyConsentDialog";
 import { z } from "zod";
 import { MediaErrorBoundary } from "./MediaErrorBoundary";
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 interface CameraCaptureProps {
   onCapture: (imageUrl: string, metadata?: CaptureMetadata) => void | Promise<void>;
@@ -296,9 +297,10 @@ export const CameraCapture = ({
         {preview && processing ? (
         <div className="space-y-4 animate-in fade-in-50">
           <div className="relative rounded-lg overflow-hidden">
-            <img 
+            <OptimizedImage 
               src={preview} 
-              alt="Preview" 
+              alt="Camera preview" 
+              priority={true}
               className="w-full h-48 object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">

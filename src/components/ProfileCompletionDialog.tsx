@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { CheckCircle, ArrowRight, Sparkles, Upload } from "lucide-react";
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 interface ProfileCompletionDialogProps {
   open: boolean;
@@ -233,7 +234,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
               <div className="flex flex-col items-center gap-4 mb-6">
                 <div className="relative w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                    <OptimizedImage src={avatarUrl} alt="User avatar" priority={true} className="w-full h-full object-cover" />
                   ) : (
                     <Upload className="h-12 w-12 text-muted-foreground" />
                   )}
