@@ -19,6 +19,7 @@ import { DemoModeProvider } from "@/components/demo/DemoMode";
 import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PerformanceReport } from "@/components/PerformanceReport";
+import { AccessibilityShortcuts } from "@/components/AccessibilityShortcuts";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { initAnalytics } from "@/lib/analytics";
 import { initSentry } from "@/lib/monitoring";
@@ -116,6 +117,7 @@ const App = () => {
                       <Sonner />
                       <CookieConsent />
                       <PerformanceReport />
+                      <AccessibilityShortcuts />
                       {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                       <GlobalAnnouncer />
                     {/* Performance monitoring (dev only) */}
