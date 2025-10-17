@@ -12,7 +12,7 @@ import { CommandPalette } from "@/components/CommandPalette";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Scissors, User, LogOut, HelpCircle, Crown, ChevronDown, Moon, Sun, Monitor } from "lucide-react";
+import { Scissors, User, LogOut, HelpCircle, Crown, ChevronDown, Moon, Sun, Monitor, Download, FileJson } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -230,6 +230,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       <DropdownMenuItem onClick={() => navigate("/settings")}>
                         <HelpCircle className="h-4 w-4 mr-2" />
                         Settings
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => navigate("/install")}>
+                        <Download className="h-4 w-4 mr-2" />
+                        Install App
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate("/settings?tab=privacy")}>
+                        <FileJson className="h-4 w-4 mr-2" />
+                        Download My Data
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuLabel className="text-xs text-muted-foreground">Theme</DropdownMenuLabel>
