@@ -24,6 +24,7 @@ import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
+import { selfHealing } from "@/lib/selfHealing";
 
 // Import advanced accessibility features
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
@@ -84,6 +85,11 @@ const AnalyticsInitializer = () => {
     // Initialize comprehensive performance optimizations
     performanceOptimizer.init().catch((error) => {
       console.error('Failed to initialize performance optimizations:', error);
+    });
+    
+    // Initialize self-healing system (error recovery, health monitoring, auto-maintenance)
+    selfHealing.initialize().catch((error) => {
+      console.error('Failed to initialize self-healing system:', error);
     });
   }, []);
   

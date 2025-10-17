@@ -183,7 +183,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     minify: 'esbuild',
-    cssMinify: 'lightningcss',
+    cssMinify: 'esbuild',
     target: 'es2020',
     sourcemap: false,
     rollupOptions: {
