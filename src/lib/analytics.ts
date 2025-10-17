@@ -178,10 +178,10 @@ class Analytics {
   }
 
   /**
-   * Track user signup
+   * Track user signup (with optional campaign data)
    */
-  signup(method: string, role: string): void {
-    this.track('sign_up', { method, role });
+  signup(method: string, role: string, campaignData?: Record<string, any>): void {
+    this.track('sign_up', { method, role, ...campaignData });
   }
 
   /**
@@ -227,13 +227,14 @@ class Analytics {
   }
 
   /**
-   * Track subscription success
+   * Track subscription success (with optional campaign data)
    */
-  purchaseCompleted(plan: string, amount: number): void {
+  purchaseCompleted(plan: string, amount: number, campaignData?: Record<string, any>): void {
     this.track('purchase_completed', { 
       plan,
       value: amount,
-      currency: 'USD'
+      currency: 'USD',
+      ...campaignData
     });
   }
 

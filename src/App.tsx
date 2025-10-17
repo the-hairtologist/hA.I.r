@@ -20,6 +20,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { initAnalytics } from "@/lib/analytics";
 import { initSentry } from "@/lib/monitoring";
+import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 
@@ -76,6 +77,7 @@ const AnalyticsInitializer = () => {
   useEffect(() => {
     initAnalytics();
     initSentry();
+    initUTMTracking(); // Track campaign parameters
   }, []);
   
   useAnalytics();
