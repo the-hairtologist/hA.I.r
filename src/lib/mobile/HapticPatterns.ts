@@ -3,7 +3,7 @@
  * Rich haptic patterns for different interactions
  */
 
-import { haptic } from '@/platform/haptics';
+import { haptic, impact } from '@/platform/haptics';
 
 /**
  * Haptic pattern definitions
@@ -12,51 +12,51 @@ export const hapticPatterns = {
   // Navigation
   navigation: {
     tap: () => haptic.tap(),
-    swipe: () => haptic.impact('light'),
-    longPress: () => haptic.impact('medium'),
+    swipe: () => impact('light'),
+    longPress: () => impact('medium'),
   },
 
   // Actions
   actions: {
     success: async () => {
-      await haptic.impact('light');
+      await impact('light');
       await new Promise(resolve => setTimeout(resolve, 100));
-      await haptic.impact('light');
+      await impact('light');
     },
     error: async () => {
-      await haptic.impact('heavy');
+      await impact('heavy');
       await new Promise(resolve => setTimeout(resolve, 50));
-      await haptic.impact('heavy');
+      await impact('heavy');
     },
-    warning: () => haptic.impact('medium'),
+    warning: () => impact('medium'),
     buttonPress: () => haptic.tap(),
   },
 
   // Feedback
   feedback: {
     selection: () => haptic.tap(),
-    toggle: () => haptic.impact('light'),
+    toggle: () => impact('light'),
     slide: () => haptic.tap(),
   },
 
   // Special interactions
   special: {
     unlock: async () => {
-      await haptic.impact('light');
+      await impact('light');
       await new Promise(resolve => setTimeout(resolve, 50));
-      await haptic.impact('medium');
+      await impact('medium');
       await new Promise(resolve => setTimeout(resolve, 50));
-      await haptic.impact('heavy');
+      await impact('heavy');
     },
     refresh: async () => {
-      await haptic.impact('medium');
+      await impact('medium');
       await new Promise(resolve => setTimeout(resolve, 100));
-      await haptic.impact('light');
+      await impact('light');
     },
     delete: async () => {
-      await haptic.impact('heavy');
+      await impact('heavy');
       await new Promise(resolve => setTimeout(resolve, 150));
-      await haptic.impact('heavy');
+      await impact('heavy');
     },
   },
 
@@ -64,18 +64,18 @@ export const hapticPatterns = {
   progress: {
     step: () => haptic.tap(),
     complete: async () => {
-      await haptic.impact('medium');
+      await impact('medium');
       await new Promise(resolve => setTimeout(resolve, 100));
-      await haptic.impact('light');
+      await impact('light');
       await new Promise(resolve => setTimeout(resolve, 100));
-      await haptic.impact('light');
+      await impact('light');
     },
   },
 
   // UI Elements
   ui: {
-    drawer: () => haptic.impact('light'),
-    modal: () => haptic.impact('medium'),
+    drawer: () => impact('light'),
+    modal: () => impact('medium'),
     dropdown: () => haptic.tap(),
     tab: () => haptic.tap(),
   },
@@ -128,7 +128,7 @@ export function playHapticForAction(action: string) {
  */
 export function hapticScrollFeedback(position: 'top' | 'bottom' | 'middle') {
   if (position === 'top' || position === 'bottom') {
-    haptic.impact('light');
+    impact('light');
   }
 }
 
@@ -136,17 +136,17 @@ export function hapticScrollFeedback(position: 'top' | 'bottom' | 'middle') {
  * Haptic feedback for drag operations
  */
 export const hapticDragFeedback = {
-  start: () => haptic.impact('medium'),
+  start: () => impact('medium'),
   move: () => {}, // No haptic during move (would be overwhelming)
-  drop: () => haptic.impact('light'),
-  cancel: () => haptic.impact('light'),
+  drop: () => impact('light'),
+  cancel: () => impact('light'),
 };
 
 /**
  * Haptic feedback for form validation
  */
 export const hapticFormFeedback = {
-  valid: () => haptic.impact('light'),
-  invalid: () => haptic.impact('heavy'),
+  valid: () => impact('light'),
+  invalid: () => impact('heavy'),
   submit: () => hapticPatterns.actions.success(),
 };
