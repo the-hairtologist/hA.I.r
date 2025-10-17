@@ -137,7 +137,7 @@ export const AdminFinancialDashboard = () => {
           .from('stylist_profiles')
           .select('user:profiles(full_name)')
           .eq('id', topStylistId)
-          .single();
+          .maybeSingle();
         
         if (topStylistData) {
           topStylist = {
