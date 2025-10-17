@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface QueuedAction {
   id: string;
@@ -33,9 +34,20 @@ class OfflineQueue {
       if (stored) {
         this.queue = JSON.parse(stored);
         this.cleanupOldItems();
-        logger.info(`Loaded ${this.queue.length} queued actions`);
-...
-      logger.info(`Cleaned up ${originalLength - this.queue.length} old queued items`);
+        logger.info(`Loaded ${this.queue.length} queued actions`, 'offlineQueue');
+      }
+    } catch (error) {
+      logger.error('Failed to load offline queue', 'offlineQueue', error as Error);
+    }
+  }
+
+  private cleanupOldItems() {
+    const cutoffTime = Date.now() - (MAX_QUEUE_AGE_DAYS * 24 * 60 * 60 * 1000);
+    const originalLength = this.queue.length;
+    this.queue = this.queue.filter(item => item.timestamp > cutoffTime);
+    
+    if (originalLength !== this.queue.length) {
+      logger.info(`Cleaned up ${originalLength - this.queue.length} old queued items`, 'offlineQueue');
       this.saveQueue();
     }
   }
@@ -44,12 +56,12 @@ class OfflineQueue {
    * Clear all queue data (call on logout)
    */
   public clearOnLogout() {
-    console.log('Clearing offline queue on logout');
+    logger.info('Clearing offline queue on logout', 'offlineQueue');
     this.queue = [];
     try {
       localStorage.removeItem(QUEUE_KEY);
     } catch (error) {
-      console.error('Failed to clear offline queue:', error);
+      logger.error('Failed to clear offline queue', 'offlineQueue', error as Error);
     }
     this.notifyListeners();
   }
@@ -59,13 +71,13 @@ class OfflineQueue {
       localStorage.setItem(QUEUE_KEY, JSON.stringify(this.queue));
       this.notifyListeners();
     } catch (error) {
-      console.error('Failed to save offline queue:', error);
+      logger.error('Failed to save offline queue', 'offlineQueue', error as Error);
     }
   }
 
   private setupOnlineListener() {
     window.addEventListener('online', () => {
-      console.log('Network restored, processing queue...');
+      logger.info('Network restored, processing queue...', 'offlineQueue');
       this.processQueue();
     });
   }
@@ -91,7 +103,11 @@ class OfflineQueue {
     this.queue.push(queuedAction);
     this.saveQueue();
 
-    console.log(`Enqueued ${action.type} action for ${action.table}`, queuedAction);
+    logger.debug(`Enqueued ${action.type} action for ${action.table}`, 'offlineQueue', { 
+      id: queuedAction.id,
+      type: action.type,
+      table: action.table
+    });
 
     // Try to process immediately if online
     if (navigator.onLine) {
@@ -107,7 +123,7 @@ class OfflineQueue {
     }
 
     this.processing = true;
-    console.log(`Processing ${this.queue.length} queued actions...`);
+    logger.info(`Processing ${this.queue.length} queued actions...`, 'offlineQueue');
 
     const pendingActions = this.queue.filter(a => a.status === 'pending');
 
@@ -119,17 +135,17 @@ class OfflineQueue {
         await this.executeAction(action);
 
         action.status = 'completed';
-        console.log(`✓ Completed action ${action.id}`);
+        logger.debug(`Completed action ${action.id}`, 'offlineQueue');
       } catch (error: any) {
         action.retryCount++;
         
         if (action.retryCount >= MAX_RETRIES) {
           action.status = 'failed';
           action.error = error.message;
-          console.error(`✗ Action ${action.id} failed after ${MAX_RETRIES} retries:`, error);
+          logger.error(`Action ${action.id} failed after ${MAX_RETRIES} retries`, 'offlineQueue', error as Error);
         } else {
           action.status = 'pending';
-          console.warn(`⚠ Action ${action.id} failed, retry ${action.retryCount}/${MAX_RETRIES}`);
+          logger.warn(`Action ${action.id} failed, retry ${action.retryCount}/${MAX_RETRIES}`, 'offlineQueue');
           await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         }
       }
@@ -142,7 +158,7 @@ class OfflineQueue {
     this.saveQueue();
 
     this.processing = false;
-    console.log(`Queue processing complete. ${this.queue.length} actions remaining.`);
+    logger.info(`Queue processing complete. ${this.queue.length} actions remaining.`, 'offlineQueue');
   }
 
   private async executeAction(action: QueuedAction) {

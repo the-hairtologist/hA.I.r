@@ -5,6 +5,7 @@
 
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { logger } from "@/lib/logger";
 import {
   ContextMenu,
   ContextMenuContent,

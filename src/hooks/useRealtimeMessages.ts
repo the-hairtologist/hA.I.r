@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { RealtimeChannel } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -63,7 +64,10 @@ export const useRealtimeMessages = (userId?: string) => {
           filter: `recipient_id=eq.${userId}`,
         },
         (payload) => {
-          logger.debug('Message change received:', payload);
+          logger.debug('Message change received', 'realtime', { 
+            eventType: payload.eventType,
+            id: (payload.new as any)?.id || (payload.old as any)?.id
+          });
 
           if (payload.eventType === 'INSERT') {
             setMessages((prev) => [payload.new as Message, ...prev]);

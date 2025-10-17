@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 // Apple IAP Product IDs (must match App Store Connect)
 export const IAP_PRODUCTS = {
@@ -35,9 +36,12 @@ class AppleIAPManager {
 
   async initialize(): Promise<void> {
     if (!this.isIOS()) {
-      logger.info('[IAP] Not iOS platform, skipping initialization');
-...
-      logger.info('[IAP] Already initialized');
+      logger.info('Not iOS platform, skipping initialization', 'IAP');
+      return;
+    }
+
+    if (this.isInitialized) {
+      logger.info('Already initialized', 'IAP');
       return;
     }
 
@@ -50,9 +54,26 @@ class AppleIAPManager {
 
       this.store = CdvPurchase.store;
       
-      logger.info('[IAP] Registering products...');
-...
-      logger.info('[IAP] Initialization complete');
+      logger.info('Registering products...', 'IAP');
+      
+      // Register products
+      this.store.register([
+        {
+          id: IAP_PRODUCTS.STYLIST_PRO_MONTHLY,
+          type: CdvPurchase.ProductType.PAID_SUBSCRIPTION,
+        },
+        {
+          id: IAP_PRODUCTS.STYLIST_PRO_YEARLY,
+          type: CdvPurchase.ProductType.PAID_SUBSCRIPTION,
+        },
+      ]);
+
+      this.setupEventHandlers();
+      
+      await this.store.initialize();
+      this.isInitialized = true;
+      
+      logger.info('Initialization complete', 'IAP');
     } catch (error) {
       console.error('[IAP] Initialization failed:', error);
       throw error;
@@ -65,16 +86,16 @@ class AppleIAPManager {
     // Handle approved purchases
     this.store.when()
       .approved((transaction: any) => {
-        console.log('[IAP] Purchase approved:', transaction.id);
+        logger.info('Purchase approved', 'IAP', { transactionId: transaction.id });
         transaction.verify();
       })
       .verified((receipt: any) => {
-        console.log('[IAP] Receipt verified:', receipt.id);
+        logger.info('Receipt verified', 'IAP', { receiptId: receipt.id });
         this.handleVerifiedPurchase(receipt);
         receipt.finish();
       })
       .finished((purchase: any) => {
-        console.log('[IAP] Purchase finished:', purchase.id);
+        logger.info('Purchase finished', 'IAP', { purchaseId: purchase.id });
         const callback = this.purchaseCallbacks.get(purchase.id);
         if (callback) {
           callback(true, purchase);
@@ -82,7 +103,7 @@ class AppleIAPManager {
         }
       })
       .error((error: any) => {
-        console.error('[IAP] Purchase error:', error);
+        logger.error('Purchase error', 'IAP', error);
         const productId = error.product?.id;
         if (productId) {
           const callback = this.purchaseCallbacks.get(productId);
@@ -96,7 +117,7 @@ class AppleIAPManager {
 
   private async handleVerifiedPurchase(receipt: any): Promise<void> {
     try {
-      console.log('[IAP] Sending receipt to backend for verification...');
+      logger.info('Sending receipt to backend for verification...', 'IAP');
       
       const { data, error } = await supabase.functions.invoke('verify-apple-receipt', {
         body: {
@@ -107,13 +128,13 @@ class AppleIAPManager {
       });
 
       if (error) {
-        console.error('[IAP] Backend verification failed:', error);
+        logger.error('Backend verification failed', 'IAP', error);
         return;
       }
 
-      console.log('[IAP] Backend verification successful:', data);
+      logger.info('Backend verification successful', 'IAP', data);
     } catch (error) {
-      console.error('[IAP] Error handling verified purchase:', error);
+      logger.error('Error handling verified purchase', 'IAP', error as Error);
     }
   }
 
@@ -163,7 +184,7 @@ class AppleIAPManager {
           throw new Error('Product not found');
         }
 
-        console.log('[IAP] Ordering product:', productId);
+        logger.info('Ordering product', 'IAP', { productId });
         this.store.order(product);
       } catch (error: any) {
         resolve({ 
@@ -182,11 +203,11 @@ class AppleIAPManager {
     await this.ensureInitialized();
 
     try {
-      console.log('[IAP] Restoring purchases...');
+      logger.info('Restoring purchases...', 'IAP');
       await this.store.restorePurchases();
       return { success: true };
     } catch (error: any) {
-      console.error('[IAP] Restore failed:', error);
+      logger.error('Restore failed', 'IAP', error);
       return { 
         success: false, 
         error: error.message || 'Failed to restore purchases' 
@@ -207,7 +228,7 @@ class AppleIAPManager {
 
       return (monthlyProduct?.owned || yearlyProduct?.owned) || false;
     } catch (error) {
-      console.error('[IAP] Error checking subscription:', error);
+      logger.error('Error checking subscription', 'IAP', error as Error);
       return false;
     }
   }
@@ -232,7 +253,7 @@ class AppleIAPManager {
       const receipt = this.store.applicationReceipt;
       return receipt || null;
     } catch (error) {
-      console.error('[IAP] Error getting receipt:', error);
+      logger.error('Error getting receipt', 'IAP', error as Error);
       return null;
     }
   }

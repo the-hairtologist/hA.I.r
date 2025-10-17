@@ -5,6 +5,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface UseOptimizedQueryOptions {
   queryKey: string[];
@@ -36,7 +37,7 @@ export const useOptimizedQuery = ({
 
   // Log cache hits for monitoring
   if (result.data && Array.isArray(result.data) && result.data.length > 0) {
-    logger.debug(`[Query Cache] ${result.data.length} items for`, queryKey);
+    logger.debug(`Query Cache: ${result.data.length} items`, 'query', { queryKey: queryKey.join('/') });
   }
 
   return result;

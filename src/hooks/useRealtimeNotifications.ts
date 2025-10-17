@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useQueryClient } from '@tanstack/react-query';
+import { logger } from '@/lib/logger';
 
 export const useRealtimeNotifications = (userId: string | undefined) => {
   const { toast } = useToast();
@@ -22,9 +23,31 @@ export const useRealtimeNotifications = (userId: string | undefined) => {
           table: 'appointments',
         },
         (payload) => {
-          logger.debug('Appointment change detected:', payload);
-...
-          logger.debug('New message received:', payload);
+          logger.debug('Appointment change detected', 'realtimeNotifications', payload);
+          
+          toast({
+            title: "Appointment Updated",
+            description: "An appointment has been updated",
+          });
+          
+          queryClient.invalidateQueries({ queryKey: ['appointments'] });
+        }
+      )
+      .subscribe();
+
+    // Subscribe to new messages
+    const messageChannel = supabase
+      .channel('message-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `recipient_id=eq.${userId}`,
+        },
+        (payload) => {
+          logger.debug('New message received', 'realtimeNotifications', payload);
           
           setUnreadCount((prev) => prev + 1);
           

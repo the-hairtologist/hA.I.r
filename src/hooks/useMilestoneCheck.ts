@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 /**
  * Hook to check for uncelebrated milestones and show celebration
@@ -54,7 +55,10 @@ export const useMilestoneCheck = (clientId?: string, enabled: boolean = true) =>
           filter: `client_id=eq.${clientId}`,
         },
         (payload) => {
-          logger.info("New milestone detected:", payload);
+          logger.info('New milestone detected', 'milestones', { 
+            clientId: payload.new.client_id,
+            type: payload.new.milestone_type
+          });
           checkMilestones();
         }
       )

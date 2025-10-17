@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { RealtimeChannel } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 
 interface Appointment {
   id: string;
@@ -78,7 +79,10 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
           table: 'appointments',
         },
         (payload) => {
-          logger.debug('Appointment change received:', payload);
+          logger.debug('Appointment change received', 'realtime', { 
+            eventType: payload.eventType,
+            id: (payload.new as any)?.id || (payload.old as any)?.id
+          });
 
           if (payload.eventType === 'INSERT') {
             setAppointments((prev) => {
