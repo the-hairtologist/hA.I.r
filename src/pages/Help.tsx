@@ -28,12 +28,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { haptic } from "@/platform/haptics";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  subject: z.string().trim().min(1, "Subject is required").max(200, "Subject must be less than 200 characters"),
+  message: z.string().trim().min(10, "Message must be at least 10 characters").max(2000, "Message must be less than 2000 characters"),
+});
 
 const Help = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAuth();
   const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
   const navigate = useNavigate();
+  const [contactFormErrors, setContactFormErrors] = useState<{ subject?: string; message?: string }>({});
 
   // Help articles from the help button
   const helpArticles = [
@@ -200,7 +207,32 @@ const Help = () => {
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message sent! We'll get back to you soon.");
+    const form = e.target as HTMLFormElement;
+    const subject = (form.elements.namedItem('subject') as HTMLInputElement).value;
+    const message = (form.elements.namedItem('message') as HTMLTextAreaElement).value;
+
+    try {
+      // Validate with zod schema
+      contactSchema.parse({ subject, message });
+      setContactFormErrors({});
+      
+      // Success - in a real app, this would send to a backend
+      toast.success("Message sent! We'll get back to you soon.");
+      form.reset();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const errors: { subject?: string; message?: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            errors[err.path[0] as 'subject' | 'message'] = err.message;
+          }
+        });
+        setContactFormErrors(errors);
+        toast.error("Please check your input", {
+          description: Object.values(errors)[0],
+        });
+      }
+    }
   };
 
   return (
@@ -466,17 +498,31 @@ const Help = () => {
                 <form onSubmit={handleContactSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="subject">Subject</Label>
-                    <Input id="subject" placeholder="What do you need help with?" required />
+                    <Input 
+                      id="subject" 
+                      name="subject"
+                      placeholder="What do you need help with?" 
+                      maxLength={200}
+                      required 
+                    />
+                    {contactFormErrors.subject && (
+                      <p className="text-sm text-destructive">{contactFormErrors.subject}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="message">Message</Label>
                     <Textarea
                       id="message"
+                      name="message"
                       placeholder="Describe your issue in detail..."
                       rows={5}
+                      maxLength={2000}
                       required
                     />
+                    {contactFormErrors.message && (
+                      <p className="text-sm text-destructive">{contactFormErrors.message}</p>
+                    )}
                   </div>
 
                   <Button type="submit" className="w-full">
