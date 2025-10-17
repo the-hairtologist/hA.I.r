@@ -1,96 +1,128 @@
 /**
  * Image Optimization Utilities
- * Handles lazy loading, compression, and responsive images
+ * Ensures all images are loaded efficiently with modern best practices
  */
-
-export interface ImageOptimizationOptions {
-  quality?: number;
-  maxWidth?: number;
-  maxHeight?: number;
-  format?: 'webp' | 'jpeg' | 'png';
-}
 
 /**
- * Lazy load images with Intersection Observer
+ * Automatically add loading attributes to all images on the page
+ * Called by performance optimizer
  */
-export function lazyLoadImages() {
-  if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const img = entry.target as HTMLImageElement;
-          const src = img.dataset.src;
-          
-          if (src) {
-            img.src = src;
-            img.classList.remove('lazy');
-            imageObserver.unobserve(img);
-          }
-        }
-      });
-    });
+export const optimizePageImages = () => {
+  // Add lazy loading to images without it
+  const images = document.querySelectorAll<HTMLImageElement>('img:not([loading])');
+  images.forEach((img) => {
+    // Skip images that are above the fold (first 800px)
+    const rect = img.getBoundingClientRect();
+    const isAboveFold = rect.top < 800;
+    
+    if (!isAboveFold) {
+      img.setAttribute('loading', 'lazy');
+    }
+    
+    // Always add async decoding
+    img.setAttribute('decoding', 'async');
+    
+    // Add error handling
+    if (!img.onerror) {
+      img.onerror = () => {
+        console.warn('Image failed to load:', img.src);
+        // Set a fallback or placeholder if needed
+        img.style.backgroundColor = '#f0f0f0';
+      };
+    }
+  });
 
-    document.querySelectorAll('img.lazy').forEach(img => {
-      imageObserver.observe(img);
-    });
-  }
-}
-
-/**
- * Generate srcset for responsive images
- */
-export function generateSrcSet(baseUrl: string, widths: number[]): string {
-  return widths
-    .map(width => `${baseUrl}?w=${width} ${width}w`)
-    .join(', ');
-}
+  console.log(`✅ Optimized ${images.length} images for lazy loading`);
+};
 
 /**
- * Get optimal image dimensions based on viewport
+ * Preload critical images (above the fold)
  */
-export function getOptimalImageSize(): { width: number; height: number } {
-  const dpr = window.devicePixelRatio || 1;
-  const width = Math.min(window.innerWidth * dpr, 1920);
-  const height = Math.min(window.innerHeight * dpr, 1080);
+export const preloadCriticalImages = (urls: string[]) => {
+  urls.forEach((url) => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = url;
+    document.head.appendChild(link);
+  });
+};
+
+/**
+ * Check if image format is optimal
+ */
+export const isModernImageFormat = (url: string): boolean => {
+  const modernFormats = ['.webp', '.avif'];
+  return modernFormats.some(format => url.toLowerCase().endsWith(format));
+};
+
+/**
+ * Get recommended image format based on browser support
+ */
+export const getRecommendedFormat = (): 'avif' | 'webp' | 'jpeg' => {
+  // Check AVIF support
+  const avifSupport = document.createElement('canvas')
+    .toDataURL('image/avif')
+    .indexOf('data:image/avif') === 0;
   
-  return { width: Math.round(width), height: Math.round(height) };
-}
+  if (avifSupport) return 'avif';
+
+  // Check WebP support
+  const webpSupport = document.createElement('canvas')
+    .toDataURL('image/webp')
+    .indexOf('data:image/webp') === 0;
+  
+  if (webpSupport) return 'webp';
+
+  return 'jpeg';
+};
 
 /**
- * Preload critical images
+ * Generate responsive image srcset
  */
-export function preloadImage(src: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = reject;
-    img.src = src;
-  });
-}
+export const generateSrcSet = (baseUrl: string, sizes: number[]): string => {
+  return sizes.map(size => `${baseUrl}?w=${size} ${size}w`).join(', ');
+};
 
 /**
- * Convert image to WebP if supported
+ * Image optimization configuration
  */
-export function supportsWebP(): Promise<boolean> {
-  return new Promise(resolve => {
-    const webP = new Image();
-    webP.onload = webP.onerror = () => {
-      resolve(webP.height === 2);
-    };
-    webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
-  });
-}
+export const IMAGE_CONFIG = {
+  // Quality settings
+  quality: {
+    thumbnail: 60,
+    medium: 75,
+    high: 85,
+  },
+  
+  // Size breakpoints
+  breakpoints: {
+    mobile: 640,
+    tablet: 768,
+    desktop: 1024,
+    wide: 1920,
+  },
+  
+  // Lazy loading intersection observer options
+  lazyLoadOptions: {
+    root: null,
+    rootMargin: '50px',
+    threshold: 0.01,
+  },
+};
 
 /**
- * Get image dimensions without loading the full image
+ * Create intersection observer for lazy loading
  */
-export function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      resolve({ width: img.width, height: img.height });
-    };
-    img.onerror = reject;
-    img.src = URL.createObjectURL(file);
-  });
-}
+export const createLazyLoadObserver = (
+  callback: (img: HTMLImageElement) => void
+): IntersectionObserver => {
+  return new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target as HTMLImageElement;
+        callback(img);
+      }
+    });
+  }, IMAGE_CONFIG.lazyLoadOptions);
+};

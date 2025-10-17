@@ -5,6 +5,7 @@
 
 import { initResourceHints, smartPrefetch } from './ResourceHints';
 import { preconnectCriticalDomains, loadPolyfills } from './BundleOptimizer';
+import { optimizePageImages } from '@/lib/imageOptimization';
 
 class PerformanceOptimizerService {
   private initialized = false;
@@ -50,14 +51,7 @@ class PerformanceOptimizerService {
   private optimizeImages() {
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
-        // Add loading="lazy" to images without it
-        const images = document.querySelectorAll('img:not([loading])');
-        images.forEach((img) => {
-          img.setAttribute('loading', 'lazy');
-          img.setAttribute('decoding', 'async');
-        });
-
-        console.log(`✅ Optimized ${images.length} images`);
+        optimizePageImages();
       });
     }
   }
