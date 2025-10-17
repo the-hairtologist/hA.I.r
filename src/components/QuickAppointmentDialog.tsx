@@ -10,6 +10,7 @@ import { format, setHours, setMinutes, addMinutes, parseISO } from "date-fns";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
+import { FormFieldError } from "@/components/FormFieldError";
 
 interface QuickAppointmentDialogProps {
   open: boolean;
@@ -38,6 +39,10 @@ export const QuickAppointmentDialog = ({
   const [notes, setNotes] = useState("");
   const [hasConflict, setHasConflict] = useState(false);
   const [conflictMessage, setConflictMessage] = useState("");
+  const [validationErrors, setValidationErrors] = useState<{
+    client?: string;
+    service?: string;
+  }>({});
 
   useEffect(() => {
     if (open) {
@@ -48,6 +53,7 @@ export const QuickAppointmentDialog = ({
       setNotes("");
       setHasConflict(false);
       setConflictMessage("");
+      setValidationErrors({});
     }
   }, [open]);
 
@@ -125,13 +131,18 @@ export const QuickAppointmentDialog = ({
   };
 
   const handleSubmit = async () => {
+    const errors: { client?: string; service?: string } = {};
+    
     if (!selectedClient) {
-      toast.error("Please select a client");
-      return;
+      errors.client = "Please select a client";
     }
 
     if (!selectedService) {
-      toast.error("Please select a service");
+      errors.service = "Please select a service";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
       return;
     }
 
@@ -139,6 +150,8 @@ export const QuickAppointmentDialog = ({
       toast.error("Cannot book - time slot conflicts with existing appointment");
       return;
     }
+    
+    setValidationErrors({});
 
     setLoading(true);
     try {
@@ -248,7 +261,14 @@ export const QuickAppointmentDialog = ({
 
           <div className="space-y-2">
             <Label htmlFor="client">Client *</Label>
-            <Select value={selectedClient} onValueChange={setSelectedClient} disabled={clients.length === 0}>
+            <Select 
+              value={selectedClient} 
+              onValueChange={(value) => {
+                setSelectedClient(value);
+                setValidationErrors(prev => ({ ...prev, client: undefined }));
+              }} 
+              disabled={clients.length === 0}
+            >
               <SelectTrigger id="client">
                 <SelectValue placeholder={clients.length === 0 ? "No clients available" : "Select a client"} />
               </SelectTrigger>
@@ -260,11 +280,19 @@ export const QuickAppointmentDialog = ({
                 ))}
               </SelectContent>
             </Select>
+            {validationErrors.client && <FormFieldError message={validationErrors.client} />}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="service">Service *</Label>
-            <Select value={selectedService} onValueChange={setSelectedService} disabled={services.length === 0}>
+            <Select 
+              value={selectedService} 
+              onValueChange={(value) => {
+                setSelectedService(value);
+                setValidationErrors(prev => ({ ...prev, service: undefined }));
+              }} 
+              disabled={services.length === 0}
+            >
               <SelectTrigger id="service">
                 <SelectValue placeholder={services.length === 0 ? "No services available" : "Select a service"} />
               </SelectTrigger>
@@ -276,6 +304,7 @@ export const QuickAppointmentDialog = ({
                 ))}
               </SelectContent>
             </Select>
+            {validationErrors.service && <FormFieldError message={validationErrors.service} />}
           </div>
 
           <div className="space-y-2">

@@ -14,6 +14,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { handleError, createSafeHandler } from "@/lib/errorHandler";
 import { authSchema } from "@/lib/validation";
 import { log } from '@/lib/logger';
+import { FormFieldError } from "@/components/FormFieldError";
 
 type AuthState = {
   email: string;
@@ -25,10 +26,20 @@ type AuthState = {
   isRecoveryMode: boolean;
   newPassword: string;
   confirmPassword: string;
+  errors: {
+    email?: string;
+    password?: string;
+    fullName?: string;
+    newPassword?: string;
+    confirmPassword?: string;
+    resetEmail?: string;
+  };
 };
 
 type AuthAction =
-  | { type: "SET_FIELD"; field: keyof AuthState; value: any }
+  | { type: "SET_FIELD"; field: keyof Omit<AuthState, 'errors'>; value: any }
+  | { type: "SET_ERRORS"; errors: AuthState['errors'] }
+  | { type: "CLEAR_ERRORS" }
   | { type: "SET_RECOVERY_MODE"; value: boolean }
   | { type: "TOGGLE_RESET_DIALOG" }
   | { type: "SET_RESET_LOADING"; value: boolean }
@@ -44,12 +55,17 @@ const initialState: AuthState = {
   isRecoveryMode: false,
   newPassword: "",
   confirmPassword: "",
+  errors: {},
 };
 
 function authReducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
     case "SET_FIELD":
-      return { ...state, [action.field]: action.value };
+      return { ...state, [action.field]: action.value, errors: { ...state.errors, [action.field]: undefined } };
+    case "SET_ERRORS":
+      return { ...state, errors: action.errors };
+    case "CLEAR_ERRORS":
+      return { ...state, errors: {} };
     case "SET_RECOVERY_MODE":
       return { ...state, isRecoveryMode: action.value };
     case "TOGGLE_RESET_DIALOG":
@@ -89,19 +105,22 @@ const Auth = () => {
     });
 
     if (!validation.success) {
-      const errorMsg = validation.error.errors[0].message;
-      // Rebrand error messages to be friendly
-      if (errorMsg.includes("email")) {
-        toast.error("Hmm, that email doesn't look quite right 🤔");
-      } else if (errorMsg.includes("password")) {
-        toast.error("Password needs a bit more love (at least 6 characters) 💪");
-      } else if (errorMsg.includes("name")) {
-        toast.error("We'd love to know your name! ✨");
-      } else {
-        toast.error(errorMsg);
-      }
+      const newErrors: AuthState['errors'] = {};
+      validation.error.errors.forEach((err) => {
+        const field = err.path[0] as keyof AuthState['errors'];
+        if (field === 'email') {
+          newErrors.email = "Please enter a valid email address";
+        } else if (field === 'password') {
+          newErrors.password = "Password must be at least 6 characters";
+        } else if (field === 'fullName') {
+          newErrors.fullName = "Please enter your full name";
+        }
+      });
+      dispatch({ type: "SET_ERRORS", errors: newErrors });
       return;
     }
+    
+    dispatch({ type: "CLEAR_ERRORS" });
 
     try {
       await signUp(state.email, state.password, state.fullName);
@@ -128,17 +147,20 @@ const Auth = () => {
     });
 
     if (!validation.success) {
-      const errorMsg = validation.error.errors[0].message;
-      // Rebrand error messages to be friendly
-      if (errorMsg.includes("email")) {
-        toast.error("Double-check that email for us? 📧");
-      } else if (errorMsg.includes("password")) {
-        toast.error("Oops! Check your password and try again 🔑");
-      } else {
-        toast.error(errorMsg);
-      }
+      const newErrors: AuthState['errors'] = {};
+      validation.error.errors.forEach((err) => {
+        const field = err.path[0] as keyof AuthState['errors'];
+        if (field === 'email') {
+          newErrors.email = "Please enter a valid email address";
+        } else if (field === 'password') {
+          newErrors.password = "Password is required";
+        }
+      });
+      dispatch({ type: "SET_ERRORS", errors: newErrors });
       return;
     }
+    
+    dispatch({ type: "CLEAR_ERRORS" });
 
     await signIn(state.email, state.password);
     toast.success("Welcome back!");
@@ -146,9 +168,11 @@ const Auth = () => {
 
   const handlePasswordReset = createSafeHandler(async () => {
     if (!state.resetEmail) {
-      toast.error("We'll need your email to send the reset link 📬");
+      dispatch({ type: "SET_ERRORS", errors: { resetEmail: "Email is required for password reset" } });
       return;
     }
+    
+    dispatch({ type: "CLEAR_ERRORS" });
 
     dispatch({ type: "SET_RESET_LOADING", value: true });
     try {
@@ -164,15 +188,22 @@ const Auth = () => {
   const handleUpdatePassword = createSafeHandler(async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (state.newPassword !== state.confirmPassword) {
-      toast.error("Hmm, those passwords don't match up 🔐");
-      return;
-    }
-
+    const newErrors: AuthState['errors'] = {};
+    
     if (state.newPassword.length < 6) {
-      toast.error("Let's make that password a bit stronger (6+ characters) 💪");
+      newErrors.newPassword = "Password must be at least 6 characters";
+    }
+    
+    if (state.newPassword !== state.confirmPassword) {
+      newErrors.confirmPassword = "Passwords don't match";
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      dispatch({ type: "SET_ERRORS", errors: newErrors });
       return;
     }
+    
+    dispatch({ type: "CLEAR_ERRORS" });
 
     await updatePassword(state.newPassword);
     toast.success("Password updated successfully!");
@@ -236,7 +267,9 @@ const Auth = () => {
                   minLength={6}
                   placeholder="Enter new password"
                   className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-invalid={!!state.errors.newPassword}
                 />
+                {state.errors.newPassword && <FormFieldError message={state.errors.newPassword} />}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="confirm-password" className="font-pixel text-xs uppercase">Confirm Password</Label>
@@ -249,7 +282,9 @@ const Auth = () => {
                   minLength={6}
                   placeholder="Confirm new password"
                   className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-invalid={!!state.errors.confirmPassword}
                 />
+                {state.errors.confirmPassword && <FormFieldError message={state.errors.confirmPassword} />}
               </div>
             <Button type="submit" className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12" disabled={loading}>
               {loading ? "Updating..." : "Update Password"}
@@ -275,7 +310,9 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "email", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-invalid={!!state.errors.email}
                   />
+                  {state.errors.email && <FormFieldError message={state.errors.email} />}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signin-password" className="font-pixel text-xs uppercase">Password</Label>
@@ -286,7 +323,9 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "password", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-invalid={!!state.errors.password}
                   />
+                  {state.errors.password && <FormFieldError message={state.errors.password} />}
                 </div>
                 <Button type="submit" className="w-full font-pixel uppercase tracking-wide bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none h-12" disabled={loading}>
                   {loading ? "Signing in..." : "Sign In"}
@@ -354,7 +393,9 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "fullName", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-invalid={!!state.errors.fullName}
                   />
+                  {state.errors.fullName && <FormFieldError message={state.errors.fullName} />}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-email" className="font-pixel text-xs uppercase">Email</Label>
@@ -366,7 +407,9 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "email", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-invalid={!!state.errors.email}
                   />
+                  {state.errors.email && <FormFieldError message={state.errors.email} />}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-password" className="font-pixel text-xs uppercase">Password</Label>
@@ -379,7 +422,9 @@ const Auth = () => {
                     required
                     minLength={6}
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-invalid={!!state.errors.password}
                   />
+                  {state.errors.password && <FormFieldError message={state.errors.password} />}
                 </div>
                 
               <div className="p-4 rounded-none border-[3px] border-black bg-secondary shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
@@ -428,7 +473,9 @@ const Auth = () => {
                 value={state.resetEmail}
                 onChange={(e) => dispatch({ type: "SET_FIELD", field: "resetEmail", value: e.target.value })}
                 className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
+                aria-invalid={!!state.errors.resetEmail}
               />
+              {state.errors.resetEmail && <FormFieldError message={state.errors.resetEmail} />}
             </div>
             <Button 
               onClick={handlePasswordReset} 

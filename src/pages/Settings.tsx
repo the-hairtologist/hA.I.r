@@ -25,6 +25,7 @@ import { MobileNavCustomizer } from "@/components/MobileNavCustomizer";
 import { FirstTimeTooltip } from "@/components/FirstTimeTooltip";
 import { ZapierSettings } from "@/pages/Settings/ZapierSettings";
 import { cn } from "@/lib/utils";
+import { FormFieldError } from "@/components/FormFieldError";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -43,6 +44,11 @@ const Settings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState<{
+    currentPassword?: string;
+    newPassword?: string;
+    confirmPassword?: string;
+  }>({});
 
   // Notification preferences
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -373,20 +379,34 @@ const Settings = () => {
   };
 
   const handlePasswordChange = async () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("All password fields are required");
-      return;
+    const errors: {
+      currentPassword?: string;
+      newPassword?: string;
+      confirmPassword?: string;
+    } = {};
+    
+    if (!currentPassword) {
+      errors.currentPassword = "Current password is required";
+    }
+    
+    if (!newPassword) {
+      errors.newPassword = "New password is required";
+    } else if (newPassword.length < 8) {
+      errors.newPassword = "Password must be at least 8 characters";
+    }
+    
+    if (!confirmPassword) {
+      errors.confirmPassword = "Please confirm your new password";
+    } else if (newPassword !== confirmPassword) {
+      errors.confirmPassword = "Passwords don't match";
     }
 
-    if (newPassword !== confirmPassword) {
-      toast.error("New passwords don't match");
+    if (Object.keys(errors).length > 0) {
+      setPasswordErrors(errors);
       return;
     }
-
-    if (newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters");
-      return;
-    }
+    
+    setPasswordErrors({});
 
     setIsChangingPassword(true);
     try {
@@ -400,6 +420,7 @@ const Settings = () => {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      setPasswordErrors({});
     } catch (error: any) {
       console.error("Error changing password:", error);
       toast.error(error.message || "Failed to change password");
@@ -1096,9 +1117,14 @@ const Settings = () => {
                       id="current-password"
                       type="password"
                       value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      onChange={(e) => {
+                        setCurrentPassword(e.target.value);
+                        setPasswordErrors(prev => ({ ...prev, currentPassword: undefined }));
+                      }}
                       placeholder="Enter current password"
+                      aria-invalid={!!passwordErrors.currentPassword}
                     />
+                    {passwordErrors.currentPassword && <FormFieldError message={passwordErrors.currentPassword} />}
                   </div>
 
                   <div>
@@ -1107,9 +1133,14 @@ const Settings = () => {
                       id="new-password"
                       type="password"
                       value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
+                      onChange={(e) => {
+                        setNewPassword(e.target.value);
+                        setPasswordErrors(prev => ({ ...prev, newPassword: undefined }));
+                      }}
                       placeholder="Enter new password (min 8 characters)"
+                      aria-invalid={!!passwordErrors.newPassword}
                     />
+                    {passwordErrors.newPassword && <FormFieldError message={passwordErrors.newPassword} />}
                   </div>
 
                   <div>
@@ -1118,9 +1149,14 @@ const Settings = () => {
                       id="confirm-password"
                       type="password"
                       value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      onChange={(e) => {
+                        setConfirmPassword(e.target.value);
+                        setPasswordErrors(prev => ({ ...prev, confirmPassword: undefined }));
+                      }}
                       placeholder="Confirm new password"
+                      aria-invalid={!!passwordErrors.confirmPassword}
                     />
+                    {passwordErrors.confirmPassword && <FormFieldError message={passwordErrors.confirmPassword} />}
                   </div>
 
                   <Button 
