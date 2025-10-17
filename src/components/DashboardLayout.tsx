@@ -8,7 +8,6 @@ import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
 import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
 import { DemoModeIndicator } from "@/components/demo/DemoMode";
-import { CommandPalette } from "@/components/CommandPalette";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -42,7 +41,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
   const { user, loading, roles, isAdmin, isStylist, isClient } = useEnhancedAuth();
   const [showShortcuts, setShowShortcuts] = useState(false);
-  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const { unreadCount } = useRealtimeNotifications(user?.id);
   const { theme, setTheme } = useTheme();
   
@@ -61,12 +59,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         return;
       }
 
-      // Cmd/Ctrl+K for search - Open command palette
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        setCommandPaletteOpen(true);
-        return;
-      }
+      // Note: Ctrl+K is handled by global CommandPalette in App.tsx
 
       // Navigation shortcuts with 'G' key
       if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
@@ -293,9 +286,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         
         <MobileBottomNav />
       </div>
-      
-      {/* Command Palette - Global keyboard shortcut */}
-      <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
       
       <KeyboardShortcutsDialog 
         open={showShortcuts} 

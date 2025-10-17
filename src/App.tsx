@@ -20,6 +20,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { PerformanceReport } from "@/components/PerformanceReport";
 import { AccessibilityShortcuts } from "@/components/AccessibilityShortcuts";
+import { CommandPalette } from "@/components/CommandPalette";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { initAnalytics } from "@/lib/analytics";
 import { initSentry } from "@/lib/monitoring";
@@ -118,6 +119,7 @@ const App = () => {
                       <CookieConsent />
                       <PerformanceReport />
                       <AccessibilityShortcuts />
+                      <CommandPalette />
                       {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                       <GlobalAnnouncer />
                     {/* Performance monitoring (dev only) */}
