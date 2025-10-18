@@ -44,7 +44,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
           Unsafe - Blocked
         </Badge>
         <Alert variant="destructive">
-          <XCircle className="h-4 w-4" />
+          <XCircle className="h-5 w-5 sm:h-6 sm:w-6" />
           <AlertDescription>
             <div className="font-semibold mb-2">Critical Safety Issues:</div>
             <ul className="list-disc list-inside space-y-1 text-sm">
@@ -69,7 +69,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
           <Tooltip>
             <TooltipTrigger>
               <Badge className="flex items-center gap-1 bg-warning hover:bg-warning/90 text-warning-foreground">
-                <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                 Safe with Cautions
               </Badge>
             </TooltipTrigger>
@@ -87,7 +87,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
         </TooltipProvider>
         
         <Alert className="border-warning bg-warning/10">
-          <AlertCircle className="h-4 w-4 text-warning" />
+          <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-warning" />
           <AlertDescription className="text-warning-foreground">
             <div className="font-semibold mb-1">Cautions:</div>
             <ul className="list-disc list-inside space-y-1 text-sm">
@@ -107,7 +107,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
       <Tooltip>
         <TooltipTrigger>
           <Badge className="flex items-center gap-1 bg-success hover:bg-success/90 text-success-foreground">
-            <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+            <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
             Safe
           </Badge>
         </TooltipTrigger>

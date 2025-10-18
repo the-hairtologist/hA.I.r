@@ -124,7 +124,7 @@ export const EnhancedSearch = ({
       <Popover open={shouldShowRecent} onOpenChange={setShowRecent}>
         <PopoverTrigger asChild>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
             <Input
               ref={inputRef}
               placeholder={placeholder}
@@ -154,7 +154,7 @@ export const EnhancedSearch = ({
                   inputRef.current?.focus();
                 }}
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             )}
           </div>

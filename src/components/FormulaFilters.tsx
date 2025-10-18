@@ -70,7 +70,7 @@ export const FormulaFiltersComponent = ({
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" className="gap-2">
-            <SlidersHorizontal className="h-4 w-4" />
+            <SlidersHorizontal className="h-5 w-5 sm:h-6 sm:w-6" />
             Filters
             {hasActiveFilters && (
               <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center">

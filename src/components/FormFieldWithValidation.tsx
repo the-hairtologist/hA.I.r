@@ -150,9 +150,9 @@ export const FormFieldWithValidation = forwardRef<
           {touched && !suffix && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
               {hasError ? (
-                <AlertCircle className="h-4 w-4 text-destructive" />
+                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-destructive" />
               ) : isValid ? (
-                <CheckCircle2 className="h-4 w-4 text-success" />
+                <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
               ) : null}
             </div>
           )}
@@ -181,7 +181,7 @@ export const FormFieldWithValidation = forwardRef<
             className="text-sm font-medium text-destructive flex items-center gap-1 animate-fade-in"
             role="alert"
           >
-            <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+            <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
             {error}
           </p>
         )}

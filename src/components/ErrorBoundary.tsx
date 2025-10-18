@@ -115,7 +115,7 @@ export class ErrorBoundary extends Component<Props, State> {
                     onClick={this.handleReset}
                     className="w-full brutal-button brutal-hover"
                   >
-                    <RefreshCw className="h-4 w-4 mr-2" />
+                    <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                     Try Again
                   </Button>
                 )}
