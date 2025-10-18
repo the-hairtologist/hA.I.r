@@ -339,35 +339,55 @@ const Dashboard = () => {
 
       // Get appropriate profile based on role
       if (primaryRole === "stylist") {
-        const { data: stylistProfile } = await supabase
-          .from("stylist_profiles")
-          .select("*")
-          .eq("user_id", sessionUser.id)
-          .maybeSingle();
-        setProfile(stylistProfile);
-      } else if (primaryRole === "client") {
-        const { data: clientProfile } = await supabase
-          .from("client_profiles")
-          .select("*")
-          .eq("user_id", sessionUser.id)
-          .maybeSingle();
-        setProfile(clientProfile);
-      } else if (primaryRole === "admin" || isAdmin) {
-        // For admins, try to get stylist profile first, then client profile
-        const { data: stylistProfile } = await supabase
+        const { data: stylistProfile, error: stylistError } = await supabase
           .from("stylist_profiles")
           .select("*")
           .eq("user_id", sessionUser.id)
           .maybeSingle();
         
+        if (stylistError && stylistError.code !== 'PGRST116') {
+          console.error('Error loading stylist profile:', stylistError);
+          throw stylistError;
+        }
+        setProfile(stylistProfile);
+      } else if (primaryRole === "client") {
+        const { data: clientProfile, error: clientError } = await supabase
+          .from("client_profiles")
+          .select("*")
+          .eq("user_id", sessionUser.id)
+          .maybeSingle();
+        
+        if (clientError && clientError.code !== 'PGRST116') {
+          console.error('Error loading client profile:', clientError);
+          throw clientError;
+        }
+        setProfile(clientProfile);
+      } else if (primaryRole === "admin" || isAdmin) {
+        // For admins, try to get stylist profile first, then client profile
+        const { data: stylistProfile, error: stylistError } = await supabase
+          .from("stylist_profiles")
+          .select("*")
+          .eq("user_id", sessionUser.id)
+          .maybeSingle();
+        
+        if (stylistError && stylistError.code !== 'PGRST116') {
+          console.error('Error loading admin stylist profile:', stylistError);
+          throw stylistError;
+        }
+        
         if (stylistProfile) {
           setProfile(stylistProfile);
         } else {
-          const { data: clientProfile } = await supabase
+          const { data: clientProfile, error: clientError } = await supabase
             .from("client_profiles")
             .select("*")
             .eq("user_id", sessionUser.id)
             .maybeSingle();
+          
+          if (clientError && clientError.code !== 'PGRST116') {
+            console.error('Error loading admin client profile:', clientError);
+            throw clientError;
+          }
           setProfile(clientProfile);
         }
       }
