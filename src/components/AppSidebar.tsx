@@ -248,7 +248,7 @@ export function AppSidebar() {
                   )}
                   <SidebarGroup className="mb-2">
                     <SidebarGroupLabel 
-                      className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/80 px-2 py-2 flex items-center justify-between transition-all border-l-[3px] border-transparent hover:border-primary/50"}`}
+                      className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/80 px-2 py-2 flex items-center justify-between gap-3 transition-all border-l-[3px] border-transparent hover:border-primary/50"}`}
                       onClick={() => !collapsed && toggleGroupCollapsed(groupKey)}
                     >
                       <span className="drop-shadow-sm">{labels[groupKey]}</span>

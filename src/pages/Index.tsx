@@ -63,7 +63,7 @@ const Index = () => {
           `,
           backgroundSize: '8px 8px'
         }}>
-          <div className="container mx-auto px-4 text-center relative z-10 w-full">
+          <div className="container mx-auto px-4 text-center relative z-10 w-full flex flex-col items-center justify-end sm:justify-center">
             <div className="max-w-4xl mx-auto space-y-8">
               <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-pixel uppercase text-secondary leading-relaxed tracking-wider drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in" style={{ lineHeight: '1.6' }}>
                 TURN CHAOS INTO CALM<br />IN 3 SECONDS.
