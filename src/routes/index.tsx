@@ -81,6 +81,7 @@ const AuditReport = lazyWithRetry(() => import('@/pages/AuditReport'));
 const ClientRetention = lazyWithRetry(() => import('@/pages/ClientRetention'));
 const DesignSystem = lazyWithRetry(() => import('@/pages/DesignSystem'));
 const Analytics = lazyWithRetry(() => import('@/pages/Analytics'));
+const OnboardingTest = lazyWithRetry(() => import('@/pages/OnboardingTest'));
 
 export const AppRoutes = () => (
   <>
@@ -335,6 +336,10 @@ export const AppRoutes = () => (
     <Route
       path="/design-system"
       element={<ProtectedRoute allowedRoles={['admin']}><DesignSystem /></ProtectedRoute>}
+    />
+    <Route
+      path="/onboarding-test"
+      element={<ProtectedRoute allowedRoles={['admin', 'stylist', 'client']}><OnboardingTest /></ProtectedRoute>}
     />
 
     {/* Error Routes */}
