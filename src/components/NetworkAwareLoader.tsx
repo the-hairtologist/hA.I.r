@@ -7,10 +7,11 @@ interface NetworkAwareLoaderProps {
   timeout?: number;
 }
 
-export const NetworkAwareLoader = ({ children, timeout = 8000 }: NetworkAwareLoaderProps) => {
+export const NetworkAwareLoader = ({ children, timeout = 15000 }: NetworkAwareLoaderProps) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showTimeout, setShowTimeout] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(0);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -29,11 +30,20 @@ export const NetworkAwareLoader = ({ children, timeout = 8000 }: NetworkAwareLoa
     // Mark as loaded once content is interactive
     const loadTimer = setTimeout(() => setIsLoading(false), 100);
 
+    // Progressive loading indicator
+    const progressInterval = setInterval(() => {
+      setLoadProgress((prev) => {
+        if (prev >= 90) return prev;
+        return prev + 10;
+      });
+    }, timeout / 10);
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
       clearTimeout(timer);
       clearTimeout(loadTimer);
+      clearInterval(progressInterval);
     };
   }, [timeout, isLoading]);
 
@@ -73,14 +83,32 @@ export const NetworkAwareLoader = ({ children, timeout = 8000 }: NetworkAwareLoa
   }
 
   if (showTimeout) {
+    const progressMessage = loadProgress < 30 
+      ? "Starting up..." 
+      : loadProgress < 60 
+      ? "Loading resources..." 
+      : loadProgress < 90 
+      ? "Almost ready..." 
+      : "Finishing up...";
+
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
         <div className="text-center p-8 bg-card brutal-border brutal-shadow-lg rounded-xl max-w-md">
           <Scissors className="h-16 w-16 text-primary mx-auto mb-4 animate-pulse" />
           <h1 className="text-2xl font-bold mb-2">Taking longer than usual...</h1>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-4">
             The app is loading slower than expected. This might be due to a slow connection.
           </p>
+          
+          {/* Progress bar */}
+          <div className="w-full bg-muted rounded-full h-2 mb-2">
+            <div 
+              className="bg-primary h-2 rounded-full transition-all duration-300"
+              style={{ width: `${loadProgress}%` }}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground mb-6">{progressMessage} {loadProgress}%</p>
+          
           <div className="flex gap-3 justify-center">
             <button
               onClick={handleReload}

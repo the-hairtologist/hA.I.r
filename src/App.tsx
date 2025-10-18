@@ -34,6 +34,7 @@ import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { selfHealing } from "@/lib/selfHealing";
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
 import { initPreloadStrategies } from "@/lib/performance/PreloadStrategy";
+import "@/lib/mobileHealthCheck";
 
 const PerformanceMonitor = lazy(() => 
   import("@/components/PerformanceMonitor")
@@ -47,11 +48,8 @@ const PerformanceOverlay = lazy(() =>
     .catch(() => ({ default: () => null }))
 );
 
-const MobileOptimizationsProvider = lazy(() => 
-  import("@/components/MobileOptimizationsProvider")
-    .then(m => ({ default: m.MobileOptimizationsProvider }))
-    .catch(() => ({ default: () => null }))
-);
+// Import MobileOptimizationsProvider directly (not lazy) for immediate mobile fixes
+import { MobileOptimizationsProvider } from "@/components/MobileOptimizationsProvider";
 
 const ServiceIntegrationTracker = lazy(() => 
   import("@/components/ServiceIntegrationTracker")
@@ -79,12 +77,14 @@ const AnalyticsInitializer = () => {
         initPreloadStrategies();
       });
 
-      // Initialize self-healing after initial render
+      // Defer self-healing initialization by 3 seconds
       requestIdleCallback(() => {
-        selfHealing.initialize().catch((error) => {
-          console.error('Failed to initialize self-healing system:', error);
-        });
-      });
+        setTimeout(() => {
+          selfHealing.initialize().catch((error) => {
+            console.error('Failed to initialize self-healing system:', error);
+          });
+        }, 3000);
+      }, { timeout: 5000 });
     } else {
       // Fallback for browsers without requestIdleCallback
       setTimeout(() => {
@@ -119,24 +119,27 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
               <SubscriptionProvider>
                 <DemoModeProvider>
-                  <Suspense fallback={null}>
-                    <MobileOptimizationsProvider>
-                      <TooltipProvider>
-                        <OfflineIndicator />
-                        <Toaster />
-                        <Sonner />
-                        <CookieConsent />
-                        <PerformanceReport />
-                        {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
-                        <GlobalAnnouncer />
+                  <MobileOptimizationsProvider>
+                    <TooltipProvider>
+                      <OfflineIndicator />
+                      <Toaster />
+                      <Sonner />
+                      <CookieConsent />
+                      <PerformanceReport />
+                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
+                      <GlobalAnnouncer />
                       {/* Performance monitoring (dev only) */}
-                      <Suspense fallback={null}>
-                        <PerformanceMonitor />
-                      </Suspense>
+                      {import.meta.env.DEV && (
+                        <Suspense fallback={null}>
+                          <PerformanceMonitor />
+                        </Suspense>
+                      )}
                       {/* Performance overlay (dev only) */}
-                      <Suspense fallback={null}>
-                        <PerformanceOverlay />
-                      </Suspense>
+                      {import.meta.env.DEV && (
+                        <Suspense fallback={null}>
+                          <PerformanceOverlay />
+                        </Suspense>
+                      )}
                       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                         <EnhancedAuthProvider>
                           <AnalyticsInitializer />
@@ -152,7 +155,7 @@ const App = () => {
                             <Suspense fallback={null}>
                               <RoleSwitchProtection />
                             </Suspense>
-                            <TimeoutGuard>
+                            <TimeoutGuard timeout={15000}>
                               <Routes>
                                 {AppRoutes()}
                               </Routes>
@@ -162,8 +165,7 @@ const App = () => {
                       </BrowserRouter>
                     </TooltipProvider>
                   </MobileOptimizationsProvider>
-                </Suspense>
-              </DemoModeProvider>
+                </DemoModeProvider>
             </SubscriptionProvider>
           </QueryClientProvider>
         </NetworkAwareLoader>

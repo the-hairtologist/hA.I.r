@@ -53,11 +53,22 @@
   .h-screen-safe {
     height: 100vh;
     height: 100dvh;
+    height: calc(var(--vh, 1vh) * 100); /* Fallback for older browsers */
   }
   
   .min-h-screen-safe {
     min-height: 100vh;
     min-height: 100dvh;
+    min-height: calc(var(--vh, 1vh) * 100); /* Fallback for older browsers */
+  }
+  
+  /* iOS-specific viewport height fix for keyboard */
+  @supports (-webkit-touch-callout: none) {
+    body {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      min-height: calc(var(--vh, 1vh) * 100);
+    }
   }
   
   /* Responsive text sizing based on device */

@@ -7,6 +7,39 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
   const { isOnline } = useOfflineStatus();
 
   useEffect(() => {
+    // Apply immediate mobile optimizations
+    const applyMobileOptimizations = () => {
+      // Viewport height fix
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      
+      // Add safe area support class
+      if (CSS.supports('padding-top: env(safe-area-inset-top)')) {
+        document.documentElement.classList.add('has-safe-area');
+      }
+      
+      // Enable touch optimization
+      document.body.style.touchAction = 'manipulation';
+    };
+
+    applyMobileOptimizations();
+    
+    // Re-apply on resize and orientation change
+    const handleResize = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     // Warm up the cache on app load
     if (isOnline) {
       warmUpCache();

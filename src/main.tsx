@@ -7,6 +7,23 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
+// Mobile viewport height fix
+const setViewportHeight = () => {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+};
+
+// Initialize viewport height
+setViewportHeight();
+window.addEventListener('resize', setViewportHeight);
+window.addEventListener('orientationchange', setViewportHeight);
+
+// Apply mobile optimizations to body
+if (document.body) {
+  document.body.style.overscrollBehavior = 'none';
+  document.body.style.touchAction = 'pan-y';
+}
+
 // Service Worker cleanup for mobile issues
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
@@ -52,11 +69,11 @@ const initApp = () => {
       return;
     }
 
-    // Set timeout for app initialization
+    // Set timeout for app initialization (increased for mobile)
     const initTimeout = setTimeout(() => {
       console.warn('App taking too long to initialize');
       showTimeoutWarning();
-    }, 10000);
+    }, 15000);
 
     const root = createRoot(rootElement);
     root.render(<App />);
