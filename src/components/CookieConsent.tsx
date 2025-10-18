@@ -77,7 +77,7 @@ export const CookieConsent = () => {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end justify-center p-4">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-modal-backdrop flex items-end justify-center p-4">
       <Card className="max-w-2xl w-full p-6 brutal-border brutal-shadow-lg">
         {!showPreferences ? (
           <div className="space-y-4">

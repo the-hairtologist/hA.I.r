@@ -230,7 +230,7 @@ const Auth = () => {
   }, "Social Sign In");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-primary p-4 relative overflow-hidden" style={{
+    <div className="min-h-screen-safe flex items-center justify-center bg-primary p-4 relative overflow-hidden" style={{
       backgroundImage: `
         linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
         linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)

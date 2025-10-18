@@ -81,7 +81,7 @@ export const CelebrationAnimation = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm animate-fade-in" style={{ backgroundColor: 'var(--brutal-overlay)' }}>
+    <div className="fixed inset-0 z-emergency flex items-center justify-center backdrop-blur-sm animate-fade-in" style={{ backgroundColor: 'var(--brutal-overlay)' }}>
       {showConfetti && (
         <Confetti
           width={window.innerWidth}

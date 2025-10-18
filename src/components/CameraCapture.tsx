@@ -235,7 +235,7 @@ export const CameraCapture = ({
         onClick={handleCapture}
         disabled={disabled || capturing || processing}
         className={cn(
-          "fixed bottom-[104px] right-20 h-14 w-14 rounded-full shadow-2xl z-50 touch-manipulation active:scale-95",
+          "fixed bottom-[104px] right-20 h-14 w-14 rounded-full shadow-2xl z-fixed touch-manipulation active:scale-95",
           "bg-gradient-to-br from-primary to-secondary",
           "hover:opacity-90",
           "transform transition-all duration-300 hover:scale-110",

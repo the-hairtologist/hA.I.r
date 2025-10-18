@@ -105,7 +105,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
         />
       )}
 
-      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-modal-backdrop flex items-center justify-center p-4 animate-fade-in">
         <Card className="max-w-md w-full border-2 border-primary/20 shadow-2xl animate-scale-in">
           <CardContent className="p-8 text-center space-y-6">
             {/* Close button */}

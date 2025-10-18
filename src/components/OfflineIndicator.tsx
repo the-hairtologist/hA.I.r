@@ -33,7 +33,7 @@ export const OfflineIndicator = () => {
   return (
     <div
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 animate-fade-in",
+        "fixed top-0 left-0 right-0 z-fixed animate-fade-in",
         "transition-transform duration-300"
       )}
       role="alert"

@@ -33,7 +33,7 @@ export const OfflineStatusBar = () => {
   return (
     <div 
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 px-4 py-2 backdrop-blur-lg border-b transition-all animate-in slide-in-from-top-2",
+        "fixed top-0 left-0 right-0 z-fixed px-4 py-2 backdrop-blur-lg border-b transition-all animate-in slide-in-from-top-2",
         quality === 'offline' && "bg-destructive/90 border-destructive text-destructive-foreground",
         quality === 'poor' && "bg-warning/90 border-warning text-warning-foreground",
         quality === 'fair' && "bg-info/90 border-info text-info-foreground",

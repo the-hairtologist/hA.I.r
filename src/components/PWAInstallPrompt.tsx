@@ -84,7 +84,7 @@ export function PWAInstallPrompt() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 animate-slide-up">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-fixed animate-slide-up">
       <Card className="p-4 shadow-xl border-2 border-primary/20 bg-gradient-to-br from-background to-primary/5">
         <button
           onClick={handleDismiss}
