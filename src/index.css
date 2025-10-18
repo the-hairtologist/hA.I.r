@@ -1500,11 +1500,6 @@ All colors MUST be HSL.
       page-break-inside: avoid;
     }
 
-    /* Headers and footers for pages */
-    @page {
-      margin: 1.5cm;
-    }
-
     /* Print-specific utilities */
     .print-only {
       display: block !important;
@@ -1666,4 +1661,9 @@ All colors MUST be HSL.
   .glass-brutal {
     @apply backdrop-blur-xl bg-background/80 border-[3px] border-foreground/20;
   }
+}
+
+/* Print page margins - must be outside @layer */
+@page {
+  margin: 1.5cm;
 }
