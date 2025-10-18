@@ -2637,6 +2637,81 @@ export type Database = {
           },
         ]
       }
+      mobile_error_logs: {
+        Row: {
+          created_at: string | null
+          device_info: Json | null
+          error_message: string
+          error_type: string
+          id: string
+          stack_trace: string | null
+          user_id: string | null
+          viewport_size: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          device_info?: Json | null
+          error_message: string
+          error_type: string
+          id?: string
+          stack_trace?: string | null
+          user_id?: string | null
+          viewport_size?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          device_info?: Json | null
+          error_message?: string
+          error_type?: string
+          id?: string
+          stack_trace?: string | null
+          user_id?: string | null
+          viewport_size?: string | null
+        }
+        Relationships: []
+      }
+      mobile_optimization_metrics: {
+        Row: {
+          created_at: string | null
+          device_type: string
+          id: string
+          interaction_latency_ms: number | null
+          offline_events_count: number | null
+          performance_score: number | null
+          safe_area_bottom: number | null
+          safe_area_top: number | null
+          user_id: string | null
+          viewport_height: number
+          viewport_width: number
+        }
+        Insert: {
+          created_at?: string | null
+          device_type: string
+          id?: string
+          interaction_latency_ms?: number | null
+          offline_events_count?: number | null
+          performance_score?: number | null
+          safe_area_bottom?: number | null
+          safe_area_top?: number | null
+          user_id?: string | null
+          viewport_height: number
+          viewport_width: number
+        }
+        Update: {
+          created_at?: string | null
+          device_type?: string
+          id?: string
+          interaction_latency_ms?: number | null
+          offline_events_count?: number | null
+          performance_score?: number | null
+          safe_area_bottom?: number | null
+          safe_area_top?: number | null
+          user_id?: string | null
+          viewport_height?: number
+          viewport_width?: number
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string | null
@@ -4104,6 +4179,39 @@ export type Database = {
           id?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_mobile_preferences: {
+        Row: {
+          created_at: string | null
+          haptic_feedback_enabled: boolean | null
+          id: string
+          offline_mode_enabled: boolean | null
+          preferred_theme: string | null
+          reduce_animations: boolean | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          haptic_feedback_enabled?: boolean | null
+          id?: string
+          offline_mode_enabled?: boolean | null
+          preferred_theme?: string | null
+          reduce_animations?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          haptic_feedback_enabled?: boolean | null
+          id?: string
+          offline_mode_enabled?: boolean | null
+          preferred_theme?: string | null
+          reduce_animations?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
