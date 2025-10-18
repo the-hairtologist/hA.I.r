@@ -1672,7 +1672,78 @@ All colors MUST be HSL.
   .glass-brutal {
     @apply backdrop-blur-xl bg-background/80 border-[3px] border-foreground/20;
   }
+  
+  /* ============================================ */
+  /* MICRO-INTERACTIONS & PREMIUM POLISH */
+  /* ============================================ */
+  
+  /* Smooth hover scale */
+  .hover-scale {
+    @apply transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[0.98];
+  }
+  
+  /* Button press effect */
+  .btn-press {
+    @apply transition-all duration-100 active:translate-y-[1px] active:shadow-inner;
+  }
+  
+  /* Hover lift with shadow */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+  
+  /* Hover glow effect */
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--primary),0.4)];
+  }
+  
+  /* Link underline animation */
+  .link-animated {
+    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+  }
+  
+  /* Smooth background fade */
+  .bg-fade {
+    @apply transition-colors duration-300 ease-in-out;
+  }
+  
+  /* Subtle bounce on hover */
+  .hover-bounce {
+    @apply transition-transform duration-300 hover:animate-bounce-gentle;
+  }
+  
+  /* Interactive icon pulse */
+  .icon-pulse {
+    @apply transition-all duration-300 hover:animate-pulse-subtle;
+  }
+  
+  /* Card hover effect */
+  .card-interactive {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/30 cursor-pointer;
+  }
+  
+  /* Smooth sidebar nav hover */
+  .nav-item-hover {
+    @apply transition-all duration-200 hover:bg-accent/50 hover:translate-x-1;
+  }
+  
+  /* Focus indicators (accessibility) */
+  .focus-highlight {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+  
+  /* Shimmer loading effect */
+  .shimmer-loading {
+    @apply relative overflow-hidden after:absolute after:inset-0 after:-translate-x-full after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:animate-[shimmer_2s_infinite];
+  }
+  
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
+
 
 /* Print page margins - must be outside @layer */
 @page {

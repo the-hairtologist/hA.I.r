@@ -1238,6 +1238,77 @@ export type Database = {
           },
         ]
       }
+      client_sentiment_analysis: {
+        Row: {
+          analyzed_at: string | null
+          client_id: string | null
+          confidence: number | null
+          created_at: string | null
+          id: string
+          insights: Json | null
+          recommendations: Json | null
+          risk_level: string | null
+          score: number
+          sentiment: string
+          stylist_id: string | null
+        }
+        Insert: {
+          analyzed_at?: string | null
+          client_id?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          insights?: Json | null
+          recommendations?: Json | null
+          risk_level?: string | null
+          score: number
+          sentiment: string
+          stylist_id?: string | null
+        }
+        Update: {
+          analyzed_at?: string | null
+          client_id?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          insights?: Json | null
+          recommendations?: Json | null
+          risk_level?: string | null
+          score?: number
+          sentiment?: string
+          stylist_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_sentiment_analysis_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_sentiment_analysis_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "client_sentiment_analysis_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_sentiment_analysis_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commissions: {
         Row: {
           brand_id: string | null
@@ -2566,6 +2637,39 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          read: boolean | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          read?: boolean | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          read?: boolean | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       onboarding_progress: {
         Row: {
           completed_at: string | null
@@ -3333,6 +3437,71 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      sms_conversations: {
+        Row: {
+          client_id: string | null
+          created_at: string | null
+          direction: string
+          from_number: string
+          id: string
+          message_body: string
+          stylist_id: string | null
+          to_number: string
+          twilio_sid: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string | null
+          direction: string
+          from_number: string
+          id?: string
+          message_body: string
+          stylist_id?: string | null
+          to_number: string
+          twilio_sid?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string | null
+          direction?: string
+          from_number?: string
+          id?: string
+          message_body?: string
+          stylist_id?: string | null
+          to_number?: string
+          twilio_sid?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_conversations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sms_conversations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "sms_conversations_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_profiles_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sms_conversations_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       stylist_affiliate_codes: {
         Row: {

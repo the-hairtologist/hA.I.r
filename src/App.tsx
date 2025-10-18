@@ -30,6 +30,7 @@ import { initSentry } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
+import { FirstTimeOnboarding } from "@/components/onboarding/FirstTimeOnboarding";
 import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { selfHealing } from "@/lib/selfHealing";
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
@@ -191,6 +192,8 @@ const App = () => {
                             <ServiceIntegrationTracker />
                           </Suspense>
                           <TourProvider>
+                            {/* First-time onboarding */}
+                            <FirstTimeOnboarding />
                             {/* Role switch protection */}
                             <Suspense fallback={null}>
                               <RoleSwitchProtection />
