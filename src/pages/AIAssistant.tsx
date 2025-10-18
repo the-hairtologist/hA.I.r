@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, MessageSquare, User } from "lucide-react";
+import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, MessageSquare, User, Brain } from "lucide-react";
 import { LoadingDots } from "@/components/ui/loading-dots";
 import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,8 @@ import { FormulaOutcomeFeedback } from "@/components/FormulaOutcomeFeedback";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { CameraCapture } from "@/components/CameraCapture";
 import { VoiceControl } from "@/components/VoiceControl";
+import { AdvancedAITools } from "@/components/ai/AdvancedAITools";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useAIAnalytics } from "@/hooks/useAIAnalytics";
 import { useFeatureFlag } from "@/lib/featureFlags";
 
@@ -656,6 +658,26 @@ const Knowledge = () => {
               </div>
             )}
           </div>
+
+          {/* Advanced AI Tools Section */}
+          {userRole === "stylist" && (
+            <div className="mb-4">
+              <Collapsible defaultOpen={false}>
+                <CollapsibleTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between" size="lg">
+                    <div className="flex items-center gap-2">
+                      <Brain className="h-5 w-5" />
+                      <span>Advanced Strategy Tools</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">Click to expand</span>
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-4">
+                  <AdvancedAITools />
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+          )}
 
           {/* Main Chat Area */}
           <div className="min-h-[min(60vh,500px)] md:min-h-0">
