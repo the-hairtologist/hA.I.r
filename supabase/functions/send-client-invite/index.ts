@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,12 +7,13 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface InviteRequest {
-  clientEmail: string;
-  clientName: string;
-  stylistName: string;
-  customMessage?: string;
-}
+// Input validation schema
+const requestSchema = z.object({
+  clientEmail: z.string().email().max(255),
+  clientName: z.string().min(1).max(255),
+  stylistName: z.string().min(1).max(255),
+  customMessage: z.string().max(1000).optional()
+});
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -19,7 +21,21 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { clientEmail, clientName, stylistName, customMessage }: InviteRequest = await req.json();
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid input',
+          details: validationResult.error.format()
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { clientEmail, clientName, stylistName, customMessage } = validationResult.data;
 
     const appUrl = Deno.env.get("VITE_SUPABASE_URL")?.replace("/rest/v1", "") || "https://app.example.com";
 

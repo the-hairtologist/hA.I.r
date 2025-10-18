@@ -5,7 +5,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Scissors, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { z } from "zod";
 
 interface RoleSelectionDialogProps {
   open: boolean;
@@ -23,6 +24,16 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
+
+      // Validate UUID format (defense-in-depth)
+      if (!z.string().uuid().safeParse(user.id).success) {
+        throw new Error("Invalid user ID format");
+      }
+
+      // Validate role value
+      if (!['client', 'stylist'].includes(selectedRole)) {
+        throw new Error("Invalid role selected");
+      }
 
       // Assign role
       const { error: roleError } = await supabase.rpc("assign_user_role", {
@@ -58,19 +69,12 @@ export const RoleSelectionDialog = ({ open, onComplete }: RoleSelectionDialogPro
         }
       }
 
-      toast({
-        title: "Welcome! 🎉",
-        description: `Your ${selectedRole} account is ready!`,
-      });
+      toast.success(`Welcome! 🎉 Your ${selectedRole} account is ready!`);
 
       onComplete();
     } catch (error: any) {
       console.error("Error assigning role:", error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to set up your account. Please try again.",
-        variant: "destructive",
-      });
+      toast.error(error.message || "Failed to set up your account. Please try again.");
     } finally {
       setLoading(false);
     }

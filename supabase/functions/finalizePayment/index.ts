@@ -1,17 +1,19 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface PaymentRequest {
-  appointmentId: string;
-  amount: number;
-  paymentMethod: string;
-  metadata?: Record<string, any>;
-}
+// Input validation schema
+const requestSchema = z.object({
+  appointmentId: z.string().uuid(),
+  amount: z.number().positive().max(100000),
+  paymentMethod: z.enum(['card', 'cash', 'other']).optional().default('card'),
+  metadata: z.record(z.any()).optional().default({})
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -37,12 +39,21 @@ serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    const { appointmentId, amount, paymentMethod, metadata = {} }: PaymentRequest = 
-      await req.json();
-
-    if (!appointmentId || !amount || !paymentMethod) {
-      throw new Error('Missing required fields: appointmentId, amount, paymentMethod');
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid input',
+          details: validationResult.error.format()
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
+
+    const { appointmentId, amount, paymentMethod, metadata } = validationResult.data;
 
     // Verify appointment exists and user has permission
     const { data: appointment, error: appointmentError } = await supabaseClient
