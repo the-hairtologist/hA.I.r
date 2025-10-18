@@ -56,6 +56,7 @@ import { useFeatureFlag } from "@/lib/featureFlags";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles, BookOpen } from "lucide-react";
 import { ProgressTracker } from "@/components/ProgressTracker";
+import { VoiceInterface } from "@/components/VoiceInterface";
 import {
   DndContext,
   closestCenter,
@@ -125,6 +126,7 @@ const Dashboard = () => {
 
   // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
+    { id: "voice-assistant", title: "Voice Assistant", component: "VoiceInterface", enabled: true },
     { id: "progress-tracker", title: "Your Progress", component: "ProgressTracker", enabled: true },
     { id: "predictive-insights", title: "AI Predictions", component: "PredictiveInsights", enabled: true },
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
@@ -622,6 +624,8 @@ const Dashboard = () => {
     if (!section.enabled) return null;
 
     switch (section.component) {
+      case "VoiceInterface":
+        return <VoiceInterface />;
       case "NextAppointment":
         return (userRole === "client" || isAdmin) ? (
           <NextAppointmentWidget />
