@@ -34,13 +34,24 @@ const TimeoutFallback = ({ onRetry, connectionSpeed }: { onRetry: () => void; co
 
 export const TimeoutGuard = ({ 
   children, 
-  timeout = 20000, // Increased from 15s to 20s for mobile
+  timeout = 30000, // Increased to 30s to allow profile/subscription loading
   fallbackMessage = "Getting things ready..."
 }: TimeoutGuardProps) => {
   const [showTimeout, setShowTimeout] = useState(false);
   const [connectionSpeed, setConnectionSpeed] = useState<string>('unknown');
 
   useEffect(() => {
+    // Check if user just logged in (within last 30 seconds) - don't show timeout during login flow
+    const lastLogin = sessionStorage.getItem('last_login');
+    if (lastLogin) {
+      const loginTime = parseInt(lastLogin);
+      const timeSinceLogin = Date.now() - loginTime;
+      if (timeSinceLogin < 30000) {
+        // User just logged in, don't show timeout
+        return;
+      }
+    }
+
     // Detect connection speed
     const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
     if (connection) {
@@ -50,9 +61,9 @@ export const TimeoutGuard = ({
       // Adjust timeout based on connection
       let adjustedTimeout = timeout;
       if (effectiveType === 'slow-2g' || effectiveType === '2g') {
-        adjustedTimeout = 25000;
+        adjustedTimeout = 35000;
       } else if (effectiveType === '3g') {
-        adjustedTimeout = 18000;
+        adjustedTimeout = 28000;
       }
       
       const timer = setTimeout(() => {

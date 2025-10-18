@@ -68,11 +68,15 @@ export function FirstTimeOnboarding() {
     const isFirstVisit = !localStorage.getItem("has_visited");
 
     if (!hasCompletedOnboarding && isFirstVisit) {
-      // Delay opening to let the app fully load
+      // Wait for dashboard to fully load before showing onboarding
       const timer = setTimeout(() => {
-        setOpen(true);
-        localStorage.setItem("has_visited", "true");
-      }, 1500);
+        // Only show if dashboard has finished loading
+        const dashboardLoaded = sessionStorage.getItem("dashboard_loaded");
+        if (dashboardLoaded === "true") {
+          setOpen(true);
+          localStorage.setItem("has_visited", "true");
+        }
+      }, 8000); // Increased delay to 8 seconds for smoother experience
 
       return () => clearTimeout(timer);
     }

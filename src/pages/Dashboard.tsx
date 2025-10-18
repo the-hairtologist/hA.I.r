@@ -220,6 +220,9 @@ const Dashboard = () => {
     if (userRole && profile) {
       loadDashboardData();
       
+      // Mark dashboard as loaded for coordinating other components
+      sessionStorage.setItem('dashboard_loaded', 'true');
+      
       // Check if we should show onboarding - only OnboardingWizard
       const onboardingComplete = localStorage.getItem('onboarding_completed');
       const profileComplete = localStorage.getItem('profile_completed');
@@ -253,6 +256,11 @@ const Dashboard = () => {
         }
       }
     }
+    
+    // Cleanup: Clear dashboard_loaded flag on unmount
+    return () => {
+      sessionStorage.removeItem('dashboard_loaded');
+    };
   }, [userRole, profile, subscribed, inTrial, subscriptionLoading]);
 
   useEffect(() => {

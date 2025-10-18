@@ -227,11 +227,18 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // CRITICAL: No async calls in callback - use setTimeout
         if (event === "SIGNED_IN" && session?.user) {
+          // Set login timestamp for coordinating loading UI
+          sessionStorage.setItem('last_login', Date.now().toString());
+          
           setState(prev => ({ ...prev, loading: true }));
           setTimeout(() => {
             loadAuthData(session.user);
           }, 0);
         } else if (event === "SIGNED_OUT") {
+          // Clear login coordination flags
+          sessionStorage.removeItem('last_login');
+          sessionStorage.removeItem('dashboard_loaded');
+          
           setState({
             user: null,
             profile: null,
