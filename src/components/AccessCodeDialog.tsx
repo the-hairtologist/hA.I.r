@@ -141,7 +141,7 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
             <Button type="submit" disabled={isSubmitting} className="flex-1">
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                   Redeeming...
                 </>
               ) : (

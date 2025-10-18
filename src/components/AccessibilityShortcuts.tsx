@@ -31,7 +31,7 @@ export const AccessibilityShortcuts = () => {
             </div>
           ),
           duration: 8000,
-          icon: <Keyboard className="h-4 w-4" />,
+          icon: <Keyboard className="h-5 w-5 sm:h-6 sm:w-6" />,
         });
         return;
       }

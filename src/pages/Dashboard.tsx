@@ -748,7 +748,7 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex-1">
                 <h3 className="text-xs sm:text-sm font-pixel text-foreground mb-1 flex items-center gap-2">
-                  <Edit3 className="h-3.5 w-3.5 text-primary" />
+                  <Edit3 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   Customize Dashboard
                 </h3>
                 <p className="text-[11px] sm:text-xs font-sans text-muted-foreground">
@@ -763,7 +763,7 @@ const Dashboard = () => {
                   onClick={handleReset}
                   className="text-xs font-bold uppercase tracking-wide"
                 >
-                  <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                  <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                   Reset
                 </Button>
                 <Button
@@ -771,7 +771,7 @@ const Dashboard = () => {
                   onClick={handleSave}
                   className="text-xs font-bold uppercase tracking-wide"
                 >
-                  <Save className="h-3.5 w-3.5 mr-1" />
+                  <Save className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                   Done
                 </Button>
               </div>
@@ -818,7 +818,7 @@ const Dashboard = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                   <div className="space-y-0.5">
                     <p className="text-[10px] xs:text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
-                      <Edit3 className="h-3.5 w-3.5 text-primary" />
+                      <Edit3 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                       {isAdmin ? "Customize Platform Dashboard" : "Personalize Your Dashboard"}
                     </p>
                     <p className="text-[10px] xs:text-xs text-muted-foreground">

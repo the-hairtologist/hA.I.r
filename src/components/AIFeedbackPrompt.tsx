@@ -110,7 +110,7 @@ export const AIFeedbackPrompt = ({
                 disabled={submitting}
                 className="flex-1 gap-2 brutal-shadow-xs brutal-hover"
               >
-                <ThumbsUp className="h-4 w-4" />
+                <ThumbsUp className="h-5 w-5 sm:h-6 sm:w-6" />
                 Yes
               </Button>
               
@@ -121,7 +121,7 @@ export const AIFeedbackPrompt = ({
                 disabled={submitting}
                 className="flex-1 gap-2 brutal-shadow-xs brutal-hover"
               >
-                <ThumbsDown className="h-4 w-4" />
+                <ThumbsDown className="h-5 w-5 sm:h-6 sm:w-6" />
                 Not quite
               </Button>
             </div>
@@ -129,7 +129,7 @@ export const AIFeedbackPrompt = ({
         ) : (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4 text-primary" />
+              <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               <p className="text-xs sm:text-sm font-medium">What could be better?</p>
             </div>
             

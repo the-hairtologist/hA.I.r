@@ -623,7 +623,7 @@ const Appointments = () => {
                               }}
                               className="h-8 opacity-0 group-hover:opacity-100 transition-opacity border-2 shadow-brutal"
                             >
-                              <Clock className="h-3.5 w-3.5 mr-1" />
+                              <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                               Start Timer
                             </Button>
                           )}

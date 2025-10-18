@@ -79,7 +79,7 @@ export const AccountDeletion = () => {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="destructive" size="sm">
-              <Trash2 className="h-4 w-4 mr-2" />
+              <Trash2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
               Delete My Account
             </Button>
           </AlertDialogTrigger>

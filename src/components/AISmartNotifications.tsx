@@ -156,7 +156,7 @@ export const AISmartNotifications = () => {
         <Card className="absolute right-0 top-full mt-2 w-96 z-50 shadow-lg">
           <CardContent className="p-4 space-y-3 max-h-96 overflow-y-auto">
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="h-4 w-4 text-primary" />
+              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               <span className="font-semibold">AI Smart Notifications</span>
             </div>
 

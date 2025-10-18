@@ -24,7 +24,7 @@ export const AIContextPanel = ({
     <Card className="brutal-border bg-gradient-to-br from-primary/5 to-accent/5">
       <CardHeader>
         <CardTitle className="text-xs sm:text-sm lg:text-base font-pixel flex items-center gap-2">
-          <Brain className="h-4 w-4 text-primary" />
+          <Brain className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
           AI Context Data
         </CardTitle>
       </CardHeader>
@@ -33,7 +33,7 @@ export const AIContextPanel = ({
         {clientContext ? (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-secondary" />
+              <User className="h-5 w-5 sm:h-6 sm:w-6 text-secondary" />
               <span className="text-xs sm:text-sm font-semibold">{clientContext.full_name}</span>
               <Badge variant="secondary" className="text-[11px] sm:text-xs">Client</Badge>
             </div>
@@ -95,7 +95,7 @@ export const AIContextPanel = ({
             onClick={onSelectClient}
             className="w-full"
           >
-            <User className="h-4 w-4 mr-2" />
+            <User className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
             Select Client for Context
           </Button>
         )}
@@ -104,7 +104,7 @@ export const AIContextPanel = ({
         {stylistContext && (
           <div className="space-y-3 pt-3 border-t-2 border-border">
             <div className="flex items-center gap-2">
-              <Scissors className="h-4 w-4 text-primary" />
+              <Scissors className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               <span className="text-xs sm:text-sm font-semibold">Your Profile</span>
             </div>
 
