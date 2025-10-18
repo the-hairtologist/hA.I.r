@@ -173,3 +173,9 @@ verify_jwt = false
 
 [functions.delete-user-account]
 verify_jwt = true
+
+[functions.twilio-sms-webhook]
+verify_jwt = false
+
+[functions.analyze-client-sentiment]
+verify_jwt = true
