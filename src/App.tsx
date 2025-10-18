@@ -49,32 +49,7 @@ import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { AppLayout } from "@/components/layout/AppLayout";
 import "@/lib/mobileHealthCheck";
 
-const PerformanceMonitor = lazy(() => 
-  import("@/components/PerformanceMonitor")
-    .then(m => ({ default: m.PerformanceMonitor }))
-    .catch(() => ({ default: () => null }))
-);
-
-const PerformanceOverlay = lazy(() => 
-  import("@/components/PerformanceOverlay")
-    .then(m => ({ default: m.PerformanceOverlay }))
-    .catch(() => ({ default: () => null }))
-);
-
-// Import MobileOptimizationsProvider directly (not lazy) for immediate mobile fixes
-import { MobileOptimizationsProvider } from "@/components/MobileOptimizationsProvider";
-
-const ServiceIntegrationTracker = lazy(() => 
-  import("@/components/ServiceIntegrationTracker")
-    .then(m => ({ default: m.ServiceIntegrationTracker }))
-    .catch(() => ({ default: () => null }))
-);
-
-const RoleSwitchProtection = lazy(() => 
-  import("@/components/RoleSwitchProtection")
-    .then(m => ({ default: m.RoleSwitchProtection }))
-    .catch(() => ({ default: () => null }))
-);
+// Removed problematic lazy-loaded components that were causing initialization conflicts
 
 const AnalyticsInitializer = () => {
   const { user } = useAuth();
@@ -173,58 +148,33 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
               <SubscriptionProvider>
                 <DemoModeProvider>
-                  <MobileOptimizationsProvider>
-                    <TooltipProvider>
-                      <OfflineIndicator />
-                      <Toaster />
-                      <Sonner />
-                      <CookieConsent />
-                      <PushOptInDialog />
-                      <PerformanceReport />
-                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
-                      <GlobalAnnouncer />
-                      {/* Performance monitoring (dev only) */}
-                      {import.meta.env.DEV && (
-                        <Suspense fallback={null}>
-                          <PerformanceMonitor />
-                        </Suspense>
-                      )}
-                      {/* Performance overlay (dev only) */}
-                      {import.meta.env.DEV && (
-                        <Suspense fallback={null}>
-                          <PerformanceOverlay />
-                        </Suspense>
-                      )}
-                      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                        <EnhancedAuthProvider>
-                          <AnalyticsInitializer />
-                          {/* Components requiring Router context */}
-                          <AccessibilityShortcuts />
-                          <CommandPalette />
-                          {/* Service integration tracking - requires Router context */}
-                          <Suspense fallback={null}>
-                            <ServiceIntegrationTracker />
-                          </Suspense>
-                          <TourProvider>
-                            {/* First-time onboarding */}
-                            <FirstTimeOnboarding />
-                            {/* Role switch protection */}
-                            <Suspense fallback={null}>
-                              <RoleSwitchProtection />
-                            </Suspense>
-                            <TimeoutGuard timeout={15000}>
-                              <AppLayout>
-                                <Routes>
-                                  {AppRoutes()}
-                                </Routes>
-                              </AppLayout>
-                              <PWAInstallPrompt />
-                            </TimeoutGuard>
-                          </TourProvider>
-                        </EnhancedAuthProvider>
-                      </BrowserRouter>
-                    </TooltipProvider>
-                  </MobileOptimizationsProvider>
+                  <TooltipProvider>
+                    <OfflineIndicator />
+                    <Toaster />
+                    <Sonner />
+                    <CookieConsent />
+                    <PushOptInDialog />
+                    <PerformanceReport />
+                    <GlobalAnnouncer />
+                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                      <EnhancedAuthProvider>
+                        <AnalyticsInitializer />
+                        <AccessibilityShortcuts />
+                        <CommandPalette />
+                        <TourProvider>
+                          <FirstTimeOnboarding />
+                          <TimeoutGuard timeout={15000}>
+                            <AppLayout>
+                              <Routes>
+                                {AppRoutes()}
+                              </Routes>
+                            </AppLayout>
+                            <PWAInstallPrompt />
+                          </TimeoutGuard>
+                        </TourProvider>
+                      </EnhancedAuthProvider>
+                    </BrowserRouter>
+                  </TooltipProvider>
                 </DemoModeProvider>
             </SubscriptionProvider>
           </QueryClientProvider>
