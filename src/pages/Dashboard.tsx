@@ -16,7 +16,7 @@ import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
 import { NotificationManager } from "@/components/NotificationManager";
-import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
+import { DashboardSkeleton } from "@/components/loading/PageSkeleton";
 import { NextAppointmentWidget } from "@/components/dashboard/NextAppointmentWidget";
 import { LoyaltyProgressWidget } from "@/components/dashboard/LoyaltyProgressWidget";
 import { CommissionTrackerWidget } from "@/components/dashboard/CommissionTrackerWidget";
@@ -589,7 +589,7 @@ const Dashboard = () => {
     return (
       <DashboardLayout>
         <div className="p-4 md:p-6 lg:p-8">
-          <DashboardFullSkeleton />
+          <DashboardSkeleton />
         </div>
       </DashboardLayout>
     );

@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteClientDialog } from "@/components/InviteClientDialog";
 import { SearchInput } from "@/components/SearchInput";
-import { ClientCardSkeleton } from "@/components/LoadingSkeleton";
+import { ClientListSkeleton } from "@/components/loading/PageSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

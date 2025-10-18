@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TrendingUp, Users, DollarSign, Calendar, Target, Zap } from "lucide-react";
 import { ClientSentimentTracker } from "@/components/ClientSentimentTracker";
 import { format, subDays, startOfDay, endOfDay } from "date-fns";
+import { AnalyticsSkeleton } from "@/components/loading/PageSkeleton";
 
 type TimeRange = "7days" | "30days" | "90days" | "1year";
 
@@ -154,9 +155,7 @@ export default function Analytics() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
+        <AnalyticsSkeleton />
       ) : (
         <>
           {/* Key Metrics */}

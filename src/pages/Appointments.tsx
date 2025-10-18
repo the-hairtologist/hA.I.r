@@ -17,7 +17,7 @@ import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { SearchInput } from "@/components/SearchInput";
-import { AppointmentSkeleton } from "@/components/LoadingSkeleton";
+import { AppointmentListSkeleton } from "@/components/loading/PageSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RebookDialog } from "@/components/RebookDialog";
@@ -326,11 +326,7 @@ const Appointments = () => {
           </div>
         </header>
         <main className="container mx-auto px-4 py-8">
-          <div className="space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <AppointmentSkeleton key={i} />
-            ))}
-          </div>
+          <AppointmentListSkeleton />
         </main>
       </div>
     );

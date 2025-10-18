@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, ArrowLeft, Trash2, Sparkles } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
+import { PortfolioSkeleton } from "@/components/loading/PageSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { PortfolioInsights } from "@/components/PortfolioInsights";
 import { BackgroundRemovalDialog } from "@/components/BackgroundRemovalDialog";
