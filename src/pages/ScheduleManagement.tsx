@@ -1089,7 +1089,8 @@ const ScheduleManagement = () => {
                                 </Button>
                               </div>
                               {days.map(({ key, label }) => {
-                                const daySchedule = overrideSchedule[key];
+                                // Safety check: ensure day exists in schedule with fallback
+                                const daySchedule = overrideSchedule?.[key] || { enabled: false, startTime: "09:00", endTime: "17:00" };
                                 return (
                                   <div key={key} className="flex items-center gap-4">
                                     <div className="w-28">
