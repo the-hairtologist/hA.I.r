@@ -145,11 +145,11 @@ export default function AdminCommandCenter() {
         actions={
           <div className="flex gap-2">
             <Button onClick={runSystemMaintenance} size="sm" className="gap-2">
-              <Zap className="h-4 w-4" />
+              <Zap className="h-5 w-5 sm:h-6 sm:w-6" />
               <span className="hidden sm:inline">Maintenance</span>
             </Button>
             <Button onClick={loadCommandCenterData} variant="outline" size="sm" className="gap-2">
-              <RefreshCw className={`h-4 w-4 ${loadingData ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-5 w-5 sm:h-6 sm:w-6 ${loadingData ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">Refresh</span>
             </Button>
           </div>
@@ -162,7 +162,7 @@ export default function AdminCommandCenter() {
           <div className="relative z-10">
             <div className="flex items-center gap-3">
               <Badge className="bg-warning text-warning-foreground border-2 border-foreground text-sm sm:text-base md:text-lg px-4 py-2">
-                <Crown className="h-4 w-4 mr-2" />
+                <Crown className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 GOD MODE
               </Badge>
               <p className="text-on-surface-primary font-medium">
@@ -330,7 +330,7 @@ export default function AdminCommandCenter() {
                           onClick={() => navigate(`/admin/user/${user.id}`)}
                           className="border-2 border-foreground shadow-brutal hover:bg-secondary"
                         >
-                          <Eye className="h-4 w-4 mr-1" />
+                          <Eye className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
                           View
                         </Button>
                       </div>
@@ -421,7 +421,7 @@ export default function AdminCommandCenter() {
                     errorLogs.map((error) => (
                       <div key={error.id} className="p-3 border-2 border-destructive/20 bg-destructive/5 rounded-lg">
                         <div className="flex items-start gap-2 mb-2">
-                          <XCircle className="h-4 w-4 text-destructive mt-0.5" />
+                          <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-destructive mt-0.5" />
                           <div className="flex-1">
                             <p className="font-medium text-sm">{error.component}</p>
                             <p className="text-xs text-muted-foreground">{error.error_message}</p>

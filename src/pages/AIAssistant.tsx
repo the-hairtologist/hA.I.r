@@ -601,7 +601,7 @@ const Knowledge = () => {
               <div className="window-chrome bg-gradient-to-br from-secondary/5 to-primary/5">
                 <div className="p-3 md:p-4">
                   <div className="flex items-center gap-2 mb-3 md:mb-4">
-                    <History className="h-4 w-4 text-secondary" />
+                    <History className="h-5 w-5 sm:h-6 sm:w-6 text-secondary" />
                     <h3 className="text-sm font-pixel">Saved Formulas</h3>
                   </div>
                   <div className="space-y-2">
@@ -628,7 +628,7 @@ const Knowledge = () => {
                 <div className="p-3 md:p-4">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <CheckSquare className="h-4 w-4 text-accent" />
+                      <CheckSquare className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                       <h3 className="text-sm font-pixel">Step Tracker</h3>
                     </div>
                     <Badge variant="secondary" className="text-xs font-mono">
@@ -804,7 +804,7 @@ const Knowledge = () => {
                                     }}
                                     className="mt-4 retro-button bg-gradient-to-r from-secondary to-accent text-secondary-foreground px-4 py-2 rounded-lg font-bold uppercase tracking-wide text-sm flex items-center gap-2"
                                   >
-                                    <Save className="h-4 w-4" />
+                                    <Save className="h-5 w-5 sm:h-6 sm:w-6" />
                                     Save Formula
                                   </button>
                                 )}
@@ -873,7 +873,7 @@ const Knowledge = () => {
                     className="retro-button bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 md:px-6 rounded-xl font-bold uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm md:text-base touch-manipulation min-h-[44px]"
                     aria-label="Send message"
                   >
-                    <Send className="h-4 w-4" />
+                    <Send className="h-5 w-5 sm:h-6 sm:w-6" />
                     <span className="hidden md:inline">Send</span>
                   </button>
                 </div>

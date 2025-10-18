@@ -449,7 +449,7 @@ const Appointments = () => {
               />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
-                  <Filter className="h-4 w-4 mr-2" />
+                  <Filter className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -768,7 +768,7 @@ const Appointments = () => {
                         setDetailsOpen(false);
                       }}
                     >
-                      <User className="h-4 w-4" />
+                      <User className="h-5 w-5 sm:h-6 sm:w-6" />
                       View Client History
                     </Button>
                     <Button 
@@ -780,7 +780,7 @@ const Appointments = () => {
                         setDetailsOpen(false);
                       }}
                     >
-                      <FileText className="h-4 w-4" />
+                      <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
                       View Client Formulas
                     </Button>
                     <Button 
@@ -792,7 +792,7 @@ const Appointments = () => {
                         setDetailsOpen(false);
                       }}
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-5 w-5 sm:h-6 sm:w-6" />
                       Create New Formula
                     </Button>
                   </div>
@@ -808,12 +808,12 @@ const Appointments = () => {
                   >
                     {updatingStatus === selectedAppointment.id ? (
                       <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 animate-spin" />
                         Confirming...
                       </>
                     ) : (
                       <>
-                        <CheckCircle className="h-4 w-4 mr-2" />
+                        <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Confirm
                       </>
                     )}
@@ -824,7 +824,7 @@ const Appointments = () => {
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "cancelled")}
                     disabled={updatingStatus === selectedAppointment.id}
                   >
-                    <XCircle className="h-4 w-4 mr-2" />
+                    <XCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                     Cancel
                   </Button>
                 </div>
@@ -836,7 +836,7 @@ const Appointments = () => {
                     className="flex-1 min-h-[44px]"
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "completed")}
                   >
-                    <CheckCircle className="h-4 w-4 mr-2" />
+                    <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                     Mark Complete
                   </Button>
                   <Button
@@ -859,7 +859,7 @@ const Appointments = () => {
                       setDetailsOpen(false);
                     }}
                   >
-                    <Repeat className="h-4 w-4 mr-2" />
+                    <Repeat className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                     Book Again
                   </Button>
                   {userRole === "client" && (
@@ -882,7 +882,7 @@ const Appointments = () => {
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "cancelled")}
                     disabled={updatingStatus === selectedAppointment.id}
                   >
-                    <XCircle className="h-4 w-4 mr-2" />
+                    <XCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                     Cancel Appointment
                   </Button>
                 </div>

@@ -144,12 +144,12 @@ export default function AdGenerator() {
               >
                 {generating ? (
                   <>
-                    <Sparkles className="h-4 w-4 animate-spin" />
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                     Generating...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="h-4 w-4" />
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
                     Generate Ad Copy
                   </>
                 )}
@@ -162,12 +162,12 @@ export default function AdGenerator() {
               >
                 {generating ? (
                   <>
-                    <Sparkles className="h-4 w-4 animate-spin" />
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                     Generating...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="h-4 w-4" />
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
                     Generate with Image
                   </>
                 )}
@@ -210,7 +210,7 @@ export default function AdGenerator() {
                       onClick={() => copyToClipboard(generatedAd.copy.headline, "headline")}
                       className={copied === "headline" ? "text-green-500" : ""}
                     >
-                      {copied === "headline" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      {copied === "headline" ? <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" /> : <Copy className="h-5 w-5 sm:h-6 sm:w-6" />}
                     </Button>
                   </div>
                   <div className="p-4 bg-muted rounded-lg">
@@ -228,7 +228,7 @@ export default function AdGenerator() {
                       onClick={() => copyToClipboard(generatedAd.copy.bodyCopy, "body")}
                       className={copied === "body" ? "text-green-500" : ""}
                     >
-                      {copied === "body" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      {copied === "body" ? <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" /> : <Copy className="h-5 w-5 sm:h-6 sm:w-6" />}
                     </Button>
                   </div>
                   <div className="p-4 bg-muted rounded-lg">
@@ -246,7 +246,7 @@ export default function AdGenerator() {
                       onClick={() => copyToClipboard(generatedAd.copy.cta, "cta")}
                       className={copied === "cta" ? "text-green-500" : ""}
                     >
-                      {copied === "cta" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      {copied === "cta" ? <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" /> : <Copy className="h-5 w-5 sm:h-6 sm:w-6" />}
                     </Button>
                   </div>
                   <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary/20">
@@ -263,7 +263,7 @@ export default function AdGenerator() {
                   copyToClipboard(allText, "all");
                 }}
               >
-                {copied === "all" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copied === "all" ? <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" /> : <Copy className="h-5 w-5 sm:h-6 sm:w-6" />}
                 {copied === "all" ? "Copied!" : "Copy All Text"}
               </Button>
             </CardContent>

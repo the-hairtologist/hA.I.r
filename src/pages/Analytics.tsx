@@ -163,7 +163,7 @@ export default function Analytics() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -178,7 +178,7 @@ export default function Analytics() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Appointments</CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{analytics?.totalAppointments || 0}</div>
@@ -191,7 +191,7 @@ export default function Analytics() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Unique Clients</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
+                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{analytics?.uniqueClients || 0}</div>
@@ -202,7 +202,7 @@ export default function Analytics() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Avg Rating</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -219,15 +219,15 @@ export default function Analytics() {
           <Tabs defaultValue="performance" className="space-y-4">
             <TabsList>
               <TabsTrigger value="performance">
-                <Target className="h-4 w-4 mr-2" />
+                <Target className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 Performance
               </TabsTrigger>
               <TabsTrigger value="sentiment">
-                <Zap className="h-4 w-4 mr-2" />
+                <Zap className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 Client Sentiment
               </TabsTrigger>
               <TabsTrigger value="trends">
-                <TrendingUp className="h-4 w-4 mr-2" />
+                <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 Trends
               </TabsTrigger>
             </TabsList>

@@ -172,10 +172,10 @@ const BookingPage = () => {
                   title={bookingUrl}
                 />
                 <Button onClick={copyToClipboard} variant="outline" className="flex-shrink-0" title="Copy link">
-                  <Copy className="h-4 w-4" />
+                  <Copy className="h-5 w-5 sm:h-6 sm:w-6" />
                 </Button>
                 <Button onClick={shareLink} variant="outline" className="flex-shrink-0" title="Share link">
-                  <Share2 className="h-4 w-4" />
+                  <Share2 className="h-5 w-5 sm:h-6 sm:w-6" />
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
@@ -186,12 +186,12 @@ const BookingPage = () => {
             <div className="flex gap-2">
               <Button asChild variant="outline" className="flex-1">
                 <a href={bookingUrl} target="_blank" rel="noopener noreferrer">
-                  <Eye className="h-4 w-4 mr-2" />
+                  <Eye className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                   Preview Page
                 </a>
               </Button>
               <Button onClick={generateQrCode} variant="outline" className="flex-1">
-                <QrCode className="h-4 w-4 mr-2" />
+                <QrCode className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 Generate QR Code
               </Button>
             </div>
