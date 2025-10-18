@@ -45,7 +45,7 @@ const StylistProfile = () => {
       // Use safe public view to prevent exposure of sensitive business data
       // View excludes: commission_rate, color_line, buffer_time_minutes, weekly_schedule
       const { data, error } = await supabase
-        .from("public_stylist_profiles_safe")
+        .from("public_stylist_directory")
         .select("*")
         .eq("id", stylistId)
         .maybeSingle();

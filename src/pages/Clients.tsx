@@ -202,19 +202,19 @@ export default function Clients() {
         .select("*")
         .eq("preferred_stylist_id", stylistId);
 
-      // Merge statistics with client data
-      const enrichedClients = (clientsData || []).map((client: any) => {
-        const stats = (statsData || []).find((s: any) => s.client_id === client.id);
-        return {
-          ...client,
-          total_appointments: stats?.total_appointments || 0,
-          last_appointment_date: stats?.last_appointment_date || null,
-          completed_appointments: stats?.completed_appointments || 0,
-          upcoming_appointments: stats?.upcoming_appointments || 0,
-        };
-      });
+      // Use client_statistics view data directly
+      setClients((statsData || []).map((stat: any) => ({
+        ...stat,
+        id: stat.id,
+        full_name: stat.full_name,
+        email: stat.email,
+        phone: stat.phone,
+        total_appointments: stat.total_appointments || 0,
+        last_appointment: stat.last_appointment || null,
+        completion_rate: stat.completion_rate || 0,
+      })));
 
-      setClients(enrichedClients);
+      // Already set above
     } catch (error) {
       console.error("Error loading clients:", error);
       toast.error("Unable to load your client list. Please refresh or check your connection.");
