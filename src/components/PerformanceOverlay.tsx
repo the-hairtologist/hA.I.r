@@ -115,7 +115,7 @@ export const PerformanceOverlay = () => {
         </div>
 
         <div className="flex items-center gap-1 text-xs text-muted-foreground pt-2 border-t">
-          <Zap className="h-3 w-3" />
+          <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
           <span>Press Ctrl+Shift+P to toggle</span>
         </div>
       </CardContent>

@@ -121,7 +121,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
               variant="default"
               className="gap-1.5 shadow-md h-7 text-xs px-3"
             >
-              <Save className="h-3 w-3" />
+              <Save className="h-4 w-4 sm:h-5 sm:w-5" />
               Save
             </Button>
           </div>

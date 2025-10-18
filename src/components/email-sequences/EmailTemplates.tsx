@@ -58,7 +58,7 @@ export const EmailTemplates = () => {
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-bold text-lg">{template.name}</h3>
                       <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                        <Sparkles className="h-3 w-3 mr-1" />
+                        <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                         Global
                       </Badge>
                     </div>

@@ -80,7 +80,7 @@ export const OfflineStatusBar = () => {
               onClick={retryFailed}
               className="hover:bg-background/20 h-8"
             >
-              <RefreshCw className="h-3 w-3 mr-1" />
+              <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
               Retry
             </Button>
           )}

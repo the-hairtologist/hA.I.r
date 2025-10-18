@@ -189,19 +189,19 @@ export const SubscriptionNudge = ({
           <div className="space-y-2 text-sm">
             <div className="flex items-center gap-2">
               <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center">
-                <Sparkles className="h-3 w-3 text-success" />
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-success" />
               </div>
               <span>Unlimited clients & appointments</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center">
-                <Sparkles className="h-3 w-3 text-success" />
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-success" />
               </div>
               <span>AI formula generator & 24/7 assistant</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-5 w-5 rounded-full bg-success/20 flex items-center justify-center">
-                <Sparkles className="h-3 w-3 text-success" />
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-success" />
               </div>
               <span>SMS notifications & priority support</span>
             </div>

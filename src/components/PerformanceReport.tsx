@@ -83,7 +83,7 @@ export const PerformanceReport = () => {
       <div className="space-y-2 text-xs">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Eye className="h-3 w-3" />
+            <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
             <span>FCP</span>
           </div>
           <Badge variant={getScoreColor(metrics.fcp, 1800, 3000)}>
@@ -93,7 +93,7 @@ export const PerformanceReport = () => {
 
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Zap className="h-3 w-3" />
+            <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
             <span>LCP</span>
           </div>
           <Badge variant={getScoreColor(metrics.lcp, 2500, 4000)}>
@@ -103,7 +103,7 @@ export const PerformanceReport = () => {
 
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Clock className="h-3 w-3" />
+            <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
             <span>TTFB</span>
           </div>
           <Badge variant={getScoreColor(metrics.ttfb, 600, 1500)}>

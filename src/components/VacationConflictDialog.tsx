@@ -143,11 +143,11 @@ export function VacationConflictDialog({
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <Calendar className="h-3.5 w-3.5" />
+                        <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                         {format(new Date(appointment.appointment_date), "MMM d, yyyy 'at' h:mm a")}
                       </div>
                       <div className="flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5" />
+                        <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
                         {appointment.duration_minutes} min
                       </div>
                     </div>

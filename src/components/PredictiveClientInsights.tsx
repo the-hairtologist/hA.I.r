@@ -69,7 +69,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
                   Last visit: {insight.daysSinceLastVisit} days ago
                 </p>
                 <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                  <Calendar className="h-3 w-3" />
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                   Suggest: {format(insight.suggestedDate, 'MMM d')}
                 </p>
               </div>
@@ -80,7 +80,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
                   className="h-7 text-xs whitespace-nowrap"
                   onClick={() => navigate(`/messages?client=${insight.clientId}`)}
                 >
-                  <MessageSquare className="h-3 w-3 mr-1" />
+                  <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                   Message
                 </Button>
                 <Button
@@ -89,7 +89,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
                   className="h-7 text-xs whitespace-nowrap"
                   onClick={() => navigate(`/book-appointment?client=${insight.clientId}`)}
                 >
-                  <Calendar className="h-3 w-3 mr-1" />
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                   Book
                 </Button>
               </div>
@@ -98,7 +98,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
         ))}
 
         <div className="pt-2 border-t flex items-center justify-center gap-2 text-xs text-muted-foreground">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           <span>Predictions based on visit patterns</span>
         </div>
       </CardContent>

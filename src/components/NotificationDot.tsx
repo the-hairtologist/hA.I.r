@@ -18,7 +18,7 @@ export const NotificationDot = ({
   const sizeClasses = {
     sm: "h-2 w-2",
     md: "h-2.5 w-2.5",
-    lg: "h-3 w-3",
+    lg: "h-4 w-4 sm:h-5 sm:w-5",
   };
 
   const badgeSizeClasses = {

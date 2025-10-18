@@ -87,7 +87,7 @@ export function QuickWinDemo() {
     <div className="w-full max-w-4xl mx-auto">
       <div className="text-center mb-8">
         <Badge className="mb-4" variant="secondary">
-          <Zap className="h-3 w-3 mr-1" />
+          <Zap className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
           60-Second Demo
         </Badge>
         <h2 className="text-3xl font-bold mb-2">See Immediate Value</h2>
@@ -164,7 +164,7 @@ export function QuickWinDemo() {
                 const CompletedIcon = completedWin.icon;
                 return (
                   <Badge key={winIndex} variant="secondary" className="gap-1">
-                    <CheckCircle2 className="h-3 w-3 text-green-500" />
+                    <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
                     {completedWin.title}
                   </Badge>
                 );

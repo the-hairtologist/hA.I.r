@@ -79,7 +79,7 @@ export const PerformanceDashboard: React.FC = () => {
           {/* Web Vitals */}
           <div>
             <h4 className="text-sm font-medium mb-2 flex items-center gap-1">
-              <Zap className="h-3 w-3" />
+              <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
               Core Web Vitals
             </h4>
             <div className="space-y-2">

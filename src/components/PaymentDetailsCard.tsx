@@ -69,7 +69,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
             variant={paymentStatus === 'completed' ? 'default' : 'secondary'}
             className="flex items-center gap-1"
           >
-            <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
+            <StatusIcon className={`h-4 w-4 sm:h-5 sm:w-5 ${statusConfig.color}`} />
             {statusConfig.text}
           </Badge>
         </div>

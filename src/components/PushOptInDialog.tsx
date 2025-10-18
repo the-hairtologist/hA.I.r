@@ -128,7 +128,7 @@ export const PushOptInDialog = () => {
               className="flex-1"
               size="sm"
             >
-              <BellOff className="mr-2 h-3 w-3" />
+              <BellOff className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               No Thanks
             </Button>
           </div>

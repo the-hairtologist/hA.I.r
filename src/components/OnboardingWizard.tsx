@@ -236,7 +236,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
                       className="gap-1 brutal-shadow-xs"
                     >
                       Take Me There
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                     </Button>
                   </div>
                 </CardContent>
