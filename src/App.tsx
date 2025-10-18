@@ -34,6 +34,16 @@ import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { selfHealing } from "@/lib/selfHealing";
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
 import { initPreloadStrategies } from "@/lib/performance/PreloadStrategy";
+import { initPushNotifications } from "@/lib/engagement/pushNotifications";
+import { initOriginVerification } from "@/lib/security/originVerification";
+import { initABTesting } from "@/lib/engagement/abTesting";
+import { initCacheReporting } from "@/lib/cache/cacheReport";
+import { initRoutePrefetcher } from "@/lib/prefetch/routePrefetcher";
+import { initContrastValidator } from "@/lib/accessibility/contrastValidator";
+import { initFocusAudit } from "@/lib/accessibility/focusAudit";
+import { initLighthouseMonitoring } from "@/lib/qa/lighthouseAudit";
+import { PushOptInDialog } from "@/components/PushOptInDialog";
+import { AppLayout } from "@/components/layout/AppLayout";
 import "@/lib/mobileHealthCheck";
 
 const PerformanceMonitor = lazy(() => 
@@ -75,6 +85,24 @@ const AnalyticsInitializer = () => {
         
         // Initialize resource preloading strategy (non-critical)
         initPreloadStrategies();
+        
+        // Phase 2 - Intelligence Layer
+        initCacheReporting();
+        initRoutePrefetcher();
+        
+        // Phase 3 - Engagement Layer
+        initPushNotifications();
+        initABTesting();
+        
+        // Phase 4 - Security Layer
+        initOriginVerification();
+        
+        // Phase 5 - QA Layer (dev only)
+        if (import.meta.env.DEV) {
+          initContrastValidator();
+          initFocusAudit();
+          initLighthouseMonitoring();
+        }
       });
 
       // Defer self-healing initialization by 3 seconds
@@ -92,6 +120,17 @@ const AnalyticsInitializer = () => {
         initSentry();
         initUTMTracking();
         initPreloadStrategies();
+        
+        // Phase 2 - Intelligence Layer
+        initCacheReporting();
+        initRoutePrefetcher();
+        
+        // Phase 3 - Engagement Layer
+        initPushNotifications();
+        initABTesting();
+        
+        // Phase 4 - Security Layer
+        initOriginVerification();
         
         selfHealing.initialize().catch((error) => {
           console.error('Failed to initialize self-healing system:', error);
@@ -125,6 +164,7 @@ const App = () => {
                       <Toaster />
                       <Sonner />
                       <CookieConsent />
+                      <PushOptInDialog />
                       <PerformanceReport />
                       {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                       <GlobalAnnouncer />
@@ -156,9 +196,11 @@ const App = () => {
                               <RoleSwitchProtection />
                             </Suspense>
                             <TimeoutGuard timeout={15000}>
-                              <Routes>
-                                {AppRoutes()}
-                              </Routes>
+                              <AppLayout>
+                                <Routes>
+                                  {AppRoutes()}
+                                </Routes>
+                              </AppLayout>
                             </TimeoutGuard>
                           </TourProvider>
                         </EnhancedAuthProvider>
