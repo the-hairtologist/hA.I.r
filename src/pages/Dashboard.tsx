@@ -352,8 +352,7 @@ const Dashboard = () => {
         
         if (stylistError && stylistError.code !== 'PGRST116') {
           console.error('Error loading stylist profile:', stylistError);
-          toast.error('Failed to load stylist profile');
-          throw stylistError;
+          // Don't throw - just log and continue without profile
         }
         
         console.log('[Dashboard] Stylist profile loaded:', !!stylistProfile);
@@ -367,8 +366,7 @@ const Dashboard = () => {
         
         if (clientError && clientError.code !== 'PGRST116') {
           console.error('Error loading client profile:', clientError);
-          toast.error('Failed to load client profile');
-          throw clientError;
+          // Don't throw - just log and continue without profile
         }
         
         console.log('[Dashboard] Client profile loaded:', !!clientProfile);
@@ -383,8 +381,7 @@ const Dashboard = () => {
         
         if (stylistError && stylistError.code !== 'PGRST116') {
           console.error('Error loading admin stylist profile:', stylistError);
-          toast.error('Failed to load admin profile');
-          throw stylistError;
+          // Don't throw - just log and continue
         }
         
         if (stylistProfile) {
@@ -399,8 +396,7 @@ const Dashboard = () => {
           
           if (clientError && clientError.code !== 'PGRST116') {
             console.error('Error loading admin client profile:', clientError);
-            toast.error('Failed to load admin profile');
-            throw clientError;
+            // Don't throw - just log and continue
           }
           
           console.log('[Dashboard] Admin client profile loaded');
