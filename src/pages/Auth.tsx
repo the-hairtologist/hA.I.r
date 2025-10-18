@@ -1,6 +1,7 @@
 import { useReducer, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -83,6 +84,14 @@ const Auth = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(authReducer, initialState);
   const { loading, signIn, signUp, resetPassword, updatePassword } = useAuth();
+  const { user: authUser, loading: authLoading } = useEnhancedAuth();
+
+  // Auto-redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!authLoading && authUser) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [authUser, authLoading, navigate]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {

@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SparkleButton } from "@/components/ui/sparkle-button";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Scissors, Calendar, Palette, Smartphone, Download } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
@@ -14,6 +16,14 @@ import { AsyncErrorBoundary } from "@/components/errors/AsyncErrorBoundary";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { user, loading } = useEnhancedAuth();
+
+  // Auto-redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   return (
     <AsyncErrorBoundary>

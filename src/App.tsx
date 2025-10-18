@@ -165,7 +165,7 @@ const App = () => {
                         <CommandPalette />
                         <TourProvider>
                           <FirstTimeOnboarding />
-                          <TimeoutGuard timeout={20000}>
+                          <TimeoutGuard timeout={30000}>
                             <AppLayout>
                               <Routes>
                                 {AppRoutes()}

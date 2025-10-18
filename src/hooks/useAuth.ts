@@ -35,37 +35,8 @@ export function useAuth(): UseAuthReturn {
   });
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        log.debug('Auth state changed', 'useAuth', { event, userId: session?.user?.id });
-        
-        // CRITICAL: Only synchronous state updates in callback
-        setState({
-          user: session?.user ?? null,
-          session: session,
-          loading: false,
-          isAuthenticated: !!session,
-        });
-
-        // CRITICAL FIX: Only navigate on actual sign-in/sign-out events, NOT initial session load
-        // Defer navigation with setTimeout to prevent deadlocks
-        if (event === 'SIGNED_IN') {
-          setTimeout(() => {
-            // Only navigate if we're currently on auth page
-            if (window.location.pathname === '/auth') {
-              navigate('/dashboard');
-            }
-          }, 0);
-        } else if (event === 'SIGNED_OUT') {
-          setTimeout(() => navigate('/auth'), 0);
-        } else if (event === 'TOKEN_REFRESHED') {
-          log.info('Token refreshed successfully', 'useAuth');
-        }
-      }
-    );
-
-    // THEN check for existing session
+    // REMOVED: Redundant auth state listener (EnhancedAuthContext handles this)
+    // Just check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setState({
         user: session?.user ?? null,
@@ -105,7 +76,6 @@ export function useAuth(): UseAuthReturn {
     }, 5 * 60 * 1000); // Check every 5 minutes (less aggressive)
 
     return () => {
-      subscription.unsubscribe();
       clearInterval(sessionCheckInterval);
     };
   }, [navigate]);

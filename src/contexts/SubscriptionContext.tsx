@@ -183,12 +183,12 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     checkSubscription();
 
-    // Check subscription on auth state change
+    // Check subscription on auth state change (deferred to allow auth to settle)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
         setTimeout(() => {
           checkSubscription();
-        }, 0);
+        }, 2000);
       } else {
         setSubscribed(false);
         setUserRole(null);
