@@ -16,11 +16,9 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
 
   // CRITICAL: Update sections when defaultSections changes (e.g., role changes)
   useEffect(() => {
-    if (!user?.id) {
-      setSections(defaultSections);
-      setIsLoading(false);
-    }
-  }, [defaultSections, user?.id]);
+    // Always sync sections with defaultSections when it changes
+    setSections(defaultSections);
+  }, [defaultSections]);
 
   useEffect(() => {
     // CRITICAL: Guard against null user to prevent crashes
