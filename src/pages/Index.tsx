@@ -56,7 +56,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-16 sm:py-24 overflow-hidden min-h-[65vh] sm:min-h-[85vh] flex items-center" style={{
+        <section className="relative bg-primary py-16 sm:py-24 overflow-hidden min-h-screen-safe flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -91,16 +91,16 @@ const Index = () => {
                 Free Trial • No Credit Card Required
               </p>
 
-              <div className="pt-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
-                <SparkleButton 
-                  variant="outline"
-                  onClick={() => navigate("/install")}
-                  className="font-pixel text-xs uppercase py-2 px-4"
-                >
-                  <Download className="h-4 w-4" />
-                  Install App
-                </SparkleButton>
-              </div>
+            <div className="pt-4 animate-fade-in relative z-50" style={{ animationDelay: '400ms' }}>
+              <SparkleButton 
+                variant="outline"
+                onClick={() => navigate("/install")}
+                className="font-pixel text-sm uppercase py-3 px-6 min-h-[48px] min-w-[160px]"
+              >
+                <Download className="h-6 w-6 sm:h-7 sm:w-7" />
+                Install App
+              </SparkleButton>
+            </div>
             </div>
           </div>
           <ScrollIndicator />

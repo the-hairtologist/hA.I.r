@@ -87,14 +87,14 @@ const AnalyticsInitializer = () => {
         }
       });
 
-      // Defer self-healing initialization by 3 seconds
+      // Defer self-healing initialization by 5 seconds (reduced overhead)
       requestIdleCallback(() => {
         setTimeout(() => {
           selfHealing.initialize().catch((error) => {
             console.error('Failed to initialize self-healing system:', error);
           });
-        }, 3000);
-      }, { timeout: 5000 });
+        }, 5000);
+      }, { timeout: 10000 });
     } else {
       // Fallback for browsers without requestIdleCallback
       setTimeout(() => {
@@ -163,7 +163,7 @@ const App = () => {
                         <CommandPalette />
                         <TourProvider>
                           <FirstTimeOnboarding />
-                          <TimeoutGuard timeout={15000}>
+                          <TimeoutGuard timeout={20000}>
                             <AppLayout>
                               <Routes>
                                 {AppRoutes()}

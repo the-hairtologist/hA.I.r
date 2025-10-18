@@ -74,7 +74,7 @@ const initApp = () => {
     const initTimeout = setTimeout(() => {
       console.warn('App taking too long to initialize');
       showTimeoutWarning();
-    }, 15000);
+    }, 20000); // Increased from 15s to 20s for mobile
 
     const root = createRoot(rootElement);
     root.render(<App />);

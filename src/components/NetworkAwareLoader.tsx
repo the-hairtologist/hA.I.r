@@ -7,7 +7,7 @@ interface NetworkAwareLoaderProps {
   timeout?: number;
 }
 
-export const NetworkAwareLoader = ({ children, timeout = 15000 }: NetworkAwareLoaderProps) => {
+export const NetworkAwareLoader = ({ children, timeout = 20000 }: NetworkAwareLoaderProps) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showTimeout, setShowTimeout] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,9 +87,9 @@ export const NetworkAwareLoader = ({ children, timeout = 15000 }: NetworkAwareLo
       ? "Starting up..." 
       : loadProgress < 60 
       ? "Loading resources..." 
-      : loadProgress < 90 
-      ? "Almost ready..." 
-      : "Finishing up...";
+      : loadProgress < 85 
+      ? "Almost there..." 
+      : "Just a moment...";
 
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">

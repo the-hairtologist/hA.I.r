@@ -31,7 +31,7 @@ export function SparkleButton({ children, variant = "primary", className, ...pro
       <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
       {/* Content */}
-      <span className="relative z-10 flex items-center justify-center gap-2">
+      <span className="relative z-10 flex items-center justify-center gap-2.5 sm:gap-3">
         {children}
       </span>
     </button>
