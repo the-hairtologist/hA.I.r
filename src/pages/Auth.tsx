@@ -237,14 +237,14 @@ const Auth = () => {
       `,
       backgroundSize: '8px 8px'
     }}>
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-secondary focus:text-secondary-foreground focus:rounded-none focus:border-[3px] focus:border-black focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] focus:font-pixel focus:uppercase">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-secondary focus:text-secondary-foreground focus:rounded-none focus:border-[3px] focus:border-foreground focus:shadow-brutal focus:font-pixel focus:uppercase">
         Skip to main content
       </a>
       <main id="main-content" role="main" aria-label="Authentication" className="w-full max-w-md relative z-10">
-        <Card className="w-full border-[4px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-background max-w-md mx-auto rounded-none">
-        <CardHeader className="text-center space-y-3 px-4 sm:px-6 pt-6 border-b-[3px] border-black">
+        <Card className="w-full border-[4px] border-foreground shadow-brutal-lg bg-background max-w-md mx-auto rounded-none">
+        <CardHeader className="text-center space-y-3 px-4 sm:px-6 pt-6 border-b-[3px] border-foreground">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 border-[3px] border-black bg-primary shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 border-[3px] border-foreground bg-primary shadow-brutal flex items-center justify-center">
               <Scissors className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
             </div>
             <CardTitle className="text-2xl sm:text-3xl font-pixel text-foreground uppercase">hA.I.r</CardTitle>

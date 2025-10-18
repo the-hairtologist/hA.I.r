@@ -99,7 +99,7 @@ export const EnhancedFooter = () => {
               </button>
               <button
                 onClick={() => navigate("/install")}
-                className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-foreground bg-accent flex items-center justify-center shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
                 aria-label="Install on Android"
               >
                 <span className="font-pixel text-xs sm:text-sm text-accent-foreground">ANDROID</span>
@@ -163,12 +163,12 @@ export const EnhancedFooter = () => {
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-11 sm:h-12 bg-white text-foreground"
+                className="border-4 border-foreground rounded-none shadow-brutal h-11 sm:h-12 bg-background text-foreground"
                 required
               />
               <Button 
                 type="submit" 
-                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11 sm:h-12"
+                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-foreground shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11 sm:h-12"
               >
                 <Mail className="h-4 w-4 mr-2" />
                 SUBSCRIBE
@@ -199,7 +199,7 @@ export const EnhancedFooter = () => {
           {/* Legal Disclaimer */}
           <div className="border-t-2 border-secondary/20 pt-4 mt-4">
             <p className="text-xs font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto">
-              <span className="font-semibold">Disclaimer:</span> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
+              <span className="font-semibold">Built secure. Private by design.</span> Individual results may vary. AI recommendations are assistive tools only. Stylists are independent contractors responsible for maintaining professional liability insurance and state licenses.
             </p>
           </div>
         </div>
