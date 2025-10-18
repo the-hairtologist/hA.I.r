@@ -311,6 +311,18 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     isAdmin: state.roles.includes("admin"),
   };
 
+  // Debug logging
+  useEffect(() => {
+    console.log('[EnhancedAuthContext] State:', {
+      hasUser: !!state.user,
+      userId: state.user?.id,
+      loading: state.loading,
+      initialized: state.initialized,
+      roles: state.roles,
+      primaryRole: state.primaryRole
+    });
+  }, [state.user, state.loading, state.initialized, state.roles, state.primaryRole]);
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
