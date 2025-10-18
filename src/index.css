@@ -1375,187 +1375,187 @@ All colors MUST be HSL.
   @media (max-width: 640px) {
     .show-mobile-flex { display: flex; }
   }
+}
 
-  /* ============================================
-     PRINT STYLES - Professional Output
-     ============================================ */
-  @media print {
-    /* Hide non-essential elements */
-    .sidebar,
-    .app-sidebar,
-    nav,
-    header nav,
-    footer,
-    button:not(.print-keep),
-    .fab,
-    .floating-action-button,
-    [data-sidebar],
-    [role="navigation"],
-    .offline-indicator,
-    .performance-overlay,
-    .cookie-consent,
-    .toast,
-    .sonner,
-    .dialog-overlay,
-    .dropdown-menu,
-    .popover,
-    .tooltip {
-      display: none !important;
-    }
+/* ============================================
+   PRINT STYLES - Professional Output
+   ============================================ */
+@media print {
+  /* Hide non-essential elements */
+  .sidebar,
+  .app-sidebar,
+  nav,
+  header nav,
+  footer,
+  button:not(.print-keep),
+  .fab,
+  .floating-action-button,
+  [data-sidebar],
+  [role="navigation"],
+  .offline-indicator,
+  .performance-overlay,
+  .cookie-consent,
+  .toast,
+  .sonner,
+  .dialog-overlay,
+  .dropdown-menu,
+  .popover,
+  .tooltip {
+    display: none !important;
+  }
 
-    /* Optimize layout for paper */
-    body {
-      background: white !important;
-      color: black !important;
-      margin: 0;
-      padding: 0;
-    }
+  /* Optimize layout for paper */
+  body {
+    background: white !important;
+    color: black !important;
+    margin: 0;
+    padding: 0;
+  }
 
-    .main-content,
-    main,
-    .container {
-      max-width: 100% !important;
-      margin: 0 !important;
-      padding: 1cm !important;
-    }
+  .main-content,
+  main,
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1cm !important;
+  }
 
-    /* Force light mode for print */
-    * {
-      background: white !important;
-      color: black !important;
-      border-color: #333 !important;
-    }
+  /* Force light mode for print */
+  * {
+    background: white !important;
+    color: black !important;
+    border-color: #333 !important;
+  }
 
-    /* Keep important colors for branding */
-    .print-color,
-    .logo,
-    .brand {
-      color: inherit !important;
-    }
+  /* Keep important colors for branding */
+  .print-color,
+  .logo,
+  .brand {
+    color: inherit !important;
+  }
 
-    /* Typography optimization */
-    h1 { font-size: 24pt !important; }
-    h2 { font-size: 18pt !important; }
-    h3 { font-size: 14pt !important; }
-    p, li, td { font-size: 11pt !important; line-height: 1.5 !important; }
+  /* Typography optimization */
+  h1 { font-size: 24pt !important; }
+  h2 { font-size: 18pt !important; }
+  h3 { font-size: 14pt !important; }
+  p, li, td { font-size: 11pt !important; line-height: 1.5 !important; }
 
-    /* Table optimization */
-    table {
-      width: 100% !important;
-      border-collapse: collapse !important;
-      page-break-inside: avoid;
-    }
+  /* Table optimization */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: avoid;
+  }
 
-    th, td {
-      border: 1px solid #333 !important;
-      padding: 8px !important;
-      text-align: left !important;
-    }
+  th, td {
+    border: 1px solid #333 !important;
+    padding: 8px !important;
+    text-align: left !important;
+  }
 
-    th {
-      background: #f0f0f0 !important;
-      font-weight: bold !important;
-    }
+  th {
+    background: #f0f0f0 !important;
+    font-weight: bold !important;
+  }
 
-    /* Formula cards */
-    .formula-card,
-    .appointment-card,
-    .client-card {
-      border: 2px solid #333 !important;
-      padding: 12px !important;
-      margin-bottom: 12px !important;
-      page-break-inside: avoid;
-    }
+  /* Formula cards */
+  .formula-card,
+  .appointment-card,
+  .client-card {
+    border: 2px solid #333 !important;
+    padding: 12px !important;
+    margin-bottom: 12px !important;
+    page-break-inside: avoid;
+  }
 
-    /* Page breaks */
-    .page-break,
-    .print-page-break {
-      page-break-after: always;
-    }
+  /* Page breaks */
+  .page-break,
+  .print-page-break {
+    page-break-after: always;
+  }
 
-    .avoid-break,
-    .card,
-    .formula,
-    .appointment {
-      page-break-inside: avoid;
-    }
+  .avoid-break,
+  .card,
+  .formula,
+  .appointment {
+    page-break-inside: avoid;
+  }
 
-    /* Links */
-    a {
-      text-decoration: underline !important;
-      color: black !important;
-    }
+  /* Links */
+  a {
+    text-decoration: underline !important;
+    color: black !important;
+  }
 
-    a[href]:after {
-      content: " (" attr(href) ")";
-      font-size: 9pt;
-      font-style: italic;
-    }
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    font-style: italic;
+  }
 
-    /* QR codes and images */
-    img,
-    .qr-code {
-      max-width: 100% !important;
-      height: auto !important;
-      page-break-inside: avoid;
-    }
+  /* QR codes and images */
+  img,
+  .qr-code {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+  }
 
-    /* Print-specific utilities */
-    .print-only {
-      display: block !important;
-    }
+  /* Print-specific utilities */
+  .print-only {
+    display: block !important;
+  }
 
-    .no-print {
-      display: none !important;
-    }
+  .no-print {
+    display: none !important;
+  }
 
-    /* Invoice specific */
-    .invoice-header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #333 !important;
-    }
+  /* Invoice specific */
+  .invoice-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333 !important;
+  }
 
-    .invoice-total {
-      font-size: 14pt !important;
-      font-weight: bold !important;
-      text-align: right;
-      margin-top: 20px;
-      padding-top: 10px;
-      border-top: 2px solid #333 !important;
-    }
+  .invoice-total {
+    font-size: 14pt !important;
+    font-weight: bold !important;
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 2px solid #333 !important;
+  }
 
-    /* Formula safety warnings */
-    .warning,
-    .alert,
-    .disclaimer {
-      border: 2px solid #333 !important;
-      padding: 10px !important;
-      margin: 10px 0 !important;
-      background: #f9f9f9 !important;
-    }
+  /* Formula safety warnings */
+  .warning,
+  .alert,
+  .disclaimer {
+    border: 2px solid #333 !important;
+    padding: 10px !important;
+    margin: 10px 0 !important;
+    background: #f9f9f9 !important;
+  }
 
-    /* Ensure badges/pills are visible */
-    .badge,
-    .pill,
-    .tag {
-      border: 1px solid #333 !important;
-      padding: 2px 6px !important;
-      border-radius: 3px !important;
-      display: inline-block !important;
-    }
+  /* Ensure badges/pills are visible */
+  .badge,
+  .pill,
+  .tag {
+    border: 1px solid #333 !important;
+    padding: 2px 6px !important;
+    border-radius: 3px !important;
+    display: inline-block !important;
+  }
 
-    /* Legal pages optimization */
-    .prose {
-      max-width: 100% !important;
-    }
+  /* Legal pages optimization */
+  .prose {
+    max-width: 100% !important;
+  }
 
-    .prose h2 {
-      margin-top: 20px !important;
-      padding-top: 10px !important;
-      border-top: 1px solid #ccc !important;
-    }
+  .prose h2 {
+    margin-top: 20px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid #ccc !important;
   }
 }
 
