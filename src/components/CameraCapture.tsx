@@ -265,12 +265,12 @@ export const CameraCapture = ({
       >
         {capturing || processing ? (
           <>
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
             {processing ? "Processing..." : "Capturing..."}
           </>
         ) : (
           <>
-            <Camera className="h-4 w-4" />
+            <Camera className="h-5 w-5 sm:h-6 sm:w-6" />
             Capture
           </>
         )}
@@ -314,7 +314,7 @@ export const CameraCapture = ({
                 onClick={handleCancel}
                 className="text-foreground hover:bg-accent"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
           </div>
@@ -338,7 +338,7 @@ export const CameraCapture = ({
 
           {error && (
             <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive">
-              <AlertCircle className="h-4 w-4" />
+              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
               <p className="text-sm">{error}</p>
             </div>
           )}

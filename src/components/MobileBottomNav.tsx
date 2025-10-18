@@ -210,7 +210,7 @@ export const MobileBottomNav = () => {
         )}
         aria-label="Mobile navigation"
         style={{
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)'
+          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)'
         }}
       >
         {/* Admin visual indicator */}
