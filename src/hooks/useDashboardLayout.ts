@@ -14,6 +14,14 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
   const [sections, setSections] = useState<DashboardSection[]>(defaultSections);
   const [isLoading, setIsLoading] = useState(true);
 
+  // CRITICAL: Update sections when defaultSections changes (e.g., role changes)
+  useEffect(() => {
+    if (!user?.id) {
+      setSections(defaultSections);
+      setIsLoading(false);
+    }
+  }, [defaultSections, user?.id]);
+
   useEffect(() => {
     // CRITICAL: Guard against null user to prevent crashes
     if (!user?.id) {

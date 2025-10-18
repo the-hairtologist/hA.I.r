@@ -175,12 +175,9 @@ const Dashboard = () => {
       ? defaultStylistSections 
       : defaultClientSections;
   
-  // CRITICAL: Only initialize dashboard layout after full authentication
-  // This prevents crashes from premature database queries when user is null
-  const shouldLoadLayout = !authLoading && !roleLoading && authUser && userRole;
-  
+  // CRITICAL FIX: Always pass defaultSections, let the hook handle loading internally
   const { sections, isLoading: layoutLoading, saveDashboardLayout, resetDashboardLayout, toggleSection } = 
-    useDashboardLayout(shouldLoadLayout ? defaultSections : []);
+    useDashboardLayout(defaultSections);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
