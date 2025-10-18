@@ -16,15 +16,15 @@ export const NotificationDot = ({
   if (!show) return null;
 
   const sizeClasses = {
-    sm: "h-1.5 w-1.5",
-    md: "h-2 w-2",
-    lg: "h-2.5 w-2.5",
+    sm: "h-2 w-2",
+    md: "h-2.5 w-2.5",
+    lg: "h-3 w-3",
   };
 
   const badgeSizeClasses = {
-    sm: "h-5 min-w-5 text-[11px] px-1",
-    md: "h-6 min-w-6 text-[11px] px-1.5",
-    lg: "h-7 min-w-7 text-xs px-2",
+    sm: "h-6 min-w-6 text-xs px-1.5",
+    md: "h-7 min-w-7 text-sm px-2",
+    lg: "h-8 min-w-8 text-sm px-2.5",
   };
 
   if (count !== undefined && count > 0) {
