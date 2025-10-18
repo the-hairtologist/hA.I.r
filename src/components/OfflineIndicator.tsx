@@ -49,9 +49,9 @@ export const OfflineIndicator = () => {
       >
         <div className="flex items-center gap-3">
           {isOnline ? (
-            <Wifi className="h-4 w-4 text-success" />
+            <Wifi className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
           ) : (
-            <WifiOff className="h-4 w-4 text-destructive" />
+            <WifiOff className="h-5 w-5 sm:h-6 sm:w-6 text-destructive" />
           )}
           <AlertDescription className="text-sm font-medium">
             {isOnline

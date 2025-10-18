@@ -159,7 +159,7 @@ export const ProgressTracker = () => {
       <CardHeader className="p-4 sm:p-6">
         <div className="flex items-center justify-between gap-3">
           <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
             <span className="truncate">Your Progress</span>
           </CardTitle>
           <Badge variant="default" className="text-sm sm:text-lg px-3 sm:px-4 shrink-0">

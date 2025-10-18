@@ -138,9 +138,9 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
               <div className="flex-1 space-y-1">
                 <div className="flex items-center gap-2">
                   {isPublicListing ? (
-                    <Eye className="h-4 w-4 text-success" />
+                    <Eye className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
                   ) : (
-                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    <EyeOff className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
                   )}
                   <Label htmlFor="public-listing" className="font-semibold">
                     Public Directory Listing
@@ -160,7 +160,7 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
 
             {isPublicListing && (
               <Alert>
-                <Users className="h-4 w-4" />
+                <Users className="h-5 w-5 sm:h-6 sm:w-6" />
                 <AlertDescription>
                   Your business name, location, bio, and portfolio are visible to anyone browsing the directory.
                   Contact information is only shared when you enable the options below.
@@ -213,7 +213,7 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
         </div>
 
         <Alert>
-          <Shield className="h-4 w-4" />
+          <Shield className="h-5 w-5 sm:h-6 sm:w-6" />
           <AlertDescription className="text-xs">
             <strong>Privacy Note:</strong> Even when contact sharing is disabled, you can still communicate 
             through our secure messaging system. Your contact information is never sold to third parties.

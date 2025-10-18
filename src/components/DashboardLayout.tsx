@@ -162,7 +162,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Badge className="bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
-                          <Crown className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                          <Crown className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
                           🛡️ ADMIN - FULL ACCESS
                         </Badge>
                       </TooltipTrigger>
@@ -175,9 +175,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   {!isAdmin && userRole && (
                     <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20">
                       {userRole === "stylist" ? (
-                        <><Scissors className="h-4 w-4 sm:h-5 sm:w-5 mr-1" /> Stylist</>
+                        <><Scissors className="h-5 w-5 sm:h-6 sm:w-6 mr-1" /> Stylist</>
                       ) : (
-                        <><User className="h-4 w-4 sm:h-5 sm:w-5 mr-1" /> Client</>
+                        <><User className="h-5 w-5 sm:h-6 sm:w-6 mr-1" /> Client</>
                       )}
                     </Badge>
                   )}
@@ -200,7 +200,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                             <span className="hidden sm:inline truncate max-w-[100px] text-sm">
                               {user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Account"}
                             </span>
-                            <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 opacity-50" />
+                            <ChevronDown className="h-5 w-5 sm:h-6 sm:w-6 opacity-50" />
                           </Button>
                         </DropdownMenuTrigger>
                       </TooltipTrigger>

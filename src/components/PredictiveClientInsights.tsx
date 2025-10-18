@@ -40,7 +40,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
       <CardHeader>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-primary flex items-center justify-center">
-            <TrendingUp className="h-4 w-4 text-on-surface-primary" />
+            <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-on-surface-primary" />
           </div>
           <div>
             <CardTitle className="text-base font-pixel">Client Insights</CardTitle>
@@ -69,7 +69,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
                   Last visit: {insight.daysSinceLastVisit} days ago
                 </p>
                 <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <Calendar className="h-5 w-5 sm:h-6 sm:w-6" />
                   Suggest: {format(insight.suggestedDate, 'MMM d')}
                 </p>
               </div>
@@ -80,16 +80,13 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
                   className="h-7 text-xs whitespace-nowrap"
                   onClick={() => navigate(`/messages?client=${insight.clientId}`)}
                 >
-                  <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
-                  Message
+                  <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
+                  Send
                 </Button>
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="h-7 text-xs whitespace-nowrap"
-                  onClick={() => navigate(`/book-appointment?client=${insight.clientId}`)}
-                >
-                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" className="flex-1">
+                  <Calendar className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
                   Book
                 </Button>
               </div>
@@ -98,7 +95,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
         ))}
 
         <div className="pt-2 border-t flex items-center justify-center gap-2 text-xs text-muted-foreground">
-          <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
           <span>Predictions based on visit patterns</span>
         </div>
       </CardContent>

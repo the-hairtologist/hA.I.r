@@ -168,7 +168,7 @@ export const EnhancedSearch = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between px-2 py-1">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
+                <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
                 <span>Recent Searches</span>
               </div>
               <Button
@@ -189,7 +189,7 @@ export const EnhancedSearch = ({
                   className="flex items-center justify-between px-3 py-2 hover:bg-secondary rounded-md cursor-pointer group transition-colors"
                 >
                   <div className="flex items-center gap-2 flex-1">
-                    <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+                    <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
                     <span className="text-sm">{search}</span>
                   </div>
                   <Button
@@ -198,7 +198,7 @@ export const EnhancedSearch = ({
                     onClick={(e) => clearRecentSearch(search, e)}
                     className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
-                    <X className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <X className="h-5 w-5 sm:h-6 sm:w-6" />
                   </Button>
                 </div>
               ))}

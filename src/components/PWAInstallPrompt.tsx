@@ -91,7 +91,7 @@ export function PWAInstallPrompt() {
           className="absolute top-2 right-2 p-1 hover:bg-muted rounded-full transition-colors"
           aria-label="Dismiss"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
         
         <div className="flex gap-3">
@@ -115,7 +115,7 @@ export function PWAInstallPrompt() {
                 size="sm"
                 className="flex-1"
               >
-                <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                <Download className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
                 Install
               </Button>
               <Button

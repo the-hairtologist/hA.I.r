@@ -154,11 +154,11 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
         <CardContent>
           <div className="flex gap-2">
             <Button onClick={shareTimeline} variant="outline">
-              <Share2 className="h-4 w-4 mr-2" />
+              <Share2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
               Share Journey
             </Button>
             <Button onClick={downloadTimeline} variant="outline">
-              <Download className="h-4 w-4 mr-2" />
+              <Download className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
               Download PDF
             </Button>
           </div>

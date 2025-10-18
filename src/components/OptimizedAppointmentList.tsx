@@ -65,7 +65,7 @@ const AppointmentCard = memo(({
               {appointment.service_type}
             </p>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
+              <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
               <span>{format(new Date(appointment.appointment_date), "MMM d, h:mm a")}</span>
             </div>
           </div>

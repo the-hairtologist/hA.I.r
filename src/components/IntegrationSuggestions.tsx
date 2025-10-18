@@ -148,7 +148,7 @@ export const IntegrationSuggestions = ({
                 onClick={() => handleDismiss(suggestion.id)}
                 className="h-6 w-6 p-0"
               >
-                <X className="h-4 w-4 sm:h-5 sm:w-5" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
             
@@ -159,7 +159,7 @@ export const IntegrationSuggestions = ({
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <Sparkles className="h-4 w-4 text-primary" />
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                     <Badge variant="secondary" className="text-xs">
                       Suggested
                     </Badge>

@@ -61,7 +61,7 @@ export const AIFormulaQuickStart = ({ onSelectTemplate }: AIFormulaQuickStartPro
                 onClick={() => onSelectTemplate(template.prompt)}
               >
                 <div className={`p-2 rounded-md bg-gradient-to-br ${template.color} text-white`}>
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <div className="text-left">
                   <div className="font-semibold">{template.title}</div>

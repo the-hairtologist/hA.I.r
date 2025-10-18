@@ -167,7 +167,7 @@ export const FormulaFiltersComponent = ({
             <Badge variant="secondary" className="gap-1">
               {clients.find(c => c.id === filters.clientId)?.full_name}
               <X
-                className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => onFiltersChange({ ...filters, clientId: "" })}
               />
             </Badge>
@@ -176,7 +176,7 @@ export const FormulaFiltersComponent = ({
             <Badge variant="secondary" className="gap-1">
               {filters.colorLine}
               <X
-                className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => onFiltersChange({ ...filters, colorLine: "" })}
               />
             </Badge>
@@ -188,7 +188,7 @@ export const FormulaFiltersComponent = ({
               {filters.dateRange === "quarter" && "Last 3 months"}
               {filters.dateRange === "year" && "Last year"}
               <X
-                className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => onFiltersChange({ ...filters, dateRange: "all" })}
               />
             </Badge>
@@ -197,7 +197,7 @@ export const FormulaFiltersComponent = ({
             <Badge key={tag} variant="secondary" className="gap-1">
               {tag}
               <X
-                className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => toggleTag(tag)}
               />
             </Badge>

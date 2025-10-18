@@ -117,9 +117,9 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
             <span className="text-xs text-muted-foreground">Split Ends</span>
             <div className="flex items-center gap-2 mt-1">
               {analysis.damage_indicators.split_ends ? (
-                <AlertCircle className="h-4 w-4 text-warning" />
+                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-warning" />
               ) : (
-                <CheckCircle className="h-4 w-4 text-success" />
+                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
               )}
               <span className="text-sm">{analysis.damage_indicators.split_ends ? 'Detected' : 'None'}</span>
             </div>
@@ -128,9 +128,9 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
             <span className="text-xs text-muted-foreground">Previous Color</span>
             <div className="flex items-center gap-2 mt-1">
               {analysis.previous_color_detected ? (
-                <AlertCircle className="h-4 w-4 text-info" />
+                <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-info" />
               ) : (
-                <CheckCircle className="h-4 w-4 text-success" />
+                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
               )}
               <span className="text-sm">{analysis.previous_color_detected ? 'Yes' : 'No'}</span>
             </div>
@@ -151,7 +151,7 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
         {/* Cautions */}
         {analysis.cautions && analysis.cautions.length > 0 && (
           <Alert className="border-warning bg-warning/10">
-            <AlertCircle className="h-4 w-4 text-warning" />
+            <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-warning" />
             <AlertDescription className="text-warning-foreground">
               <div className="font-semibold mb-1">Important Cautions:</div>
               <ul className="list-disc list-inside space-y-1 text-sm">

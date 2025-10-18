@@ -78,7 +78,7 @@ export function CalendarSyncIndicator() {
   if (loading) {
     return (
       <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground">
-        <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+        <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
         <span>Checking calendar...</span>
       </div>
     );
@@ -92,7 +92,7 @@ export function CalendarSyncIndicator() {
         onClick={() => navigate("/integrations")}
         className="w-full justify-start h-auto px-3 py-2 text-xs"
       >
-        <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-amber-500" />
+        <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-amber-500" />
         <span className="text-muted-foreground">Connect Calendar</span>
       </Button>
     );
@@ -106,14 +106,14 @@ export function CalendarSyncIndicator() {
     <div className="px-3 py-2 border-t">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+          <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
               <span className="text-xs font-medium truncate">
                 {connection.provider === 'google' ? 'Google Calendar' : 'Calendar'}
               </span>
               {connection.sync_enabled && (
-                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-success flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-success flex-shrink-0" />
               )}
             </div>
             <p className="text-[11px] text-muted-foreground truncate">
@@ -130,7 +130,7 @@ export function CalendarSyncIndicator() {
             className="h-6 w-6 p-0"
             title="Sync now"
           >
-            <RefreshCw className={cn("h-4 w-4 sm:h-5 sm:w-5", syncing && "animate-spin")} />
+            <RefreshCw className={cn("h-5 w-5 sm:h-6 sm:w-6", syncing && "animate-spin")} />
           </Button>
           <Button
             variant="ghost"
@@ -139,7 +139,7 @@ export function CalendarSyncIndicator() {
             className="h-6 w-6 p-0"
             title="Calendar settings"
           >
-            <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Settings className="h-5 w-5 sm:h-6 sm:w-6" />
           </Button>
         </div>
       </div>

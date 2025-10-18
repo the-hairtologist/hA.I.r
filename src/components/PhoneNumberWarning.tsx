@@ -18,7 +18,7 @@ export const PhoneNumberWarning = ({ phoneNumber, className }: PhoneNumberWarnin
 
   return (
     <Alert className={`brutal-border brutal-shadow-xs ${className}`}>
-      <Phone className="h-4 w-4" />
+      <Phone className="h-5 w-5 sm:h-6 sm:w-6" />
       <AlertDescription className="flex items-center justify-between">
         <span className="text-sm">
           📱 Add your phone number to receive SMS appointment reminders and updates!

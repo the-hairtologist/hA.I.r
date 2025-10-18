@@ -97,7 +97,7 @@ export const ClientPortalPreview = ({
               onClick={handleShare}
               className="gap-1"
             >
-              <Share2 className="h-4 w-4 sm:h-5 sm:w-5" />
+              <Share2 className="h-5 w-5 sm:h-6 sm:w-6" />
               Share
             </Button>
           </div>

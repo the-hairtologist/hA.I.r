@@ -35,7 +35,7 @@ export const MedicalDisclaimer = ({ context = "general", className = "" }: Medic
 
   return (
     <Alert variant="default" className={`border-warning/50 bg-warning/5 ${className}`}>
-      <AlertTriangle className="h-4 w-4 text-warning" />
+      <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-warning" />
       <AlertTitle className="text-warning font-pixel">{title}</AlertTitle>
       <AlertDescription className="text-muted-foreground text-sm mt-2">
         {description}

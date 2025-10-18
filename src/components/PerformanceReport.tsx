@@ -76,14 +76,14 @@ export const PerformanceReport = () => {
   return (
     <Card className="fixed bottom-6 right-6 p-4 w-80 z-40 shadow-lg border-2 border-foreground lg:bottom-24 lg:right-4">
       <div className="flex items-center gap-2 mb-3">
-        <Activity className="h-4 w-4 text-primary" />
+        <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
         <h3 className="font-semibold text-sm">Performance Metrics</h3>
       </div>
       
       <div className="space-y-2 text-xs">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Eye className="h-5 w-5 sm:h-6 sm:w-6" />
             <span>FCP</span>
           </div>
           <Badge variant={getScoreColor(metrics.fcp, 1800, 3000)}>
@@ -93,7 +93,7 @@ export const PerformanceReport = () => {
 
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Zap className="h-5 w-5 sm:h-6 sm:w-6" />
             <span>LCP</span>
           </div>
           <Badge variant={getScoreColor(metrics.lcp, 2500, 4000)}>
@@ -103,7 +103,7 @@ export const PerformanceReport = () => {
 
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
             <span>TTFB</span>
           </div>
           <Badge variant={getScoreColor(metrics.ttfb, 600, 1500)}>

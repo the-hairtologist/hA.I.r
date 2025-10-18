@@ -23,7 +23,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
   if (isLoading) {
     return (
       <Badge variant="outline" className="animate-pulse">
-        <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+        <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
         Validating...
       </Badge>
     );
@@ -40,7 +40,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
     return (
       <div className="space-y-2">
         <Badge variant="destructive" className="flex items-center gap-1">
-          <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+          <XCircle className="h-5 w-5 sm:h-6 sm:w-6" />
           Unsafe - Blocked
         </Badge>
         <Alert variant="destructive">
