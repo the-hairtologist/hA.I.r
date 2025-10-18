@@ -24,6 +24,7 @@ import { TimeoutGuard } from "@/components/TimeoutGuard";
 import { PerformanceReport } from "@/components/PerformanceReport";
 import { AccessibilityShortcuts } from "@/components/AccessibilityShortcuts";
 import { CommandPalette } from "@/components/CommandPalette";
+import { ViewportChangeHandler } from "@/components/ViewportChangeHandler";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useAuth } from "@/hooks/useAuth";
 import { initAnalytics } from "@/lib/analytics";
@@ -156,6 +157,7 @@ const App = () => {
                     <PushOptInDialog />
                     <PerformanceReport />
                     <GlobalAnnouncer />
+                    <ViewportChangeHandler />
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <EnhancedAuthProvider>
                         <AnalyticsInitializer />

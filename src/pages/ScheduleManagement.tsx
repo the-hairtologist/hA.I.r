@@ -140,13 +140,31 @@ const ScheduleManagement = () => {
   ];
 
   useEffect(() => {
-    loadData();
-    loadScheduleOverrides();
+    let mounted = true;
+    
+    const initialize = async () => {
+      if (mounted) {
+        await loadData();
+        await loadScheduleOverrides();
+      }
+    };
+    
+    initialize();
+    
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const loadData = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        navigate("/auth");
+        return;
+      }
+      
       if (!session) {
         navigate("/auth");
         return;
@@ -173,11 +191,17 @@ const ScheduleManagement = () => {
 
       setStylistProfile(stylist);
       
-      if (stylist.weekly_schedule) {
-        setSchedule(stylist.weekly_schedule as unknown as Record<string, DaySchedule>);
+      // Safely handle weekly_schedule with proper validation
+      if (stylist.weekly_schedule && typeof stylist.weekly_schedule === 'object') {
+        try {
+          setSchedule(stylist.weekly_schedule as unknown as Record<string, DaySchedule>);
+        } catch (e) {
+          console.error("Error parsing schedule:", e);
+          // Keep default schedule if parsing fails
+        }
       }
 
-      // Load buffer time
+      // Load buffer time with fallback
       setBufferTime(stylist.buffer_time_minutes || 15);
 
       const { data: datesData } = await supabase
