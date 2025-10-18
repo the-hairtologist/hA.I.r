@@ -53,10 +53,10 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: n
         transitionDelay: `${index * 100}ms`,
       }}
     >
-      <div className="relative w-16 h-16 border-4 border-foreground bg-accent flex items-center justify-center group">
-        <Icon className="h-8 w-8 text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" strokeWidth={2} />
-        <div className="absolute -top-3 -right-3 w-8 h-8 border-4 border-foreground bg-primary flex items-center justify-center">
-          <span className="font-pixel text-primary-foreground text-sm">
+      <div className="relative w-20 h-20 sm:w-24 sm:h-24 border-4 border-foreground bg-accent flex items-center justify-center group">
+        <Icon className="h-10 w-10 sm:h-12 sm:w-12 text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" strokeWidth={2} />
+        <div className="absolute -top-3 -right-3 w-10 h-10 border-4 border-foreground bg-primary flex items-center justify-center">
+          <span className="font-pixel text-primary-foreground text-base">
             {feature.number}
           </span>
         </div>

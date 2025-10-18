@@ -31,17 +31,17 @@ export const AnimatedCounter = React.forwardRef<HTMLDivElement, AnimatedCounterP
         ref={setRefs}
         className="flex flex-col items-center gap-4 transition-all duration-300"
       >
-        <div
-          className={`w-16 h-16 border-4 border-foreground bg-primary flex items-center justify-center mb-2 transition-all duration-300 ${
-            isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-          }`}
-        >
-          <Icon 
-            className={`h-8 w-8 text-primary-foreground transition-transform duration-300 ${
-              isVisible ? 'animate-bounce' : ''
-            }`} 
-            style={{ animationIterationCount: 1, animationDuration: '0.6s' }}
-          />
+      <div
+        className={`w-20 h-20 sm:w-24 sm:h-24 border-4 border-foreground bg-primary flex items-center justify-center mb-2 transition-all duration-300 ${
+          isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+        }`}
+      >
+        <Icon 
+          className={`h-10 w-10 sm:h-12 sm:w-12 text-primary-foreground transition-transform duration-300 ${
+            isVisible ? 'animate-bounce' : ''
+          }`} 
+          style={{ animationIterationCount: 1, animationDuration: '0.6s' }}
+        />
         </div>
         <div className="text-center">
           <div className="text-base sm:text-lg font-pixel text-secondary-foreground">
