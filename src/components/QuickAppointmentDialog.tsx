@@ -238,8 +238,8 @@ export const QuickAppointmentDialog = ({
         <div className="space-y-4 py-4">
           {clients.length === 0 && (
             <Alert>
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
+              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+              <AlertDescription className="text-xs sm:text-sm">
                 No clients found. Please add clients to your list first.
               </AlertDescription>
             </Alert>
@@ -247,8 +247,8 @@ export const QuickAppointmentDialog = ({
 
           {services.length === 0 && (
             <Alert>
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
+              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+              <AlertDescription className="text-xs sm:text-sm">
                 No services found. Please add services to your list first.
               </AlertDescription>
             </Alert>
@@ -256,8 +256,8 @@ export const QuickAppointmentDialog = ({
 
           {hasConflict && (
             <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{conflictMessage}</AlertDescription>
+              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+              <AlertDescription className="text-xs sm:text-sm">{conflictMessage}</AlertDescription>
             </Alert>
           )}
 
@@ -318,13 +318,14 @@ export const QuickAppointmentDialog = ({
               placeholder="Add any special notes or requests..."
               rows={3}
               maxLength={500}
+              className="min-h-[88px]"
             />
-            <p className="text-xs text-muted-foreground">{notes.length}/500 characters</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">{notes.length}/500 characters</p>
           </div>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading} className="min-h-[44px]">
             Cancel
           </Button>
         <Button 
@@ -332,7 +333,7 @@ export const QuickAppointmentDialog = ({
           disabled={loading || hasConflict || clients.length === 0 || services.length === 0}
           className="min-h-[44px]"
         >
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {loading && <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />}
             Create Appointment
           </Button>
         </DialogFooter>

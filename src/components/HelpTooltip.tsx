@@ -56,22 +56,22 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
       <AlertDialogTrigger asChild>
         <button
           type="button"
-          className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary hover:bg-primary/90 transition-all brutal-border brutal-shadow-xs hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+          className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full bg-primary hover:bg-primary/90 transition-all brutal-border brutal-shadow-xs hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_hsl(var(--foreground))] touch-manipulation active:scale-95"
           aria-label="Help"
         >
-          <HelpCircle className="h-4 w-4 text-primary-foreground" />
+          <HelpCircle className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent className="brutal-border brutal-shadow-lg max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle className="font-pixel text-2xl">{title}</AlertDialogTitle>
           <AlertDialogDescription className="font-sans text-base leading-relaxed space-y-4">
-            <div className="text-foreground/90 whitespace-pre-wrap">{displayContent}</div>
+            <div className="text-foreground/90 whitespace-pre-wrap text-sm sm:text-base">{displayContent}</div>
             
             {examples && examples.length > 0 && (
               <div className="pt-3 border-t-2 border-foreground/10">
-                <p className="font-semibold text-foreground mb-2">💡 Examples:</p>
-                <ul className="space-y-1.5 text-sm text-foreground/80">
+                <p className="font-semibold text-foreground mb-2 text-sm sm:text-base">💡 Examples:</p>
+                <ul className="space-y-1.5 text-xs sm:text-sm text-foreground/80">
                   {examples.map((example, i) => (
                     <li key={i} className="flex gap-2">
                       <span className="text-secondary">•</span>
@@ -84,8 +84,8 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
             
             {tips && tips.length > 0 && (
               <div className="pt-3 border-t-2 border-foreground/10">
-                <p className="font-semibold text-foreground mb-2">✨ Tips:</p>
-                <ul className="space-y-1.5 text-sm text-foreground/80">
+                <p className="font-semibold text-foreground mb-2 text-sm sm:text-base">✨ Tips:</p>
+                <ul className="space-y-1.5 text-xs sm:text-sm text-foreground/80">
                   {tips.map((tip, i) => (
                     <li key={i} className="flex gap-2">
                       <span className="text-secondary">•</span>

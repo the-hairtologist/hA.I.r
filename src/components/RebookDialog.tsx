@@ -278,8 +278,8 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
           {/* Time Slot Selection */}
           {selectedWeeks && (
             <div>
-              <Label className="mb-3 block flex items-center gap-2">
-                <Clock className="h-4 w-4" />
+              <Label className="mb-3 block flex items-center gap-2 text-sm sm:text-base">
+                <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
                 Available Times
               </Label>
               
@@ -315,14 +315,14 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="flex-1"
+              className="flex-1 min-h-[44px]"
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
               Cancel
             </Button>
             <Button
-              className="flex-1"
+              className="flex-1 min-h-[44px]"
               onClick={handleRebook}
               disabled={!selectedTime || loading || checking}
             >
