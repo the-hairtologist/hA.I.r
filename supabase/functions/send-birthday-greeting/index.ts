@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-import { Resend } from "npm:resend@2.0.0";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -61,7 +61,7 @@ serve(async (req) => {
 
     for (const profile of birthdayProfiles) {
       try {
-        const stylistName = profile.client_profiles?.[0]?.stylist?.profiles?.full_name || 'Your Stylist';
+        const stylistName = (profile.client_profiles as any)?.[0]?.stylist?.profiles?.[0]?.full_name || 'Your Stylist';
         
         await resend.emails.send({
           from: 'Hair A.I. <noreply@hair-ai.app>',

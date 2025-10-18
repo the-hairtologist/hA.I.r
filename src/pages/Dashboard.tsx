@@ -145,6 +145,7 @@ const Dashboard = () => {
 
   // Client dashboard sections - optimized for client needs
   const defaultClientSections: DashboardSection[] = [
+    { id: "rebooking-prompt", title: "Time for a Touch-Up", component: "RebookingPrompt", enabled: true },
     { id: "next-appointment", title: "Upcoming", component: "NextAppointment", enabled: true },
     { id: "loyalty-progress", title: "Rewards", component: "LoyaltyProgress", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
@@ -665,6 +666,10 @@ const Dashboard = () => {
       case "ClientMilestones":
         return (userRole === "client" || isAdmin) && profile?.id ? (
           <ClientMilestones clientId={profile.id} />
+        ) : null;
+      case "RebookingPrompt":
+        return (userRole === "client" || isAdmin) ? (
+          <RebookingPrompt />
         ) : null;
       case "UpcomingAppointments":
         return (userRole === "client" || isAdmin) && stats ? (

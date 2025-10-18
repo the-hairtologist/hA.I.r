@@ -155,3 +155,21 @@ verify_jwt = true
 
 [functions.ai-assistant]
 verify_jwt = true
+
+[functions.calendar-oauth-init]
+verify_jwt = true
+
+[functions.send-birthday-greeting]
+verify_jwt = false
+
+[functions.send-loyalty-milestone]
+verify_jwt = false
+
+[functions.send-reengagement]
+verify_jwt = false
+
+[functions.generate-predictive-insights]
+verify_jwt = false
+
+[functions.delete-user-account]
+verify_jwt = true

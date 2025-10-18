@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-import { Resend } from "npm:resend@2.0.0";
+import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -66,9 +66,11 @@ serve(async (req) => {
 
     for (const client of inactiveList) {
       try {
-        const clientEmail = client.profiles.email;
-        const clientName = client.profiles.full_name;
-        const stylistName = client.preferred_stylist?.profiles?.full_name || 'Your Stylist';
+        const clientData = client.profiles as any;
+        const clientEmail = Array.isArray(clientData) ? clientData[0]?.email : clientData.email;
+        const clientName = Array.isArray(clientData) ? clientData[0]?.full_name : clientData.full_name;
+        const stylistData = (client.preferred_stylist as any)?.profiles;
+        const stylistName = Array.isArray(stylistData) ? stylistData[0]?.full_name : stylistData?.full_name || 'Your Stylist';
 
         // Check if already sent re-engagement recently (last 30 days)
         const thirtyDaysAgo = new Date();
@@ -115,8 +117,10 @@ serve(async (req) => {
         console.log(`✅ Re-engagement email sent to ${clientEmail}`);
       } catch (emailError) {
         const msg = emailError instanceof Error ? emailError.message : 'Unknown error';
-        errors.push(`${client.profiles.email}: ${msg}`);
-        console.error(`❌ Failed to send to ${client.profiles.email}:`, msg);
+        const clientData = client.profiles as any;
+        const email = Array.isArray(clientData) ? clientData[0]?.email : clientData.email;
+        errors.push(`${email}: ${msg}`);
+        console.error(`❌ Failed to send to ${email}:`, msg);
       }
     }
 
