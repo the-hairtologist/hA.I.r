@@ -32,6 +32,8 @@ import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { AIFormulaAnalyzer } from "@/components/AIFormulaAnalyzer";
 import { formulaSchema } from "@/lib/validation/formulaSchemas";
 import { cn } from "@/lib/utils";
+import { VirtualList } from "@/components/VirtualList";
+import { useCallback } from "react";
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -70,6 +72,184 @@ const Formulas = () => {
   const [applicationNotes, setApplicationNotes] = useState("");
   const [whatWorked, setWhatWorked] = useState("");
   const [whatToAvoid, setWhatToAvoid] = useState("");
+
+  // Formula card renderer (for both regular and virtual list)
+  const renderFormulaCard = useCallback((formula: any, index: number) => {
+    const isSelected = selectedFormulas.has(formula.id);
+    return (
+      <Card key={formula.id} className={cn(
+        "border-[3px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all",
+        isSelected ? "border-primary ring-2 ring-primary" : "border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]"
+      )}>
+        <CardHeader>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3 flex-1">
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  const newSelected = new Set(selectedFormulas);
+                  if (newSelected.has(formula.id)) {
+                    newSelected.delete(formula.id);
+                  } else {
+                    newSelected.add(formula.id);
+                  }
+                  setSelectedFormulas(newSelected);
+                }}
+                className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1 focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                onClick={(e) => e.stopPropagation()}
+                aria-label={`Select ${formula.client?.full_name || 'formula'}`}
+              />
+              <div className="flex-1">
+                <CardTitle className="text-base sm:text-lg md:text-xl">
+                  <HighlightedText text={formula.client?.full_name || "Client"} query={searchTerm} />
+                </CardTitle>
+            <CardDescription className="flex flex-wrap items-center gap-2 mt-1">
+              {formula.client?.email && (
+                <HighlightedText text={formula.client.email} query={searchTerm} />
+              )}
+              {formula.color_line && (
+                <>
+                  <span>•</span>
+                  <HighlightedText text={formula.color_line} query={searchTerm} />
+                </>
+              )}
+              {formula.created_at && (
+                <span className="text-[10px] xs:text-xs">• {new Date(formula.created_at).toLocaleDateString()}</span>
+              )}
+            </CardDescription>
+            {formula.tags && formula.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {formula.tags.map((tag: string) => (
+                  <Badge key={tag} variant="secondary" className="text-[10px] xs:text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+              </div>
+            </div>
+            <div className="flex gap-2 flex-shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleDuplicateFormula(formula)}
+              title="Duplicate formula"
+              aria-label={`Duplicate formula for ${formula.client?.full_name || 'client'}`}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleEditFormula(formula)}
+              title="Edit formula"
+              aria-label={`Edit formula for ${formula.client?.full_name || 'client'}`}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleDeleteFormula(formula.id)}
+              title="Delete formula"
+              aria-label={`Delete formula for ${formula.client?.full_name || 'client'}`}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+          </div>
+        </CardHeader>
+    <CardContent className="space-y-3">
+      <div>
+        <p className="text-xs sm:text-sm font-medium mb-1">Formula:</p>
+        <p className="text-xs sm:text-sm whitespace-pre-wrap text-muted-foreground">
+          {formula.formula_text}
+        </p>
+      </div>
+      {formula.instructions && (
+        <div className="space-y-2">
+          <p className="text-xs sm:text-sm font-medium mb-1">Instructions:</p>
+          <p className="text-xs sm:text-sm whitespace-pre-wrap text-muted-foreground">
+            {formula.instructions}
+          </p>
+        </div>
+      )}
+      {formula.result_notes && (
+        <div>
+          <p className="text-xs sm:text-sm font-medium mb-1">Results:</p>
+          <p className="text-xs sm:text-sm whitespace-pre-wrap text-muted-foreground">
+            {formula.result_notes}
+          </p>
+        </div>
+      )}
+      
+      {/* Structured Formula Details */}
+      {(formula.processing_time || formula.developer_volume || formula.application_notes || formula.what_worked || formula.what_to_avoid) && (
+        <div className="pt-2 border-t space-y-2">
+          {/* Processing Time */}
+          {formula.processing_time && (
+            <div>
+              <p className="text-[10px] xs:text-xs font-medium mb-1 flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                Processing Time
+              </p>
+              <p className="text-[10px] xs:text-xs text-muted-foreground pl-4">{formula.processing_time}</p>
+            </div>
+          )}
+
+          {/* Developer Volume */}
+          {formula.developer_volume && (
+            <div>
+              <p className="text-[10px] xs:text-xs font-medium mb-1 flex items-center gap-1">
+                <Beaker className="h-3 w-3" />
+                Developer Volume
+              </p>
+              <p className="text-[10px] xs:text-xs text-muted-foreground pl-4">{formula.developer_volume}</p>
+            </div>
+          )}
+
+          {/* Application Notes */}
+          {formula.application_notes && (
+            <div>
+              <p className="text-[10px] xs:text-xs font-medium mb-1 flex items-center gap-1">
+                <FileText className="h-3 w-3" />
+                Application
+              </p>
+              <p className="text-[10px] xs:text-xs text-muted-foreground pl-4">{formula.application_notes}</p>
+            </div>
+          )}
+
+          {/* Success/Learnings */}
+          {(formula.what_worked || formula.what_to_avoid) && (
+            <div className="grid gap-2">
+              {formula.what_worked && (
+                <div className="bg-green-50 dark:bg-green-950/20 p-2 rounded-md">
+                  <p className="text-xs font-medium mb-1 flex items-center gap-1 text-green-700 dark:text-green-400">
+                    <ThumbsUp className="h-3 w-3" />
+                    What Worked
+                  </p>
+                  <p className="text-xs text-green-600 dark:text-green-500/80 pl-4">{formula.what_worked}</p>
+                </div>
+              )}
+              {formula.what_to_avoid && (
+                <div className="bg-amber-50 dark:bg-amber-950/20 p-2 rounded-md">
+                  <p className="text-xs font-medium mb-1 flex items-center gap-1 text-amber-700 dark:text-amber-400">
+                    <AlertTriangle className="h-3 w-3" />
+                    What to Avoid
+                  </p>
+                  <p className="text-xs text-amber-600 dark:text-amber-500/80 pl-4">{formula.what_to_avoid}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </CardContent>
+  </Card>
+    );
+  }, [selectedFormulas, searchTerm]);
 
   useEffect(() => {
     loadData();
@@ -394,6 +574,11 @@ const Formulas = () => {
     return filtered;
   }, [formulas, searchTerm, filters]);
 
+  // Virtual scroll optimization - use for large lists (50+ items)
+  const useVirtualScroll = filteredFormulas.length > 50;
+  const formulaCardHeight = 420; // Average card height in pixels
+  const viewportHeight = typeof window !== 'undefined' ? window.innerHeight - 400 : 600;
+
   // Extract unique color lines and tags
   const uniqueColorLines = useMemo(() => {
     const lines = formulas
@@ -695,192 +880,17 @@ const Formulas = () => {
                 </>
               )}
             </div>
+          ) : useVirtualScroll ? (
+            <VirtualList
+              items={filteredFormulas}
+              itemHeight={formulaCardHeight}
+              containerHeight={viewportHeight}
+              gap={16}
+              className="px-1"
+              renderItem={renderFormulaCard}
+            />
           ) : (
-              filteredFormulas.map((formula) => {
-                const isSelected = selectedFormulas.has(formula.id);
-                return (
-                  <Card key={formula.id} className={cn(
-                    "border-[3px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:-translate-y-1 transition-all",
-                    isSelected ? "border-primary ring-2 ring-primary" : "border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]"
-                  )}>
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-3 flex-1">
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={(e) => {
-                              e.stopPropagation();
-                              const newSelected = new Set(selectedFormulas);
-                              if (newSelected.has(formula.id)) {
-                                newSelected.delete(formula.id);
-                              } else {
-                                newSelected.add(formula.id);
-                              }
-                              setSelectedFormulas(newSelected);
-                            }}
-                            className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1 focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                            onClick={(e) => e.stopPropagation()}
-                            aria-label={`Select ${formula.client?.full_name || 'formula'}`}
-                          />
-                          <div className="flex-1">
-                            <CardTitle className="text-base sm:text-lg md:text-xl">
-                              <HighlightedText text={formula.client?.full_name || "Client"} query={searchTerm} />
-                            </CardTitle>
-                        <CardDescription className="flex flex-wrap items-center gap-2 mt-1">
-                          {formula.client?.email && (
-                            <HighlightedText text={formula.client.email} query={searchTerm} />
-                          )}
-                          {formula.color_line && (
-                            <>
-                              <span>•</span>
-                              <HighlightedText text={formula.color_line} query={searchTerm} />
-                            </>
-                          )}
-                          {formula.created_at && (
-                            <span className="text-[10px] xs:text-xs">• {new Date(formula.created_at).toLocaleDateString()}</span>
-                          )}
-                        </CardDescription>
-                        {formula.tags && formula.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mt-2">
-                            {formula.tags.map((tag: string) => (
-                              <Badge key={tag} variant="secondary" className="text-[10px] xs:text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-                          </div>
-                        </div>
-                        <div className="flex gap-2 flex-shrink-0">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDuplicateFormula(formula)}
-                          title="Duplicate formula"
-                          aria-label={`Duplicate formula for ${formula.client?.full_name || 'client'}`}
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditFormula(formula)}
-                          title="Edit formula"
-                          aria-label={`Edit formula for ${formula.client?.full_name || 'client'}`}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDeleteFormula(formula.id)}
-                          title="Delete formula"
-                          aria-label={`Delete formula for ${formula.client?.full_name || 'client'}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      </div>
-                    </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <p className="text-xs sm:text-sm font-medium mb-1">Formula:</p>
-                    <p className="text-xs sm:text-sm whitespace-pre-wrap text-muted-foreground">
-                      {formula.formula_text}
-                    </p>
-                  </div>
-                  {formula.instructions && (
-                    <div className="space-y-2">
-                      <p className="text-xs sm:text-sm font-medium mb-1">Instructions:</p>
-                      <p className="text-xs sm:text-sm whitespace-pre-wrap text-muted-foreground">
-                        {formula.instructions}
-                      </p>
-                      <AudioGuidePlayer 
-                        text={formula.instructions}
-                        title={`Instructions for ${formula.client?.full_name || 'Client'}`}
-                        voice="nova"
-                      />
-                    </div>
-                  )}
-                  {formula.result_notes && (
-                    <div>
-                      <p className="text-xs sm:text-sm font-medium mb-1">Notes:</p>
-                      <p className="text-xs sm:text-sm text-muted-foreground">{formula.result_notes}</p>
-                    </div>
-                  )}
-
-                  {/* Structured Details - Show if any exist */}
-                  {(formula.processing_time_minutes || formula.developer_volume || formula.application_notes || formula.what_worked || formula.what_to_avoid) && (
-                    <div className="border-t pt-3 space-y-3">
-                      {/* Processing Details */}
-                      {(formula.processing_time_minutes || formula.developer_volume) && (
-                        <div className="flex flex-wrap gap-4 text-[10px] xs:text-xs">
-                          {formula.processing_time_minutes && (
-                            <div 
-                              className={cn(
-                                "flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer transition-colors",
-                                processingTimeSort ? "bg-primary/10 text-primary" : "bg-muted hover:bg-muted/70"
-                              )}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setProcessingTimeSort(processingTimeSort === "asc" ? "desc" : processingTimeSort === "desc" ? null : "asc");
-                              }}
-                              title={processingTimeSort ? "Click to change sort order" : "Click to sort by processing time"}
-                            >
-                              <Clock className="h-3 w-3 text-primary" />
-                              <span className="font-medium">{formula.processing_time_minutes} min</span>
-                            </div>
-                          )}
-                          {formula.developer_volume && (
-                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md">
-                              <Beaker className="h-3 w-3 text-primary" />
-                              <span className="font-medium">{formula.developer_volume}</span>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Application Notes */}
-                      {formula.application_notes && (
-                        <div>
-                          <p className="text-[10px] xs:text-xs font-medium mb-1 flex items-center gap-1">
-                            <FileText className="h-3 w-3" />
-                            Application
-                          </p>
-                          <p className="text-[10px] xs:text-xs text-muted-foreground pl-4">{formula.application_notes}</p>
-                        </div>
-                      )}
-
-                      {/* Success/Learnings */}
-                      {(formula.what_worked || formula.what_to_avoid) && (
-                        <div className="grid gap-2">
-                          {formula.what_worked && (
-                            <div className="bg-green-50 dark:bg-green-950/20 p-2 rounded-md">
-                              <p className="text-xs font-medium mb-1 flex items-center gap-1 text-green-700 dark:text-green-400">
-                                <ThumbsUp className="h-3 w-3" />
-                                What Worked
-                              </p>
-                              <p className="text-xs text-green-600 dark:text-green-500/80 pl-4">{formula.what_worked}</p>
-                            </div>
-                          )}
-                          {formula.what_to_avoid && (
-                            <div className="bg-amber-50 dark:bg-amber-950/20 p-2 rounded-md">
-                              <p className="text-xs font-medium mb-1 flex items-center gap-1 text-amber-700 dark:text-amber-400">
-                                <AlertTriangle className="h-3 w-3" />
-                                What to Avoid
-                              </p>
-                              <p className="text-xs text-amber-600 dark:text-amber-500/80 pl-4">{formula.what_to_avoid}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })
+              filteredFormulas.map(renderFormulaCard)
         )}
         </div>
       </div>
