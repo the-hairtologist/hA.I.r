@@ -340,6 +340,8 @@ const Dashboard = () => {
         return;
       }
 
+      console.log('[Dashboard] Loading profile for role:', primaryRole);
+
       // Get appropriate profile based on role
       if (primaryRole === "stylist") {
         const { data: stylistProfile, error: stylistError } = await supabase
@@ -350,8 +352,11 @@ const Dashboard = () => {
         
         if (stylistError && stylistError.code !== 'PGRST116') {
           console.error('Error loading stylist profile:', stylistError);
+          toast.error('Failed to load stylist profile');
           throw stylistError;
         }
+        
+        console.log('[Dashboard] Stylist profile loaded:', !!stylistProfile);
         setProfile(stylistProfile);
       } else if (primaryRole === "client") {
         const { data: clientProfile, error: clientError } = await supabase
@@ -362,8 +367,11 @@ const Dashboard = () => {
         
         if (clientError && clientError.code !== 'PGRST116') {
           console.error('Error loading client profile:', clientError);
+          toast.error('Failed to load client profile');
           throw clientError;
         }
+        
+        console.log('[Dashboard] Client profile loaded:', !!clientProfile);
         setProfile(clientProfile);
       } else if (primaryRole === "admin" || isAdmin) {
         // For admins, try to get stylist profile first, then client profile
@@ -375,10 +383,12 @@ const Dashboard = () => {
         
         if (stylistError && stylistError.code !== 'PGRST116') {
           console.error('Error loading admin stylist profile:', stylistError);
+          toast.error('Failed to load admin profile');
           throw stylistError;
         }
         
         if (stylistProfile) {
+          console.log('[Dashboard] Admin stylist profile loaded');
           setProfile(stylistProfile);
         } else {
           const { data: clientProfile, error: clientError } = await supabase
@@ -389,8 +399,11 @@ const Dashboard = () => {
           
           if (clientError && clientError.code !== 'PGRST116') {
             console.error('Error loading admin client profile:', clientError);
+            toast.error('Failed to load admin profile');
             throw clientError;
           }
+          
+          console.log('[Dashboard] Admin client profile loaded');
           setProfile(clientProfile);
         }
       }
