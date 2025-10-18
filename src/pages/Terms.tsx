@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 import { FileText } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import { Link } from "react-router-dom";
 
 const Terms = () => {
   return (
@@ -274,7 +275,7 @@ const Terms = () => {
             </ul>
             
             <h2>16. Privacy</h2>
-            <p>Your privacy is important. See our <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a> for details on data handling.</p>
+            <p>Your privacy is important. See our <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link> for details on data handling.</p>
             
             <h2>17. Modifications to Terms</h2>
             <p>We may update these terms at any time. Continued use of the service constitutes acceptance of new terms.</p>
