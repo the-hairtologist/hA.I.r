@@ -26,11 +26,15 @@ export default function Analytics() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
 
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error loading stylist profile:', error);
+      }
 
       return data;
     },

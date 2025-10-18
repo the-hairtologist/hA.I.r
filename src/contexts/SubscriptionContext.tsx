@@ -131,7 +131,13 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Subscription check failed:', error);
+        // Set safe defaults instead of crashing
+        setSubscribed(false);
+        setInTrial(false);
+        return;
+      }
 
       const isSubscribed = data.subscribed || false;
       const isInTrial = data.in_trial || false;
