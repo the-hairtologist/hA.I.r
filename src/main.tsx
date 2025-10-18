@@ -21,8 +21,8 @@ window.addEventListener('orientationchange', setViewportHeight);
 
 // Apply mobile optimizations to body
 if (document.body) {
-  document.body.style.overscrollBehavior = 'none';
-  document.body.style.touchAction = 'pan-y';
+  document.body.style.overscrollBehavior = 'contain';
+  document.body.style.touchAction = 'auto';
 }
 
 // Service Worker cleanup for mobile issues
