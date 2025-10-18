@@ -90,6 +90,7 @@ export default defineConfig(({ mode }) => ({
         clientsClaim: true,
         skipWaiting: true,
         maximumFileSizeToCacheInBytes: 5000000, // 5MB
+        navigationPreload: true, // Enable navigation preload for faster page loads
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -119,10 +120,10 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          // Critical user data - cache for 7 days
+          // Critical user data - StaleWhileRevalidate for faster perceived performance
           {
             urlPattern: /client_profiles|stylist_profiles|appointments|formulas/i,
-            handler: 'NetworkFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'user-data-cache',
               expiration: {
@@ -135,17 +136,17 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          // Supabase REST API - NetworkFirst with background sync
+          // Supabase REST API - StaleWhileRevalidate for better offline/slow network
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
-            handler: 'NetworkFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'supabase-api-cache',
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 30 // 30 minutes
               },
-              networkTimeoutSeconds: 3,
+              networkTimeoutSeconds: 5,
               cacheableResponse: {
                 statuses: [0, 200]
               },

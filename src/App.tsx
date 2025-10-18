@@ -19,6 +19,8 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { DemoModeProvider } from "@/components/demo/DemoMode";
 import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { NetworkAwareLoader } from "@/components/NetworkAwareLoader";
+import { TimeoutGuard } from "@/components/TimeoutGuard";
 import { PerformanceReport } from "@/components/PerformanceReport";
 import { AccessibilityShortcuts } from "@/components/AccessibilityShortcuts";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -65,23 +67,42 @@ const RoleSwitchProtection = lazy(() =>
 
 const AnalyticsInitializer = () => {
   useEffect(() => {
-    // Initialize analytics and monitoring
-    initAnalytics();
-    initSentry();
-    initUTMTracking();
+    // Defer non-critical initializations to idle time
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        // Initialize analytics and monitoring (non-critical)
+        initAnalytics();
+        initSentry();
+        initUTMTracking();
+        
+        // Initialize resource preloading strategy (non-critical)
+        initPreloadStrategies();
+      });
+
+      // Initialize self-healing after initial render
+      requestIdleCallback(() => {
+        selfHealing.initialize().catch((error) => {
+          console.error('Failed to initialize self-healing system:', error);
+        });
+      });
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(() => {
+        initAnalytics();
+        initSentry();
+        initUTMTracking();
+        initPreloadStrategies();
+        
+        selfHealing.initialize().catch((error) => {
+          console.error('Failed to initialize self-healing system:', error);
+        });
+      }, 1000);
+    }
     
-    // Initialize comprehensive performance optimizations
+    // Initialize critical performance optimizations immediately
     performanceOptimizer.init().catch((error) => {
       console.error('Failed to initialize performance optimizations:', error);
     });
-    
-    // Initialize self-healing system (error recovery, health monitoring, auto-maintenance)
-    selfHealing.initialize().catch((error) => {
-      console.error('Failed to initialize self-healing system:', error);
-    });
-    
-    // Initialize resource preloading strategy
-    initPreloadStrategies();
   }, []);
   
   useAnalytics();
@@ -94,58 +115,60 @@ const App = () => {
     <HelmetProvider>
       <GlobalErrorBoundary>
         <ErrorBoundary>
-          <QueryClientProvider client={queryClient}>
-            <SubscriptionProvider>
-              <DemoModeProvider>
-                <Suspense fallback={null}>
-                  <MobileOptimizationsProvider>
-                    <TooltipProvider>
-                      <OfflineIndicator />
-                      <Toaster />
-                      <Sonner />
-                      <CookieConsent />
-                      <PerformanceReport />
-                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
-                      <GlobalAnnouncer />
-                    {/* Performance monitoring (dev only) */}
-                    <Suspense fallback={null}>
-                      <PerformanceMonitor />
-                    </Suspense>
-                    {/* Performance overlay (dev only) */}
-                    <Suspense fallback={null}>
-                      <PerformanceOverlay />
-                    </Suspense>
-                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                      <EnhancedAuthProvider>
-                        <AnalyticsInitializer />
-                        {/* Components requiring Router context */}
-                        <AccessibilityShortcuts />
-                        <CommandPalette />
-                        {/* Service integration tracking - requires Router context */}
-                        <Suspense fallback={null}>
-                          <ServiceIntegrationTracker />
-                        </Suspense>
-                        <TourProvider>
-                          {/* Role switch protection */}
+          <NetworkAwareLoader>
+            <QueryClientProvider client={queryClient}>
+              <SubscriptionProvider>
+                <DemoModeProvider>
+                  <Suspense fallback={null}>
+                    <MobileOptimizationsProvider>
+                      <TooltipProvider>
+                        <OfflineIndicator />
+                        <Toaster />
+                        <Sonner />
+                        <CookieConsent />
+                        <PerformanceReport />
+                        {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
+                        <GlobalAnnouncer />
+                      {/* Performance monitoring (dev only) */}
+                      <Suspense fallback={null}>
+                        <PerformanceMonitor />
+                      </Suspense>
+                      {/* Performance overlay (dev only) */}
+                      <Suspense fallback={null}>
+                        <PerformanceOverlay />
+                      </Suspense>
+                      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                        <EnhancedAuthProvider>
+                          <AnalyticsInitializer />
+                          {/* Components requiring Router context */}
+                          <AccessibilityShortcuts />
+                          <CommandPalette />
+                          {/* Service integration tracking - requires Router context */}
                           <Suspense fallback={null}>
-                            <RoleSwitchProtection />
+                            <ServiceIntegrationTracker />
                           </Suspense>
-                          <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
-                            <Routes>
-                              {AppRoutes()}
-                            </Routes>
-                          </Suspense>
-                        </TourProvider>
-                      </EnhancedAuthProvider>
-                    </BrowserRouter>
-                  </TooltipProvider>
-                </MobileOptimizationsProvider>
-              </Suspense>
-            </DemoModeProvider>
-          </SubscriptionProvider>
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </GlobalErrorBoundary>
+                          <TourProvider>
+                            {/* Role switch protection */}
+                            <Suspense fallback={null}>
+                              <RoleSwitchProtection />
+                            </Suspense>
+                            <TimeoutGuard>
+                              <Routes>
+                                {AppRoutes()}
+                              </Routes>
+                            </TimeoutGuard>
+                          </TourProvider>
+                        </EnhancedAuthProvider>
+                      </BrowserRouter>
+                    </TooltipProvider>
+                  </MobileOptimizationsProvider>
+                </Suspense>
+              </DemoModeProvider>
+            </SubscriptionProvider>
+          </QueryClientProvider>
+        </NetworkAwareLoader>
+        </ErrorBoundary>
+      </GlobalErrorBoundary>
     </HelmetProvider>
   );
 };
