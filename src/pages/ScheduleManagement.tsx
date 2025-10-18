@@ -606,14 +606,14 @@ const ScheduleManagement = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen-safe flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 pb-20">
+    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-accent/5 pb-20">
       <header className="border-b-[3px] border-foreground bg-card/95 backdrop-blur-sm sticky top-0 z-10 shadow-brutal-sm">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center gap-3">

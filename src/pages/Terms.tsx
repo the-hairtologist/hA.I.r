@@ -5,7 +5,7 @@ import { SEO } from "@/components/SEO";
 
 const Terms = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen-safe bg-background">
       <SEO 
         title="Terms of Service - User Agreement"
         description="Read the terms and conditions for using hA.I.r. Understand your rights, responsibilities, and our service policies including refunds and AI disclaimers."

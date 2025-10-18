@@ -5,7 +5,7 @@ import { Cookie } from "lucide-react";
 
 const CookiePolicy = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen-safe bg-background">
       <PageHeader 
         title="Cookie Policy" 
         icon={<Cookie className="h-6 w-6" />}

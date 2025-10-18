@@ -111,7 +111,7 @@ export default function OnboardingTest() {
   if (!status) return null;
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen-safe bg-background p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>

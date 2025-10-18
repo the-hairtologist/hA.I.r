@@ -324,14 +324,14 @@ const Messages = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen-safe flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
+    <div className="h-screen-safe flex flex-col bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
       <header className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
             <Button

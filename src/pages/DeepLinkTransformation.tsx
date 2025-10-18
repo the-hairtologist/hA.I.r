@@ -106,7 +106,7 @@ export default function DeepLinkTransformation() {
   
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen-safe flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -121,7 +121,7 @@ export default function DeepLinkTransformation() {
   const hasPhotos = photo?.before_image_url && photo?.after_image_url;
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <PageHeader title="Hair Transformation" backTo="/" />
       
       <main className="container mx-auto px-4 py-8 max-w-4xl">

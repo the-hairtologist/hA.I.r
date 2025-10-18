@@ -97,7 +97,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
         
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-2">
-            <StickyNote className="h-4 w-4 text-warning" />
+            <StickyNote className="h-5 w-5 text-warning" />
             <h3 className="text-xs font-bold text-foreground uppercase tracking-wide">Quick Notes</h3>
           </div>
           

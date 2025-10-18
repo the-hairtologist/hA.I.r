@@ -15,7 +15,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background scroll-smooth">
+    <div className="min-h-screen-safe bg-background scroll-smooth">
       <SEO 
         title="hA.I.r - AI-Powered Salon Assistant | Transform Every Color Service"
         description="Professional color formulas in seconds. AI-powered booking, client management, and formula generation for hair stylists. No guesswork, just flawless results every time."

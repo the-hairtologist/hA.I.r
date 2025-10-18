@@ -279,8 +279,8 @@ export const MobileBottomNav = () => {
                     <Icon 
                       className={cn(
                         "transition-all duration-200", 
-                        // Consistent icon size for all
-                        item.highlight ? "h-6 w-6" : "h-5 w-5",
+                        // Minimum 24px icons for mobile visibility
+                        "h-6 w-6",
                         active ? "text-on-surface-primary" : "text-muted-foreground",
                         item.highlight && !active && "text-primary"
                       )} 

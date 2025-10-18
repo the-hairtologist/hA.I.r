@@ -80,7 +80,7 @@ const PublicStylistDirectory = () => {
         url="/stylists"
       />
       
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen-safe bg-background">
         {/* Public Header */}
         <header className="border-b-4 border-foreground bg-gradient-to-r from-primary/10 to-accent/10">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">

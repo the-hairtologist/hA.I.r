@@ -531,7 +531,7 @@ export default function Clients() {
   // Show empty state for non-stylists
   if (!stylistId) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <main className="container mx-auto py-8 px-4">
           <Breadcrumbs />
           <div className="mb-6">
@@ -559,7 +559,7 @@ export default function Clients() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>

@@ -121,7 +121,7 @@ export default function QuickFormula() {
 
   return (
     <AIFeatureErrorBoundary featureName="Quick Formula Generator">
-      <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
+      <div className="min-h-screen-safe bg-gradient-to-br from-primary/10 via-background to-accent/10">
         <PageHeader
           title="Quick Formula"
           icon={<Zap className="h-6 w-6" />}

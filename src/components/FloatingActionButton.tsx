@@ -121,7 +121,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
                 "hover:scale-110 transition-all duration-200"
               )}
             >
-              <action.icon className="h-5 w-5 text-on-surface-primary" />
+              <action.icon className="h-6 w-6 text-on-surface-primary" />
             </Button>
           </div>
         ))}
