@@ -783,6 +783,53 @@ All colors MUST be HSL.
     }
   }
 
+  /* ============================================ */
+  /* MOBILE BOTTOM NAV OPTIMIZATIONS */
+  /* Consistent touch targets across all devices */
+  /* ============================================ */
+  
+  /* Ensure consistent button sizing on mobile */
+  @media (max-width: 1024px) {
+    nav[aria-label="Mobile navigation"] button {
+      /* Enforce minimum touch target */
+      min-height: 44px;
+      min-width: 44px;
+      /* Ensure consistent padding */
+      padding: 0.5rem 0.25rem;
+    }
+    
+    /* Consistent icon container sizing */
+    nav[aria-label="Mobile navigation"] .rounded-xl {
+      width: 44px !important;
+      height: 44px !important;
+      flex-shrink: 0;
+    }
+    
+    /* Consistent icon sizing */
+    nav[aria-label="Mobile navigation"] svg {
+      width: 20px !important;
+      height: 20px !important;
+    }
+    
+    /* Consistent label sizing */
+    nav[aria-label="Mobile navigation"] span {
+      font-size: 11px !important;
+      line-height: 1.2;
+    }
+  }
+  
+  /* Extra small devices - even more compact */
+  @media (max-width: 360px) {
+    nav[aria-label="Mobile navigation"] {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    
+    nav[aria-label="Mobile navigation"] button {
+      min-width: 56px;
+    }
+  }
+
   .window-controls {
     display: flex;
     gap: 6px;

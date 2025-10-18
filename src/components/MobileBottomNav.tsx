@@ -33,7 +33,7 @@ export const MobileBottomNav = () => {
   const stylistItems: NavItem[] = [
     { 
       icon: Calendar, 
-      label: "Appointments", 
+      label: "Schedule", 
       path: "/appointments",
       gradient: "from-cyan-start to-cyan-end",
       highlight: false
@@ -61,7 +61,7 @@ export const MobileBottomNav = () => {
     },
     { 
       icon: MessageSquare, 
-      label: "Messages", 
+      label: "Chat", 
       path: "/messages",
       gradient: "from-pink-start to-pink-end",
       badge: unreadCount,
@@ -80,21 +80,21 @@ export const MobileBottomNav = () => {
     },
     { 
       icon: Plus, 
-      label: "Book Now", 
+      label: "Book", 
       path: "/book-appointment",
       gradient: "from-emerald-start to-emerald-end",
       highlight: true // PRIMARY ACTION for clients
     },
     { 
       icon: CalendarCheck, 
-      label: "Appointments", 
+      label: "Visits", 
       path: "/appointments",
       gradient: "from-cyan-start to-cyan-end",
       highlight: false
     },
     { 
       icon: MessageSquare, 
-      label: "Messages", 
+      label: "Chat", 
       path: "/messages",
       gradient: "from-pink-start to-pink-end",
       badge: unreadCount,
@@ -102,11 +102,11 @@ export const MobileBottomNav = () => {
     },
   ];
 
-  // Admin bottom nav: Admin-focused with Settings instead of full messages list
+  // Admin bottom nav: Admin-focused with key controls
   const adminItems: NavItem[] = [
     { 
       icon: Home, 
-      label: "Dashboard", 
+      label: "Home", 
       path: "/dashboard",
       gradient: "from-purple-start to-purple-end",
       highlight: false
@@ -120,10 +120,17 @@ export const MobileBottomNav = () => {
     },
     { 
       icon: Settings, 
-      label: "Admin", 
+      label: "Control", 
       path: "/admin/command",
       gradient: "from-amber-start to-amber-end",
       highlight: true // Admin command center is priority
+    },
+    { 
+      icon: Activity, 
+      label: "Health", 
+      path: "/system-health",
+      gradient: "from-emerald-start to-emerald-end",
+      highlight: false
     },
   ];
 
@@ -210,7 +217,7 @@ export const MobileBottomNav = () => {
         {isAdmin && (
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500 to-transparent animate-pulse-subtle" />
         )}
-        <div className="flex justify-evenly items-stretch h-16 px-2">{/* Better spacing with justify-evenly and reduced padding */}
+        <div className="flex justify-around items-stretch h-16 px-1">{/* Consistent spacing with justify-around */}
           {items.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -222,7 +229,7 @@ export const MobileBottomNav = () => {
                 disabled={item.disabled}
                 className={cn(
                   "relative flex flex-col items-center justify-center flex-1",
-                  "min-w-[70px] min-h-[68px] gap-1", // Increased from min-w-[60px] min-h-[60px] gap-0.5
+                  "min-w-[64px] w-full max-w-[80px] gap-1", // Consistent fixed sizing
                   "transition-all duration-200 ease-out",
                   "active:scale-95",
                   "touch-manipulation",
@@ -245,35 +252,37 @@ export const MobileBottomNav = () => {
                     />
                 )}
 
-                {/* Icon container */}
+                {/* Icon container - Consistent sizing for all items */}
                 <div className="relative flex items-center justify-center">
                   <div 
                     className={cn(
-                      "flex items-center justify-center rounded-2xl",
+                      "flex items-center justify-center rounded-xl",
                       "transition-all duration-200",
-                      "retro-nav-icon-container", // Retro styling
-                      // Enhanced Home highlight
+                      // Consistent base size for all items
+                      "w-11 h-11",
+                      // Highlight effect for primary action
                       item.highlight && !active && [
-                        "w-14 h-14", // Larger highlight container (increased from w-12 h-12)
                         "bg-gradient-to-br from-primary/10 to-secondary/10",
                         "ring-1 ring-primary/20"
                       ],
-                      !item.highlight && "w-13 h-13", // Increased from w-11 h-11 (52px)
+                      // Active state
                       active && [
                         "bg-gradient-to-br",
                         item.gradient,
-                        "shadow-lg",
-                        "active", // Active state for retro styling
-                        item.highlight ? "scale-115" : "scale-110"
+                        "shadow-md",
+                        "scale-105"
                       ],
-                      !active && !item.highlight && "hover:bg-accent/50"
+                      // Hover state
+                      !active && "hover:bg-accent/30"
                     )}
                   >
                     <Icon 
                       className={cn(
-                        "h-7 w-7 transition-all duration-200", // Increased from h-6 w-6 (28px)
+                        "transition-all duration-200", 
+                        // Consistent icon size for all
+                        item.highlight ? "h-6 w-6" : "h-5 w-5",
                         active ? "text-on-surface-primary" : "text-muted-foreground",
-                        item.highlight && !active && "text-primary/60"
+                        item.highlight && !active && "text-primary"
                       )} 
                       strokeWidth={active ? 2.5 : 2}
                       aria-hidden="true"
@@ -290,25 +299,26 @@ export const MobileBottomNav = () => {
                   )}
                 </div>
 
-                {/* Label */}
+                {/* Label - Consistent sizing */}
                 <span 
                   className={cn(
-                    "text-xs font-sans font-medium transition-all duration-200 truncate max-w-[70px]",
-                    active ? "text-primary scale-105" : "text-muted-foreground"
+                    "text-[11px] font-sans font-medium transition-all duration-200",
+                    "truncate w-full text-center px-0.5",
+                    active ? "text-primary font-semibold" : "text-muted-foreground"
                   )}
                 >
                   {item.label}
                 </span>
 
-                {/* Active indicator line */}
+                {/* Active indicator line - Consistent design */}
                 {active && (
                   <div 
                     className={cn(
                       "absolute bottom-0 left-1/2 -translate-x-1/2",
-                      "h-2 w-12 rounded-t-full",
+                      "h-1 w-8 rounded-t-md",
                       "bg-gradient-to-r",
                       item.gradient,
-                      "animate-fade-in shadow-lg"
+                      "animate-fade-in"
                     )}
                     aria-hidden="true"
                   />

@@ -107,6 +107,16 @@ export const stylistNavigationItems: NavigationItem[] = [
     color: "text-pink-400 dark:text-pink-300" 
   },
   { 
+    id: "formulas", 
+    title: "Formulas", 
+    url: "/formulas", 
+    icon: FileText, 
+    gradient: "bg-[image:var(--gradient-orange-red)]", 
+    group: "main", 
+    color: "text-orange-400 dark:text-orange-300",
+    description: "Color formulas & history"
+  },
+  { 
     id: "business", 
     title: "Business", 
     url: "#", 
