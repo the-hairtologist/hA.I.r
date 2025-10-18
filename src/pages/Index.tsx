@@ -20,7 +20,9 @@ const Index = () => {
 
   // Auto-redirect authenticated users to dashboard
   useEffect(() => {
+    console.log('[Index] Auth state:', { user: !!user, userId: user?.id, loading, initialized: !loading });
     if (!loading && user) {
+      console.log('[Index] Redirecting to dashboard...');
       navigate("/dashboard", { replace: true });
     }
   }, [user, loading, navigate]);
