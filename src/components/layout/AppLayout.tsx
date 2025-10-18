@@ -24,17 +24,27 @@ const PUBLIC_ROUTES = [
 ];
 
 export const AppLayout = ({ children, notificationCount = 0 }: AppLayoutProps) => {
-  const location = useLocation();
-  
-  // Don't render mobile header on public pages
-  const shouldShowHeader = !PUBLIC_ROUTES.includes(location.pathname);
-  
-  return (
-    <>
-      {shouldShowHeader && <MobileHeader notificationCount={notificationCount} />}
+  try {
+    const location = useLocation();
+    
+    // Don't render mobile header on public pages
+    const shouldShowHeader = location?.pathname ? !PUBLIC_ROUTES.includes(location.pathname) : false;
+    
+    return (
+      <>
+        {shouldShowHeader && <MobileHeader notificationCount={notificationCount} />}
+        <main className="min-h-screen-safe overflow-y-auto overflow-x-hidden">
+          {children}
+        </main>
+      </>
+    );
+  } catch (error) {
+    console.warn('AppLayout render error:', error);
+    // Fallback: render children without header if location fails
+    return (
       <main className="min-h-screen-safe overflow-y-auto overflow-x-hidden">
         {children}
       </main>
-    </>
-  );
+    );
+  }
 };
