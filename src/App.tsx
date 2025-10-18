@@ -25,8 +25,9 @@ import { PerformanceReport } from "@/components/PerformanceReport";
 import { AccessibilityShortcuts } from "@/components/AccessibilityShortcuts";
 import { CommandPalette } from "@/components/CommandPalette";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useAuth } from "@/hooks/useAuth";
 import { initAnalytics } from "@/lib/analytics";
-import { initSentry } from "@/lib/monitoring";
+import { initSentry, setUser, clearUser } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
@@ -75,13 +76,17 @@ const RoleSwitchProtection = lazy(() =>
 );
 
 const AnalyticsInitializer = () => {
+  const { user } = useAuth();
+
   useEffect(() => {
+    // Initialize Sentry immediately for error tracking
+    initSentry();
+    
     // Defer non-critical initializations to idle time
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
         // Initialize analytics and monitoring (non-critical)
         initAnalytics();
-        initSentry();
         initUTMTracking();
         
         // Initialize resource preloading strategy (non-critical)
@@ -118,7 +123,6 @@ const AnalyticsInitializer = () => {
       // Fallback for browsers without requestIdleCallback
       setTimeout(() => {
         initAnalytics();
-        initSentry();
         initUTMTracking();
         initPreloadStrategies();
         
@@ -144,6 +148,15 @@ const AnalyticsInitializer = () => {
       console.error('Failed to initialize performance optimizations:', error);
     });
   }, []);
+
+  // Track user context in Sentry
+  useEffect(() => {
+    if (user) {
+      setUser(user.id, user.email, user.user_metadata?.full_name);
+    } else {
+      clearUser();
+    }
+  }, [user]);
   
   useAnalytics();
   return null;
