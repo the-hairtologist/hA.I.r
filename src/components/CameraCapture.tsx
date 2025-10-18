@@ -303,16 +303,16 @@ export const CameraCapture = ({
               priority={true}
               className="w-full h-48 object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent flex items-end p-4">
               <div className="flex-1">
-                <p className="text-white font-medium">{messages.processing}</p>
+                <p className="text-foreground font-medium">{messages.processing}</p>
                 <Progress value={uploadProgress} className="h-2 mt-2" />
               </div>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={handleCancel}
-                className="text-white hover:bg-white/20"
+                className="text-foreground hover:bg-accent"
               >
                 <X className="h-4 w-4" />
               </Button>
