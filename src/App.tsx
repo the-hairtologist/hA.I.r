@@ -45,6 +45,7 @@ import { initContrastValidator } from "@/lib/accessibility/contrastValidator";
 import { initFocusAudit } from "@/lib/accessibility/focusAudit";
 import { initLighthouseMonitoring } from "@/lib/qa/lighthouseAudit";
 import { PushOptInDialog } from "@/components/PushOptInDialog";
+import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { AppLayout } from "@/components/layout/AppLayout";
 import "@/lib/mobileHealthCheck";
 
@@ -217,6 +218,7 @@ const App = () => {
                                   {AppRoutes()}
                                 </Routes>
                               </AppLayout>
+                              <PWAInstallPrompt />
                             </TimeoutGuard>
                           </TourProvider>
                         </EnhancedAuthProvider>

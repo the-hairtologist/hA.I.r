@@ -75,7 +75,7 @@ const GrowthAnalytics = lazyWithRetry(() => import('@/pages/GrowthAnalytics'));
 const CommissionTracking = StylistPages.CommissionTracking; // Role-based code splitting
 const FeedbackBoard = lazyWithRetry(() => import('@/pages/FeedbackBoard'));
 const ClientFormulas = lazyWithRetry(() => import('@/pages/ClientFormulas'));
-const InstallPWA = lazyWithRetry(() => import('@/pages/InstallPWA'));
+const Install = lazyWithRetry(() => import('@/pages/Install'));
 const ZapierIntegration = lazyWithRetry(() => import('@/pages/ZapierIntegration'));
 const AuditReport = lazyWithRetry(() => import('@/pages/AuditReport'));
 const ClientRetention = lazyWithRetry(() => import('@/pages/ClientRetention'));
@@ -94,7 +94,7 @@ export const AppRoutes = () => (
     <Route path="/accessibility" element={<Accessibility />} />
     <Route path="/unsubscribe" element={<Unsubscribe />} />
     <Route path="/showcase" element={<ShowcaseDemo />} />
-    <Route path="/install" element={<InstallPWA />} />
+    <Route path="/install" element={<Install />} />
 
     {/* Deep Link Routes */}
     <Route path="/appointment/:id" element={<DeepLinkAppointment />} />
