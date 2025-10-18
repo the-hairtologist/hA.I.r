@@ -40,7 +40,7 @@ export const ContextualHelp = ({
         )}
         aria-label="Toggle help"
       >
-        <HelpCircle className="h-4 w-4" />
+        <HelpCircle className="h-5 w-5 sm:h-6 sm:w-6" />
       </Button>
 
       {isOpen && (
@@ -62,7 +62,7 @@ export const ContextualHelp = ({
                 onClick={() => setIsOpen(false)}
                 className="h-6 w-6"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
           </CardHeader>

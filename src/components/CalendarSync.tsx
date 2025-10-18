@@ -224,10 +224,10 @@ const CalendarSync = () => {
                       disabled={syncing === connection.id || !connection.is_active}
                     >
                       {syncing === connection.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                       ) : (
                         <>
-                          <RefreshCw className="h-4 w-4 mr-2" />
+                          <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                           Sync Now
                         </>
                       )}
@@ -239,10 +239,10 @@ const CalendarSync = () => {
                       disabled={disconnecting === connection.id}
                     >
                       {disconnecting === connection.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                       ) : (
                         <>
-                          <Unlink className="h-4 w-4 mr-2" />
+                          <Unlink className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                           Disconnect
                         </>
                       )}
@@ -265,7 +265,7 @@ const CalendarSync = () => {
                   disabled={connecting === 'google'}
                 >
                   {connecting === 'google' ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 animate-spin" />
                   ) : (
                     <>
                       <span className="mr-2">📅</span>
@@ -282,7 +282,7 @@ const CalendarSync = () => {
                   disabled={connecting === 'outlook'}
                 >
                   {connecting === 'outlook' ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 animate-spin" />
                   ) : (
                     <>
                       <span className="mr-2">📧</span>

@@ -106,7 +106,7 @@ export const ContextualAI = ({ context, data, onAction }: ContextualAIProps) => 
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
           <div className="rounded-full bg-primary/10 p-2 mt-0.5">
-            <Sparkles className="h-4 w-4 text-primary" />
+            <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
           </div>
           
           <div className="flex-1 space-y-3">
@@ -120,7 +120,7 @@ export const ContextualAI = ({ context, data, onAction }: ContextualAIProps) => 
                 onClick={handleAction}
                 className="gap-2"
               >
-                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
+                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
                 {suggestion.actionLabel}
               </Button>
             )}
@@ -132,7 +132,7 @@ export const ContextualAI = ({ context, data, onAction }: ContextualAIProps) => 
             onClick={handleDismiss}
             className="h-6 w-6 -mt-1 -mr-1"
           >
-            <X className="h-4 w-4 sm:h-5 sm:w-5" />
+            <X className="h-5 w-5 sm:h-6 sm:w-6" />
           </Button>
         </div>
       </CardContent>

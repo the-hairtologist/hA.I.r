@@ -147,7 +147,7 @@ export function ClientCSVImport({ stylistId, onImportComplete }: ClientCSVImport
             onClick={downloadTemplate}
             className="gap-2"
           >
-            <Download className="h-4 w-4" />
+            <Download className="h-5 w-5 sm:h-6 sm:w-6" />
             Download Template
           </Button>
           
@@ -157,7 +157,7 @@ export function ClientCSVImport({ stylistId, onImportComplete }: ClientCSVImport
             disabled={importing}
             className="gap-2"
           >
-            <Upload className="h-4 w-4" />
+            <Upload className="h-5 w-5 sm:h-6 sm:w-6" />
             {importing ? "Importing..." : "Upload CSV"}
           </Button>
           
@@ -172,7 +172,7 @@ export function ClientCSVImport({ stylistId, onImportComplete }: ClientCSVImport
 
         {results && (
           <Alert>
-            <AlertCircle className="h-4 w-4" />
+            <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
             <AlertDescription>
               <strong>Import Results:</strong>
               <ul className="mt-2 space-y-1 text-sm">
@@ -198,7 +198,7 @@ export function ClientCSVImport({ stylistId, onImportComplete }: ClientCSVImport
         )}
 
         <Alert>
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
           <AlertDescription className="text-xs">
             <strong>CSV Format:</strong> Include columns: full_name (required), email, phone, hair_type, allergies, notes
           </AlertDescription>

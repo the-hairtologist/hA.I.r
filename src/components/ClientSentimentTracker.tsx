@@ -198,17 +198,17 @@ export function ClientSentimentTracker({ stylistId, clientId }: ClientSentimentT
                         : "default"
                     }
                   >
-                    {client.riskLevel === "high" && <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />}
+                    {client.riskLevel === "high" && <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />}
                     {client.riskLevel.toUpperCase()}
                   </Badge>
                   {client.trend === "improving" && (
-                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" />
                   )}
                   {client.trend === "declining" && (
-                    <TrendingDown className="h-4 w-4 text-red-500" />
+                    <TrendingDown className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
                   )}
                   {client.trend === "stable" && (
-                    <Minus className="h-4 w-4 text-gray-500" />
+                    <Minus className="h-5 w-5 sm:h-6 sm:w-6 text-gray-500" />
                   )}
                 </div>
               </div>
