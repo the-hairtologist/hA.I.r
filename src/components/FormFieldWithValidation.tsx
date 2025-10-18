@@ -181,7 +181,7 @@ export const FormFieldWithValidation = forwardRef<
             className="text-sm font-medium text-destructive flex items-center gap-1 animate-fade-in"
             role="alert"
           >
-            <AlertCircle className="h-3 w-3" />
+            <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
             {error}
           </p>
         )}

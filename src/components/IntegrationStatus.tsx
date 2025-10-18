@@ -50,7 +50,7 @@ export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) =
               <p className="text-xs text-muted-foreground">{activeCount} active</p>
             </div>
             <Badge variant="secondary" className="gap-1">
-              <Check className="h-3 w-3" />
+              <Check className="h-4 w-4 sm:h-5 sm:w-5" />
               Active
             </Badge>
           </div>

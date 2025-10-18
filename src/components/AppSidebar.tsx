@@ -199,7 +199,7 @@ export function AppSidebar() {
                 className="flex-1 h-9 font-bold border-[2px] shadow-[var(--brutal-shadow-sm)] hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5 active:shadow-none active:translate-y-0 transition-all"
                 title={isEditMode ? "Finish customizing" : "Drag to prioritize your most-used tools"}
               >
-                <Edit3 className="h-3.5 w-3.5 mr-1.5" />
+                <Edit3 className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5" />
                 {isEditMode ? "Done" : "Customize"}
               </Button>
               {isEditMode && (
@@ -210,7 +210,7 @@ export function AppSidebar() {
                   className="h-9 px-2 border-[2px] shadow-[var(--brutal-shadow-sm)] hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5 active:shadow-none active:translate-y-0 transition-all"
                   title="Reset to recommended order"
                 >
-                  <RotateCcw className="h-3.5 w-3.5" />
+                  <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               )}
             </div>

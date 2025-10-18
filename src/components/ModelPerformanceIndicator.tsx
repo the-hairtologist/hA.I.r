@@ -77,13 +77,13 @@ export const ModelPerformanceIndicator = ({
       <div className="flex items-center gap-1 text-xs text-muted-foreground">
         {modelInfo && (
           <Badge variant="outline" className="text-xs">
-            <ModelIcon className="h-3 w-3 mr-1" />
+            <ModelIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
             {modelInfo.name}
           </Badge>
         )}
         {responseTimeMs && (
           <Badge variant="outline" className="text-xs">
-            <Clock className="h-3 w-3 mr-1" />
+            <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
             {(responseTimeMs / 1000).toFixed(1)}s
           </Badge>
         )}
@@ -98,7 +98,7 @@ export const ModelPerformanceIndicator = ({
           <Tooltip>
             <TooltipTrigger>
               <Badge className={modelInfo.color}>
-                <ModelIcon className="h-3 w-3 mr-1" />
+                <ModelIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                 {modelInfo.name}
               </Badge>
             </TooltipTrigger>
@@ -117,7 +117,7 @@ export const ModelPerformanceIndicator = ({
           <Tooltip>
             <TooltipTrigger>
               <Badge variant="outline" className={speedInfo.color}>
-                <Clock className="h-3 w-3 mr-1" />
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                 {speedInfo.text} ({(responseTimeMs / 1000).toFixed(1)}s)
               </Badge>
             </TooltipTrigger>

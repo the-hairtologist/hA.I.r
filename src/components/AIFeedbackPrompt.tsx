@@ -98,7 +98,7 @@ export const AIFeedbackPrompt = ({
                 className="h-6 w-6 -mr-2"
                 onClick={() => onDismiss?.()}
               >
-                <X className="h-3 w-3" />
+                <X className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
             

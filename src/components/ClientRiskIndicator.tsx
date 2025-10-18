@@ -102,7 +102,7 @@ export const ClientRiskIndicator = ({
   if (risk.level === 'low') {
     return (
       <Badge variant={config.badgeVariant} className="gap-1">
-        <Icon className="h-3 w-3" />
+        <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
         {config.title}
       </Badge>
     );

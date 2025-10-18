@@ -120,7 +120,7 @@ export const ContextualAI = ({ context, data, onAction }: ContextualAIProps) => 
                 onClick={handleAction}
                 className="gap-2"
               >
-                <Sparkles className="h-3 w-3" />
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                 {suggestion.actionLabel}
               </Button>
             )}
@@ -132,7 +132,7 @@ export const ContextualAI = ({ context, data, onAction }: ContextualAIProps) => 
             onClick={handleDismiss}
             className="h-6 w-6 -mt-1 -mr-1"
           >
-            <X className="h-3 w-3" />
+            <X className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </div>
       </CardContent>

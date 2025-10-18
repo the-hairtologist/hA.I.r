@@ -23,7 +23,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
   if (isLoading) {
     return (
       <Badge variant="outline" className="animate-pulse">
-        <AlertCircle className="h-3 w-3 mr-1" />
+        <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
         Validating...
       </Badge>
     );
@@ -40,7 +40,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
     return (
       <div className="space-y-2">
         <Badge variant="destructive" className="flex items-center gap-1">
-          <XCircle className="h-3 w-3" />
+          <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />
           Unsafe - Blocked
         </Badge>
         <Alert variant="destructive">
@@ -69,7 +69,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
           <Tooltip>
             <TooltipTrigger>
               <Badge className="flex items-center gap-1 bg-warning hover:bg-warning/90 text-warning-foreground">
-                <AlertCircle className="h-3 w-3" />
+                <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                 Safe with Cautions
               </Badge>
             </TooltipTrigger>
@@ -107,7 +107,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
       <Tooltip>
         <TooltipTrigger>
           <Badge className="flex items-center gap-1 bg-success hover:bg-success/90 text-success-foreground">
-            <CheckCircle className="h-3 w-3" />
+            <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
             Safe
           </Badge>
         </TooltipTrigger>

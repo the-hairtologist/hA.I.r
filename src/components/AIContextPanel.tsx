@@ -47,7 +47,7 @@ export const AIContextPanel = ({
 
             {clientContext.hair_goals && (
               <div className="text-[11px] sm:text-xs">
-                <Target className="h-3 w-3 inline mr-1 text-accent" />
+                <Target className="h-4 w-4 sm:h-5 sm:w-5 inline mr-1 text-accent" />
                 <span className="text-muted-foreground">Goals:</span>{" "}
                 <span className="font-medium">{clientContext.hair_goals}</span>
               </div>
@@ -55,7 +55,7 @@ export const AIContextPanel = ({
 
             {clientContext.allergies && (
               <div className="text-[11px] sm:text-xs bg-destructive/10 p-2 rounded-lg border-2 border-destructive/20">
-                <AlertTriangle className="h-3 w-3 inline mr-1 text-destructive" />
+                <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 inline mr-1 text-destructive" />
                 <span className="text-destructive font-semibold">Allergies:</span>{" "}
                 <span className="text-destructive">{clientContext.allergies}</span>
               </div>
@@ -71,7 +71,7 @@ export const AIContextPanel = ({
             {clientContext.recentFormulas?.length > 0 && (
               <div className="text-[11px] sm:text-xs space-y-1">
                 <div className="flex items-center gap-1">
-                  <History className="h-3 w-3 text-primary" />
+                  <History className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   <span className="font-semibold">Recent Formulas ({clientContext.recentFormulas.length})</span>
                 </div>
                 {clientContext.recentFormulas.slice(0, 2).map((f: any, i: number) => (
@@ -139,7 +139,7 @@ export const AIContextPanel = ({
 
         {hasContext && (
           <div className="text-[11px] sm:text-xs text-muted-foreground pt-2 border-t border-border">
-            <Brain className="h-3 w-3 inline mr-1" />
+            <Brain className="h-4 w-4 sm:h-5 sm:w-5 inline mr-1" />
             AI will use this context to personalize all responses
           </div>
         )}

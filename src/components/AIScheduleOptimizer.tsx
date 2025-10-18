@@ -132,7 +132,7 @@ export const AIScheduleOptimizer = ({
                           <div className="flex items-center justify-between">
                             <div className="space-y-1">
                               <div className="flex items-center gap-2 text-sm">
-                                <Calendar className="h-3 w-3" />
+                                <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                                 {format(parseISO(alt.date), 'MMM d, yyyy')} at {alt.time}
                               </div>
                               <Badge

@@ -157,7 +157,7 @@ export const AIProductRecommendations = ({
             </CardDescription>
           </div>
           <Badge variant="secondary" className="flex items-center gap-1">
-            <TrendingUp className="h-3 w-3" />
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
             AI Matched
           </Badge>
         </div>

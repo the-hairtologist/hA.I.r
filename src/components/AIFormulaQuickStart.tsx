@@ -43,7 +43,7 @@ export const AIFormulaQuickStart = ({ onSelectTemplate }: AIFormulaQuickStartPro
           <CardDescription className="space-y-1">
             <div>Click a template to get professional formulas instantly</div>
             <Badge variant="outline" className="text-xs border-primary/30 bg-primary/5 mt-2">
-              <Info className="h-3 w-3 mr-1" />
+              <Info className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
               AI-generated • Always verify with strand tests
             </Badge>
           </CardDescription>
