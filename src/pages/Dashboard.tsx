@@ -175,8 +175,12 @@ const Dashboard = () => {
       ? defaultStylistSections 
       : defaultClientSections;
   
+  // CRITICAL: Only initialize dashboard layout after full authentication
+  // This prevents crashes from premature database queries when user is null
+  const shouldLoadLayout = !authLoading && !roleLoading && authUser && userRole;
+  
   const { sections, isLoading: layoutLoading, saveDashboardLayout, resetDashboardLayout, toggleSection } = 
-    useDashboardLayout(defaultSections);
+    useDashboardLayout(shouldLoadLayout ? defaultSections : []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -605,7 +609,9 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) {
+  // CRITICAL: Wait for ALL loading states to complete before rendering dashboard
+  // This prevents crashes from premature database queries or null references
+  if (authLoading || roleLoading || loading || layoutLoading || !user || !userRole) {
     return (
       <DashboardLayout>
         <div className="p-4 md:p-6 lg:p-8">

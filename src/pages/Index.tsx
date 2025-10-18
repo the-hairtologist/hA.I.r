@@ -10,12 +10,14 @@ import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
+import { AsyncErrorBoundary } from "@/components/errors/AsyncErrorBoundary";
 
 const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen-safe bg-background scroll-smooth">
+    <AsyncErrorBoundary>
+      <div className="min-h-screen-safe bg-background scroll-smooth">
       <SEO 
         title="hA.I.r - AI-Powered Salon Assistant | Transform Every Color Service"
         description="Professional color formulas in seconds. AI-powered booking, client management, and formula generation for hair stylists. No guesswork, just flawless results every time."
@@ -162,6 +164,7 @@ const Index = () => {
 
       <EnhancedFooter />
     </div>
+    </AsyncErrorBoundary>
   );
 };
 

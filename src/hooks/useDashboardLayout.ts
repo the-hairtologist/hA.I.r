@@ -15,21 +15,30 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
+    // CRITICAL: Guard against null user to prevent crashes
+    if (!user?.id) {
       setSections(defaultSections);
       setIsLoading(false);
       return;
     }
 
+    // Only load dashboard layout after user is fully authenticated
     loadDashboardLayout();
   }, [user?.id]);
 
   const loadDashboardLayout = async () => {
+    // CRITICAL: Double-check user exists before database query
+    if (!user?.id) {
+      setSections(defaultSections);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("user_dashboard_preferences")
         .select("dashboard_layout")
-        .eq("user_id", user!.id)
+        .eq("user_id", user.id)
         .maybeSingle();
 
       if (error && error.code !== "PGRST116") {
@@ -59,7 +68,11 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
   };
 
   const saveDashboardLayout = async (newLayout: DashboardSection[]) => {
-    if (!user) return;
+    // CRITICAL: Guard against null user
+    if (!user?.id) {
+      console.warn('Cannot save dashboard layout: user not authenticated');
+      return;
+    }
 
     setSections(newLayout);
 
@@ -83,7 +96,11 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
   };
 
   const resetDashboardLayout = async () => {
-    if (!user) return;
+    // CRITICAL: Guard against null user
+    if (!user?.id) {
+      console.warn('Cannot reset dashboard layout: user not authenticated');
+      return;
+    }
 
     setSections(defaultSections);
 
