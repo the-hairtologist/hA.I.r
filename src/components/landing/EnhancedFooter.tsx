@@ -34,7 +34,7 @@ export const EnhancedFooter = () => {
           {/* Brand Column */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div className="w-11 h-11 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              <div className="w-11 h-11 border-4 border-foreground bg-secondary flex items-center justify-center shadow-brutal">
                 <Scissors className="h-5 w-5 text-secondary-foreground" />
               </div>
               <span className="font-pixel text-xl text-background uppercase">hA.I.r</span>
@@ -47,7 +47,7 @@ export const EnhancedFooter = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-foreground bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-brutal"
                 aria-label="Instagram"
               >
                 <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
@@ -56,7 +56,7 @@ export const EnhancedFooter = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-foreground bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-brutal"
                 aria-label="Facebook"
               >
                 <Facebook className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-foreground" />
@@ -65,7 +65,7 @@ export const EnhancedFooter = () => {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-foreground bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-brutal"
                 aria-label="Twitter"
               >
                 <Twitter className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
@@ -74,7 +74,7 @@ export const EnhancedFooter = () => {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-foreground bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-brutal"
                 aria-label="YouTube"
               >
                 <Youtube className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-foreground" />
@@ -85,19 +85,19 @@ export const EnhancedFooter = () => {
             <div className="flex flex-wrap gap-2 pt-3">
               <button 
                 onClick={() => navigate("/install")}
-                className="w-11 h-11 sm:w-12 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                className="w-11 h-11 sm:w-12 sm:h-12 border-4 border-foreground bg-accent flex items-center justify-center shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
                 aria-label="Install App"
               >
                 <Smartphone className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
               </button>
               <button 
                 onClick={() => navigate("/install")}
-                className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-foreground bg-secondary flex items-center justify-center shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
                 aria-label="Install on iOS"
               >
                 <span className="font-pixel text-xs sm:text-sm text-secondary-foreground">iOS</span>
               </button>
-              <button 
+              <button
                 onClick={() => navigate("/install")}
                 className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
                 aria-label="Install on Android"
