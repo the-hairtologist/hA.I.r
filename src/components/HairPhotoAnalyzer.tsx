@@ -166,7 +166,7 @@ export const HairPhotoAnalyzer = ({ clientId, onAnalysisComplete }: HairPhotoAna
                 <Label>Recommendations</Label>
                 <div className="space-y-2">
                   {analysis.recommendations.map((rec: any, idx: number) => (
-                    <Alert key={idx}>
+                    <Alert key={`${rec.category}-${rec.priority}-${idx}`}>
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription>
                         <div className="space-y-1">

@@ -172,8 +172,8 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
             <div className="space-y-3">
               <label className="text-sm font-medium">AI-Generated Message Previews</label>
               <div className="space-y-2 max-h-60 overflow-y-auto">
-                {relevantReminders.slice(0, 3).map((reminder, index) => (
-                  <Card key={index} className="border">
+                {relevantReminders.slice(0, 3).map((reminder) => (
+                  <Card key={`${reminder.clientId}-${reminder.suggestedTime}`} className="border">
                     <CardContent className="p-3">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <p className="text-sm font-medium">{reminder.clientName}</p>

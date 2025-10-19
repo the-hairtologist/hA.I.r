@@ -109,7 +109,7 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
       <CardContent>
         <div className="space-y-4">
           {timeline.map((item, idx) => (
-            <div key={idx} className="flex gap-4 relative">
+            <div key={item.data.id || `${item.type}-${item.date}-${idx}`} className="flex gap-4 relative">
               {/* Timeline connector */}
               {idx < timeline.length - 1 && (
                 <div className="absolute left-4 top-10 bottom-0 w-0.5 bg-border" />

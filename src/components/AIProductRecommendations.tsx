@@ -164,12 +164,12 @@ export const AIProductRecommendations = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {recommendations.map((product) => {
-            const commission = (product.price * product.commissionRate).toFixed(2);
+          {recommendations.map((rec) => {
+            const commission = (rec.price * rec.commissionRate).toFixed(2);
             
             return (
               <div
-                key={product.id}
+                key={rec.name}
                 className="flex items-start gap-4 p-4 border-2 border-foreground rounded-lg hover:bg-accent/5 transition-colors"
               >
                 {/* Product Image Placeholder */}
@@ -181,35 +181,35 @@ export const AIProductRecommendations = ({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h4 className="font-semibold text-xs sm:text-sm">{product.name}</h4>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground">{product.brand}</p>
+                      <h4 className="font-semibold text-xs sm:text-sm">{rec.name}</h4>
+                      <p className="text-[11px] sm:text-xs text-muted-foreground">{rec.brand}</p>
                     </div>
                     <Badge variant="outline" className="text-[11px] sm:text-xs">
-                      {product.category}
+                      {rec.category}
                     </Badge>
                   </div>
 
                   <p className="text-xs sm:text-sm text-muted-foreground mt-2 line-clamp-2">
-                    {product.description}
+                    {rec.description}
                   </p>
 
                   <div className="flex items-center gap-4 mt-3">
                     <div>
                       <span className="text-base sm:text-lg font-bold text-primary">
-                        ${product.price.toFixed(2)}
+                        ${rec.price.toFixed(2)}
                       </span>
                     </div>
                     <div className="text-[11px] sm:text-xs text-success font-medium">
                       Earn ${commission}
                       <span className="text-muted-foreground ml-1">
-                        ({(product.commissionRate * 100).toFixed(0)}%)
+                        ({(rec.commissionRate * 100).toFixed(0)}%)
                       </span>
                     </div>
                   </div>
 
                   {/* Match Reason */}
                   <div className="mt-2 text-[11px] sm:text-xs text-muted-foreground italic">
-                    💡 {product.matchReason}
+                    💡 {rec.matchReason}
                   </div>
                 </div>
 
@@ -217,7 +217,7 @@ export const AIProductRecommendations = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleProductClick(product)}
+                  onClick={() => handleProductClick(rec)}
                   className="shrink-0"
                 >
                   <ExternalLink className="h-4 w-4" />
