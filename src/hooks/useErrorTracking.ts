@@ -50,7 +50,19 @@ const logError = async (errorData: {
   userId?: string;
 }) => {
   try {
-    await supabase.functions.invoke('log-error', {
+    // Send to Sentry
+    const { captureError, captureMessage } = await import('@/lib/monitoring');
+    
+    if (errorData.level === 'error' && errorData.stack) {
+      const error = new Error(errorData.message);
+      error.stack = errorData.stack;
+      captureError(error, errorData.context);
+    } else {
+      captureMessage(errorData.message, errorData.level);
+    }
+    
+    // Also log to edge function for custom tracking
+    await supabase.functions.invoke('sentry-error-tracking', {
       body: errorData,
     });
   } catch (error) {

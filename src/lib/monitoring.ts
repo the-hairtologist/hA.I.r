@@ -32,7 +32,11 @@ let sentryInitialized = false;
  * Call this once in your App.tsx or main.tsx
  */
 export const initSentry = () => {
-  if (sentryInitialized || !SENTRY_DSN) {
+  if (sentryInitialized) {
+    return;
+  }
+  
+  if (!SENTRY_DSN) {
     logger.info('Sentry not configured - error monitoring disabled');
     return;
   }
@@ -59,8 +63,8 @@ export const initSentry = () => {
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
 
-      // Only capture errors in production
-      enabled: !import.meta.env.DEV,
+      // Capture errors in all environments when DSN is configured
+      enabled: true,
 
       // Ignore common non-critical errors
       ignoreErrors: [

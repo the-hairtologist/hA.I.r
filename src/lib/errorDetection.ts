@@ -78,16 +78,13 @@ class ErrorDetectionSystem {
   /**
    * Send to monitoring service
    */
-  private sendToMonitoring(error: ErrorReport): void {
-    // Integrate with Sentry, LogRocket, etc.
+  private async sendToMonitoring(error: ErrorReport): Promise<void> {
     try {
-      fetch('/api/error-report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(error),
-      }).catch(() => {
-        // Silently fail - don't crash on monitoring failure
-      });
+      const { captureMessage } = await import('@/lib/monitoring');
+      captureMessage(
+        `${error.type}: ${error.message}`,
+        error.severity === 'critical' || error.severity === 'high' ? 'error' : 'warning'
+      );
     } catch {
       // Silently fail
     }

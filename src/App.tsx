@@ -18,6 +18,7 @@ import { DemoModeProvider } from "@/components/demo/DemoMode";
 import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useSentryUser } from "@/hooks/useSentryUser";
 import { initAnalytics } from "@/lib/analytics";
 import { initSentry } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
@@ -94,6 +95,7 @@ const AnalyticsInitializer = () => {
   }, []);
   
   useAnalytics();
+  useSentryUser(); // Sync user context with Sentry
   return null;
 };
 
