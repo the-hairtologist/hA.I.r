@@ -4,6 +4,7 @@
  */
 
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Calendar, Bell } from 'lucide-react';
@@ -15,6 +16,8 @@ interface LiveBookingToastProps {
 }
 
 export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, onNewBooking }) => {
+  const navigate = useNavigate();
+  
   useEffect(() => {
     if (!stylistId) return;
 
@@ -62,7 +65,7 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
               action: {
                 label: 'View',
                 onClick: () => {
-                  window.location.href = '/appointments';
+                  navigate('/appointments');
                 },
               },
             });
@@ -114,7 +117,7 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
       console.log('[LiveBooking] Cleaning up realtime listener');
       supabase.removeChannel(channel);
     };
-  }, [stylistId, onNewBooking]);
+  }, [stylistId, onNewBooking, navigate]);
 
   return null; // This is a headless component
 };

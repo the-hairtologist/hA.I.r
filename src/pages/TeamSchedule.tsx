@@ -44,7 +44,7 @@ export default function TeamSchedule() {
       .from('stylist_profiles')
       .select('id')
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle();
     
     if (data) setStylistId(data.id);
   };

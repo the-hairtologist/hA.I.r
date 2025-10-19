@@ -50,7 +50,7 @@ export const useSmartAutomation = (stylistId?: string) => {
         .from('stylist_profiles')
         .select('timezone')
         .eq('id', stylistId)
-        .single();
+        .maybeSingle();
       
       const stylistTimezone = stylist?.timezone || 'America/New_York';
 
