@@ -66,9 +66,9 @@ export function SecurityHealthScore() {
   });
 
   const getScoreStatus = (score: number) => {
-    if (score >= 90) return { label: "Excellent", color: "text-green-600", variant: "default" as const };
-    if (score >= 70) return { label: "Good", color: "text-blue-600", variant: "secondary" as const };
-    if (score >= 50) return { label: "Fair", color: "text-yellow-600", variant: "secondary" as const };
+    if (score >= 90) return { label: "Excellent", color: "text-success", variant: "default" as const };
+    if (score >= 70) return { label: "Good", color: "text-info", variant: "secondary" as const };
+    if (score >= 50) return { label: "Fair", color: "text-warning", variant: "secondary" as const };
     return { label: "At Risk", color: "text-destructive", variant: "destructive" as const };
   };
 
@@ -85,19 +85,26 @@ export function SecurityHealthScore() {
   const TrendIcon = healthData?.trend === "up" ? TrendingUp : TrendingDown;
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-primary/5 to-primary/10">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+    <Card 
+      variant="brutal"
+      className="p-6 sm:p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5 overflow-hidden relative animate-fade-in"
+    >
+      {/* Background decoration */}
+      <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/5 rounded-full blur-3xl animate-pulse-ring" />
+      <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-accent/5 rounded-full blur-3xl animate-pulse-ring" style={{ animationDelay: '1.5s' }} />
+      
+      <div className="relative z-10 flex flex-col sm:flex-row sm:items-center gap-6">
         {/* Score Display */}
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <div className="p-4 rounded-full bg-background shadow-lg">
-              <Shield className={`h-8 w-8 ${status.color}`} />
+        <div className="flex items-center gap-4 sm:gap-6">
+          <div className="relative animate-float">
+            <div className="p-5 rounded-2xl bg-background shadow-[0_8px_32px_rgba(0,0,0,0.12)] border-2 border-primary/20">
+              <Shield className={`h-10 w-10 ${status.color} drop-shadow-sm`} />
             </div>
             {healthData?.trend && healthData.trend !== "stable" && (
-              <div className="absolute -bottom-1 -right-1 p-1 rounded-full bg-background shadow">
+              <div className="absolute -bottom-2 -right-2 p-1.5 rounded-full bg-background shadow-lg border-2 border-primary/20 animate-bounce-gentle">
                 <TrendIcon
-                  className={`h-4 w-4 ${
-                    healthData.trend === "up" ? "text-green-600" : "text-red-600"
+                  className={`h-5 w-5 ${
+                    healthData.trend === "up" ? "text-success" : "text-destructive"
                   }`}
                 />
               </div>
@@ -105,47 +112,58 @@ export function SecurityHealthScore() {
           </div>
 
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-4xl font-bold">{score}</span>
-              <span className="text-lg text-muted-foreground">/100</span>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="text-5xl sm:text-6xl font-display font-bold tabular-nums bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text">
+                {score}
+              </span>
+              <span className="text-xl sm:text-2xl text-muted-foreground font-medium">/100</span>
             </div>
-            <Badge variant={status.variant} className="text-xs">
+            <Badge 
+              variant={status.variant} 
+              className="text-xs uppercase tracking-wider font-bold px-3 py-1 shadow-sm"
+            >
               {status.label}
             </Badge>
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="flex-1 space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Security Health</span>
-            <span className="font-medium">{score}%</span>
+        <div className="flex-1 space-y-3">
+          <div className="flex justify-between text-sm font-medium">
+            <span className="text-muted-foreground uppercase tracking-wider text-xs">Security Health</span>
+            <span className="font-bold text-foreground tabular-nums">{score}%</span>
           </div>
-          <Progress value={score} className="h-3" />
-          <p className="text-xs text-muted-foreground">
-            Based on {healthData?.metrics.recentAudits || 0} recent security events
+          <div className="relative">
+            <Progress value={score} className="h-4 shadow-inner" />
+            {/* Shimmer effect on progress */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
+              style={{ backgroundSize: '200% 100%' }}
+            />
+          </div>
+          <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide">
+            Based on <span className="font-bold text-foreground">{healthData?.metrics.recentAudits || 0}</span> recent security events
           </p>
         </div>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t">
-        <div>
-          <p className="text-xs text-muted-foreground">Failed Logins (24h)</p>
-          <p className="text-lg font-bold">{healthData?.metrics.failedLogins || 0}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Suspicious Activity</p>
-          <p className="text-lg font-bold">{healthData?.metrics.suspiciousActivity || 0}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Security Events (7d)</p>
-          <p className="text-lg font-bold">{healthData?.metrics.recentAudits || 0}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Active Users</p>
-          <p className="text-lg font-bold">{healthData?.metrics.activeUsers || 0}</p>
-        </div>
+      <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-8 pt-6 border-t-2 border-border/50">
+        {[
+          { label: "Failed Logins (24h)", value: healthData?.metrics.failedLogins || 0 },
+          { label: "Suspicious Activity", value: healthData?.metrics.suspiciousActivity || 0 },
+          { label: "Security Events (7d)", value: healthData?.metrics.recentAudits || 0 },
+          { label: "Active Users", value: healthData?.metrics.activeUsers || 0 },
+        ].map((metric, idx) => (
+          <div key={idx} className="group transition-all duration-300 hover:scale-105">
+            <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider font-medium mb-1">
+              {metric.label}
+            </p>
+            <p className="text-xl sm:text-2xl font-display font-bold tabular-nums group-hover:text-primary transition-colors">
+              {metric.value}
+            </p>
+          </div>
+        ))}
       </div>
     </Card>
   );

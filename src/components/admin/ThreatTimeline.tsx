@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AlertTriangle, Shield, Info, XCircle } from "lucide-react";
+import { AlertTriangle, Shield, Info, XCircle, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface ThreatEvent {
@@ -77,36 +77,41 @@ export function ThreatTimeline() {
         return {
           icon: XCircle,
           color: "text-destructive",
-          bgColor: "bg-destructive/10",
+          bgColor: "bg-destructive/10 border border-destructive/20",
           badge: "destructive" as const,
+          ringColor: "ring-destructive/20",
         };
       case "high":
         return {
           icon: AlertTriangle,
-          color: "text-orange-600",
-          bgColor: "bg-orange-100 dark:bg-orange-950",
+          color: "text-warning",
+          bgColor: "bg-warning/10 border border-warning/20",
           badge: "destructive" as const,
+          ringColor: "ring-warning/20",
         };
       case "medium":
         return {
           icon: AlertTriangle,
-          color: "text-yellow-600",
-          bgColor: "bg-yellow-100 dark:bg-yellow-950",
+          color: "text-secondary",
+          bgColor: "bg-secondary/10 border border-secondary/20",
           badge: "secondary" as const,
+          ringColor: "ring-secondary/20",
         };
       case "low":
         return {
           icon: Info,
-          color: "text-blue-600",
-          bgColor: "bg-blue-100 dark:bg-blue-950",
+          color: "text-info",
+          bgColor: "bg-info/10 border border-info/20",
           badge: "outline" as const,
+          ringColor: "ring-info/20",
         };
       default:
         return {
           icon: Shield,
           color: "text-muted-foreground",
-          bgColor: "bg-muted",
+          bgColor: "bg-muted border border-border",
           badge: "outline" as const,
+          ringColor: "ring-muted",
         };
     }
   };
@@ -124,58 +129,81 @@ export function ThreatTimeline() {
   }
 
   return (
-    <Card className="p-4">
-      <div className="flex items-center gap-2 mb-4">
-        <Shield className="h-5 w-5 text-primary" />
-        <h3 className="text-lg font-semibold">Security Threat Timeline</h3>
-        <Badge variant="secondary" className="ml-auto">
+    <Card variant="brutal" className="p-5 sm:p-6 animate-fade-in">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+          <Shield className="h-5 w-5 text-primary" />
+        </div>
+        <h3 className="text-lg font-display font-bold">Security Threat Timeline</h3>
+        <Badge variant="secondary" className="ml-auto font-bold text-xs">
           {events?.length || 0} events
         </Badge>
       </div>
 
       <ScrollArea className="h-[500px] pr-4">
-        <div className="space-y-4">
-          {events?.map((event) => {
+        <div className="space-y-3 relative">
+          {/* Timeline line */}
+          <div className="absolute left-[22px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-border to-transparent" />
+          
+          {events?.map((event, index) => {
             const config = getSeverityConfig(event.severity);
             const Icon = config.icon;
 
             return (
               <div
                 key={event.id}
-                className="flex gap-4 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                className="relative flex gap-4 p-4 rounded-xl border-2 border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all duration-300 hover:scale-[1.01] group animate-slide-up-fade"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className={`p-2 rounded-lg ${config.bgColor} h-fit flex-shrink-0`}>
+                {/* Timeline dot */}
+                <div className={`absolute -left-[9px] top-6 w-4 h-4 rounded-full bg-background border-2 ${config.ringColor} ring-4 ring-background z-10 group-hover:scale-125 transition-transform`} />
+                
+                <div className={`p-3 rounded-xl ${config.bgColor} h-fit flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm`}>
                   <Icon className={`h-5 w-5 ${config.color}`} />
                 </div>
 
                 <div className="flex-1 min-w-0 space-y-2">
                   <div className="flex items-start justify-between gap-2 flex-wrap">
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">{event.type}</p>
-                      <p className="text-xs text-muted-foreground">{event.source}</p>
+                      <p className="font-bold text-sm truncate group-hover:text-primary transition-colors">
+                        {event.type}
+                      </p>
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
+                        {event.source}
+                      </p>
                     </div>
-                    <Badge variant={config.badge} className="text-xs flex-shrink-0">
+                    <Badge 
+                      variant={config.badge} 
+                      className="text-[10px] uppercase tracking-wider font-bold flex-shrink-0 shadow-sm"
+                    >
                       {event.severity}
                     </Badge>
                   </div>
 
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-sm text-muted-foreground/90 line-clamp-2 leading-relaxed">
                     {event.description}
                   </p>
 
-                  <p className="text-xs text-muted-foreground">
-                    {formatDistanceToNow(new Date(event.timestamp), {
-                      addSuffix: true,
-                    })}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-3 w-3 text-muted-foreground/50" />
+                    <p className="text-xs text-muted-foreground/70 font-medium">
+                      {formatDistanceToNow(new Date(event.timestamp), {
+                        addSuffix: true,
+                      })}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
           })}
 
           {!events?.length && (
-            <div className="text-center py-8 text-muted-foreground">
-              No security threats detected
+            <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+              <div className="p-4 rounded-full bg-success/10 border border-success/20 mb-4">
+                <Shield className="h-10 w-10 text-success" />
+              </div>
+              <p className="text-lg font-display font-bold text-foreground mb-2">All Clear!</p>
+              <p className="text-sm text-muted-foreground">No security threats detected</p>
             </div>
           )}
         </div>

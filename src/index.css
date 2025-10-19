@@ -381,6 +381,26 @@ All colors MUST be HSL.
     
     /* Brutal Overlay (for modals/dialogs) */
     --brutal-overlay: hsl(var(--foreground) / 0.5);
+    
+    /* Enhanced Animation Timings */
+    --timing-instant: 100ms;
+    --timing-fast: 200ms;
+    --timing-base: 300ms;
+    --timing-slow: 500ms;
+    --timing-slower: 700ms;
+    
+    /* Micro-interaction Effects */
+    --scale-hover: 1.02;
+    --scale-press: 0.98;
+    --lift-subtle: -2px;
+    --lift-hover: -4px;
+    
+    /* Security Dashboard Colors (semantic, HSL-based) */
+    --security-critical: 0 85% 60%;
+    --security-high: 25 95% 53%;
+    --security-medium: 45 93% 47%;
+    --security-low: 217 91% 60%;
+    --security-success: 142 76% 36%;
   }
 
   .dark {

@@ -33,28 +33,30 @@ export default function SecurityDashboard() {
   };
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 max-w-7xl space-y-6">
+    <div className="container mx-auto p-4 sm:p-6 max-w-7xl space-y-6 sm:space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Shield className="h-6 w-6 text-primary" />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b-2 border-border/50">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 border-2 border-primary/20 shadow-sm animate-pulse-ring">
+            <Shield className="h-7 w-7 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold">Security Dashboard</h1>
-            <p className="text-sm text-muted-foreground">
-              Real-time security monitoring and threat analysis
+            <h1 className="text-2xl sm:text-3xl font-display font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text">
+              Security Dashboard
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider font-medium mt-1">
+              Real-time security monitoring & threat analysis
             </p>
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 sm:gap-3">
           <Button
             variant="outline"
             size="sm"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto font-bold transition-all hover:scale-105 active:scale-95"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Refresh
@@ -63,7 +65,7 @@ export default function SecurityDashboard() {
             variant="outline"
             size="sm"
             onClick={handleExport}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto font-bold transition-all hover:scale-105 active:scale-95"
           >
             <Download className="h-4 w-4 mr-2" />
             Export
@@ -79,11 +81,17 @@ export default function SecurityDashboard() {
 
       {/* Tabs for Details */}
       <Tabs defaultValue="timeline" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 h-auto">
-          <TabsTrigger value="timeline" className="text-xs sm:text-sm">
+        <TabsList className="grid w-full grid-cols-2 h-auto border-2 border-border shadow-sm">
+          <TabsTrigger 
+            value="timeline" 
+            className="text-xs sm:text-sm font-bold uppercase tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+          >
             Threat Timeline
           </TabsTrigger>
-          <TabsTrigger value="audit" className="text-xs sm:text-sm">
+          <TabsTrigger 
+            value="audit" 
+            className="text-xs sm:text-sm font-bold uppercase tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+          >
             Audit Log
           </TabsTrigger>
         </TabsList>
