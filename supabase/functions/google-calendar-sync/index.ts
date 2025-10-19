@@ -6,13 +6,10 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface CalendarEvent {
-  title: string;
-  description?: string;
-  start: string;
-  end: string;
-  location?: string;
-}
+const logStep = (step: string, details?: any) => {
+  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
+  console.log(`[CALENDAR-SYNC] ${step}${detailsStr}`);
+};
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -20,101 +17,159 @@ serve(async (req) => {
   }
 
   try {
-    const { event } = await req.json() as { event: CalendarEvent };
-    
-    if (!event || !event.title || !event.start || !event.end) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid event data' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    logStep('Function started');
 
-    // Get user's Google Calendar access token from database
-    const authHeader = req.headers.get('authorization');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    );
+
+    const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'No authorization header' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      throw new Error('No authorization header provided');
     }
 
-    const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
-    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
-    // Extract user ID from JWT
     const token = authHeader.replace('Bearer ', '');
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    const userId = payload.sub;
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    
+    if (userError || !userData.user) {
+      throw new Error('User not authenticated');
+    }
+    
+    const user = userData.user;
+    logStep('User authenticated', { userId: user.id });
 
-    // Get user's calendar credentials
-    const { data: credentials, error: credError } = await supabase
-      .from('user_integrations')
-      .select('google_calendar_token')
-      .eq('user_id', userId)
+    const { appointmentId } = await req.json();
+    
+    if (!appointmentId) {
+      throw new Error('Appointment ID is required');
+    }
+
+    // Get appointment with related data
+    const { data: appointment, error: appointmentError } = await supabase
+      .from('appointments')
+      .select(`
+        *,
+        client:client_profiles!appointments_client_id_fkey(full_name, email),
+        stylist:stylist_profiles!appointments_stylist_id_fkey(business_name)
+      `)
+      .eq('id', appointmentId)
       .single();
 
-    if (credError || !credentials?.google_calendar_token) {
-      return new Response(
-        JSON.stringify({ error: 'Google Calendar not connected' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    if (appointmentError) {
+      throw new Error(`Failed to fetch appointment: ${appointmentError.message}`);
     }
 
-    // Create event in Google Calendar
+    logStep('Appointment fetched', { appointmentId });
+
+    // Get calendar connection
+    const { data: connection, error: connectionError } = await supabase
+      .from('calendar_connections')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('provider', 'google')
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (connectionError || !connection) {
+      throw new Error('No active Google Calendar connection found');
+    }
+
+    // Get tokens using RPC function
+    const { data: tokens, error: tokensError } = await supabase.rpc(
+      'get_calendar_token',
+      { p_connection_id: connection.id }
+    );
+
+    if (tokensError || !tokens || tokens.length === 0) {
+      throw new Error('Failed to retrieve calendar tokens');
+    }
+
+    const [accessToken] = tokens[0];
+    logStep('Tokens retrieved');
+
+    // Create calendar event
+    const startTime = new Date(appointment.appointment_date);
+    const endTime = new Date(startTime.getTime() + (appointment.duration_minutes || 60) * 60000);
+
+    const calendarEvent = {
+      summary: `${appointment.service_type} - ${appointment.client?.full_name || 'Client'}`,
+      description: `Service: ${appointment.service_type}\nStatus: ${appointment.status}${appointment.notes ? `\n\nNotes: ${appointment.notes}` : ''}`,
+      start: {
+        dateTime: startTime.toISOString(),
+        timeZone: 'America/New_York',
+      },
+      end: {
+        dateTime: endTime.toISOString(),
+        timeZone: 'America/New_York',
+      },
+      attendees: appointment.client?.email ? [{ email: appointment.client.email }] : [],
+      reminders: {
+        useDefault: false,
+        overrides: [
+          { method: 'email', minutes: 24 * 60 },
+          { method: 'popup', minutes: 60 },
+        ],
+      },
+    };
+
     const calendarResponse = await fetch(
       'https://www.googleapis.com/calendar/v3/calendars/primary/events',
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${credentials.google_calendar_token}`,
+          'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          summary: event.title,
-          description: event.description,
-          location: event.location,
-          start: {
-            dateTime: event.start,
-            timeZone: 'America/New_York',
-          },
-          end: {
-            dateTime: event.end,
-            timeZone: 'America/New_York',
-          },
-          reminders: {
-            useDefault: false,
-            overrides: [
-              { method: 'email', minutes: 24 * 60 },
-              { method: 'popup', minutes: 60 },
-            ],
-          },
-        }),
+        body: JSON.stringify(calendarEvent),
       }
     );
 
     if (!calendarResponse.ok) {
-      const errorData = await calendarResponse.json();
-      console.error('Google Calendar API error:', errorData);
-      throw new Error('Failed to create calendar event');
+      const errorText = await calendarResponse.text();
+      throw new Error(`Google Calendar API error: ${errorText}`);
     }
 
-    const calendarEvent = await calendarResponse.json();
+    const googleEvent = await calendarResponse.json();
+    logStep('Event created in Google Calendar', { eventId: googleEvent.id });
+
+    // Store event mapping
+    await supabase
+      .from('appointment_calendar_events')
+      .upsert({
+        appointment_id: appointmentId,
+        calendar_connection_id: connection.id,
+        external_event_id: googleEvent.id,
+        provider: 'google',
+        sync_status: 'synced',
+      });
+
+    // Update last sync time
+    await supabase
+      .from('calendar_connections')
+      .update({ last_sync_at: new Date().toISOString() })
+      .eq('id', connection.id);
 
     return new Response(
       JSON.stringify({ 
-        success: true, 
-        eventId: calendarEvent.id,
-        htmlLink: calendarEvent.htmlLink 
+        success: true,
+        eventId: googleEvent.id,
+        eventLink: googleEvent.htmlLink,
       }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      }
     );
-
   } catch (error: any) {
-    console.error('Error syncing to Google Calendar:', error);
+    logStep('ERROR in calendar-sync', { message: error.message });
+    
     return new Response(
       JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500,
+      }
     );
   }
 });
