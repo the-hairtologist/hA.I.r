@@ -7,11 +7,11 @@ import { Calendar, Sparkles, ArrowRight, Clock, DollarSign } from "lucide-react"
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { SmartUpsell } from "@/components/SmartUpsell";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 
 const BookAppointment = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useEnhancedAuth();
   const [searchParams] = useSearchParams();
   const stylistId = searchParams.get("stylist");
   const clientId = searchParams.get("clientId");

@@ -8,8 +8,7 @@ import { useToast } from "@/hooks/useToast";
 import { Plus, Edit, Copy, Trash2, Play, Pause, Sparkles, Mail } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { SequenceBuilder } from "./SequenceBuilder";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,8 +24,8 @@ import {
 export const SequenceList = () => {
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
-  const { isAdmin } = useUserRole(user?.id);
+  const { user, roles } = useEnhancedAuth();
+  const isAdmin = roles.includes('admin');
   const [selectedSequence, setSelectedSequence] = useState<any>(null);
   const [isBuilderOpen, setIsBuilderOpen] = useState(false);
 

@@ -83,15 +83,15 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
 const Auth = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const { loading, signIn, signUp, resetPassword, updatePassword } = useAuth();
-  const { user: authUser, loading: authLoading } = useEnhancedAuth();
+  const { signIn, signUp, resetPassword, updatePassword } = useAuth();
+  const { user: authUser, loading } = useEnhancedAuth();
 
   // Auto-redirect authenticated users to dashboard
   useEffect(() => {
-    if (!authLoading && authUser) {
+    if (!loading && authUser) {
       navigate("/dashboard", { replace: true });
     }
-  }, [authUser, authLoading, navigate]);
+  }, [authUser, loading, navigate]);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {

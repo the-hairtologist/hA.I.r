@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { 
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import {
   Home, 
   Calendar, 
   MessageSquare, 
@@ -121,8 +120,8 @@ const SortableNavItem = ({ item, isEnabled, onToggle }: {
 };
 
 export const MobileNavCustomizer = ({ userRole }: MobileNavCustomizerProps) => {
-  const { user } = useAuth();
-  const { isAdmin } = useUserRole(user?.id);
+  const { roles } = useEnhancedAuth();
+  const isAdmin = roles.includes('admin');
   const [mounted, setMounted] = useState(false);
 
   // Stylist navigation items

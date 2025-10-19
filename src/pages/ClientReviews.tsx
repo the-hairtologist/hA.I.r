@@ -3,24 +3,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, TrendingUp, Users, MessageSquare } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
 
 const ClientReviews = () => {
-  const { session } = useAuth();
+  const { user } = useEnhancedAuth();
 
   const { data: stylistProfile } = useQuery({
-    queryKey: ['stylist-profile', session?.user?.id],
+    queryKey: ['stylist-profile', user?.id],
     queryFn: async () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', session?.user?.id)
+        .eq('user_id', user?.id)
         .maybeSingle();
       return data;
     },
-    enabled: !!session?.user?.id,
+    enabled: !!user?.id,
   });
 
   const { data: reviews = [], isLoading } = useQuery({

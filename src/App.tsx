@@ -48,6 +48,7 @@ import { initLighthouseMonitoring } from "@/lib/qa/lighthouseAudit";
 import { PushOptInDialog } from "@/components/PushOptInDialog";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { RoleSwitchProtection } from "@/components/RoleSwitchProtection";
 import "@/lib/mobileHealthCheck";
 
 // Removed problematic lazy-loaded components that were causing initialization conflicts
@@ -160,6 +161,7 @@ const App = () => {
                     <ViewportChangeHandler />
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <EnhancedAuthProvider>
+                        <RoleSwitchProtection />
                         <AnalyticsInitializer />
                         <AccessibilityShortcuts />
                         <CommandPalette />

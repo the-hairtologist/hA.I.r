@@ -1,14 +1,14 @@
+import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { toast } from "sonner";
+import { format } from "date-fns";
 import { Bell, Check, Trash2, Calendar, MessageSquare, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
-import { format } from "date-fns";
 
 interface Notification {
   id: string;
@@ -20,12 +20,12 @@ interface Notification {
 }
 
 const Notifications = () => {
-  const { session } = useAuth();
+  const { user } = useEnhancedAuth();
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
   const { data: notifications = [], isLoading } = useQuery({
-    queryKey: ['notifications', session?.user?.id, filter],
+    queryKey: ['notifications', user?.id, filter],
     queryFn: async () => {
       // For now, return mock data. In production, fetch from notifications table
       const mockNotifications: Notification[] = [
@@ -58,7 +58,7 @@ const Notifications = () => {
         ? mockNotifications.filter(n => !n.read)
         : mockNotifications;
     },
-    enabled: !!session?.user?.id,
+    enabled: !!user,
   });
 
   const markAsRead = useMutation({

@@ -15,7 +15,7 @@ import { ArrowLeft, FileText, User, Calendar, Activity, Download, RefreshCw } fr
 import { format } from "date-fns";
 import { ActivityLogFilter, ActivityFilters } from "@/components/admin/ActivityLogFilter";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 
 interface ActivityLogEntry {
   id: string;
@@ -31,7 +31,7 @@ interface ActivityLogEntry {
 
 const ActivityLog = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useEnhancedAuth();
   const [userRole, setUserRole] = useState<string | null>(null);
   const [roleLoading, setRoleLoading] = useState(true);
   const [loading, setLoading] = useState(true);
