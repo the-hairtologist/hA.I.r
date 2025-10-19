@@ -66,7 +66,9 @@ const logError = async (errorData: {
       body: errorData,
     });
   } catch (error) {
-    console.error('Failed to log error to tracking service:', error);
+    import('@/lib/logging/productionLogger').then(({ logger }) => {
+      logger.error('Failed to log error to tracking service', error);
+    });
   }
 };
 

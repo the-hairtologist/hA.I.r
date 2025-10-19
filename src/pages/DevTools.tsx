@@ -55,7 +55,7 @@ export default function DevTools() {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
       
       if (!stylist) {
         throw new Error("No stylist profile found");
@@ -101,7 +101,7 @@ export default function DevTools() {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
       
       if (!stylist) {
         throw new Error("No stylist profile found");

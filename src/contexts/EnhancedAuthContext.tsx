@@ -99,7 +99,9 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         .eq("user_id", userId);
 
       if (error) {
-        console.error("Role verification failed:", error);
+        import('@/lib/logging/productionLogger').then(({ logger }) => {
+          logger.error("Role verification failed", error);
+        });
         return false;
       }
 
@@ -114,7 +116,9 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return true;
     } catch (error) {
-      console.error("Error verifying roles:", error);
+      import('@/lib/logging/productionLogger').then(({ logger }) => {
+        logger.error("Error verifying roles", error);
+      });
       return false;
     }
   }, []);
@@ -179,7 +183,9 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         initialized: true,
       });
     } catch (error) {
-      console.error("Error loading auth data:", error);
+      import('@/lib/logging/productionLogger').then(({ logger }) => {
+        logger.error("Error loading auth data", error);
+      });
       setState((prev) => ({ ...prev, loading: false, initialized: true }));
     }
   }, []);
@@ -202,7 +208,9 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
           setState((prev) => ({ ...prev, loading: false, initialized: true }));
         }
       } catch (error) {
-        console.error("Error initializing auth:", error);
+        import('@/lib/logging/productionLogger').then(({ logger }) => {
+          logger.error("Error initializing auth", error);
+        });
         if (isMounted) {
           setState((prev) => ({ ...prev, loading: false, initialized: true }));
         }

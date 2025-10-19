@@ -23,7 +23,7 @@ const SalesDashboard = () => {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) return { today: 0, week: 0, month: 0, forecast: 0, todayBookings: 0, weekBookings: 0, monthBookings: 0 };
 

@@ -45,7 +45,7 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
               )
             `)
             .eq('id', payload.new.id)
-            .single();
+            .maybeSingle();
 
           if (appointment) {
             const clientName = appointment.client?.full_name || 'A client';
@@ -89,7 +89,7 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
                 client:client_profiles(full_name)
               `)
               .eq('id', payload.new.id)
-              .single();
+              .maybeSingle();
 
             if (appointment) {
               const clientName = appointment.client?.full_name || 'Client';

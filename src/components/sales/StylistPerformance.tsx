@@ -15,7 +15,7 @@ export function StylistPerformance() {
         .from("stylist_profiles")
         .select("id, average_rating, total_reviews")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) return null;
 

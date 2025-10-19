@@ -48,6 +48,7 @@ import { ClientMilestones } from "@/components/dashboard/ClientMilestones";
 import { SupportChatWidget } from "@/components/dashboard/SupportChatWidget";
 import { PredictiveSuggestions } from "@/components/PredictiveSuggestions";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
+import { FeatureErrorBoundary } from "@/components/errors/FeatureErrorBoundary";
 import { useAIAnalytics } from "@/hooks/useAIAnalytics";
 import { useFeatureFlag } from "@/lib/featureFlags";
 import { Button } from "@/components/ui/button";
@@ -598,30 +599,48 @@ const Dashboard = () => {
       case "BirthdayAlerts":
         return (userRole === "stylist" || isAdmin) ? <BirthdayAlertsWidget /> : null;
       case "CommissionTracker":
-        return (userRole === "stylist" || isAdmin) ? <CommissionTrackerWidget /> : null;
+        return (userRole === "stylist" || isAdmin) ? (
+          <FeatureErrorBoundary featureName="Commission Tracker">
+            <CommissionTrackerWidget />
+          </FeatureErrorBoundary>
+        ) : null;
       case "LiveKPICards":
         return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <LiveKPICards stylistId={profile.id} />
+          <FeatureErrorBoundary featureName="Live KPIs">
+            <LiveKPICards stylistId={profile.id} />
+          </FeatureErrorBoundary>
         ) : null;
       case "QuickActions":
         return <QuickActions userRole={userRole || ""} isAdmin={isAdmin} />;
       case "WeeklyOverview":
-        return (userRole === "stylist" || isAdmin) ? <WeeklyOverview /> : null;
+        return (userRole === "stylist" || isAdmin) ? (
+          <FeatureErrorBoundary featureName="Weekly Overview">
+            <WeeklyOverview />
+          </FeatureErrorBoundary>
+        ) : null;
       case "ClientSentimentTracker":
         return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <ClientSentimentTracker stylistId={profile.id} />
+          <FeatureErrorBoundary featureName="Client Sentiment">
+            <ClientSentimentTracker stylistId={profile.id} />
+          </FeatureErrorBoundary>
         ) : null;
       case "RevenueTrends":
         return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <RevenueTrends stylistId={profile.id} />
+          <FeatureErrorBoundary featureName="Revenue Analytics">
+            <RevenueTrends stylistId={profile.id} />
+          </FeatureErrorBoundary>
         ) : null;
       case "TopServices":
         return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <TopServices stylistId={profile.id} />
+          <FeatureErrorBoundary featureName="Service Performance">
+            <TopServices stylistId={profile.id} />
+          </FeatureErrorBoundary>
         ) : null;
       case "ClientRetention":
         return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <ClientRetention stylistId={profile.id} />
+          <FeatureErrorBoundary featureName="Retention Metrics">
+            <ClientRetention stylistId={profile.id} />
+          </FeatureErrorBoundary>
         ) : null;
       case "QuickNotes":
         return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;

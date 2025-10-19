@@ -51,7 +51,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (isAppleIAP) {
       appleIAP.initialize().catch((error) => {
-        console.error('[Subscription] Failed to initialize Apple IAP:', error);
+        import('@/lib/logging/productionLogger').then(({ logger }) => {
+          logger.error('[Subscription] Failed to initialize Apple IAP', error);
+        });
       });
     }
   }, [isAppleIAP]);
@@ -146,7 +148,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem('subscription_prompt_dismissed');
       }
     } catch (error) {
-      console.error("Error checking subscription:", error);
+      import('@/lib/logging/productionLogger').then(({ logger }) => {
+        logger.error("Error checking subscription", error);
+      });
       setSubscribed(false);
     } finally {
       setLoading(false);

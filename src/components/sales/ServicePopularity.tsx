@@ -15,7 +15,7 @@ export function ServicePopularity() {
         .from("stylist_profiles")
         .select("id")
         .eq("user_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (!stylistProfile) return [];
 
