@@ -159,8 +159,6 @@ const App = () => {
               <SubscriptionProvider>
                 <DemoModeProvider>
                   <TooltipProvider>
-                    <AnalyticsInitializer />
-                    <RoleSwitchProtection />
                     <OfflineIndicator />
                     <Toaster />
                     <Sonner />
@@ -179,6 +177,8 @@ const App = () => {
                           {AppRoutes()}
                         </Routes>
                       </AppLayout>
+                      <AnalyticsInitializer />
+                      <RoleSwitchProtection />
                     </TourProvider>
                   </TooltipProvider>
                 </DemoModeProvider>
