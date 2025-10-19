@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import { useRichHaptics } from "@/hooks/useRichHaptics";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold uppercase tracking-wide ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -40,14 +41,31 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, disabled, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, disabled, onClick, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+    const haptics = useRichHaptics();
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      // Trigger haptic feedback on click
+      if (!disabled) {
+        if (variant === 'destructive') {
+          haptics.patterns.warningPattern();
+        } else {
+          haptics.trigger('button_tap');
+        }
+      }
+      
+      // Call original onClick handler
+      onClick?.(e);
+    };
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         disabled={disabled}
         aria-disabled={disabled}
+        onClick={handleClick}
         {...props}
       />
     );

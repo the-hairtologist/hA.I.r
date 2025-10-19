@@ -53,6 +53,7 @@ import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles, BookOpen }
 import { ProgressTracker } from "@/components/ProgressTracker";
 import { ChurnRiskWidget } from "@/components/ChurnRiskWidget";
 import { ProactiveInsightsPanel } from "@/components/ProactiveInsightsPanel";
+import { LiveBookingToast } from "@/components/LiveBookingToast";
 import {
   DndContext,
   closestCenter,
@@ -676,6 +677,11 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
+      {/* Live Booking Notifications - Real-time toasts for new appointments */}
+      {userRole === "stylist" && profile?.id && (
+        <LiveBookingToast stylistId={profile.id} onNewBooking={loadDashboardData} />
+      )}
+      
       {/* Enhanced notification system */}
       {user && userRole && (
         <NotificationEnhancer userId={user.id} userRole={userRole as "stylist" | "client"} />

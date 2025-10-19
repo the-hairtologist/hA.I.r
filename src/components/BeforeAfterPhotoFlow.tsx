@@ -9,8 +9,10 @@ import { useRichHaptics } from '@/hooks/useRichHaptics';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Camera, Check, X, RefreshCw, Sparkles, Loader2, Image as ImageIcon } from 'lucide-react';
+import { Camera, Check, X, RefreshCw, Sparkles, Loader2, Image as ImageIcon, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { removeBackground, loadImage } from '@/utils/backgroundRemoval';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Dialog,
   DialogContent,
@@ -43,8 +45,10 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
   const [beforePhoto, setBeforePhoto] = useState<string | null>(null);
   const [afterPhoto, setAfterPhoto] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
+  const [removingBackground, setRemovingBackground] = useState(false);
+  const [currentPhotoForBgRemoval, setCurrentPhotoForBgRemoval] = useState<string | null>(null);
 
-  const capturePhoto = async () => {
+  const capturePhotoAction = async () => {
     triggerButton();
     
     const metadata = {
@@ -61,16 +65,18 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
       
       if (stage === 'before') {
         setBeforePhoto(photo.url);
+        setCurrentPhotoForBgRemoval(photo.url);
         toast({
           title: '✨ Before photo captured!',
-          description: 'Photo optimized and saved. Ready for "After" photo.',
+          description: 'Photo optimized and saved. Remove background or capture After photo.',
         });
         setStage('after');
       } else if (stage === 'after') {
         setAfterPhoto(photo.url);
+        setCurrentPhotoForBgRemoval(photo.url);
         toast({
           title: '🎉 Transformation documented!',
-          description: 'Before & After photos saved. Generating comparison...',
+          description: 'Before & After photos saved.',
         });
         setStage('complete');
         
@@ -85,6 +91,74 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
         description: 'Could not capture photo. Please try again.',
         variant: 'destructive'
       });
+    }
+  };
+
+  const handleRemoveBackground = async () => {
+    if (!currentPhotoForBgRemoval) return;
+    
+    setRemovingBackground(true);
+    triggerButton();
+    
+    try {
+      toast({
+        title: 'Processing...',
+        description: 'AI is removing the background (3-5 seconds)',
+      });
+      
+      // Load the image
+      const response = await fetch(currentPhotoForBgRemoval);
+      const blob = await response.blob();
+      const img = await loadImage(blob);
+      
+      // Remove background
+      const processedBlob = await removeBackground(img);
+      
+      // Upload processed image directly to storage
+      const timestamp = Date.now();
+      const clientPath = clientId || 'temp';
+      const filePath = `${clientPath}/${timestamp}_nobg.png`;
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('hair-photos')
+        .upload(filePath, processedBlob, {
+          contentType: 'image/png',
+          upsert: true
+        });
+      
+      if (uploadError) throw uploadError;
+      
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('hair-photos')
+        .getPublicUrl(filePath);
+      
+      const processedUrl = urlData.publicUrl;
+      
+      // Update the current photo with background removed version
+      if (stage === 'after' || stage === 'complete') {
+        setAfterPhoto(processedUrl);
+      } else {
+        setBeforePhoto(processedUrl);
+      }
+      setCurrentPhotoForBgRemoval(processedUrl);
+      
+      triggerSuccess();
+      toast({
+        title: '✨ Background removed!',
+        description: 'Professional photo ready',
+      });
+      
+    } catch (error) {
+      console.error('Background removal error:', error);
+      triggerError();
+      toast({
+        title: 'Processing Failed',
+        description: 'Could not remove background. Please try again.',
+        variant: 'destructive'
+      });
+    } finally {
+      setRemovingBackground(false);
     }
   };
 
@@ -195,24 +269,47 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           {/* Action Buttons */}
           <div className="flex gap-2">
             {stage !== 'complete' && (
-              <Button 
-                onClick={capturePhoto} 
-                disabled={capturing}
-                className="flex-1"
-                size="lg"
-              >
-                {capturing ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Capturing...
-                  </>
-                ) : (
-                  <>
-                    <Camera className="mr-2 h-5 w-5" />
-                    Capture {stage === 'before' ? 'Before' : 'After'}
-                  </>
+              <>
+                <Button 
+                  onClick={capturePhotoAction} 
+                  disabled={capturing}
+                  className="flex-1"
+                  size="lg"
+                >
+                  {capturing ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Capturing...
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="mr-2 h-5 w-5" />
+                      Capture {stage === 'before' ? 'Before' : 'After'}
+                    </>
+                  )}
+                </Button>
+                
+                {currentPhotoForBgRemoval && (
+                  <Button 
+                    onClick={handleRemoveBackground} 
+                    disabled={removingBackground}
+                    variant="outline"
+                    size="lg"
+                  >
+                    {removingBackground ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        AI Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="mr-2 h-4 w-4" />
+                        Remove BG
+                      </>
+                    )}
+                  </Button>
                 )}
-              </Button>
+              </>
             )}
             
             {stage === 'complete' && (
