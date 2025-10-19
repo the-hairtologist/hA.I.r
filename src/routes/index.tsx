@@ -44,6 +44,7 @@ const NotFound = lazyWithRetry(() => import('@/pages/NotFound'));
 const ServerError = lazyWithRetry(() => import('@/pages/ServerError'));
 const Referrals = lazyWithRetry(() => import('@/pages/Referrals'));
 const SystemHealth = lazyWithRetry(() => import('@/pages/SystemHealth'));
+const SecurityDashboard = lazyWithRetry(() => import('@/pages/admin/SecurityDashboard'));
 const AdminCommandCenter = lazyWithRetry(() => import('@/pages/AdminCommandCenter'));
 const AdminUsers = lazyWithRetry(() => import('@/pages/AdminUsers'));
 const AuditLogs = lazyWithRetry(() => import('@/pages/AuditLogs'));
@@ -294,6 +295,10 @@ export const AppRoutes = () => (
     />
 
     {/* Admin Routes */}
+    <Route
+      path="/admin/security"
+      element={<ProtectedRoute allowedRoles={['admin']}><SecurityDashboard /></ProtectedRoute>}
+    />
     <Route
       path="/access-codes"
       element={<ProtectedRoute allowedRoles={['admin']}><AccessCodes /></ProtectedRoute>}

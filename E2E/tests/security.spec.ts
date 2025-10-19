@@ -212,4 +212,113 @@ test.describe('Security', () => {
     await page.waitForURL('/auth');
     await expect(page.getByText(/session.*expired/i)).toBeVisible();
   });
+
+  test('should prevent signup with leaked passwords', async ({ page }) => {
+    await page.goto('/auth');
+    await page.getByRole('button', { name: /sign up/i }).click();
+    
+    const emailInput = page.getByLabel(/email/i);
+    const passwordInput = page.getByLabel(/^password$/i);
+    
+    // Try commonly leaked password
+    await emailInput.fill('newuser@example.com');
+    await passwordInput.fill('password123456'); // Common leaked password
+    await page.getByRole('button', { name: /create account/i }).click();
+    
+    // Should show error about leaked password
+    await expect(page.getByText(/password.*compromised|password.*leaked/i)).toBeVisible();
+  });
+
+  test('should enforce medical data consent', async ({ page }) => {
+    // Login as stylist
+    await page.goto('/auth');
+    await page.getByLabel(/email/i).fill('stylist@example.com');
+    await page.getByLabel(/password/i).fill('password123');
+    await page.getByRole('button', { name: /sign in/i }).click();
+    
+    await page.waitForURL('/dashboard');
+    
+    // Try to access client medical data
+    await page.goto('/clients/client-id-without-consent');
+    
+    // Medical fields should be masked or hidden
+    const allergyField = page.locator('[data-testid="allergies-field"]');
+    if (await allergyField.count() > 0) {
+      const allergyText = await allergyField.textContent();
+      expect(allergyText).toMatch(/consent required|not shared/i);
+    }
+  });
+
+  test('should rate limit calendar token access', async ({ page }) => {
+    // Make multiple rapid calendar token requests
+    const responses = [];
+    
+    for (let i = 0; i < 12; i++) {
+      const response = await page.request.post('/api/calendar/token', {
+        data: { connection_id: 'test-connection-id' },
+      });
+      responses.push(response);
+    }
+    
+    // Should get rate limited after 10 attempts
+    const rateLimited = responses.slice(10).some(r => r.status() === 429);
+    expect(rateLimited).toBe(true);
+  });
+
+  test('should audit SECURITY DEFINER function calls', async ({ page }) => {
+    // Login as admin
+    await page.goto('/auth');
+    await page.getByLabel(/email/i).fill('admin@example.com');
+    await page.getByLabel(/password/i).fill('password123');
+    await page.getByRole('button', { name: /sign in/i }).click();
+    
+    await page.waitForURL('/dashboard');
+    
+    // Perform action that calls SECURITY DEFINER function
+    await page.goto('/admin/users');
+    await page.getByRole('button', { name: /grant admin/i }).first().click();
+    await page.getByRole('button', { name: /confirm/i }).click();
+    
+    // Check audit logs
+    await page.goto('/admin/audit-logs');
+    await expect(page.getByText(/ADMIN_GRANT/i)).toBeVisible();
+  });
+
+  test('should protect admin security dashboard', async ({ page }) => {
+    // Try to access as non-admin
+    await page.goto('/auth');
+    await page.getByLabel(/email/i).fill('user@example.com');
+    await page.getByLabel(/password/i).fill('password123');
+    await page.getByRole('button', { name: /sign in/i }).click();
+    
+    await page.waitForURL('/dashboard');
+    
+    // Try to access security dashboard
+    await page.goto('/admin/security');
+    
+    // Should redirect or show unauthorized
+    await expect(page.url()).not.toContain('/admin/security');
+  });
+
+  test('should display security health metrics', async ({ page }) => {
+    // Login as admin
+    await page.goto('/auth');
+    await page.getByLabel(/email/i).fill('admin@example.com');
+    await page.getByLabel(/password/i).fill('password123');
+    await page.getByRole('button', { name: /sign in/i }).click();
+    
+    await page.waitForURL('/dashboard');
+    
+    // Navigate to security dashboard
+    await page.goto('/admin/security');
+    
+    // Should show security health score
+    await expect(page.getByText(/security health/i)).toBeVisible();
+    await expect(page.getByText(/\d+\/100/)).toBeVisible();
+    
+    // Should show metrics cards
+    await expect(page.getByText(/failed login attempts/i)).toBeVisible();
+    await expect(page.getByText(/security events/i)).toBeVisible();
+    await expect(page.getByText(/suspicious activities/i)).toBeVisible();
+  });
 });
