@@ -94,6 +94,20 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
           .from("appointments")
           .update({ status: "completed" })
           .eq("id", data.id);
+        
+        // Trigger Zapier webhook
+        try {
+          const { triggerAppointmentCompleted } = await import("@/lib/zapierTriggers");
+          await triggerAppointmentCompleted(data.stylist_id, {
+            appointment_id: data.id,
+            appointment_date: data.appointment_date,
+            service_type: data.service_type,
+            client_id: data.client_id,
+          });
+        } catch (error) {
+          console.error("[Zapier] Failed to trigger appointment completed webhook:", error);
+        }
+        
         toast.success("Appointment marked as completed");
       } else if (type === "task") {
         // Task completion handled by parent component

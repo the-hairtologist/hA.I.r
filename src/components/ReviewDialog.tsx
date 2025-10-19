@@ -40,15 +40,29 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
     setSubmitting(true);
 
     try {
-      const { error } = await supabase.from("reviews").insert({
+      const { data, error } = await supabase.from("reviews").insert({
         stylist_id: appointment.stylist_id,
         client_id: clientProfileId,
         appointment_id: appointment.id,
         rating,
         review_text: reviewText.trim() || null,
-      });
+      }).select();
 
       if (error) throw error;
+
+      // Trigger Zapier webhook
+      try {
+        const { triggerReviewReceived } = await import("@/lib/zapierTriggers");
+        await triggerReviewReceived(appointment.stylist_id, {
+          review_id: data?.[0]?.id,
+          rating,
+          review_text: reviewText,
+          appointment_id: appointment.id,
+          client_id: clientProfileId,
+        });
+      } catch (error) {
+        console.error("[Zapier] Failed to trigger review received webhook:", error);
+      }
 
       toast.success("Review submitted successfully! Thank you for your feedback!");
       onOpenChange(false);

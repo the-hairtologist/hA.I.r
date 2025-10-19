@@ -102,6 +102,26 @@ serve(async (request) => {
 
       console.log('[STRIPE-WEBHOOK] Payment record created')
 
+      // Trigger Zapier webhook for payment received
+      try {
+        await supabase.functions.invoke('zapier-trigger', {
+          body: {
+            event: 'payment.received',
+            data: {
+              stylist_id: appointmentData.stylist_id,
+              payment_amount: amountPaid,
+              is_deposit: isDeposit,
+              remaining_balance: remainingBalance,
+              appointment_id: appointment.id,
+              client_id: appointmentData.client_id,
+            },
+          },
+        })
+        console.log('[STRIPE-WEBHOOK] Zapier payment webhook triggered')
+      } catch (zapierError) {
+        console.error('[STRIPE-WEBHOOK] Failed to trigger Zapier webhook:', zapierError)
+      }
+
       // Send confirmation email
       try {
         await supabase.functions.invoke('send-appointment-confirmation', {

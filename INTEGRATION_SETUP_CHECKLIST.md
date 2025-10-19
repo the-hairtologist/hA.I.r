@@ -78,15 +78,29 @@
 
 ---
 
-### 4️⃣ Zapier (Optional - Client-Driven)
-**Status**: ✅ Backend ready, no action needed
+### 4️⃣ Zapier Integration
+**Status**: ✅ Fully configured and connected
+
+**What's working**:
+- All 5 event triggers connected:
+  - ✅ `appointment.booked` - Triggers when new appointment is created
+  - ✅ `client.created` - Triggers when new client is added
+  - ✅ `payment.received` - Triggers when Stripe payment completes
+  - ✅ `review.received` - Triggers when client submits review
+  - ✅ `appointment.completed` - Triggers when appointment is marked complete
+- Production features:
+  - Automatic 3x retry with exponential backoff
+  - 10-second timeout per attempt
+  - Full delivery tracking and failure logs
+  - Live metrics dashboard in Settings → Integrations
 
 **What clients can do**:
-- Create Zaps triggered by app events
+- Create Zaps triggered by any of the above events
 - Example: "New appointment → Send Slack notification"
+- Example: "Payment received → Add row to Google Sheets"
 - They configure this themselves in Zapier dashboard
 
-**No setup required from you** - this is client-side.
+**No setup required from you** - triggers are already built into the app!
 
 ---
 

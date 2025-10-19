@@ -142,6 +142,19 @@ export const AddClientDialog = ({
         description: `${validatedData.full_name} has been added to your clients`,
       });
 
+      // Trigger Zapier webhook
+      try {
+        const { triggerNewClient } = await import("@/lib/zapierTriggers");
+        await triggerNewClient(stylistId, {
+          client_id: newClient.id,
+          client_name: validatedData.full_name,
+          client_email: validatedData.email,
+          client_phone: validatedData.phone,
+        });
+      } catch (error) {
+        console.error("[Zapier] Failed to trigger new client webhook:", error);
+      }
+
       // Notify parent and close
       onClientAdded(newClient.id);
       resetForm();

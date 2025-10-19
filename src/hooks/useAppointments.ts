@@ -130,6 +130,19 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
       toast.success('Appointment created successfully');
       log.info('Appointment created', 'useAppointments', { id: newAppointment.id });
 
+      // Trigger Zapier webhook
+      try {
+        const { triggerAppointmentBooked } = await import("@/lib/zapierTriggers");
+        await triggerAppointmentBooked(newAppointment.stylist_id, {
+          appointment_id: newAppointment.id,
+          appointment_date: newAppointment.appointment_date,
+          service_type: newAppointment.service_type,
+          client_id: newAppointment.client_id,
+        });
+      } catch (error) {
+        console.error("[Zapier] Failed to trigger appointment booked webhook:", error);
+      }
+
       // Auto-sync to calendar (non-blocking)
       supabase.functions.invoke('sync-calendar-event', {
         body: { appointment_id: newAppointment.id, action: 'create' }

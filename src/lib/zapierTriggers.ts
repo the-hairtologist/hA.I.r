@@ -1,69 +1,42 @@
 /**
- * Zapier Webhook Triggers - Database-Backed
- * Automatically trigger Zapier workflows on key events
- * All webhooks are configured per-stylist in the database
+ * Zapier Webhook Triggers - Production System
+ * Uses the zapier-trigger edge function with retry logic, failure tracking, and monitoring
  */
 
 import { supabase } from "@/integrations/supabase/client";
 
-interface ZapierWebhook {
-  id: string;
-  event_type: string;
-  webhook_url: string;
-  is_active: boolean;
-}
-
 /**
- * Get all active webhooks for a specific event type
+ * Trigger Zapier webhooks via edge function (with automatic retries and tracking)
  */
-const getActiveWebhooks = async (
+const triggerZapierEvent = async (
   stylistId: string,
-  eventType: string
-): Promise<ZapierWebhook[]> => {
-  try {
-    const { data, error } = await supabase
-      .from("zapier_webhooks")
-      .select("*")
-      .eq("stylist_id", stylistId)
-      .eq("event_type", eventType)
-      .eq("is_active", true);
-
-    if (error) throw error;
-    return data || [];
-  } catch (error) {
-    console.error(`[Zapier] Error fetching webhooks for ${eventType}:`, error);
-    return [];
-  }
-};
-
-/**
- * Trigger all active webhooks for an event
- */
-const triggerWebhooks = async (
-  webhooks: ZapierWebhook[],
-  payload: any
+  eventType: string,
+  eventData: any
 ): Promise<void> => {
-  const promises = webhooks.map(async (webhook) => {
-    try {
-      await fetch(webhook.webhook_url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+  try {
+    const { data, error } = await supabase.functions.invoke('zapier-trigger', {
+      body: {
+        event: eventType,
+        data: {
+          stylist_id: stylistId,
+          ...eventData,
         },
-        mode: "no-cors", // Zapier requires no-cors
-        body: JSON.stringify({
-          event: webhook.event_type,
-          timestamp: new Date().toISOString(),
-          data: payload,
-        }),
-      });
-      console.log(`[Zapier] ✅ Webhook triggered: ${webhook.event_type}`);
-    } catch (error) {
-      console.error(`[Zapier] ❌ Webhook failed for ${webhook.event_type}:`, error);
-    }
-  });
+      },
+    });
 
-  await Promise.allSettled(promises);
+    if (error) {
+      console.error(`[Zapier] Edge function error for ${eventType}:`, error);
+      return;
+    }
+
+    if (data?.triggered > 0) {
+      console.log(`[Zapier] ✅ Triggered ${data.triggered} webhook(s) for ${eventType}`);
+    } else {
+      console.log(`[Zapier] No active webhooks for ${eventType}`);
+    }
+  } catch (error) {
+    console.error(`[Zapier] Failed to trigger ${eventType}:`, error);
+  }
 };
 
 /**
@@ -73,10 +46,7 @@ export const triggerAppointmentBooked = async (
   stylistId: string,
   appointmentData: any
 ) => {
-  const webhooks = await getActiveWebhooks(stylistId, "appointment.booked");
-  if (webhooks.length > 0) {
-    await triggerWebhooks(webhooks, appointmentData);
-  }
+  await triggerZapierEvent(stylistId, "appointment.booked", appointmentData);
 };
 
 /**
@@ -86,10 +56,7 @@ export const triggerNewClient = async (
   stylistId: string,
   clientData: any
 ) => {
-  const webhooks = await getActiveWebhooks(stylistId, "client.created");
-  if (webhooks.length > 0) {
-    await triggerWebhooks(webhooks, clientData);
-  }
+  await triggerZapierEvent(stylistId, "client.created", clientData);
 };
 
 /**
@@ -99,10 +66,7 @@ export const triggerPaymentReceived = async (
   stylistId: string,
   paymentData: any
 ) => {
-  const webhooks = await getActiveWebhooks(stylistId, "payment.received");
-  if (webhooks.length > 0) {
-    await triggerWebhooks(webhooks, paymentData);
-  }
+  await triggerZapierEvent(stylistId, "payment.received", paymentData);
 };
 
 /**
@@ -112,10 +76,7 @@ export const triggerReviewReceived = async (
   stylistId: string,
   reviewData: any
 ) => {
-  const webhooks = await getActiveWebhooks(stylistId, "review.received");
-  if (webhooks.length > 0) {
-    await triggerWebhooks(webhooks, reviewData);
-  }
+  await triggerZapierEvent(stylistId, "review.received", reviewData);
 };
 
 /**
@@ -125,8 +86,5 @@ export const triggerAppointmentCompleted = async (
   stylistId: string,
   appointmentData: any
 ) => {
-  const webhooks = await getActiveWebhooks(stylistId, "appointment.completed");
-  if (webhooks.length > 0) {
-    await triggerWebhooks(webhooks, appointmentData);
-  }
+  await triggerZapierEvent(stylistId, "appointment.completed", appointmentData);
 };
