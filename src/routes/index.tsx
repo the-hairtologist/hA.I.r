@@ -83,6 +83,7 @@ const ZapierIntegration = lazyWithRetry(() => import('@/pages/ZapierIntegration'
 const AuditReport = lazyWithRetry(() => import('@/pages/AuditReport'));
 const ClientRetention = lazyWithRetry(() => import('@/pages/ClientRetention'));
 const DesignSystem = lazyWithRetry(() => import('@/pages/DesignSystem'));
+const DevTools = lazyWithRetry(() => import('@/pages/DevTools'));
 const SubscriptionPage = lazyWithRetry(() => import('@/pages/SubscriptionPage'));
 const StyleInspiration = lazyWithRetry(() => import('@/pages/StyleInspiration'));
 const Analytics = lazyWithRetry(() => import('@/pages/Analytics'));
@@ -359,6 +360,10 @@ export const AppRoutes = () => (
     <Route
       path="/design-system"
       element={<ProtectedRoute allowedRoles={['admin']}><DesignSystem /></ProtectedRoute>}
+    />
+    <Route
+      path="/dev-tools"
+      element={<ProtectedRoute allowedRoles={['admin']}><DevTools /></ProtectedRoute>}
     />
 
     {/* Error Routes */}

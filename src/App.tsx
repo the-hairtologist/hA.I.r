@@ -112,12 +112,16 @@ const AnalyticsInitializer = () => {
     
     // Initialize comprehensive performance optimizations
     performanceOptimizer.init().catch((error) => {
-      console.error('Failed to initialize performance optimizations:', error);
+      import('@/lib/logging/productionLogger').then(({ logger }) => {
+        logger.error('Failed to initialize performance optimizations', error);
+      });
     });
     
     // Initialize self-healing system (error recovery, health monitoring, auto-maintenance)
     selfHealing.initialize().catch((error) => {
-      console.error('Failed to initialize self-healing system:', error);
+      import('@/lib/logging/productionLogger').then(({ logger }) => {
+        logger.error('Failed to initialize self-healing system', error);
+      });
     });
   }, []);
   

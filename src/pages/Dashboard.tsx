@@ -27,6 +27,7 @@ import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { OnboardingWizard } from "@/components/OnboardingWizard";
 import { AppointmentTimerWidget } from "@/components/AppointmentTimerWidget";
+import { logger } from "@/lib/logging/productionLogger";
 import { BirthdayAlertsWidget } from "@/components/BirthdayAlertsWidget";
 import { StatsToggleButton } from "@/components/admin/StatsToggleButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
@@ -311,7 +312,7 @@ const Dashboard = () => {
         setPredictiveInsights(data);
       }
     } catch (error) {
-      console.warn('Failed to load predictive insights:', error);
+      logger.warn('Failed to load predictive insights', { error });
     }
   };
 
@@ -378,7 +379,7 @@ const Dashboard = () => {
       }
     } catch (error: any) {
       toast.error("Unable to load your dashboard. Please refresh the page.");
-      console.error(error);
+      logger.error("Dashboard load failed", error);
     } finally {
       setLoading(false);
     }
@@ -392,7 +393,7 @@ const Dashboard = () => {
         await loadClientDashboard();
       }
     } catch (error) {
-      console.error("Error loading dashboard data:", error);
+      logger.error("Error loading dashboard data", error);
     }
   };
 
