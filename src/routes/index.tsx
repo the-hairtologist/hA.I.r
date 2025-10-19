@@ -45,6 +45,7 @@ const NotFound = lazyWithRetry(() => import('@/pages/NotFound'));
 const ServerError = lazyWithRetry(() => import('@/pages/ServerError'));
 const Referrals = lazyWithRetry(() => import('@/pages/Referrals'));
 const SystemHealth = lazyWithRetry(() => import('@/pages/SystemHealth'));
+// Security Dashboard - Admin only route for monitoring
 const SecurityDashboard = lazy(() => import('@/pages/admin/SecurityDashboard'));
 const AdminCommandCenter = lazyWithRetry(() => import('@/pages/AdminCommandCenter'));
 const AdminUsers = lazyWithRetry(() => import('@/pages/AdminUsers'));
