@@ -40,6 +40,8 @@ import { HairPhotoAnalyzer } from "@/components/HairPhotoAnalyzer";
 import { clientSchema } from "@/lib/validation/clientSchemas";
 import { usePagination } from "@/hooks/usePagination";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { networkErrors, dataErrors } from "@/lib/errorMessages";
+import { SaveIndicator } from "@/components/SaveIndicator";
 
 interface ClientProfile {
   id: string;
@@ -92,6 +94,7 @@ export default function Clients() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditSubmitting, setIsEditSubmitting] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
   // Bulk selection
   const {
@@ -155,7 +158,14 @@ export default function Clients() {
       }
     } catch (error) {
       console.error("Error loading stylist profile:", error);
-      toast.error("Failed to load profile");
+      const errorConfig = networkErrors.loadFailed("profile", () => loadStylistProfile());
+      toast.error(errorConfig.title, {
+        description: errorConfig.description,
+        action: errorConfig.action ? {
+          label: errorConfig.action.label,
+          onClick: errorConfig.action.onClick,
+        } : undefined,
+      });
       setLoading(false);
     }
   };
@@ -214,7 +224,14 @@ export default function Clients() {
       setClients(enrichedClients);
     } catch (error) {
       console.error("Error loading clients:", error);
-      toast.error("Unable to load your client list. Please refresh or check your connection.");
+      const errorConfig = networkErrors.loadFailed("client list", () => loadClients());
+      toast.error(errorConfig.title, {
+        description: errorConfig.description,
+        action: errorConfig.action ? {
+          label: errorConfig.action.label,
+          onClick: errorConfig.action.onClick,
+        } : undefined,
+      });
     } finally {
       setLoading(false);
     }
@@ -297,6 +314,8 @@ export default function Clients() {
       });
 
       setIsEditSubmitting(true);
+      setSaveStatus("saving");
+      
       const { error } = await supabase
         .from("client_profiles")
         .update({
@@ -311,16 +330,28 @@ export default function Clients() {
 
       if (error) throw error;
 
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 2000);
       toast.success("Client updated successfully!");
       setEditDialogOpen(false);
       loadClients();
     } catch (error: any) {
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+      
       if (error.name === 'ZodError') {
         const firstError = error.errors[0];
         toast.error(firstError.message);
       } else {
         console.error("Error updating client:", error);
-        toast.error("Unable to update client information. Please try again.");
+        const errorConfig = dataErrors.updateFailed("client", () => handleEditClient(e));
+        toast.error(errorConfig.title, {
+          description: errorConfig.description,
+          action: errorConfig.action ? {
+            label: errorConfig.action.label,
+            onClick: errorConfig.action.onClick,
+          } : undefined,
+        });
       }
     } finally {
       setIsEditSubmitting(false);

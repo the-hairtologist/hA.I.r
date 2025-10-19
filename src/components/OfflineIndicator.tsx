@@ -1,22 +1,30 @@
+/**
+ * Offline Indicator - Shows when user is disconnected
+ * Mobile-first design with touch-friendly positioning
+ */
+
 import { useEffect, useState } from "react";
 import { WifiOff, Wifi } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 
 export const OfflineIndicator = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [wasOffline, setWasOffline] = useState(false);
   const [showReconnected, setShowReconnected] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
-      setShowReconnected(true);
-      setTimeout(() => setShowReconnected(false), 3000);
+      if (wasOffline) {
+        setShowReconnected(true);
+        setTimeout(() => setShowReconnected(false), 3000);
+        setWasOffline(false);
+      }
     };
 
     const handleOffline = () => {
       setIsOnline(false);
-      setShowReconnected(false);
+      setWasOffline(true);
     };
 
     window.addEventListener("online", handleOnline);
@@ -26,40 +34,55 @@ export const OfflineIndicator = () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-  }, []);
+  }, [wasOffline]);
 
-  if (isOnline && !showReconnected) return null;
-
-  return (
-    <div
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 animate-fade-in",
-        "transition-transform duration-300"
-      )}
-      role="alert"
-      aria-live="assertive"
-    >
-      <Alert
-        className={cn(
-          "rounded-none border-x-0 border-t-0",
-          isOnline
-            ? "bg-success/10 border-success/30 dark:bg-success/20 dark:border-success/40"
-            : "bg-destructive/10 border-destructive/50"
-        )}
+  // Show reconnected message briefly
+  if (showReconnected) {
+    return (
+      <div
+        className="fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[200] 
+                   bg-success/90 backdrop-blur-sm text-white 
+                   px-4 sm:px-6 py-3 rounded-full 
+                   shadow-[4px_4px_0px_0px_rgba(0,0,0,0.25)] 
+                   border-2 border-white/20
+                   animate-fade-in
+                   min-h-[44px] flex items-center gap-2
+                   touch-manipulation"
+        role="status"
+        aria-live="polite"
       >
-        <div className="flex items-center gap-3">
-          {isOnline ? (
-            <Wifi className="h-4 w-4 text-success" />
-          ) : (
-            <WifiOff className="h-4 w-4 text-destructive" />
-          )}
-          <AlertDescription className="text-sm font-medium">
-            {isOnline
-              ? "Connection restored. You're back online."
-              : "No internet connection. Some features may be unavailable."}
-          </AlertDescription>
-        </div>
-      </Alert>
-    </div>
-  );
+        <Wifi className="h-5 w-5 animate-pulse" aria-hidden="true" />
+        <span className="font-medium text-sm sm:text-base">
+          📡 Back online! Changes syncing...
+        </span>
+      </div>
+    );
+  }
+
+  // Show offline indicator
+  if (!isOnline) {
+    return (
+      <div
+        className={cn(
+          "fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[200]",
+          "bg-amber-500/95 backdrop-blur-sm text-white",
+          "px-4 sm:px-6 py-3 rounded-full",
+          "shadow-[4px_4px_0px_0px_rgba(0,0,0,0.25)]",
+          "border-2 border-amber-600",
+          "animate-bounce",
+          "min-h-[44px] flex items-center gap-2",
+          "touch-manipulation"
+        )}
+        role="alert"
+        aria-live="assertive"
+      >
+        <WifiOff className="h-5 w-5" aria-hidden="true" />
+        <span className="font-medium text-sm sm:text-base">
+          📡 You're offline - Changes will sync later
+        </span>
+      </div>
+    );
+  }
+
+  return null;
 };

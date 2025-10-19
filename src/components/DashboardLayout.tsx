@@ -29,10 +29,12 @@ import {
 } from "@/components/ui/tooltip";
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import { authErrors } from "@/lib/errorMessages";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -115,7 +117,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       navigate("/auth");
       toast.success("Signed out successfully");
     } catch (error) {
-      toast.error("Error signing out");
+      const errorConfig = authErrors.signOutFailed(() => handleSignOut());
+      toast.error(errorConfig.title, {
+        description: errorConfig.description,
+        action: errorConfig.action ? {
+          label: errorConfig.action.label,
+          onClick: errorConfig.action.onClick,
+        } : undefined,
+      });
     }
   };
 
@@ -138,6 +147,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <a href="#main-content" className="skip-to-main">
         Skip to main content
       </a>
+      <OfflineIndicator />
       <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
         <AppSidebar />
         <MobileSidebarOverlay />

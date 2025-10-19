@@ -17,6 +17,7 @@ import { z } from "zod";
 import { validatePhone } from "@/lib/phoneValidation";
 import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { dataErrors } from "@/lib/errorMessages";
 
 interface AddClientDialogProps {
   open: boolean;
@@ -158,7 +159,10 @@ export const AddClientDialog = ({
         toast.error("Please check the form for errors");
       } else {
         console.error("Error adding client:", error);
-        toast.error("Failed to add client");
+        const errorConfig = dataErrors.saveFailed("client");
+        toast.error(errorConfig.title, {
+          description: errorConfig.description,
+        });
       }
     } finally {
       setLoading(false);

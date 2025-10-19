@@ -11,6 +11,7 @@ import { Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
 import { FormFieldError } from "@/components/FormFieldError";
+import { networkErrors } from "@/lib/errorMessages";
 
 interface QuickAppointmentDialogProps {
   open: boolean;
@@ -81,7 +82,10 @@ export const QuickAppointmentDialog = ({
       setServices(servicesData || []);
     } catch (error) {
       console.error("Error loading data:", error);
-      toast.error("Failed to load clients and services");
+      const errorConfig = networkErrors.loadFailed("clients and services");
+      toast.error(errorConfig.title, {
+        description: errorConfig.description,
+      });
     }
   };
 
