@@ -8,10 +8,11 @@ import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
 import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
 import { DemoModeIndicator } from "@/components/demo/DemoMode";
+import { CommandPalette } from "@/components/CommandPalette";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Scissors, User, LogOut, HelpCircle, Crown, ChevronDown, Moon, Sun, Monitor, Download, FileJson } from "lucide-react";
+import { Scissors, User, LogOut, HelpCircle, Crown, ChevronDown, Moon, Sun, Monitor } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +42,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
   const { user, loading, roles, isAdmin, isStylist, isClient } = useEnhancedAuth();
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const { unreadCount } = useRealtimeNotifications(user?.id);
   const { theme, setTheme } = useTheme();
   
@@ -59,7 +61,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         return;
       }
 
-      // Note: Ctrl+K is handled by global CommandPalette in App.tsx
+      // Cmd/Ctrl+K for search - Open command palette
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setCommandPaletteOpen(true);
+        return;
+      }
 
       // Navigation shortcuts with 'G' key
       if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
@@ -225,15 +232,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         Settings
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => navigate("/install")}>
-                        <Download className="h-4 w-4 mr-2" />
-                        Install App
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate("/settings?tab=privacy")}>
-                        <FileJson className="h-4 w-4 mr-2" />
-                        Download My Data
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
                       <DropdownMenuLabel className="text-xs text-muted-foreground">Theme</DropdownMenuLabel>
                       <DropdownMenuItem onClick={() => setTheme("light")}>
                         <Sun className="h-4 w-4 mr-2" />
@@ -286,6 +284,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         
         <MobileBottomNav />
       </div>
+      
+      {/* Command Palette - Global keyboard shortcut */}
+      <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
       
       <KeyboardShortcutsDialog 
         open={showShortcuts} 

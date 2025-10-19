@@ -84,13 +84,6 @@ export default defineConfig(({ mode }) => ({
         },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api/, /^\/auth/],
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
-        skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 5000000, // 5MB
-        navigationPreload: true, // Enable navigation preload for faster page loads
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -120,7 +113,7 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          // Critical user data - NetworkFirst for mobile reliability
+          // Critical user data - cache for 7 days
           {
             urlPattern: /client_profiles|stylist_profiles|appointments|formulas/i,
             handler: 'NetworkFirst',
@@ -130,18 +123,18 @@ export default defineConfig(({ mode }) => ({
                 maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
               },
-              networkTimeoutSeconds: 3,
+              networkTimeoutSeconds: 5,
               cacheableResponse: {
                 statuses: [0, 200]
               }
             }
           },
-          // Supabase REST API - NetworkFirst for mobile reliability
+          // API responses - shorter cache
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'supabase-api-cache',
+              cacheName: 'api-cache',
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 30 // 30 minutes
@@ -149,39 +142,6 @@ export default defineConfig(({ mode }) => ({
               networkTimeoutSeconds: 3,
               cacheableResponse: {
                 statuses: [0, 200]
-              }
-            }
-          },
-          // Supabase Storage - optimized for images/files
-          {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/storage/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'supabase-storage-cache',
-              expiration: {
-                maxEntries: 300,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          // Supabase Auth - never cache
-          {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/auth/i,
-            handler: 'NetworkOnly'
-          },
-          // Navigation caching for mobile
-          {
-            urlPattern: ({request}) => request.mode === 'navigate',
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'navigation-cache',
-              networkTimeoutSeconds: 3,
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
               }
             }
           },
@@ -197,27 +157,14 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          // Generic API - NetworkFirst
           {
             urlPattern: /\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'generic-api-cache',
+              cacheName: 'api-cache',
               expiration: {
                 maxEntries: 50,
                 maxAgeSeconds: 60 * 5 // 5 minutes
-              }
-            }
-          },
-          // Static assets from CDN
-          {
-            urlPattern: /^https:\/\/cdn\./i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'cdn-cache',
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 60 * 60 * 24 * 90 // 90 days
               }
             }
           }
@@ -242,12 +189,9 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // React ecosystem - keep React and ReactDOM separate to ensure proper initialization
-          if (id.includes('node_modules/react-dom')) {
-            return 'react-dom';
-          }
-          if (id.includes('node_modules/react') && !id.includes('react-dom') && !id.includes('react-router')) {
-            return 'react';
+          // React ecosystem
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-core';
           }
           if (id.includes('node_modules/react-router')) {
             return 'react-router';
@@ -296,7 +240,7 @@ export default defineConfig(({ mode }) => ({
       },
       // Tree shaking optimizations
       treeshake: {
-        moduleSideEffects: true, // Allow React's side effects for proper initialization
+        moduleSideEffects: 'no-external',
         propertyReadSideEffects: false,
         unknownGlobalSideEffects: false,
       },
@@ -308,16 +252,5 @@ export default defineConfig(({ mode }) => ({
   },
   esbuild: {
     drop: mode === 'production' ? ['console', 'debugger'] : [],
-    legalComments: 'none',
   },
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react-router-dom',
-      '@tanstack/react-query',
-      '@supabase/supabase-js'
-    ],
-    exclude: ['@huggingface/transformers']
-  }
 }));

@@ -6,11 +6,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SparkleButton } from "@/components/ui/sparkle-button";
 import { Badge } from "@/components/ui/badge";
-import { SEO } from "@/components/SEO";
 import { FeatureShowcase } from "@/components/showcase/FeatureShowcase";
-import { Scissors, ArrowRight, X, Sparkles, Download } from "lucide-react";
+import { Scissors, ArrowRight, X, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ShowcaseDemo() {
@@ -19,12 +17,6 @@ export default function ShowcaseDemo() {
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-gradient-to-br from-background via-background to-primary/5 animate-fade-in">
-      <SEO 
-        title="Interactive Demo - See hA.I.r in Action"
-        description="Explore all features of hA.I.r with our interactive demo. Experience AI-powered formulas, smart booking, and client management before you sign up."
-        keywords="hair salon demo, salon software demo, ai hair color demo, stylist app demo"
-      />
-      
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -120,16 +112,6 @@ export default function ShowcaseDemo() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <div className="mb-4">
-            <SparkleButton 
-              variant="outline"
-              onClick={() => navigate("/install")}
-              className="py-2 px-4"
-            >
-              <Download className="h-4 w-4" />
-              Install App
-            </SparkleButton>
-          </div>
           <p>© 2025 hA.I.r. All rights reserved.</p>
           <p className="mt-2">
             No credit card required • Cancel anytime • 14-day free trial

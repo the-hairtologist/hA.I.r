@@ -1,17 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 import { FileText } from "lucide-react";
-import { SEO } from "@/components/SEO";
 
 const Terms = () => {
   return (
     <div className="min-h-screen bg-background">
-      <SEO 
-        title="Terms of Service - User Agreement"
-        description="Read the terms and conditions for using hA.I.r. Understand your rights, responsibilities, and our service policies including refunds and AI disclaimers."
-        keywords="terms of service, user agreement, terms and conditions, service policy, refund policy"
-      />
-      
       <PageHeader 
         title="Terms of Service" 
         icon={<FileText className="h-6 w-6" />}

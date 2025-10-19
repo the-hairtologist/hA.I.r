@@ -5,7 +5,6 @@
 
 import { initResourceHints, smartPrefetch } from './ResourceHints';
 import { preconnectCriticalDomains, loadPolyfills } from './BundleOptimizer';
-import { optimizePageImages } from '@/lib/imageOptimization';
 
 class PerformanceOptimizerService {
   private initialized = false;
@@ -16,8 +15,7 @@ class PerformanceOptimizerService {
   async init() {
     if (this.initialized) return;
 
-    const isDev = import.meta.env.DEV;
-    if (isDev) console.log('🚀 Initializing performance optimizations...');
+    console.log('🚀 Initializing performance optimizations...');
 
     // Phase 1: Critical resource hints (immediate)
     initResourceHints();
@@ -43,7 +41,7 @@ class PerformanceOptimizerService {
     this.monitorPerformance();
 
     this.initialized = true;
-    if (isDev) console.log('✅ Performance optimizations complete');
+    console.log('✅ Performance optimizations complete');
   }
 
   /**
@@ -52,7 +50,14 @@ class PerformanceOptimizerService {
   private optimizeImages() {
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
-        optimizePageImages();
+        // Add loading="lazy" to images without it
+        const images = document.querySelectorAll('img:not([loading])');
+        images.forEach((img) => {
+          img.setAttribute('loading', 'lazy');
+          img.setAttribute('decoding', 'async');
+        });
+
+        console.log(`✅ Optimized ${images.length} images`);
       });
     }
   }
@@ -87,14 +92,12 @@ class PerformanceOptimizerService {
    * Monitor performance metrics
    */
   private monitorPerformance() {
-    const isDev = import.meta.env.DEV;
-    
     // Monitor long tasks
     if ('PerformanceObserver' in window) {
       try {
         const observer = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
-            if (entry.duration > 50 && isDev) {
+            if (entry.duration > 50) {
               console.warn('⚠️ Long task detected:', {
                 duration: entry.duration,
                 startTime: entry.startTime,
@@ -117,7 +120,7 @@ class PerformanceOptimizerService {
               clsScore += (entry as any).value;
             }
           }
-          if (clsScore > 0.1 && isDev) {
+          if (clsScore > 0.1) {
             console.warn('⚠️ High CLS detected:', clsScore);
           }
         });
@@ -133,11 +136,10 @@ class PerformanceOptimizerService {
    * Optimize fonts loading
    */
   optimizeFonts() {
-    const isDev = import.meta.env.DEV;
     // Use font-display: swap for better perceived performance
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
-        if (isDev) console.log('✅ Fonts loaded');
+        console.log('✅ Fonts loaded');
       });
     }
   }
@@ -146,16 +148,13 @@ class PerformanceOptimizerService {
    * Compress and optimize data transfers
    */
   enableCompression() {
-    const isDev = import.meta.env.DEV;
     // Check if compression is supported
     const supportsCompression = 'CompressionStream' in window;
     
-    if (isDev) {
-      if (supportsCompression) {
-        console.log('✅ Compression API available');
-      } else {
-        console.log('ℹ️ Compression API not available');
-      }
+    if (supportsCompression) {
+      console.log('✅ Compression API available');
+    } else {
+      console.log('ℹ️ Compression API not available');
     }
   }
 

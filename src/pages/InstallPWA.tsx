@@ -5,7 +5,6 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { SparkleButton } from "@/components/ui/sparkle-button";
 import { Smartphone, Download, Share2, MoreVertical, Chrome, CheckCircle2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -99,14 +98,13 @@ const InstallPWA = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <SparkleButton
+                  <button
                     onClick={handleInstallClick}
-                    variant="primary"
-                    className="w-full py-4 px-6"
+                    className="w-full py-4 px-6 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
                   >
                     <Download className="h-5 w-5" />
                     Install App Now
-                  </SparkleButton>
+                  </button>
                 </CardContent>
               </Card>
             )}

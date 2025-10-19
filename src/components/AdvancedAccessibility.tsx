@@ -169,7 +169,7 @@ export function AccessibilityPanel() {
     <div
       role="region"
       aria-label="Accessibility settings"
-      className="fixed bottom-24 left-4 bg-background border-2 border-foreground shadow-lg p-4 rounded-lg z-40 lg:bottom-6 lg:left-auto lg:right-24"
+      className="fixed bottom-4 right-4 bg-background border-2 border-foreground shadow-lg p-4 rounded-lg z-50"
     >
       <h3 className="font-bold mb-4">Accessibility Settings</h3>
       

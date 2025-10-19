@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SparkleButton } from "@/components/ui/sparkle-button";
-import { Scissors, Calendar, Palette, Smartphone, Download } from "lucide-react";
-import { SEO } from "@/components/SEO";
+import { Scissors, Calendar, Palette, Smartphone } from "lucide-react";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
@@ -16,12 +14,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background scroll-smooth">
-      <SEO 
-        title="hA.I.r - AI-Powered Salon Assistant | Transform Every Color Service"
-        description="Professional color formulas in seconds. AI-powered booking, client management, and formula generation for hair stylists. No guesswork, just flawless results every time."
-        keywords="hair salon software, color formula generator, salon booking, stylist app, hair color AI, salon management, professional hair color, salon assistant"
-      />
-      
       {/* Skip to main content for accessibility */}
       <a 
         href="#main-content" 
@@ -56,7 +48,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-16 sm:py-24 overflow-hidden min-h-[65vh] sm:min-h-[85vh] flex items-center" style={{
+        <section className="relative bg-primary py-24 sm:py-32 overflow-hidden min-h-[90vh] flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -86,24 +78,13 @@ const Index = () => {
               <p className="text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase animate-fade-in" style={{ animationDelay: '300ms' }}>
                 Free Trial • No Credit Card Required
               </p>
-
-              <div className="pt-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
-                <SparkleButton 
-                  variant="outline"
-                  onClick={() => navigate("/install")}
-                  className="font-pixel text-xs uppercase py-2 px-4"
-                >
-                  <Download className="h-4 w-4" />
-                  Install App
-                </SparkleButton>
-              </div>
             </div>
           </div>
           <ScrollIndicator />
         </section>
 
         {/* How It Works - Clean white background */}
-        <section className="py-12 sm:py-20 bg-background" style={{
+        <section className="py-20 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
@@ -114,12 +95,12 @@ const Index = () => {
         </section>
 
         {/* Testimonial Section - Blue background */}
-        <section className="py-12 sm:py-20 bg-accent">
+        <section className="py-20 bg-accent">
           <SingleTestimonial />
         </section>
 
         {/* FOMO/CTA Section - Bold yellow */}
-        <section className="py-12 sm:py-20 bg-secondary" style={{
+        <section className="py-20 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -130,13 +111,13 @@ const Index = () => {
         </section>
 
         {/* FAQ Section - Blue background */}
-        <section className="py-12 sm:py-20 bg-accent">
+        <section className="py-20 bg-accent">
           <MinimalFAQ />
         </section>
       </main>
 
       {/* Stats Section - Yellow background for excitement */}
-      <section className="py-12 sm:py-16 bg-secondary border-t-[4px] border-black" style={{
+      <section className="py-16 bg-secondary border-t-[4px] border-black" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)

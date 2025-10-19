@@ -16,7 +16,7 @@ import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
 import { NotificationManager } from "@/components/NotificationManager";
-import { DashboardSkeleton } from "@/components/loading/PageSkeleton";
+import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
 import { NextAppointmentWidget } from "@/components/dashboard/NextAppointmentWidget";
 import { LoyaltyProgressWidget } from "@/components/dashboard/LoyaltyProgressWidget";
 import { CommissionTrackerWidget } from "@/components/dashboard/CommissionTrackerWidget";
@@ -30,11 +30,6 @@ import { AppointmentTimerWidget } from "@/components/AppointmentTimerWidget";
 import { BirthdayAlertsWidget } from "@/components/BirthdayAlertsWidget";
 import { StatsToggleButton } from "@/components/admin/StatsToggleButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
-import { useResponsive } from "@/hooks/useResponsive";
-import { MobileDashboardDrawer } from "@/components/dashboard/MobileDashboardDrawer";
-import { useSwipeGestures } from "@/hooks/useSwipeGestures";
-import { playHapticForAction } from "@/lib/mobile/HapticPatterns";
-import { useRef } from "react";
 
 import { WelcomeChecklist } from "@/components/WelcomeChecklist";
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
@@ -79,22 +74,6 @@ const Dashboard = () => {
   const { user: authUser, loading: authLoading } = useAuth();
   const { roles, isAdmin, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
-  const { isMobile } = useResponsive();
-  
-  // Swipe gestures for mobile navigation
-  const swipeRef = useSwipeGestures({
-    onSwipeRight: () => {
-      if (isMobile) {
-        navigate(-1); // Go back
-      }
-    },
-    onSwipeDown: () => {
-      if (isMobile) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        playHapticForAction('refresh');
-      }
-    },
-  });
   
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
@@ -145,7 +124,6 @@ const Dashboard = () => {
 
   // Client dashboard sections - optimized for client needs
   const defaultClientSections: DashboardSection[] = [
-    { id: "rebooking-prompt", title: "Time for a Touch-Up", component: "RebookingPrompt", enabled: true },
     { id: "next-appointment", title: "Upcoming", component: "NextAppointment", enabled: true },
     { id: "loyalty-progress", title: "Rewards", component: "LoyaltyProgress", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
@@ -589,7 +567,7 @@ const Dashboard = () => {
     return (
       <DashboardLayout>
         <div className="p-4 md:p-6 lg:p-8">
-          <DashboardSkeleton />
+          <DashboardFullSkeleton />
         </div>
       </DashboardLayout>
     );
@@ -667,10 +645,6 @@ const Dashboard = () => {
         return (userRole === "client" || isAdmin) && profile?.id ? (
           <ClientMilestones clientId={profile.id} />
         ) : null;
-      case "RebookingPrompt":
-        return (userRole === "client" || isAdmin) ? (
-          <RebookingPrompt />
-        ) : null;
       case "UpcomingAppointments":
         return (userRole === "client" || isAdmin) && stats ? (
           stats.upcomingAppointments > 0 ? (
@@ -694,7 +668,7 @@ const Dashboard = () => {
       {/* Quick Add Client FAB - Only for stylists */}
       {userRole === "stylist" && !isAdmin && <QuickAddClientFAB />}
       
-      <div ref={swipeRef as any} className="w-full space-y-4 sm:space-y-6">
+      <div className="w-full space-y-4 sm:space-y-6">
         
         <div className="mb-6 sm:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
@@ -858,86 +832,19 @@ const Dashboard = () => {
             items={sections.map(s => s.id)}
             strategy={verticalListSortingStrategy}
           >
-            {isMobile && !isEditMode ? (
-              // Mobile 3-tier layout
-              <>
-                {/* Tier 1: Primary sections - always visible */}
-                <div className="space-y-3">
-                  {sections
-                    .filter(s => 
-                      ['appointment-timer', 'next-appointment', 'kpi-cards', 'quick-actions', 'recent-activity'].includes(s.id)
-                    )
-                    .slice(0, 4)
-                    .map((section, index) => (
-                      <DraggableSection
-                        key={section.id}
-                        section={section}
-                        isEditMode={false}
-                        onToggle={() => toggleSection(section.id)}
-                        animationDelay={`${350 + index * 50}ms`}
-                      >
-                        {renderSection(section)}
-                      </DraggableSection>
-                    ))}
-                </div>
-
-                {/* Tier 2: Secondary sections - collapsible */}
-                {sections.filter(s => 
-                  ['weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
-                ).length > 0 && (
-                  <div className="space-y-3 mt-4">
-                    {sections
-                      .filter(s => 
-                        ['weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
-                      )
-                      .map((section, index) => (
-                        <DraggableSection
-                          key={section.id}
-                          section={section}
-                          isEditMode={false}
-                          onToggle={() => toggleSection(section.id)}
-                          animationDelay={`${550 + index * 50}ms`}
-                        >
-                          {renderSection(section)}
-                        </DraggableSection>
-                      ))}
-                  </div>
-                )}
-
-                {/* Tier 3: Drawer sections - "More Stats" */}
-                {sections.filter(s => 
-                  !['appointment-timer', 'next-appointment', 'kpi-cards', 'quick-actions', 'recent-activity',
-                    'weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
-                ).length > 0 && (
-                  <MobileDashboardDrawer
-                    sections={sections.filter(s => 
-                      !['appointment-timer', 'next-appointment', 'kpi-cards', 'quick-actions', 'recent-activity',
-                        'weekly-overview', 'commission-tracker', 'progress-tracker', 'loyalty-progress'].includes(s.id)
-                    )}
-                    renderSection={(section) => (
-                      <div key={section.id}>
-                        {renderSection(section)}
-                      </div>
-                    )}
-                  />
-                )}
-              </>
-            ) : (
-              // Desktop or Edit Mode: Show all sections
-              <div className="space-y-4 sm:space-y-6">
-                {sections.map((section, index) => (
-                  <DraggableSection
-                    key={section.id}
-                    section={section}
-                    isEditMode={isEditMode}
-                    onToggle={() => toggleSection(section.id)}
-                    animationDelay={`${350 + index * 50}ms`}
-                  >
-                    {renderSection(section)}
-                  </DraggableSection>
-                ))}
-              </div>
-            )}
+            <div className="space-y-6 md:space-y-8">
+              {sections.map((section, index) => (
+                <DraggableSection
+                  key={section.id}
+                  section={section}
+                  isEditMode={isEditMode}
+                  onToggle={() => toggleSection(section.id)}
+                  animationDelay={`${350 + index * 50}ms`}
+                >
+                  {renderSection(section)}
+                </DraggableSection>
+              ))}
+            </div>
           </SortableContext>
         </DndContext>
 

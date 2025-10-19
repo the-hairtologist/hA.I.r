@@ -53,22 +53,11 @@
   .h-screen-safe {
     height: 100vh;
     height: 100dvh;
-    height: calc(var(--vh, 1vh) * 100); /* Fallback for older browsers */
   }
   
   .min-h-screen-safe {
     min-height: 100vh;
     min-height: 100dvh;
-    min-height: calc(var(--vh, 1vh) * 100); /* Fallback for older browsers */
-  }
-  
-  /* iOS-specific viewport height fix for keyboard */
-  @supports (-webkit-touch-callout: none) {
-    body {
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      min-height: calc(var(--vh, 1vh) * 100);
-    }
   }
   
   /* Responsive text sizing based on device */
@@ -794,53 +783,6 @@ All colors MUST be HSL.
     }
   }
 
-  /* ============================================ */
-  /* MOBILE BOTTOM NAV OPTIMIZATIONS */
-  /* Consistent touch targets across all devices */
-  /* ============================================ */
-  
-  /* Ensure consistent button sizing on mobile */
-  @media (max-width: 1024px) {
-    nav[aria-label="Mobile navigation"] button {
-      /* Enforce minimum touch target */
-      min-height: 44px;
-      min-width: 44px;
-      /* Ensure consistent padding */
-      padding: 0.5rem 0.25rem;
-    }
-    
-    /* Consistent icon container sizing */
-    nav[aria-label="Mobile navigation"] .rounded-xl {
-      width: 44px !important;
-      height: 44px !important;
-      flex-shrink: 0;
-    }
-    
-    /* Consistent icon sizing */
-    nav[aria-label="Mobile navigation"] svg {
-      width: 20px !important;
-      height: 20px !important;
-    }
-    
-    /* Consistent label sizing */
-    nav[aria-label="Mobile navigation"] span {
-      font-size: 11px !important;
-      line-height: 1.2;
-    }
-  }
-  
-  /* Extra small devices - even more compact */
-  @media (max-width: 360px) {
-    nav[aria-label="Mobile navigation"] {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
-    
-    nav[aria-label="Mobile navigation"] button {
-      min-width: 56px;
-    }
-  }
-
   .window-controls {
     display: flex;
     gap: 6px;
@@ -1386,187 +1328,192 @@ All colors MUST be HSL.
   @media (max-width: 640px) {
     .show-mobile-flex { display: flex; }
   }
-}
 
-/* ============================================
-   PRINT STYLES - Professional Output
-   ============================================ */
-@media print {
-  /* Hide non-essential elements */
-  .sidebar,
-  .app-sidebar,
-  nav,
-  header nav,
-  footer,
-  button:not(.print-keep),
-  .fab,
-  .floating-action-button,
-  [data-sidebar],
-  [role="navigation"],
-  .offline-indicator,
-  .performance-overlay,
-  .cookie-consent,
-  .toast,
-  .sonner,
-  .dialog-overlay,
-  .dropdown-menu,
-  .popover,
-  .tooltip {
-    display: none !important;
-  }
+  /* ============================================
+     PRINT STYLES - Professional Output
+     ============================================ */
+  @media print {
+    /* Hide non-essential elements */
+    .sidebar,
+    .app-sidebar,
+    nav,
+    header nav,
+    footer,
+    button:not(.print-keep),
+    .fab,
+    .floating-action-button,
+    [data-sidebar],
+    [role="navigation"],
+    .offline-indicator,
+    .performance-overlay,
+    .cookie-consent,
+    .toast,
+    .sonner,
+    .dialog-overlay,
+    .dropdown-menu,
+    .popover,
+    .tooltip {
+      display: none !important;
+    }
 
-  /* Optimize layout for paper */
-  body {
-    background: white !important;
-    color: black !important;
-    margin: 0;
-    padding: 0;
-  }
+    /* Optimize layout for paper */
+    body {
+      background: white !important;
+      color: black !important;
+      margin: 0;
+      padding: 0;
+    }
 
-  .main-content,
-  main,
-  .container {
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 1cm !important;
-  }
+    .main-content,
+    main,
+    .container {
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 1cm !important;
+    }
 
-  /* Force light mode for print */
-  * {
-    background: white !important;
-    color: black !important;
-    border-color: #333 !important;
-  }
+    /* Force light mode for print */
+    * {
+      background: white !important;
+      color: black !important;
+      border-color: #333 !important;
+    }
 
-  /* Keep important colors for branding */
-  .print-color,
-  .logo,
-  .brand {
-    color: inherit !important;
-  }
+    /* Keep important colors for branding */
+    .print-color,
+    .logo,
+    .brand {
+      color: inherit !important;
+    }
 
-  /* Typography optimization */
-  h1 { font-size: 24pt !important; }
-  h2 { font-size: 18pt !important; }
-  h3 { font-size: 14pt !important; }
-  p, li, td { font-size: 11pt !important; line-height: 1.5 !important; }
+    /* Typography optimization */
+    h1 { font-size: 24pt !important; }
+    h2 { font-size: 18pt !important; }
+    h3 { font-size: 14pt !important; }
+    p, li, td { font-size: 11pt !important; line-height: 1.5 !important; }
 
-  /* Table optimization */
-  table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    page-break-inside: avoid;
-  }
+    /* Table optimization */
+    table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      page-break-inside: avoid;
+    }
 
-  th, td {
-    border: 1px solid #333 !important;
-    padding: 8px !important;
-    text-align: left !important;
-  }
+    th, td {
+      border: 1px solid #333 !important;
+      padding: 8px !important;
+      text-align: left !important;
+    }
 
-  th {
-    background: #f0f0f0 !important;
-    font-weight: bold !important;
-  }
+    th {
+      background: #f0f0f0 !important;
+      font-weight: bold !important;
+    }
 
-  /* Formula cards */
-  .formula-card,
-  .appointment-card,
-  .client-card {
-    border: 2px solid #333 !important;
-    padding: 12px !important;
-    margin-bottom: 12px !important;
-    page-break-inside: avoid;
-  }
+    /* Formula cards */
+    .formula-card,
+    .appointment-card,
+    .client-card {
+      border: 2px solid #333 !important;
+      padding: 12px !important;
+      margin-bottom: 12px !important;
+      page-break-inside: avoid;
+    }
 
-  /* Page breaks */
-  .page-break,
-  .print-page-break {
-    page-break-after: always;
-  }
+    /* Page breaks */
+    .page-break,
+    .print-page-break {
+      page-break-after: always;
+    }
 
-  .avoid-break,
-  .card,
-  .formula,
-  .appointment {
-    page-break-inside: avoid;
-  }
+    .avoid-break,
+    .card,
+    .formula,
+    .appointment {
+      page-break-inside: avoid;
+    }
 
-  /* Links */
-  a {
-    text-decoration: underline !important;
-    color: black !important;
-  }
+    /* Links */
+    a {
+      text-decoration: underline !important;
+      color: black !important;
+    }
 
-  a[href]:after {
-    content: " (" attr(href) ")";
-    font-size: 9pt;
-    font-style: italic;
-  }
+    a[href]:after {
+      content: " (" attr(href) ")";
+      font-size: 9pt;
+      font-style: italic;
+    }
 
-  /* QR codes and images */
-  img,
-  .qr-code {
-    max-width: 100% !important;
-    height: auto !important;
-    page-break-inside: avoid;
-  }
+    /* QR codes and images */
+    img,
+    .qr-code {
+      max-width: 100% !important;
+      height: auto !important;
+      page-break-inside: avoid;
+    }
 
-  /* Print-specific utilities */
-  .print-only {
-    display: block !important;
-  }
+    /* Headers and footers for pages */
+    @page {
+      margin: 1.5cm;
+    }
 
-  .no-print {
-    display: none !important;
-  }
+    /* Print-specific utilities */
+    .print-only {
+      display: block !important;
+    }
 
-  /* Invoice specific */
-  .invoice-header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #333 !important;
-  }
+    .no-print {
+      display: none !important;
+    }
 
-  .invoice-total {
-    font-size: 14pt !important;
-    font-weight: bold !important;
-    text-align: right;
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 2px solid #333 !important;
-  }
+    /* Invoice specific */
+    .invoice-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #333 !important;
+    }
 
-  /* Formula safety warnings */
-  .warning,
-  .alert,
-  .disclaimer {
-    border: 2px solid #333 !important;
-    padding: 10px !important;
-    margin: 10px 0 !important;
-    background: #f9f9f9 !important;
-  }
+    .invoice-total {
+      font-size: 14pt !important;
+      font-weight: bold !important;
+      text-align: right;
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 2px solid #333 !important;
+    }
 
-  /* Ensure badges/pills are visible */
-  .badge,
-  .pill,
-  .tag {
-    border: 1px solid #333 !important;
-    padding: 2px 6px !important;
-    border-radius: 3px !important;
-    display: inline-block !important;
-  }
+    /* Formula safety warnings */
+    .warning,
+    .alert,
+    .disclaimer {
+      border: 2px solid #333 !important;
+      padding: 10px !important;
+      margin: 10px 0 !important;
+      background: #f9f9f9 !important;
+    }
 
-  /* Legal pages optimization */
-  .prose {
-    max-width: 100% !important;
-  }
+    /* Ensure badges/pills are visible */
+    .badge,
+    .pill,
+    .tag {
+      border: 1px solid #333 !important;
+      padding: 2px 6px !important;
+      border-radius: 3px !important;
+      display: inline-block !important;
+    }
 
-  .prose h2 {
-    margin-top: 20px !important;
-    padding-top: 10px !important;
-    border-top: 1px solid #ccc !important;
+    /* Legal pages optimization */
+    .prose {
+      max-width: 100% !important;
+    }
+
+    .prose h2 {
+      margin-top: 20px !important;
+      padding-top: 10px !important;
+      border-top: 1px solid #ccc !important;
+    }
   }
 }
 
@@ -1672,80 +1619,4 @@ All colors MUST be HSL.
   .glass-brutal {
     @apply backdrop-blur-xl bg-background/80 border-[3px] border-foreground/20;
   }
-  
-  /* ============================================ */
-  /* MICRO-INTERACTIONS & PREMIUM POLISH */
-  /* ============================================ */
-  
-  /* Smooth hover scale */
-  .hover-scale {
-    @apply transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-[0.98];
-  }
-  
-  /* Button press effect */
-  .btn-press {
-    @apply transition-all duration-100 active:translate-y-[1px] active:shadow-inner;
-  }
-  
-  /* Hover lift with shadow */
-  .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
-  }
-  
-  /* Hover glow effect */
-  .hover-glow {
-    @apply transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--primary),0.4)];
-  }
-  
-  /* Link underline animation */
-  .link-animated {
-    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
-  }
-  
-  /* Smooth background fade */
-  .bg-fade {
-    @apply transition-colors duration-300 ease-in-out;
-  }
-  
-  /* Subtle bounce on hover */
-  .hover-bounce {
-    @apply transition-transform duration-300 hover:animate-bounce-gentle;
-  }
-  
-  /* Interactive icon pulse */
-  .icon-pulse {
-    @apply transition-all duration-300 hover:animate-pulse-subtle;
-  }
-  
-  /* Card hover effect */
-  .card-interactive {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/30 cursor-pointer;
-  }
-  
-  /* Smooth sidebar nav hover */
-  .nav-item-hover {
-    @apply transition-all duration-200 hover:bg-accent/50 hover:translate-x-1;
-  }
-  
-  /* Focus indicators (accessibility) */
-  .focus-highlight {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
-  }
-  
-  /* Shimmer loading effect */
-  .shimmer-loading {
-    @apply relative overflow-hidden after:absolute after:inset-0 after:-translate-x-full after:bg-gradient-to-r after:from-transparent after:via-white/20 after:to-transparent after:animate-[shimmer_2s_infinite];
-  }
-  
-  @keyframes shimmer {
-    100% {
-      transform: translateX(100%);
-    }
-  }
-}
-
-
-/* Print page margins - must be outside @layer */
-@page {
-  margin: 1.5cm;
 }

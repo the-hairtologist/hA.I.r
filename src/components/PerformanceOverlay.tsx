@@ -77,7 +77,7 @@ export const PerformanceOverlay = () => {
 
   return (
     <Card className={cn(
-      "fixed top-20 right-4 z-40 w-64",
+      "fixed top-4 right-4 z-50 w-64",
       "border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
       "bg-background/95 backdrop-blur-sm"
     )}>

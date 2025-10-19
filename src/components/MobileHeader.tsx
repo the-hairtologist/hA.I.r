@@ -16,8 +16,6 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     let ticking = false;
@@ -26,16 +24,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
-          
-          // Auto-hide logic: hide on scroll down, show on scroll up
-          if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            setHidden(true);
-          } else if (currentScrollY < lastScrollY) {
-            setHidden(false);
-          }
-          
           setScrolled(currentScrollY > 10);
-          setLastScrollY(currentScrollY);
           ticking = false;
         });
         ticking = true;
@@ -44,7 +33,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   const handleMenuClick = () => {
     haptic.tap();
@@ -56,8 +45,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
       className={cn(
         "lg:hidden sticky top-0 z-40 bg-background/95 backdrop-blur-md",
         "transition-all duration-300 ease-out",
-        scrolled && "border-b-[3px] border-foreground shadow-brutal-sm",
-        hidden && "-translate-y-full"
+        scrolled && "border-b-[3px] border-foreground shadow-brutal-sm"
       )}
       style={{
         paddingTop: 'env(safe-area-inset-top, 0px)'
@@ -65,7 +53,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
     >
       <div 
         className={cn(
-          "flex items-center justify-between px-4 h-14"
+          "flex items-center justify-between px-4 h-16"
         )}
       >
         {/* Left: Menu button with "More" indicator - ENHANCED for better discoverability */}
