@@ -296,14 +296,14 @@ export const AppRoutes = () => (
       element={<ProtectedRoute allowedRoles={['client', 'admin']}><ClientFormulas /></ProtectedRoute>}
     />
 
-    {/* Admin Routes */}
-    <Route
-      path="/admin/security"
-      element={<ProtectedRoute allowedRoles={['admin']}><SecurityDashboard /></ProtectedRoute>}
-    />
+    {/* Admin Routes - Security & Management */}
     <Route
       path="/access-codes"
       element={<ProtectedRoute allowedRoles={['admin']}><AccessCodes /></ProtectedRoute>}
+    />
+    <Route
+      path="/admin/security"
+      element={<ProtectedRoute allowedRoles={['admin']}><SecurityDashboard /></ProtectedRoute>}
     />
     <Route
       path="/app-directory"

@@ -9,6 +9,10 @@ import { ThreatTimeline } from "@/components/admin/ThreatTimeline";
 import { SecurityHealthScore } from "@/components/admin/SecurityHealthScore";
 import { toast } from "sonner";
 
+/**
+ * Security Dashboard - Real-time threat monitoring and audit logs
+ * Admin-only access with comprehensive security metrics
+ */
 export default function SecurityDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
