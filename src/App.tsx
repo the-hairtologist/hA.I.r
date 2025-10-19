@@ -151,13 +151,22 @@ const AnalyticsInitializer = () => {
 
 const App = () => {
   return (
-    <ErrorBoundary fallback={<div style={{padding: '20px'}}>Minimal Error Boundary Triggered</div>}>
+    <ErrorBoundary fallback={<div style={{padding: '20px'}}>Error Boundary Triggered</div>}>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <Routes>
-            {AppRoutes()}
-          </Routes>
-        </BrowserRouter>
+        <HelmetProvider>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <EnhancedAuthProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <OfflineIndicator />
+                <Routes>
+                  {AppRoutes()}
+                </Routes>
+              </TooltipProvider>
+            </EnhancedAuthProvider>
+          </BrowserRouter>
+        </HelmetProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
