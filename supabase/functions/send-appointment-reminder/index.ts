@@ -6,6 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -78,7 +79,7 @@ serve(async (req) => {
         });
 
         await resend.emails.send({
-          from: "hA.I.r <onboarding@resend.dev>",
+          from: FROM_EMAIL,
           to: [clientEmail],
           subject: "🎉 Appointment Reminder - Tomorrow!",
           html: `

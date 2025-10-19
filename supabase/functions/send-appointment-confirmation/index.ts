@@ -3,6 +3,7 @@ import { Resend } from "https://esm.sh/resend@2.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -154,7 +155,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const { error: emailError } = await resend.emails.send({
-      from: "hA.I.r <onboarding@resend.dev>",
+      from: FROM_EMAIL,
       to: [clientEmail],
       subject: `✨ Appointment Confirmed - ${formattedDate} at ${formattedTime}`,
       html: emailHtml,

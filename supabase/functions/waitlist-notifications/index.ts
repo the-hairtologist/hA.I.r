@@ -11,6 +11,7 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 interface WaitlistNotification {
   type: "new_waitlist" | "waitlist_available" | "waitlist_cancelled";
@@ -88,7 +89,7 @@ serve(async (req: Request) => {
       }
 
       await resend.emails.send({
-        from: "hA.I.r Notifications <onboarding@resend.dev>",
+        from: FROM_EMAIL,
         to: [notificationData.stylistEmail],
         subject: `🔔 New Waitlist Request from ${notificationData.clientName}`,
         html: `
@@ -125,7 +126,7 @@ serve(async (req: Request) => {
       }
 
       await resend.emails.send({
-        from: "hA.I.r Notifications <onboarding@resend.dev>",
+        from: FROM_EMAIL,
         to: [notificationData.stylistEmail],
         subject: `ℹ️ Waitlist Request Cancelled - ${notificationData.clientName}`,
         html: `

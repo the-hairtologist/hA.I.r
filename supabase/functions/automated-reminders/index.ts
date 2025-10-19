@@ -67,6 +67,7 @@ Deno.serve(async (req) => {
     );
 
     const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+    const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
     // Get appointments in the next 24-48 hours that haven't been reminded
     const now = new Date();
@@ -175,7 +176,7 @@ Deno.serve(async (req) => {
         `;
 
         const { error: emailError } = await resend.emails.send({
-          from: 'hA.I.r Appointments <onboarding@resend.dev>',
+          from: FROM_EMAIL,
           to: [clientEmail],
           subject: `Reminder: Your appointment tomorrow at ${formattedTime}`,
           html: emailHtml,

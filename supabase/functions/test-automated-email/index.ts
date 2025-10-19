@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,7 +22,7 @@ serve(async (req) => {
     }
 
     let emailContent = {
-      from: "hA.I.r Testing <onboarding@resend.dev>",
+      from: FROM_EMAIL,
       to: [recipient_email],
       subject: "",
       html: "",

@@ -1,7 +1,21 @@
 # Email Configuration Guide for hA.I.r
 
-## Current Status ⚠️
-Your app currently uses Resend's **sandbox domain** (`onboarding@resend.dev`) for all emails. This is fine for testing but has limitations for production:
+## Current Status ✅
+
+**Code Updated!** All 11 edge functions now support custom domain configuration via the `FROM_EMAIL` environment variable.
+
+**What works now:**
+- ✅ Automatic fallback to sandbox domain (`onboarding@resend.dev`) for testing
+- ✅ Production-ready custom domain support
+- ✅ Consistent sender address across all email types
+
+**What you need:** Configure your custom domain in Resend and add the FROM_EMAIL variable to use production email.
+
+---
+
+## Why Use a Custom Domain?
+
+Using Resend's sandbox domain has limitations:
 
 - **Limited deliverability** - May be flagged as spam
 - **No branding** - Emails come from "onboarding@resend.dev" instead of your domain
@@ -48,20 +62,24 @@ Value: v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
 - Check status at [Resend Domains](https://resend.com/domains)
 - Status should show **"Verified"** when ready
 
-### Step 4: Update Your App Configuration
+### Step 4: Configure FROM_EMAIL in Lovable Cloud
 
-Once your domain is verified, add the secret to your backend:
+Once your domain is verified in Resend:
 
-1. **Add the FROM_EMAIL secret** using this format:
-   ```
-   Your Brand <noreply@yourdomain.com>
-   ```
+1. Go to **Project Settings** in Lovable Cloud
+2. Navigate to **Environment Variables** or **Secrets**  
+3. Add new variable:
+   - **Name:** `FROM_EMAIL`
+   - **Value:** `Your Brand <noreply@yourdomain.com>`
    
-   Examples:
-   - `Salon Name <appointments@yoursalon.com>`
-   - `hA.I.r Notifications <notify@yourdomain.com>`
+**Example values:**
+```
+Salon Name <appointments@yoursalon.com>
+hA.I.r Notifications <notify@yourdomain.com>
+Team at [Business] <hello@yourdomain.com>
+```
 
-2. **All edge functions will automatically use this address** instead of the sandbox
+4. **Redeploy your edge functions** (they will automatically pick up the new value)
 
 ---
 
@@ -159,7 +177,37 @@ Consider using different addresses for different purposes:
 - **Support:** `support@yourdomain.com`
 - **Reminders:** `reminders@yourdomain.com`
 
-Update the `FROM_EMAIL` secret to match your preferred sender.
+Update the `FROM_EMAIL` variable to match your preferred sender.
+
+---
+
+## Code Changes Summary
+
+**Updated Functions (11 total):**
+1. auto-send-aftercare
+2. automated-appointment-followup
+3. automated-reminders
+4. process-email-sequences
+5. send-appointment-confirmation
+6. send-appointment-email
+7. send-appointment-reminder
+8. send-automated-emails
+9. send-rebooking-reminder
+10. test-automated-email
+11. waitlist-notifications
+
+**Implementation:**
+```typescript
+// Each function now uses:
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+
+// Then in email sending:
+await resend.emails.send({
+  from: FROM_EMAIL,
+  to: [recipientEmail],
+  // ...
+});
+```
 
 ---
 
@@ -211,11 +259,11 @@ Monitor usage at [Resend Dashboard](https://resend.com/dashboard)
 
 ## Next Steps
 
-1. ✅ **Review this guide**
+1. ✅ **Code updated** - All functions support custom domains
 2. ⏳ **Add your domain to Resend** ([Resend Domains](https://resend.com/domains))
 3. ⏳ **Configure DNS records** at your registrar
 4. ⏳ **Wait for verification** (24-48 hours)
-5. ⏳ **Add FROM_EMAIL secret** to your backend
-6. ✅ **Test email sending** with your custom domain
+5. ⏳ **Add FROM_EMAIL variable** in Project Settings
+6. ⏳ **Test email sending** with your custom domain
 
 **Questions?** Contact your development team or Resend support.

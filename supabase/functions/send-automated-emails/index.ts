@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -92,7 +93,7 @@ serve(async (req) => {
               : client.stylist_profiles;
 
             const emailResult = await resend.emails.send({
-              from: "hA.I.r <onboarding@resend.dev>",
+              from: FROM_EMAIL,
               to: [client.email],
               subject: `Happy Birthday ${client.full_name}! 🎂 Special Gift Inside`,
               html: generateBirthdayEmail(
@@ -177,7 +178,7 @@ serve(async (req) => {
           }
 
           const emailResult = await resend.emails.send({
-            from: "hA.I.r <onboarding@resend.dev>",
+            from: FROM_EMAIL,
             to: [clientProfile.email],
             subject: `How was your visit with ${stylistProfile?.full_name}? ⭐`,
             html: generateReviewEmail(
@@ -251,7 +252,7 @@ serve(async (req) => {
           }
 
           const emailResult = await resend.emails.send({
-            from: "hA.I.r <onboarding@resend.dev>",
+            from: FROM_EMAIL,
             to: [clientProfile.email],
             subject: `We missed you, ${clientProfile.full_name} - Let's reschedule! 💇`,
             html: generateCancellationEmail(

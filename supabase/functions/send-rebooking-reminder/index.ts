@@ -6,6 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 interface RebookingReminderData {
   clientName: string;
@@ -197,7 +198,7 @@ serve(async (req) => {
 
         // Send email reminder with stylist's customization
         const emailResult = await resend.emails.send({
-          from: `${businessName} via hA.I.r <onboarding@resend.dev>`,
+          from: FROM_EMAIL,
           to: [clientEmail],
           subject: replacePlaceholders(settings.rebooking_subject),
           html: `

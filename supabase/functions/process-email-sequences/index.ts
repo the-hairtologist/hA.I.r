@@ -10,6 +10,7 @@ const corsHeaders = {
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -137,7 +138,7 @@ serve(async (req) => {
 
         // Send email via Resend
         const { data: emailData, error: emailError } = await resend.emails.send({
-          from: 'hA.I.r <onboarding@resend.dev>',
+          from: FROM_EMAIL,
           to: [clientEmail],
           subject,
           html: body,
