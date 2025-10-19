@@ -90,6 +90,12 @@ export function useTour() {
 
   // Auto-start tour on page load if not completed
   useEffect(() => {
+    // Don't run tours on landing page or auth pages
+    const publicPages = ['/', '/auth', '/install'];
+    if (publicPages.includes(location.pathname)) {
+      return;
+    }
+
     const tour = getTourByPath(location.pathname);
     if (tour && shouldShowTour(tour.id)) {
       // Delay to ensure DOM elements are rendered
@@ -98,7 +104,7 @@ export function useTour() {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [location.pathname]);
+  }, [location.pathname, shouldShowTour, startTour]);
 
   return {
     isRunning,

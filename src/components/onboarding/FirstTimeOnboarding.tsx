@@ -51,6 +51,12 @@ export function FirstTimeOnboarding() {
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    // Don't show on landing page or auth pages
+    const currentPath = window.location.pathname;
+    if (currentPath === '/' || currentPath === '/auth' || currentPath === '/install') {
+      return;
+    }
+
     // Check if user has already completed onboarding
     const hasCompletedOnboarding = localStorage.getItem("onboarding_completed");
     const isFirstVisit = !localStorage.getItem("has_visited");
