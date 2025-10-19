@@ -39,8 +39,6 @@ export const useRealtimeSubscription = ({
   useEffect(() => {
     if (!enabled) return;
 
-    console.log(`[Hook] Setting up realtime for ${table}`);
-
     const unsubscribe = realtimeManager.subscribe(
       { table, event, filter },
       (payload) => {
@@ -49,7 +47,6 @@ export const useRealtimeSubscription = ({
     );
 
     return () => {
-      console.log(`[Hook] Cleaning up realtime for ${table}`);
       unsubscribe();
     };
   }, [table, event, filter, enabled]);

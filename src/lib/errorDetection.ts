@@ -165,6 +165,4 @@ export function initializeErrorDetection(): void {
       timestamp: new Date().toISOString(),
     });
   });
-
-  console.log('✅ Error Detection System initialized');
 }

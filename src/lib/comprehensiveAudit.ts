@@ -673,8 +673,6 @@ class ComprehensiveAuditSystem {
    * Run complete audit
    */
   async runCompleteAudit(): Promise<ComprehensiveAuditReport> {
-    console.log('🔍 Starting comprehensive audit...');
-
     const categoryResults = await Promise.all(
       this.categories.map(async (category) => {
         const results = await Promise.all(
@@ -813,7 +811,6 @@ export const comprehensiveAudit = new ComprehensiveAuditSystem();
 /**
  * Quick audit check
  */
-export async function runQuickAudit(): Promise<void> {
-  const report = await comprehensiveAudit.generateDetailedReport();
-  console.log(report);
+export async function runQuickAudit(): Promise<string> {
+  return await comprehensiveAudit.generateDetailedReport();
 }

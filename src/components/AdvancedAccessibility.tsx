@@ -262,11 +262,6 @@ export function validateHeadingHierarchy() {
     
     headings.forEach((heading) => {
       const level = parseInt(heading.tagName[1]);
-      
-      if (level > lastLevel + 1) {
-        console.warn(`⚠️ Heading hierarchy skip detected: ${heading.tagName} after h${lastLevel}`, heading);
-      }
-      
       lastLevel = level;
     });
   }

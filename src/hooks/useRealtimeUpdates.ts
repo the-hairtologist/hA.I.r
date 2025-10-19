@@ -20,8 +20,6 @@ export const useRealtimeUpdates = (
           table: table,
         },
         (payload) => {
-          console.log(`Realtime update on ${table}:`, payload);
-          
           // Show notifications for specific events
           if (payload.eventType === "INSERT") {
             if (table === "messages") {

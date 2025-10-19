@@ -144,7 +144,7 @@ export const dependencyValidator = new DependencyValidator();
 /**
  * Auto-register common modules to detect issues early
  */
-export function registerCoreModules(): void {
+export function registerCoreModules(): { valid: boolean; errors: string[] } {
   // Register key modules that actually exist
   dependencyValidator.registerModule('src/App.tsx', [
     'src/contexts/EnhancedAuthContext.tsx',
@@ -157,9 +157,5 @@ export function registerCoreModules(): void {
   ]);
 
   // Validate
-  const result = dependencyValidator.validate();
-  
-  if (!result.valid) {
-    console.warn('⚠️ Dependency validation warnings:', result.errors);
-  }
+  return dependencyValidator.validate();
 }

@@ -21,8 +21,6 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
   useEffect(() => {
     if (!stylistId) return;
 
-    console.log('[LiveBooking] Setting up realtime listener for stylist:', stylistId);
-
     const channel = supabase
       .channel(`appointments-${stylistId}`)
       .on(
@@ -34,8 +32,6 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
           filter: `stylist_id=eq.${stylistId}`,
         },
         async (payload) => {
-          console.log('[LiveBooking] New appointment detected:', payload);
-
           // Fetch full appointment details with client info
           const { data: appointment } = await supabase
             .from('appointments')
@@ -86,8 +82,6 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
         async (payload) => {
           // Check if status changed
           if (payload.old.status !== payload.new.status) {
-            console.log('[LiveBooking] Appointment status changed:', payload);
-
             const { data: appointment } = await supabase
               .from('appointments')
               .select(`
@@ -109,12 +103,9 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
           }
         }
       )
-      .subscribe((status) => {
-        console.log('[LiveBooking] Channel status:', status);
-      });
+      .subscribe();
 
     return () => {
-      console.log('[LiveBooking] Cleaning up realtime listener');
       supabase.removeChannel(channel);
     };
   }, [stylistId, onNewBooking, navigate]);

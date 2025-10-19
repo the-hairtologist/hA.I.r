@@ -169,7 +169,6 @@ export async function handleError(
     
     if (isModuleError) {
       // Log silently instead of showing toast
-      console.warn('Module load error (suppressed toast):', errorMessage);
       return appError;
     }
     

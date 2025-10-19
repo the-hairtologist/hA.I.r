@@ -63,8 +63,6 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = clientId ? `${clientId}/${fileName}` : `analysis/${fileName}`;
 
-      console.log('Uploading file to storage...', filePath);
-
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('hair-photos')
         .upload(filePath, selectedFile, {
@@ -81,8 +79,6 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
       const { data: { publicUrl } } = supabase.storage
         .from('hair-photos')
         .getPublicUrl(filePath);
-
-      console.log('File uploaded successfully:', publicUrl);
 
       // Analyze the photo
       const analysisResult = await analyzePhoto(publicUrl, clientId);

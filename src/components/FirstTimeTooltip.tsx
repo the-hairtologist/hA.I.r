@@ -48,9 +48,8 @@ export const FirstTimeTooltip = ({
 
         return () => clearTimeout(timer);
       }
-    } catch (error) {
+    } catch {
       // If localStorage is unavailable or JSON parsing fails, don't show tooltip
-      console.warn("FirstTimeTooltip: localStorage error", error);
     }
   }, [id, delayMs]);
 
@@ -63,9 +62,8 @@ export const FirstTimeTooltip = ({
       const seenTooltips = JSON.parse(localStorage.getItem("seenTooltips") || "{}");
       seenTooltips[id] = true;
       localStorage.setItem("seenTooltips", JSON.stringify(seenTooltips));
-    } catch (error) {
+    } catch {
       // If localStorage write fails (quota exceeded, etc.), gracefully fail
-      console.warn("FirstTimeTooltip: Failed to save to localStorage", error);
     }
   };
 
@@ -112,7 +110,7 @@ export const FirstTimeTooltip = ({
 export const resetAllTooltips = () => {
   try {
     localStorage.removeItem("seenTooltips");
-  } catch (error) {
-    console.warn("FirstTimeTooltip: Failed to reset tooltips", error);
+  } catch {
+    // Silent fail
   }
 };

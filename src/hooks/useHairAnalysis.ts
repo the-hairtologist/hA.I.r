@@ -22,8 +22,6 @@ export const useHairAnalysis = () => {
     setResult(null);
 
     try {
-      console.log('Starting hair photo analysis...', { imageUrl, clientId });
-
       const { data, error } = await supabase.functions.invoke('analyze-hair-photo', {
         body: { imageUrl, clientId }
       });
@@ -40,8 +38,6 @@ export const useHairAnalysis = () => {
       if (!data?.success) {
         throw new Error('Analysis failed - no data returned');
       }
-
-      console.log('Analysis completed successfully:', data);
 
       setResult({
         analysisId: data.analysisId,

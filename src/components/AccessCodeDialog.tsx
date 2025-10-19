@@ -33,7 +33,6 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
         
         // Exponential backoff
         const delay = Math.min(1000 * Math.pow(2, i), 5000);
-        console.warn(`Network error, retrying... (attempt ${i + 1}/${maxRetries})`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
@@ -57,7 +56,6 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
     }
 
     if (detectSQLInjection(sanitizedCode)) {
-      console.warn("Potential SQL injection attempt detected in access code");
       toast.error("Invalid access code format");
       return;
     }

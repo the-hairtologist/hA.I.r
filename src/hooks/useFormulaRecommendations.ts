@@ -30,8 +30,6 @@ export const useFormulaRecommendations = () => {
     setRecommendations(null);
 
     try {
-      console.log('Generating formula recommendations...', { clientId, stylistId });
-
       const { data, error } = await supabase.functions.invoke('generate-formula-recommendations', {
         body: { clientId, stylistId }
       });
@@ -48,8 +46,6 @@ export const useFormulaRecommendations = () => {
       if (!data?.success) {
         throw new Error('Failed to generate recommendations');
       }
-
-      console.log('Recommendations generated successfully:', data);
 
       setRecommendations(data.recommendations);
 

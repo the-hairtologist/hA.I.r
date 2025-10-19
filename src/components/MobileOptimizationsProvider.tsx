@@ -24,7 +24,6 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
       if (!supabaseUrl || !supabaseKey) {
-        console.warn('Credentials not available, skipping cache warmup');
         return;
       }
       
@@ -39,8 +38,8 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
       );
       
       logger.info('Cache warmed successfully');
-    } catch (error) {
-      console.warn('Cache warming failed (non-critical):', error);
+    } catch {
+      // Cache warming failed (non-critical)
     }
   };
 

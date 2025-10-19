@@ -127,12 +127,7 @@ export class PerformanceBudget {
   }
 
   static reportBudgetViolation(metric: string, actual: number, budget: number) {
-    console.warn(`⚠️ Performance Budget Violation: ${metric}`, {
-      actual,
-      budget,
-      overage: actual - budget,
-      percentage: ((actual / budget - 1) * 100).toFixed(1) + '%'
-    });
+    // Budget violation - handled by monitoring system
   }
 }
 
@@ -210,10 +205,6 @@ export function initializeAdvancedPerformance() {
   if (window.location.pathname.includes('dashboard')) {
     ResourceHintsManager.prefetchRoutes(['/clients', '/appointments', '/formulas']);
   }
-  
-  // Report adaptive settings
-  const settings = AdaptiveLoader.getOptimalSettings();
-  console.log('🎯 Adaptive Loading Settings:', settings);
   
   // Monitor performance budgets
   if ('PerformanceObserver' in window) {

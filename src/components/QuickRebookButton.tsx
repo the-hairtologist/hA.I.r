@@ -106,10 +106,6 @@ export const QuickRebookButton = ({
           }
         });
 
-        if (notifError) {
-          console.warn('Failed to send notification:', notifError);
-        }
-
         showCelebration("appointment-booked", `${clientName} rebooked for ${appointmentTime.toLocaleDateString()}`);
         haptic.success();
       } else {

@@ -251,8 +251,6 @@ export function initializeAdvancedSecurity() {
       }
     });
   }
-
-  console.log('🔒 Advanced Security Initialized');
 }
 
 // Export rate limiter instances for different use cases

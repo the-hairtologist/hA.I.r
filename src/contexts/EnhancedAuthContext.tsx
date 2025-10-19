@@ -109,7 +109,6 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const isValid = criticalRoles.every(role => verifiedRoles.includes(role));
       
       if (!isValid) {
-        console.warn("Role verification failed - forcing re-authentication");
         return false;
       }
 
@@ -277,7 +276,6 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const isValid = await verifyRoleIntegrity(state.user!.id, state.roles);
       if (!isValid) {
         // Force re-authentication if role verification fails
-        console.warn("Role integrity check failed - signing out for security");
         await signOut();
       }
     }, 5 * 60 * 1000); // 5 minutes

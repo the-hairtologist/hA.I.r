@@ -51,11 +51,10 @@ export function useAIAnalytics() {
           event.eventType === 'visual_analysis' ||
           event.eventType === 'prediction_viewed') {
         // Trigger background insight generation (non-blocking)
-        generateAutomatedInsights(user.id, event).catch(console.warn);
+        generateAutomatedInsights(user.id, event).catch(() => {});
       }
-    } catch (error) {
+    } catch {
       // Silently fail analytics - don't break user experience
-      console.warn('Analytics tracking failed:', error);
     }
   }, []);
 

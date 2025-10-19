@@ -42,11 +42,6 @@ function getRating(metric: string, value: number): 'good' | 'needs-improvement' 
  */
 async function sendToAnalytics(data: VitalsData) {
   try {
-    // Log to console in development
-    if (import.meta.env.DEV) {
-      console.log('📊 Core Web Vitals:', data);
-    }
-
     // Send to analytics
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'web_vitals', {
