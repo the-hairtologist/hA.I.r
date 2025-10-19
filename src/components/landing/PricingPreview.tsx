@@ -79,7 +79,7 @@ export const PricingPreview = () => {
           >
             {plan.popular && (
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-secondary text-secondary-foreground border-2 border-foreground px-4 py-1">
-                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                <Sparkles className="h-3 w-3 mr-1" />
                 Most Popular
               </Badge>
             )}

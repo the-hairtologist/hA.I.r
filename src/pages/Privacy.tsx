@@ -5,7 +5,7 @@ import { SEO } from "@/components/SEO";
 
 const Privacy = () => {
   return (
-    <div className="min-h-screen-safe bg-background">
+    <div className="min-h-screen bg-background">
       <SEO 
         title="Privacy Policy - Your Data Protection Rights"
         description="Learn how hA.I.r protects your personal information, handles data, and complies with GDPR and CCPA regulations. Full transparency on data collection and usage."

@@ -97,7 +97,7 @@ export const FirstTimeTooltip = ({
               className="h-6 w-6 p-0 hover:bg-foreground/10 flex-shrink-0"
               aria-label="Dismiss tip"
             >
-              <X className="h-5 w-5 sm:h-6 sm:w-6" />
+              <X className="h-4 w-4" />
             </Button>
           </div>
         </TooltipContent>

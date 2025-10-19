@@ -107,7 +107,7 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
 
         <div className="space-y-4">
           <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search by name or email..."
               value={searchTerm}
@@ -135,7 +135,7 @@ export const NewConversationDialog = ({ open, onOpenChange, userRole, onConversa
                 >
                   <Avatar>
                     <AvatarFallback>
-                      <User className="h-5 w-5 sm:h-6 sm:w-6" />
+                      <User className="h-4 w-4" />
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">

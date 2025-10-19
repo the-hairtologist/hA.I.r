@@ -56,7 +56,7 @@ export default function Install() {
 
   if (isInstalled) {
     return (
-      <div className="min-h-screen-safe flex items-center justify-center p-4 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10">
         <Card className="max-w-md w-full">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
@@ -82,7 +82,7 @@ export default function Install() {
   }
 
   return (
-    <div className="min-h-screen-safe p-4 md:p-8 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10">
+    <div className="min-h-screen p-4 md:p-8 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-4">

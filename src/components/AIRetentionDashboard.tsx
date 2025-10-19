@@ -148,7 +148,7 @@ export const AIRetentionDashboard = () => {
               <CardDescription>AI-detected churn risk</CardDescription>
             </div>
             <Button onClick={sendRetentionMessages} disabled={loading || atRiskCount === 0} size="sm" className="w-full sm:w-auto">
-              <Mail className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+              <Mail className="h-4 w-4 mr-2" />
               <span className="text-xs sm:text-sm">Send Messages</span>
             </Button>
           </div>

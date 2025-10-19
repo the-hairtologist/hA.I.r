@@ -174,11 +174,11 @@ export const SmartRebookReminder = () => {
                 </div>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <Clock className="h-3 w-3" />
                     <span>{opportunity.daysSinceLastVisit} days since last visit</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <Calendar className="h-3 w-3" />
                     <span>Last: {format(opportunity.lastAppointmentDate, "MMM d")}</span>
                   </div>
                 </div>

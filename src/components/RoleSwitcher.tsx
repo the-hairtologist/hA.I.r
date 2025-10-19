@@ -59,10 +59,10 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
                 className="gap-1.5 md:gap-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 px-2 md:px-3 transition-all"
               >
                 <div className={`p-1 rounded ${viewConfig[currentView].gradient}`}>
-                  <CurrentIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
+                  <CurrentIcon className="h-3 w-3 text-primary-foreground" />
                 </div>
                 <span className="hidden sm:inline text-xs font-medium">{viewConfig[currentView].label}</span>
-                <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 opacity-50" />
+                <ChevronDown className="h-3 w-3 opacity-50" />
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
@@ -84,7 +84,7 @@ export function RoleSwitcher({ onViewChange, currentView }: RoleSwitcherProps) {
                   className={`cursor-pointer transition-colors ${currentView === view ? "bg-primary/10" : "hover:bg-muted"}`}
                 >
                   <div className={`p-1 rounded mr-2 ${viewConfig[view].gradient}`}>
-                    <ViewIcon className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
+                    <ViewIcon className="h-3 w-3 text-primary-foreground" />
                   </div>
                   <span className="text-sm">{viewConfig[view].label}</span>
                   {currentView === view && (

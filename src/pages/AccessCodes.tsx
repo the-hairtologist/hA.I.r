@@ -99,7 +99,7 @@ export default function AccessCodes() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-xs sm:text-sm">Total Codes</CardTitle>
-              <Key className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
+              <Key className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-xl sm:text-2xl md:text-3xl font-bold">{codes.length}</div>
@@ -109,7 +109,7 @@ export default function AccessCodes() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-xs sm:text-sm">Used Codes</CardTitle>
-              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" />
+              <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
               <div className="text-xl sm:text-2xl md:text-3xl font-bold">{usedCount}</div>
@@ -119,7 +119,7 @@ export default function AccessCodes() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-xs sm:text-sm">Available</CardTitle>
-              <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-orange-500" />
+              <XCircle className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
               <div className="text-xl sm:text-2xl md:text-3xl font-bold">{availableCount}</div>
@@ -177,7 +177,7 @@ export default function AccessCodes() {
                     onClick={() => copyToClipboard(codeItem.code)}
                     disabled={!!codeItem.used_by}
                   >
-                    <Copy className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <Copy className="h-4 w-4" />
                   </Button>
                 </div>
               ))}

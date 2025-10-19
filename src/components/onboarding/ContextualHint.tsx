@@ -79,7 +79,7 @@ export const ContextualHint = ({
           className="flex-shrink-0 h-6 w-6 -mt-1 -mr-1"
           onClick={handleDismiss}
         >
-          <X className="h-4 w-4 sm:h-5 sm:w-5" />
+          <X className="h-3 w-3" />
         </Button>
       </div>
 

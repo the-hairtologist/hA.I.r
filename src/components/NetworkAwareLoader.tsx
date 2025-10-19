@@ -7,7 +7,7 @@ interface NetworkAwareLoaderProps {
   timeout?: number;
 }
 
-export const NetworkAwareLoader = ({ children, timeout = 20000 }: NetworkAwareLoaderProps) => {
+export const NetworkAwareLoader = ({ children, timeout = 15000 }: NetworkAwareLoaderProps) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showTimeout, setShowTimeout] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +74,7 @@ export const NetworkAwareLoader = ({ children, timeout = 20000 }: NetworkAwareLo
             onClick={handleReload}
             className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
           >
-            <RefreshCw className="inline h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+            <RefreshCw className="inline h-4 w-4 mr-2" />
             Try Again
           </button>
         </div>
@@ -87,9 +87,9 @@ export const NetworkAwareLoader = ({ children, timeout = 20000 }: NetworkAwareLo
       ? "Starting up..." 
       : loadProgress < 60 
       ? "Loading resources..." 
-      : loadProgress < 85 
-      ? "Almost there..." 
-      : "Just a moment...";
+      : loadProgress < 90 
+      ? "Almost ready..." 
+      : "Finishing up...";
 
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
@@ -114,7 +114,7 @@ export const NetworkAwareLoader = ({ children, timeout = 20000 }: NetworkAwareLo
               onClick={handleReload}
               className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
             >
-              <RefreshCw className="inline h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+              <RefreshCw className="inline h-4 w-4 mr-2" />
               Reload
             </button>
             <button

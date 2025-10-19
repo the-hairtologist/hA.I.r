@@ -225,12 +225,12 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
                     Total: {result.total}
                   </Badge>
                   <Badge className="bg-success text-on-surface-primary">
-                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                    <CheckCircle className="h-3 w-3 mr-1" />
                     Success: {result.success}
                   </Badge>
                   {result.failed > 0 && (
                     <Badge variant="destructive">
-                      <XCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                      <XCircle className="h-3 w-3 mr-1" />
                       Failed: {result.failed}
                     </Badge>
                   )}
@@ -239,7 +239,7 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
                 {result.errors.length > 0 && (
                   <div className="space-y-1">
                     <p className="text-xs font-medium flex items-center gap-1">
-                      <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <AlertCircle className="h-3 w-3" />
                       Errors:
                     </p>
                     <div className="max-h-[150px] overflow-y-auto space-y-1">

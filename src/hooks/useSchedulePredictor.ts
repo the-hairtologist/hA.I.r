@@ -30,15 +30,6 @@ export function useSchedulePredictor() {
   const predictNextAppointment = async (context: ClientContext) => {
     setPredicting(true);
     
-    // Pre-check: Skip AI call if insufficient data
-    if (!context.serviceHistory || context.serviceHistory.length < 3) {
-      toast.info('Building your pattern... 📊', {
-        description: 'Book 3+ appointments for AI predictions!'
-      });
-      setPredicting(false);
-      return null;
-    }
-    
     try {
       logger.info('Predicting appointment schedule', 'SchedulePredictor', { clientId: context.clientId });
 
@@ -57,9 +48,7 @@ export function useSchedulePredictor() {
       return null;
     } catch (error) {
       logger.error('Schedule prediction failed', error);
-      toast.error('All set ✅ — Take a breath, hA.I.r\'s got it.', {
-        description: 'We need a bit more history to predict. Book 3+ appointments first!'
-      });
+      toast.error('Failed to predict schedule');
       return null;
     } finally {
       setPredicting(false);

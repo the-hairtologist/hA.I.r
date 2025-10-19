@@ -43,7 +43,7 @@ export const TrustBadge = ({ type, className }: TrustBadgeProps) => {
         className
       )}
     >
-      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+      <Icon className="h-3 w-3" />
       {badge.text}
     </Badge>
   );

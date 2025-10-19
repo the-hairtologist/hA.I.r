@@ -116,7 +116,7 @@ export function NextAppointmentWidget() {
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-xs sm:text-sm">
-            <Clock className="h-5 w-5 text-muted-foreground" />
+            <Clock className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">{format(aptDate, "EEEE, MMMM d 'at' h:mm a")}</span>
           </div>
           
@@ -125,7 +125,7 @@ export function NextAppointmentWidget() {
           </div>
 
           <div className="flex items-center gap-2 text-xs sm:text-sm">
-            <User className="h-5 w-5 text-muted-foreground" />
+            <User className="h-4 w-4 text-muted-foreground" />
             <span>{appointment.stylist_name}</span>
           </div>
 
@@ -153,7 +153,7 @@ export function NextAppointmentWidget() {
             variant="default"
             className="flex-1"
           >
-            <MessageSquare className="h-5 w-5 mr-1" />
+            <MessageSquare className="h-4 w-4 mr-1" />
             Message Stylist
           </Button>
         </div>

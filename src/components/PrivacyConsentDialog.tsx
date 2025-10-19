@@ -148,7 +148,7 @@ export const PrivacyConsentDialog = ({
           {/* What we'll use it for */}
           <div className="space-y-2">
             <h4 className="font-semibold text-sm flex items-center gap-2">
-              <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+              <Shield className="h-4 w-4 text-primary" />
               How we'll use {type === 'both' ? 'these features' : 'this'}:
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
@@ -164,7 +164,7 @@ export const PrivacyConsentDialog = ({
           {/* Privacy protection */}
           <div className="space-y-2">
             <h4 className="font-semibold text-sm flex items-center gap-2">
-              <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
+              <Shield className="h-4 w-4 text-success" />
               Your privacy is protected:
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
@@ -180,7 +180,7 @@ export const PrivacyConsentDialog = ({
           {/* Privacy notice */}
           <div className="p-3 rounded-lg bg-muted border border-border">
             <div className="flex gap-2">
-              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground shrink-0 mt-0.5" />
+              <AlertCircle className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
               <div className="text-xs text-muted-foreground">
                 <p>
                   Your browser will ask for permission separately. We'll only access {type === 'both' ? 'your camera and microphone' : `your ${type}`} when you explicitly use {type === 'both' ? 'these features' : 'this feature'}.

@@ -69,13 +69,13 @@ export const Breadcrumbs = () => {
             to="/dashboard"
             className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           >
-            <Home className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Home className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Home</span>
           </Link>
         </li>
         {breadcrumbs.map(({ path, label, isLast }) => (
           <li key={path} className="flex items-center gap-2">
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
             {isLast ? (
               <span className="font-medium text-foreground">{label}</span>
             ) : (

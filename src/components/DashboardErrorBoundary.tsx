@@ -91,7 +91,7 @@ export class DashboardErrorBoundary extends Component<Props, State> {
                   onClick={this.handleReset}
                   className="flex-1"
                 >
-                  <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                  <RefreshCw className="h-4 w-4 mr-2" />
                   Refresh Page
                 </Button>
                 <Button 

@@ -34,7 +34,7 @@ const TimeoutFallback = ({ onRetry, connectionSpeed }: { onRetry: () => void; co
 
 export const TimeoutGuard = ({ 
   children, 
-  timeout = 20000, // Increased from 15s to 20s for mobile
+  timeout = 15000,
   fallbackMessage = "Getting things ready..."
 }: TimeoutGuardProps) => {
   const [showTimeout, setShowTimeout] = useState(false);

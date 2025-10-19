@@ -45,7 +45,7 @@ const StylistProfile = () => {
       // Use safe public view to prevent exposure of sensitive business data
       // View excludes: commission_rate, color_line, buffer_time_minutes, weekly_schedule
       const { data, error } = await supabase
-        .from("public_stylist_directory")
+        .from("public_stylist_profiles_safe")
         .select("*")
         .eq("id", stylistId)
         .maybeSingle();
@@ -68,7 +68,7 @@ const StylistProfile = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center min-h-screen-safe">
+        <div className="flex items-center justify-center min-h-screen">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       </DashboardLayout>

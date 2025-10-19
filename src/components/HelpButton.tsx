@@ -80,7 +80,7 @@ export const HelpButton = () => {
         variant="outline"
         size="icon"
         onClick={handleOpen}
-        className="fixed bottom-36 left-6 h-14 w-14 rounded-full brutal-border brutal-shadow-xs brutal-hover z-fixed bg-primary text-on-surface-primary lg:bottom-6 lg:left-auto lg:right-20 touch-manipulation active:scale-95"
+        className="fixed bottom-36 left-6 h-14 w-14 rounded-full brutal-border brutal-shadow-xs brutal-hover z-50 bg-primary text-on-surface-primary lg:bottom-6 lg:left-auto lg:right-20 touch-manipulation active:scale-95"
         aria-label="Help & Support"
       >
         <HelpCircle className="h-6 w-6" />
@@ -97,29 +97,29 @@ export const HelpButton = () => {
 
           <Tabs defaultValue="articles" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="articles" className="gap-1 min-h-[44px]">
-                <BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
-                <span className="text-xs sm:text-sm">Articles</span>
+              <TabsTrigger value="articles" className="gap-1">
+                <BookOpen className="h-4 w-4" />
+                Articles
               </TabsTrigger>
-              <TabsTrigger value="videos" className="gap-1 min-h-[44px]">
-                <Video className="h-5 w-5 sm:h-6 sm:w-6" />
-                <span className="text-xs sm:text-sm">Videos</span>
+              <TabsTrigger value="videos" className="gap-1">
+                <Video className="h-4 w-4" />
+                Videos
               </TabsTrigger>
-              <TabsTrigger value="contact" className="gap-1 min-h-[44px]">
-                <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6" />
-                <span className="text-xs sm:text-sm">Contact</span>
+              <TabsTrigger value="contact" className="gap-1">
+                <MessageSquare className="h-4 w-4" />
+                Contact
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="articles" className="space-y-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search help articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 min-h-[44px]"
+                  className="pl-10"
                 />
               </div>
 
@@ -142,14 +142,14 @@ export const HelpButton = () => {
                       <CardContent className="p-4">
                         <div className="space-y-2">
                           <div className="flex items-start justify-between">
-                            <h4 className="font-semibold text-sm sm:text-base">{article.title}</h4>
-                            <ExternalLink className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground flex-shrink-0" />
+                            <h4 className="font-semibold text-sm">{article.title}</h4>
+                            <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                           </div>
-                          <p className="text-xs sm:text-sm text-muted-foreground">
+                          <p className="text-xs text-muted-foreground">
                             {article.description}
                           </p>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs sm:text-sm text-primary font-medium">
+                            <span className="text-xs text-primary font-medium">
                               {article.category}
                             </span>
                           </div>
@@ -190,7 +190,7 @@ export const HelpButton = () => {
                           // Chat widget integration point
                           haptic.tap();
                         }}
-                        className="border-[2px] border-foreground min-h-[44px]"
+                        className="border-[2px] border-foreground"
                       >
                         Start Chat
                       </Button>

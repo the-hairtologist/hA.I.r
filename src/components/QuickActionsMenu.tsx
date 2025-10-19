@@ -130,33 +130,33 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
         {/* Appointment Actions */}
         {type === "appointment" && (
           <>
-            <ContextMenuItem onClick={() => handleAction("view")} className="min-h-[44px]">
-              <Calendar className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("view")}>
+              <Calendar className="mr-2 h-4 w-4" />
               View Details
               <ContextMenuShortcut>⌘V</ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => handleAction("edit")} className="min-h-[44px]">
-              <Edit className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("edit")}>
+              <Edit className="mr-2 h-4 w-4" />
               Edit Appointment
               <ContextMenuShortcut>⌘E</ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => handleAction("reschedule")} className="min-h-[44px]">
-              <Clock className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("reschedule")}>
+              <Clock className="mr-2 h-4 w-4" />
               Reschedule
               <ContextMenuShortcut>⌘R</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuSeparator />
-            <ContextMenuItem onClick={() => handleAction("complete")} className="min-h-[44px]">
-              <CheckCircle className="mr-2 h-5 w-5 sm:h-6 sm:w-6 text-success" />
+            <ContextMenuItem onClick={() => handleAction("complete")}>
+              <CheckCircle className="mr-2 h-4 w-4 text-success" />
               Mark as Completed
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => handleAction("cancel")} className="min-h-[44px]">
-              <XCircle className="mr-2 h-5 w-5 sm:h-6 sm:w-6 text-destructive" />
+            <ContextMenuItem onClick={() => handleAction("cancel")}>
+              <XCircle className="mr-2 h-4 w-4 text-destructive" />
               Cancel Appointment
             </ContextMenuItem>
             <ContextMenuSeparator />
-            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive min-h-[44px]">
-              <Trash2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive">
+              <Trash2 className="mr-2 h-4 w-4" />
               Delete
             </ContextMenuItem>
           </>
@@ -165,36 +165,36 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
         {/* Client Actions */}
         {type === "client" && (
           <>
-            <ContextMenuItem onClick={() => handleAction("view")} className="min-h-[44px]">
-              <User className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("view")}>
+              <User className="mr-2 h-4 w-4" />
               View Profile
               <ContextMenuShortcut>⌘V</ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => handleAction("edit")} className="min-h-[44px]">
-              <Edit className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("edit")}>
+              <Edit className="mr-2 h-4 w-4" />
               Edit Client
               <ContextMenuShortcut>⌘E</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuSeparator />
             <ContextMenuSub>
-              <ContextMenuSubTrigger className="min-h-[44px]">
-                <MoreHorizontal className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+              <ContextMenuSubTrigger>
+                <MoreHorizontal className="mr-2 h-4 w-4" />
                 Quick Contact
               </ContextMenuSubTrigger>
               <ContextMenuSubContent>
-                <ContextMenuItem onClick={() => handleAction("email")} className="min-h-[44px]">
-                  <Mail className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                <ContextMenuItem onClick={() => handleAction("email")}>
+                  <Mail className="mr-2 h-4 w-4" />
                   Send Email
                 </ContextMenuItem>
-                <ContextMenuItem onClick={() => handleAction("call")} className="min-h-[44px]">
-                  <Phone className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                <ContextMenuItem onClick={() => handleAction("call")}>
+                  <Phone className="mr-2 h-4 w-4" />
                   Call Client
                 </ContextMenuItem>
               </ContextMenuSubContent>
             </ContextMenuSub>
             <ContextMenuSeparator />
-            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive min-h-[44px]">
-              <Trash2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive">
+              <Trash2 className="mr-2 h-4 w-4" />
               Delete Client
             </ContextMenuItem>
           </>
@@ -203,18 +203,18 @@ export function QuickActionsMenu({ children, type, data, onAction }: QuickAction
         {/* Task Actions */}
         {type === "task" && (
           <>
-            <ContextMenuItem onClick={() => handleAction("complete")} className="min-h-[44px]">
-              <CheckCircle className="mr-2 h-5 w-5 sm:h-6 sm:w-6 text-success" />
+            <ContextMenuItem onClick={() => handleAction("complete")}>
+              <CheckCircle className="mr-2 h-4 w-4 text-success" />
               Mark as Done
               <ContextMenuShortcut>⌘D</ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => handleAction("edit")} className="min-h-[44px]">
-              <Edit className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("edit")}>
+              <Edit className="mr-2 h-4 w-4" />
               Edit Task
             </ContextMenuItem>
             <ContextMenuSeparator />
-            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive min-h-[44px]">
-              <Trash2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <ContextMenuItem onClick={() => handleAction("delete")} className="text-destructive">
+              <Trash2 className="mr-2 h-4 w-4" />
               Delete Task
             </ContextMenuItem>
           </>

@@ -164,7 +164,7 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
                   <div className="space-y-2">
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <Calendar className="h-3 w-3" />
                         {score.days_since_last_visit} days since visit
                       </span>
                       <span className={`font-semibold ${getScoreColor(score.retention_score)}`}>

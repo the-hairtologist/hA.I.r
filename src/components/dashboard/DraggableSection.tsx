@@ -62,7 +62,7 @@ export function DraggableSection({
               className="cursor-grab active:cursor-grabbing touch-none p-1 rounded hover:bg-accent/50 transition-all hover:scale-105 active:scale-95"
               aria-label="Drag to reorder"
             >
-              <GripVertical className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+              <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
             <span className="text-[11px] font-pixel font-black text-foreground uppercase tracking-wider flex-1">
               {section.title}
@@ -79,9 +79,9 @@ export function DraggableSection({
               title={section.enabled ? "Click to hide this section" : "Click to show this section"}
             >
               {section.enabled ? (
-                <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <Eye className="h-3.5 w-3.5 text-primary" />
               ) : (
-                <EyeOff className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+                <EyeOff className="h-3.5 w-3.5 text-muted-foreground" />
               )}
             </button>
           </div>

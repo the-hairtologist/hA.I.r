@@ -23,12 +23,12 @@ export default {
     },
     screens: {
       'xxs': '320px',  // Extreme small screens (very old devices)
-      'xs': '360px',   // Extra small screens (Galaxy S21, small modern phones)
-      'sm': '640px',   // Small tablets and large phones
-      'md': '768px',   // Tablets
-      'lg': '1024px',  // Small laptops
-      'xl': '1280px',  // Desktops
-      '2xl': '1536px', // Large desktops
+      'xs': '360px',   // Extra small screens (small modern phones)
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
     },
     extend: {
       fontFamily: {
@@ -217,20 +217,6 @@ export default {
         "bounce-attention": "bounce-attention 5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
         "glow-soft": "glow-soft 3s ease-in-out infinite",
         "glow-prominent": "glow-prominent 2.5s ease-in-out infinite",
-      },
-      // Safe area spacing utilities for iOS notch & Android punch-holes
-      spacing: {
-        'safe-top': 'env(safe-area-inset-top)',
-        'safe-bottom': 'env(safe-area-inset-bottom)',
-        'safe-left': 'env(safe-area-inset-left)',
-        'safe-right': 'env(safe-area-inset-right)',
-      },
-      // Viewport height utilities (mobile browser URL bar fix)
-      height: {
-        'screen-safe': 'calc(var(--vh, 1vh) * 100)',
-      },
-      minHeight: {
-        'screen-safe': 'calc(var(--vh, 1vh) * 100)',
       },
     },
   },

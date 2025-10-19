@@ -84,14 +84,14 @@ export function PWAInstallPrompt() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-fixed animate-slide-up">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 animate-slide-up">
       <Card className="p-4 shadow-xl border-2 border-primary/20 bg-gradient-to-br from-background to-primary/5">
         <button
           onClick={handleDismiss}
           className="absolute top-2 right-2 p-1 hover:bg-muted rounded-full transition-colors"
           aria-label="Dismiss"
         >
-          <X className="h-5 w-5 sm:h-6 sm:w-6" />
+          <X className="h-4 w-4" />
         </button>
         
         <div className="flex gap-3">
@@ -115,7 +115,7 @@ export function PWAInstallPrompt() {
                 size="sm"
                 className="flex-1"
               >
-                <Download className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
+                <Download className="h-3 w-3 mr-1" />
                 Install
               </Button>
               <Button

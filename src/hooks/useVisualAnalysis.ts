@@ -54,9 +54,7 @@ export function useVisualAnalysis() {
       return null;
     } catch (error) {
       logger.error('Visual analysis failed', error);
-      toast.error('Our bad 🙏 — Try that again?', {
-        description: 'Quick tip: Upload photos in natural light for best results 💡'
-      });
+      toast.error('Failed to analyze photo');
       return null;
     } finally {
       setAnalyzing(false);

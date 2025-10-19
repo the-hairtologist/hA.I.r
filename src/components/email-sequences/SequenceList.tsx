@@ -242,7 +242,7 @@ export const SequenceList = () => {
                     <h3 className="font-bold text-lg">{sequence.name}</h3>
                     {sequence.is_global_template && (
                       <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                        <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                        <Sparkles className="h-3 w-3 mr-1" />
                         Global
                       </Badge>
                     )}

@@ -272,7 +272,7 @@ const Knowledge = () => {
   const featuredArticles = filteredArticles.filter(a => a.featured);
 
   return (
-    <div className="min-h-screen-safe bg-gradient-to-br from-primary/10 via-background to-accent/10">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <PageHeader
         title="Knowledge Base"
         icon={<BookOpen className="h-6 w-6" />}

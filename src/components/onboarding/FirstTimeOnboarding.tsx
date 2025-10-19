@@ -153,16 +153,16 @@ export function FirstTimeOnboarding() {
                 >
                   <div
                     className={cn(
-                      "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-colors",
+                      "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors",
                       isCurrent && "bg-primary text-primary-foreground",
                       isCompleted && "bg-green-500 text-white",
                       !isCurrent && !isCompleted && "bg-muted"
                     )}
                   >
                     {isCompleted ? (
-                      <CheckCircle2 className="h-6 w-6" />
+                      <CheckCircle2 className="h-5 w-5" />
                     ) : (
-                      <StepIcon className="h-6 w-6" />
+                      <StepIcon className="h-5 w-5" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -181,7 +181,7 @@ export function FirstTimeOnboarding() {
           {/* Current Step Details */}
           <div className="bg-muted/50 p-4 rounded-lg border">
             <div className="flex items-start gap-3">
-              <Icon className="h-10 w-10 text-primary flex-shrink-0 mt-1" />
+              <Icon className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-semibold mb-1">{currentStepData.title}</h3>
                 <p className="text-sm text-muted-foreground">

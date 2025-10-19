@@ -111,12 +111,12 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
           >
             {loading ? (
               <>
-                <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 animate-spin" />
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Analyzing...
               </>
             ) : (
               <>
-                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                <Sparkles className="h-4 w-4 mr-2" />
                 Analyze Portfolio
               </>
             )}
@@ -127,7 +127,7 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
       {analysis && (
         <CardContent>
           <Alert className="mb-4 border-primary/20 bg-primary/5">
-            <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
+            <Sparkles className="h-4 w-4" />
             <AlertDescription>
               {photosAnalyzed > 0 
                 ? `Analyzed ${photosAnalyzed} photos from your portfolio using Gemini 2.5 Pro`
@@ -144,19 +144,19 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
           {photosAnalyzed > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6 pt-6 border-t">
               <div className="flex items-center gap-2 text-sm">
-                <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                <span className="text-muted-foreground">Trends Detected</span>
+                <TrendingUp className="h-4 w-4 text-primary" />
+                <span className="text-muted-foreground">Growth Tips</span>
               </div>
-              <div className="flex items-start gap-2 text-sm">
-                <Target className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                <span className="text-muted-foreground">Recommendations</span>
+              <div className="flex items-center gap-2 text-sm">
+                <Target className="h-4 w-4 text-primary" />
+                <span className="text-muted-foreground">Style Focus</span>
               </div>
-              <div className="flex items-start gap-2 text-sm">
-                <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                <span className="text-muted-foreground">Optimizations</span>
+              <div className="flex items-center gap-2 text-sm">
+                <Lightbulb className="h-4 w-4 text-primary" />
+                <span className="text-muted-foreground">Marketing Ideas</span>
               </div>
-              <div className="flex items-start gap-2 text-sm">
-                <Award className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+              <div className="flex items-center gap-2 text-sm">
+                <Award className="h-4 w-4 text-primary" />
                 <span className="text-muted-foreground">Showcase Pieces</span>
               </div>
             </div>

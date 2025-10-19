@@ -362,7 +362,7 @@ export const MobileNavCustomizer = ({ userRole }: MobileNavCustomizerProps) => {
             onClick={handleReset}
             className="gap-2"
           >
-            <RotateCcw className="h-5 w-5 sm:h-6 sm:w-6" />
+            <RotateCcw className="h-4 w-4" />
             Reset
           </Button>
         </div>

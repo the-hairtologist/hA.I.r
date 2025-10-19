@@ -210,14 +210,12 @@ export const QuickAppointmentDialog = ({
         // Don't block success if SMS fails
       }
 
-      toast.success('Booked! ✅ — Confirmation sent to client 📧');
+      toast.success("Appointment created successfully!");
       onOpenChange(false);
       onSuccess?.();
     } catch (error: any) {
       console.error("Error creating appointment:", error);
-      toast.error("Oops! 😅 — Let's try that again", {
-        description: error.message || "Check your connection and retry"
-      });
+      toast.error(error.message || "Failed to create appointment");
     } finally {
       setLoading(false);
     }
@@ -238,8 +236,8 @@ export const QuickAppointmentDialog = ({
         <div className="space-y-4 py-4">
           {clients.length === 0 && (
             <Alert>
-              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-              <AlertDescription className="text-xs sm:text-sm">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
                 No clients found. Please add clients to your list first.
               </AlertDescription>
             </Alert>
@@ -247,8 +245,8 @@ export const QuickAppointmentDialog = ({
 
           {services.length === 0 && (
             <Alert>
-              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-              <AlertDescription className="text-xs sm:text-sm">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
                 No services found. Please add services to your list first.
               </AlertDescription>
             </Alert>
@@ -256,8 +254,8 @@ export const QuickAppointmentDialog = ({
 
           {hasConflict && (
             <Alert variant="destructive">
-              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-              <AlertDescription className="text-xs sm:text-sm">{conflictMessage}</AlertDescription>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{conflictMessage}</AlertDescription>
             </Alert>
           )}
 
@@ -318,22 +316,20 @@ export const QuickAppointmentDialog = ({
               placeholder="Add any special notes or requests..."
               rows={3}
               maxLength={500}
-              className="min-h-[88px]"
             />
-            <p className="text-xs sm:text-sm text-muted-foreground">{notes.length}/500 characters</p>
+            <p className="text-xs text-muted-foreground">{notes.length}/500 characters</p>
           </div>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading} className="min-h-[44px]">
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
             Cancel
           </Button>
-        <Button 
-          onClick={handleSubmit} 
-          disabled={loading || hasConflict || clients.length === 0 || services.length === 0}
-          className="min-h-[44px]"
-        >
-            {loading && <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />}
+          <Button 
+            onClick={handleSubmit} 
+            disabled={loading || hasConflict || clients.length === 0 || services.length === 0}
+          >
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Appointment
           </Button>
         </DialogFooter>

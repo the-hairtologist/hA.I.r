@@ -157,7 +157,7 @@ export const AIProductRecommendations = ({
             </CardDescription>
           </div>
           <Badge variant="secondary" className="flex items-center gap-1">
-            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+            <TrendingUp className="h-3 w-3" />
             AI Matched
           </Badge>
         </div>
@@ -220,7 +220,7 @@ export const AIProductRecommendations = ({
                   onClick={() => handleProductClick(product)}
                   className="shrink-0"
                 >
-                  <ExternalLink className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <ExternalLink className="h-4 w-4" />
                 </Button>
               </div>
             );

@@ -58,7 +58,7 @@ export const ModernEmptyState = React.forwardRef<HTMLDivElement, ModernEmptyStat
               
               {/* Decorative elements */}
               <div className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-accent border-2 border-foreground" />
-              <div className="absolute -bottom-2 -left-2 h-4 w-4 sm:h-5 sm:w-5 rounded-full bg-secondary border-2 border-foreground" />
+              <div className="absolute -bottom-2 -left-2 h-3 w-3 rounded-full bg-secondary border-2 border-foreground" />
             </div>
           )}
           

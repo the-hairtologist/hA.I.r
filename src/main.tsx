@@ -21,8 +21,8 @@ window.addEventListener('orientationchange', setViewportHeight);
 
 // Apply mobile optimizations to body
 if (document.body) {
-  document.body.style.overscrollBehavior = 'contain';
-  document.body.style.touchAction = 'auto';
+  document.body.style.overscrollBehavior = 'none';
+  document.body.style.touchAction = 'pan-y';
 }
 
 // Service Worker cleanup for mobile issues
@@ -74,7 +74,7 @@ const initApp = () => {
     const initTimeout = setTimeout(() => {
       console.warn('App taking too long to initialize');
       showTimeoutWarning();
-    }, 20000); // Increased from 15s to 20s for mobile
+    }, 15000);
 
     const root = createRoot(rootElement);
     root.render(<App />);

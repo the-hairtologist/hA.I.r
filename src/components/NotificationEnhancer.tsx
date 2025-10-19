@@ -100,7 +100,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
       haptic.warning();
       
       toast.info(`${unreadMessages.length} New Message${unreadMessages.length > 1 ? "s" : ""}`, {
-        icon: <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6" />,
+        icon: <MessageSquare className="h-4 w-4" />,
         action: {
           label: "View",
           onClick: () => navigate("/messages"),
@@ -199,7 +199,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
           
           toast.success("Milestone Reached! 🎉", {
             description: message,
-            icon: <Gift className="h-5 w-5 sm:h-6 sm:w-6" />,
+            icon: <Gift className="h-4 w-4" />,
           });
         }
       }
@@ -217,7 +217,7 @@ export const NotificationEnhancer = ({ userId, userRole }: NotificationEnhancerP
       haptic.warning();
       
       toast.info(`${unreadMessages.length} New Message${unreadMessages.length > 1 ? "s" : ""}`, {
-        icon: <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6" />,
+        icon: <MessageSquare className="h-4 w-4" />,
         action: {
           label: "View",
           onClick: () => navigate("/messages"),

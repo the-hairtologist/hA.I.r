@@ -97,7 +97,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
             
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <Smile className="h-5 w-5 sm:h-6 sm:w-6 text-success shrink-0" />
+                <Smile className="h-4 w-4 text-success shrink-0" />
                 <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-success to-success/70 transition-all" 
@@ -108,7 +108,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
               </div>
               
               <div className="flex items-center gap-3">
-                <Meh className="h-5 w-5 sm:h-6 sm:w-6 text-warning shrink-0" />
+                <Meh className="h-4 w-4 text-warning shrink-0" />
                 <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-warning to-warning/70 transition-all" 
@@ -119,7 +119,7 @@ export function ClientSentimentTracker({ stylistId }: ClientSentimentTrackerProp
               </div>
               
               <div className="flex items-center gap-3">
-                <Frown className="h-5 w-5 sm:h-6 sm:w-6 text-destructive shrink-0" />
+                <Frown className="h-4 w-4 text-destructive shrink-0" />
                 <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-destructive to-destructive/70 transition-all" 

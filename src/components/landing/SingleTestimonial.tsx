@@ -35,7 +35,7 @@ export const SingleTestimonial = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className={`border-4 border-foreground bg-card p-8 shadow-[8px_8px_0px_0px_hsl(var(--foreground))] hover:shadow-[10px_10px_0px_0px_hsl(var(--foreground))] transition-all duration-300 hover:-translate-y-1 ${
+              className={`border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
               style={{
@@ -46,7 +46,7 @@ export const SingleTestimonial = () => {
                 {[...Array(5)].map((_, i) => (
                   <div 
                     key={i} 
-                    className={`w-6 h-6 border-2 border-foreground bg-secondary flex items-center justify-center transition-all duration-300 ${
+                    className={`w-6 h-6 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
                       isVisible ? 'scale-100' : 'scale-0'
                     }`}
                     style={{
@@ -59,7 +59,7 @@ export const SingleTestimonial = () => {
               </div>
               
               <div className="mb-6">
-                <div className="w-8 h-8 border-2 border-foreground bg-accent flex items-center justify-center mb-4">
+                <div className="w-8 h-8 border-2 border-black bg-accent flex items-center justify-center mb-4">
                   <Quote className="h-4 w-4 text-accent-foreground" />
                 </div>
                 <p className="text-base font-sans text-foreground leading-relaxed">
@@ -68,7 +68,7 @@ export const SingleTestimonial = () => {
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 border-4 border-foreground bg-accent flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-black bg-accent flex items-center justify-center">
                   <span className="font-pixel text-accent-foreground text-xs">{testimonial.initials}</span>
                 </div>
                 <div>

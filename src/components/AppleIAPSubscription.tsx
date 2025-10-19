@@ -134,7 +134,7 @@ export const AppleIAPSubscription = () => {
           onClick={handleRestore}
           disabled={loading}
         >
-          <Apple className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+          <Apple className="h-4 w-4 mr-2" />
           Restore Purchases
         </Button>
       </div>
@@ -169,7 +169,7 @@ export const AppleIAPSubscription = () => {
                 <ul className="space-y-2">
                   {getProductFeatures(product.id).map((feature, index) => (
                     <li key={index} className="flex items-center gap-2 text-sm">
-                      <Check className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
+                      <Check className="h-4 w-4 text-primary flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -181,7 +181,7 @@ export const AppleIAPSubscription = () => {
                   disabled={purchasing !== null || subscribed}
                 >
                   {purchasing === product.id && (
-                    <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   {subscribed ? 'Current Plan' : 'Subscribe Now'}
                 </Button>

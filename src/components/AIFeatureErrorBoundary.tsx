@@ -92,7 +92,7 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
                   size="sm"
                   className="gap-2"
                 >
-                  <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <RefreshCw className="h-4 w-4" />
                   Try Again
                 </Button>
                 <Button

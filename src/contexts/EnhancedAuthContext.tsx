@@ -88,11 +88,11 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
    */
   const verifyRoleIntegrity = useCallback(async (userId: string, currentRoles: AppRole[]): Promise<boolean> => {
     try {
-      // Skip verification for regular clients to reduce database calls
+      // Only verify critical roles periodically
       const criticalRoles = currentRoles.filter(r => r === 'admin' || r === 'stylist');
       if (criticalRoles.length === 0) return true;
 
-      // Re-fetch critical roles only from database
+      // Re-fetch roles directly from database
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
