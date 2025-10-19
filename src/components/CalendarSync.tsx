@@ -51,24 +51,24 @@ const CalendarSync = () => {
   };
 
   const handleConnect = async (provider: CalendarProvider) => {
+    if (provider !== 'google') {
+      toast.info('Outlook Calendar integration coming soon!');
+      return;
+    }
+
     setConnecting(provider);
     try {
-      // Calendar sync integration coming in a future update
-      toast.info(
-        `${provider === 'google' ? 'Google' : 'Outlook'} Calendar integration is being set up. This feature will be available soon.`,
-        { duration: 5000 }
-      );
+      const { data, error } = await supabase.functions.invoke('google-calendar-oauth');
       
-      // Future implementation will use edge function - calendar_oauth
-      // const { data, error } = await supabase.functions.invoke('calendar-oauth-init', {
-      //   body: { provider }
-      // });
-      // if (error) throw error;
-      // window.location.href = data.authUrl;
+      if (error) throw error;
+      if (!data?.url) throw new Error('No OAuth URL returned');
       
-    } catch (error) {
+      // Redirect to Google OAuth
+      window.location.href = data.url;
+      
+    } catch (error: any) {
       console.error('Error connecting calendar:', error);
-      toast.error('Failed to connect calendar');
+      toast.error(error.message || 'Failed to connect calendar');
     } finally {
       setConnecting(null);
     }
@@ -106,17 +106,32 @@ const CalendarSync = () => {
   const handleSync = async (connectionId: string) => {
     setSyncing(connectionId);
     try {
-      const { error } = await supabase.functions.invoke('sync-appointments-to-calendar', {
-        body: { connectionId }
-      });
+      // Get recent appointments that need syncing
+      const { data: appointments, error: aptError } = await supabase
+        .from('appointments')
+        .select('id')
+        .gte('appointment_date', new Date().toISOString())
+        .limit(10);
 
-      if (error) throw error;
+      if (aptError) throw aptError;
+
+      let syncedCount = 0;
+      for (const apt of appointments || []) {
+        try {
+          const { error } = await supabase.functions.invoke('google-calendar-sync', {
+            body: { appointmentId: apt.id }
+          });
+          if (!error) syncedCount++;
+        } catch (err) {
+          console.error('Failed to sync appointment:', apt.id, err);
+        }
+      }
       
-      toast.success('Appointments synced successfully');
+      toast.success(`${syncedCount} appointment(s) synced successfully`);
       loadConnections();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error syncing calendar:', error);
-      toast.error('Failed to sync appointments');
+      toast.error(error.message || 'Failed to sync appointments');
     } finally {
       setSyncing(null);
     }

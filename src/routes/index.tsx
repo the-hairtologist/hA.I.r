@@ -82,6 +82,7 @@ const ZapierIntegration = lazyWithRetry(() => import('@/pages/ZapierIntegration'
 const AuditReport = lazyWithRetry(() => import('@/pages/AuditReport'));
 const ClientRetention = lazyWithRetry(() => import('@/pages/ClientRetention'));
 const DesignSystem = lazyWithRetry(() => import('@/pages/DesignSystem'));
+const SubscriptionPage = lazyWithRetry(() => import('@/pages/SubscriptionPage'));
 
 export const AppRoutes = () => (
   <>
@@ -119,6 +120,7 @@ export const AppRoutes = () => (
     <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
     <Route path="/appointments" element={<ProtectedRoute><Appointments /></ProtectedRoute>} />
     <Route path="/feedback" element={<ProtectedRoute><FeedbackBoard /></ProtectedRoute>} />
+    <Route path="/subscription" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><SubscriptionPage /></ProtectedRoute>} />
 
     {/* Stylist Routes */}
     <Route
