@@ -52,18 +52,18 @@ export const MobileBottomNav = () => {
       highlight: true
     },
     { 
-      icon: Sparkles, 
-      label: "AI", 
-      path: "/ai-assistant",
-      gradient: "from-violet-start to-violet-end",
-      highlight: false
-    },
-    { 
       icon: MessageSquare, 
       label: "Messages", 
       path: "/messages",
       gradient: "from-pink-start to-pink-end",
       badge: unreadCount,
+      highlight: false
+    },
+    { 
+      icon: Settings, 
+      label: "Settings", 
+      path: "/settings",
+      gradient: "from-blue-start to-blue-end",
       highlight: false
     },
   ];
@@ -99,30 +99,59 @@ export const MobileBottomNav = () => {
       badge: unreadCount,
       highlight: false
     },
-  ];
-
-  // Admin bottom nav: Admin-focused with Settings instead of full messages list
-  const adminItems: NavItem[] = [
     { 
-      icon: Home, 
-      label: "Dashboard", 
-      path: "/dashboard",
-      gradient: "from-purple-start to-purple-end",
-      highlight: false
-    },
-    { 
-      icon: Calendar, 
-      label: "Schedule", 
-      path: "/schedule",
-      gradient: "from-cyan-start to-cyan-end",
+      icon: User, 
+      label: "Profile", 
+      path: "/profile",
+      gradient: "from-blue-start to-blue-end",
       highlight: false
     },
     { 
       icon: Settings, 
-      label: "Admin", 
+      label: "Settings", 
+      path: "/settings",
+      gradient: "from-blue-start to-blue-end",
+      highlight: false
+    },
+  ];
+
+  // Admin bottom nav: Admin-focused with quick access to critical functions
+  const adminItems: NavItem[] = [
+    { 
+      icon: Users, 
+      label: "Users", 
+      path: "/admin/users",
+      gradient: "from-cyan-start to-cyan-end",
+      highlight: false
+    },
+    { 
+      icon: MessageSquare, 
+      label: "Messages", 
+      path: "/messages",
+      gradient: "from-pink-start to-pink-end",
+      badge: unreadCount,
+      highlight: false
+    },
+    { 
+      icon: Shield, 
+      label: "Admin Center", 
       path: "/admin/command",
       gradient: "from-amber-start to-amber-end",
       highlight: true // Admin command center is priority
+    },
+    { 
+      icon: Activity, 
+      label: "System Health", 
+      path: "/system-health",
+      gradient: "from-emerald-start to-emerald-end",
+      highlight: false
+    },
+    { 
+      icon: Settings, 
+      label: "Settings", 
+      path: "/settings",
+      gradient: "from-blue-start to-blue-end",
+      highlight: false
     },
   ];
 

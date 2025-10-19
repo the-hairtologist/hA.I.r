@@ -98,26 +98,34 @@ export function AppSidebar() {
   // Get navigation items based on role
   const adminItems = getAdminNavigationItems(isAdmin);
   
+  // Filter out "Coming Soon" items universally
+  const filterComingSoon = (items: NavigationItem[]): NavigationItem[] => {
+    return items.filter(item => !item.comingSoon).map(item => ({
+      ...item,
+      children: item.children ? item.children.filter(child => !child.comingSoon) : undefined
+    }));
+  };
+  
   // Admin sees EVERYTHING - Prioritized order: Admin first, then Stylist, then Client
   const baseItems: NavigationItem[] = (() => {
     if (isAdmin) {
       // Prefix client items with "client-" group to differentiate
-      const clientItemsWithPrefix = clientNavigationItems.map(item => ({
+      const clientItemsWithPrefix = filterComingSoon(clientNavigationItems).map(item => ({
         ...item,
         group: `client-${item.group}`
       }));
       
-      // Admin gets all items in priority order: ADMIN → STYLIST → CLIENT
-      return [...adminItems, ...stylistNavigationItems, ...clientItemsWithPrefix];
+      // Admin gets all items in priority order: ADMIN → STYLIST → CLIENT (no "Coming Soon")
+      return [...filterComingSoon(adminItems), ...filterComingSoon(stylistNavigationItems), ...clientItemsWithPrefix];
     }
     
-    // Stylist gets only stylist items
+    // Stylist gets only stylist items (no "Coming Soon")
     if (isStylist) {
-      return stylistNavigationItems;
+      return filterComingSoon(stylistNavigationItems);
     }
     
-    // Client gets only client items
-    return clientNavigationItems;
+    // Client gets only client items (no "Coming Soon")
+    return filterComingSoon(clientNavigationItems);
   })();
 
   // Get group labels based on role
