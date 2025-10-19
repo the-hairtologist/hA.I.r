@@ -86,6 +86,16 @@ export const stylistNavigationItems: NavigationItem[] = [
     group: "main", 
     color: "text-emerald-400 dark:text-emerald-300" 
   },
+  { 
+    id: "formulas", 
+    title: "Formulas", 
+    url: "/formulas", 
+    icon: Beaker, 
+    gradient: "bg-[image:var(--gradient-purple-pink)]", 
+    group: "main", 
+    color: "text-purple-400 dark:text-purple-300",
+    description: "Client hair formulas"
+  },
   // REMOVED: "Find Clients" - feature not implemented (was comingSoon: true)
   { 
     id: "messages", 

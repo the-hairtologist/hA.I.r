@@ -159,7 +159,7 @@ export function SortableNavItem({
       {hasChildren && !collapsed && (
         <div 
           className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            isExpanded ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+            isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
           <SidebarMenuSub className="mt-1 mb-2 ml-4 space-y-1">
