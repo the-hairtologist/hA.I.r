@@ -4822,13 +4822,63 @@ export type Database = {
           },
         ]
       }
+      zapier_delivery_log: {
+        Row: {
+          attempt_number: number | null
+          created_at: string | null
+          error_message: string | null
+          event_type: string
+          http_status: number | null
+          id: string
+          payload: Json
+          status: string
+          webhook_id: string
+        }
+        Insert: {
+          attempt_number?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          event_type: string
+          http_status?: number | null
+          id?: string
+          payload: Json
+          status: string
+          webhook_id: string
+        }
+        Update: {
+          attempt_number?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          event_type?: string
+          http_status?: number | null
+          id?: string
+          payload?: Json
+          status?: string
+          webhook_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "zapier_delivery_log_webhook_id_fkey"
+            columns: ["webhook_id"]
+            isOneToOne: false
+            referencedRelation: "zapier_webhooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       zapier_webhooks: {
         Row: {
           created_at: string
           event_type: string
           id: string
           is_active: boolean | null
+          last_error_message: string | null
+          last_failure_at: string | null
+          last_success_at: string | null
+          last_triggered_at: string | null
           stylist_id: string
+          total_failures: number | null
+          total_triggers: number | null
           updated_at: string
           webhook_url: string
         }
@@ -4837,7 +4887,13 @@ export type Database = {
           event_type: string
           id?: string
           is_active?: boolean | null
+          last_error_message?: string | null
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          last_triggered_at?: string | null
           stylist_id: string
+          total_failures?: number | null
+          total_triggers?: number | null
           updated_at?: string
           webhook_url: string
         }
@@ -4846,7 +4902,13 @@ export type Database = {
           event_type?: string
           id?: string
           is_active?: boolean | null
+          last_error_message?: string | null
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          last_triggered_at?: string | null
           stylist_id?: string
+          total_failures?: number | null
+          total_triggers?: number | null
           updated_at?: string
           webhook_url?: string
         }

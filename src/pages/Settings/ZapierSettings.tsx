@@ -14,6 +14,12 @@ interface WebhookConfig {
   webhook_url: string;
   is_active: boolean;
   created_at: string;
+  last_triggered_at?: string;
+  last_success_at?: string;
+  last_failure_at?: string;
+  total_triggers?: number;
+  total_failures?: number;
+  last_error_message?: string;
 }
 
 const EVENT_TYPES = [
@@ -32,6 +38,7 @@ export const ZapierSettings = () => {
     webhook_url: "",
   });
   const [saving, setSaving] = useState(false);
+  const [testing, setTesting] = useState<string | null>(null);
 
   useEffect(() => {
     loadWebhooks();
@@ -149,6 +156,46 @@ export const ZapierSettings = () => {
     }
   };
 
+  const testWebhook = async (webhook: WebhookConfig) => {
+    setTesting(webhook.id);
+    try {
+      const { error } = await supabase.functions.invoke('zapier-trigger', {
+        body: {
+          event: webhook.event_type,
+          data: {
+            test: true,
+            message: "This is a test from hA.I.r",
+            timestamp: new Date().toISOString(),
+          },
+          testMode: true,
+        },
+      });
+
+      if (error) throw error;
+
+      toast.success("Test webhook sent! Check your Zap history.", { duration: 5000 });
+      loadWebhooks(); // Refresh to show updated stats
+    } catch (error: any) {
+      console.error("Error testing webhook:", error);
+      toast.error("Failed to send test webhook");
+    } finally {
+      setTesting(null);
+    }
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "Never";
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
+    return `${Math.floor(diffMins / 1440)}d ago`;
+  };
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <Card>
@@ -243,39 +290,88 @@ export const ZapierSettings = () => {
               <div className="space-y-2 sm:space-y-3">
                 {webhooks.map((webhook) => {
                   const eventType = EVENT_TYPES.find((t) => t.value === webhook.event_type);
+                  const successRate = webhook.total_triggers 
+                    ? Math.round(((webhook.total_triggers - (webhook.total_failures || 0)) / webhook.total_triggers) * 100)
+                    : 100;
+                  
                   return (
                     <div
                       key={webhook.id}
-                      className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 sm:p-4 border rounded-lg"
+                      className="flex flex-col gap-3 p-3 sm:p-4 border rounded-lg"
                     >
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className="font-medium text-xs sm:text-sm">{eventType?.label || webhook.event_type}</span>
-                          <Badge variant={webhook.is_active ? "default" : "secondary"} className="text-[10px] sm:text-xs">
-                            {webhook.is_active ? "Active" : "Inactive"}
-                          </Badge>
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <span className="font-medium text-xs sm:text-sm">{eventType?.label || webhook.event_type}</span>
+                            <Badge variant={webhook.is_active ? "default" : "secondary"} className="text-[10px] sm:text-xs">
+                              {webhook.is_active ? "Active" : "Inactive"}
+                            </Badge>
+                            {successRate < 80 && webhook.total_triggers > 0 && (
+                              <Badge variant="destructive" className="text-[10px] sm:text-xs">
+                                {successRate}% success
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-[10px] sm:text-xs text-muted-foreground break-all mb-2">
+                            {webhook.webhook_url}
+                          </p>
+                          
+                          {/* Stats */}
+                          <div className="grid grid-cols-2 gap-2 text-[10px] sm:text-xs">
+                            <div>
+                              <span className="text-muted-foreground">Triggered:</span>{" "}
+                              <span className="font-medium">{webhook.total_triggers || 0} times</span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">Failures:</span>{" "}
+                              <span className={webhook.total_failures ? "font-medium text-destructive" : "font-medium"}>
+                                {webhook.total_failures || 0}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">Last triggered:</span>{" "}
+                              <span className="font-medium">{formatDate(webhook.last_triggered_at)}</span>
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground">Last success:</span>{" "}
+                              <span className="font-medium">{formatDate(webhook.last_success_at)}</span>
+                            </div>
+                          </div>
+                          
+                          {webhook.last_error_message && (
+                            <div className="mt-2 p-2 bg-destructive/10 rounded text-[10px] sm:text-xs text-destructive">
+                              <strong>Last error:</strong> {webhook.last_error_message}
+                            </div>
+                          )}
                         </div>
-                        <p className="text-[10px] sm:text-xs text-muted-foreground break-all">
-                          {webhook.webhook_url}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => toggleWebhook(webhook.id, webhook.is_active)}
-                          className="flex-1 sm:flex-none text-xs"
-                        >
-                          {webhook.is_active ? "Disable" : "Enable"}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => deleteWebhook(webhook.id)}
-                          className="text-xs"
-                        >
-                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                        </Button>
+                        
+                        <div className="flex flex-wrap items-center gap-2 shrink-0">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => testWebhook(webhook)}
+                            disabled={testing === webhook.id || !webhook.is_active}
+                            className="flex-1 sm:flex-none text-xs"
+                          >
+                            {testing === webhook.id ? "Testing..." : "Test"}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => toggleWebhook(webhook.id, webhook.is_active)}
+                            className="flex-1 sm:flex-none text-xs"
+                          >
+                            {webhook.is_active ? "Disable" : "Enable"}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => deleteWebhook(webhook.id)}
+                            className="text-xs"
+                          >
+                            <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   );
