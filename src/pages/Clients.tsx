@@ -46,6 +46,9 @@ import { networkErrors, dataErrors } from "@/lib/errorMessages";
 import { SaveIndicator } from "@/components/SaveIndicator";
 import { ReEngagementDialog } from "@/components/ReEngagementDialog";
 import { ClientActivityIndicator } from "@/components/ClientActivityIndicator";
+import { VirtualList } from "@/components/VirtualList";
+import { useCallback, memo } from "react";
+import { ClientCard } from "@/components/ClientCard";
 
 interface ClientProfile {
   id: string;
@@ -74,6 +77,10 @@ export default function Clients() {
   const [selectedClient, setSelectedClient] = useState<ClientProfile | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearch = useDebounce(searchQuery, 300);
+  
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value);
+  }, []);
   const [sortBy, setSortBy] = useState<"name" | "recent" | "inactive">("recent");
   const [riskFilter, setRiskFilter] = useState<"all" | "60" | "90" | "120">("all");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -961,173 +968,25 @@ export default function Clients() {
               </Select>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {paginatedClients.map((client) => {
-              const selected = isSelected(client.id);
-              const daysSince = getDaysSinceLastVisit(client.last_appointment_date);
-              
-              return (
-                <Card 
-                  key={client.id} 
-                  className={cn(
-                    "border-[3px] shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-y-[-4px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))] transition-all duration-300 bg-gradient-to-br from-card via-card to-secondary/5 cursor-pointer",
-                    selected ? "border-primary ring-2 ring-primary" : "border-foreground"
-                  )}
-                  onClick={(e) => {
-                    // Only open dialog if not clicking checkbox
-                    if (!(e.target as HTMLElement).closest('input[type="checkbox"]')) {
-                      openEditDialog(client);
-                    }
+            <VirtualList
+              items={paginatedClients}
+              estimateSize={280}
+              overscan={2}
+              className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+              renderItem={(client) => (
+                <ClientCard
+                  client={client}
+                  isSelected={isSelected(client.id)}
+                  onToggleSelection={toggleSelection}
+                  onEdit={() => openEditDialog(client)}
+                  onViewHistory={() => {
+                    setSelectedClientId(client.id);
+                    setHistoryDialogOpen(true);
                   }}
-                >
-                  <CardHeader className="border-b-[3px] border-foreground bg-secondary/10">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2 flex-1">
-                        <input
-                          type="checkbox"
-                          checked={selected}
-                          onChange={(e) => {
-                            e.stopPropagation();
-                            toggleSelection(client.id);
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                          className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1 focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                          aria-label={`Select ${client.full_name || 'client'}`}
-                        />
-                         <CardTitle className="flex items-center gap-2 font-pixel flex-1">
-                          <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground relative">
-                            <User className="h-5 w-5 text-secondary-foreground" />
-                            <div className="absolute -top-1 -right-1 h-2 w-2 bg-gradient-to-r from-primary to-accent rounded-full animate-pulse border border-background" title="AI features available" />
-                          </div>
-                          {client.full_name || "Unnamed Client"}
-                        </CardTitle>
-                      </div>
-                      {daysSince !== null && (
-                        <Badge variant={daysSince > 90 ? "destructive" : daysSince > 60 ? "secondary" : "outline"} className="text-[10px] xs:text-xs">
-                          {daysSince} days ago
-                        </Badge>
-                      )}
-                    </div>
-                  </CardHeader>
-                <CardContent className="space-y-3 pt-4">
-                  {client.email && (
-                    <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-primary/5 rounded-lg border-[2px] border-primary/20">
-                      <Mail className="h-4 w-4 text-primary" />
-                      <span className="truncate">{client.email}</span>
-                    </div>
-                  )}
-                  {client.phone && (
-                    <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-accent/5 rounded-lg border-[2px] border-accent/20">
-                      <Phone className="h-4 w-4 text-accent" />
-                      <span>{client.phone}</span>
-                    </div>
-                  )}
-                  
-                  {/* Client Statistics */}
-                    {(client.total_appointments > 0 || client.last_appointment_date) && (
-                      <div className="grid grid-cols-2 gap-2 pt-2 border-t">
-                        <div className="text-center p-2 bg-muted/50 rounded-lg">
-                          <p className="text-xs text-muted-foreground">Visits</p>
-                          <p className="text-lg font-bold text-primary">{client.total_appointments || 0}</p>
-                        </div>
-                        <div className="text-center p-2 bg-muted/50 rounded-lg">
-                          <p className="text-xs text-muted-foreground">Last Visit</p>
-                          {client.last_appointment_date ? (
-                            <>
-                              <p className="text-xs font-semibold">
-                                {new Date(client.last_appointment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                              </p>
-                              {daysSince !== null && (
-                                <Badge 
-                                  variant={daysSince > 90 ? "destructive" : daysSince > 60 ? "secondary" : "outline"} 
-                                  className="text-xs mt-1"
-                                >
-                                  {daysSince} days ago
-                                </Badge>
-                              )}
-                            </>
-                          ) : (
-                            <p className="text-[10px] xs:text-xs text-muted-foreground">Never</p>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  
-                  {client.allergies && (
-                    <div className="text-xs sm:text-sm p-2 bg-destructive/5 rounded-lg border-[2px] border-destructive/20">
-                      <span className="font-semibold text-destructive">Allergies:</span> {client.allergies}
-                    </div>
-                  )}
-
-                  {/* AI Risk Indicator */}
-                  <AIFeatureErrorBoundary featureName="client_risk_indicator">
-                    <ClientRiskIndicator
-                      lastAppointmentDate={client.last_appointment_date}
-                      totalAppointments={client.total_appointments || 0}
-                      missedAppointments={0}
-                      onActionClick={() => {
-                        toast.success("Opening engagement tools...");
-                        // Could navigate to messaging or appointment booking
-                      }}
-                    />
-                  </AIFeatureErrorBoundary>
-
-                  {/* Live Activity Indicator */}
-                  <ClientActivityIndicator clientId={client.id} />
-
-                  <div className="text-xs sm:text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
-                    <span className="font-semibold text-secondary">Notes: </span>
-                    <span className="text-foreground">
-                      {client.notes || <span className="text-muted-foreground italic">No notes</span>}
-                    </span>
-                  </div>
-                  <div className="flex gap-2 mt-4">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openEditDialog(client);
-                      }}
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedClientId(client.id);
-                        setHistoryDialogOpen(true);
-                      }}
-                    >
-                      <Calendar className="h-4 w-4 mr-2" />
-                      History
-                    </Button>
-                    {client.email && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedClient(client);
-                          setInviteDialogOpen(true);
-                        }}
-                      >
-                        <UserPlus className="h-4 w-4 mr-2" />
-                        Invite
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-          </div>
+                  onViewNotes={() => openEditDialog(client)}
+                />
+              )}
+            />
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
