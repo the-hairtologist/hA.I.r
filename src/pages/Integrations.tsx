@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SearchInput } from "@/components/SearchInput";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { IntegrationTester } from "@/components/IntegrationTester";
 import { 
   Zap, Calendar, MessageSquare, Instagram, CreditCard, 
   FileText, Star, Cloud, Video, TrendingUp, Mail,
@@ -493,6 +494,9 @@ const Integrations = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8 animate-fade-in">
+        {/* Integration Tester */}
+        <IntegrationTester />
+
         {/* Header */}
         <div className="glass-effect p-8 rounded-xl border">
           <div className="flex items-center justify-between mb-4">

@@ -213,6 +213,29 @@ export const RebookDialog = ({ open, onOpenChange, appointment, onSuccess }: Reb
         console.error("SMS notification failed:", smsError);
       }
 
+      // Send email confirmation
+      try {
+        await supabase.functions.invoke('send-appointment-confirmation', {
+          body: {
+            appointmentId: newAppointment.id,
+          },
+        });
+      } catch (emailError) {
+        console.error("Email notification failed:", emailError);
+      }
+
+      // Sync to calendar
+      try {
+        await supabase.functions.invoke('sync-calendar-event', {
+          body: {
+            appointment_id: newAppointment.id,
+            action: 'create',
+          },
+        });
+      } catch (calendarError) {
+        console.error("Calendar sync failed:", calendarError);
+      }
+
       toast.success(
         <div className="flex items-center gap-2">
           <CheckCircle className="h-5 w-5 text-success" />

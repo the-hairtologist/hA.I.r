@@ -214,6 +214,31 @@ export const QuickAppointmentDialog = ({
         // Don't block success if SMS fails
       }
 
+      // Send email confirmation
+      try {
+        await supabase.functions.invoke('send-appointment-confirmation', {
+          body: {
+            appointmentId: newAppointment.id,
+          },
+        });
+      } catch (emailError) {
+        console.error("Email notification failed:", emailError);
+        // Don't block success if email fails
+      }
+
+      // Sync to calendar
+      try {
+        await supabase.functions.invoke('sync-calendar-event', {
+          body: {
+            appointment_id: newAppointment.id,
+            action: 'create',
+          },
+        });
+      } catch (calendarError) {
+        console.error("Calendar sync failed:", calendarError);
+        // Don't block success if calendar sync fails
+      }
+
       toast.success("Appointment created successfully!");
       onOpenChange(false);
       onSuccess?.();
