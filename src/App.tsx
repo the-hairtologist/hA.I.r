@@ -151,49 +151,43 @@ const AnalyticsInitializer = () => {
 
 const App = () => {
   return (
-    <HelmetProvider>
-      <GlobalErrorBoundary>
-        <ErrorBoundary>
-          <NetworkAwareLoader>
-            <QueryClientProvider client={queryClient}>
+    <ErrorBoundary fallback={<div style={{padding: '20px'}}>Something went wrong</div>}>
+      <QueryClientProvider client={queryClient}>
+        <HelmetProvider>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <EnhancedAuthProvider>
               <SubscriptionProvider>
                 <DemoModeProvider>
                   <TooltipProvider>
+                    <AnalyticsInitializer />
+                    <RoleSwitchProtection />
                     <OfflineIndicator />
                     <Toaster />
                     <Sonner />
                     <CookieConsent />
                     <PushOptInDialog />
+                    <PWAInstallPrompt />
                     <PerformanceReport />
                     <GlobalAnnouncer />
+                    <AccessibilityShortcuts />
+                    <CommandPalette />
                     <ViewportChangeHandler />
-                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                      <EnhancedAuthProvider>
-                        <AnalyticsInitializer />
-                        <RoleSwitchProtection />
-                        <AccessibilityShortcuts />
-                        <CommandPalette />
-                        <TourProvider>
-                          <FirstTimeOnboarding />
-                          <TimeoutGuard timeout={30000}>
-                            <AppLayout>
-                              <Routes>
-                                {AppRoutes()}
-                              </Routes>
-                            </AppLayout>
-                            <PWAInstallPrompt />
-                          </TimeoutGuard>
-                        </TourProvider>
-                      </EnhancedAuthProvider>
-                    </BrowserRouter>
+                    <TourProvider>
+                      <FirstTimeOnboarding />
+                      <AppLayout>
+                        <Routes>
+                          {AppRoutes()}
+                        </Routes>
+                      </AppLayout>
+                    </TourProvider>
                   </TooltipProvider>
                 </DemoModeProvider>
               </SubscriptionProvider>
-            </QueryClientProvider>
-          </NetworkAwareLoader>
-        </ErrorBoundary>
-      </GlobalErrorBoundary>
-    </HelmetProvider>
+            </EnhancedAuthProvider>
+          </BrowserRouter>
+        </HelmetProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
