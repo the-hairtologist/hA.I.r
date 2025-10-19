@@ -290,8 +290,8 @@ export const AdminDivineWeapon = () => {
                 <div>
                   <p className="text-sm font-medium mb-2">Suggested Actions:</p>
                   <ul className="space-y-1">
-                    {insight.suggestedActions.map((action: string, i: number) => (
-                      <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                    {insight.suggestedActions.map((action: string) => (
+                      <li key={action} className="text-sm text-muted-foreground flex items-center gap-2">
                         <Target className="h-3 w-3" />
                         {action}
                       </li>

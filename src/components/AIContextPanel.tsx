@@ -74,8 +74,8 @@ export const AIContextPanel = ({
                   <History className="h-3 w-3 text-primary" />
                   <span className="font-semibold">Recent Formulas ({clientContext.recentFormulas.length})</span>
                 </div>
-                {clientContext.recentFormulas.slice(0, 2).map((f: any, i: number) => (
-                  <div key={i} className="text-muted-foreground pl-4">
+                {clientContext.recentFormulas.slice(0, 2).map((f: any) => (
+                  <div key={f.id || f.formula_name} className="text-muted-foreground pl-4">
                     • {f.formula_name}
                   </div>
                 ))}

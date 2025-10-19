@@ -103,9 +103,9 @@ export function KeyboardShortcuts() {
                 {group.title}
               </h3>
               <div className="space-y-2">
-                {group.shortcuts.map((shortcut, i) => (
+                {group.shortcuts.map((shortcut) => (
                   <div
-                    key={i}
+                    key={shortcut.description}
                     className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-2">

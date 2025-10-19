@@ -89,8 +89,8 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
         <div>
           <span className="text-sm font-medium block mb-2">Detected Undertones</span>
           <div className="flex flex-wrap gap-2">
-            {analysis.undertones.map((tone, i) => (
-              <Badge key={i} variant="secondary" className="capitalize">
+            {analysis.undertones.map((tone) => (
+              <Badge key={tone} variant="secondary" className="capitalize">
                 {tone}
               </Badge>
             ))}
@@ -155,8 +155,8 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
             <AlertDescription className="text-warning-foreground">
               <div className="font-semibold mb-1">Important Cautions:</div>
               <ul className="list-disc list-inside space-y-1 text-sm">
-                {analysis.cautions.map((caution, i) => (
-                  <li key={i}>{caution}</li>
+                {analysis.cautions.map((caution) => (
+                  <li key={caution}>{caution}</li>
                 ))}
               </ul>
             </AlertDescription>

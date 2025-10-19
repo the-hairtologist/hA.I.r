@@ -72,8 +72,8 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
               <div className="pt-3 border-t-2 border-foreground/10">
                 <p className="font-semibold text-foreground mb-2">💡 Examples:</p>
                 <ul className="space-y-1.5 text-sm text-foreground/80">
-                  {examples.map((example, i) => (
-                    <li key={i} className="flex gap-2">
+                  {examples.map((example) => (
+                    <li key={example} className="flex gap-2">
                       <span className="text-secondary">•</span>
                       <span>{example}</span>
                     </li>
@@ -86,8 +86,8 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
               <div className="pt-3 border-t-2 border-foreground/10">
                 <p className="font-semibold text-foreground mb-2">✨ Tips:</p>
                 <ul className="space-y-1.5 text-sm text-foreground/80">
-                  {tips.map((tip, i) => (
-                    <li key={i} className="flex gap-2">
+                  {tips.map((tip) => (
+                    <li key={tip} className="flex gap-2">
                       <span className="text-secondary">•</span>
                       <span>{tip}</span>
                     </li>

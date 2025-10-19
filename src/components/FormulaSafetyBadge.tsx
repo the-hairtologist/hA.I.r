@@ -48,8 +48,8 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
           <AlertDescription>
             <div className="font-semibold mb-2">Critical Safety Issues:</div>
             <ul className="list-disc list-inside space-y-1 text-sm">
-              {blockers.map((blocker, i) => (
-                <li key={i}>{blocker}</li>
+              {blockers.map((blocker) => (
+                <li key={blocker}>{blocker}</li>
               ))}
             </ul>
             <p className="mt-2 text-xs font-semibold">
@@ -77,8 +77,8 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
               <div className="text-sm">
                 <p className="font-semibold mb-1">⚠️ Please Note:</p>
                 <ul className="list-disc list-inside space-y-1">
-                  {warnings.map((warning, i) => (
-                    <li key={i}>{warning}</li>
+                  {warnings.map((warning) => (
+                    <li key={warning}>{warning}</li>
                   ))}
                 </ul>
               </div>
@@ -91,8 +91,8 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
           <AlertDescription className="text-warning-foreground">
             <div className="font-semibold mb-1">Cautions:</div>
             <ul className="list-disc list-inside space-y-1 text-sm">
-              {warnings.map((warning, i) => (
-                <li key={i}>{warning}</li>
+              {warnings.map((warning) => (
+                <li key={warning}>{warning}</li>
               ))}
             </ul>
           </AlertDescription>

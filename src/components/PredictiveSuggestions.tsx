@@ -46,8 +46,8 @@ export const PredictiveSuggestions = ({ insights, onAction }: PredictiveSuggesti
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {insights.map((insight, i) => (
-          <Alert key={i} className="border-primary/20">
+        {insights.map((insight) => (
+          <Alert key={`${insight.type}-${insight.title}`} className="border-primary/20">
             <div className="flex items-start gap-3">
               <Calendar className="h-5 w-5 text-primary mt-0.5" />
               <div className="flex-1 space-y-2">

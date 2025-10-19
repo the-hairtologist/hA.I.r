@@ -188,8 +188,8 @@ export const AIRetentionDashboard = () => {
                         
                         <div className="text-xs sm:text-sm space-y-1">
                           <div className="font-medium text-muted-foreground mb-1">Reasons:</div>
-                          {score.reasons.map((reason: string, i: number) => (
-                            <div key={i} className="text-muted-foreground pl-2">
+                          {score.reasons.map((reason: string) => (
+                            <div key={reason} className="text-muted-foreground pl-2">
                               • {reason}
                             </div>
                           ))}
@@ -197,8 +197,8 @@ export const AIRetentionDashboard = () => {
                         
                         <div className="text-xs sm:text-sm space-y-1">
                           <div className="font-medium text-primary mb-1">Recommendations:</div>
-                          {score.recommendations.slice(0, 3).map((rec: string, i: number) => (
-                            <div key={i} className="text-muted-foreground pl-2">
+                          {score.recommendations.slice(0, 3).map((rec: string) => (
+                            <div key={rec} className="text-muted-foreground pl-2">
                               {rec}
                             </div>
                           ))}

@@ -135,8 +135,8 @@ export const FormulaSuccessPredictor = ({
           <div className="space-y-2 pt-2 border-t border-border/50">
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Recommendations:</div>
             <ul className="text-sm text-muted-foreground space-y-2">
-              {config.tips.map((tip, i) => (
-                <li key={i} className="flex items-start gap-2">
+              {config.tips.map((tip) => (
+                <li key={tip} className="flex items-start gap-2">
                   <span className="mt-1 text-primary">•</span>
                   <span className="flex-1">{tip}</span>
                 </li>

@@ -187,8 +187,8 @@ export function ClientCSVImport({ stylistId, onImportComplete }: ClientCSVImport
                     View Errors ({results.errors.length})
                   </summary>
                   <ul className="mt-2 space-y-1 text-xs text-muted-foreground max-h-40 overflow-y-auto">
-                    {results.errors.map((error, i) => (
-                      <li key={i}>{error}</li>
+                    {results.errors.map((error, idx) => (
+                      <li key={`error-${idx}-${error.substring(0, 20)}`}>{error}</li>
                     ))}
                   </ul>
                 </details>

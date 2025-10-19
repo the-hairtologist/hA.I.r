@@ -152,8 +152,8 @@ export const PrivacyConsentDialog = ({
               How we'll use {type === 'both' ? 'these features' : 'this'}:
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
-              {details.usage.map((item, i) => (
-                <li key={i} className="flex items-start gap-2">
+              {details.usage.map((item) => (
+                <li key={item} className="flex items-start gap-2">
                   <span className="text-primary mt-0.5">•</span>
                   <span>{item}</span>
                 </li>
@@ -168,8 +168,8 @@ export const PrivacyConsentDialog = ({
               Your privacy is protected:
             </h4>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
-              {details.protection.map((item, i) => (
-                <li key={i} className="flex items-start gap-2">
+              {details.protection.map((item) => (
+                <li key={item} className="flex items-start gap-2">
                   <span className="text-success mt-0.5">✓</span>
                   <span>{item}</span>
                 </li>
