@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
@@ -26,6 +26,7 @@ import { FirstTimeTooltip } from "@/components/FirstTimeTooltip";
 import { ZapierSettings } from "@/pages/Settings/ZapierSettings";
 import { cn } from "@/lib/utils";
 import { FormFieldError } from "@/components/FormFieldError";
+import { useDevMode } from "@/hooks/useDevMode";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Settings = () => {
   const [userRole, setUserRole] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { isDevMode, toggleDevMode } = useDevMode();
 
   // Security - Password change
   const [currentPassword, setCurrentPassword] = useState("");
@@ -1730,6 +1732,24 @@ const Settings = () => {
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Restart Tutorial
                 </Button>
+                
+                {/* Developer Mode Toggle */}
+                <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="dev-mode" className="font-semibold flex items-center gap-2">
+                      <Code className="h-4 w-4" />
+                      Developer Mode
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Show performance metrics and debug info
+                    </p>
+                  </div>
+                  <ThemeSwitch
+                    id="dev-mode"
+                    checked={isDevMode}
+                    onCheckedChange={toggleDevMode}
+                  />
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

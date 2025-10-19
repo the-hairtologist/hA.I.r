@@ -26,10 +26,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { securityGuardian } from '@/lib/ai/SecurityGuardian';
 import { predictiveAnalytics } from '@/lib/ai/PredictiveAnalytics';
+import { useDevMode } from '@/hooks/useDevMode';
+import { DeveloperPanel } from './admin/DeveloperPanel';
 
 export const AdminDivineWeapon = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { isDevMode } = useDevMode();
   const [securityStatus, setSecurityStatus] = useState<any>(null);
   const [insights, setInsights] = useState<any[]>([]);
   const [systemHealth, setSystemHealth] = useState<any>(null);
@@ -199,6 +202,7 @@ export const AdminDivineWeapon = () => {
           <TabsTrigger value="insights">AI Insights</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="system">System</TabsTrigger>
+          {isDevMode && <TabsTrigger value="developer">Developer</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="security" className="space-y-4">
@@ -357,6 +361,12 @@ export const AdminDivineWeapon = () => {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {isDevMode && (
+          <TabsContent value="developer">
+            <DeveloperPanel />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );
