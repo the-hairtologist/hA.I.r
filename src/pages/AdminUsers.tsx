@@ -159,7 +159,7 @@ export default function AdminUsers() {
           <CardContent className="pt-6">
             <div className="flex gap-4 mb-4">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-3 h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search users..."
                   value={searchTerm}
@@ -193,7 +193,7 @@ export default function AdminUsers() {
                     disabled={bulkActionLoading}
                     className="gap-2"
                   >
-                    <Trash2 className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <Trash2 className="h-4 w-4" />
                     Delete Selected
                   </Button>
                   <Button
@@ -223,7 +223,7 @@ export default function AdminUsers() {
                 onClick={selectAll}
                 className="gap-2 w-full sm:w-auto"
               >
-                <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+                <Users className="h-4 w-4" />
                 {selectedUsers.size === filteredUsers.length ? 'Deselect All' : 'Select All'}
               </Button>
             </div>
@@ -276,7 +276,7 @@ export default function AdminUsers() {
                                 onClick={() => setSelectedUser(user)}
                                 className="w-full sm:w-auto justify-center"
                               >
-                                <Eye className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                                <Eye className="h-4 w-4 mr-2" />
                                 View Details
                               </Button>
                             </DialogTrigger>
@@ -325,7 +325,7 @@ export default function AdminUsers() {
                             onValueChange={(role) => handleAssignRole(user.id, role as 'client' | 'stylist')}
                           >
                             <SelectTrigger className="w-full sm:w-[140px]">
-                              <UserCog className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                              <UserCog className="h-4 w-4 mr-2" />
                               <SelectValue placeholder="Add Role" />
                             </SelectTrigger>
                             <SelectContent>

@@ -125,7 +125,7 @@ const ClientDiscovery = () => {
                     onClick={() => navigate("/clients")}
                     className="gap-2"
                   >
-                    <Calendar className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <Calendar className="h-4 w-4" />
                     Manage Clients
                   </Button>
                 )}
