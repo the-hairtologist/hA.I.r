@@ -45,11 +45,11 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
     }
   };
 
-  const getCategoryIcon = (category: string) => {
-    if (category.includes('revenue')) return DollarSign;
-    if (category.includes('churn')) return AlertTriangle;
-    if (category.includes('efficiency')) return Clock;
-    if (category.includes('retention')) return Users;
+  const getCategoryIcon = (type: string) => {
+    if (type === 'revenue_opportunity') return DollarSign;
+    if (type === 'churn_risk') return AlertTriangle;
+    if (type === 'efficiency') return Clock;
+    if (type === 'retention') return Users;
     return Sparkles;
   };
 
@@ -65,10 +65,10 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
     );
   }
 
-  const churnInsights = insights.filter(i => i.insightType?.includes('churn'));
-  const revenueInsights = insights.filter(i => i.insightType?.includes('revenue'));
-  const efficiencyInsights = insights.filter(i => i.insightType?.includes('efficiency'));
-  const retentionInsights = insights.filter(i => i.insightType?.includes('retention'));
+  const churnInsights = insights.filter(i => i.type === 'churn_risk');
+  const revenueInsights = insights.filter(i => i.type === 'revenue_opportunity');
+  const efficiencyInsights = insights.filter(i => i.type === 'efficiency');
+  const retentionInsights = insights.filter(i => i.type === 'retention');
 
   const totalPotentialRevenue = revenueInsights.reduce((sum, i) => sum + (i.potentialRevenue || 0), 0);
 
@@ -138,12 +138,12 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                     </CardContent>
                   </Card>
                 )}
-                {insights.map((insight) => {
-                  const Icon = getCategoryIcon(insight.category);
+                {insights.map((insight, idx) => {
+                  const Icon = getCategoryIcon(insight.type);
                   const PriorityIcon = getPriorityIcon(insight.priority);
                   
                   return (
-                    <Card key={insight.id} className="border-l-4 border-l-primary">
+                    <Card key={idx} className="border-l-4 border-l-primary">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-start gap-3 flex-1">
@@ -153,7 +153,7 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
                                 <h4 className="font-semibold">{insight.title}</h4>
-                                <Badge variant={insight.priority === 'critical' ? 'destructive' : 'secondary'}>
+                                <Badge variant={insight.priority === 'urgent' ? 'destructive' : 'secondary'}>
                                   <PriorityIcon className="h-3 w-3 mr-1" />
                                   {insight.priority}
                                 </Badge>
@@ -180,7 +180,7 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                                       className="flex items-start gap-2 p-2 bg-muted/50 rounded-md"
                                     >
                                       <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                      <span className="text-sm">{action.action}</span>
+                                      <span className="text-sm">{action.title}</span>
                                     </div>
                                   ))}
                                 </div>
@@ -188,12 +188,6 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                             </div>
                           </div>
                         </div>
-                        {insight.affectedClients && insight.affectedClients.length > 0 && (
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-3 pt-3 border-t">
-                            <Users className="h-3 w-3" />
-                            <span>{insight.affectedClients.length} clients affected</span>
-                          </div>
-                        )}
                       </CardContent>
                     </Card>
                   );
@@ -209,8 +203,8 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                 <p className="font-medium text-lg">No churn risks detected</p>
               </div>
             ) : (
-              churnInsights.map((insight) => (
-                <Card key={insight.id} className="border-l-4 border-l-destructive">
+              churnInsights.map((insight, idx) => (
+                <Card key={idx} className="border-l-4 border-l-destructive">
                   <CardContent className="p-4">
                     <h4 className="font-semibold mb-2">{insight.title}</h4>
                     <p className="text-sm text-muted-foreground">{insight.description}</p>
@@ -227,8 +221,8 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                 <p className="font-medium text-lg">No revenue opportunities right now</p>
               </div>
             ) : (
-              revenueInsights.map((insight) => (
-                <Card key={insight.id} className="border-l-4 border-l-primary">
+              revenueInsights.map((insight, idx) => (
+                <Card key={idx} className="border-l-4 border-l-primary">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-semibold">{insight.title}</h4>
@@ -252,8 +246,8 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                 <p className="font-medium text-lg">Operating at peak efficiency</p>
               </div>
             ) : (
-              efficiencyInsights.map((insight) => (
-                <Card key={insight.id} className="border-l-4 border-l-blue-500">
+              efficiencyInsights.map((insight, idx) => (
+                <Card key={idx} className="border-l-4 border-l-blue-500">
                   <CardContent className="p-4">
                     <h4 className="font-semibold mb-2">{insight.title}</h4>
                     <p className="text-sm text-muted-foreground">{insight.description}</p>
@@ -270,8 +264,8 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                 <p className="font-medium text-lg">Retention looking strong</p>
               </div>
             ) : (
-              retentionInsights.map((insight) => (
-                <Card key={insight.id} className="border-l-4 border-l-green-500">
+              retentionInsights.map((insight, idx) => (
+                <Card key={idx} className="border-l-4 border-l-green-500">
                   <CardContent className="p-4">
                     <h4 className="font-semibold mb-2">{insight.title}</h4>
                     <p className="text-sm text-muted-foreground">{insight.description}</p>

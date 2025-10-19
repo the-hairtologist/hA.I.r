@@ -36,10 +36,10 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
   const haptics = useRichHaptics();
   const triggerSuccess = () => haptics.patterns.successSequence();
   const triggerError = () => haptics.patterns.warningPattern();
-  const triggerButton = () => haptics.trigger('tap');
+  const triggerButton = () => haptics.trigger('button_tap');
   const { toast } = useToast();
 
-  const [stage, setStage] = useState<'before' | 'after' | 'progress'>('before');
+  const [stage, setStage] = useState<'before' | 'after' | 'complete'>('before');
   const [beforePhoto, setBeforePhoto] = useState<string | null>(null);
   const [afterPhoto, setAfterPhoto] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
@@ -48,7 +48,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
     triggerButton();
     
     const metadata = {
-      stage,
+      stage: (stage === 'complete' ? 'after' : stage) as 'before' | 'after' | 'progress',
       clientId,
       appointmentId,
       serviceType
@@ -72,7 +72,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           title: '🎉 Transformation documented!',
           description: 'Before & After photos saved. Generating comparison...',
         });
-        setStage('progress');
+        setStage('complete');
         
         if (beforePhoto && onComplete) {
           onComplete({ before: beforePhoto, after: photo.url });

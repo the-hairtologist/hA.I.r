@@ -27,7 +27,7 @@ export const ChurnRiskWidget: React.FC<ChurnRiskWidgetProps> = ({ stylistId, var
   const getRiskColor = (level: string) => {
     switch (level) {
       case 'critical': return 'destructive';
-      case 'high': return 'warning';
+      case 'high': return 'secondary';
       case 'medium': return 'secondary';
       default: return 'outline';
     }
