@@ -151,48 +151,15 @@ const AnalyticsInitializer = () => {
 
 const App = () => {
   return (
-    <HelmetProvider>
-      <GlobalErrorBoundary>
-        <ErrorBoundary>
-          <NetworkAwareLoader>
-            <QueryClientProvider client={queryClient}>
-              <SubscriptionProvider>
-                <DemoModeProvider>
-                  <TooltipProvider>
-                    <OfflineIndicator />
-                    <Toaster />
-                    <Sonner />
-                    <CookieConsent />
-                    <PushOptInDialog />
-                    <PerformanceReport />
-                    <GlobalAnnouncer />
-                    <ViewportChangeHandler />
-                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                      <EnhancedAuthProvider>
-                        {/* <AnalyticsInitializer /> */}
-                        <AccessibilityShortcuts />
-                        <CommandPalette />
-                        <TourProvider>
-                          <FirstTimeOnboarding />
-                          <TimeoutGuard timeout={30000}>
-                            <AppLayout>
-                              <Routes>
-                                {AppRoutes()}
-                              </Routes>
-                            </AppLayout>
-                            <PWAInstallPrompt />
-                          </TimeoutGuard>
-                        </TourProvider>
-                      </EnhancedAuthProvider>
-                    </BrowserRouter>
-                  </TooltipProvider>
-                </DemoModeProvider>
-            </SubscriptionProvider>
-          </QueryClientProvider>
-        </NetworkAwareLoader>
-        </ErrorBoundary>
-      </GlobalErrorBoundary>
-    </HelmetProvider>
+    <ErrorBoundary fallback={<div style={{padding: '20px'}}>Minimal Error Boundary Triggered</div>}>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <Routes>
+            {AppRoutes()}
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
