@@ -11,15 +11,16 @@ export function useCalendarSync() {
     try {
       setConnecting(true);
       
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-      const redirectUri = `${window.location.origin}/integrations/calendar`;
+      // Fetch Google Client ID from backend
+      const { data: config, error: configError } = await supabase.functions.invoke('google-client-config');
       
-      if (!clientId) {
+      if (configError || !config?.clientId) {
         throw new Error('Google Calendar integration not configured');
       }
 
+      const redirectUri = `${window.location.origin}/integrations/calendar`;
       const params = new URLSearchParams({
-        client_id: clientId,
+        client_id: config.clientId,
         redirect_uri: redirectUri,
         response_type: 'code',
         scope: 'https://www.googleapis.com/auth/calendar.events',
