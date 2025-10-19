@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { uploadToStorage } from "@/utils/supabaseStorageHelper";
 
 interface VideoUploadProps {
   onVideoUploaded: (videoUrl: string, videoBase64: string) => void;
@@ -43,44 +43,26 @@ export const VideoUpload = ({ onVideoUploaded, maxSizeMB = 50 }: VideoUploadProp
       setVideoPreview(previewUrl);
       setProgress(30);
 
-      // Convert to base64 for AI analysis
-      const reader = new FileReader();
-      const base64Promise = new Promise<string>((resolve, reject) => {
-        reader.onload = () => {
-          const result = reader.result as string;
-          resolve(result);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-
-      const videoBase64 = await base64Promise;
-      setProgress(60);
-
-      // Upload to Supabase Storage
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError, data } = await supabase.storage
-        .from('client-videos')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (uploadError) throw uploadError;
-
-      setProgress(90);
-
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('client-videos')
-        .getPublicUrl(filePath);
+      // Upload directly to storage with progress tracking
+      const { url: publicUrl } = await uploadToStorage(
+        file,
+        'client-videos',
+        undefined,
+        ({ progress }) => {
+          setProgress(30 + (progress * 0.7)); // 30-100%
+        }
+      );
 
       setProgress(100);
       
-      onVideoUploaded(publicUrl, videoBase64);
+      // For AI analysis, we still need base64 (but this is now async, not blocking upload)
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const videoBase64 = reader.result as string;
+        onVideoUploaded(publicUrl, videoBase64);
+      };
+      reader.readAsDataURL(file);
+      
       toast.success('Video uploaded successfully!');
     } catch (error: any) {
       console.error('Upload error:', error);

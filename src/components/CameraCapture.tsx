@@ -12,6 +12,7 @@ import { PrivacyConsentDialog, getStoredConsent } from "./PrivacyConsentDialog";
 import { z } from "zod";
 import { MediaErrorBoundary } from "./MediaErrorBoundary";
 import { OptimizedImage } from '@/components/OptimizedImage';
+import { uploadToStorage } from "@/utils/supabaseStorageHelper";
 
 interface CameraCaptureProps {
   onCapture: (imageUrl: string, metadata?: CaptureMetadata) => void | Promise<void>;
@@ -180,26 +181,32 @@ export const CameraCapture = ({
       // Compress and optimize
       const { blob: optimizedBlob, metadata } = await compressImage(blob);
       
-      // Convert back to data URL
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const optimizedDataUrl = reader.result as string;
-        
-        try {
-          await onCapture(optimizedDataUrl, metadata);
-          
-          await haptic.success();
-          toast.success(messages.success, {
-            description: `Saved ${metadata.compressionRatio}% space • ${(metadata.compressedSize / 1024).toFixed(0)}KB`
-          });
-          
-          setPreview(null);
-        } catch (error) {
-          throw error;
+      // Upload directly to Supabase storage
+      setUploadProgress(70);
+      const bucketName = context === 'profile' ? 'avatars' : 'hair-photos';
+      const { url: storageUrl } = await uploadToStorage(
+        optimizedBlob,
+        bucketName,
+        undefined,
+        (progress) => {
+          setUploadProgress(70 + (progress.progress * 0.3));
         }
-      };
+      );
       
-      reader.readAsDataURL(optimizedBlob);
+      setUploadProgress(100);
+      
+      try {
+        await onCapture(storageUrl, metadata);
+        
+        await haptic.success();
+        toast.success(messages.success, {
+          description: `Saved ${metadata.compressionRatio}% space • ${(metadata.compressedSize / 1024).toFixed(0)}KB`
+        });
+        
+        setPreview(null);
+      } catch (error) {
+        throw error;
+      }
       
     } catch (error: any) {
       console.error('Capture error:', error);
