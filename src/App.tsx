@@ -212,14 +212,12 @@ const App = () => {
                             <Suspense fallback={null}>
                               <RoleSwitchProtection />
                             </Suspense>
-                            <TimeoutGuard timeout={15000}>
-                              <AppLayout>
-                                <Routes>
-                                  {AppRoutes()}
-                                </Routes>
-                              </AppLayout>
-                              <PWAInstallPrompt />
-                            </TimeoutGuard>
+                            <AppLayout>
+                              <Routes>
+                                {AppRoutes()}
+                              </Routes>
+                            </AppLayout>
+                            <PWAInstallPrompt />
                           </TourProvider>
                         </EnhancedAuthProvider>
                       </BrowserRouter>
