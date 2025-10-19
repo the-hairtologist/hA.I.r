@@ -93,7 +93,6 @@ function getConnectionInfo(): {
   downlink?: number;
   rtt?: number;
 } {
-  // @ts-ignore - Network Information API
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
   
   if (!connection) return {};
@@ -109,7 +108,6 @@ function getConnectionInfo(): {
  * Determine connection quality based on available metrics
  */
 function determineQuality(): NetworkQuality {
-  // @ts-ignore - Network Information API
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
   
   if (!connection) {

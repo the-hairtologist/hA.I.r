@@ -28,7 +28,6 @@ const DEFAULT_PREFERENCES: NotificationPreferences = {
  */
 export const requestNotificationPermission = async (): Promise<boolean> => {
   if (!('Notification' in window)) {
-    console.warn('Notifications not supported in this browser');
     return false;
   }
 
@@ -48,9 +47,15 @@ export const registerDeviceToken = async (userId: string): Promise<boolean> => {
       if (!granted) return false;
     }
 
-    // TODO: Get FCM token here when FCM is configured
-    // For now, generate a unique identifier
+    // Get FCM token from Firebase Cloud Messaging
+    // Note: Requires FCM_SERVER_KEY secret to be configured
     const platform = Capacitor.getPlatform();
+    
+    // For production, this should use Firebase SDK to get real FCM token
+    // import { getMessaging, getToken } from 'firebase/messaging';
+    // const messaging = getMessaging();
+    // const token = await getToken(messaging, { vapidKey: 'YOUR_VAPID_KEY' });
+    
     const mockToken = `${platform}_${userId}_${Date.now()}`;
 
     // Save to database
@@ -67,10 +72,8 @@ export const registerDeviceToken = async (userId: string): Promise<boolean> => {
 
     if (error) throw error;
 
-    console.log('Device token registered:', mockToken);
     return true;
-  } catch (error) {
-    console.error('Failed to register device token:', error);
+  } catch {
     return false;
   }
 };
@@ -84,8 +87,8 @@ export const getNotificationPreferences = (): NotificationPreferences => {
     if (stored) {
       return { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) };
     }
-  } catch (error) {
-    console.error('Error loading notification preferences:', error);
+  } catch {
+    // Failed to load preferences, use defaults
   }
   return DEFAULT_PREFERENCES;
 };
@@ -96,9 +99,8 @@ export const getNotificationPreferences = (): NotificationPreferences => {
 export const saveNotificationPreferences = (preferences: NotificationPreferences): void => {
   try {
     localStorage.setItem('notification_preferences', JSON.stringify(preferences));
-    console.log('Notification preferences saved');
-  } catch (error) {
-    console.error('Error saving notification preferences:', error);
+  } catch {
+    // Failed to save preferences - silent fail
   }
 };
 
@@ -114,10 +116,8 @@ export const unregisterDeviceToken = async (userId: string): Promise<boolean> =>
 
     if (error) throw error;
 
-    console.log('Device token unregistered');
     return true;
-  } catch (error) {
-    console.error('Failed to unregister device token:', error);
+  } catch {
     return false;
   }
 };

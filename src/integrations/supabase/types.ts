@@ -4465,25 +4465,25 @@ export type Database = {
           completed: boolean
           created_at: string
           id: string
-          stylist_id: string
           task: string
           updated_at: string
+          user_id: string
         }
         Insert: {
           completed?: boolean
           created_at?: string
           id?: string
-          stylist_id: string
           task: string
           updated_at?: string
+          user_id: string
         }
         Update: {
           completed?: boolean
           created_at?: string
           id?: string
-          stylist_id?: string
           task?: string
           updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

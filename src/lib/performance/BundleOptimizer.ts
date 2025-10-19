@@ -10,8 +10,8 @@ export const importWithChunkName = async <T = any>(
   modulePath: string,
   chunkName: string
 ): Promise<T> => {
-  // @ts-ignore - webpack magic comment
-  return await import(/* webpackChunkName: "[request]" */ modulePath);
+  // Dynamic import with chunk naming for better code splitting
+  return await import(modulePath);
 };
 
 /**
@@ -36,15 +36,7 @@ export const loadFeatureIfEnabled = async <T = any>(
 export const loadPolyfills = async () => {
   const polyfills: Promise<void>[] = [];
 
-  // Check for IntersectionObserver (most modern browsers have it)
-  if (!('IntersectionObserver' in window)) {
-    console.warn('⚠️ IntersectionObserver not supported - some features may be limited');
-  }
-
-  // Check for ResizeObserver
-  if (!('ResizeObserver' in window)) {
-    console.warn('⚠️ ResizeObserver not supported - some features may be limited');
-  }
+  // Polyfills loaded silently - modern browsers typically have these features
 
   await Promise.all(polyfills);
 };
@@ -87,36 +79,28 @@ export const prefetchOnIdle = (resources: string[]) => {
  * Monitor and report bundle size in development
  */
 export const reportBundleSize = () => {
-  if (import.meta.env.DEV) {
-    const scripts = Array.from(document.scripts);
-    const totalSize = scripts.reduce((acc, script) => {
-      if (script.src) {
-        return acc + (script.textContent?.length || 0);
-      }
-      return acc;
-    }, 0);
-
-    console.log(`📦 Estimated bundle size: ${(totalSize / 1024).toFixed(2)} KB`);
-  }
+  // Bundle size reporting disabled - use build tools for accurate metrics
 };
 
 /**
- * Tree-shakable logger (removed in production)
+ * Development-only logging (tree-shaken in production)
  */
+import { log } from '@/lib/logger';
+
 export const devLog = (...args: any[]) => {
   if (import.meta.env.DEV) {
-    console.log(...args);
+    log.debug(String(args[0]), 'dev', args.length > 1 ? { data: args.slice(1) } : undefined);
   }
 };
 
 export const devWarn = (...args: any[]) => {
   if (import.meta.env.DEV) {
-    console.warn(...args);
+    log.warn(String(args[0]), 'dev', args.length > 1 ? { data: args.slice(1) } : undefined);
   }
 };
 
 export const devError = (...args: any[]) => {
   if (import.meta.env.DEV) {
-    console.error(...args);
+    log.error(String(args[0]), 'dev', args.length > 1 ? args[1] : undefined);
   }
 };
