@@ -311,8 +311,8 @@ const Resources = () => {
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
-                    {category.faqs.map((faq, index) => (
-                      <AccordionItem key={faq.question} value={`item-${index}`}>
+                    {category.faqs.map((faq) => (
+                      <AccordionItem key={faq.question} value={faq.question}>
                         <AccordionTrigger className="text-left hover:no-underline">
                           {faq.question}
                         </AccordionTrigger>

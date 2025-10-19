@@ -302,8 +302,8 @@ const Help = () => {
               </CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible className="w-full">
-                  {filteredFaqs.map((faq, index) => (
-                    <AccordionItem key={faq.question} value={`item-${index}`}>
+                  {filteredFaqs.map((faq) => (
+                    <AccordionItem key={faq.question} value={faq.question}>
                       <AccordionTrigger>{faq.question}</AccordionTrigger>
                       <AccordionContent>{faq.answer}</AccordionContent>
                     </AccordionItem>
