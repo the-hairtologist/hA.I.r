@@ -15,7 +15,8 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { logger } from "@/lib/logger";
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 export type AppRole = "stylist" | "client" | "admin";
 
@@ -99,9 +100,7 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         .eq("user_id", userId);
 
       if (error) {
-        import('@/lib/logging/productionLogger').then(({ logger }) => {
-          logger.error("Role verification failed", error);
-        });
+        logger.error("Role verification failed", error, { component: 'EnhancedAuthContext' });
         return false;
       }
 
@@ -116,9 +115,7 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return true;
     } catch (error) {
-      import('@/lib/logging/productionLogger').then(({ logger }) => {
-        logger.error("Error verifying roles", error);
-      });
+      logger.error("Error verifying roles", error, { component: 'EnhancedAuthContext' });
       return false;
     }
   }, []);
@@ -172,6 +169,14 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         ? "client"
         : null;
 
+      logger.info('Auth data loaded successfully', {
+        component: 'EnhancedAuthContext',
+        userId: user.id,
+        roles,
+        primaryRole
+      });
+      userJourney.trackAction('Auth Data Loaded', { userId: user.id, primaryRole });
+      
       setState({
         user,
         profile,
@@ -183,9 +188,8 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         initialized: true,
       });
     } catch (error) {
-      import('@/lib/logging/productionLogger').then(({ logger }) => {
-        logger.error("Error loading auth data", error);
-      });
+      logger.error("Error loading auth data", error, { component: 'EnhancedAuthContext' });
+      userJourney.trackError(error as Error, { action: 'loadAuthData' });
       setState((prev) => ({ ...prev, loading: false, initialized: true }));
     }
   }, []);
@@ -208,9 +212,8 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
           setState((prev) => ({ ...prev, loading: false, initialized: true }));
         }
       } catch (error) {
-        import('@/lib/logging/productionLogger').then(({ logger }) => {
-          logger.error("Error initializing auth", error);
-        });
+        logger.error("Error initializing auth", error, { component: 'EnhancedAuthContext' });
+        userJourney.trackError(error as Error, { action: 'initAuth' });
         if (isMounted) {
           setState((prev) => ({ ...prev, loading: false, initialized: true }));
         }
@@ -230,7 +233,14 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        logger.debug("[Auth] State changed:", event);
+        logger.debug("Auth state changed", { 
+          component: 'EnhancedAuthContext',
+          event,
+          userId: session?.user?.id 
+        });
+        userJourney.trackAction(`Auth State: ${event}`, { 
+          userId: session?.user?.id 
+        });
 
         // CRITICAL: No async calls in callback - use setTimeout
         if (event === "SIGNED_IN" && session?.user) {
@@ -239,6 +249,8 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
             loadAuthData(session.user);
           }, 0);
         } else if (event === "SIGNED_OUT") {
+          logger.info('User signed out', { component: 'EnhancedAuthContext' });
+          userJourney.trackAction('User Signed Out');
           setState({
             user: null,
             profile: null,
@@ -262,6 +274,9 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
    * Sign out
    */
   const signOut = useCallback(async () => {
+    logger.info('Sign out initiated', { component: 'EnhancedAuthContext' });
+    userJourney.trackAction('Sign Out Initiated');
+    
     // Clear offline queue data before signing out
     const { offlineQueue } = await import('@/lib/offlineQueue');
     offlineQueue.clearOnLogout();

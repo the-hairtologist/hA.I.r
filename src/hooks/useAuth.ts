@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { handleError } from '@/lib/errorHandler';
-import { log } from '@/lib/logger';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface AuthState {
   user: User | null;
@@ -38,7 +39,17 @@ export function useAuth(): UseAuthReturn {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        log.debug('Auth state changed', 'useAuth', { event, userId: session?.user?.id });
+        logger.debug('Auth state changed', { 
+          component: 'useAuth',
+          event, 
+          userId: session?.user?.id 
+        });
+        
+        // Track auth events in user journey
+        userJourney.trackAction(`Auth: ${event}`, { 
+          userId: session?.user?.id,
+          email: session?.user?.email 
+        });
         
         // CRITICAL: Only synchronous state updates in callback
         setState({
@@ -60,7 +71,7 @@ export function useAuth(): UseAuthReturn {
         } else if (event === 'SIGNED_OUT') {
           setTimeout(() => navigate('/auth'), 0);
         } else if (event === 'TOKEN_REFRESHED') {
-          log.info('Token refreshed successfully', 'useAuth');
+          logger.info('Token refreshed successfully', { component: 'useAuth' });
         }
       }
     );
@@ -85,7 +96,10 @@ export function useAuth(): UseAuthReturn {
       const { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
-        log.error('Session check failed', 'useAuth', { error });
+        logger.warn('Session check failed', { 
+          component: 'useAuth',
+          error: error.message 
+        });
         // Don't force logout on network errors - let Supabase handle it
         return;
       }
@@ -97,7 +111,8 @@ export function useAuth(): UseAuthReturn {
         const tenMinutes = 10 * 60 * 1000;
         
         if (expiresAt - now < tenMinutes && expiresAt - now > 0) {
-          log.info('Session expiring soon - Supabase will auto-refresh', 'useAuth', {
+          logger.info('Session expiring soon - Supabase will auto-refresh', {
+            component: 'useAuth',
             expiresIn: Math.floor((expiresAt - now) / 1000 / 60) + ' minutes'
           });
         }
@@ -111,8 +126,10 @@ export function useAuth(): UseAuthReturn {
   }, [navigate]);
 
   const signIn = useCallback(async (email: string, password: string) => {
+    const startTime = Date.now();
     try {
-      log.info('Attempting sign in', 'useAuth', { email });
+      logger.info('Attempting sign in', { component: 'useAuth', email });
+      userJourney.trackAction('Sign In Attempt', { email });
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -121,16 +138,28 @@ export function useAuth(): UseAuthReturn {
 
       if (error) throw error;
 
-      log.info('Sign in successful', 'useAuth', { userId: data.user?.id });
+      const duration = Date.now() - startTime;
+      logger.info('Sign in successful', { 
+        component: 'useAuth', 
+        userId: data.user?.id,
+        duration 
+      });
+      logger.performance('Sign In', duration, { email });
+      userJourney.trackAction('Sign In Success', { userId: data.user?.id });
     } catch (error) {
+      const duration = Date.now() - startTime;
+      logger.error('Sign in failed', error, { component: 'useAuth', email, duration });
+      userJourney.trackError(error as Error, { action: 'signIn', email });
       handleError(error, 'Sign In');
       throw error;
     }
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, fullName: string) => {
+    const startTime = Date.now();
     try {
-      log.info('Attempting sign up', 'useAuth', { email });
+      logger.info('Attempting sign up', { component: 'useAuth', email, fullName });
+      userJourney.trackAction('Sign Up Attempt', { email, fullName });
       
       const redirectUrl = `${window.location.origin}/`;
       
@@ -147,8 +176,18 @@ export function useAuth(): UseAuthReturn {
 
       if (error) throw error;
 
-      log.info('Sign up successful', 'useAuth', { userId: data.user?.id });
+      const duration = Date.now() - startTime;
+      logger.info('Sign up successful', { 
+        component: 'useAuth', 
+        userId: data.user?.id,
+        duration 
+      });
+      logger.performance('Sign Up', duration, { email });
+      userJourney.trackAction('Sign Up Success', { userId: data.user?.id });
     } catch (error) {
+      const duration = Date.now() - startTime;
+      logger.error('Sign up failed', error, { component: 'useAuth', email, duration });
+      userJourney.trackError(error as Error, { action: 'signUp', email });
       handleError(error, 'Sign Up');
       throw error;
     }
@@ -156,13 +195,17 @@ export function useAuth(): UseAuthReturn {
 
   const signOut = useCallback(async () => {
     try {
-      log.info('Attempting sign out', 'useAuth');
+      logger.info('Attempting sign out', { component: 'useAuth' });
+      userJourney.trackAction('Sign Out Attempt');
       
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
 
-      log.info('Sign out successful', 'useAuth');
+      logger.info('Sign out successful', { component: 'useAuth' });
+      userJourney.trackAction('Sign Out Success');
     } catch (error) {
+      logger.error('Sign out failed', error, { component: 'useAuth' });
+      userJourney.trackError(error as Error, { action: 'signOut' });
       handleError(error, 'Sign Out');
       throw error;
     }
@@ -170,7 +213,8 @@ export function useAuth(): UseAuthReturn {
 
   const resetPassword = useCallback(async (email: string) => {
     try {
-      log.info('Requesting password reset', 'useAuth', { email });
+      logger.info('Requesting password reset', { component: 'useAuth', email });
+      userJourney.trackAction('Password Reset Request', { email });
       
       const redirectUrl = `${window.location.origin}/auth?mode=recovery`;
       
@@ -180,8 +224,11 @@ export function useAuth(): UseAuthReturn {
 
       if (error) throw error;
 
-      log.info('Password reset email sent', 'useAuth');
+      logger.info('Password reset email sent', { component: 'useAuth', email });
+      userJourney.trackAction('Password Reset Email Sent', { email });
     } catch (error) {
+      logger.error('Password reset failed', error, { component: 'useAuth', email });
+      userJourney.trackError(error as Error, { action: 'resetPassword', email });
       handleError(error, 'Password Reset');
       throw error;
     }
@@ -189,7 +236,8 @@ export function useAuth(): UseAuthReturn {
 
   const updatePassword = useCallback(async (newPassword: string) => {
     try {
-      log.info('Updating password', 'useAuth');
+      logger.info('Updating password', { component: 'useAuth' });
+      userJourney.trackAction('Password Update Attempt');
       
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
@@ -197,8 +245,11 @@ export function useAuth(): UseAuthReturn {
 
       if (error) throw error;
 
-      log.info('Password updated successfully', 'useAuth');
+      logger.info('Password updated successfully', { component: 'useAuth' });
+      userJourney.trackAction('Password Update Success');
     } catch (error) {
+      logger.error('Password update failed', error, { component: 'useAuth' });
+      userJourney.trackError(error as Error, { action: 'updatePassword' });
       handleError(error, 'Update Password');
       throw error;
     }

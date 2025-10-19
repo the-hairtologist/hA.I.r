@@ -33,7 +33,18 @@ export class DashboardErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Dashboard Error:', error, errorInfo);
+    import('@/lib/logging/productionLogger').then(({ logger }) => {
+      logger.error('Dashboard Error', error, {
+        component: 'DashboardErrorBoundary',
+        componentStack: errorInfo.componentStack
+      });
+    });
+    import('@/lib/logging/userJourneyTracker').then(({ userJourney }) => {
+      userJourney.trackError(error, { 
+        boundary: 'Dashboard',
+        componentStack: errorInfo.componentStack 
+      });
+    });
     this.setState({
       error,
       errorInfo,
