@@ -49,7 +49,7 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
     }
 
     // Enhanced input validation for defense-in-depth
-    const sanitizedCode = sanitizeInput(code, 'text');
+    const sanitizedCode = sanitizeInput(code);
     
     if (!sanitizedCode) {
       toast.error("Invalid access code format");

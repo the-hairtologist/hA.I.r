@@ -1,163 +1,95 @@
 /**
- * Input Sanitization Layer
- * Additional security beyond validation to prevent injection attacks
+ * Input Sanitization Utilities
+ * Protects against XSS, SQL injection, and other input-based attacks
  */
 
 /**
- * Sanitize HTML to prevent XSS attacks
- * Strips all HTML tags except safe formatting
+ * Sanitize HTML content to prevent XSS attacks
  */
-export function sanitizeHTML(input: string): string {
-  if (!input) return '';
-  
-  // Remove all HTML tags except safe ones
-  const allowedTags = ['b', 'i', 'em', 'strong', 'br'];
-  const tagRegex = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi;
-  
-  return input.replace(tagRegex, (match, tagName) => {
-    return allowedTags.includes(tagName.toLowerCase()) ? match : '';
-  });
+export function sanitizeHtml(input: string): string {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;',
+  };
+  return input.replace(/[&<>"'/]/g, (char) => map[char]);
 }
 
 /**
- * Sanitize text for safe display (prevent XSS)
+ * Sanitize user input for safe display
  */
-export function sanitizeText(input: string): string {
-  if (!input) return '';
-  
+export function sanitizeInput(input: string): string {
   return input
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;')
-    .replace(/\//g, '&#x2F;');
+    .trim()
+    .replace(/[<>]/g, '') // Remove potential HTML tags
+    .slice(0, 5000); // Limit length to prevent DoS
 }
 
 /**
- * Sanitize for URL usage
+ * Validate and sanitize email addresses
  */
-export function sanitizeForURL(input: string): string {
-  if (!input) return '';
-  
-  return encodeURIComponent(input.trim());
+export function sanitizeEmail(email: string): string {
+  return email.toLowerCase().trim().slice(0, 254);
 }
 
 /**
- * Validate and sanitize email
+ * Validate and sanitize phone numbers
  */
-export function sanitizeEmail(input: string): string | null {
-  if (!input) return null;
-  
-  const trimmed = input.trim().toLowerCase();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
-  if (!emailRegex.test(trimmed)) return null;
-  if (trimmed.length > 255) return null;
-  
-  return trimmed;
+export function sanitizePhone(phone: string): string {
+  return phone.replace(/[^\d+()-\s]/g, '').trim().slice(0, 20);
 }
 
 /**
- * Validate and sanitize phone number
+ * Sanitize URLs to prevent javascript: and data: schemes
  */
-export function sanitizePhone(input: string): string | null {
-  if (!input) return null;
-  
-  // Remove all non-numeric characters except +, -, (, ), and spaces
-  const cleaned = input.replace(/[^0-9+\-() ]/g, '');
-  
-  if (cleaned.length < 10 || cleaned.length > 20) return null;
-  
-  return cleaned;
+export function sanitizeUrl(url: string): string {
+  const trimmed = url.trim().toLowerCase();
+  if (
+    trimmed.startsWith('javascript:') ||
+    trimmed.startsWith('data:') ||
+    trimmed.startsWith('vbscript:')
+  ) {
+    return '';
+  }
+  return url.trim().slice(0, 2048);
 }
 
 /**
- * Prevent SQL injection in user input (additional layer beyond parameterized queries)
+ * Remove SQL injection attempts
+ */
+export function sanitizeSqlInput(input: string): string {
+  return input
+    .replace(/['";\\]/g, '') // Remove SQL special chars
+    .replace(/--/g, '')
+    .replace(/\/\*/g, '')
+    .replace(/\*\//g, '')
+    .trim();
+}
+
+/**
+ * Detect potential SQL injection attempts
  */
 export function detectSQLInjection(input: string): boolean {
-  if (!input) return false;
-  
   const sqlPatterns = [
-    /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|SCRIPT|JAVASCRIPT|ONERROR)\b)/gi,
-    /(--|;|\/\*|\*\/|xp_|sp_)/gi,
-    /(\bUNION\b.*\bSELECT\b)/gi,
-    /(\bOR\b.*=.*)/gi
+    /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE)\b)/i,
+    /(--|;|\/\*|\*\/)/,
+    /('|('')|"|(""))/,
+    /(\bOR\b|\bAND\b).*?[=<>]/i,
+    /\bUNION\b.*?\bSELECT\b/i,
   ];
   
   return sqlPatterns.some(pattern => pattern.test(input));
 }
 
 /**
- * Sanitize file paths to prevent directory traversal
+ * Validate and sanitize file names
  */
-export function sanitizeFilePath(input: string): string | null {
-  if (!input) return null;
-  
-  // Remove any path traversal attempts
-  const dangerous = ['../', '..\\', './', '.\\'];
-  const sanitized = input.split('/').filter(part => 
-    !dangerous.some(d => part.includes(d))
-  ).join('/');
-  
-  // Only allow alphanumeric, hyphens, underscores, and periods
-  if (!/^[a-zA-Z0-9\-_./]+$/.test(sanitized)) return null;
-  
-  return sanitized;
-}
-
-/**
- * Comprehensive input sanitization
- */
-export function sanitizeInput(
-  input: string,
-  type: 'text' | 'html' | 'email' | 'phone' | 'url' | 'filepath' = 'text'
-): string | null {
-  if (!input) return null;
-  
-  // Check for SQL injection attempts
-  if (detectSQLInjection(input)) {
-    console.warn('Potential SQL injection detected:', input);
-    return null;
-  }
-  
-  switch (type) {
-    case 'html':
-      return sanitizeHTML(input);
-    case 'text':
-      return sanitizeText(input);
-    case 'email':
-      return sanitizeEmail(input);
-    case 'phone':
-      return sanitizePhone(input);
-    case 'url':
-      return sanitizeForURL(input);
-    case 'filepath':
-      return sanitizeFilePath(input);
-    default:
-      return input.trim();
-  }
-}
-
-/**
- * Batch sanitize object properties
- */
-export function sanitizeObject<T extends Record<string, any>>(
-  obj: T,
-  fieldTypes: Partial<Record<keyof T, 'text' | 'html' | 'email' | 'phone' | 'url' | 'filepath'>>
-): Partial<T> {
-  const sanitized: Partial<T> = {};
-  
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === 'string') {
-      const type = fieldTypes[key as keyof T] || 'text';
-      const sanitizedValue = sanitizeInput(value, type);
-      if (sanitizedValue !== null) {
-        sanitized[key as keyof T] = sanitizedValue as any;
-      }
-    } else {
-      sanitized[key as keyof T] = value;
-    }
-  }
-  
-  return sanitized;
+export function sanitizeFileName(fileName: string): string {
+  return fileName
+    .replace(/[^a-zA-Z0-9._-]/g, '_')
+    .replace(/\.{2,}/g, '.')
+    .slice(0, 255);
 }
