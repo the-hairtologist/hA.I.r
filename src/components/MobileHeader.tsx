@@ -99,18 +99,19 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-1">
-          {/* Search button */}
+          {/* Command Palette / Quick Search */}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => {
               haptic.tap();
-              window.dispatchEvent(new CustomEvent('global-search-focus'));
+              window.dispatchEvent(new CustomEvent('open-command-palette'));
             }}
-            className="min-w-[44px] min-h-[44px] touch-manipulation"
-            aria-label="Open search"
+            className="min-w-[44px] min-h-[44px] touch-manipulation relative group"
+            aria-label="Quick search and actions"
           >
-            <Search className="h-6 w-6" />
+            <Search className="h-6 w-6 group-hover:text-primary transition-colors" />
+            <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary/60 animate-pulse" />
           </Button>
 
           {/* Notifications button */}

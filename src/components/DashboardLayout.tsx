@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
 import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
+import { MobileQuickActions } from "@/components/MobileQuickActions";
 import { DemoModeIndicator } from "@/components/demo/DemoMode";
 import { CommandPalette } from "@/components/CommandPalette";
 import { Button } from "@/components/ui/button";
@@ -53,13 +54,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   // Determine user role - admin gets full access, no role switching needed
   const userRole = isStylist ? 'stylist' : isClient ? 'client' : 'admin';
 
-  // Listen for keyboard shortcuts (stylist only)
+  // Listen for keyboard shortcuts AND custom events (for mobile)
   useEffect(() => {
-    if (userRole !== 'stylist') return;
-
     const handleKeyPress = (e: KeyboardEvent) => {
-      // Show shortcuts dialog with Shift+?
-      if (e.key === '?' && e.shiftKey) {
+      // Show shortcuts dialog with Shift+? (stylist only on desktop)
+      if (e.key === '?' && e.shiftKey && userRole === 'stylist') {
         e.preventDefault();
         setShowShortcuts(true);
         return;
@@ -72,8 +71,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         return;
       }
 
-      // Navigation shortcuts with 'G' key
-      if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      // Navigation shortcuts with 'G' key (stylist only)
+      if (e.key === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey && userRole === 'stylist') {
         const handleSecondKey = (e2: KeyboardEvent) => {
           e2.preventDefault();
           window.removeEventListener('keydown', handleSecondKey);
@@ -95,16 +94,24 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         navigate('/book-appointment');
       }
 
-      // Cmd+Shift+C - Add new client
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+      // Cmd+Shift+C - Add new client (stylist only)
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C' && userRole === 'stylist') {
         e.preventDefault();
         // Dispatch custom event to open add client dialog
         window.dispatchEvent(new CustomEvent('open-add-client-dialog'));
       }
     };
 
+    // Listen for custom events (mobile triggers)
+    const handleCommandPalette = () => setCommandPaletteOpen(true);
+    
     window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener('open-command-palette', handleCommandPalette);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('open-command-palette', handleCommandPalette);
+    };
   }, [userRole, navigate]);
 
   // Redirect if not authenticated
@@ -295,9 +302,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
         
         <MobileBottomNav />
+        <MobileQuickActions />
       </div>
       
-      {/* Command Palette - Global keyboard shortcut */}
+      {/* Command Palette - Global for keyboard + mobile tap */}
       <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
       
       <KeyboardShortcutsDialog 
