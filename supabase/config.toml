@@ -116,3 +116,32 @@ verify_jwt = true
 
 [functions.generate-formula-recommendations]
 verify_jwt = true
+
+[functions.process-email-sequences]
+verify_jwt = false
+
+[functions.auto-send-aftercare]
+verify_jwt = false
+
+[functions.send-automated-emails]
+verify_jwt = false
+
+[functions.resend-webhook]
+verify_jwt = false
+
+# Cron Jobs - Automated Email System
+[functions.automated-reminders.schedule]
+enabled = true
+cron = "0 */2 * * *"  # Every 2 hours
+
+[functions.automated-appointment-followup.schedule]
+enabled = true
+cron = "0 9 * * *"  # Daily at 9 AM
+
+[functions.process-email-sequences.schedule]
+enabled = true
+cron = "0 */3 * * *"  # Every 3 hours
+
+[functions.send-automated-emails.schedule]
+enabled = true
+cron = "0 10 * * *"  # Daily at 10 AM
