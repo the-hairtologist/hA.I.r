@@ -138,13 +138,14 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
   }
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
       {cards.map((card, index) => (
         <Card
           key={card.label}
           className={cn(
             "cursor-pointer border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
             "hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+            "active:translate-x-[4px] active:translate-y-[4px] active:shadow-none",
             "transition-all duration-300 animate-fade-in",
             card.borderColor
           )}
@@ -155,8 +156,8 @@ export const LiveKPICards = ({ stylistId, onCardClick }: LiveKPICardsProps) => {
             <div className={cn("rounded-lg p-1.5 sm:p-2 w-fit mb-2 sm:mb-3 bg-gradient-to-br", card.color)}>
               <card.icon className={cn("h-4 w-4 sm:h-5 sm:w-5", card.iconColor)} />
             </div>
-            <p className="text-[11px] sm:text-xs font-sans font-medium text-muted-foreground mb-0.5">{card.label}</p>
-            <p className="text-lg sm:text-xl lg:text-2xl font-pixel font-bold gradient-text">
+            <p className="text-[10px] xs:text-[11px] sm:text-xs font-sans font-medium text-muted-foreground mb-0.5 truncate">{card.label}</p>
+            <p className="text-base xs:text-lg sm:text-xl lg:text-2xl font-pixel font-bold gradient-text truncate">
               {card.value}
             </p>
           </CardContent>

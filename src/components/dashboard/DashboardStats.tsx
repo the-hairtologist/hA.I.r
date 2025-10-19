@@ -92,11 +92,11 @@ export const DashboardStats = memo(({ stats, userRole }: DashboardStatsProps) =>
   );
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
       {displayStats.map((stat, index) => (
         <div 
           key={stat.label} 
-          className="relative transform transition-all duration-300 hover:scale-[1.02]"
+          className="relative transform transition-all duration-200 sm:duration-300 hover:scale-[1.02] active:scale-[0.98]"
           style={{ 
             animation: `fadeInUp 0.4s ease-out ${index * 0.1}s both`
           }}

@@ -84,28 +84,28 @@ export function SecurityMetricsCards() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {metricCards.map((metric, index) => (
         <Card 
           key={metric.title} 
           variant="brutal"
-          className="group p-5 transition-all duration-300 hover:scale-[1.02] animate-slide-up-fade cursor-pointer"
+          className="group p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] animate-slide-up-fade cursor-pointer"
           style={{ animationDelay: `${index * 100}ms` }}
         >
           <div className="flex items-start justify-between">
-            <div className="space-y-2 flex-1 min-w-0">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground/80 truncate">
+            <div className="space-y-1.5 sm:space-y-2 flex-1 min-w-0">
+              <p className="text-[10px] xs:text-xs font-bold uppercase tracking-wider text-muted-foreground/80 truncate">
                 {metric.title}
               </p>
-              <p className="text-3xl sm:text-4xl font-display font-bold tabular-nums animate-number-pop">
+              <p className="text-2xl xs:text-3xl sm:text-4xl font-display font-bold tabular-nums animate-number-pop">
                 {metric.value}
               </p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wide text-muted-foreground/60 font-medium">
+              <p className="text-[9px] xs:text-[10px] sm:text-xs uppercase tracking-wide text-muted-foreground/60 font-medium truncate">
                 {metric.subtitle}
               </p>
             </div>
-            <div className={`p-3 rounded-xl ${metric.bgColor} flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-              <metric.icon className={`h-5 w-5 sm:h-6 sm:w-6 ${metric.color}`} />
+            <div className={`p-2 sm:p-3 rounded-xl ${metric.bgColor} flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+              <metric.icon className={`h-4 w-4 xs:h-5 xs:w-5 sm:h-6 sm:w-6 ${metric.color}`} />
             </div>
           </div>
           

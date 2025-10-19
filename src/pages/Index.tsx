@@ -22,24 +22,24 @@ const Index = () => {
         Skip to main content
       </a>
       
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b-[4px] border-black" role="banner" style={{
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b-[3px] sm:border-b-[4px] border-black" role="banner" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)
         `,
         backgroundSize: '8px 8px'
       }}>
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <button onClick={() => navigate("/")} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 border-2 border-white bg-primary flex items-center justify-center">
-              <Scissors className="h-4 w-4 text-primary-foreground" />
+        <div className="container mx-auto px-3 xs:px-4 py-3 sm:py-4 flex items-center justify-between">
+          <button onClick={() => navigate("/")} className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity">
+            <div className="w-7 h-7 xs:w-8 xs:h-8 border-2 border-white bg-primary flex items-center justify-center">
+              <Scissors className="h-3.5 w-3.5 xs:h-4 xs:w-4 text-primary-foreground" />
             </div>
-            <span className="text-base font-pixel text-white uppercase">hA.I.r</span>
+            <span className="text-sm xs:text-base font-pixel text-white uppercase">hA.I.r</span>
           </button>
           <Button 
             onClick={() => navigate("/auth")} 
             size="sm" 
-            className="font-pixel text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none px-6 py-2.5 min-h-[44px]"
+            className="font-pixel text-[10px] xs:text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-[2px] xs:border-[3px] border-white shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] xs:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] xs:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none px-4 xs:px-6 py-2 xs:py-2.5 min-h-[44px]"
           >
             Get Started
           </Button>
@@ -48,34 +48,34 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-24 sm:py-32 overflow-hidden min-h-[90vh] flex items-center" style={{
+        <section className="relative bg-primary py-16 xs:py-20 sm:py-24 md:py-32 overflow-hidden min-h-[85vh] xs:min-h-[90vh] flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>
-          <div className="container mx-auto px-4 text-center relative z-10 w-full">
-            <div className="max-w-4xl mx-auto space-y-8">
-              <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-pixel uppercase text-secondary leading-relaxed tracking-wider drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in" style={{ lineHeight: '1.6' }}>
+          <div className="container mx-auto px-3 xs:px-4 text-center relative z-10 w-full">
+            <div className="max-w-4xl mx-auto space-y-6 xs:space-y-8">
+              <h1 className="text-2xl xxs:text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-pixel uppercase text-secondary leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-0">
                 YOUR HAIR, SMARTER.<br />YOUR SALON, EFFORTLESS.
               </h1>
               
-              <p className="text-sm xs:text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-loose animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <p className="text-xs xxs:text-sm xs:text-base sm:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-2 xs:px-0" style={{ animationDelay: '100ms' }}>
                 BOOK SMARTER. STYLE BETTER. GET PAID FASTER.
               </p>
               
-              <div className="pt-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
+              <div className="pt-4 xs:pt-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-sm xs:text-base sm:text-lg px-6 xs:px-8 sm:px-12 py-4 xs:py-5 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-[4px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle min-h-[56px]"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg px-5 xxs:px-6 xs:px-8 sm:px-12 py-3 xxs:py-4 xs:py-5 sm:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-[3px] xs:border-[4px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] xs:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xs:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none animate-pulse-subtle min-h-[56px]"
                 >
                   GET STARTED FREE
                 </Button>
               </div>
               
-              <p className="text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <p className="text-[10px] xxs:text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase animate-fade-in" style={{ animationDelay: '300ms' }}>
                 Free Trial • No Credit Card Required
               </p>
             </div>
@@ -117,18 +117,18 @@ const Index = () => {
       </main>
 
       {/* Stats Section - Yellow background for excitement */}
-      <section className="py-16 bg-secondary border-t-[4px] border-black" style={{
+      <section className="py-12 xs:py-14 sm:py-16 bg-secondary border-t-[3px] sm:border-t-[4px] border-black" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
         `,
         backgroundSize: '8px 8px'
       }}>
-        <div className="container mx-auto px-4">
-          <h2 className="text-center font-pixel text-lg xs:text-xl sm:text-2xl text-secondary-foreground mb-12 uppercase tracking-wider">
+        <div className="container mx-auto px-3 xs:px-4">
+          <h2 className="text-center font-pixel text-base xxs:text-lg xs:text-xl sm:text-2xl text-secondary-foreground mb-8 xs:mb-10 sm:mb-12 uppercase tracking-wide xs:tracking-wider px-2 xs:px-0 leading-tight">
             STYLISTS USING hA.I.r<br/>CUT ADMIN TIME BY 40%
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 xs:gap-8 md:gap-10 lg:gap-12 max-w-5xl mx-auto">
             <AnimatedCounter end={2000} suffix="+" icon={Scissors} label="STYLISTS" />
             <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" />
             <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" />
