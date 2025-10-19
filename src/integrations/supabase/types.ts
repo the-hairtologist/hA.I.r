@@ -5107,6 +5107,20 @@ export type Database = {
         Args: { _user_id: string }
         Returns: string
       }
+      get_cron_job_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          active: boolean
+          command: string
+          database: string
+          jobid: number
+          jobname: string
+          nodename: string
+          nodeport: number
+          schedule: string
+          username: string
+        }[]
+      }
       get_stylist_profile_id: {
         Args: { _user_id: string }
         Returns: string

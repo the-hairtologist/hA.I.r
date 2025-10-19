@@ -74,24 +74,66 @@ serve(async (req) => {
 
         message += `\n\nSee you soon! 💇‍♀️`;
 
-        // Send SMS reminder if phone number exists
-        if (apt.client?.phone) {
-          await supabase.functions.invoke("send-sms-notification", {
-            body: {
-              to: apt.client.phone,
-              message: message,
-            },
-          });
+        // Check email preferences before sending
+        let emailSent = false;
+        if (apt.client?.email) {
+          const { data: emailPrefs } = await supabase
+            .from("email_preferences")
+            .select("appointment_reminders_enabled")
+            .eq("email", apt.client.email)
+            .maybeSingle();
+
+          if (!emailPrefs || emailPrefs.appointment_reminders_enabled !== false) {
+            await supabase.functions.invoke("send-appointment-reminder", {
+              body: {
+                appointmentId: apt.id,
+                customMessage: message,
+              },
+            });
+            emailSent = true;
+            console.log(`📧 Email reminder sent to ${apt.client.email}`);
+          } else {
+            console.log(`⏭️ Email skipped - user opted out: ${apt.client.email}`);
+          }
         }
 
-        // Send email reminder
-        if (apt.client?.email) {
-          await supabase.functions.invoke("send-appointment-reminder", {
-            body: {
-              appointmentId: apt.id,
-              customMessage: message,
-            },
-          });
+        // Check client profile SMS preferences before sending
+        let smsSent = false;
+        if (apt.client?.phone) {
+          const { data: clientProfile } = await supabase
+            .from("client_profiles")
+            .select("communication_preference")
+            .eq("id", apt.client_id)
+            .maybeSingle();
+
+          // Send SMS if communication preference is 'sms' or 'both', or if not set (default to yes)
+          const allowSms = !clientProfile || 
+                          clientProfile.communication_preference === 'sms' || 
+                          clientProfile.communication_preference === 'both' ||
+                          clientProfile.communication_preference === 'app';
+
+          if (allowSms) {
+            try {
+              await supabase.functions.invoke("send-sms-notification", {
+                body: {
+                  to: apt.client.phone,
+                  message: message,
+                },
+              });
+              smsSent = true;
+              console.log(`📱 SMS reminder sent to ${apt.client.phone}`);
+            } catch (smsError) {
+              console.error(`SMS error for appointment ${apt.id}:`, smsError);
+            }
+          } else {
+            console.log(`⏭️ SMS skipped - user opted out: ${apt.client.phone}`);
+          }
+        }
+
+        // Only mark as sent if at least one notification was sent
+        if (!emailSent && !smsSent) {
+          console.warn(`⚠️ No reminders sent for appointment ${apt.id} - both channels opted out or unavailable`);
+          continue;
         }
 
         // Mark as sent

@@ -144,6 +144,20 @@ Deno.serve(async (req) => {
           continue;
         }
 
+        // Check email preferences before sending
+        const { data: emailPrefs } = await supabaseClient
+          .from('email_preferences')
+          .select('appointment_reminders_enabled')
+          .eq('email', clientEmail)
+          .maybeSingle();
+
+        if (emailPrefs && emailPrefs.appointment_reminders_enabled === false) {
+          console.log(`⏭️ Skipping reminder - user opted out: ${clientEmail}`);
+          results.failed++;
+          results.errors.push(`User opted out: ${appointment.id}`);
+          continue;
+        }
+
         const appointmentDate = new Date(appointment.appointment_date);
         const formattedDate = appointmentDate.toLocaleDateString('en-US', {
           weekday: 'long',
