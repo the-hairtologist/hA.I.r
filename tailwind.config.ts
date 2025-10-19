@@ -23,12 +23,12 @@ export default {
     },
     screens: {
       'xxs': '320px',  // Extreme small screens (very old devices)
-      'xs': '360px',   // Extra small screens (Galaxy S21, small modern phones)
-      'sm': '640px',   // Small tablets and large phones
-      'md': '768px',   // Tablets
-      'lg': '1024px',  // Small laptops
-      'xl': '1280px',  // Desktops
-      '2xl': '1536px', // Large desktops
+      'xs': '360px',   // Extra small screens (small modern phones)
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
     },
     extend: {
       fontFamily: {

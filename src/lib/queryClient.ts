@@ -11,8 +11,8 @@ export const queryClient = new QueryClient({
     queries: {
       staleTime: 60 * 1000, // 1 minute
       gcTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1, // Reduced from 3 to 1 for mobile performance
-      retryDelay: 1000, // Simple 1s delay instead of exponential backoff
+      retry: 3,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       refetchOnWindowFocus: false,
     },
   },

@@ -23,7 +23,7 @@ const ClientDiscovery = () => {
     : "We're building a powerful marketplace to connect you with clients looking for your expertise";
 
   return (
-    <div className="min-h-screen-safe bg-gradient-to-br from-primary/10 via-background to-accent/10">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10">
       <PageHeader
         title={pageTitle}
         icon={<Search className="h-6 w-6" />}

@@ -315,12 +315,12 @@ export const AddClientDialog = ({
             >
               {loading ? (
                 <>
-                  <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   Adding...
                 </>
               ) : (
                 <>
-                  <UserPlus className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <UserPlus className="h-4 w-4" />
                   Add Client
                 </>
               )}

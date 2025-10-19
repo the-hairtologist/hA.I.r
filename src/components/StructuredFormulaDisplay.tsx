@@ -98,7 +98,7 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
               {item.mix && <div>Mix: {item.mix}</div>}
               {item.processing_minutes && (
                 <div className="flex items-center gap-2 text-foreground/80">
-                  <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <Clock className="h-3 w-3" />
                   <span>{item.processing_minutes} minutes</span>
                 </div>
               )}
@@ -119,7 +119,7 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
               <CardTitle className="text-lg">Professional Formula</CardTitle>
             </div>
             <Badge variant="outline" className="w-fit text-xs border-primary/30 bg-primary/5">
-              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+              <Sparkles className="h-3 w-3 mr-1" />
               AI-Generated • Verify with Professional
             </Badge>
           </div>
@@ -130,7 +130,7 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
               onClick={copyFormula}
               className="h-8"
             >
-              <Copy className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+              <Copy className="h-3 w-3 mr-1" />
               Copy
             </Button>
             {onSave && (
@@ -139,7 +139,7 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
                 onClick={() => onSave(JSON.stringify(formula, null, 2))}
                 className="h-8"
               >
-                <Save className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                <Save className="h-3 w-3 mr-1" />
                 Save
               </Button>
             )}
@@ -147,7 +147,7 @@ export const StructuredFormulaDisplay = ({ data, onSave }: StructuredFormulaDisp
         </div>
         {formula.estimated_time_minutes && (
           <Badge variant="secondary" className="w-fit mt-2">
-            <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+            <Clock className="h-3 w-3 mr-1" />
             Est. {formula.estimated_time_minutes} min
           </Badge>
         )}

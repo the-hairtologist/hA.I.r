@@ -241,7 +241,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                 </div>
                 <Label htmlFor="avatar-upload" className="cursor-pointer">
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-primary hover:underline">
-                    <Upload className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <Upload className="h-4 w-4" />
                     {uploading ? "Uploading..." : avatarUrl ? "Change Photo" : "Upload Photo"}
                   </div>
                   <Input
@@ -452,13 +452,13 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
                 "Saving..."
               ) : step === totalSteps ? (
                 <>
-                  <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                  <CheckCircle className="h-4 w-4 mr-2" />
                   Complete Profile
                 </>
               ) : (
                 <>
                   Next
-                  <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 ml-2" />
+                  <ArrowRight className="h-4 w-4 ml-2" />
                 </>
               )}
             </Button>

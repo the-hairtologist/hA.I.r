@@ -122,7 +122,7 @@ export function LoyaltyProgressWidget() {
         {unclaimedRewards.length > 0 && (
           <div className="pt-2 border-t">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-5 w-5 text-amber-500" />
+              <Sparkles className="h-4 w-4 text-amber-500" />
               <span className="text-xs sm:text-sm font-medium">You have {unclaimedRewards.length} reward{unclaimedRewards.length !== 1 ? 's' : ''}!</span>
             </div>
             <div className="space-y-2">
@@ -133,7 +133,7 @@ export function LoyaltyProgressWidget() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Trophy className="h-5 w-5 text-amber-500" />
+                      <Trophy className="h-4 w-4 text-amber-500" />
                       <span className="text-xs sm:text-sm font-medium">
                         ${reward.discount_amount} Off
                       </span>
@@ -159,7 +159,7 @@ export function LoyaltyProgressWidget() {
           variant="outline"
           className="w-full"
         >
-          <Star className="h-5 w-5 mr-2" />
+          <Star className="h-4 w-4 mr-2" />
           View All Rewards
         </Button>
       </CardContent>

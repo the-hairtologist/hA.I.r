@@ -167,7 +167,7 @@ export const VoiceInput = ({
           <Mic className="h-4 w-4" />
         )}
         {isRecording && (
-          <span className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 bg-destructive rounded-full animate-pulse" />
+          <span className="absolute -top-1 -right-1 h-3 w-3 bg-destructive rounded-full animate-pulse" />
         )}
       </Button>
     );

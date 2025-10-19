@@ -97,7 +97,7 @@ export const ClientPortalPreview = ({
               onClick={handleShare}
               className="gap-1"
             >
-              <Share2 className="h-5 w-5 sm:h-6 sm:w-6" />
+              <Share2 className="h-3 w-3" />
               Share
             </Button>
           </div>
@@ -108,7 +108,7 @@ export const ClientPortalPreview = ({
 
           {stylistLocation && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <MapPin className="h-5 w-5 sm:h-6 sm:w-6" />
+              <MapPin className="h-4 w-4" />
               {stylistLocation}
             </div>
           )}
@@ -117,7 +117,7 @@ export const ClientPortalPreview = ({
         {/* Feature Banner */}
         <div className="p-4 bg-accent/20 rounded-lg brutal-border border-accent/40">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-accent-foreground" />
+            <Sparkles className="h-4 w-4 text-accent-foreground" />
             <p className="text-sm font-semibold text-accent-foreground">
               Client Booking Portal
             </p>
@@ -134,7 +134,7 @@ export const ClientPortalPreview = ({
             className="gap-2"
             disabled
           >
-            <Calendar className="h-5 w-5 sm:h-6 sm:w-6" />
+            <Calendar className="h-4 w-4" />
             Book Now
           </Button>
           <Button
@@ -142,7 +142,7 @@ export const ClientPortalPreview = ({
             disabled
             className="gap-2"
           >
-            <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
+            <Clock className="h-4 w-4" />
             View Hours
           </Button>
         </div>

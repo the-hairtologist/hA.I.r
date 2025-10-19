@@ -21,7 +21,7 @@ export const TourTooltip = ({
   return (
     <div
       {...tooltipProps}
-      className="bg-background border-[3px] border-foreground shadow-brutal rounded-none max-w-sm"
+      className="bg-background border-[3px] border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none max-w-sm"
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b-[2px] border-foreground">
@@ -56,12 +56,12 @@ export const TourTooltip = ({
       {/* Footer */}
       <div className="flex items-center justify-between gap-2 p-4 border-t-[2px] border-foreground bg-muted/20">
         {index > 0 ? (
-            <Button
-              {...backProps}
-              variant="outline"
-              size="sm"
-              className="font-pixel text-xs uppercase border-[2px] border-foreground shadow-brutal-sm hover:shadow-brutal transition-all"
-            >
+          <Button
+            {...backProps}
+            variant="outline"
+            size="sm"
+            className="font-pixel text-xs uppercase border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+          >
             Back
           </Button>
         ) : (
@@ -80,7 +80,7 @@ export const TourTooltip = ({
             <Button
               {...primaryProps}
               size="sm"
-              className="font-pixel text-xs uppercase bg-primary text-primary-foreground border-[2px] border-foreground shadow-brutal-sm hover:shadow-brutal transition-all"
+              className="font-pixel text-xs uppercase bg-primary text-primary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
             >
               {index === size - 1 ? 'Finish' : 'Next'}
             </Button>

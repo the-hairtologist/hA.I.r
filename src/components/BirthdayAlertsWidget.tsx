@@ -192,7 +192,7 @@ export function BirthdayAlertsWidget() {
                         className="h-7 w-7 p-0"
                         title="Send birthday email"
                       >
-                        <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <Mail className="h-3.5 w-3.5" />
                       </Button>
                     )}
                     {client.phone && (
@@ -203,7 +203,7 @@ export function BirthdayAlertsWidget() {
                         className="h-7 w-7 p-0"
                         title="Send birthday SMS"
                       >
-                        <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <MessageCircle className="h-3.5 w-3.5" />
                       </Button>
                     )}
                   </div>

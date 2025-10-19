@@ -6,7 +6,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { logger } from "@/lib/logger";
 
 // Mobile viewport height fix
 const setViewportHeight = () => {
@@ -40,7 +39,7 @@ if ('serviceWorker' in navigator) {
       });
     });
   }).catch((error) => {
-    logger.error('SW check failed', 'ServiceWorker', error);
+    console.error('SW check failed:', error);
   });
 }
 
@@ -54,7 +53,7 @@ const clearCacheAndReload = async () => {
     localStorage.clear();
     sessionStorage.clear();
   } catch (e) {
-    logger.error('Cache clear failed', 'CacheClear', e as Error);
+    console.error('Cache clear failed:', e);
   } finally {
     window.location.reload();
   }
@@ -74,7 +73,7 @@ const initApp = () => {
     const initTimeout = setTimeout(() => {
       console.warn('App taking too long to initialize');
       showTimeoutWarning();
-    }, 20000); // Increased from 15s to 20s for mobile
+    }, 15000);
 
     const root = createRoot(rootElement);
     root.render(<App />);
@@ -82,7 +81,7 @@ const initApp = () => {
     // Clear timeout once rendered
     clearTimeout(initTimeout);
   } catch (error) {
-    logger.error('App initialization failed', 'AppInit', error as Error);
+    console.error('App initialization failed:', error);
     showErrorUI('Initialization failed');
   }
 };

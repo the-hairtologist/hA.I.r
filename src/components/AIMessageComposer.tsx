@@ -103,12 +103,12 @@ export const AIMessageComposer = ({
         <Button onClick={handleGenerate} disabled={generating} className="w-full">
           {generating ? (
             <>
-              <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Generating message...
             </>
           ) : (
             <>
-              <Sparkles className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+              <Sparkles className="mr-2 h-4 w-4" />
               Generate Message
             </>
           )}
@@ -128,12 +128,12 @@ export const AIMessageComposer = ({
             {/* Action Buttons */}
             <div className="flex gap-2">
               <Button onClick={handleCopy} variant="outline" className="flex-1">
-                <Copy className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                <Copy className="mr-2 h-4 w-4" />
                 Copy
               </Button>
               {onSendMessage && (
                 <Button onClick={handleSend} className="flex-1">
-                  <Send className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                  <Send className="mr-2 h-4 w-4" />
                   Send Message
                 </Button>
               )}

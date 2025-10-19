@@ -316,7 +316,7 @@ const Appointments = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
         <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center gap-2">
@@ -333,7 +333,7 @@ const Appointments = () => {
   }
 
   return (
-    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
@@ -623,7 +623,7 @@ const Appointments = () => {
                               }}
                               className="h-8 opacity-0 group-hover:opacity-100 transition-opacity border-2 shadow-brutal"
                             >
-                              <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
+                              <Clock className="h-3.5 w-3.5 mr-1" />
                               Start Timer
                             </Button>
                           )}

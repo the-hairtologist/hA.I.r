@@ -39,36 +39,13 @@ class SelfHealingSystem {
       performanceMonitor.init();
       webVitalsMonitor.init();
 
-      // Skip initial data integrity check on startup for performance
-      // Schedule it for later when user is idle
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-          this.runDelayedIntegrityCheck();
-        }, { timeout: 30000 }); // 30 seconds
-      } else {
-        setTimeout(() => {
-          this.runDelayedIntegrityCheck();
-        }, 30000);
-      }
-
-      this.initialized = true;
-      logger.info('Self-healing system initialized successfully');
-    } catch (error) {
-      logger.error('Failed to initialize self-healing system', 'SelfHealingSystem', error);
-    }
-  }
-
-  /**
-   * Run integrity check after delay (non-blocking)
-   */
-  private async runDelayedIntegrityCheck() {
-    try {
+      // Run initial integrity check (silent for production)
       const issues = await dataIntegrity.runFullCheck();
       
       if (issues.length > 0) {
         // Only log in development mode to avoid console noise in production
         if (import.meta.env.DEV) {
-          logger.debug(`Found ${issues.length} data integrity issues`);
+          logger.debug(`Found ${issues.length} data integrity issues on startup`);
         }
         
         // Auto-fix what we can
@@ -77,8 +54,11 @@ class SelfHealingSystem {
           logger.info(`Auto-fixed ${fixed} issues`);
         }
       }
+
+      this.initialized = true;
+      logger.info('Self-healing system initialized successfully');
     } catch (error) {
-      logger.error('Delayed integrity check failed', 'SelfHealingSystem', error);
+      logger.error('Failed to initialize self-healing system', 'SelfHealingSystem', error);
     }
   }
 

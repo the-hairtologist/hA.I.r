@@ -42,10 +42,10 @@ export const CalendarView = ({ appointments, onDateSelect, onAppointmentClick }:
           <CardTitle>{format(currentMonth, 'MMMM yyyy')}</CardTitle>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={previousMonth}>
-              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+              <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="sm" onClick={nextMonth}>
-              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>

@@ -210,14 +210,12 @@ export const QuickAppointmentDialog = ({
         // Don't block success if SMS fails
       }
 
-      toast.success('Booked! ✅ — Confirmation sent to client 📧');
+      toast.success("Appointment created successfully!");
       onOpenChange(false);
       onSuccess?.();
     } catch (error: any) {
       console.error("Error creating appointment:", error);
-      toast.error("Oops! 😅 — Let's try that again", {
-        description: error.message || "Check your connection and retry"
-      });
+      toast.error(error.message || "Failed to create appointment");
     } finally {
       setLoading(false);
     }
@@ -327,11 +325,10 @@ export const QuickAppointmentDialog = ({
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
             Cancel
           </Button>
-        <Button 
-          onClick={handleSubmit} 
-          disabled={loading || hasConflict || clients.length === 0 || services.length === 0}
-          className="min-h-[44px]"
-        >
+          <Button 
+            onClick={handleSubmit} 
+            disabled={loading || hasConflict || clients.length === 0 || services.length === 0}
+          >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Appointment
           </Button>

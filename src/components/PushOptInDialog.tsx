@@ -63,7 +63,7 @@ export const PushOptInDialog = () => {
         <div className="space-y-3 py-4">
           <div className="flex items-start gap-3">
             <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-              <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-600 dark:text-emerald-400" />
+              <Calendar className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div>
               <p className="font-medium text-sm">Never miss appointments</p>
@@ -73,7 +73,7 @@ export const PushOptInDialog = () => {
 
           <div className="flex items-start gap-3">
             <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
-              <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 dark:text-blue-400" />
+              <MessageSquare className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
               <p className="font-medium text-sm">Instant messages</p>
@@ -83,7 +83,7 @@ export const PushOptInDialog = () => {
 
           <div className="flex items-start gap-3">
             <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-900/30">
-              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600 dark:text-purple-400" />
+              <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <p className="font-medium text-sm">AI insights & tips</p>
@@ -93,7 +93,7 @@ export const PushOptInDialog = () => {
 
           <div className="flex items-start gap-3">
             <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/30">
-              <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-amber-600 dark:text-amber-400" />
+              <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
             </div>
             <div>
               <p className="font-medium text-sm">Quiet hours control</p>
@@ -109,7 +109,7 @@ export const PushOptInDialog = () => {
             className="w-full"
             size="lg"
           >
-            <Bell className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <Bell className="mr-2 h-4 w-4" />
             {deciding ? 'Enabling...' : 'Enable Notifications'}
           </Button>
 
@@ -128,7 +128,7 @@ export const PushOptInDialog = () => {
               className="flex-1"
               size="sm"
             >
-              <BellOff className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+              <BellOff className="mr-2 h-3 w-3" />
               No Thanks
             </Button>
           </div>

@@ -100,11 +100,11 @@ export const SmartSchedulingSuggestions = ({
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      <Calendar className="h-3.5 w-3.5 text-primary" />
                       <span className="text-sm font-medium">
                         {format(date, 'EEE, MMM d')}
                       </span>
-                      <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground ml-1" />
+                      <Clock className="h-3.5 w-3.5 text-muted-foreground ml-1" />
                       <span className="text-sm text-muted-foreground">
                         {format(date, 'h:mm a')}
                       </span>
@@ -124,7 +124,7 @@ export const SmartSchedulingSuggestions = ({
         {patterns && (
           <div className="pt-3 border-t">
             <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
+              <TrendingUp className="h-3.5 w-3.5 text-accent" />
               <span className="text-xs font-medium text-muted-foreground">Your Patterns</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -156,7 +156,7 @@ export const SmartSchedulingSuggestions = ({
           onClick={fetchSuggestions}
           className="w-full text-xs h-8"
         >
-          <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5" />
+          <Sparkles className="h-3 w-3 mr-1.5" />
           Refresh Suggestions
         </Button>
       </CardContent>

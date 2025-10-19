@@ -440,14 +440,14 @@ const Settings = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen-safe flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <PageHeader
         title="Settings"
         icon={<SettingsIcon className="h-6 w-6" />}

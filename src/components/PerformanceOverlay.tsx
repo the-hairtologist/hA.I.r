@@ -84,7 +84,7 @@ export const PerformanceOverlay = () => {
       <CardContent className="p-4 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-primary animate-pulse" />
+            <Activity className="h-4 w-4 text-primary animate-pulse" />
             <h3 className="font-semibold text-sm">Performance</h3>
           </div>
           <Button
@@ -93,7 +93,7 @@ export const PerformanceOverlay = () => {
             onClick={() => setShow(false)}
             className="h-6 w-6"
           >
-            <X className="h-5 w-5 sm:h-6 sm:w-6" />
+            <X className="h-4 w-4" />
           </Button>
         </div>
 
@@ -115,7 +115,7 @@ export const PerformanceOverlay = () => {
         </div>
 
         <div className="flex items-center gap-1 text-xs text-muted-foreground pt-2 border-t">
-          <Zap className="h-5 w-5 sm:h-6 sm:w-6" />
+          <Zap className="h-3 w-3" />
           <span>Press Ctrl+Shift+P to toggle</span>
         </div>
       </CardContent>

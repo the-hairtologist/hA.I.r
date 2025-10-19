@@ -180,7 +180,7 @@ export const CommandPalette = () => {
                   key={command.id}
                   onSelect={() => handleSelect(command.path)}
                 >
-                  <Icon className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                  <Icon className="mr-2 h-4 w-4" />
                   <span>{command.label}</span>
                 </CommandItem>
               );
@@ -197,7 +197,7 @@ export const CommandPalette = () => {
                   key={command.id}
                   onSelect={() => handleSelect(command.path)}
                 >
-                  <Icon className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                  <Icon className="mr-2 h-4 w-4" />
                   <span>{command.label}</span>
                 </CommandItem>
               );

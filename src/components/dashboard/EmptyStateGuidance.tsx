@@ -56,9 +56,9 @@ export const EmptyStateGuidance = ({ type }: EmptyStateGuidanceProps) => {
           onClick={config.action}
           className="gap-2"
         >
-          <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
+          <Sparkles className="h-4 w-4" />
           {config.cta}
-          <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </CardContent>
     </Card>

@@ -25,9 +25,8 @@ import { PerformanceReport } from "@/components/PerformanceReport";
 import { AccessibilityShortcuts } from "@/components/AccessibilityShortcuts";
 import { CommandPalette } from "@/components/CommandPalette";
 import { useAnalytics } from "@/hooks/useAnalytics";
-import { useAuth } from "@/hooks/useAuth";
 import { initAnalytics } from "@/lib/analytics";
-import { initSentry, setUser, clearUser } from "@/lib/monitoring";
+import { initSentry } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
@@ -45,24 +44,44 @@ import { initContrastValidator } from "@/lib/accessibility/contrastValidator";
 import { initFocusAudit } from "@/lib/accessibility/focusAudit";
 import { initLighthouseMonitoring } from "@/lib/qa/lighthouseAudit";
 import { PushOptInDialog } from "@/components/PushOptInDialog";
-import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { AppLayout } from "@/components/layout/AppLayout";
 import "@/lib/mobileHealthCheck";
 
-// Removed problematic lazy-loaded components that were causing initialization conflicts
+const PerformanceMonitor = lazy(() => 
+  import("@/components/PerformanceMonitor")
+    .then(m => ({ default: m.PerformanceMonitor }))
+    .catch(() => ({ default: () => null }))
+);
+
+const PerformanceOverlay = lazy(() => 
+  import("@/components/PerformanceOverlay")
+    .then(m => ({ default: m.PerformanceOverlay }))
+    .catch(() => ({ default: () => null }))
+);
+
+// Import MobileOptimizationsProvider directly (not lazy) for immediate mobile fixes
+import { MobileOptimizationsProvider } from "@/components/MobileOptimizationsProvider";
+
+const ServiceIntegrationTracker = lazy(() => 
+  import("@/components/ServiceIntegrationTracker")
+    .then(m => ({ default: m.ServiceIntegrationTracker }))
+    .catch(() => ({ default: () => null }))
+);
+
+const RoleSwitchProtection = lazy(() => 
+  import("@/components/RoleSwitchProtection")
+    .then(m => ({ default: m.RoleSwitchProtection }))
+    .catch(() => ({ default: () => null }))
+);
 
 const AnalyticsInitializer = () => {
-  const { user } = useAuth();
-
   useEffect(() => {
-    // Initialize Sentry immediately for error tracking
-    initSentry();
-    
     // Defer non-critical initializations to idle time
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => {
         // Initialize analytics and monitoring (non-critical)
         initAnalytics();
+        initSentry();
         initUTMTracking();
         
         // Initialize resource preloading strategy (non-critical)
@@ -87,18 +106,19 @@ const AnalyticsInitializer = () => {
         }
       });
 
-      // Defer self-healing initialization by 5 seconds (reduced overhead)
+      // Defer self-healing initialization by 3 seconds
       requestIdleCallback(() => {
         setTimeout(() => {
           selfHealing.initialize().catch((error) => {
             console.error('Failed to initialize self-healing system:', error);
           });
-        }, 5000);
-      }, { timeout: 10000 });
+        }, 3000);
+      }, { timeout: 5000 });
     } else {
       // Fallback for browsers without requestIdleCallback
       setTimeout(() => {
         initAnalytics();
+        initSentry();
         initUTMTracking();
         initPreloadStrategies();
         
@@ -124,15 +144,6 @@ const AnalyticsInitializer = () => {
       console.error('Failed to initialize performance optimizations:', error);
     });
   }, []);
-
-  // Track user context in Sentry
-  useEffect(() => {
-    if (user) {
-      setUser(user.id, user.email, user.user_metadata?.full_name);
-    } else {
-      clearUser();
-    }
-  }, [user]);
   
   useAnalytics();
   return null;
@@ -148,33 +159,57 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
               <SubscriptionProvider>
                 <DemoModeProvider>
-                  <TooltipProvider>
-                    <OfflineIndicator />
-                    <Toaster />
-                    <Sonner />
-                    <CookieConsent />
-                    <PushOptInDialog />
-                    <PerformanceReport />
-                    <GlobalAnnouncer />
-                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                      <EnhancedAuthProvider>
-                        <AnalyticsInitializer />
-                        <AccessibilityShortcuts />
-                        <CommandPalette />
-                        <TourProvider>
-                          <FirstTimeOnboarding />
-                          <TimeoutGuard timeout={20000}>
-                            <AppLayout>
-                              <Routes>
-                                {AppRoutes()}
-                              </Routes>
-                            </AppLayout>
-                            <PWAInstallPrompt />
-                          </TimeoutGuard>
-                        </TourProvider>
-                      </EnhancedAuthProvider>
-                    </BrowserRouter>
-                  </TooltipProvider>
+                  <MobileOptimizationsProvider>
+                    <TooltipProvider>
+                      <OfflineIndicator />
+                      <Toaster />
+                      <Sonner />
+                      <CookieConsent />
+                      <PushOptInDialog />
+                      <PerformanceReport />
+                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
+                      <GlobalAnnouncer />
+                      {/* Performance monitoring (dev only) */}
+                      {import.meta.env.DEV && (
+                        <Suspense fallback={null}>
+                          <PerformanceMonitor />
+                        </Suspense>
+                      )}
+                      {/* Performance overlay (dev only) */}
+                      {import.meta.env.DEV && (
+                        <Suspense fallback={null}>
+                          <PerformanceOverlay />
+                        </Suspense>
+                      )}
+                      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                        <EnhancedAuthProvider>
+                          <AnalyticsInitializer />
+                          {/* Components requiring Router context */}
+                          <AccessibilityShortcuts />
+                          <CommandPalette />
+                          {/* Service integration tracking - requires Router context */}
+                          <Suspense fallback={null}>
+                            <ServiceIntegrationTracker />
+                          </Suspense>
+                          <TourProvider>
+                            {/* First-time onboarding */}
+                            <FirstTimeOnboarding />
+                            {/* Role switch protection */}
+                            <Suspense fallback={null}>
+                              <RoleSwitchProtection />
+                            </Suspense>
+                            <TimeoutGuard timeout={15000}>
+                              <AppLayout>
+                                <Routes>
+                                  {AppRoutes()}
+                                </Routes>
+                              </AppLayout>
+                            </TimeoutGuard>
+                          </TourProvider>
+                        </EnhancedAuthProvider>
+                      </BrowserRouter>
+                    </TooltipProvider>
+                  </MobileOptimizationsProvider>
                 </DemoModeProvider>
             </SubscriptionProvider>
           </QueryClientProvider>

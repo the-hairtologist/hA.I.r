@@ -14,8 +14,6 @@
     -webkit-text-size-adjust: 100%;
     /* Enable smooth scrolling on iOS */
     -webkit-overflow-scrolling: touch;
-    /* CRITICAL: Enable smooth scrolling globally */
-    scroll-behavior: smooth;
     /* Fix dynamic viewport for mobile browsers (address bar) */
     height: 100%;
     /* CRITICAL: Prevent horizontal scroll */
@@ -149,19 +147,6 @@
   *:focus-visible {
     @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
-
-  /* Z-Index Scale for Consistent Layering */
-  .z-base { z-index: 1; }
-  .z-dropdown { z-index: 10; }
-  .z-sticky { z-index: 20; }
-  .z-fixed { z-index: 30; }
-  .z-modal-backdrop { z-index: 40; }
-  .z-modal { z-index: 50; }
-  .z-popover { z-index: 60; }
-  .z-tooltip { z-index: 70; }
-  .z-toast { z-index: 80; }
-  .z-priority { z-index: 90; }
-  .z-emergency { z-index: 100; }
 
   /* Skip to main content link */
   .skip-to-main {

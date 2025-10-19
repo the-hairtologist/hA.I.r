@@ -9,7 +9,7 @@ import { Eye } from "lucide-react";
 
 const Accessibility = () => {
   return (
-    <div className="min-h-screen-safe bg-background">
+    <div className="min-h-screen bg-background">
       <PageHeader 
         title="Accessibility Statement" 
         icon={<Eye className="h-6 w-6" />}

@@ -9,7 +9,7 @@ import { Shield, Mail, FileText } from "lucide-react";
 
 const DMCA = () => {
   return (
-    <div className="min-h-screen-safe bg-background">
+    <div className="min-h-screen bg-background">
       <PageHeader 
         title="DMCA Copyright Policy" 
         icon={<Shield className="h-6 w-6" />}

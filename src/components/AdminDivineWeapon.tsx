@@ -240,14 +240,14 @@ export const AdminDivineWeapon = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 border rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Eye className="h-5 w-5 sm:h-6 sm:w-6 text-info" />
+                    <Eye className="h-4 w-4 text-info" />
                     <span className="text-sm font-medium">Events Logged</span>
                   </div>
                   <p className="text-2xl font-bold">{securityStatus?.recentEvents || 0}</p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
+                    <Lock className="h-4 w-4 text-success" />
                     <span className="text-sm font-medium">Auto-Blocked</span>
                   </div>
                   <p className="text-2xl font-bold">0</p>
@@ -288,7 +288,7 @@ export const AdminDivineWeapon = () => {
                   <ul className="space-y-1">
                     {insight.suggestedActions.map((action: string, i: number) => (
                       <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
-                        <Target className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <Target className="h-3 w-3" />
                         {action}
                       </li>
                     ))}
@@ -326,7 +326,7 @@ export const AdminDivineWeapon = () => {
                 Advanced user management and role control will be available here.
               </p>
               <Button onClick={() => navigate('/admin/users')} className="gap-2">
-                <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+                <Users className="h-4 w-4" />
                 Go to User Management
               </Button>
             </CardContent>
@@ -345,11 +345,11 @@ export const AdminDivineWeapon = () => {
                 </p>
                 <div className="grid gap-3">
                   <Button onClick={() => navigate('/system-health')} variant="outline" className="justify-start">
-                    <Activity className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                    <Activity className="h-4 w-4 mr-2" />
                     View System Health
                   </Button>
                   <Button onClick={() => navigate('/access-codes')} variant="outline" className="justify-start">
-                    <Lock className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                    <Lock className="h-4 w-4 mr-2" />
                     Manage Access Codes
                   </Button>
                 </div>

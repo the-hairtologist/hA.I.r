@@ -59,7 +59,7 @@ export const QuickReviewButton = ({
       >
         <div className="relative">
           <Star className="h-5 w-5 fill-current" />
-          <Plus className="h-4 w-4 sm:h-5 sm:w-5 absolute -bottom-0.5 -right-0.5 bg-foreground text-amber-400 rounded-full p-0.5" />
+          <Plus className="h-3 w-3 absolute -bottom-0.5 -right-0.5 bg-foreground text-amber-400 rounded-full p-0.5" />
         </div>
       </Button>
 

@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { OfflineStatusBar } from './OfflineStatusBar';
 import { useOfflineStatus } from '@/hooks/useOfflineStatus';
 import { logger } from '@/lib/logger';
-import { initMobileOptimizations } from '@/lib/mobileOptimizations';
-import { Platform } from '@/platform/detector';
 
 export const MobileOptimizationsProvider = ({ children }: { children: React.ReactNode }) => {
   const { isOnline } = useOfflineStatus();
@@ -22,12 +20,6 @@ export const MobileOptimizationsProvider = ({ children }: { children: React.Reac
       
       // Enable touch optimization
       document.body.style.touchAction = 'manipulation';
-      
-      // Initialize full mobile optimization suite on mobile devices
-      if (Platform.isMobile) {
-        initMobileOptimizations();
-        logger.info(`Mobile optimizations activated for ${Platform.platform}`);
-      }
     };
 
     applyMobileOptimizations();

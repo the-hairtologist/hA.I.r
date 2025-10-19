@@ -80,7 +80,7 @@ export const HelpButton = () => {
         variant="outline"
         size="icon"
         onClick={handleOpen}
-        className="fixed bottom-36 left-6 h-14 w-14 rounded-full brutal-border brutal-shadow-xs brutal-hover z-fixed bg-primary text-on-surface-primary lg:bottom-6 lg:left-auto lg:right-20 touch-manipulation active:scale-95"
+        className="fixed bottom-36 left-6 h-14 w-14 rounded-full brutal-border brutal-shadow-xs brutal-hover z-50 bg-primary text-on-surface-primary lg:bottom-6 lg:left-auto lg:right-20 touch-manipulation active:scale-95"
         aria-label="Help & Support"
       >
         <HelpCircle className="h-6 w-6" />

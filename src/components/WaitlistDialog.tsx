@@ -292,7 +292,7 @@ export function WaitlistDialog() {
                             className="h-7 w-7 p-0"
                             title="Notify via email"
                           >
-                            <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
+                            <Mail className="h-3.5 w-3.5" />
                           </Button>
                         )}
                         {entry.client_phone && (
@@ -303,7 +303,7 @@ export function WaitlistDialog() {
                             className="h-7 w-7 p-0"
                             title="Notify via SMS"
                           >
-                            <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
+                            <Phone className="h-3.5 w-3.5" />
                           </Button>
                         )}
                         <Button
@@ -313,7 +313,7 @@ export function WaitlistDialog() {
                           className="h-7 w-7 p-0 text-destructive hover:text-destructive/80"
                           title="Remove from waitlist"
                         >
-                          <X className="h-4 w-4 sm:h-5 sm:w-5" />
+                          <X className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                     </div>

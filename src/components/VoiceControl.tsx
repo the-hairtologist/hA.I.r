@@ -348,7 +348,7 @@ export const VoiceControl = ({
         )}
         {isRecording && (
           <>
-            <span className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 bg-destructive rounded-full animate-pulse" />
+            <span className="absolute -top-1 -right-1 h-3 w-3 bg-destructive rounded-full animate-pulse" />
             <span className="absolute inset-0 rounded-md" 
                   style={{ 
                     boxShadow: `0 0 ${audioLevel / 5}px rgba(239, 68, 68, 0.5)` 

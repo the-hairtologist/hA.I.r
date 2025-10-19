@@ -172,7 +172,7 @@ export const SmartUpsell = ({ currentService, clientId, stylistId, onAddUpsell, 
           
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <Sparkles className="h-3 w-3 text-primary" />
               <p className="text-xs font-semibold text-primary">
                 {aiSuggestion.fallback ? 'Smart' : 'AI-Powered'} Upsell Suggestion
               </p>
@@ -203,7 +203,7 @@ export const SmartUpsell = ({ currentService, clientId, stylistId, onAddUpsell, 
                 onClick={handleAdd}
                 className="h-7 text-xs gap-1 brutal-shadow-xs brutal-hover"
               >
-                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
+                <Sparkles className="h-3 w-3" />
                 Add Service
               </Button>
             </div>

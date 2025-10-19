@@ -79,7 +79,7 @@ export function EmptyStateEnhanced({
               >
                 {primaryAction.icon && <primaryAction.icon className="h-5 w-5" />}
                 {primaryAction.label}
-                <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 ml-1" />
+                <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
             )}
             {secondaryAction && (

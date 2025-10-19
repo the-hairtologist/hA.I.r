@@ -32,7 +32,7 @@ export const AppLayout = ({ children, notificationCount = 0 }: AppLayoutProps) =
   return (
     <>
       {shouldShowHeader && <MobileHeader notificationCount={notificationCount} />}
-      <main className="min-h-screen-safe overflow-y-auto overflow-x-hidden">
+      <main className="min-h-screen">
         {children}
       </main>
     </>

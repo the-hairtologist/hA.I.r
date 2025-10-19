@@ -202,19 +202,19 @@ export default function Clients() {
         .select("*")
         .eq("preferred_stylist_id", stylistId);
 
-      // Use client_statistics view data directly
-      setClients((statsData || []).map((stat: any) => ({
-        ...stat,
-        id: stat.id,
-        full_name: stat.full_name,
-        email: stat.email,
-        phone: stat.phone,
-        total_appointments: stat.total_appointments || 0,
-        last_appointment: stat.last_appointment || null,
-        completion_rate: stat.completion_rate || 0,
-      })));
+      // Merge statistics with client data
+      const enrichedClients = (clientsData || []).map((client: any) => {
+        const stats = (statsData || []).find((s: any) => s.client_id === client.id);
+        return {
+          ...client,
+          total_appointments: stats?.total_appointments || 0,
+          last_appointment_date: stats?.last_appointment_date || null,
+          completed_appointments: stats?.completed_appointments || 0,
+          upcoming_appointments: stats?.upcoming_appointments || 0,
+        };
+      });
 
-      // Already set above
+      setClients(enrichedClients);
     } catch (error) {
       console.error("Error loading clients:", error);
       toast.error("Unable to load your client list. Please refresh or check your connection.");
@@ -531,7 +531,7 @@ export default function Clients() {
   // Show empty state for non-stylists
   if (!stylistId) {
     return (
-      <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <main className="container mx-auto py-8 px-4">
           <Breadcrumbs />
           <div className="mb-6">
@@ -559,7 +559,7 @@ export default function Clients() {
   }
 
   return (
-    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>

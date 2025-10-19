@@ -179,13 +179,3 @@ verify_jwt = false
 
 [functions.analyze-client-sentiment]
 verify_jwt = true
-
-[functions.socratic-analysis]
-verify_jwt = true
-
-[functions.strategy-simulator]
-verify_jwt = true
-
-[functions.creative-solver]
-verify_jwt = true
-

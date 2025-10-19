@@ -68,7 +68,7 @@ export const KeyboardShortcutDiscovery = () => {
             onClick={handleDismiss}
             className="h-6 w-6"
           >
-            <X className="h-5 w-5 sm:h-6 sm:w-6" />
+            <X className="h-4 w-4" />
           </Button>
         </div>
         

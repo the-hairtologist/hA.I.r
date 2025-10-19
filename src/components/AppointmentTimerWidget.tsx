@@ -136,7 +136,7 @@ export function AppointmentTimerWidget() {
       <Card>
         <CardHeader>
           <CardTitle className="text-xs sm:text-sm flex items-center gap-2">
-            <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
+            <Clock className="h-4 w-4" />
             Appointment Timer
           </CardTitle>
         </CardHeader>
@@ -152,7 +152,7 @@ export function AppointmentTimerWidget() {
               toast.info("Go to Appointments page and click 'Start Timer' on any active appointment");
             }}
           >
-            <Clock className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <Clock className="mr-2 h-4 w-4" />
             How to Start
           </Button>
           <p className="text-[11px] sm:text-xs text-muted-foreground mt-2 text-center">
@@ -168,7 +168,7 @@ export function AppointmentTimerWidget() {
       <CardHeader>
         <CardTitle className="text-xs sm:text-sm flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 sm:h-6 sm:w-6 animate-pulse" />
+            <Clock className="h-4 w-4 animate-pulse" />
             Active Session
           </div>
           <Badge variant="outline" className="text-[11px] sm:text-xs animate-pulse">
@@ -199,12 +199,12 @@ export function AppointmentTimerWidget() {
           >
             {isPaused ? (
               <>
-                <Play className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                <Play className="mr-2 h-4 w-4" />
                 Resume
               </>
             ) : (
               <>
-                <Pause className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+                <Pause className="mr-2 h-4 w-4" />
                 Pause
               </>
             )}
@@ -215,7 +215,7 @@ export function AppointmentTimerWidget() {
             onClick={stopTimer}
             className="flex-1"
           >
-            <CheckCircle className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <CheckCircle className="mr-2 h-4 w-4" />
             Complete
           </Button>
         </div>

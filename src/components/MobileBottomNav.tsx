@@ -204,13 +204,13 @@ export const MobileBottomNav = () => {
       {/* Navigation bar */}
       <nav 
         className={cn(
-          "lg:hidden fixed bottom-0 left-0 right-0 z-fixed bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
+          "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
           "border-t-[3px]",
           isAdmin ? "border-t-amber-500 bg-gradient-to-r from-amber-500/5 to-amber-600/5" : "border-foreground"
         )}
         aria-label="Mobile navigation"
         style={{
-          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)'
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)'
         }}
       >
         {/* Admin visual indicator */}
@@ -279,8 +279,8 @@ export const MobileBottomNav = () => {
                     <Icon 
                       className={cn(
                         "transition-all duration-200", 
-                        // Minimum 24px icons for mobile visibility
-                        "h-6 w-6",
+                        // Consistent icon size for all
+                        item.highlight ? "h-6 w-6" : "h-5 w-5",
                         active ? "text-on-surface-primary" : "text-muted-foreground",
                         item.highlight && !active && "text-primary"
                       )} 

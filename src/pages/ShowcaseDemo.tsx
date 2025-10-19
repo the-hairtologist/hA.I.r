@@ -18,7 +18,7 @@ export default function ShowcaseDemo() {
   const [selectedRole, setSelectedRole] = useState<"stylist" | "client">("stylist");
 
   return (
-    <div className="min-h-screen-safe w-full max-w-full overflow-x-hidden bg-gradient-to-br from-background via-background to-primary/5 animate-fade-in">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-gradient-to-br from-background via-background to-primary/5 animate-fade-in">
       <SEO 
         title="Interactive Demo - See hA.I.r in Action"
         description="Explore all features of hA.I.r with our interactive demo. Experience AI-powered formulas, smart booking, and client management before you sign up."

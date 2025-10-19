@@ -123,7 +123,7 @@ export const BackgroundRemovalDialog = ({
           {/* WebGPU Status */}
           {hasWebGPU !== null && (
             <Alert>
-              <Zap className="h-5 w-5 sm:h-6 sm:w-6" />
+              <Zap className="h-4 w-4" />
               <AlertDescription>
                 {hasWebGPU
                   ? '🚀 WebGPU acceleration enabled - Lightning fast processing!'
@@ -135,7 +135,7 @@ export const BackgroundRemovalDialog = ({
           {/* Error Display */}
           {error && (
             <Alert variant="destructive">
-              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+              <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
@@ -201,12 +201,12 @@ export const BackgroundRemovalDialog = ({
                 >
                   {processing ? (
                     <>
-                      <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 animate-spin" />
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       Processing...
                     </>
                   ) : (
                     <>
-                      <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                      <Sparkles className="h-4 w-4 mr-2" />
                       Remove Background
                     </>
                   )}
@@ -226,7 +226,7 @@ export const BackgroundRemovalDialog = ({
                   onClick={handleDownload}
                   className="w-full sm:w-auto"
                 >
-                  <Download className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
+                  <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
                 <Button 

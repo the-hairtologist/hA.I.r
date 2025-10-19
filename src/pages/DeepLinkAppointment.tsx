@@ -87,7 +87,7 @@ export default function DeepLinkAppointment() {
   
   if (loading) {
     return (
-      <div className="min-h-screen-safe flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -101,7 +101,7 @@ export default function DeepLinkAppointment() {
   const clientName = appointment.client?.user?.full_name || 'Client';
   
   return (
-    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <PageHeader
         title="Appointment Details"
         backTo="/appointments"
