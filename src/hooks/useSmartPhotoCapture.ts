@@ -41,9 +41,7 @@ export const useSmartPhotoCapture = () => {
       // Capture photo
       const photoDataUrl = await captureImage({ 
         source: 'camera',
-        quality: 90,
-        width: 1920,
-        height: 1920
+        quality: 90
       });
 
       if (!photoDataUrl) {
@@ -124,7 +122,7 @@ export const useSmartPhotoCapture = () => {
     } finally {
       setCapturing(false);
     }
-  };
+  }, []);
 
   /**
    * ✨ Compare before/after photos

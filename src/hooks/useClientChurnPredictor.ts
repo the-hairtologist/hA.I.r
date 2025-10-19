@@ -281,7 +281,7 @@ export const useClientChurnPredictor = (stylistId?: string) => {
       description: `${Math.round(p.churnProbability * 100)}% chance of churn. ${p.factors[0]?.description || ''}`,
       priority: p.riskLevel === 'critical' ? 'urgent' : p.riskLevel,
       confidence_score: p.confidence,
-      action_items: p.recommendedActions,
+      action_items: p.recommendedActions as any,
       potential_revenue: p.predictedLossValue,
       affected_clients: [p.clientId],
       expires_at: subDays(new Date(), -14).toISOString() // Expire in 14 days
