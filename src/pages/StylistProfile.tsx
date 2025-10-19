@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { ReviewsList } from "@/components/reviews/ReviewsList";
 import { ShareButtons } from "@/components/ShareButtons";
 import { SEOHead } from "@/components/SEOHead";
+import { GoogleMapLocation } from "@/components/GoogleMapLocation";
 import { 
   ArrowLeft, 
   Calendar, 
@@ -190,6 +191,16 @@ const StylistProfile = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Location Map */}
+        {stylist.location && (
+          <div className="mb-8">
+            <GoogleMapLocation 
+              address={stylist.location} 
+              businessName={stylist.business_name}
+            />
+          </div>
+        )}
 
         {/* Reviews Section */}
         <Card>

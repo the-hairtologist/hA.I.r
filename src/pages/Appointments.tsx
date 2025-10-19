@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, FileText, User, Calendar as CalendarIcon, ArrowLeft, Clock, CheckCircle, XCircle, Filter, CalendarDays, Repeat } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, FileText, User, Calendar as CalendarIcon, ArrowLeft, Clock, CheckCircle, XCircle, Filter, CalendarDays, Repeat, QrCode, Download, Receipt } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/CalendarView";
@@ -36,6 +36,8 @@ import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { AIScheduleOptimizer } from "@/components/AIScheduleOptimizer";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
+import { generateAppointmentQR, downloadQRCode } from "@/utils/qrCodeGenerator";
+import { generateReceipt } from "@/utils/pdfGenerator";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -65,6 +67,8 @@ const Appointments = () => {
   const [services, setServices] = useState<any[]>([]);
   const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
   const [serviceTemplateMode, setServiceTemplateMode] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
+  const [showQrCode, setShowQrCode] = useState(false);
 
   // Global keyboard shortcut for search focus
   useEffect(() => {
@@ -802,6 +806,83 @@ const Appointments = () => {
                   </div>
                 </div>
               )}
+
+              {/* QR Code & Receipt Actions */}
+              <div className="pt-4 border-t space-y-2">
+                <p className="text-xs sm:text-sm font-medium mb-3">Check-In & Receipt</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    className="justify-start gap-2"
+                    size="sm"
+                    onClick={async () => {
+                      try {
+                        const qrUrl = await generateAppointmentQR(selectedAppointment.id);
+                        setQrCodeUrl(qrUrl);
+                        setShowQrCode(true);
+                        toast.success("QR code generated!");
+                      } catch (error) {
+                        toast.error("Failed to generate QR code");
+                      }
+                    }}
+                  >
+                    <QrCode className="h-4 w-4" />
+                    QR Check-In
+                  </Button>
+                  {selectedAppointment.status === "completed" && (
+                    <Button
+                      variant="outline"
+                      className="justify-start gap-2"
+                      size="sm"
+                      onClick={async () => {
+                        try {
+                          await generateReceipt({
+                            appointmentId: selectedAppointment.id,
+                            clientName: userRole === "stylist" 
+                              ? selectedAppointment.client?.user?.full_name 
+                              : selectedAppointment.stylist?.user?.full_name,
+                            stylistName: selectedAppointment.stylist?.user?.full_name,
+                            businessName: selectedAppointment.stylist?.business_name || "hA.I.r Salon",
+                            serviceType: selectedAppointment.service_type,
+                            appointmentDate: format(new Date(selectedAppointment.appointment_date), "PPP"),
+                            price: selectedAppointment.price || 0,
+                            notes: selectedAppointment.notes,
+                          });
+                          toast.success("Receipt downloaded!");
+                        } catch (error) {
+                          toast.error("Failed to generate receipt");
+                        }
+                      }}
+                    >
+                      <Receipt className="h-4 w-4" />
+                      Download Receipt
+                    </Button>
+                  )}
+                </div>
+
+                {/* QR Code Display */}
+                {showQrCode && qrCodeUrl && (
+                  <Card className="mt-4">
+                    <CardContent className="pt-6 text-center space-y-3">
+                      <img src={qrCodeUrl} alt="Check-in QR Code" className="mx-auto w-48 h-48" />
+                      <p className="text-sm text-muted-foreground">
+                        Scan this QR code to check in
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          downloadQRCode(qrCodeUrl, `appointment-${selectedAppointment.id}.png`);
+                          toast.success("QR code downloaded!");
+                        }}
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download QR Code
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
 
               {userRole === "stylist" && selectedAppointment.status === "scheduled" && (
                 <div className="flex gap-3 pt-4 border-t">
