@@ -17,6 +17,7 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { DemoModeProvider } from "@/components/demo/DemoMode";
 import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { ScrollToTopButton } from "@/components/ui/scroll-to-top";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useSentryUser } from "@/hooks/useSentryUser";
 import { useSessionTracking } from "@/hooks/useSessionTracking";
@@ -168,6 +169,7 @@ const App = () => {
                       <PerformanceOverlay />
                     </ReactSuspense>
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                      <ScrollToTopButton />
                       <EnhancedAuthProvider>
                         <AnalyticsInitializer />
                         {/* Service integration tracking - requires Router context */}
