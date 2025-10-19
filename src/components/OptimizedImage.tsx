@@ -1,39 +1,27 @@
-/**
- * Optimized Image Component
- * Features: Lazy loading, WebP support, responsive images, blur placeholder
- */
-
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
-interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface OptimizedImageProps {
   src: string;
   alt: string;
-  blurhash?: string;
-  priority?: boolean;
+  className?: string;
   sizes?: string;
-  quality?: number;
+  priority?: boolean;
 }
 
-export const OptimizedImage: React.FC<OptimizedImageProps> = ({
-  src,
-  alt,
-  blurhash,
-  priority = false,
-  sizes,
-  quality = 75,
-  className,
-  onLoad: onLoadProp,
-  ...props
-}) => {
+export function OptimizedImage({ 
+  src, 
+  alt, 
+  className, 
+  sizes = '100vw',
+  priority = false 
+}: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
-  const [error, setError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
-  // Intersection Observer for lazy loading
   useEffect(() => {
-    if (priority || !imgRef.current) return;
+    if (priority) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -42,76 +30,44 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
           observer.disconnect();
         }
       },
-      {
-        rootMargin: '50px', // Start loading slightly before visible
-        threshold: 0.01,
-      }
+      { rootMargin: '50px' }
     );
 
-    observer.observe(imgRef.current);
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
 
     return () => observer.disconnect();
   }, [priority]);
 
-  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    setIsLoaded(true);
-    onLoadProp?.(e);
-  };
-
-  const handleError = () => {
-    setError(true);
-  };
-
-  // Generate srcset for responsive images
-  const generateSrcSet = (baseSrc: string) => {
-    const widths = [320, 640, 768, 1024, 1280, 1536];
-    return widths
-      .map((width) => `${baseSrc}?w=${width}&q=${quality} ${width}w`)
-      .join(', ');
-  };
+  // Generate WebP URL if possible
+  const webpSrc = src.includes('.supabase.co') 
+    ? src.replace(/\.(jpg|jpeg|png)/, '.webp')
+    : src;
 
   return (
-    <div
-      ref={imgRef}
-      className={cn('relative overflow-hidden', className)}
-      style={{ backgroundColor: blurhash ? '#f0f0f0' : undefined }}
-    >
-      {/* Blur placeholder */}
-      {!isLoaded && blurhash && (
-        <div
-          className="absolute inset-0 animate-pulse bg-muted"
-          aria-hidden="true"
-        />
+    <div className={cn('relative overflow-hidden bg-muted', className)}>
+      {!isLoaded && (
+        <div className="absolute inset-0 animate-pulse bg-muted" />
       )}
-
-      {/* Actual image */}
-      {(isInView || priority) && !error && (
-        <img
-          {...props}
-          src={src}
-          alt={alt}
-          srcSet={generateSrcSet(src)}
-          sizes={sizes}
-          loading={priority ? 'eager' : 'lazy'}
-          decoding="async"
-          onLoad={handleLoad}
-          onError={handleError}
-          className={cn(
-            'transition-opacity duration-300',
-            isLoaded ? 'opacity-100' : 'opacity-0',
-            className
-          )}
-        />
-      )}
-
-      {/* Error fallback */}
-      {error && (
-        <div className="flex items-center justify-center h-full bg-muted text-muted-foreground">
-          Failed to load image
-        </div>
+      {isInView && (
+        <picture>
+          <source srcSet={webpSrc} type="image/webp" />
+          <img
+            ref={imgRef}
+            src={src}
+            alt={alt}
+            sizes={sizes}
+            loading={priority ? 'eager' : 'lazy'}
+            onLoad={() => setIsLoaded(true)}
+            className={cn(
+              'w-full h-full object-cover transition-opacity duration-300',
+              isLoaded ? 'opacity-100' : 'opacity-0',
+              className
+            )}
+          />
+        </picture>
       )}
     </div>
   );
-};
-
-OptimizedImage.displayName = 'OptimizedImage';
+}
