@@ -156,14 +156,31 @@ const App = () => {
         <HelmetProvider>
           <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <EnhancedAuthProvider>
-              <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <OfflineIndicator />
-                <Routes>
-                  {AppRoutes()}
-                </Routes>
-              </TooltipProvider>
+              <SubscriptionProvider>
+                <DemoModeProvider>
+                  <TooltipProvider>
+                    <AnalyticsInitializer />
+                    <RoleSwitchProtection />
+                    <Toaster />
+                    <Sonner />
+                    <OfflineIndicator />
+                    <CookieConsent />
+                    <PushOptInDialog />
+                    <PWAInstallPrompt />
+                    <PerformanceReport />
+                    <GlobalAnnouncer />
+                    <AccessibilityShortcuts />
+                    <CommandPalette />
+                    <ViewportChangeHandler />
+                    <TourProvider>
+                      <FirstTimeOnboarding />
+                      <Routes>
+                        {AppRoutes()}
+                      </Routes>
+                    </TourProvider>
+                  </TooltipProvider>
+                </DemoModeProvider>
+              </SubscriptionProvider>
             </EnhancedAuthProvider>
           </BrowserRouter>
         </HelmetProvider>
