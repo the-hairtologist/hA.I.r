@@ -3,7 +3,7 @@
  * Copyright © 2025 hA.I.r. All Rights Reserved.
  */
 
-import React, { useEffect, Suspense, lazy } from "react";
+import React, { useEffect, Suspense, lazy, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -76,75 +76,70 @@ const RoleSwitchProtection = lazy(() =>
     .catch(() => ({ default: () => null }))
 );
 
+// Delayed service tracker to prevent blocking initial load
+const DelayedServiceTracker = () => {
+  const [shouldMount, setShouldMount] = useState(false);
+
+  useEffect(() => {
+    // Delay service tracker by 3 seconds to not block initial page load
+    const timer = setTimeout(() => {
+      setShouldMount(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!shouldMount) return null;
+
+  return (
+    <Suspense fallback={null}>
+      <ServiceIntegrationTracker />
+    </Suspense>
+  );
+};
+
 const AnalyticsInitializer = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Initialize Sentry immediately for error tracking
+    // ONLY initialize Sentry immediately for critical error tracking
     initSentry();
     
-    // Defer non-critical initializations to idle time
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => {
-        // Initialize analytics and monitoring (non-critical)
+    // Defer EVERYTHING else until after first paint to prevent blocking
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        // Initialize analytics (2s delay after first paint)
         initAnalytics();
         initUTMTracking();
         
-        // Initialize resource preloading strategy (non-critical)
+        // Initialize resource preloading (2s delay)
         initPreloadStrategies();
         
-        // Phase 2 - Intelligence Layer
-        initCacheReporting();
-        initRoutePrefetcher();
+        // Phase 2-5: All non-critical systems (3s delay)
+        setTimeout(() => {
+          initCacheReporting();
+          initRoutePrefetcher();
+          initPushNotifications();
+          initABTesting();
+          initOriginVerification();
+          
+          if (import.meta.env.DEV) {
+            initContrastValidator();
+            initFocusAudit();
+            initLighthouseMonitoring();
+          }
+        }, 1000);
         
-        // Phase 3 - Engagement Layer
-        initPushNotifications();
-        initABTesting();
-        
-        // Phase 4 - Security Layer
-        initOriginVerification();
-        
-        // Phase 5 - QA Layer (dev only)
-        if (import.meta.env.DEV) {
-          initContrastValidator();
-          initFocusAudit();
-          initLighthouseMonitoring();
-        }
-      });
-
-      // Defer self-healing initialization by 3 seconds
-      requestIdleCallback(() => {
+        // Self-healing system (5s delay total)
         setTimeout(() => {
           selfHealing.initialize().catch((error) => {
             console.error('Failed to initialize self-healing system:', error);
           });
         }, 3000);
-      }, { timeout: 5000 });
-    } else {
-      // Fallback for browsers without requestIdleCallback
-      setTimeout(() => {
-        initAnalytics();
-        initUTMTracking();
-        initPreloadStrategies();
-        
-        // Phase 2 - Intelligence Layer
-        initCacheReporting();
-        initRoutePrefetcher();
-        
-        // Phase 3 - Engagement Layer
-        initPushNotifications();
-        initABTesting();
-        
-        // Phase 4 - Security Layer
-        initOriginVerification();
-        
-        selfHealing.initialize().catch((error) => {
-          console.error('Failed to initialize self-healing system:', error);
-        });
-      }, 1000);
-    }
+      }, 2000);
+    });
     
-    // Initialize critical performance optimizations immediately
+    // Performance optimizer (immediate but non-blocking)
     performanceOptimizer.init().catch((error) => {
       console.error('Failed to initialize performance optimizations:', error);
     });
@@ -198,13 +193,10 @@ const App = () => {
                       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                         <EnhancedAuthProvider>
                           <AnalyticsInitializer />
+                          <DelayedServiceTracker />
                           {/* Components requiring Router context */}
                           <AccessibilityShortcuts />
                           <CommandPalette />
-                          {/* Service integration tracking - requires Router context */}
-                          <Suspense fallback={null}>
-                            <ServiceIntegrationTracker />
-                          </Suspense>
                           <TourProvider>
                             {/* First-time onboarding */}
                             <FirstTimeOnboarding />

@@ -88,23 +88,8 @@ export function useTour() {
     localStorage.removeItem(TOUR_DISMISSED_KEY);
   }, []);
 
-  // Auto-start tour on page load if not completed
-  useEffect(() => {
-    // Don't run tours on landing page or auth pages
-    const publicPages = ['/', '/auth', '/install'];
-    if (publicPages.includes(location.pathname)) {
-      return;
-    }
-
-    const tour = getTourByPath(location.pathname);
-    if (tour && shouldShowTour(tour.id)) {
-      // Delay to ensure DOM elements are rendered
-      const timer = setTimeout(() => {
-        startTour(tour.id);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [location.pathname, shouldShowTour, startTour]);
+  // Auto-start disabled: Tours are now opt-in only to prevent blocking page loads
+  // Tours can still be manually started via startTour() from UI buttons/menus
 
   return {
     isRunning,
