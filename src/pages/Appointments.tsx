@@ -36,6 +36,7 @@ import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { AIScheduleOptimizer } from "@/components/AIScheduleOptimizer";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
+import { AppointmentPhotoButton } from "@/components/AppointmentPhotoButton";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -590,6 +591,15 @@ const Appointments = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           {getStatusBadge(apt.status)}
+                          {/* Photo Capture Button - Available for scheduled and completed appointments */}
+                          {userRole === "stylist" && (apt.status === "scheduled" || apt.status === "completed" || apt.status === "confirmed") && (
+                            <AppointmentPhotoButton
+                              appointmentId={apt.id}
+                              clientId={apt.client_id}
+                              stylistId={apt.stylist_id}
+                              serviceType={apt.service_type}
+                            />
+                          )}
                           {apt.status === "scheduled" && userRole === "stylist" && (
                             <Button
                               variant="outline"

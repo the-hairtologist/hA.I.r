@@ -42,6 +42,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { networkErrors, dataErrors } from "@/lib/errorMessages";
 import { SaveIndicator } from "@/components/SaveIndicator";
+import { ReEngagementDialog } from "@/components/ReEngagementDialog";
 
 interface ClientProfile {
   id: string;
@@ -615,6 +616,13 @@ export default function Clients() {
             <p className="text-muted-foreground font-sans">Manage your client profiles, formulas, and preferences</p>
           </div>
           <div className="flex gap-2">
+            {/* Re-engagement Campaign Button - Shows when clients selected */}
+            {selectedCount > 0 && stylistId && (
+              <ReEngagementDialog
+                selectedClients={filteredClients.filter(c => selectedIds.has(c.id))}
+                stylistId={stylistId}
+              />
+            )}
             <Button 
               variant="outline"
               onClick={handleExportCSV}

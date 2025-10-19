@@ -51,6 +51,8 @@ import { useFeatureFlag } from "@/lib/featureFlags";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles, BookOpen } from "lucide-react";
 import { ProgressTracker } from "@/components/ProgressTracker";
+import { ChurnRiskWidget } from "@/components/ChurnRiskWidget";
+import { ProactiveInsightsPanel } from "@/components/ProactiveInsightsPanel";
 import {
   DndContext,
   closestCenter,
@@ -105,6 +107,8 @@ const Dashboard = () => {
   // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
     { id: "progress-tracker", title: "Your Progress", component: "ProgressTracker", enabled: true },
+    { id: "churn-risk", title: "At-Risk Clients", component: "ChurnRisk", enabled: true },
+    { id: "proactive-insights", title: "AI Recommendations", component: "ProactiveInsights", enabled: true },
     { id: "predictive-insights", title: "AI Predictions", component: "PredictiveInsights", enabled: true },
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
     { id: "appointment-timer", title: "Session Timer", component: "AppointmentTimer", enabled: true },
@@ -617,6 +621,18 @@ const Dashboard = () => {
         ) : null;
       case "QuickNotes":
         return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;
+      case "ChurnRisk":
+        return (userRole === "stylist" || isAdmin) && profile?.id ? (
+          <AIFeatureErrorBoundary featureName="Churn Prediction">
+            <ChurnRiskWidget stylistId={profile.id} variant="full" />
+          </AIFeatureErrorBoundary>
+        ) : null;
+      case "ProactiveInsights":
+        return (userRole === "stylist" || isAdmin) && profile?.id ? (
+          <AIFeatureErrorBoundary featureName="Proactive Insights">
+            <ProactiveInsightsPanel stylistId={profile.id} />
+          </AIFeatureErrorBoundary>
+        ) : null;
       case "PredictiveInsights":
         return (userRole === "stylist" || isAdmin) && predictiveInsightsEnabled && predictiveInsights.length > 0 ? (
           <AIFeatureErrorBoundary featureName="Predictive Insights">
