@@ -3,11 +3,12 @@
  * Handles fetching, creating, and updating appointments
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { handleError } from '@/lib/errorHandler';
 import { toast } from 'sonner';
 import { log } from '@/lib/logger';
+import { useEnhancedQuery, invalidateQueryCache } from '@/lib';
 
 export interface Appointment {
   id: string;
@@ -49,16 +50,14 @@ interface UseAppointmentsReturn {
 
 export function useAppointments(options: UseAppointmentsOptions = {}): UseAppointmentsReturn {
   const { stylistId, clientId, status, autoFetch = true } = options;
+
+  // Use enhanced query with retry, caching, and offline support
+  const queryKey = ['appointments', stylistId, clientId, status];
   
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const fetchAppointments = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
+  const { data: appointments = [], isLoading: loading, error, refetch } = useEnhancedQuery({
+    queryKey,
+    enabled: autoFetch,
+    queryFn: async () => {
       log.debug('Fetching appointments', 'useAppointments', { stylistId, clientId, status });
 
       let query = supabase
@@ -102,50 +101,16 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
       if (fetchError) throw fetchError;
 
-      setAppointments((data as Appointment[]) || []);
       log.info('Appointments loaded successfully', 'useAppointments', { count: data?.length });
-    } catch (err) {
-      const error = err as Error;
-      setError(error);
-      handleError(error, 'Fetch Appointments', { showToast: false });
-    } finally {
-      setLoading(false);
-    }
-  }, [stylistId, clientId, status]);
-
-  useEffect(() => {
-    if (autoFetch) {
-      fetchAppointments();
-    }
-  }, [autoFetch, fetchAppointments]);
-
-  // Set up realtime subscriptions
-  useEffect(() => {
-    if (!stylistId && !clientId) return;
-
-    log.debug('Setting up realtime subscription', 'useAppointments');
-
-    const channel = supabase
-      .channel('appointments-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'appointments',
-          filter: stylistId ? `stylist_id=eq.${stylistId}` : `client_id=eq.${clientId}`,
-        },
-        (payload) => {
-          log.debug('Realtime appointment update', 'useAppointments', payload);
-          fetchAppointments();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [stylistId, clientId, fetchAppointments]);
+      return (data as Appointment[]) || [];
+    },
+    retryOptions: {
+      maxRetries: 3,
+    },
+    cacheTable: 'appointments',
+    cacheParams: { stylistId, clientId, status },
+    offlineSupport: true,
+  });
 
   const createAppointment = useCallback(async (data: Partial<Appointment>): Promise<Appointment> => {
     try {
@@ -159,8 +124,8 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
       if (error) throw error;
 
-      // Optimistically add to local state
-      setAppointments(prev => [newAppointment as Appointment, ...prev]);
+      // Invalidate cache to trigger refetch
+      invalidateQueryCache('appointments');
 
       toast.success('Appointment created successfully');
       log.info('Appointment created', 'useAppointments', { id: newAppointment.id });
@@ -183,10 +148,8 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
       if (error) throw error;
 
-      // Optimistically update local state
-      setAppointments(prev =>
-        prev.map(apt => apt.id === id ? { ...apt, ...data } as Appointment : apt)
-      );
+      // Invalidate cache to trigger refetch
+      invalidateQueryCache('appointments');
 
       toast.success('Appointment updated successfully');
       log.info('Appointment updated', 'useAppointments', { id });
@@ -212,10 +175,8 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
       if (error) throw error;
 
-      // Optimistically update local state
-      setAppointments(prev =>
-        prev.map(apt => apt.id === id ? { ...apt, ...updateData } as Appointment : apt)
-      );
+      // Invalidate cache to trigger refetch
+      invalidateQueryCache('appointments');
 
       toast.success('Appointment cancelled');
       log.info('Appointment cancelled', 'useAppointments', { id });
@@ -249,8 +210,8 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
   return {
     appointments,
     loading,
-    error,
-    refetch: fetchAppointments,
+    error: error as Error | null,
+    refetch: async () => { await refetch(); },
     createAppointment,
     updateAppointment,
     cancelAppointment,

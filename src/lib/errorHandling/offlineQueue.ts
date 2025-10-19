@@ -122,7 +122,7 @@ class OfflineQueue {
   }
 
   /**
-   * Get queue status
+   * Get current queue status
    */
   getStatus() {
     return {
@@ -131,6 +131,20 @@ class OfflineQueue {
       isOnline: navigator.onLine,
       oldestOperation: this.queue[0]?.timestamp,
     };
+  }
+
+  /**
+   * Get count of pending operations
+   */
+  getPendingCount(): number {
+    return this.queue.length;
+  }
+
+  /**
+   * Get count of failed operations
+   */
+  getFailedCount(): number {
+    return this.queue.filter((op) => op.retryCount >= this.maxRetries).length;
   }
 
   /**

@@ -78,20 +78,6 @@ export const isValidGA4MeasurementId = (measurementId: string): boolean => {
 };
 
 /**
- * Sanitizes user input for safe display
- * Strips HTML tags and dangerous characters
- * @param input - User input string
- * @returns Sanitized string
- */
-export const sanitizeInput = (input: string): string => {
-  return input
-    .replace(/[<>]/g, '') // Remove HTML tags
-    .replace(/javascript:/gi, '') // Remove javascript: protocol
-    .replace(/on\w+\s*=/gi, '') // Remove event handlers
-    .trim();
-};
-
-/**
  * Validates external links before rendering
  * @param href - The href attribute value
  * @returns true if link is safe

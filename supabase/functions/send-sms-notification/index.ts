@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { checkRateLimit, rateLimitErrorResponse, getRateLimitHeaders, RATE_LIMITS } from '../_shared/rateLimiter.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -67,6 +68,15 @@ serve(async (req) => {
   }
 
   try {
+    // Rate limiting
+    const identifier = req.headers.get('authorization') || req.headers.get('x-forwarded-for') || 'anonymous';
+    const { allowed, remaining, resetAt } = checkRateLimit(identifier, RATE_LIMITS.SMS_NOTIFICATION);
+    
+    if (!allowed) {
+      console.warn(`Rate limit exceeded for SMS: ${identifier}`);
+      return rateLimitErrorResponse(resetAt);
+    }
+
     const { appointmentId, notificationType, customMessage }: SMSRequest = await req.json();
     
     console.log(`📱 Sending ${notificationType} SMS for appointment ${appointmentId}`);
@@ -154,6 +164,8 @@ serve(async (req) => {
     console.log(`✅ SMS sent successfully to ${clientPhone}`);
     console.log("Twilio response:", twilioResponse);
 
+    const rateLimitHeaders = getRateLimitHeaders(remaining, resetAt, RATE_LIMITS.SMS_NOTIFICATION.maxRequests);
+
     return new Response(
       JSON.stringify({ 
         success: true, 
@@ -161,7 +173,7 @@ serve(async (req) => {
         to: clientPhone 
       }),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, ...rateLimitHeaders, "Content-Type": "application/json" },
         status: 200,
       }
     );

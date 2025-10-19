@@ -13,10 +13,30 @@ export const ServiceWorkerUpdate = () => {
   const [needRefresh, setNeedRefresh] = useState(false);
 
   useEffect(() => {
-    // Simple SW check without vite-plugin-pwa React hook
+    // Check if service worker is available
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then(() => {
         setOfflineReady(true);
+        
+        // Check for updates periodically
+        const checkForUpdates = () => {
+          navigator.serviceWorker.getRegistration().then((reg) => {
+            if (reg) {
+              reg.update().then(() => {
+                // Check if there's a waiting worker
+                if (reg.waiting) {
+                  setNeedRefresh(true);
+                }
+              });
+            }
+          });
+        };
+
+        // Check for updates every 5 minutes
+        const interval = setInterval(checkForUpdates, 5 * 60 * 1000);
+        checkForUpdates(); // Check immediately
+
+        return () => clearInterval(interval);
       });
     }
   }, []);
@@ -42,7 +62,14 @@ export const ServiceWorkerUpdate = () => {
           <Button
             size="sm"
             onClick={() => {
-              window.location.reload();
+              navigator.serviceWorker.getRegistration().then((reg) => {
+                if (reg && reg.waiting) {
+                  // Tell the waiting service worker to activate
+                  reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                  // Reload the page
+                  window.location.reload();
+                }
+              });
             }}
           >
             <RefreshCw className="h-4 w-4 mr-2" />

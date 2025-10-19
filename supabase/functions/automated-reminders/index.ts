@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 import { Resend } from 'https://esm.sh/resend@4.0.0';
 import { compressedJsonResponse, compressedErrorResponse, corsHeaders } from '../_shared/compression.ts';
+import { checkRateLimit, rateLimitErrorResponse, getRateLimitHeaders, RATE_LIMITS } from '../_shared/rateLimiter.ts';
 
 interface Database {
   public: {
@@ -50,6 +51,16 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Rate limiting
+    const identifier = req.headers.get('x-forwarded-for') || 'automated-reminders';
+    const { allowed, remaining, resetAt } = checkRateLimit(identifier, RATE_LIMITS.REMINDERS);
+    
+    if (!allowed) {
+      console.warn(`Rate limit exceeded for ${identifier}`);
+      return rateLimitErrorResponse(resetAt);
+    }
+    
+    const rateLimitHeaders = getRateLimitHeaders(remaining, resetAt, RATE_LIMITS.REMINDERS.maxRequests);
     const supabaseClient = createClient<Database>(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -232,7 +243,7 @@ Deno.serve(async (req) => {
     return await compressedJsonResponse({
       message: `Processed ${appointments.length} appointments`,
       results,
-    }, 200);
+    }, 200, { ...rateLimitHeaders });
   } catch (error) {
     console.error('Error in automated-reminders function:', error);
     const errorMsg = error instanceof Error ? error.message : 'Unknown error';
