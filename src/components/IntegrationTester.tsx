@@ -18,51 +18,75 @@ export function IntegrationTester() {
     try {
       switch (type) {
         case 'email':
-          // Test Resend webhook by checking if edge function exists
-          const { error: emailError } = await supabase.functions.invoke('send-appointment-confirmation', {
-            body: { test: true }
-          });
-          setResults(prev => ({ ...prev, email: !emailError }));
-          if (!emailError) {
-            toast.success('✅ Email integration is working!');
-          } else {
-            toast.error('❌ Email integration failed');
+          // Check email configuration health
+          try {
+            const { data, error } = await supabase.functions.invoke('send-appointment-confirmation', {
+              body: { healthCheck: true }
+            });
+            
+            if (error) {
+              console.error('Email test error:', error);
+              setResults(prev => ({ ...prev, email: false }));
+              toast.error('❌ Email function not accessible. Check if RESEND_API_KEY is configured.');
+            } else {
+              setResults(prev => ({ ...prev, email: true }));
+              toast.success('✅ Email integration is configured correctly!');
+            }
+          } catch (err) {
+            console.error('Email test exception:', err);
+            setResults(prev => ({ ...prev, email: false }));
+            toast.error('❌ Email function failed. Verify edge function deployment.');
           }
           break;
 
         case 'calendar':
           // Test calendar connection
-          const { data: connection } = await supabase
+          const { data: connection, error: calError } = await supabase
             .from('calendar_connections')
             .select('*')
             .eq('is_active', true)
             .maybeSingle();
           
-          setResults(prev => ({ ...prev, calendar: !!connection }));
-          if (connection) {
+          if (calError) {
+            console.error('Calendar test error:', calError);
+            setResults(prev => ({ ...prev, calendar: false }));
+            toast.error('❌ Calendar connection check failed');
+          } else if (connection) {
+            setResults(prev => ({ ...prev, calendar: true }));
             toast.success('✅ Calendar is connected!');
           } else {
-            toast.warning('⚠️ Calendar not connected - connect it first');
+            setResults(prev => ({ ...prev, calendar: false }));
+            toast.warning('⚠️ No calendar connected. Connect Google Calendar first.');
           }
           break;
 
         case 'stripe':
-          // Test Stripe webhook by checking recent logs
-          const { error: stripeError } = await supabase.functions.invoke('stripe-webhook', {
-            body: { test: true }
-          });
-          setResults(prev => ({ ...prev, stripe: !stripeError }));
-          if (!stripeError) {
-            toast.success('✅ Stripe webhook is configured!');
-          } else {
-            toast.error('❌ Stripe webhook failed');
+          // Check Stripe configuration (webhooks can only be tested by actual Stripe events)
+          try {
+            // We can't directly invoke the webhook, but we can check if it's reachable
+            const { data, error } = await supabase.functions.invoke('stripe-webhook', {
+              body: { healthCheck: true }
+            });
+            
+            if (error) {
+              console.error('Stripe test error:', error);
+              setResults(prev => ({ ...prev, stripe: false }));
+              toast.error('❌ Stripe webhook not accessible. Check STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET configuration.');
+            } else {
+              setResults(prev => ({ ...prev, stripe: true }));
+              toast.success('✅ Stripe webhook endpoint is reachable! Test with a real Stripe event.');
+            }
+          } catch (err) {
+            console.error('Stripe test exception:', err);
+            setResults(prev => ({ ...prev, stripe: false }));
+            toast.error('❌ Stripe webhook failed. Verify edge function deployment.');
           }
           break;
       }
     } catch (error) {
       console.error(`Error testing ${type}:`, error);
       setResults(prev => ({ ...prev, [type]: false }));
-      toast.error(`❌ ${type} test failed`);
+      toast.error(`❌ ${type} test failed - unexpected error`);
     } finally {
       setTesting(null);
     }
@@ -175,13 +199,18 @@ export function IntegrationTester() {
 
         <div className="mt-6 p-4 bg-muted/50 rounded-lg">
           <p className="text-sm text-muted-foreground">
-            <strong>Next steps:</strong>
+            <strong>Testing Notes:</strong>
             <br />
-            1. Test each integration above
+            • <strong>Email:</strong> Checks if function exists and RESEND_API_KEY is configured
             <br />
-            2. Create a test appointment to verify email + calendar sync
+            • <strong>Calendar:</strong> Verifies if Google Calendar is connected
             <br />
-            3. Complete a test Stripe checkout to verify payment webhook
+            • <strong>Stripe:</strong> Checks webhook endpoint (real testing requires actual Stripe events)
+            <br />
+            <br />
+            <strong>Full Integration Test:</strong>
+            <br />
+            Create a real appointment to test email delivery and calendar sync together
           </p>
         </div>
       </CardContent>
