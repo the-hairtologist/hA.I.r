@@ -576,7 +576,14 @@ const Integrations = () => {
                           <Button 
                             size="sm" 
                             className="w-full"
-                            onClick={() => setSelectedIntegration(integration)}
+                            onClick={() => {
+                              // Direct navigation for special integrations
+                              if (integration.id === "google-calendar" || integration.id === "zapier") {
+                                handleConnect(integration);
+                              } else {
+                                setSelectedIntegration(integration);
+                              }
+                            }}
                           >
                             Connect
                           </Button>
@@ -751,7 +758,14 @@ const Integrations = () => {
                         className="w-full"
                         variant={integration.status === "coming_soon" ? "secondary" : "default"}
                         disabled={integration.status === "coming_soon"}
-                        onClick={() => setSelectedIntegration(integration)}
+                        onClick={() => {
+                          // Direct navigation for special integrations
+                          if (integration.id === "google-calendar" || integration.id === "zapier") {
+                            handleConnect(integration);
+                          } else {
+                            setSelectedIntegration(integration);
+                          }
+                        }}
                       >
                         {integration.status === "connected" && <Check className="h-4 w-4 mr-2" />}
                         {integration.status === "coming_soon" && "Coming Soon"}
