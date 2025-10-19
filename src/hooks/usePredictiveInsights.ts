@@ -76,9 +76,29 @@ export const usePredictiveInsights = (stylistId?: string) => {
         const lastVisit = new Date(clientApts[0].appointment_date);
         const daysSince = differenceInDays(new Date(), lastVisit);
         
-        // Predict if due for visit
+        // ✨ ENHANCEMENT: Multi-factor prediction with smarter confidence scoring
         const dueThreshold = avgInterval * 0.9; // 90% of average interval
         const isDue = daysSince >= dueThreshold;
+
+        // Calculate confidence based on multiple factors
+        const consistencyScore = calculateConsistency(intervals);
+        const recencyScore = calculateRecencyScore(daysSince, avgInterval);
+        const frequencyScore = clientApts.length >= 5 ? 1.0 : clientApts.length / 5;
+        
+        // Weighted confidence calculation
+        const confidenceScore = (
+          consistencyScore * 0.4 + 
+          recencyScore * 0.3 + 
+          frequencyScore * 0.3
+        );
+
+        const confidence: "high" | "medium" | "low" = 
+          confidenceScore >= 0.75 ? "high" :
+          confidenceScore >= 0.5 ? "medium" : "low";
+
+        // ✨ ENHANCEMENT: Smarter date suggestion based on day-of-week preferences
+        const preferredDays = detectPreferredDays(clientApts);
+        const smartSuggestedDate = findNextPreferredDay(preferredDays, avgInterval);
 
         if (isDue) {
           insights.push({
@@ -86,11 +106,65 @@ export const usePredictiveInsights = (stylistId?: string) => {
             clientName: clientApts[0].client?.user?.full_name || 'Unknown',
             dueForVisit: true,
             daysSinceLastVisit: daysSince,
-            suggestedDate: addDays(new Date(), 7), // Suggest a week from now
-            confidence: intervals.length >= 3 ? "high" : intervals.length >= 2 ? "medium" : "low"
+            suggestedDate: smartSuggestedDate,
+            confidence
           });
         }
       });
+
+      // ✨ ENHANCEMENT: Helper functions for smarter predictions
+      const calculateConsistency = (intervals: number[]): number => {
+        if (intervals.length < 2) return 0.5;
+        const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+        const variance = intervals.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / intervals.length;
+        const stdDev = Math.sqrt(variance);
+        // Lower standard deviation = higher consistency
+        return Math.max(0, 1 - (stdDev / avg));
+      };
+
+      const calculateRecencyScore = (daysSince: number, avgInterval: number): number => {
+        const ratio = daysSince / avgInterval;
+        // Score highest when just past due date
+        if (ratio >= 0.9 && ratio <= 1.2) return 1.0;
+        if (ratio >= 0.8 && ratio <= 1.4) return 0.7;
+        return 0.4;
+      };
+
+      const detectPreferredDays = (appointments: any[]): number[] => {
+        const dayCount: Record<number, number> = {};
+        appointments.forEach(apt => {
+          const day = new Date(apt.appointment_date).getDay();
+          dayCount[day] = (dayCount[day] || 0) + 1;
+        });
+        
+        const maxCount = Math.max(...Object.values(dayCount));
+        return Object.keys(dayCount)
+          .filter(day => dayCount[parseInt(day)] >= maxCount * 0.7)
+          .map(d => parseInt(d));
+      };
+
+      const findNextPreferredDay = (preferredDays: number[], avgInterval: number): Date => {
+        if (preferredDays.length === 0) {
+          return addDays(new Date(), Math.round(avgInterval));
+        }
+
+        let targetDate = addDays(new Date(), Math.round(avgInterval));
+        const targetDay = targetDate.getDay();
+        
+        if (preferredDays.includes(targetDay)) {
+          return targetDate;
+        }
+
+        // Find next preferred day within 3 days
+        for (let i = 1; i <= 3; i++) {
+          const nextDate = addDays(targetDate, i);
+          if (preferredDays.includes(nextDate.getDay())) {
+            return nextDate;
+          }
+        }
+
+        return targetDate; // Fallback to calculated date
+      };
 
       // Sort by confidence and days since last visit
       insights.sort((a, b) => {

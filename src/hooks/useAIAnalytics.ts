@@ -44,11 +44,76 @@ export function useAIAnalytics() {
         metadata: event.metadata || {},
         performance_ms: event.performanceMs
       });
+
+      // ✨ ENHANCEMENT: Auto-generate insights from patterns
+      // Check if we should trigger automated insight generation
+      if (event.eventType === 'formula_validation' || 
+          event.eventType === 'visual_analysis' ||
+          event.eventType === 'prediction_viewed') {
+        // Trigger background insight generation (non-blocking)
+        generateAutomatedInsights(user.id, event).catch(console.warn);
+      }
     } catch (error) {
       // Silently fail analytics - don't break user experience
       console.warn('Analytics tracking failed:', error);
     }
   }, []);
+
+  // ✨ ENHANCEMENT: Auto-generate insights from usage patterns
+  const generateAutomatedInsights = async (userId: string, event: AIAnalyticsEvent) => {
+    // Get recent analytics to detect patterns
+    const { data: recentEvents } = await supabase
+      .from('ai_analytics_events')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (!recentEvents || recentEvents.length < 5) return;
+
+    // Detect patterns and generate insights
+    const patterns = analyzePatterns(recentEvents);
+    
+    if (patterns.shouldGenerateInsight) {
+      // Auto-create AI insight
+      await supabase.from('ai_insights').insert({
+        stylist_id: patterns.stylistId,
+        insight_type: patterns.type,
+        title: patterns.title,
+        description: patterns.description,
+        priority: patterns.priority,
+        confidence_score: patterns.confidence,
+        action_items: patterns.actions,
+        potential_revenue: patterns.revenue
+      });
+    }
+  };
+
+  const analyzePatterns = (events: any[]) => {
+    // Pattern detection logic
+    const formulaEvents = events.filter(e => e.event_type === 'formula_validation');
+    const errorRate = formulaEvents.filter(e => e.metadata?.blockerCount > 0).length / formulaEvents.length;
+    
+    // High error rate pattern
+    if (errorRate > 0.3 && formulaEvents.length >= 5) {
+      return {
+        shouldGenerateInsight: true,
+        stylistId: events[0].metadata?.stylistId,
+        type: 'efficiency',
+        title: 'Formula Safety Patterns Detected',
+        description: `We've noticed ${Math.round(errorRate * 100)}% of your recent formulas triggered safety warnings. Consider reviewing your color mixing ratios.`,
+        priority: 'medium',
+        confidence: Math.min(errorRate * 100, 95),
+        actions: [
+          { title: 'Review last 5 formulas', url: '/formulas' },
+          { title: 'Check mixing guidelines', url: '/assistant' }
+        ],
+        revenue: 0
+      };
+    }
+
+    return { shouldGenerateInsight: false };
+  };
 
   const trackFormulaValidation = useCallback((result: {
     isSafe: boolean;

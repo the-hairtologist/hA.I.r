@@ -156,6 +156,41 @@ class EnhancedAnalytics {
       ...properties,
     });
   }
+
+  /**
+   * ✨ ENHANCEMENT: Track user journey through funnel
+   */
+  trackFunnelStep(funnelName: string, stepName: string, stepOrder: number, properties?: Record<string, any>) {
+    this.track('funnel_step_completed', {
+      funnel_name: funnelName,
+      step_name: stepName,
+      step_order: stepOrder,
+      ...properties,
+    });
+  }
+
+  /**
+   * ✨ ENHANCEMENT: Track business-critical actions with revenue impact
+   */
+  trackRevenueAction(action: string, revenueImpact: number, properties?: Record<string, any>) {
+    this.track('revenue_action', {
+      action,
+      revenue_impact: revenueImpact,
+      ...properties,
+    });
+  }
+
+  /**
+   * ✨ ENHANCEMENT: Track AI confidence and effectiveness
+   */
+  trackAIOutcome(feature: string, confidenceScore: number, wasAccurate: boolean, properties?: Record<string, any>) {
+    this.track('ai_outcome', {
+      feature,
+      confidence_score: confidenceScore,
+      was_accurate: wasAccurate,
+      ...properties,
+    });
+  }
   
   /**
    * Track error with context
