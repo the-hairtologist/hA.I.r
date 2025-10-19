@@ -38,6 +38,14 @@ export const MobileSidebarOverlay = () => {
     };
   }, [isOpen]);
 
+  // Failsafe: Restore scroll on component unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, []);
+
   // Handle swipe-to-close gesture
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.touches[0].clientX);

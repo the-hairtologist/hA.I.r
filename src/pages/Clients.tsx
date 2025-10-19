@@ -994,9 +994,10 @@ export default function Clients() {
                           className="h-5 w-5 rounded border-2 border-foreground cursor-pointer mt-1 focus:ring-2 focus:ring-primary focus:ring-offset-2"
                           aria-label={`Select ${client.full_name || 'client'}`}
                         />
-                        <CardTitle className="flex items-center gap-2 font-pixel flex-1">
-                          <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground">
+                         <CardTitle className="flex items-center gap-2 font-pixel flex-1">
+                          <div className="p-2 bg-secondary rounded-lg border-[2px] border-foreground relative">
                             <User className="h-5 w-5 text-secondary-foreground" />
+                            <div className="absolute -top-1 -right-1 h-2 w-2 bg-gradient-to-r from-primary to-accent rounded-full animate-pulse border border-background" title="AI features available" />
                           </div>
                           {client.full_name || "Unnamed Client"}
                         </CardTitle>
@@ -1206,7 +1207,12 @@ export default function Clients() {
             <Tabs defaultValue="info" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="info">Info & Formulas</TabsTrigger>
-                <TabsTrigger value="ai">AI Analysis</TabsTrigger>
+                <TabsTrigger value="ai" className="relative">
+                  AI Analysis
+                  <Badge variant="secondary" className="ml-2 text-[10px] px-1 py-0 h-4 bg-gradient-to-r from-primary to-accent border-0 animate-pulse">
+                    NEW
+                  </Badge>
+                </TabsTrigger>
                 <TabsTrigger value="timeline">Hair Journey</TabsTrigger>
                 <TabsTrigger value="appointments">Appointments</TabsTrigger>
               </TabsList>
