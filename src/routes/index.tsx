@@ -4,6 +4,7 @@
  */
 
 import { Route } from 'react-router-dom';
+import { lazy } from 'react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SubscriptionGate } from '@/components/SubscriptionGate';
 import { DashboardErrorBoundary } from '@/components/DashboardErrorBoundary';
@@ -44,7 +45,7 @@ const NotFound = lazyWithRetry(() => import('@/pages/NotFound'));
 const ServerError = lazyWithRetry(() => import('@/pages/ServerError'));
 const Referrals = lazyWithRetry(() => import('@/pages/Referrals'));
 const SystemHealth = lazyWithRetry(() => import('@/pages/SystemHealth'));
-const SecurityDashboard = lazyWithRetry(() => import('@/pages/admin/SecurityDashboard'));
+const SecurityDashboard = lazy(() => import('@/pages/admin/SecurityDashboard'));
 const AdminCommandCenter = lazyWithRetry(() => import('@/pages/AdminCommandCenter'));
 const AdminUsers = lazyWithRetry(() => import('@/pages/AdminUsers'));
 const AuditLogs = lazyWithRetry(() => import('@/pages/AuditLogs'));
