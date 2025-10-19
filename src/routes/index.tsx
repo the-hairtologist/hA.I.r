@@ -83,6 +83,11 @@ const AuditReport = lazyWithRetry(() => import('@/pages/AuditReport'));
 const ClientRetention = lazyWithRetry(() => import('@/pages/ClientRetention'));
 const DesignSystem = lazyWithRetry(() => import('@/pages/DesignSystem'));
 const SubscriptionPage = lazyWithRetry(() => import('@/pages/SubscriptionPage'));
+const StyleInspiration = lazyWithRetry(() => import('@/pages/StyleInspiration'));
+const Analytics = lazyWithRetry(() => import('@/pages/Analytics'));
+const Marketplace = lazyWithRetry(() => import('@/pages/Marketplace'));
+const GiftCards = lazyWithRetry(() => import('@/pages/GiftCards'));
+const TeamSchedule = lazyWithRetry(() => import('@/pages/TeamSchedule'));
 
 export const AppRoutes = () => (
   <>
@@ -121,6 +126,11 @@ export const AppRoutes = () => (
     <Route path="/appointments" element={<ProtectedRoute><Appointments /></ProtectedRoute>} />
     <Route path="/feedback" element={<ProtectedRoute><FeedbackBoard /></ProtectedRoute>} />
     <Route path="/subscription" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><SubscriptionPage /></ProtectedRoute>} />
+    <Route path="/inspiration" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><StyleInspiration /></ProtectedRoute>} />
+    <Route path="/analytics" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><Analytics /></ProtectedRoute>} />
+    <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
+    <Route path="/gift-cards" element={<ProtectedRoute><GiftCards /></ProtectedRoute>} />
+    <Route path="/team" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><TeamSchedule /></ProtectedRoute>} />
 
     {/* Stylist Routes */}
     <Route

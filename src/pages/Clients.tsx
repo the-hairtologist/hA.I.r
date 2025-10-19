@@ -43,6 +43,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { networkErrors, dataErrors } from "@/lib/errorMessages";
 import { SaveIndicator } from "@/components/SaveIndicator";
 import { ReEngagementDialog } from "@/components/ReEngagementDialog";
+import { ClientActivityIndicator } from "@/components/ClientActivityIndicator";
 
 interface ClientProfile {
   id: string;
@@ -1067,6 +1068,9 @@ export default function Clients() {
                       }}
                     />
                   </AIFeatureErrorBoundary>
+
+                  {/* Live Activity Indicator */}
+                  <ClientActivityIndicator clientId={client.id} />
 
                   <div className="text-xs sm:text-sm p-3 bg-secondary/5 rounded-lg border-[2px] border-secondary/30">
                     <span className="font-semibold text-secondary">Notes: </span>

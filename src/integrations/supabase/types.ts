@@ -2334,6 +2334,102 @@ export type Database = {
           },
         ]
       }
+      gift_card_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          gift_card_id: string
+          id: string
+          order_id: string | null
+          transaction_type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          gift_card_id: string
+          id?: string
+          order_id?: string | null
+          transaction_type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          gift_card_id?: string
+          id?: string
+          order_id?: string | null
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_card_transactions_gift_card_id_fkey"
+            columns: ["gift_card_id"]
+            isOneToOne: false
+            referencedRelation: "gift_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_card_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gift_cards: {
+        Row: {
+          balance: number
+          code: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          original_balance: number
+          purchased_by: string | null
+          recipient_email: string | null
+          stylist_id: string | null
+        }
+        Insert: {
+          balance: number
+          code: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_balance: number
+          purchased_by?: string | null
+          recipient_email?: string | null
+          stylist_id?: string | null
+        }
+        Update: {
+          balance?: number
+          code?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_balance?: number
+          purchased_by?: string | null
+          recipient_email?: string | null
+          stylist_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_cards_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_cards_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hair_analysis_results: {
         Row: {
           analysis_result: Json
@@ -2844,6 +2940,110 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          order_id?: string
+          price?: number
+          product_id?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          id: string
+          status: string
+          stripe_payment_intent_id: string | null
+          stylist_id: string
+          total: number
+          updated_at: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stylist_id: string
+          total: number
+          updated_at?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stylist_id?: string
+          total?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           amount: number
@@ -3152,6 +3352,63 @@ export type Database = {
           },
           {
             foreignKeyName: "product_inventory_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          price: number
+          stock_quantity: number | null
+          stylist_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          price: number
+          stock_quantity?: number | null
+          stylist_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          price?: number
+          stock_quantity?: number | null
+          stylist_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_stylist_id_fkey"
             columns: ["stylist_id"]
             isOneToOne: false
             referencedRelation: "stylist_profiles"
@@ -4229,6 +4486,45 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      team_messages: {
+        Row: {
+          created_at: string | null
+          edited_at: string | null
+          id: string
+          message: string
+          stylist_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          edited_at?: string | null
+          id?: string
+          message: string
+          stylist_id: string
+        }
+        Update: {
+          created_at?: string | null
+          edited_at?: string | null
+          id?: string
+          message?: string
+          stylist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_messages_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_messages_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       todos: {
         Row: {
