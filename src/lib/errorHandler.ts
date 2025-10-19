@@ -13,7 +13,8 @@
 import { toast } from "sonner";
 import { log } from "./logger";
 import { PostgrestError } from "@supabase/supabase-js";
-import type { AppError, ErrorContext, RetryOptions, ErrorHandlerOptions } from "@/types/errors";
+import type { AppError, ErrorContext, RetryOptions, ErrorHandlerOptions, ErrorRecoveryContext } from "@/types/errors";
+import { shouldAttemptRecovery, recoverFromError } from "./errorRecovery";
 
 /**
  * Maps common error codes to user-friendly messages
@@ -106,11 +107,12 @@ export function getErrorMessage(error: unknown): string {
  * }
  * ```
  */
-export function handleError(
+export async function handleError(
   error: unknown,
   context?: string,
-  options?: ErrorHandlerOptions
-): AppError {
+  options?: ErrorHandlerOptions,
+  recoveryContext?: ErrorRecoveryContext
+): Promise<AppError> {
   const {
     showToast = true,
     logError = true,
@@ -135,6 +137,28 @@ export function handleError(
   // Log the error
   if (logError) {
     log.error(errorMessage, context, error);
+  }
+
+  // Attempt automatic recovery if applicable
+  if (shouldAttemptRecovery(appError, recoveryContext)) {
+    try {
+      const recoveryResult = await recoverFromError(appError, recoveryContext || {});
+      
+      if (recoveryResult.recovered) {
+        log.info(`Error recovered using ${recoveryResult.strategy}`, 'errorHandler');
+        
+        // Show recovery success toast
+        if (showToast) {
+          toast.success(recoveryResult.message, {
+            duration: 3000,
+          });
+        }
+        
+        return appError;
+      }
+    } catch (recoveryError) {
+      log.error('Recovery failed', 'errorHandler', recoveryError as Error);
+    }
   }
 
   // Show toast notification with retry option (but not for module import errors)
