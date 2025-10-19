@@ -28,16 +28,11 @@ export const useSubscriptionNudges = () => {
       if (!session) return;
 
       // Get stylist profile
-      const { data: stylistData, error: stylistError } = await supabase
+      const { data: stylistData } = await supabase
         .from("stylist_profiles")
         .select("id, trial_end_date")
         .eq("user_id", session.user.id)
         .maybeSingle();
-
-      if (stylistError && stylistError.code !== 'PGRST116') {
-        console.error('Error loading stylist profile for subscription nudges:', stylistError);
-        return;
-      }
 
       if (!stylistData) return;
 
@@ -50,14 +45,10 @@ export const useSubscriptionNudges = () => {
       }
 
       // Get client count
-      const { count: clients, error: clientError } = await supabase
+      const { count: clients } = await supabase
         .from("client_profiles")
         .select("*", { count: 'exact', head: true })
         .eq("preferred_stylist_id", stylistData.id);
-
-      if (clientError && clientError.code !== 'PGRST116') {
-        console.error('Error loading client count:', clientError);
-      }
 
       setClientCount(clients || 0);
 

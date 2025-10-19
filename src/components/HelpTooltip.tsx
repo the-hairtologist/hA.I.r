@@ -9,7 +9,7 @@ import {
   AlertDialogAction,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Badge } from "@/components/ui/badge";
 
 interface RoleSpecificContent {
@@ -25,9 +25,7 @@ interface HelpTooltipProps {
 }
 
 export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpTooltipProps) => {
-  const { roles } = useEnhancedAuth();
-  const isStylist = roles.includes('stylist');
-  const isClient = roles.includes('client');
+  const { isStylist, isClient } = useUserRole();
   
   // Determine what content to show based on role
   let displayContent = '';

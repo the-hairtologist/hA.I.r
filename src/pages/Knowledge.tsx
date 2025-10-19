@@ -6,15 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen, Search, Video, FileText, Lightbulb, TrendingUp, Award, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useUserRole } from "@/hooks/useUserRole";
 
 
 const Knowledge = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const { roles } = useEnhancedAuth();
-  const isStylist = roles.includes('stylist');
-  const isClient = roles.includes('client');
+  const { isStylist, isClient } = useUserRole();
 
   const categories = [
     { id: "all", label: "All Topics", icon: BookOpen },

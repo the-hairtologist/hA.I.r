@@ -1,15 +1,11 @@
 /**
  * User Role Hook
- * @deprecated For current user, use useEnhancedAuth() instead.
- * Only use this hook when checking roles for OTHER users (admin functionality).
- * 
  * Provides role checking and management
  */
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { log } from '@/lib/logger';
-import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
 
 export type UserRole = 'admin' | 'stylist' | 'client';
 
@@ -23,20 +19,6 @@ interface UseUserRoleReturn {
 }
 
 export function useUserRole(userId?: string): UseUserRoleReturn {
-  const { user: currentUser, roles: currentRoles, loading: authLoading } = useEnhancedAuth();
-  
-  // Early return if checking current user - use EnhancedAuth instead
-  if (userId === currentUser?.id) {
-    console.warn('[useUserRole] Use useEnhancedAuth() for current user roles');
-    return {
-      roles: currentRoles,
-      isStylist: currentRoles.includes('stylist'),
-      isClient: currentRoles.includes('client'),
-      isAdmin: currentRoles.includes('admin'),
-      loading: authLoading,
-      refetch: async () => {},
-    };
-  }
   const [roles, setRoles] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(true);
 

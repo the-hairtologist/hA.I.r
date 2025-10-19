@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SparkleButton } from "@/components/ui/sparkle-button";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Scissors, Calendar, Palette, Smartphone, Download } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
@@ -12,35 +10,12 @@ import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
-import { AsyncErrorBoundary } from "@/components/errors/AsyncErrorBoundary";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, loading } = useEnhancedAuth();
-
-  // Auto-redirect authenticated users to dashboard - IMMEDIATE redirect
-  useEffect(() => {
-    if (user && !loading) {
-      console.log('[Index] User and data ready, redirect to dashboard');
-      navigate("/dashboard", { replace: true });
-    }
-  }, [user, loading, navigate]);
-
-  // Safety fallback - show loading if user exists (during redirect)
-  if (user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center space-y-4">
-          <Scissors className="h-12 w-12 text-primary mx-auto animate-pulse" />
-          <p className="text-lg font-pixel text-foreground">REDIRECTING TO DASHBOARD...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <AsyncErrorBoundary>
-      <div className="min-h-screen-safe bg-background scroll-smooth">
+    <div className="min-h-screen-safe bg-background scroll-smooth">
       <SEO 
         title="hA.I.r - AI-Powered Salon Assistant | Transform Every Color Service"
         description="Professional color formulas in seconds. AI-powered booking, client management, and formula generation for hair stylists. No guesswork, just flawless results every time."
@@ -187,7 +162,6 @@ const Index = () => {
 
       <EnhancedFooter />
     </div>
-    </AsyncErrorBoundary>
   );
 };
 

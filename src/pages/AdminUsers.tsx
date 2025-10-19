@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { z } from "zod";
 import {
   Dialog,
   DialogContent,
@@ -123,18 +122,6 @@ export default function AdminUsers() {
 
   const handleAssignRole = async (userId: string, role: 'client' | 'stylist') => {
     try {
-      // Validate UUID format (defense-in-depth)
-      if (!z.string().uuid().safeParse(userId).success) {
-        toast.error("Invalid user ID format");
-        return;
-      }
-
-      // Validate role value
-      if (!['client', 'stylist'].includes(role)) {
-        toast.error("Invalid role selected");
-        return;
-      }
-
       const { error } = await supabase.rpc('assign_user_role', {
         _user_id: userId,
         _role: role as any

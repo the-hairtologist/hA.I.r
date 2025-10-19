@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { SearchInput } from "@/components/SearchInput";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { 
   Zap, Calendar, MessageSquare, Instagram, CreditCard, 
   FileText, Star, Cloud, Video, TrendingUp, Mail,
@@ -356,10 +357,8 @@ const categories = [
 const Integrations = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, roles } = useEnhancedAuth();
-  const isStylist = roles.includes('stylist');
-  const isClient = roles.includes('client');
-  const isAdmin = roles.includes('admin');
+  const { user } = useAuth();
+  const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
   const [webhookUrl, setWebhookUrl] = useState("");

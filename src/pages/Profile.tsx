@@ -8,39 +8,41 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Mail, Phone, MapPin, Camera } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const Profile = () => {
-  const { user, roles } = useEnhancedAuth();
+  const { session } = useAuth();
   const queryClient = useQueryClient();
+  const { roles } = useUserRole(session?.user?.id);
   const userRole = roles?.[0];
 
   const { data: profile } = useQuery({
-    queryKey: ['profile', user?.id],
+    queryKey: ['profile', session?.user?.id],
     queryFn: async () => {
       const { data } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user?.id)
+        .eq('id', session?.user?.id)
         .maybeSingle();
       return data;
     },
-    enabled: !!user?.id,
+    enabled: !!session?.user?.id,
   });
 
   const { data: stylistProfile } = useQuery({
-    queryKey: ['stylist-profile', user?.id],
+    queryKey: ['stylist-profile', session?.user?.id],
     queryFn: async () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', user?.id)
+        .eq('user_id', session?.user?.id)
         .maybeSingle();
       return data;
     },
-    enabled: !!user?.id && userRole === 'stylist',
+    enabled: !!session?.user?.id && userRole === 'stylist',
   });
 
   const [formData, setFormData] = useState({
@@ -61,7 +63,7 @@ const Profile = () => {
           full_name: data.full_name,
           phone: data.phone,
         })
-        .eq('id', user?.id);
+        .eq('id', session?.user?.id);
 
       if (profileError) throw profileError;
 
@@ -74,7 +76,7 @@ const Profile = () => {
             business_name: data.business_name,
             location: data.location,
           })
-          .eq('user_id', user?.id);
+          .eq('user_id', session?.user?.id);
 
         if (stylistError) throw stylistError;
       }

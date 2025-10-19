@@ -3,23 +3,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 
 export const RoleSwitchProtection = () => {
   const navigate = useNavigate();
-  const { user } = useEnhancedAuth();
   const { subscribed, inTrial, loading: subscriptionLoading } = useSubscription();
   const [hasChecked, setHasChecked] = useState(false);
 
   useEffect(() => {
-    // Don't run on public pages or when no user is logged in
-    if (!user) {
-      setHasChecked(false);
-      return;
-    }
-
     const checkRoleSwitch = async () => {
-      if (hasChecked || subscriptionLoading) return;
+      if (hasChecked) return;
       
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -78,7 +70,7 @@ export const RoleSwitchProtection = () => {
     };
 
     checkRoleSwitch();
-  }, [user, subscribed, inTrial, subscriptionLoading, hasChecked, navigate]);
+  }, [subscribed, inTrial, subscriptionLoading, hasChecked, navigate]);
 
   return null;
 };

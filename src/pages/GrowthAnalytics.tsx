@@ -6,28 +6,28 @@ import {
   TrendingUp, Users, Calendar, DollarSign, Share2, 
   Eye, MousePointer, UserPlus, BarChart3, Clock 
 } from "lucide-react";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const GrowthAnalytics = () => {
-  const { user } = useEnhancedAuth();
+  const { session } = useAuth();
   const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("30d");
 
   // Fetch stylist profile
   const { data: stylistProfile } = useQuery({
-    queryKey: ['stylist-profile', user?.id],
+    queryKey: ['stylist-profile', session?.user?.id],
     queryFn: async () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', user?.id)
+        .eq('user_id', session?.user?.id)
         .maybeSingle();
       return data;
     },
-    enabled: !!user?.id,
+    enabled: !!session?.user?.id,
   });
 
   // Fetch appointments data for analytics

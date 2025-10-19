@@ -6,16 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Copy, ExternalLink, Share2, QrCode, Eye, Facebook, Twitter, Mail, Instagram } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import QRCode from "qrcode";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 
 const BookingPage = () => {
-  const { user } = useEnhancedAuth();
+  const { session } = useAuth();
   const queryClient = useQueryClient();
   const [isPublic, setIsPublic] = useState(true);
   const [welcomeMessage, setWelcomeMessage] = useState("");
@@ -25,16 +25,16 @@ const BookingPage = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   const { data: stylistProfile } = useQuery({
-    queryKey: ['stylist-profile', user?.id],
+    queryKey: ['stylist-profile', session?.user?.id],
     queryFn: async () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', user?.id)
+        .eq('user_id', session?.user?.id)
         .maybeSingle();
       return data;
     },
-    enabled: !!user?.id,
+    enabled: !!session?.user?.id,
   });
 
   // Initialize form values when profile loads

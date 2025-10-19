@@ -5,7 +5,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import { initAnalytics } from "@/lib/analytics";
-import { Link } from "react-router-dom";
 
 const COOKIE_CONSENT_KEY = "hair-cookie-consent";
 
@@ -119,9 +118,9 @@ export const CookieConsent = () => {
             <p className="text-xs text-muted-foreground">
               By clicking "Accept All", you consent to our use of cookies. 
               Learn more in our{" "}
-              <Link to="/cookie-policy" className="text-primary hover:underline">
+              <a href="/cookie-policy" className="text-primary hover:underline">
                 Cookie Policy
-              </Link>
+              </a>
               .
             </p>
           </div>

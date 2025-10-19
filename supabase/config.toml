@@ -189,6 +189,3 @@ verify_jwt = true
 [functions.creative-solver]
 verify_jwt = true
 
-[functions.realtime-voice]
-verify_jwt = true
-

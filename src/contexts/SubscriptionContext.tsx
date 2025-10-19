@@ -131,13 +131,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         },
       });
 
-      if (error) {
-        console.error('Subscription check failed:', error);
-        // Set safe defaults instead of crashing
-        setSubscribed(false);
-        setInTrial(false);
-        return;
-      }
+      if (error) throw error;
 
       const isSubscribed = data.subscribed || false;
       const isInTrial = data.in_trial || false;
@@ -183,12 +177,12 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     checkSubscription();
 
-    // Check subscription on auth state change (deferred to allow auth to settle)
+    // Check subscription on auth state change
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
         setTimeout(() => {
           checkSubscription();
-        }, 2000);
+        }, 0);
       } else {
         setSubscribed(false);
         setUserRole(null);

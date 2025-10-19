@@ -1,5 +1,6 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SequenceList } from "@/components/email-sequences/SequenceList";
 import { SequenceBuilder } from "@/components/email-sequences/SequenceBuilder";
@@ -10,9 +11,8 @@ import { EmailTestPanel } from "@/components/email-automation/EmailTestPanel";
 import { Mail, TrendingUp, Users, Layout, Zap } from "lucide-react";
 
 const EmailSequences = () => {
-  const { user, roles } = useEnhancedAuth();
-  const isAdmin = roles.includes('admin');
-  const isStylist = roles.includes('stylist');
+  const { user } = useAuth();
+  const { isAdmin, isStylist } = useUserRole(user?.id);
 
   if (!isAdmin && !isStylist) {
     return (

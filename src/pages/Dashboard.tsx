@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { StylistSubscriptionPrompt } from "@/components/StylistSubscriptionPrompt";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -55,7 +56,6 @@ import { useFeatureFlag } from "@/lib/featureFlags";
 import { Button } from "@/components/ui/button";
 import { Edit3, RotateCcw, Save, StickyNote, MessageCircle, Sparkles, BookOpen } from "lucide-react";
 import { ProgressTracker } from "@/components/ProgressTracker";
-import { VoiceInterface } from "@/components/VoiceInterface";
 import {
   DndContext,
   closestCenter,
@@ -76,8 +76,8 @@ import {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user: authUser, roles, loading: authLoading } = useEnhancedAuth();
-  const isAdmin = roles.includes('admin');
+  const { user: authUser, loading: authLoading } = useAuth();
+  const { roles, isAdmin, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
   const { isMobile } = useResponsive();
   
@@ -125,7 +125,6 @@ const Dashboard = () => {
 
   // Stylist dashboard sections - business management focus
   const defaultStylistSections: DashboardSection[] = [
-    { id: "voice-assistant", title: "Voice Assistant", component: "VoiceInterface", enabled: true },
     { id: "progress-tracker", title: "Your Progress", component: "ProgressTracker", enabled: true },
     { id: "predictive-insights", title: "AI Predictions", component: "PredictiveInsights", enabled: true },
     { id: "kpi-cards", title: "Today's Overview", component: "LiveKPICards", enabled: true },
@@ -176,7 +175,6 @@ const Dashboard = () => {
       ? defaultStylistSections 
       : defaultClientSections;
   
-  // CRITICAL FIX: Always pass defaultSections, let the hook handle loading internally
   const { sections, isLoading: layoutLoading, saveDashboardLayout, resetDashboardLayout, toggleSection } = 
     useDashboardLayout(defaultSections);
 
@@ -199,7 +197,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Wait for auth and roles to be fully loaded
-    if (!authLoading && authUser && roles.length > 0) {
+    if (!authLoading && !roleLoading && authUser && roles.length > 0) {
       // Prioritize stylist role if user has both roles
       const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
       setUserRole(primaryRole);
@@ -213,14 +211,11 @@ const Dashboard = () => {
     } else if (!authLoading && !authUser) {
       navigate("/auth");
     }
-  }, [authLoading, authUser, roles]);
+  }, [authLoading, roleLoading, authUser, roles]);
 
   useEffect(() => {
     if (userRole && profile) {
       loadDashboardData();
-      
-      // Mark dashboard as loaded for coordinating other components
-      sessionStorage.setItem('dashboard_loaded', 'true');
       
       // Check if we should show onboarding - only OnboardingWizard
       const onboardingComplete = localStorage.getItem('onboarding_completed');
@@ -255,11 +250,6 @@ const Dashboard = () => {
         }
       }
     }
-    
-    // Cleanup: Clear dashboard_loaded flag on unmount
-    return () => {
-      sessionStorage.removeItem('dashboard_loaded');
-    };
   }, [userRole, profile, subscribed, inTrial, subscriptionLoading]);
 
   useEffect(() => {
@@ -347,66 +337,37 @@ const Dashboard = () => {
         return;
       }
 
-      console.log('[Dashboard] Loading profile for role:', primaryRole);
-
       // Get appropriate profile based on role
       if (primaryRole === "stylist") {
-        const { data: stylistProfile, error: stylistError } = await supabase
+        const { data: stylistProfile } = await supabase
           .from("stylist_profiles")
           .select("*")
           .eq("user_id", sessionUser.id)
           .maybeSingle();
-        
-        if (stylistError && stylistError.code !== 'PGRST116') {
-          console.error('Error loading stylist profile:', stylistError);
-          // Don't throw - just log and continue without profile
-        }
-        
-        console.log('[Dashboard] Stylist profile loaded:', !!stylistProfile);
         setProfile(stylistProfile);
       } else if (primaryRole === "client") {
-        const { data: clientProfile, error: clientError } = await supabase
+        const { data: clientProfile } = await supabase
           .from("client_profiles")
           .select("*")
           .eq("user_id", sessionUser.id)
           .maybeSingle();
-        
-        if (clientError && clientError.code !== 'PGRST116') {
-          console.error('Error loading client profile:', clientError);
-          // Don't throw - just log and continue without profile
-        }
-        
-        console.log('[Dashboard] Client profile loaded:', !!clientProfile);
         setProfile(clientProfile);
       } else if (primaryRole === "admin" || isAdmin) {
         // For admins, try to get stylist profile first, then client profile
-        const { data: stylistProfile, error: stylistError } = await supabase
+        const { data: stylistProfile } = await supabase
           .from("stylist_profiles")
           .select("*")
           .eq("user_id", sessionUser.id)
           .maybeSingle();
         
-        if (stylistError && stylistError.code !== 'PGRST116') {
-          console.error('Error loading admin stylist profile:', stylistError);
-          // Don't throw - just log and continue
-        }
-        
         if (stylistProfile) {
-          console.log('[Dashboard] Admin stylist profile loaded');
           setProfile(stylistProfile);
         } else {
-          const { data: clientProfile, error: clientError } = await supabase
+          const { data: clientProfile } = await supabase
             .from("client_profiles")
             .select("*")
             .eq("user_id", sessionUser.id)
             .maybeSingle();
-          
-          if (clientError && clientError.code !== 'PGRST116') {
-            console.error('Error loading admin client profile:', clientError);
-            // Don't throw - just log and continue
-          }
-          
-          console.log('[Dashboard] Admin client profile loaded');
           setProfile(clientProfile);
         }
       }
@@ -624,9 +585,7 @@ const Dashboard = () => {
     }
   };
 
-  // CRITICAL: Wait for ALL loading states to complete before rendering dashboard
-  // This prevents crashes from premature database queries or null references
-  if (authLoading || loading || layoutLoading || !user || !userRole) {
+  if (loading) {
     return (
       <DashboardLayout>
         <div className="p-4 md:p-6 lg:p-8">
@@ -640,8 +599,6 @@ const Dashboard = () => {
     if (!section.enabled) return null;
 
     switch (section.component) {
-      case "VoiceInterface":
-        return <VoiceInterface />;
       case "NextAppointment":
         return (userRole === "client" || isAdmin) ? (
           <NextAppointmentWidget />

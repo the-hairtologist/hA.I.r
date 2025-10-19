@@ -4575,10 +4575,6 @@ export type Database = {
         Args: { _client_user_id: string; _stylist_id: string }
         Returns: boolean
       }
-      is_client_of_stylist: {
-        Args: { _client_id: string; _stylist_user_id: string }
-        Returns: boolean
-      }
       is_stylist_owner: {
         Args: { _stylist_id: string; _user_id: string }
         Returns: boolean
@@ -4615,16 +4611,6 @@ export type Database = {
       trigger_appointment_reminders: {
         Args: Record<PropertyKey, never>
         Returns: Json
-      }
-      user_is_client_of_stylist: {
-        Args: { _stylist_id: string; _user_id: string }
-        Returns: boolean
-      }
-      user_is_stylist: {
-        Args: { _user_id: string }
-        Returns: {
-          stylist_id: string
-        }[]
       }
       user_owns_formula: {
         Args: { _formula_id: string; _user_id: string }

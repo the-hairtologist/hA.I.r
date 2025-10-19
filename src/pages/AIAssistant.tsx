@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Sparkles, Send, Save, CheckSquare, History, Trash2, MessageSquare, User, Brain } from "lucide-react";
 import { LoadingDots } from "@/components/ui/loading-dots";
@@ -35,7 +36,8 @@ import { useFeatureFlag } from "@/lib/featureFlags";
 
 const Knowledge = () => {
   const navigate = useNavigate();
-  const { user, roles, loading: authLoading } = useEnhancedAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
   
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
@@ -93,14 +95,14 @@ const Knowledge = () => {
   }, [aiMessages]);
 
   useEffect(() => {
-    if (!authLoading && user && roles.length > 0) {
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
       const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
       setUserRole(primaryRole);
       setLoading(false);
     } else if (!authLoading && !user) {
       navigate("/auth");
     }
-  }, [authLoading, user, roles]);
+  }, [authLoading, roleLoading, user, roles]);
 
   useEffect(() => {
     if (userRole === "stylist") {

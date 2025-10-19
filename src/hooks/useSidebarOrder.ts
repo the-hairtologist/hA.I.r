@@ -44,17 +44,11 @@ export function useSidebarOrder(defaultItems: SidebarItem[], groupLabels: { [key
   }, [user?.id, defaultItems.length]); // Watch for changes in defaultItems
 
   const loadSidebarOrder = async () => {
-    if (!user?.id) {
-      setItems(defaultItems);
-      setIsLoading(false);
-      return;
-    }
-    
     try {
       const { data, error } = await supabase
         .from("user_sidebar_preferences")
         .select("sidebar_order")
-        .eq("user_id", user.id)
+        .eq("user_id", user!.id)
         .maybeSingle();
 
       if (error && error.code !== "PGRST116") {

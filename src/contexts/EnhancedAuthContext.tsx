@@ -155,18 +155,10 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
           .maybeSingle(),
       ]);
 
-      // Handle individual errors gracefully
-      const profile = profileResult.error ? null : profileResult.data;
-      const roles = rolesResult.error ? [] : (rolesResult.data || []).map((r) => r.role as AppRole);
-      const stylistProfile = stylistResult.error ? null : stylistResult.data;
-      const clientProfile = clientResult.error ? null : clientResult.data;
-
-      // If roles failed to load (critical), keep loading true
-      if (rolesResult.error) {
-        console.error("[EnhancedAuth] CRITICAL: Roles fetch failed:", rolesResult.error);
-        setState((prev) => ({ ...prev, loading: true, initialized: true }));
-        return;
-      }
+      const profile = profileResult.data;
+      const roles = (rolesResult.data || []).map((r) => r.role as AppRole);
+      const stylistProfile = stylistResult.data;
+      const clientProfile = clientResult.data;
 
       // Determine primary role (prefer stylist if user has both)
       const primaryRole = roles.includes("stylist")
@@ -187,17 +179,9 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         loading: false,
         initialized: true,
       });
-
-      console.log("[EnhancedAuth] ✅ Auth data loaded:", {
-        roles,
-        primaryRole,
-        hasProfile: !!profile,
-        hasStylistProfile: !!stylistProfile,
-        hasClientProfile: !!clientProfile,
-      });
     } catch (error) {
-      console.error("[EnhancedAuth] Exception loading auth data:", error);
-      setState((prev) => ({ ...prev, loading: true, initialized: true }));
+      console.error("Error loading auth data:", error);
+      setState((prev) => ({ ...prev, loading: false, initialized: true }));
     }
   }, []);
 
@@ -214,15 +198,6 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         if (!isMounted) return;
 
         if (session?.user) {
-          // Set user and keep loading until all auth data is ready
-          setState(prev => ({ 
-            ...prev, 
-            user: session.user, 
-            loading: true,
-            initialized: true 
-          }));
-          
-          // THEN load the rest of the data in background
           await loadAuthData(session.user);
         } else {
           setState((prev) => ({ ...prev, loading: false, initialized: true }));
@@ -252,18 +227,11 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // CRITICAL: No async calls in callback - use setTimeout
         if (event === "SIGNED_IN" && session?.user) {
-          // Set login timestamp for coordinating loading UI
-          sessionStorage.setItem('last_login', Date.now().toString());
-          
           setState(prev => ({ ...prev, loading: true }));
           setTimeout(() => {
             loadAuthData(session.user);
           }, 0);
         } else if (event === "SIGNED_OUT") {
-          // Clear login coordination flags
-          sessionStorage.removeItem('last_login');
-          sessionStorage.removeItem('dashboard_loaded');
-          
           setState({
             user: null,
             profile: null,
@@ -335,18 +303,6 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     isClient: state.roles.includes("client"),
     isAdmin: state.roles.includes("admin"),
   };
-
-  // Debug logging
-  useEffect(() => {
-    console.log('[EnhancedAuthContext] State:', {
-      hasUser: !!state.user,
-      userId: state.user?.id,
-      loading: state.loading,
-      initialized: state.initialized,
-      roles: state.roles,
-      primaryRole: state.primaryRole
-    });
-  }, [state.user, state.loading, state.initialized, state.roles, state.primaryRole]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

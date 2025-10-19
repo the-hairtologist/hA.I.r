@@ -13,14 +13,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { format } from "date-fns";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { AdminFeedbackActions } from "@/components/feedback/AdminFeedbackActions";
 
 const FeedbackBoard = () => {
   const toast = useToast();
   const queryClient = useQueryClient();
-  const { user, roles } = useEnhancedAuth();
-  const isAdmin = roles.includes('admin');
+  const { user } = useAuth();
+  const { isAdmin } = useUserRole(user?.id);
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("recent");

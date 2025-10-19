@@ -12,7 +12,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Camera, Mic, Shield, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
 
 interface PrivacyConsentDialogProps {
   open: boolean;
@@ -188,9 +187,9 @@ export const PrivacyConsentDialog = ({
                 </p>
                 <p className="mt-2">
                   Read our full{" "}
-                  <Link to="/privacy" className="text-primary hover:underline">
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                     Privacy Policy
-                  </Link>
+                  </a>
                 </p>
               </div>
             </div>

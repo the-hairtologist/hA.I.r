@@ -2,7 +2,6 @@ import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/PageHeader";
 import { Shield } from "lucide-react";
 import { SEO } from "@/components/SEO";
-import { Link } from "react-router-dom";
 
 const Privacy = () => {
   return (
@@ -100,7 +99,7 @@ const Privacy = () => {
             </ul>
             
             <h2>7. Cookies</h2>
-            <p>We use cookies for essential functionality and, with your consent, for analytics and marketing. You can manage your cookie preferences through our cookie consent banner. See our <Link to="/cookie-policy" className="text-primary hover:underline">Cookie Policy</Link> for details.</p>
+            <p>We use cookies for essential functionality and, with your consent, for analytics and marketing. You can manage your cookie preferences through our cookie consent banner. See our <a href="/cookie-policy" className="text-primary hover:underline">Cookie Policy</a> for details.</p>
             
             <h3>Essential Cookies (Required)</h3>
             <ul>

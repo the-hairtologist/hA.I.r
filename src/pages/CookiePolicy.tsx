@@ -2,7 +2,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/PageHeader";
 import { Cookie } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const CookiePolicy = () => {
   return (
@@ -203,10 +202,10 @@ const CookiePolicy = () => {
             <h2>Additional Resources</h2>
             <ul>
               <li>
-                <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+                <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>
               </li>
               <li>
-                <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
+                <a href="/terms" className="text-primary hover:underline">Terms of Service</a>
               </li>
               <li>
                 <a href="https://allaboutcookies.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">

@@ -7,7 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Copy, Share2, Gift, Users, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logger } from "@/lib/logger";
-import { sanitizeInput, detectSQLInjection } from "@/lib/security/inputSanitization";
 
 interface ReferralData {
   referral_code: string;
@@ -57,18 +56,9 @@ export const ReferralSystem = () => {
 
       // Create referral code if doesn't exist
       if (!existingRef) {
-        // Validate stylist name before sending to RPC
-        const stylistName = profile.business_name || "Stylist";
-        const sanitizedName = sanitizeInput(stylistName, 'text');
-        
-        if (!sanitizedName || sanitizedName.length > 100 || detectSQLInjection(sanitizedName)) {
-          console.error("Invalid stylist name for referral code generation");
-          return;
-        }
-
         const { data: newCode, error: codeError } = await supabase.rpc(
           "generate_referral_code",
-          { stylist_name: sanitizedName }
+          { stylist_name: profile.business_name || "Stylist" }
         );
 
         if (!codeError && newCode) {

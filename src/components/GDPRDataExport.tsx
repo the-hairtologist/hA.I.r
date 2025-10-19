@@ -26,15 +26,11 @@ export const GDPRDataExport = () => {
     setExporting(true);
     try {
       // Gather all user data
-      const { data: profile, error: profileError } = await supabase
+      const { data: profile } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user?.id)
-        .maybeSingle();
-
-      if (profileError && profileError.code !== 'PGRST116') {
-        console.error('Error loading profile:', profileError);
-      }
+        .single();
 
       const { data: clientProfile } = await supabase
         .from('client_profiles')

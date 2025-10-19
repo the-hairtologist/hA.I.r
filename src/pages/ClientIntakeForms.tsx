@@ -1,12 +1,12 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { IntakeFormBuilder } from "@/components/intake-forms/IntakeFormBuilder";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { FileText } from "lucide-react";
 
 const ClientIntakeForms = () => {
-  const { user, roles } = useEnhancedAuth();
-  const isAdmin = roles.includes('admin');
-  const isStylist = roles.includes('stylist');
+  const { user } = useAuth();
+  const { isAdmin, isStylist } = useUserRole(user?.id);
 
   if (!isAdmin && !isStylist) {
     return (

@@ -1,7 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -10,11 +9,10 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Input validation schema
-const requestSchema = z.object({
-  appointmentId: z.string().uuid(),
-  type: z.enum(["confirmation", "reminder"])
-});
+interface AppointmentEmailRequest {
+  appointmentId: string;
+  type: "confirmation" | "reminder";
+}
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -27,21 +25,7 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const body = await req.json();
-    
-    // Validate input
-    const validationResult = requestSchema.safeParse(body);
-    if (!validationResult.success) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Invalid input',
-          details: validationResult.error.format()
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const { appointmentId, type } = validationResult.data;
+    const { appointmentId, type }: AppointmentEmailRequest = await req.json();
 
     // Fetch appointment details with related data
     const { data: appointment, error: appointmentError } = await supabase

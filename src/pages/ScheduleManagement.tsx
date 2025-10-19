@@ -140,31 +140,13 @@ const ScheduleManagement = () => {
   ];
 
   useEffect(() => {
-    let mounted = true;
-    
-    const initialize = async () => {
-      if (mounted) {
-        await loadData();
-        await loadScheduleOverrides();
-      }
-    };
-    
-    initialize();
-    
-    return () => {
-      mounted = false;
-    };
+    loadData();
+    loadScheduleOverrides();
   }, []);
 
   const loadData = async () => {
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error("Session error:", sessionError);
-        navigate("/auth");
-        return;
-      }
-      
+      const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate("/auth");
         return;
@@ -191,17 +173,11 @@ const ScheduleManagement = () => {
 
       setStylistProfile(stylist);
       
-      // Safely handle weekly_schedule with proper validation
-      if (stylist.weekly_schedule && typeof stylist.weekly_schedule === 'object') {
-        try {
-          setSchedule(stylist.weekly_schedule as unknown as Record<string, DaySchedule>);
-        } catch (e) {
-          console.error("Error parsing schedule:", e);
-          // Keep default schedule if parsing fails
-        }
+      if (stylist.weekly_schedule) {
+        setSchedule(stylist.weekly_schedule as unknown as Record<string, DaySchedule>);
       }
 
-      // Load buffer time with fallback
+      // Load buffer time
       setBufferTime(stylist.buffer_time_minutes || 15);
 
       const { data: datesData } = await supabase
@@ -1089,8 +1065,7 @@ const ScheduleManagement = () => {
                                 </Button>
                               </div>
                               {days.map(({ key, label }) => {
-                                // Safety check: ensure day exists in schedule with fallback
-                                const daySchedule = overrideSchedule?.[key] || { enabled: false, startTime: "09:00", endTime: "17:00" };
+                                const daySchedule = overrideSchedule[key];
                                 return (
                                   <div key={key} className="flex items-center gap-4">
                                     <div className="w-28">

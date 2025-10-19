@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   HelpCircle, 
@@ -25,7 +26,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const Resources = () => {
   const navigate = useNavigate();
-  const { user, roles, loading: authLoading } = useEnhancedAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
   
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
@@ -33,14 +35,14 @@ const Resources = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authLoading && user && roles.length > 0) {
+    if (!authLoading && !roleLoading && user && roles.length > 0) {
       const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
       setUserRole(primaryRole);
       setLoading(false);
     } else if (!authLoading && !user) {
       navigate("/auth");
     }
-  }, [authLoading, user, roles]);
+  }, [authLoading, roleLoading, user, roles]);
 
   const checkUserRole = async () => {
     // This function is now handled by the useEffect above with useUserRole hook

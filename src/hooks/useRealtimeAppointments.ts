@@ -34,31 +34,21 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
           .order('appointment_date', { ascending: true });
 
         if (role === 'client') {
-          const { data: clientProfile, error: clientError } = await supabase
+          const { data: clientProfile } = await supabase
             .from('client_profiles')
             .select('id')
             .eq('user_id', userId)
             .maybeSingle();
 
-          if (clientError && clientError.code !== 'PGRST116') {
-            console.error('Error loading client profile:', clientError);
-            throw clientError;
-          }
-
           if (clientProfile) {
             query = query.eq('client_id', clientProfile.id);
           }
         } else if (role === 'stylist') {
-          const { data: stylistProfile, error: stylistError } = await supabase
+          const { data: stylistProfile } = await supabase
             .from('stylist_profiles')
             .select('id')
             .eq('user_id', userId)
             .maybeSingle();
-
-          if (stylistError && stylistError.code !== 'PGRST116') {
-            console.error('Error loading stylist profile:', stylistError);
-            throw stylistError;
-          }
 
           if (stylistProfile) {
             query = query.eq('stylist_id', stylistProfile.id);

@@ -34,7 +34,7 @@ const TimeoutFallback = ({ onRetry, connectionSpeed }: { onRetry: () => void; co
 
 export const TimeoutGuard = ({ 
   children, 
-  timeout = 30000, // Increased to 30s to allow profile/subscription loading
+  timeout = 20000, // Increased from 15s to 20s for mobile
   fallbackMessage = "Getting things ready..."
 }: TimeoutGuardProps) => {
   const [showTimeout, setShowTimeout] = useState(false);
@@ -50,9 +50,9 @@ export const TimeoutGuard = ({
       // Adjust timeout based on connection
       let adjustedTimeout = timeout;
       if (effectiveType === 'slow-2g' || effectiveType === '2g') {
-        adjustedTimeout = 35000;
+        adjustedTimeout = 25000;
       } else if (effectiveType === '3g') {
-        adjustedTimeout = 28000;
+        adjustedTimeout = 18000;
       }
       
       const timer = setTimeout(() => {
@@ -77,5 +77,9 @@ export const TimeoutGuard = ({
     return <TimeoutFallback onRetry={handleRetry} connectionSpeed={connectionSpeed} />;
   }
 
-  return <>{children}</>;
+  return (
+    <Suspense fallback={<LoadingSpinner message={fallbackMessage} />}>
+      {children}
+    </Suspense>
+  );
 };

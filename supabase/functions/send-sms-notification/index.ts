@@ -1,18 +1,16 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Input validation schema
-const requestSchema = z.object({
-  appointmentId: z.string().uuid(),
-  notificationType: z.enum(["confirmation", "reminder", "cancellation", "reschedule"]),
-  customMessage: z.string().max(500).optional()
-});
+interface SMSRequest {
+  appointmentId: string;
+  notificationType: "confirmation" | "reminder" | "cancellation" | "reschedule";
+  customMessage?: string;
+}
 
 const formatPhoneNumber = (phone: string): string => {
   // Remove all non-numeric characters
@@ -69,21 +67,7 @@ serve(async (req) => {
   }
 
   try {
-    const body = await req.json();
-    
-    // Validate input
-    const validationResult = requestSchema.safeParse(body);
-    if (!validationResult.success) {
-      return new Response(
-        JSON.stringify({ 
-          error: 'Invalid input',
-          details: validationResult.error.format()
-        }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const { appointmentId, notificationType, customMessage } = validationResult.data;
+    const { appointmentId, notificationType, customMessage }: SMSRequest = await req.json();
     
     console.log(`📱 Sending ${notificationType} SMS for appointment ${appointmentId}`);
 

@@ -161,12 +161,6 @@ const Portfolio = () => {
 
       if (!navigator.onLine) {
         // Queue for later if offline
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.user?.id) {
-          toast.error("Unable to queue photo - please sign in again");
-          return;
-        }
-        
         offlineQueue.enqueue({
           type: 'insert',
           table: 'portfolio_photos',
@@ -178,7 +172,7 @@ const Portfolio = () => {
             before_photo_url: beforeUrl,
             display_order: photos.length,
           },
-          userId: session.user.id
+          userId: (await supabase.auth.getSession()).data.session!.user.id
         });
         
         toast.success("Photo queued for upload!", {

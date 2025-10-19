@@ -7,22 +7,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, Shield, Zap, Database, Brain, TrendingUp, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Navigate } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function SystemHealth() {
-  const { user, roles, loading: authLoading } = useEnhancedAuth();
-  const isAdmin = roles.includes('admin');
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
   const [status, setStatus] = useState<any>(null);
 
   // Redirect non-admins
-  if (!authLoading && (!user || !isAdmin)) {
+  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
   }
 
   // Show loading while checking permissions
-  if (authLoading) {
+  if (authLoading || roleLoading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
 

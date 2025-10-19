@@ -1,4 +1,5 @@
-import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { useUserRole } from '@/hooks/useUserRole';
+import { useAuth } from '@/hooks/useAuth';
 import { ReactNode } from 'react';
 
 interface RoleBasedFeatureGateProps {
@@ -12,7 +13,8 @@ export const RoleBasedFeatureGate = ({
   allowedRoles, 
   fallback = null 
 }: RoleBasedFeatureGateProps) => {
-  const { roles } = useEnhancedAuth();
+  const { user } = useAuth();
+  const { roles } = useUserRole(user?.id);
 
   const hasAccess = roles.some(role => allowedRoles.includes(role as any));
 

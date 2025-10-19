@@ -4,13 +4,12 @@
  */
 
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Calendar, Scissors, Users, CheckCircle2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
 
 interface OnboardingStep {
   id: string;
@@ -47,40 +46,25 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
 
 export function FirstTimeOnboarding() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    // Public routes where onboarding should NOT show
-    const publicRoutes = ["/", "/auth", "/install", "/privacy", "/terms"];
-    const isPublicRoute = publicRoutes.includes(location.pathname);
-
-    // Only show onboarding for authenticated users on protected routes
-    if (!user || isPublicRoute) {
-      return;
-    }
-
     // Check if user has already completed onboarding
     const hasCompletedOnboarding = localStorage.getItem("onboarding_completed");
     const isFirstVisit = !localStorage.getItem("has_visited");
 
     if (!hasCompletedOnboarding && isFirstVisit) {
-      // Wait for dashboard to fully load before showing onboarding
+      // Delay opening to let the app fully load
       const timer = setTimeout(() => {
-        // Only show if dashboard has finished loading
-        const dashboardLoaded = sessionStorage.getItem("dashboard_loaded");
-        if (dashboardLoaded === "true") {
-          setOpen(true);
-          localStorage.setItem("has_visited", "true");
-        }
-      }, 8000); // Increased delay to 8 seconds for smoother experience
+        setOpen(true);
+        localStorage.setItem("has_visited", "true");
+      }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [user, location.pathname]);
+  }, []);
 
   const currentStepData = ONBOARDING_STEPS[currentStep];
   const progress = ((currentStep + 1) / ONBOARDING_STEPS.length) * 100;

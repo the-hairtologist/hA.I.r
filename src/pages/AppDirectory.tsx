@@ -3,7 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Crown, Shield, Users, Calendar, MessageSquare, Palette, Image,
@@ -15,16 +16,16 @@ import {
 
 export default function AppDirectory() {
   const navigate = useNavigate();
-  const { user, roles, loading: authLoading } = useEnhancedAuth();
-  const isAdmin = roles.includes('admin');
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
 
   // Redirect non-admins
-  if (!authLoading && (!user || !isAdmin)) {
+  if (!authLoading && !roleLoading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
   }
 
   // Show loading while checking permissions
-  if (authLoading) {
+  if (authLoading || roleLoading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
 

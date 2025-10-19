@@ -3,11 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Sparkles, Search, TrendingUp, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const ClientDiscovery = () => {
   const navigate = useNavigate();
-  const { user, roles } = useEnhancedAuth();
+  const { user } = useAuth();
+  const { roles } = useUserRole(user?.id);
   const isClient = roles.includes('client');
   const isStylist = roles.includes('stylist');
 
