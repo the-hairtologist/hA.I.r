@@ -37,6 +37,8 @@ import { ClientRiskIndicator } from "@/components/ClientRiskIndicator";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { AIMessageComposer } from "@/components/AIMessageComposer";
 import { HairPhotoAnalyzer } from "@/components/HairPhotoAnalyzer";
+import { HairPhotoAnalysis } from "@/components/client/HairPhotoAnalysis";
+import { FormulaSuggestions } from "@/components/formulas/FormulaSuggestions";
 import { clientSchema } from "@/lib/validation/clientSchemas";
 import { usePagination } from "@/hooks/usePagination";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -1202,8 +1204,9 @@ export default function Clients() {
             </DialogHeader>
             
             <Tabs defaultValue="info" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="info">Info & Formulas</TabsTrigger>
+                <TabsTrigger value="ai">AI Analysis</TabsTrigger>
                 <TabsTrigger value="timeline">Hair Journey</TabsTrigger>
                 <TabsTrigger value="appointments">Appointments</TabsTrigger>
               </TabsList>
@@ -1334,6 +1337,29 @@ export default function Clients() {
                 )}
               </div>
             </div>
+              </TabsContent>
+              
+              <TabsContent value="ai" className="space-y-6">
+                {selectedClient && stylistId && (
+                  <>
+                    <FormulaSuggestions 
+                      clientId={selectedClient.id}
+                      stylistId={stylistId}
+                      onUseRecommendation={(rec) => {
+                        toast.success("Formula Copied", {
+                          description: "You can now create a new formula with this recommendation",
+                        });
+                      }}
+                    />
+                    <HairPhotoAnalysis 
+                      clientId={selectedClient.id}
+                      onAnalysisComplete={(result) => {
+                        console.log('Analysis complete:', result);
+                        toast.success("Analysis Complete");
+                      }}
+                    />
+                  </>
+                )}
               </TabsContent>
               
               <TabsContent value="timeline">

@@ -113,3 +113,6 @@ verify_jwt = true
 
 [functions.ai-message-generator]
 verify_jwt = true
+
+[functions.generate-formula-recommendations]
+verify_jwt = true
