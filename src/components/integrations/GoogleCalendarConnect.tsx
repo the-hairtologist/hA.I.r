@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Check, X } from 'lucide-react';
+import { Calendar, Check, X, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useCalendarSync } from '@/hooks/useCalendarSync';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
 
 export function GoogleCalendarConnect() {
   const { 
@@ -23,9 +24,20 @@ export function GoogleCalendarConnect() {
 
   const loadConnection = async () => {
     setLoading(true);
-    const conn = await checkConnection();
-    setConnection(conn);
-    setLoading(false);
+    try {
+      const conn = await checkConnection();
+      setConnection(conn);
+    } catch (error) {
+      toast.error('Failed to check calendar connection');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    toast.info('Refreshing connection status...');
+    await loadConnection();
+    toast.success('Connection status updated');
   };
 
   const handleConnect = async () => {
@@ -83,26 +95,38 @@ export function GoogleCalendarConnect() {
           </div>
         </div>
 
-        {connection ? (
+        <div className="flex gap-2">
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={handleDisconnect}
+            onClick={handleRefresh}
+            disabled={loading}
             className="gap-2"
           >
-            <X className="h-4 w-4" />
-            Disconnect
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
           </Button>
-        ) : (
-          <Button
-            onClick={handleConnect}
-            disabled={connecting}
-            className="gap-2"
-          >
-            <Calendar className="h-4 w-4" />
-            {connecting ? 'Connecting...' : 'Connect'}
-          </Button>
-        )}
+          {connection ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDisconnect}
+              className="gap-2"
+            >
+              <X className="h-4 w-4" />
+              Disconnect
+            </Button>
+          ) : (
+            <Button
+              onClick={handleConnect}
+              disabled={connecting}
+              className="gap-2"
+            >
+              <Calendar className="h-4 w-4" />
+              {connecting ? 'Connecting...' : 'Connect'}
+            </Button>
+          )}
+        </div>
       </div>
 
       {!connection && (
