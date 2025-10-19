@@ -18,14 +18,25 @@ const Index = () => {
   const navigate = useNavigate();
   const { user, loading } = useEnhancedAuth();
 
-  // Auto-redirect authenticated users to dashboard
+  // Auto-redirect authenticated users to dashboard - IMMEDIATE redirect
   useEffect(() => {
-    console.log('[Index] Auth state:', { user: !!user, userId: user?.id, loading, initialized: !loading });
-    if (!loading && user) {
-      console.log('[Index] Redirecting to dashboard...');
+    if (user) {
+      console.log('[Index] User detected, immediate redirect to dashboard');
       navigate("/dashboard", { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [user, navigate]);
+
+  // Safety fallback - show loading if user exists (during redirect)
+  if (user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <Scissors className="h-12 w-12 text-primary mx-auto animate-pulse" />
+          <p className="text-lg font-pixel text-foreground">REDIRECTING TO DASHBOARD...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <AsyncErrorBoundary>

@@ -41,17 +41,6 @@ export const TimeoutGuard = ({
   const [connectionSpeed, setConnectionSpeed] = useState<string>('unknown');
 
   useEffect(() => {
-    // Check if user just logged in (within last 30 seconds) - don't show timeout during login flow
-    const lastLogin = sessionStorage.getItem('last_login');
-    if (lastLogin) {
-      const loginTime = parseInt(lastLogin);
-      const timeSinceLogin = Date.now() - loginTime;
-      if (timeSinceLogin < 30000) {
-        // User just logged in, don't show timeout
-        return;
-      }
-    }
-
     // Detect connection speed
     const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
     if (connection) {
