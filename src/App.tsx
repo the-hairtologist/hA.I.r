@@ -151,8 +151,7 @@ const AnalyticsInitializer = () => {
 
 const App = () => {
   return (
-    <ErrorBoundary fallback={<div style={{padding: '20px'}}>Something went wrong</div>}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
         <HelmetProvider>
           <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <EnhancedAuthProvider>
@@ -187,7 +186,6 @@ const App = () => {
           </BrowserRouter>
         </HelmetProvider>
       </QueryClientProvider>
-    </ErrorBoundary>
   );
 };
 
