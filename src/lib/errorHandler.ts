@@ -215,7 +215,7 @@ export function withErrorHandling<T extends (...args: any[]) => Promise<any>>(
     try {
       return await fn(...args);
     } catch (error) {
-      const appError = handleError(error, context, {
+      const appError = await handleError(error, context, {
         showToast: options?.showToast ?? true,
       });
       
@@ -231,16 +231,16 @@ export function withErrorHandling<T extends (...args: any[]) => Promise<any>>(
 /**
  * Validates required fields and throws appropriate errors
  */
-export function validateRequired(
+export async function validateRequired(
   data: Record<string, any>,
   requiredFields: string[],
   context?: string
-): void {
+): Promise<void> {
   const missing = requiredFields.filter(field => !data[field]);
   
   if (missing.length > 0) {
     const error = new Error(`Missing required fields: ${missing.join(', ')}`);
-    handleError(error, context);
+    await handleError(error, context);
     throw error;
   }
 }
@@ -256,7 +256,7 @@ export function createSafeHandler<T extends (...args: any[]) => Promise<void>>(
     try {
       await handler(...args);
     } catch (error) {
-      handleError(error, context);
+      await handleError(error, context);
     }
   }) as T;
 }
@@ -332,7 +332,7 @@ export async function safeAsync<T>(
     const data = await operation();
     return { data, error: null };
   } catch (error) {
-    const appError = handleError(error, errorContext, {
+    const appError = await handleError(error, errorContext, {
       showToast: options?.showToast ?? true,
     });
     options?.onError?.(appError);

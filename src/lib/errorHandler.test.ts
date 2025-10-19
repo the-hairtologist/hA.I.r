@@ -52,32 +52,32 @@ describe('errorHandler', () => {
   });
 
   describe('handleError', () => {
-    it('should create AppError object', () => {
+    it('should create AppError object', async () => {
       const error = new Error('Test error');
-      const appError = handleError(error, 'testContext', { showToast: false });
+      const appError = await handleError(error, 'testContext', { showToast: false });
 
       expect(appError.message).toBe('Test error');
       expect(appError.context).toBe('testContext');
       expect(appError.originalError).toBe(error);
     });
 
-    it('should show toast by default', () => {
+    it('should show toast by default', async () => {
       const error = new Error('Test error');
-      handleError(error, 'testContext');
+      await handleError(error, 'testContext');
 
       expect(toast.error).toHaveBeenCalledWith('Test error');
     });
 
-    it('should not show toast when disabled', () => {
+    it('should not show toast when disabled', async () => {
       const error = new Error('Test error');
-      handleError(error, 'testContext', { showToast: false });
+      await handleError(error, 'testContext', { showToast: false });
 
       expect(toast.error).not.toHaveBeenCalled();
     });
 
-    it('should use custom message when provided', () => {
+    it('should use custom message when provided', async () => {
       const error = new Error('Original');
-      const appError = handleError(error, 'testContext', {
+      const appError = await handleError(error, 'testContext', {
         customMessage: 'Custom message',
         showToast: false,
       });
@@ -85,11 +85,11 @@ describe('errorHandler', () => {
       expect(appError.message).toBe('Custom message');
     });
 
-    it('should show retry button for retryable errors', () => {
+    it('should show retry button for retryable errors', async () => {
       const error = new Error('Network error');
       const onRetry = vi.fn();
       
-      handleError(error, 'testContext', {
+      await handleError(error, 'testContext', {
         retryable: true,
         onRetry,
       });
@@ -103,9 +103,9 @@ describe('errorHandler', () => {
       });
     });
 
-    it('should suppress module import errors', () => {
+    it('should suppress module import errors', async () => {
       const error = new Error('Importing a module script failed');
-      handleError(error, 'testContext');
+      await handleError(error, 'testContext');
 
       expect(toast.error).not.toHaveBeenCalled();
     });

@@ -5,6 +5,7 @@
 
 import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import type { EnrichedAIError } from '@/lib/aiErrorContext';
 
 export interface AIAnalyticsEvent {
   eventType: 
@@ -13,7 +14,8 @@ export interface AIAnalyticsEvent {
     | 'quick_formula'
     | 'outcome_tracked'
     | 'prediction_viewed'
-    | 'model_routed';
+    | 'model_routed'
+    | 'ai_error';
   feature: string;
   metadata?: Record<string, any>;
   performanceMs?: number;
@@ -109,6 +111,22 @@ export function useAIAnalytics() {
     });
   }, [trackEvent]);
 
+  const trackAIError = useCallback((error: EnrichedAIError) => {
+    trackEvent({
+      eventType: 'ai_error',
+      feature: error.aiContext.feature,
+      metadata: {
+        errorCode: error.code,
+        model: error.aiContext.model,
+        executionTimeMs: error.aiContext.executionTimeMs,
+        rateLimitRemaining: error.aiContext.rateLimitRemaining,
+        suggestedAction: error.aiContext.suggestedAction,
+        retryable: error.retryable,
+      },
+      performanceMs: error.aiContext.executionTimeMs,
+    });
+  }, [trackEvent]);
+
   return {
     trackEvent,
     trackFormulaValidation,
@@ -116,6 +134,7 @@ export function useAIAnalytics() {
     trackQuickFormula,
     trackOutcome,
     trackPrediction,
-    trackModelRouting
+    trackModelRouting,
+    trackAIError,
   };
 }
