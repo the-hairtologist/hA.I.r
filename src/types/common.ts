@@ -1,214 +1,266 @@
 /**
- * Common TypeScript Types
- * 
- * Centralized type definitions to replace `any[]` usage across the codebase
+ * Common TypeScript interfaces to eliminate 'any' types across the app
+ * Following Lovable best practices for type safety
+ * Based on actual Supabase database schema
  */
 
-import { Database } from '@/integrations/supabase/types';
+import type { Database } from '@/integrations/supabase/types';
 
-// ============= Database Types =============
-export type Tables = Database['public']['Tables'];
-export type Enums = Database['public']['Enums'];
+// ============= Database Table Types (Re-export from Supabase) =============
 
-export type Profile = Tables['profiles']['Row'];
-export type ClientProfile = Tables['client_profiles']['Row'];
-export type StylistProfile = Tables['stylist_profiles']['Row'];
-export type Appointment = Tables['appointments']['Row'];
-export type Formula = Tables['formulas']['Row'];
-export type StylistService = Tables['stylist_services']['Row'];
-export type Review = Tables['reviews']['Row'];
-export type Payment = Tables['payments']['Row'];
-export type Message = Tables['messages']['Row'];
-export type AuditLog = Tables['audit_logs']['Row'];
-export type ErrorLog = Tables['error_logs']['Row'];
+export type ClientProfile = Database['public']['Tables']['client_profiles']['Row'];
+export type ClientProfileInsert = Database['public']['Tables']['client_profiles']['Insert'];
+export type ClientProfileUpdate = Database['public']['Tables']['client_profiles']['Update'];
 
-// ============= User & Role Types =============
-export type UserRole = Enums['app_role'];
+export type StylistProfile = Database['public']['Tables']['stylist_profiles']['Row'];
+export type StylistProfileInsert = Database['public']['Tables']['stylist_profiles']['Insert'];
+export type StylistProfileUpdate = Database['public']['Tables']['stylist_profiles']['Update'];
 
-export interface UserWithRole {
-  id: string;
-  email: string;
-  role: UserRole;
-  profile?: Profile;
+export type Appointment = Database['public']['Tables']['appointments']['Row'];
+export type AppointmentInsert = Database['public']['Tables']['appointments']['Insert'];
+export type AppointmentUpdate = Database['public']['Tables']['appointments']['Update'];
+
+export type Formula = Database['public']['Tables']['formulas']['Row'];
+export type FormulaInsert = Database['public']['Tables']['formulas']['Insert'];
+export type FormulaUpdate = Database['public']['Tables']['formulas']['Update'];
+
+export type StylistService = Database['public']['Tables']['stylist_services']['Row'];
+export type StylistServiceInsert = Database['public']['Tables']['stylist_services']['Insert'];
+export type StylistServiceUpdate = Database['public']['Tables']['stylist_services']['Update'];
+
+export type Review = Database['public']['Tables']['reviews']['Row'];
+export type ReviewInsert = Database['public']['Tables']['reviews']['Insert'];
+export type ReviewUpdate = Database['public']['Tables']['reviews']['Update'];
+
+export type CalendarConnection = Database['public']['Tables']['calendar_connections']['Row'];
+export type CalendarEvent = Database['public']['Tables']['appointment_calendar_events']['Row'];
+
+// ============= Formula Analysis Types =============
+
+export interface FormulaIngredient {
+  product: string;
+  amount: string;
+  unit: string;
+  developer?: string;
+  processingTime?: string;
 }
 
-// ============= UI Component Types =============
-export interface SelectOption<T = string> {
-  value: T;
-  label: string;
-  disabled?: boolean;
+export interface FormulaAnalysis {
+  level: number;
+  tone: string;
+  condition: string;
+  targetLevel: number;
+  steps: FormulaStep[];
+  warnings: string[];
+  tips: string[];
 }
 
-export interface TableColumn<T = any> {
-  key: string;
-  label: string;
-  sortable?: boolean;
-  render?: (value: any, item: T) => React.ReactNode;
+export interface FormulaStep {
+  order: number;
+  action: string;
+  product: string;
+  amount: string;
+  processingTime: string;
+  notes?: string;
 }
 
-export interface PaginationMeta {
-  currentPage: number;
-  totalPages: number;
-  totalItems: number;
-  itemsPerPage: number;
+// ============= AI Types =============
+
+export interface AIContext {
+  clientProfile?: ClientProfile;
+  stylistProfile?: StylistProfile;
+  recentFormulas?: Formula[];
+  recentAppointments?: Appointment[];
+  conversationHistory?: AIMessage[];
 }
 
-// ============= Form Types =============
-export interface FormFieldConfig {
-  name: string;
-  label: string;
-  type: 'text' | 'email' | 'number' | 'tel' | 'date' | 'textarea' | 'select';
-  placeholder?: string;
-  required?: boolean;
-  options?: SelectOption[];
-  validation?: {
-    min?: number;
-    max?: number;
-    pattern?: RegExp;
-    message?: string;
-  };
+export interface AIMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp?: string;
 }
 
-// ============= API Response Types =============
-export interface ApiResponse<T = any> {
-  data?: T;
-  error?: string;
-  message?: string;
-  success: boolean;
-}
-
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  pagination: PaginationMeta;
-}
-
-// ============= Chart/Analytics Types =============
-export interface ChartDataPoint {
-  label: string;
-  value: number;
-  color?: string;
+export interface AIAnalysis {
+  sentiment: 'positive' | 'neutral' | 'negative';
+  confidence: number;
+  insights: string[];
+  recommendations: string[];
   metadata?: Record<string, any>;
 }
 
-export interface TimeSeriesDataPoint {
+export interface AISuggestion {
+  title: string;
+  priority: 'low' | 'medium' | 'high';
+  category: string;
+}
+
+// ============= Analytics Types =============
+
+export interface AnalyticsEvent {
+  event_name: string;
+  user_id?: string;
+  properties?: Record<string, any>;
+  timestamp: number;
+}
+
+export interface ConversionFunnelStep {
+  step_name: string;
+  step_order: number;
+  funnel_name: string;
+  completed: boolean;
+  time_to_complete_ms?: number;
+  metadata?: Record<string, any>;
+}
+
+// ============= Notification Types =============
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: 'appointment' | 'reminder' | 'message' | 'system';
+  title: string;
+  message: string;
+  read: boolean;
+  action_url?: string;
+  created_at: string;
+}
+
+// ============= Utility Types =============
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  count: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+}
+
+export interface ErrorResponse {
+  error: string;
+  code?: string;
+  details?: any;
+  timestamp: string;
+}
+
+export interface SuccessResponse<T = any> {
+  data: T;
+  message?: string;
+}
+
+// ============= Form Types =============
+
+export interface FormField {
+  name: string;
+  label: string;
+  type: 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'date' | 'time' | 'checkbox' | 'number';
+  placeholder?: string;
+  required?: boolean;
+  validation?: (value: any) => string | null;
+  options?: Array<{ label: string; value: string }>;
+}
+
+// ============= Component Props Types =============
+
+export interface BaseComponentProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export interface LoadingState<T = any> {
+  isLoading: boolean;
+  error: Error | null;
+  data?: T;
+}
+
+// ============= Hook Return Types =============
+
+export interface UseQueryResult<T> {
+  data: T | undefined;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => Promise<void>;
+}
+
+export interface UseMutationResult<TData = any, TVariables = any> {
+  mutate: (variables: TVariables) => Promise<TData>;
+  mutateAsync: (variables: TVariables) => Promise<TData>;
+  isLoading: boolean;
+  error: Error | null;
+  data: TData | undefined;
+}
+
+// ============= Client Context Types =============
+
+export interface ClientContext {
+  profile?: ClientProfile;
+  recentFormulas?: Formula[];
+  recentAppointments?: Appointment[];
+  stats?: {
+    totalAppointments: number;
+    completionRate: number;
+    lastAppointment?: string;
+  };
+}
+
+export interface StylistContext {
+  profile?: StylistProfile;
+  services?: StylistService[];
+  stats?: {
+    totalClients: number;
+    averageRating: number;
+    totalReviews: number;
+    upcomingAppointments: number;
+  };
+}
+
+// ============= Calendar Types =============
+
+export interface CalendarEventData {
+  title: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  attendees?: string[];
+}
+
+// ============= Video Analysis Types =============
+
+export interface VideoAnalysis {
+  hairCondition?: string;
+  suggestedTreatments?: string[];
+  colorAnalysis?: {
+    currentColor: string;
+    naturalColor: string;
+    recommendations: string[];
+  };
+  confidence: number;
+}
+
+// ============= Chart Data Types =============
+
+export interface ChartDataPoint {
   date: string;
   value: number;
   label?: string;
 }
 
-export interface KPIMetric {
-  label: string;
-  value: number | string;
-  change?: number; // percentage change
-  trend?: 'up' | 'down' | 'neutral';
-  icon?: React.ComponentType<{ className?: string }>;
+export interface RevenueData {
+  period: string;
+  revenue: number;
+  appointments: number;
 }
 
-// ============= Search & Filter Types =============
-export interface SearchFilters {
-  query?: string;
-  dateFrom?: string;
-  dateTo?: string;
-  status?: string[];
-  category?: string[];
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-}
+// ============= Share Types =============
 
-export interface SearchResult<T> {
-  items: T[];
-  total: number;
-  filters: SearchFilters;
-}
-
-// ============= Export Types =============
-export interface CSVExportConfig {
-  filename: string;
-  headers: string[];
-  data: any[][];
-  dateFormat?: string;
-}
-
-// ============= Notification Types =============
-export interface NotificationPayload {
+export interface ShareData {
   title: string;
-  message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  action?: {
-    label: string;
-    onClick: () => void;
-  };
-}
-
-// ============= File Upload Types =============
-export interface UploadedFile {
-  id: string;
-  name: string;
+  text: string;
   url: string;
-  size: number;
-  type: string;
-  uploadedAt: string;
 }
 
-// ============= Calendar/Schedule Types =============
-export interface TimeSlot {
-  start: string; // ISO datetime
-  end: string;   // ISO datetime
-  available: boolean;
-  appointmentId?: string;
-}
+// ============= Generic API Response =============
 
-export interface ScheduleDay {
-  date: string; // YYYY-MM-DD
-  slots: TimeSlot[];
-}
-
-// ============= Conversation/Chat Types =============
-export interface ConversationUser {
-  id: string;
-  name: string;
-  avatar?: string;
-  role: UserRole;
-}
-
-export interface ConversationWithParticipants {
-  id: string;
-  title?: string;
-  participants: ConversationUser[];
-  lastMessage?: Message;
-  unreadCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// ============= AI/ML Types =============
-export interface AIInsight {
-  type: 'suggestion' | 'prediction' | 'warning' | 'opportunity';
-  title: string;
-  description: string;
-  confidence: number; // 0-1
-  actionable: boolean;
-  metadata?: Record<string, any>;
-}
-
-export interface RiskScore {
-  score: number; // 0-100
-  level: 'low' | 'medium' | 'high';
-  factors: string[];
-  recommendation: string;
-}
-
-// ============= Utility Types =============
-export type Nullable<T> = T | null;
-export type Optional<T> = T | undefined;
-export type AsyncResult<T> = Promise<ApiResponse<T>>;
-
-// Generic array type with constraints
-export type TypedArray<T> = T extends Array<infer U> ? U[] : never;
-
-// Ensure at least one property is present
-export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = 
-  Pick<T, Exclude<keyof T, Keys>> & 
-  { [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>> }[Keys];
-
-// Make specific properties required
-export type RequireProps<T, K extends keyof T> = T & Required<Pick<T, K>>;
+export type ApiResponse<T> = 
+  | { success: true; data: T }
+  | { success: false; error: string; code?: string };
