@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
+import { ListItemSkeleton } from "@/components/ui/skeleton-layouts";
 
 const ClientReviews = () => {
   const { session } = useAuth();
@@ -123,8 +124,10 @@ const ClientReviews = () => {
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="text-center py-8 text-muted-foreground">
-                Loading reviews...
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <ListItemSkeleton key={i} />
+                ))}
               </div>
             ) : reviews.length === 0 ? (
               <div className="text-center py-8">

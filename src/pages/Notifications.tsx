@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { ListItemSkeleton } from "@/components/ui/skeleton-layouts";
 
 interface Notification {
   id: string;
@@ -145,8 +146,10 @@ const Notifications = () => {
         <Card>
           <CardContent className="p-0">
             {isLoading ? (
-              <div className="p-8 text-center text-muted-foreground">
-                Loading notifications...
+              <div className="p-4 space-y-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <ListItemSkeleton key={i} />
+                ))}
               </div>
             ) : notifications.length === 0 ? (
               <div className="p-8 text-center">
