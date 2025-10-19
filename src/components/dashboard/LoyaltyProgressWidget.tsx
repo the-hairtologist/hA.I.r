@@ -1,6 +1,7 @@
 /**
  * Loyalty Progress Widget
  * Shows client's reward points and progress to next reward
+ * OPTIMIZED: Uses EnhancedAuth context to avoid duplicate queries
  */
 
 import { useState, useEffect } from "react";
@@ -10,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 
 interface Milestone {
   id: string;
@@ -23,29 +24,22 @@ interface Milestone {
 
 export function LoyaltyProgressWidget() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { clientProfile } = useEnhancedAuth();
   const [loading, setLoading] = useState(true);
   const [appointmentCount, setAppointmentCount] = useState(0);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
 
   useEffect(() => {
-    loadLoyaltyData();
-  }, [user]);
+    if (clientProfile?.id) {
+      loadLoyaltyData();
+    }
+  }, [clientProfile?.id]);
 
   const loadLoyaltyData = async () => {
-    if (!user) return;
+    if (!clientProfile?.id) return;
 
     try {
-      // Get client profile
-      const { data: clientProfile } = await supabase
-        .from("client_profiles")
-        .select("id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (!clientProfile) return;
-
-      // Get completed appointment count
+      // Get completed appointment count - NO DUPLICATE QUERY
       const { count } = await supabase
         .from("appointments")
         .select("*", { count: "exact", head: true })

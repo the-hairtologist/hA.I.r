@@ -1,13 +1,14 @@
 /**
  * Next Appointment Widget
  * Shows the next upcoming appointment for clients
+ * OPTIMIZED: Uses EnhancedAuth context to avoid duplicate queries
  */
 
 import { useState, useEffect } from "react";
 import { Calendar, Clock, User, MapPin, Phone, MessageSquare } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { format, formatDistanceToNow } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,59 +24,54 @@ interface Appointment {
 
 export function NextAppointmentWidget() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { clientProfile } = useEnhancedAuth();
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchNextAppointment = async () => {
-      if (!user) return;
+    if (clientProfile?.id) {
+      fetchNextAppointment();
+    }
+  }, [clientProfile?.id]);
 
-      try {
-        const { data: clientProfile } = await supabase
-          .from("client_profiles")
-          .select("id")
-          .eq("user_id", user.id)
-          .maybeSingle();
+  const fetchNextAppointment = async () => {
+    if (!clientProfile?.id) return;
 
-        if (!clientProfile) return;
+    try {
+      const now = new Date().toISOString();
 
-        const now = new Date().toISOString();
+      // Fetch next appointment - NO DUPLICATE QUERY
+      const { data, error } = await supabase
+        .from("appointments")
+        .select(`
+          id,
+          appointment_date,
+          service_type,
+          stylist_id,
+          notes,
+          stylist_profiles!inner(user:profiles(full_name))
+        `)
+        .eq("client_id", clientProfile.id)
+        .gte("appointment_date", now)
+        .eq("status", "scheduled")
+        .order("appointment_date", { ascending: true })
+        .limit(1)
+        .maybeSingle();
 
-        const { data, error } = await supabase
-          .from("appointments")
-          .select(`
-            id,
-            appointment_date,
-            service_type,
-            stylist_id,
-            notes,
-            stylist_profiles!inner(user:profiles(full_name))
-          `)
-          .eq("client_id", clientProfile.id)
-          .gte("appointment_date", now)
-          .eq("status", "scheduled")
-          .order("appointment_date", { ascending: true })
-          .limit(1)
-          .maybeSingle();
+      if (error && error.code !== 'PGRST116') throw error;
 
-        if (error && error.code !== 'PGRST116') throw error;
-
-        if (data) {
-          setAppointment({
-            ...data,
-            stylist_name: (data.stylist_profiles as any)?.user?.full_name || "Your Stylist"
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching next appointment:", error);
-      } finally {
-        setLoading(false);
+      if (data) {
+        setAppointment({
+          ...data,
+          stylist_name: (data.stylist_profiles as any)?.user?.full_name || "Your Stylist"
+        });
       }
-    };
-
-    fetchNextAppointment();
-  }, [user]);
+    } catch (error) {
+      console.error("Error fetching next appointment:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading || !appointment) {
     return (

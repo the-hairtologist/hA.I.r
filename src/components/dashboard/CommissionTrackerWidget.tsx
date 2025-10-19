@@ -1,13 +1,14 @@
 /**
  * Commission Tracker Widget
  * Shows stylist's commission earnings and status
+ * OPTIMIZED: Uses EnhancedAuth context to avoid duplicate queries
  */
 
 import { useState, useEffect } from "react";
 import { DollarSign, TrendingUp, Clock, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { format } from "date-fns";
 
 interface Commission {
@@ -20,28 +21,21 @@ interface Commission {
 }
 
 export function CommissionTrackerWidget() {
-  const { user } = useAuth();
+  const { stylistProfile } = useEnhancedAuth();
   const [loading, setLoading] = useState(true);
   const [commissions, setCommissions] = useState<Commission[]>([]);
 
   useEffect(() => {
-    loadCommissions();
-  }, [user]);
+    if (stylistProfile?.id) {
+      loadCommissions();
+    }
+  }, [stylistProfile?.id]);
 
   const loadCommissions = async () => {
-    if (!user) return;
+    if (!stylistProfile?.id) return;
 
     try {
-      // Get stylist profile
-      const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (!stylistProfile) return;
-
-      // Get recent commissions
+      // Get recent commissions - NO DUPLICATE QUERY
       const { data, error } = await supabase
         .from("commissions")
         .select("*")
