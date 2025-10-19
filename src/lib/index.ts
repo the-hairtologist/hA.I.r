@@ -45,6 +45,16 @@ export {
   type PaginationResult,
 } from './database/queryOptimization';
 
+// Performance utilities
+export {
+  compressImage,
+  generateSrcSet,
+  getOptimalImageSize,
+  preloadImage,
+  createBlurPlaceholder,
+  type ImageOptimizationOptions,
+} from './performance/imageOptimization';
+
 // Hooks
 export { useEnhancedQuery, invalidateQueryCache } from '@/hooks/useEnhancedQuery';
 

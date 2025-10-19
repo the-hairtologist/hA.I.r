@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Loader2, Sparkles, Copy, Send } from 'lucide-react';
 import { toast } from 'sonner';
+import { sanitizeInput, rateLimiter, RATE_LIMITS } from '@/lib';
 
 interface AIMessageComposerProps {
   clientName: string;
@@ -34,13 +35,22 @@ export const AIMessageComposer = ({
   const [generatedText, setGeneratedText] = useState('');
 
   const handleGenerate = async () => {
+    // Rate limiting for AI requests
+    if (!rateLimiter.isAllowed('ai-message', RATE_LIMITS.AI)) {
+      toast.error('Too many AI requests. Please wait a moment.');
+      return;
+    }
+
+    // Sanitize inputs
+    const sanitizedNote = customNote ? sanitizeInput(customNote) : undefined;
+
     const result = await generateMessage({
       messageType,
       clientName,
       stylistName,
       lastVisit,
       favoriteServices,
-      customNote: customNote || undefined,
+      customNote: sanitizedNote,
     });
 
     if (result) {

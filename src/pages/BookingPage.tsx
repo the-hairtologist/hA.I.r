@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import QRCode from "qrcode";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { sanitizeInput, rateLimiter, RATE_LIMITS } from "@/lib";
 
 const BookingPage = () => {
   const { session } = useAuth();
@@ -125,15 +126,24 @@ const BookingPage = () => {
   const saveSettings = async () => {
     if (!stylistProfile?.id) return;
 
+    // Rate limiting
+    if (!rateLimiter.isAllowed('booking-settings', RATE_LIMITS.FORM)) {
+      toast.error('Too many requests. Please wait a moment.');
+      return;
+    }
+
     setIsSaving(true);
     try {
+      // Sanitize inputs
+      const sanitizedData = {
+        accepts_new_clients: isPublic,
+        bio: sanitizeInput(welcomeMessage),
+        parking_instructions: sanitizeInput(bookingInstructions),
+      };
+
       const { error } = await supabase
         .from('stylist_profiles')
-        .update({
-          accepts_new_clients: isPublic,
-          bio: welcomeMessage,
-          parking_instructions: bookingInstructions,
-        })
+        .update(sanitizedData)
         .eq('id', stylistProfile.id);
 
       if (error) throw error;
