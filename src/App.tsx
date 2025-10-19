@@ -177,9 +177,9 @@ const App = () => {
                           {AppRoutes()}
                         </Routes>
                       </AppLayout>
-                      <AnalyticsInitializer />
-                      <RoleSwitchProtection />
                     </TourProvider>
+                    <AnalyticsInitializer />
+                    <RoleSwitchProtection />
                   </TooltipProvider>
                 </DemoModeProvider>
               </SubscriptionProvider>
