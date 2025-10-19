@@ -86,17 +86,7 @@ export const stylistNavigationItems: NavigationItem[] = [
     group: "main", 
     color: "text-emerald-400 dark:text-emerald-300" 
   },
-  { 
-    id: "find-clients", 
-    title: "Find Clients", 
-    url: "/client-discovery", 
-    icon: Search, 
-    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
-    group: "main", 
-    color: "text-cyan-400 dark:text-cyan-300",
-    comingSoon: true,
-    description: "Browse client requests"
-  },
+  // REMOVED: "Find Clients" - feature not implemented (was comingSoon: true)
   { 
     id: "messages", 
     title: "Messages", 

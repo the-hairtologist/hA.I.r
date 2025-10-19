@@ -69,6 +69,7 @@ export const MobileBottomNav = () => {
   ];
 
   // Client bottom nav: Book Appointment is now the primary highlighted action
+  // CONDENSED: Profile merged into Account (Settings) - 5 items for better tap targets (60px+)
   const clientItems: NavItem[] = [
     { 
       icon: Home, 
@@ -100,15 +101,8 @@ export const MobileBottomNav = () => {
       highlight: false
     },
     { 
-      icon: User, 
-      label: "Profile", 
-      path: "/profile",
-      gradient: "from-blue-start to-blue-end",
-      highlight: false
-    },
-    { 
       icon: Settings, 
-      label: "Settings", 
+      label: "Account", 
       path: "/settings",
       gradient: "from-blue-start to-blue-end",
       highlight: false
@@ -116,6 +110,7 @@ export const MobileBottomNav = () => {
   ];
 
   // Admin bottom nav: Admin-focused with quick access to critical functions
+  // CONDENSED: System Health accessible via Admin Hub - 4 items for clarity
   const adminItems: NavItem[] = [
     { 
       icon: Users, 
@@ -134,17 +129,10 @@ export const MobileBottomNav = () => {
     },
     { 
       icon: Shield, 
-      label: "Admin Center", 
+      label: "Admin Hub", 
       path: "/admin/command",
       gradient: "from-amber-start to-amber-end",
-      highlight: true // Admin command center is priority
-    },
-    { 
-      icon: Activity, 
-      label: "System Health", 
-      path: "/system-health",
-      gradient: "from-emerald-start to-emerald-end",
-      highlight: false
+      highlight: true // Admin hub is central command - System Health accessible inside
     },
     { 
       icon: Settings, 
