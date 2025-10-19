@@ -522,6 +522,10 @@ export type Database = {
           cancellation_reason: string | null
           cancelled_at: string | null
           client_id: string
+          confirmation_requested_24h: boolean | null
+          confirmation_requested_48h: boolean | null
+          confirmed_at: string | null
+          confirmed_by_client: boolean | null
           created_at: string
           duration_minutes: number | null
           followup_sent: boolean | null
@@ -540,6 +544,10 @@ export type Database = {
           cancellation_reason?: string | null
           cancelled_at?: string | null
           client_id: string
+          confirmation_requested_24h?: boolean | null
+          confirmation_requested_48h?: boolean | null
+          confirmed_at?: string | null
+          confirmed_by_client?: boolean | null
           created_at?: string
           duration_minutes?: number | null
           followup_sent?: boolean | null
@@ -558,6 +566,10 @@ export type Database = {
           cancellation_reason?: string | null
           cancelled_at?: string | null
           client_id?: string
+          confirmation_requested_24h?: boolean | null
+          confirmation_requested_48h?: boolean | null
+          confirmed_at?: string | null
+          confirmed_by_client?: boolean | null
           created_at?: string
           duration_minutes?: number | null
           followup_sent?: boolean | null

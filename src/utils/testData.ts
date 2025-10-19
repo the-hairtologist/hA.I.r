@@ -117,6 +117,10 @@ export function generateTestAppointment(
     cancelled_at: null,
     followup_sent: status === 'completed' ? faker.datatype.boolean() : false,
     rebook_reminder_sent: false,
+    confirmation_requested_48h: false,
+    confirmation_requested_24h: false,
+    confirmed_by_client: false,
+    confirmed_at: null,
     ...overrides
   };
 }

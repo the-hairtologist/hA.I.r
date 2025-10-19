@@ -24,18 +24,34 @@ Last updated: 2025-10-19
   - ✅ Respects SMS preferences
   - ✅ Cron job scheduled
 
-### 3. **Post-Appointment Follow-ups**
+### 3. **Post-Appointment Follow-ups & Lifecycle Automation**
 - **Frequency**: Daily at 10 AM
 - **Function**: `automated-appointment-followup`
 - **What it does**: 
   - Sends review requests 24 hours after completed appointments
   - Sends re-booking reminders 3 days after no-shows
+  - **🎂 Birthday reminders** 7 days before client birthdays
+  - **📅 6-week rebooking reminders** for clients overdue for next visit
 - **Features**:
   - ✅ Beautiful email templates
-  - ✅ Automated tracking
+  - ✅ Respects email preferences
+  - ✅ Prevents duplicate emails
   - ✅ Cron job scheduled
 
-### 4. **Weekly Retention Messages** 🆕
+### 4. **No-Show Prevention System** 🆕
+- **Frequency**: Twice daily at 8 AM and 8 PM
+- **Function**: `no-show-prevention`
+- **What it does**: 
+  - Sends 48-hour confirmation requests
+  - Sends 24-hour urgent confirmations for unconfirmed appointments
+- **Features**:
+  - ✅ Reduces no-shows with proactive confirmations
+  - ✅ Two-tier reminder system (48h + 24h)
+  - ✅ Respects email preferences
+  - ✅ Tracks confirmation status
+  - ✅ Cron job scheduled
+
+### 5. **Weekly Retention Messages** 🆕
 - **Frequency**: Weekly on Monday at 9 AM
 - **Function**: `retention-messages`
 - **What it does**: Analyzes all clients, identifies at-risk clients, sends personalized win-back messages
@@ -50,7 +66,7 @@ Last updated: 2025-10-19
 
 ## 🔄 Systems That Need Manual Trigger (But Have Auto Components)
 
-### 5. **Zapier Webhooks**
+### 6. **Zapier Webhooks**
 - **Status**: ✅ Automated delivery with retry logic
 - **Manual**: Stylists must configure their Zapier webhook URL
 - **What it does**: Triggers Zaps for:
@@ -105,13 +121,11 @@ This returns:
 
 ## 📝 What's NOT Automated Yet
 
-### Missing Automation Opportunities (Phase 2-5)
-1. **Birthday & Anniversary Reminders** - Placeholder exists, needs implementation
-2. **No-Show Prevention** - Pre-appointment confirmations (48h & 24h)
-3. **Smart Rescheduling** - Auto-suggest alternative times when stylist cancels
-4. **Inventory Reorder Reminders** - Track product usage, remind to reorder
-5. **Weather-Based Reminders** - Hair prep tips for weather conditions
-6. **Social Media Automation** - Auto-post client transformations (with permission)
+### Future Automation Opportunities
+1. **Smart Rescheduling** - Auto-suggest alternative times when stylist cancels
+2. **Inventory Reorder Reminders** - Track product usage, remind to reorder
+3. **Weather-Based Reminders** - Hair prep tips for weather conditions
+4. **Social Media Automation** - Auto-post client transformations (with permission)
 
 ---
 
