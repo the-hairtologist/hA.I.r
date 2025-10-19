@@ -15,10 +15,9 @@ import { Link } from 'react-router-dom';
 interface Insight {
   id: string;
   insight_type: string;
-  message: string;
-  action_url: string | null;
-  priority: number;
-  dismissed: boolean;
+  description: string;
+  priority: string;
+  is_dismissed: boolean;
   created_at: string;
 }
 
@@ -31,12 +30,12 @@ export function AIInsightsWidget() {
       const { data, error } = await supabase
         .from('ai_insights')
         .select('*')
-        .eq('dismissed', false)
-        .order('priority', { ascending: false })
+        .eq('is_dismissed', false)
+        .order('created_at', { ascending: false })
         .limit(5);
 
       if (error) throw error;
-      return data as Insight[];
+      return (data || []) as Insight[];
     },
     refetchInterval: 5 * 60 * 1000, // Refresh every 5 minutes
   });
@@ -45,7 +44,7 @@ export function AIInsightsWidget() {
     mutationFn: async (insightId: string) => {
       const { error } = await supabase
         .from('ai_insights')
-        .update({ dismissed: true })
+        .update({ is_dismissed: true, dismissed_at: new Date().toISOString() })
         .eq('id', insightId);
 
       if (error) throw error;
@@ -155,16 +154,7 @@ export function AIInsightsWidget() {
               className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg group hover:bg-muted transition-colors"
             >
               <div className="flex-1">
-                <p className="text-sm">{insight.message}</p>
-                {insight.action_url && (
-                  <Link
-                    to={insight.action_url}
-                    className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
-                  >
-                    Take action
-                    <ExternalLink className="w-3 h-3" />
-                  </Link>
-                )}
+                <p className="text-sm">{insight.description}</p>
               </div>
               <Button
                 onClick={() => dismissMutation.mutate(insight.id)}

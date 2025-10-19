@@ -69,7 +69,7 @@ export function BugReporter() {
 
       // Submit bug report
       const { error } = await supabase
-        .from('bug_reports')
+        .from('bug_reports' as any)
         .insert({
           user_id: user?.id || null,
           title: title.trim(),
