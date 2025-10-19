@@ -29,6 +29,14 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
 
   const allStylistActions: ActionButton[] = [
     {
+      id: "support-chat",
+      label: "AI Support",
+      icon: MessageSquare,
+      route: "/support-chat",
+      description: "24/7 instant help",
+      gradient: "from-cyan-500 to-blue-500",
+    },
+    {
       id: "quick-formula",
       label: "⚡ Quick Formula",
       icon: Zap,
@@ -127,6 +135,14 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
   ];
 
   const allClientActions: ActionButton[] = [
+    {
+      id: "support-chat",
+      label: "AI Support",
+      icon: MessageSquare,
+      route: "/support-chat",
+      description: "Get instant help",
+      gradient: "from-cyan-500 to-blue-500",
+    },
     {
       id: "knowledge",
       label: "Hair Care Tips",

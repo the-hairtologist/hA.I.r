@@ -44,6 +44,7 @@ import { ClientRetention } from "@/components/dashboard/ClientRetention";
 import { QuickNotes } from "@/components/dashboard/QuickNotes";
 import { FavoriteStylists } from "@/components/dashboard/FavoriteStylists";
 import { ClientMilestones } from "@/components/dashboard/ClientMilestones";
+import { SupportChatWidget } from "@/components/dashboard/SupportChatWidget";
 import { PredictiveSuggestions } from "@/components/PredictiveSuggestions";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { useAIAnalytics } from "@/hooks/useAIAnalytics";
@@ -130,6 +131,7 @@ const Dashboard = () => {
   // Client dashboard sections - optimized for client needs
   const defaultClientSections: DashboardSection[] = [
     { id: "next-appointment", title: "Upcoming", component: "NextAppointment", enabled: true },
+    { id: "support-chat-widget", title: "AI Support", component: "SupportChatWidget", enabled: true },
     { id: "loyalty-progress", title: "Rewards", component: "LoyaltyProgress", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
     { id: "favorite-stylists", title: "My Stylists", component: "FavoriteStylists", enabled: true },
@@ -662,6 +664,8 @@ const Dashboard = () => {
         return (userRole === "client" || isAdmin) && profile?.id ? (
           <ClientMilestones clientId={profile.id} />
         ) : null;
+      case "SupportChatWidget":
+        return <SupportChatWidget />;
       case "UpcomingAppointments":
         return (userRole === "client" || isAdmin) && stats ? (
           stats.upcomingAppointments > 0 ? (

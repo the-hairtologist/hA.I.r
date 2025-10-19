@@ -145,3 +145,6 @@ cron = "0 */3 * * *"  # Every 3 hours
 [functions.send-automated-emails.schedule]
 enabled = true
 cron = "0 10 * * *"  # Daily at 10 AM
+
+[functions.support-chat]
+verify_jwt = true

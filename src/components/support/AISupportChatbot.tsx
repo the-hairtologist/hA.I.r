@@ -2,8 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageSquare, Send, Bot, User, Sparkles } from "lucide-react";
+import { MessageSquare, Send, Bot, User, Sparkles, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface Message {
   role: "user" | "assistant";
@@ -40,39 +42,54 @@ export function AISupportChatbot() {
       timestamp: new Date()
     };
 
+    const currentInput = input;
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const responses: Record<string, string> = {
-        "appointment": "I can help you book an appointment! What day works best for you?",
-        "reschedule": "I'll help you reschedule. Please provide your current appointment details.",
-        "services": "We offer various services including cuts, colors, styling, and treatments. Which service interests you?",
-        "price": "Our pricing varies by service. Would you like information on a specific service?",
-        "hours": "We're open Monday-Saturday, 9 AM - 6 PM. Would you like to book during these hours?",
-      };
+    try {
+      // Get conversation history (last 5 messages for context)
+      const conversationHistory = messages.slice(-10).map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
 
-      const lowerInput = input.toLowerCase();
-      let response = "I understand you're asking about that. Let me connect you with a team member who can help you better with this specific request.";
-
-      for (const [key, value] of Object.entries(responses)) {
-        if (lowerInput.includes(key)) {
-          response = value;
-          break;
+      const { data, error } = await supabase.functions.invoke('support-chat', {
+        body: {
+          message: currentInput,
+          conversationHistory
         }
+      });
+
+      if (error) {
+        console.error('Support chat error:', error);
+        throw error;
       }
 
       const assistantMessage: Message = {
         role: "assistant",
-        content: response,
+        content: data.response || "I apologize, but I'm having trouble responding right now. Please try again.",
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      
+      const errorMessage: Message = {
+        role: "assistant",
+        content: "I'm sorry, I'm experiencing technical difficulties. Please try again in a moment, or contact support directly if this persists.",
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+      
+      toast.error("Failed to send message", {
+        description: "Please check your connection and try again."
+      });
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -134,15 +151,14 @@ export function AISupportChatbot() {
           ))}
 
           {isTyping && (
-            <div className="flex gap-3">
+            <div className="flex gap-3 animate-fade-in">
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                 <Bot className="h-4 w-4 text-primary" />
               </div>
               <div className="p-3 rounded-lg bg-muted border-2 border-border">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" />
-                  <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "0.1s" }} />
-                  <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "0.2s" }} />
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  <span className="text-sm text-muted-foreground">Thinking...</span>
                 </div>
               </div>
             </div>
@@ -159,14 +175,26 @@ export function AISupportChatbot() {
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
               className="flex-1"
+              disabled={isTyping}
             />
-            <Button onClick={handleSend} size="icon" disabled={!input.trim()}>
-              <Send className="h-4 w-4" />
+            <Button 
+              onClick={handleSend} 
+              size="icon" 
+              disabled={!input.trim() || isTyping}
+            >
+              {isTyping ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            Try asking: "When is my appointment?", "What services do you offer?", or "How do I reschedule?"
-          </p>
+          <div className="flex items-start gap-2 mt-2">
+            <Sparkles className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-muted-foreground">
+              AI-powered support with access to your appointments and services. Ask about booking, rescheduling, pricing, or services!
+            </p>
+          </div>
         </div>
       </CardContent>
     </Card>
