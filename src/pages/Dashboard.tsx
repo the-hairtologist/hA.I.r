@@ -80,11 +80,6 @@ const Dashboard = () => {
   const { user: authUser, loading: authLoading } = useAuth();
   const { roles, isAdmin, loading: roleLoading } = useUserRole(authUser?.id);
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
-  
-  // Show dashboard skeleton while roles are loading
-  if (roleLoading && roles.length === 0) {
-    return <DashboardSkeleton />;
-  }
   const { isMobile } = useResponsive();
   
   // Swipe gestures for mobile navigation

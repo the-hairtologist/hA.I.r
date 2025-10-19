@@ -77,9 +77,5 @@ export const TimeoutGuard = ({
     return <TimeoutFallback onRetry={handleRetry} connectionSpeed={connectionSpeed} />;
   }
 
-  return (
-    <Suspense fallback={<LoadingSpinner message={fallbackMessage} />}>
-      {children}
-    </Suspense>
-  );
+  return <>{children}</>;
 };

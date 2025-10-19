@@ -20,11 +20,11 @@ const Index = () => {
 
   // Auto-redirect authenticated users to dashboard - IMMEDIATE redirect
   useEffect(() => {
-    if (user) {
-      console.log('[Index] User detected, immediate redirect to dashboard');
+    if (user && !loading) {
+      console.log('[Index] User and data ready, redirect to dashboard');
       navigate("/dashboard", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   // Safety fallback - show loading if user exists (during redirect)
   if (user) {

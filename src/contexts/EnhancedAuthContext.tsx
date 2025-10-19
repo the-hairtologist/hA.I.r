@@ -198,12 +198,11 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         if (!isMounted) return;
 
         if (session?.user) {
-          // Set user IMMEDIATELY and mark as not loading
-          // This allows immediate redirects while profile/roles load in background
+          // Set user and keep loading until all auth data is ready
           setState(prev => ({ 
             ...prev, 
             user: session.user, 
-            loading: false,
+            loading: true,
             initialized: true 
           }));
           

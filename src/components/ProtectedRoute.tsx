@@ -11,9 +11,8 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
   const { user, loading, roles, initialized } = useEnhancedAuth();
   const location = useLocation();
 
-  // Only show loading if auth is still initializing
-  // Don't block on roles loading - they'll be checked after
-  const isStillLoading = loading || !initialized;
+  // Wait for auth data to fully load (including roles)
+  const isStillLoading = loading;
 
   if (isStillLoading) {
     return (
