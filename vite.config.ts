@@ -90,7 +90,6 @@ export default defineConfig(({ mode }) => ({
         clientsClaim: true,
         skipWaiting: true,
         maximumFileSizeToCacheInBytes: 5000000, // 5MB
-        navigationPreload: true, // Enable navigation preload for faster page loads
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -120,7 +119,7 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          // Critical user data - NetworkFirst for mobile reliability
+          // Critical user data - cache for 7 days
           {
             urlPattern: /client_profiles|stylist_profiles|appointments|formulas/i,
             handler: 'NetworkFirst',
@@ -130,13 +129,13 @@ export default defineConfig(({ mode }) => ({
                 maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
               },
-              networkTimeoutSeconds: 3,
+              networkTimeoutSeconds: 5,
               cacheableResponse: {
                 statuses: [0, 200]
               }
             }
           },
-          // Supabase REST API - NetworkFirst for mobile reliability
+          // Supabase REST API - NetworkFirst with background sync
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
             handler: 'NetworkFirst',
@@ -149,6 +148,12 @@ export default defineConfig(({ mode }) => ({
               networkTimeoutSeconds: 3,
               cacheableResponse: {
                 statuses: [0, 200]
+              },
+              backgroundSync: {
+                name: 'supabase-queue',
+                options: {
+                  maxRetentionTime: 24 * 60 // Retry for 24 hours
+                }
               }
             }
           },
@@ -171,19 +176,6 @@ export default defineConfig(({ mode }) => ({
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/auth/i,
             handler: 'NetworkOnly'
-          },
-          // Navigation caching for mobile
-          {
-            urlPattern: ({request}) => request.mode === 'navigate',
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'navigation-cache',
-              networkTimeoutSeconds: 3,
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
-              }
-            }
           },
           // Images - cache for 30 days
           {

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-import { logger } from '@/lib/logger';
 
 interface Props {
   children: ReactNode;
@@ -39,8 +38,12 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log to centralized logger (automatically sends to Sentry)
-    logger.error('Error caught by boundary', 'ErrorBoundary', error);
+    console.error('Error caught by boundary:', error, errorInfo);
+    
+    // Track error in production (could send to monitoring service)
+    if (import.meta.env.PROD) {
+      this.logErrorToService(error, errorInfo);
+    }
 
     // Call custom error handler if provided
     this.props.onError?.(error, errorInfo);
@@ -50,6 +53,10 @@ export class ErrorBoundary extends Component<Props, State> {
       description: 'We\'re working to fix this issue',
     });
   }
+
+  logErrorToService = (error: Error, errorInfo: React.ErrorInfo) => {
+    // In production, send to error tracking service (silent logging)
+  };
 
   handleReset = () => {
     this.setState({ 

@@ -11,7 +11,7 @@
  */
 
 import { toast } from "sonner";
-import { logger } from "./logger";
+import { log } from "./logger";
 import { PostgrestError } from "@supabase/supabase-js";
 import type { AppError, ErrorContext, RetryOptions, ErrorHandlerOptions } from "@/types/errors";
 
@@ -132,8 +132,10 @@ export function handleError(
     statusCode: typeof err.statusCode === 'number' ? err.statusCode : typeof err.status === 'number' ? err.status : undefined,
   };
 
-  // Log error using centralized logger (automatically sends to Sentry)
-  logger.error(errorMessage, context || 'Error', error instanceof Error ? error : new Error(errorMessage));
+  // Log the error
+  if (logError) {
+    log.error(errorMessage, context, error);
+  }
 
   // Show toast notification with retry option (but not for module import errors)
   if (showToast) {
@@ -281,7 +283,7 @@ export async function withRetry<T>(
       // Calculate delay with optional exponential backoff
       const currentDelay = backoff ? delay * Math.pow(2, attempt - 1) : delay;
       
-      logger.debug(`Retry attempt ${attempt}/${maxRetries} after ${currentDelay}ms`, 'withRetry');
+      log.debug(`Retry attempt ${attempt}/${maxRetries} after ${currentDelay}ms`);
       onRetry?.(attempt);
 
       await new Promise(resolve => setTimeout(resolve, currentDelay));

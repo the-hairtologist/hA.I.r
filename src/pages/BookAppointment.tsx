@@ -6,17 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Sparkles, ArrowRight, Clock, DollarSign } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
-import { SmartUpsell } from "@/components/SmartUpsell";
-import { useAuth } from "@/hooks/useAuth";
 
 const BookAppointment = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const stylistId = searchParams.get("stylist");
   const clientId = searchParams.get("clientId");
   const serviceType = searchParams.get("serviceType");
-  const [selectedService, setSelectedService] = useState<string>("Color & Highlights");
 
   return (
     <DashboardLayout>
@@ -82,11 +78,7 @@ const BookAppointment = () => {
               { name: "Haircut & Style", price: "$60+", duration: "1 hour", icon: Calendar },
               { name: "Full Color Treatment", price: "$150+", duration: "3-4 hours", icon: DollarSign },
             ].map((service) => (
-              <Card 
-                key={service.name} 
-                className={`brutal-border brutal-shadow-xs hover:brutal-shadow-sm transition-all cursor-pointer ${selectedService === service.name ? 'border-primary border-2' : ''}`}
-                onClick={() => setSelectedService(service.name)}
-              >
+              <Card key={service.name} className="brutal-border brutal-shadow-xs hover:brutal-shadow-sm transition-all">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="p-3 rounded-lg bg-primary/10">
@@ -106,21 +98,6 @@ const BookAppointment = () => {
             ))}
           </div>
         </div>
-
-        {/* Smart Upsell Integration */}
-        {selectedService && user && (
-          <div className="mb-8">
-            <SmartUpsell 
-              currentService={selectedService}
-              clientId={clientId || undefined}
-              stylistId={stylistId || undefined}
-              onAddUpsell={(addon) => {
-                console.log('Adding upsell:', addon);
-                // In real implementation, this would add to booking cart
-              }}
-            />
-          </div>
-        )}
 
         {/* CTA */}
         <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 brutal-border">

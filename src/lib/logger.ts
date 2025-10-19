@@ -79,18 +79,6 @@ class Logger implements LoggerInterface {
 
   error(message: string, label?: string, error?: Error | LogContext | unknown) {
     this.log('ERROR', message, label, error);
-    
-    // Send to Sentry if available and initialized
-    if (typeof window !== 'undefined') {
-      try {
-        const { captureError, isSentryReady } = require('@/lib/monitoring');
-        if (isSentryReady() && error instanceof Error) {
-          captureError(error, { label, message });
-        }
-      } catch (e) {
-        // Sentry not available or not initialized - fail silently
-      }
-    }
   }
 
   getRecentLogs(count: number = 100): LogEntry[] {

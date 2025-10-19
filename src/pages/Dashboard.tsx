@@ -16,7 +16,7 @@ import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
 import { NotificationManager } from "@/components/NotificationManager";
-import { DashboardSkeleton } from "@/components/loading/PageSkeleton";
+import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
 import { NextAppointmentWidget } from "@/components/dashboard/NextAppointmentWidget";
 import { LoyaltyProgressWidget } from "@/components/dashboard/LoyaltyProgressWidget";
 import { CommissionTrackerWidget } from "@/components/dashboard/CommissionTrackerWidget";
@@ -145,7 +145,6 @@ const Dashboard = () => {
 
   // Client dashboard sections - optimized for client needs
   const defaultClientSections: DashboardSection[] = [
-    { id: "rebooking-prompt", title: "Time for a Touch-Up", component: "RebookingPrompt", enabled: true },
     { id: "next-appointment", title: "Upcoming", component: "NextAppointment", enabled: true },
     { id: "loyalty-progress", title: "Rewards", component: "LoyaltyProgress", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
@@ -589,7 +588,7 @@ const Dashboard = () => {
     return (
       <DashboardLayout>
         <div className="p-4 md:p-6 lg:p-8">
-          <DashboardSkeleton />
+          <DashboardFullSkeleton />
         </div>
       </DashboardLayout>
     );
@@ -666,10 +665,6 @@ const Dashboard = () => {
       case "ClientMilestones":
         return (userRole === "client" || isAdmin) && profile?.id ? (
           <ClientMilestones clientId={profile.id} />
-        ) : null;
-      case "RebookingPrompt":
-        return (userRole === "client" || isAdmin) ? (
-          <RebookingPrompt />
         ) : null;
       case "UpcomingAppointments":
         return (userRole === "client" || isAdmin) && stats ? (

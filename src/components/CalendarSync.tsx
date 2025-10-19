@@ -53,18 +53,22 @@ const CalendarSync = () => {
   const handleConnect = async (provider: CalendarProvider) => {
     setConnecting(provider);
     try {
-      const { data, error } = await supabase.functions.invoke('calendar-oauth-init', {
-        body: { provider }
-      });
+      // Calendar sync integration coming in a future update
+      toast.info(
+        `${provider === 'google' ? 'Google' : 'Outlook'} Calendar integration is being set up. This feature will be available soon.`,
+        { duration: 5000 }
+      );
       
-      if (error) throw error;
+      // Future implementation will use edge function - calendar_oauth
+      // const { data, error } = await supabase.functions.invoke('calendar-oauth-init', {
+      //   body: { provider }
+      // });
+      // if (error) throw error;
+      // window.location.href = data.authUrl;
       
-      if (data?.authUrl) {
-        window.location.href = data.authUrl;
-      }
     } catch (error) {
       console.error('Error connecting calendar:', error);
-      toast.error('Failed to connect calendar. Make sure Google Calendar API is configured.');
+      toast.error('Failed to connect calendar');
     } finally {
       setConnecting(null);
     }

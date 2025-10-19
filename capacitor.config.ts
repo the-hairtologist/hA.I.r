@@ -25,9 +25,6 @@ const config: CapacitorConfig = {
     // Improved scrolling performance
     scrollEnabled: true,
     allowsInlineMediaPlayback: true,
-    // Splash screen configuration
-    splashDuration: 2000,
-    splashFadeOutDuration: 500,
   },
   plugins: {
     SplashScreen: {
