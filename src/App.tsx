@@ -57,47 +57,52 @@ const AnalyticsInitializer = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Initialize Sentry immediately for error tracking
-    initSentry();
-    
-    // Defer non-critical initializations to idle time
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => {
-        // Initialize analytics and monitoring (non-critical)
-        initAnalytics();
-        initUTMTracking();
-        
-        // Initialize resource preloading strategy (non-critical)
-        initPreloadStrategies();
-        
-        // Phase 2 - Intelligence Layer
-        initCacheReporting();
-        initRoutePrefetcher();
-        
-        // Phase 3 - Engagement Layer
-        initPushNotifications();
-        initABTesting();
-        
-        // Phase 4 - Security Layer
-        initOriginVerification();
-        
-        // Phase 5 - QA Layer (dev only)
-        if (import.meta.env.DEV) {
-          initContrastValidator();
-          initFocusAudit();
-          initLighthouseMonitoring();
-        }
-      });
+    try {
+      // Initialize Sentry immediately for error tracking
+      initSentry();
+      
+      // Defer non-critical initializations to idle time
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          try {
+            // Initialize analytics and monitoring (non-critical)
+            initAnalytics();
+            initUTMTracking();
+            
+            // Initialize resource preloading strategy (non-critical)
+            initPreloadStrategies();
+            
+            // Phase 2 - Intelligence Layer
+            initCacheReporting();
+            initRoutePrefetcher();
+            
+            // Phase 3 - Engagement Layer
+            initPushNotifications();
+            initABTesting();
+            
+            // Phase 4 - Security Layer
+            initOriginVerification();
+            
+            // Phase 5 - QA Layer (dev only)
+            if (import.meta.env.DEV) {
+              initContrastValidator();
+              initFocusAudit();
+              initLighthouseMonitoring();
+            }
+          } catch (error) {
+            console.error('[Analytics] Non-critical init failed:', error);
+          }
+        });
 
-      // Defer self-healing initialization by 5 seconds (reduced overhead)
-      requestIdleCallback(() => {
-        setTimeout(() => {
-          selfHealing.initialize().catch((error) => {
-            console.error('Failed to initialize self-healing system:', error);
-          });
-        }, 5000);
-      }, { timeout: 10000 });
-    } else {
+        // Defer self-healing initialization by 5 seconds (reduced overhead)
+        requestIdleCallback(() => {
+          setTimeout(() => {
+            selfHealing.initialize().catch((error) => {
+              console.error('Failed to initialize self-healing system:', error);
+            });
+          }, 5000);
+        }, { timeout: 10000 });
+      } else {
       // Fallback for browsers without requestIdleCallback
       setTimeout(() => {
         initAnalytics();
@@ -125,6 +130,9 @@ const AnalyticsInitializer = () => {
     performanceOptimizer.init().catch((error) => {
       console.error('Failed to initialize performance optimizations:', error);
     });
+    } catch (error) {
+      console.error('[Analytics] Critical init failed:', error);
+    }
   }, []);
 
   // Track user context in Sentry
@@ -161,8 +169,7 @@ const App = () => {
                     <ViewportChangeHandler />
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <EnhancedAuthProvider>
-                        <RoleSwitchProtection />
-                        <AnalyticsInitializer />
+                        {/* <AnalyticsInitializer /> */}
                         <AccessibilityShortcuts />
                         <CommandPalette />
                         <TourProvider>
