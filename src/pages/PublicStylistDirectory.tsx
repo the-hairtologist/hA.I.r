@@ -30,7 +30,7 @@ interface StylistProfile {
 
 const PublicStylistDirectory = () => {
   const navigate = useNavigate();
-  const [stylists, setStylists] = useState<StylistProfile[]>([]);
+  const [stylists, setStylists] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -40,9 +40,9 @@ const PublicStylistDirectory = () => {
 
   const fetchStylists = async () => {
     try {
-      // Use the safe public view that excludes sensitive business data
+      // Use the public directory view
       const { data, error } = await supabase
-        .from("public_stylist_profiles_safe")
+        .from("public_stylist_directory")
         .select("*")
         .order("average_rating", { ascending: false, nullsFirst: false })
         .order("total_reviews", { ascending: false, nullsFirst: false })

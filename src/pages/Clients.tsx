@@ -202,13 +202,12 @@ export default function Clients() {
 
       // Merge statistics with client data
       const enrichedClients = (clientsData || []).map((client: any) => {
-        const stats = (statsData || []).find((s: any) => s.client_id === client.id);
+        const stats = (statsData || []).find((s: any) => s.id === client.id);
         return {
           ...client,
           total_appointments: stats?.total_appointments || 0,
-          last_appointment_date: stats?.last_appointment_date || null,
-          completed_appointments: stats?.completed_appointments || 0,
-          upcoming_appointments: stats?.upcoming_appointments || 0,
+          last_appointment_date: stats?.last_appointment || null,
+          completion_rate: stats?.completion_rate || 0,
         };
       });
 

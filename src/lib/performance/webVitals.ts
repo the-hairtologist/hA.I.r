@@ -106,8 +106,8 @@ class WebVitalsMonitor {
   /**
    * Send metrics to analytics
    */
-  private sendToAnalytics(metric: WebVitalMetric) {
-    // Could integrate with Google Analytics, Mixpanel, etc.
+  private async sendToAnalytics(metric: WebVitalMetric) {
+    // Send to Google Analytics if available
     if (window.gtag) {
       window.gtag('event', metric.name, {
         event_category: 'Web Vitals',
@@ -115,6 +115,18 @@ class WebVitalsMonitor {
         metric_rating: metric.rating,
         non_interaction: true,
       });
+    }
+
+    // Send to database for detailed analysis
+    try {
+      const { performanceTracker } = await import('@/lib/analytics/performanceTracker');
+      await performanceTracker.trackWebVital({
+        name: metric.name,
+        value: metric.value,
+        rating: metric.rating,
+      });
+    } catch (error) {
+      logger.warn('Failed to send Web Vital to database', 'webVitals', error);
     }
   }
 

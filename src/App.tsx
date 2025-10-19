@@ -19,6 +19,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useSentryUser } from "@/hooks/useSentryUser";
+import { useSessionTracking } from "@/hooks/useSessionTracking";
 import { initAnalytics } from "@/lib/analytics";
 import { initSentry } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
@@ -96,6 +97,7 @@ const AnalyticsInitializer = () => {
   
   useAnalytics();
   useSentryUser(); // Sync user context with Sentry
+  useSessionTracking(); // Track user sessions
   return null;
 };
 

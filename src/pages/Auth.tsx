@@ -15,6 +15,7 @@ import { handleError, createSafeHandler } from "@/lib/errorHandler";
 import { authSchema } from "@/lib/validation";
 import { log } from '@/lib/logger';
 import { FormFieldError } from "@/components/FormFieldError";
+import { eventTracker } from "@/lib/analytics/eventTracker";
 
 type AuthState = {
   email: string;
@@ -141,6 +142,13 @@ const Auth = () => {
   const handleSignIn = createSafeHandler(async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Track signin attempt
+    await eventTracker.track({
+      eventName: 'signin_started',
+      eventCategory: 'auth',
+      eventData: { method: 'email' },
+    });
+
     const validation = authSchema.safeParse({
       email: state.email,
       password: state.password,
@@ -157,13 +165,40 @@ const Auth = () => {
         }
       });
       dispatch({ type: "SET_ERRORS", errors: newErrors });
+      
+      // Track validation failure
+      await eventTracker.track({
+        eventName: 'signin_failed',
+        eventCategory: 'auth',
+        eventData: { reason: 'validation_error' },
+      });
       return;
     }
     
     dispatch({ type: "CLEAR_ERRORS" });
 
-    await signIn(state.email, state.password);
-    toast.success("Welcome back!");
+    try {
+      await signIn(state.email, state.password);
+      
+      // Track successful signin
+      const { data: { user } } = await supabase.auth.getUser();
+      await eventTracker.track({
+        eventName: 'signin_completed',
+        eventCategory: 'auth',
+        eventData: { method: 'email' },
+        userId: user?.id,
+      });
+      
+      toast.success("Welcome back!");
+    } catch (error: any) {
+      // Track signin failure
+      await eventTracker.track({
+        eventName: 'signin_failed',
+        eventCategory: 'auth',
+        eventData: { reason: error.message || 'unknown_error' },
+      });
+      throw error;
+    }
   }, "Sign In");
 
   const handlePasswordReset = createSafeHandler(async () => {
@@ -174,12 +209,34 @@ const Auth = () => {
     
     dispatch({ type: "CLEAR_ERRORS" });
 
+    // Track password reset request
+    await eventTracker.track({
+      eventName: 'password_reset_requested',
+      eventCategory: 'auth',
+      eventData: { email: state.resetEmail },
+    });
+
     dispatch({ type: "SET_RESET_LOADING", value: true });
     try {
       await resetPassword(state.resetEmail);
+      
+      // Track successful password reset email sent
+      await eventTracker.track({
+        eventName: 'password_reset_email_sent',
+        eventCategory: 'auth',
+      });
+      
       toast.success("Password reset link sent! Check your email.");
       dispatch({ type: "TOGGLE_RESET_DIALOG" });
       dispatch({ type: "SET_FIELD", field: "resetEmail", value: "" });
+    } catch (error: any) {
+      // Track failure
+      await eventTracker.track({
+        eventName: 'password_reset_failed',
+        eventCategory: 'auth',
+        eventData: { reason: error.message || 'unknown_error' },
+      });
+      throw error;
     } finally {
       dispatch({ type: "SET_RESET_LOADING", value: false });
     }
