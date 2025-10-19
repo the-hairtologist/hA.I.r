@@ -30,6 +30,8 @@ import {
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { SessionExpiryWarning } from "@/components/SessionExpiryWarning";
+import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useTheme } from "next-themes";
@@ -303,6 +305,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         onOpenChange={setShowShortcuts}
         userRole={userRole}
       />
+      
+      {/* New UX Components */}
+      <SessionExpiryWarning />
+      <KeyboardShortcuts />
     </SidebarProvider>
   );
 }

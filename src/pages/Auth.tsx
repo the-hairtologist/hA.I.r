@@ -16,6 +16,7 @@ import { authSchema } from "@/lib/validation";
 import { log } from '@/lib/logger';
 import { FormFieldError } from "@/components/FormFieldError";
 import { eventTracker } from "@/lib/analytics/eventTracker";
+import { PasswordStrength } from "@/components/PasswordStrength";
 
 type AuthState = {
   email: string;
@@ -326,6 +327,7 @@ const Auth = () => {
                   className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                   aria-invalid={!!state.errors.newPassword}
                 />
+                <PasswordStrength password={state.newPassword} />
                 {state.errors.newPassword && <FormFieldError message={state.errors.newPassword} />}
               </div>
               <div className="space-y-2">
@@ -481,6 +483,7 @@ const Auth = () => {
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
                     aria-invalid={!!state.errors.password}
                   />
+                  <PasswordStrength password={state.password} />
                   {state.errors.password && <FormFieldError message={state.errors.password} />}
                 </div>
                 
