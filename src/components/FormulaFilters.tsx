@@ -70,7 +70,7 @@ export const FormulaFiltersComponent = ({
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" className="gap-2">
-            <SlidersHorizontal className="h-4 w-4" />
+            <SlidersHorizontal className="h-5 w-5 sm:h-6 sm:w-6" />
             Filters
             {hasActiveFilters && (
               <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center">
@@ -167,7 +167,7 @@ export const FormulaFiltersComponent = ({
             <Badge variant="secondary" className="gap-1">
               {clients.find(c => c.id === filters.clientId)?.full_name}
               <X
-                className="h-3 w-3 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => onFiltersChange({ ...filters, clientId: "" })}
               />
             </Badge>
@@ -176,7 +176,7 @@ export const FormulaFiltersComponent = ({
             <Badge variant="secondary" className="gap-1">
               {filters.colorLine}
               <X
-                className="h-3 w-3 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => onFiltersChange({ ...filters, colorLine: "" })}
               />
             </Badge>
@@ -188,7 +188,7 @@ export const FormulaFiltersComponent = ({
               {filters.dateRange === "quarter" && "Last 3 months"}
               {filters.dateRange === "year" && "Last year"}
               <X
-                className="h-3 w-3 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => onFiltersChange({ ...filters, dateRange: "all" })}
               />
             </Badge>
@@ -197,7 +197,7 @@ export const FormulaFiltersComponent = ({
             <Badge key={tag} variant="secondary" className="gap-1">
               {tag}
               <X
-                className="h-3 w-3 cursor-pointer"
+                className="h-5 w-5 sm:h-6 sm:w-6 cursor-pointer"
                 onClick={() => toggleTag(tag)}
               />
             </Badge>

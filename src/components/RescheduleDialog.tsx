@@ -183,7 +183,7 @@ export const RescheduleDialog = ({ open, onOpenChange, appointment, onSuccess }:
                     onClick={() => setSelectedTime(time)}
                     className="justify-start"
                   >
-                    <Clock className="h-3 w-3 mr-2" />
+                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                     {time}
                   </Button>
                 ))}

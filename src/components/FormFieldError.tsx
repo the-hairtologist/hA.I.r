@@ -18,7 +18,7 @@ export const FormFieldError = ({ message, className, id }: FormFieldErrorProps) 
         className
       )}
     >
-      <AlertCircle className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+      <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0" aria-hidden="true" />
       <span>{message}</span>
     </div>
   );

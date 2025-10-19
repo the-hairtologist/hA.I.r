@@ -50,7 +50,7 @@ export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) =
               <p className="text-xs text-muted-foreground">{activeCount} active</p>
             </div>
             <Badge variant="secondary" className="gap-1">
-              <Check className="h-3 w-3" />
+              <Check className="h-5 w-5 sm:h-6 sm:w-6" />
               Active
             </Badge>
           </div>
@@ -75,7 +75,7 @@ export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) =
         <CardTitle className="flex items-center justify-between">
           Integration Status
           <Button variant="ghost" size="sm" onClick={() => navigate('/integrations')}>
-            <ExternalLink className="h-4 w-4" />
+            <ExternalLink className="h-5 w-5 sm:h-6 sm:w-6" />
           </Button>
         </CardTitle>
         <CardDescription>Monitor your connected services</CardDescription>
@@ -119,22 +119,22 @@ const StatusItem = ({
     switch (status) {
       case 'active':
         return {
-          icon: <Check className="h-4 w-4 text-success" />,
+          icon: <Check className="h-5 w-5 sm:h-6 sm:w-6 text-success" />,
           badge: <Badge variant="default" className="bg-success hover:bg-success">Active</Badge>,
         };
       case 'error':
         return {
-          icon: <AlertCircle className="h-4 w-4 text-destructive" />,
+          icon: <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-destructive" />,
           badge: <Badge variant="destructive">Error</Badge>,
         };
       case 'checking':
         return {
-          icon: <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />,
+          icon: <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin text-muted-foreground" />,
           badge: <Badge variant="outline">Checking</Badge>,
         };
       default:
         return {
-          icon: <AlertCircle className="h-4 w-4 text-muted-foreground" />,
+          icon: <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />,
           badge: <Badge variant="outline">Available</Badge>,
         };
     }

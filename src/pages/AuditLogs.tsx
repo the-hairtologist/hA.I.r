@@ -146,7 +146,7 @@ export default function AuditLogs() {
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-3 h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
                 <Input
                   placeholder="Search logs..."
                   value={searchTerm}
@@ -207,7 +207,7 @@ export default function AuditLogs() {
                 className="gap-2 w-full sm:w-auto"
                 size="sm"
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-5 w-5 sm:h-6 sm:w-6" />
                 <span className="sm:inline">Export CSV</span>
               </Button>
             </div>

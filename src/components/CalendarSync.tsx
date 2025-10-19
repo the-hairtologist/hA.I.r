@@ -53,22 +53,18 @@ const CalendarSync = () => {
   const handleConnect = async (provider: CalendarProvider) => {
     setConnecting(provider);
     try {
-      // Calendar sync integration coming in a future update
-      toast.info(
-        `${provider === 'google' ? 'Google' : 'Outlook'} Calendar integration is being set up. This feature will be available soon.`,
-        { duration: 5000 }
-      );
+      const { data, error } = await supabase.functions.invoke('calendar-oauth-init', {
+        body: { provider }
+      });
       
-      // Future implementation will use edge function - calendar_oauth
-      // const { data, error } = await supabase.functions.invoke('calendar-oauth-init', {
-      //   body: { provider }
-      // });
-      // if (error) throw error;
-      // window.location.href = data.authUrl;
+      if (error) throw error;
       
+      if (data?.authUrl) {
+        window.location.href = data.authUrl;
+      }
     } catch (error) {
       console.error('Error connecting calendar:', error);
-      toast.error('Failed to connect calendar');
+      toast.error('Failed to connect calendar. Make sure Google Calendar API is configured.');
     } finally {
       setConnecting(null);
     }
@@ -203,12 +199,12 @@ const CalendarSync = () => {
                       <div className="flex items-center gap-2 mt-1">
                         {connection.is_active ? (
                           <Badge variant="default" className="bg-success">
-                            <CheckCircle2 className="h-3 w-3 mr-1" />
+                            <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
                             Connected
                           </Badge>
                         ) : (
                           <Badge variant="secondary">
-                            <XCircle className="h-3 w-3 mr-1" />
+                            <XCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
                             Inactive
                           </Badge>
                         )}
@@ -228,10 +224,10 @@ const CalendarSync = () => {
                       disabled={syncing === connection.id || !connection.is_active}
                     >
                       {syncing === connection.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                       ) : (
                         <>
-                          <RefreshCw className="h-4 w-4 mr-2" />
+                          <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                           Sync Now
                         </>
                       )}
@@ -243,10 +239,10 @@ const CalendarSync = () => {
                       disabled={disconnecting === connection.id}
                     >
                       {disconnecting === connection.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                       ) : (
                         <>
-                          <Unlink className="h-4 w-4 mr-2" />
+                          <Unlink className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                           Disconnect
                         </>
                       )}
@@ -269,7 +265,7 @@ const CalendarSync = () => {
                   disabled={connecting === 'google'}
                 >
                   {connecting === 'google' ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 animate-spin" />
                   ) : (
                     <>
                       <span className="mr-2">📅</span>
@@ -286,7 +282,7 @@ const CalendarSync = () => {
                   disabled={connecting === 'outlook'}
                 >
                   {connecting === 'outlook' ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 mr-2 animate-spin" />
                   ) : (
                     <>
                       <span className="mr-2">📧</span>

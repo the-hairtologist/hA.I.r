@@ -77,7 +77,7 @@ export const CookieConsent = () => {
   if (!showBanner) return null;
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end justify-center p-4">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-modal-backdrop flex items-end justify-center p-4">
       <Card className="max-w-2xl w-full p-6 brutal-border brutal-shadow-lg">
         {!showPreferences ? (
           <div className="space-y-4">
@@ -95,7 +95,7 @@ export const CookieConsent = () => {
                 className="h-8 w-8"
                 onClick={acceptEssential}
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
 
@@ -134,7 +134,7 @@ export const CookieConsent = () => {
                 className="h-8 w-8"
                 onClick={() => setShowPreferences(false)}
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
 

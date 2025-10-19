@@ -75,11 +75,13 @@ const GrowthAnalytics = lazyWithRetry(() => import('@/pages/GrowthAnalytics'));
 const CommissionTracking = StylistPages.CommissionTracking; // Role-based code splitting
 const FeedbackBoard = lazyWithRetry(() => import('@/pages/FeedbackBoard'));
 const ClientFormulas = lazyWithRetry(() => import('@/pages/ClientFormulas'));
-const InstallPWA = lazyWithRetry(() => import('@/pages/InstallPWA'));
+const Install = lazyWithRetry(() => import('@/pages/Install'));
 const ZapierIntegration = lazyWithRetry(() => import('@/pages/ZapierIntegration'));
 const AuditReport = lazyWithRetry(() => import('@/pages/AuditReport'));
 const ClientRetention = lazyWithRetry(() => import('@/pages/ClientRetention'));
 const DesignSystem = lazyWithRetry(() => import('@/pages/DesignSystem'));
+const Analytics = lazyWithRetry(() => import('@/pages/Analytics'));
+const OnboardingTest = lazyWithRetry(() => import('@/pages/OnboardingTest'));
 
 export const AppRoutes = () => (
   <>
@@ -93,7 +95,7 @@ export const AppRoutes = () => (
     <Route path="/accessibility" element={<Accessibility />} />
     <Route path="/unsubscribe" element={<Unsubscribe />} />
     <Route path="/showcase" element={<ShowcaseDemo />} />
-    <Route path="/install" element={<InstallPWA />} />
+    <Route path="/install" element={<Install />} />
 
     {/* Deep Link Routes */}
     <Route path="/appointment/:id" element={<DeepLinkAppointment />} />
@@ -201,6 +203,10 @@ export const AppRoutes = () => (
     />
     <Route
       path="/analytics"
+      element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><Analytics /></ProtectedRoute>}
+    />
+    <Route
+      path="/growth-analytics"
       element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><GrowthAnalytics /></ProtectedRoute>}
     />
     <Route
@@ -330,6 +336,10 @@ export const AppRoutes = () => (
     <Route
       path="/design-system"
       element={<ProtectedRoute allowedRoles={['admin']}><DesignSystem /></ProtectedRoute>}
+    />
+    <Route
+      path="/onboarding-test"
+      element={<ProtectedRoute allowedRoles={['admin', 'stylist', 'client']}><OnboardingTest /></ProtectedRoute>}
     />
 
     {/* Error Routes */}

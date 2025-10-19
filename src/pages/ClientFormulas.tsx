@@ -159,7 +159,7 @@ const ClientFormulas = () => {
                   {formula.formula_text && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm font-medium">
-                        <Palette className="h-4 w-4 text-primary" />
+                        <Palette className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                         Formula
                       </div>
                       <p className="text-sm whitespace-pre-wrap bg-muted/50 p-3 rounded-lg">
@@ -171,7 +171,7 @@ const ClientFormulas = () => {
                   {formula.instructions && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm font-medium">
-                        <FileText className="h-4 w-4 text-primary" />
+                        <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                         Care Instructions
                       </div>
                       <p className="text-sm whitespace-pre-wrap bg-muted/50 p-3 rounded-lg">

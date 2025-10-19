@@ -17,15 +17,18 @@ import { TrustBadge } from "@/components/TrustBadge";
 
 interface StylistProfile {
   id: string;
-  user_id: string;
   business_name: string;
   bio: string;
   specialty: string;
   location: string;
   years_experience: number;
-  average_rating?: number;
-  total_reviews?: number;
+  average_rating: number;
+  total_reviews: number;
   is_available: boolean;
+  accepts_new_clients: boolean;
+  booking_link: string;
+  social_media_instagram: string;
+  social_media_tiktok: string;
 }
 
 const PublicStylistDirectory = () => {
@@ -40,13 +43,13 @@ const PublicStylistDirectory = () => {
 
   const fetchStylists = async () => {
     try {
-      // Use the safe public view that excludes sensitive business data
+      // Use public_stylist_directory view (excludes sensitive data like commission_rate)
       const { data, error } = await supabase
-        .from("public_stylist_profiles_safe")
+        .from("public_stylist_directory")
         .select("*")
         .order("average_rating", { ascending: false, nullsFirst: false })
         .order("total_reviews", { ascending: false, nullsFirst: false })
-        .limit(50); // Top 50 stylists for public discovery
+        .limit(50);
 
       if (error) throw error;
       setStylists(data || []);
@@ -77,7 +80,7 @@ const PublicStylistDirectory = () => {
         url="/stylists"
       />
       
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen-safe bg-background">
         {/* Public Header */}
         <header className="border-b-4 border-foreground bg-gradient-to-r from-primary/10 to-accent/10">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">

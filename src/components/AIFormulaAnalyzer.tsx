@@ -66,12 +66,12 @@ export const AIFormulaAnalyzer = ({ formulas, onAnalysisComplete }: AIFormulaAna
           >
             {analyzing ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                 Analyzing {formulas.length} formulas...
               </>
             ) : (
               <>
-                <Sparkles className="mr-2 h-4 w-4" />
+                <Sparkles className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
                 Analyze {formulas.length} Formula{formulas.length !== 1 ? 's' : ''}
               </>
             )}
@@ -105,7 +105,7 @@ export const AIFormulaAnalyzer = ({ formulas, onAnalysisComplete }: AIFormulaAna
                       {data.insights?.strengths && data.insights.strengths.length > 0 && (
                         <div>
                           <h4 className="font-semibold text-sm flex items-center gap-2 mb-2">
-                            <CheckCircle className="h-4 w-4 text-green-600" />
+                            <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                             Strengths
                           </h4>
                           <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
@@ -120,7 +120,7 @@ export const AIFormulaAnalyzer = ({ formulas, onAnalysisComplete }: AIFormulaAna
                       {data.insights?.weaknesses && data.insights.weaknesses.length > 0 && (
                         <div>
                           <h4 className="font-semibold text-sm flex items-center gap-2 mb-2">
-                            <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                            <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600" />
                             Areas for Improvement
                           </h4>
                           <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
@@ -135,7 +135,7 @@ export const AIFormulaAnalyzer = ({ formulas, onAnalysisComplete }: AIFormulaAna
                       {data.recommendations && data.recommendations.length > 0 && (
                         <div>
                           <h4 className="font-semibold text-sm flex items-center gap-2 mb-2">
-                            <TrendingUp className="h-4 w-4 text-blue-600" />
+                            <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                             Recommendations
                           </h4>
                           <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">

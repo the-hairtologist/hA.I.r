@@ -206,7 +206,7 @@ export const AdminFinancialDashboard = () => {
             </div>
             <div className="flex items-center gap-2 mt-2">
               <Badge variant={metrics.revenueGrowth >= 0 ? "default" : "destructive"} className="text-xs">
-                <TrendingUp className="h-3 w-3 mr-1" />
+                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                 {metrics.revenueGrowth >= 0 ? '+' : ''}{metrics.revenueGrowth.toFixed(1)}%
               </Badge>
               <span className="text-xs text-muted-foreground">vs last month</span>

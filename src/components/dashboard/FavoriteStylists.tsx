@@ -124,7 +124,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                     className="flex-1 gap-1 h-8 text-[11px] sm:text-xs"
                     onClick={() => navigate(`/stylist/${stylist.id}`)}
                   >
-                    <Calendar className="h-3 w-3" />
+                    <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                     Book
                   </Button>
                   <Button
@@ -133,7 +133,7 @@ export function FavoriteStylists({ clientId }: FavoriteStylistsProps) {
                     className="flex-1 gap-1 h-8 text-[11px] sm:text-xs"
                     onClick={() => navigate("/messages")}
                   >
-                    <MessageSquare className="h-3 w-3" />
+                    <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
                     Message
                   </Button>
                 </div>

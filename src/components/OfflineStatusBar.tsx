@@ -33,7 +33,7 @@ export const OfflineStatusBar = () => {
   return (
     <div 
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 px-4 py-2 backdrop-blur-lg border-b transition-all animate-in slide-in-from-top-2",
+        "fixed top-0 left-0 right-0 z-fixed px-4 py-2 backdrop-blur-lg border-b transition-all animate-in slide-in-from-top-2",
         quality === 'offline' && "bg-destructive/90 border-destructive text-destructive-foreground",
         quality === 'poor' && "bg-warning/90 border-warning text-warning-foreground",
         quality === 'fair' && "bg-info/90 border-info text-info-foreground",
@@ -80,7 +80,7 @@ export const OfflineStatusBar = () => {
               onClick={retryFailed}
               className="hover:bg-background/20 h-8"
             >
-              <RefreshCw className="h-3 w-3 mr-1" />
+              <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
               Retry
             </Button>
           )}

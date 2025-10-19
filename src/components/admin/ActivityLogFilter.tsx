@@ -214,7 +214,7 @@ export function ActivityLogFilter({
               onClick={() => updateFilter("role", undefined)}
             >
               Role: {filters.role}
-              <X className="h-3 w-3 cursor-pointer hover:text-destructive" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer hover:text-destructive" />
             </Badge>
           )}
           {filters.type && (
@@ -224,7 +224,7 @@ export function ActivityLogFilter({
               onClick={() => updateFilter("type", undefined)}
             >
               Type: {filters.type}
-              <X className="h-3 w-3 cursor-pointer hover:text-destructive" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer hover:text-destructive" />
             </Badge>
           )}
           {(filters.dateFrom || filters.dateTo) && (
@@ -239,7 +239,7 @@ export function ActivityLogFilter({
               {filters.dateFrom && format(filters.dateFrom, "MMM d")}
               {filters.dateFrom && filters.dateTo && " - "}
               {filters.dateTo && format(filters.dateTo, "MMM d")}
-              <X className="h-3 w-3 cursor-pointer hover:text-destructive" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5 cursor-pointer hover:text-destructive" />
             </Badge>
           )}
         </div>

@@ -9,7 +9,7 @@ export const LoadingDots = ({ className, size = "md" }: LoadingDotsProps) => {
   const sizeClasses = {
     sm: "h-1 w-1",
     md: "h-2 w-2",
-    lg: "h-3 w-3"
+    lg: "h-4 w-4 sm:h-5 sm:w-5"
   };
 
   return (

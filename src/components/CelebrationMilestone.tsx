@@ -105,7 +105,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
         />
       )}
 
-      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-modal-backdrop flex items-center justify-center p-4 animate-fade-in">
         <Card className="max-w-md w-full border-2 border-primary/20 shadow-2xl animate-scale-in">
           <CardContent className="p-8 text-center space-y-6">
             {/* Close button */}
@@ -115,7 +115,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
               className="absolute top-2 right-2"
               onClick={onClose}
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5 sm:h-6 sm:w-6" />
             </Button>
 
             {/* Animated emoji */}
@@ -156,7 +156,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
                       {milestone.discount_code}
                     </code>
                     <Button size="icon" variant="outline" onClick={copyDiscountCode}>
-                      <Copy className="h-4 w-4" />
+                      <Copy className="h-5 w-5 sm:h-6 sm:w-6" />
                     </Button>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
             {/* CTA */}
             <div className="space-y-2">
               <Button onClick={markAsCelebrated} className="w-full" size="lg">
-                <Sparkles className="h-4 w-4 mr-2" />
+                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 Awesome, Thank You!
               </Button>
               <p className="text-xs text-muted-foreground">

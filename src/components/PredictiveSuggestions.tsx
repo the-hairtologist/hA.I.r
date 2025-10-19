@@ -74,7 +74,7 @@ export const PredictiveSuggestions = ({ insights, onAction }: PredictiveSuggesti
 
                 {insight.inventory_items && insight.inventory_items.length > 0 && (
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Package className="h-4 w-4 text-muted-foreground" />
+                    <Package className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
                     <span className="text-xs font-medium">Check inventory:</span>
                     {insight.inventory_items.map((item, j) => (
                       <Badge key={j} variant="secondary" className="text-xs">

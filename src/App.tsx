@@ -19,70 +19,120 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { DemoModeProvider } from "@/components/demo/DemoMode";
 import { CookieConsent } from "@/components/CookieConsent";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { NetworkAwareLoader } from "@/components/NetworkAwareLoader";
+import { TimeoutGuard } from "@/components/TimeoutGuard";
 import { PerformanceReport } from "@/components/PerformanceReport";
 import { AccessibilityShortcuts } from "@/components/AccessibilityShortcuts";
 import { CommandPalette } from "@/components/CommandPalette";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useAuth } from "@/hooks/useAuth";
 import { initAnalytics } from "@/lib/analytics";
-import { initSentry } from "@/lib/monitoring";
+import { initSentry, setUser, clearUser } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
+import { FirstTimeOnboarding } from "@/components/onboarding/FirstTimeOnboarding";
 import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { selfHealing } from "@/lib/selfHealing";
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
 import { initPreloadStrategies } from "@/lib/performance/PreloadStrategy";
+import { initPushNotifications } from "@/lib/engagement/pushNotifications";
+import { initOriginVerification } from "@/lib/security/originVerification";
+import { initABTesting } from "@/lib/engagement/abTesting";
+import { initCacheReporting } from "@/lib/cache/cacheReport";
+import { initRoutePrefetcher } from "@/lib/prefetch/routePrefetcher";
+import { initContrastValidator } from "@/lib/accessibility/contrastValidator";
+import { initFocusAudit } from "@/lib/accessibility/focusAudit";
+import { initLighthouseMonitoring } from "@/lib/qa/lighthouseAudit";
+import { PushOptInDialog } from "@/components/PushOptInDialog";
+import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { AppLayout } from "@/components/layout/AppLayout";
+import "@/lib/mobileHealthCheck";
 
-const PerformanceMonitor = lazy(() => 
-  import("@/components/PerformanceMonitor")
-    .then(m => ({ default: m.PerformanceMonitor }))
-    .catch(() => ({ default: () => null }))
-);
-
-const PerformanceOverlay = lazy(() => 
-  import("@/components/PerformanceOverlay")
-    .then(m => ({ default: m.PerformanceOverlay }))
-    .catch(() => ({ default: () => null }))
-);
-
-const MobileOptimizationsProvider = lazy(() => 
-  import("@/components/MobileOptimizationsProvider")
-    .then(m => ({ default: m.MobileOptimizationsProvider }))
-    .catch(() => ({ default: () => null }))
-);
-
-const ServiceIntegrationTracker = lazy(() => 
-  import("@/components/ServiceIntegrationTracker")
-    .then(m => ({ default: m.ServiceIntegrationTracker }))
-    .catch(() => ({ default: () => null }))
-);
-
-const RoleSwitchProtection = lazy(() => 
-  import("@/components/RoleSwitchProtection")
-    .then(m => ({ default: m.RoleSwitchProtection }))
-    .catch(() => ({ default: () => null }))
-);
+// Removed problematic lazy-loaded components that were causing initialization conflicts
 
 const AnalyticsInitializer = () => {
+  const { user } = useAuth();
+
   useEffect(() => {
-    // Initialize analytics and monitoring
-    initAnalytics();
+    // Initialize Sentry immediately for error tracking
     initSentry();
-    initUTMTracking();
     
-    // Initialize comprehensive performance optimizations
+    // Defer non-critical initializations to idle time
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        // Initialize analytics and monitoring (non-critical)
+        initAnalytics();
+        initUTMTracking();
+        
+        // Initialize resource preloading strategy (non-critical)
+        initPreloadStrategies();
+        
+        // Phase 2 - Intelligence Layer
+        initCacheReporting();
+        initRoutePrefetcher();
+        
+        // Phase 3 - Engagement Layer
+        initPushNotifications();
+        initABTesting();
+        
+        // Phase 4 - Security Layer
+        initOriginVerification();
+        
+        // Phase 5 - QA Layer (dev only)
+        if (import.meta.env.DEV) {
+          initContrastValidator();
+          initFocusAudit();
+          initLighthouseMonitoring();
+        }
+      });
+
+      // Defer self-healing initialization by 5 seconds (reduced overhead)
+      requestIdleCallback(() => {
+        setTimeout(() => {
+          selfHealing.initialize().catch((error) => {
+            console.error('Failed to initialize self-healing system:', error);
+          });
+        }, 5000);
+      }, { timeout: 10000 });
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(() => {
+        initAnalytics();
+        initUTMTracking();
+        initPreloadStrategies();
+        
+        // Phase 2 - Intelligence Layer
+        initCacheReporting();
+        initRoutePrefetcher();
+        
+        // Phase 3 - Engagement Layer
+        initPushNotifications();
+        initABTesting();
+        
+        // Phase 4 - Security Layer
+        initOriginVerification();
+        
+        selfHealing.initialize().catch((error) => {
+          console.error('Failed to initialize self-healing system:', error);
+        });
+      }, 1000);
+    }
+    
+    // Initialize critical performance optimizations immediately
     performanceOptimizer.init().catch((error) => {
       console.error('Failed to initialize performance optimizations:', error);
     });
-    
-    // Initialize self-healing system (error recovery, health monitoring, auto-maintenance)
-    selfHealing.initialize().catch((error) => {
-      console.error('Failed to initialize self-healing system:', error);
-    });
-    
-    // Initialize resource preloading strategy
-    initPreloadStrategies();
   }, []);
+
+  // Track user context in Sentry
+  useEffect(() => {
+    if (user) {
+      setUser(user.id, user.email, user.user_metadata?.full_name);
+    } else {
+      clearUser();
+    }
+  }, [user]);
   
   useAnalytics();
   return null;
@@ -94,58 +144,43 @@ const App = () => {
     <HelmetProvider>
       <GlobalErrorBoundary>
         <ErrorBoundary>
-          <QueryClientProvider client={queryClient}>
-            <SubscriptionProvider>
-              <DemoModeProvider>
-                <Suspense fallback={null}>
-                  <MobileOptimizationsProvider>
-                    <TooltipProvider>
-                      <OfflineIndicator />
-                      <Toaster />
-                      <Sonner />
-                      <CookieConsent />
-                      <PerformanceReport />
-                      {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
-                      <GlobalAnnouncer />
-                    {/* Performance monitoring (dev only) */}
-                    <Suspense fallback={null}>
-                      <PerformanceMonitor />
-                    </Suspense>
-                    {/* Performance overlay (dev only) */}
-                    <Suspense fallback={null}>
-                      <PerformanceOverlay />
-                    </Suspense>
+          <NetworkAwareLoader>
+            <QueryClientProvider client={queryClient}>
+              <SubscriptionProvider>
+                <DemoModeProvider>
+                  <TooltipProvider>
+                    <OfflineIndicator />
+                    <Toaster />
+                    <Sonner />
+                    <CookieConsent />
+                    <PushOptInDialog />
+                    <PerformanceReport />
+                    <GlobalAnnouncer />
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <EnhancedAuthProvider>
                         <AnalyticsInitializer />
-                        {/* Components requiring Router context */}
                         <AccessibilityShortcuts />
                         <CommandPalette />
-                        {/* Service integration tracking - requires Router context */}
-                        <Suspense fallback={null}>
-                          <ServiceIntegrationTracker />
-                        </Suspense>
                         <TourProvider>
-                          {/* Role switch protection */}
-                          <Suspense fallback={null}>
-                            <RoleSwitchProtection />
-                          </Suspense>
-                          <Suspense fallback={<LoadingSpinner message="Getting things ready..." />}>
-                            <Routes>
-                              {AppRoutes()}
-                            </Routes>
-                          </Suspense>
+                          <FirstTimeOnboarding />
+                          <TimeoutGuard timeout={20000}>
+                            <AppLayout>
+                              <Routes>
+                                {AppRoutes()}
+                              </Routes>
+                            </AppLayout>
+                            <PWAInstallPrompt />
+                          </TimeoutGuard>
                         </TourProvider>
                       </EnhancedAuthProvider>
                     </BrowserRouter>
                   </TooltipProvider>
-                </MobileOptimizationsProvider>
-              </Suspense>
-            </DemoModeProvider>
-          </SubscriptionProvider>
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </GlobalErrorBoundary>
+                </DemoModeProvider>
+            </SubscriptionProvider>
+          </QueryClientProvider>
+        </NetworkAwareLoader>
+        </ErrorBoundary>
+      </GlobalErrorBoundary>
     </HelmetProvider>
   );
 };

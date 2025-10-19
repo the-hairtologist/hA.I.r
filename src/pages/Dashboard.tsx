@@ -16,7 +16,7 @@ import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
 import { NotificationManager } from "@/components/NotificationManager";
-import { DashboardFullSkeleton } from "@/components/LoadingSkeleton";
+import { DashboardSkeleton } from "@/components/loading/PageSkeleton";
 import { NextAppointmentWidget } from "@/components/dashboard/NextAppointmentWidget";
 import { LoyaltyProgressWidget } from "@/components/dashboard/LoyaltyProgressWidget";
 import { CommissionTrackerWidget } from "@/components/dashboard/CommissionTrackerWidget";
@@ -145,6 +145,7 @@ const Dashboard = () => {
 
   // Client dashboard sections - optimized for client needs
   const defaultClientSections: DashboardSection[] = [
+    { id: "rebooking-prompt", title: "Time for a Touch-Up", component: "RebookingPrompt", enabled: true },
     { id: "next-appointment", title: "Upcoming", component: "NextAppointment", enabled: true },
     { id: "loyalty-progress", title: "Rewards", component: "LoyaltyProgress", enabled: true },
     { id: "quick-actions", title: "Quick Actions", component: "QuickActions", enabled: true },
@@ -588,7 +589,7 @@ const Dashboard = () => {
     return (
       <DashboardLayout>
         <div className="p-4 md:p-6 lg:p-8">
-          <DashboardFullSkeleton />
+          <DashboardSkeleton />
         </div>
       </DashboardLayout>
     );
@@ -665,6 +666,10 @@ const Dashboard = () => {
       case "ClientMilestones":
         return (userRole === "client" || isAdmin) && profile?.id ? (
           <ClientMilestones clientId={profile.id} />
+        ) : null;
+      case "RebookingPrompt":
+        return (userRole === "client" || isAdmin) ? (
+          <RebookingPrompt />
         ) : null;
       case "UpcomingAppointments":
         return (userRole === "client" || isAdmin) && stats ? (
@@ -743,7 +748,7 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex-1">
                 <h3 className="text-xs sm:text-sm font-pixel text-foreground mb-1 flex items-center gap-2">
-                  <Edit3 className="h-3.5 w-3.5 text-primary" />
+                  <Edit3 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   Customize Dashboard
                 </h3>
                 <p className="text-[11px] sm:text-xs font-sans text-muted-foreground">
@@ -758,7 +763,7 @@ const Dashboard = () => {
                   onClick={handleReset}
                   className="text-xs font-bold uppercase tracking-wide"
                 >
-                  <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                  <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                   Reset
                 </Button>
                 <Button
@@ -766,7 +771,7 @@ const Dashboard = () => {
                   onClick={handleSave}
                   className="text-xs font-bold uppercase tracking-wide"
                 >
-                  <Save className="h-3.5 w-3.5 mr-1" />
+                  <Save className="h-4 w-4 sm:h-5 sm:w-5 mr-1" />
                   Done
                 </Button>
               </div>
@@ -813,7 +818,7 @@ const Dashboard = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                   <div className="space-y-0.5">
                     <p className="text-[10px] xs:text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
-                      <Edit3 className="h-3.5 w-3.5 text-primary" />
+                      <Edit3 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                       {isAdmin ? "Customize Platform Dashboard" : "Personalize Your Dashboard"}
                     </p>
                     <p className="text-[10px] xs:text-xs text-muted-foreground">

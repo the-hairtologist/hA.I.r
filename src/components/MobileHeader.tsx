@@ -60,7 +60,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
         hidden && "-translate-y-full"
       )}
       style={{
-        paddingTop: 'env(safe-area-inset-top, 0px)'
+        paddingTop: 'max(env(safe-area-inset-top, 0px), 8px)'
       }}
     >
       <div 

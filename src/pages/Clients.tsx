@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { InviteClientDialog } from "@/components/InviteClientDialog";
 import { SearchInput } from "@/components/SearchInput";
-import { ClientCardSkeleton } from "@/components/LoadingSkeleton";
+import { ClientListSkeleton } from "@/components/loading/PageSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -202,19 +202,19 @@ export default function Clients() {
         .select("*")
         .eq("preferred_stylist_id", stylistId);
 
-      // Merge statistics with client data
-      const enrichedClients = (clientsData || []).map((client: any) => {
-        const stats = (statsData || []).find((s: any) => s.client_id === client.id);
-        return {
-          ...client,
-          total_appointments: stats?.total_appointments || 0,
-          last_appointment_date: stats?.last_appointment_date || null,
-          completed_appointments: stats?.completed_appointments || 0,
-          upcoming_appointments: stats?.upcoming_appointments || 0,
-        };
-      });
+      // Use client_statistics view data directly
+      setClients((statsData || []).map((stat: any) => ({
+        ...stat,
+        id: stat.id,
+        full_name: stat.full_name,
+        email: stat.email,
+        phone: stat.phone,
+        total_appointments: stat.total_appointments || 0,
+        last_appointment: stat.last_appointment || null,
+        completion_rate: stat.completion_rate || 0,
+      })));
 
-      setClients(enrichedClients);
+      // Already set above
     } catch (error) {
       console.error("Error loading clients:", error);
       toast.error("Unable to load your client list. Please refresh or check your connection.");
@@ -519,7 +519,7 @@ export default function Clients() {
             className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
             aria-label="Go back"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             Back
           </Button>
         </div>
@@ -531,7 +531,7 @@ export default function Clients() {
   // Show empty state for non-stylists
   if (!stylistId) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <main className="container mx-auto py-8 px-4">
           <Breadcrumbs />
           <div className="mb-6">
@@ -540,7 +540,7 @@ export default function Clients() {
               onClick={() => navigate("/dashboard")} 
               className="gap-2"
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               Back to Dashboard
             </Button>
           </div>
@@ -559,7 +559,7 @@ export default function Clients() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <div className="min-h-screen-safe bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
@@ -573,7 +573,7 @@ export default function Clients() {
             className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
             aria-label="Go back"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             Back
           </Button>
         </div>
@@ -598,7 +598,7 @@ export default function Clients() {
               disabled={filteredClients.length === 0}
               className="gap-2"
             >
-              <Download className="h-4 w-4" />
+              <Download className="h-5 w-5 sm:h-6 sm:w-6" />
               Export
             </Button>
             <Button 
@@ -606,7 +606,7 @@ export default function Clients() {
               onClick={() => navigate("/formulas")}
               className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
             >
-              <FileText className="h-4 w-4" />
+              <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
               Formulas
             </Button>
             <Button 
@@ -614,13 +614,13 @@ export default function Clients() {
               variant="outline"
               className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
             >
-              <UserPlus className="h-4 w-4" />
+              <UserPlus className="h-5 w-5 sm:h-6 sm:w-6" />
               Invite Client
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
-                  <Plus className="h-4 w-4" />
+                  <Plus className="h-5 w-5 sm:h-6 sm:w-6" />
                   Add Client
                 </Button>
               </DialogTrigger>
@@ -788,7 +788,7 @@ export default function Clients() {
           <Card className="border-2 border-destructive bg-destructive/5">
             <CardContent className="p-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-destructive" />
+                <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-destructive" />
                 <span className="text-xs sm:text-sm font-medium">
                   Showing at-risk clients: Not seen in {riskFilter}+ days
                 </span>
@@ -798,7 +798,7 @@ export default function Clients() {
                 size="sm"
                 onClick={() => setRiskFilter("all")}
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </CardContent>
           </Card>
@@ -815,7 +815,7 @@ export default function Clients() {
           />
           <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
             <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
-              <Filter className="h-4 w-4 mr-2" />
+              <Filter className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -881,7 +881,7 @@ export default function Clients() {
                     onClick={() => setIsDialogOpen(true)}
                     className="gap-2"
                   >
-                    <UserPlus className="h-4 w-4" />
+                    <UserPlus className="h-5 w-5 sm:h-6 sm:w-6" />
                     Add New Client
                   </Button>
                 </div>
@@ -983,13 +983,13 @@ export default function Clients() {
                         <CardContent className="space-y-3 pt-4">
                           {client.email && (
                             <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-primary/5 rounded-lg border-[2px] border-primary/20">
-                              <Mail className="h-4 w-4 text-primary" />
+                              <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                               <span className="truncate">{client.email}</span>
                             </div>
                           )}
                           {client.phone && (
                             <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-accent/5 rounded-lg border-[2px] border-accent/20">
-                              <Phone className="h-4 w-4 text-accent" />
+                              <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                               <span>{client.phone}</span>
                             </div>
                           )}
@@ -1058,7 +1058,7 @@ export default function Clients() {
                                 openEditDialog(client);
                               }}
                             >
-                              <Edit className="h-4 w-4 mr-2" />
+                              <Edit className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                               Edit
                             </Button>
                             <Button
@@ -1071,7 +1071,7 @@ export default function Clients() {
                                 setHistoryDialogOpen(true);
                               }}
                             >
-                              <Calendar className="h-4 w-4 mr-2" />
+                              <Calendar className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                               History
                             </Button>
                             {client.email && (
@@ -1085,7 +1085,7 @@ export default function Clients() {
                                   setInviteDialogOpen(true);
                                 }}
                               >
-                                <UserPlus className="h-4 w-4 mr-2" />
+                                <UserPlus className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                                 Invite
                               </Button>
                             )}
@@ -1147,13 +1147,13 @@ export default function Clients() {
                 <CardContent className="space-y-3 pt-4">
                   {client.email && (
                     <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-primary/5 rounded-lg border-[2px] border-primary/20">
-                      <Mail className="h-4 w-4 text-primary" />
+                      <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       <span className="truncate">{client.email}</span>
                     </div>
                   )}
                   {client.phone && (
                     <div className="flex items-center gap-2 text-xs sm:text-sm p-2 bg-accent/5 rounded-lg border-[2px] border-accent/20">
-                      <Phone className="h-4 w-4 text-accent" />
+                      <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                       <span>{client.phone}</span>
                     </div>
                   )}
@@ -1223,7 +1223,7 @@ export default function Clients() {
                         openEditDialog(client);
                       }}
                     >
-                      <Edit className="h-4 w-4 mr-2" />
+                      <Edit className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                       Edit
                     </Button>
                     <Button
@@ -1236,7 +1236,7 @@ export default function Clients() {
                         setHistoryDialogOpen(true);
                       }}
                     >
-                      <Calendar className="h-4 w-4 mr-2" />
+                      <Calendar className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                       History
                     </Button>
                     {client.email && (
@@ -1250,7 +1250,7 @@ export default function Clients() {
                           setInviteDialogOpen(true);
                         }}
                       >
-                        <UserPlus className="h-4 w-4 mr-2" />
+                        <UserPlus className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Invite
                       </Button>
                     )}

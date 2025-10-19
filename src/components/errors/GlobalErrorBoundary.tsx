@@ -7,6 +7,7 @@ import React from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { logger } from '@/lib/logger';
 
 interface Props {
   children: React.ReactNode;
@@ -33,26 +34,12 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Global Error Boundary caught error:', error, errorInfo);
+    logger.error('Global Error Boundary caught error', 'GlobalErrorBoundary', error);
     
     this.setState({
       error,
       errorInfo,
     });
-
-    // Log to error tracking service if available
-    try {
-      // Could integrate with Sentry, LogRocket, etc.
-      if (window.location.hostname !== 'localhost') {
-        console.error('Production error:', {
-          error: error.toString(),
-          stack: error.stack,
-          componentStack: errorInfo.componentStack,
-        });
-      }
-    } catch (loggingError) {
-      console.error('Error logging failed:', loggingError);
-    }
   }
 
   handleReset = () => {

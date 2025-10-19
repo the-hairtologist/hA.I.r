@@ -121,9 +121,9 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
                 item.type === 'appointment' ? getStatusColor(item.data.status) : "bg-primary"
               )}>
                 {item.type === 'appointment' ? (
-                  <Calendar className="h-4 w-4 text-on-surface-primary" />
+                  <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-on-surface-primary" />
                 ) : (
-                  <FileText className="h-4 w-4 text-on-surface-primary" />
+                  <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-on-surface-primary" />
                 )}
               </div>
 

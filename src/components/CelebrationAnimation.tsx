@@ -81,7 +81,7 @@ export const CelebrationAnimation = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-sm animate-fade-in" style={{ backgroundColor: 'var(--brutal-overlay)' }}>
+    <div className="fixed inset-0 z-emergency flex items-center justify-center backdrop-blur-sm animate-fade-in" style={{ backgroundColor: 'var(--brutal-overlay)' }}>
       {showConfetti && (
         <Confetti
           width={window.innerWidth}
@@ -99,7 +99,7 @@ export const CelebrationAnimation = ({
           onClick={handleClose}
           className="absolute right-2 top-2 rounded-full"
         >
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5 sm:h-6 sm:w-6" />
         </Button>
         
         <CardContent className="pt-12 pb-8 px-8 text-center space-y-6">
@@ -117,7 +117,7 @@ export const CelebrationAnimation = ({
           {discountCode && (
             <div className="space-y-4 pt-4">
               <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                <TrendingUp className="h-4 w-4 text-success" />
+                <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
                 <span>You've earned a special reward!</span>
               </div>
               

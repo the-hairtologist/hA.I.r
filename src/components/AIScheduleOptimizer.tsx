@@ -71,12 +71,12 @@ export const AIScheduleOptimizer = ({
           >
             {predicting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                 Analyzing schedule patterns...
               </>
             ) : (
               <>
-                <TrendingUp className="mr-2 h-4 w-4" />
+                <TrendingUp className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
                 Generate Optimal Schedule
               </>
             )}
@@ -96,13 +96,13 @@ export const AIScheduleOptimizer = ({
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
                     <span className="font-medium">
                       {format(parseISO(prediction.suggested_date), 'EEEE, MMMM d, yyyy')}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
                     <span className="font-medium">{prediction.suggested_time}</span>
                   </div>
                   {prediction.reasoning && (
@@ -132,7 +132,7 @@ export const AIScheduleOptimizer = ({
                           <div className="flex items-center justify-between">
                             <div className="space-y-1">
                               <div className="flex items-center gap-2 text-sm">
-                                <Calendar className="h-3 w-3" />
+                                <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                                 {format(parseISO(alt.date), 'MMM d, yyyy')} at {alt.time}
                               </div>
                               <Badge

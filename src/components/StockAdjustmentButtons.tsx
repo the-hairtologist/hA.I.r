@@ -61,7 +61,7 @@ export const StockAdjustmentButtons = ({
         className="h-8 w-8 p-0"
         aria-label={`Decrease by ${incrementAmount}`}
       >
-        <Minus className="h-3 w-3" />
+        <Minus className="h-4 w-4 sm:h-5 sm:w-5" />
       </Button>
       <Button
         variant="outline"
@@ -74,7 +74,7 @@ export const StockAdjustmentButtons = ({
         className="h-8 w-8 p-0"
         aria-label={`Increase by ${incrementAmount}`}
       >
-        <Plus className="h-3 w-3" />
+        <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
       </Button>
     </div>
   );

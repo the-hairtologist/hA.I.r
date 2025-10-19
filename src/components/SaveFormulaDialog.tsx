@@ -158,7 +158,7 @@ export const SaveFormulaDialog = ({
                   onClick={() => setAddClientDialogOpen(true)}
                   className="h-auto py-1 px-2 text-xs gap-1"
                 >
-                  <UserPlus className="h-3 w-3" />
+                  <UserPlus className="h-4 w-4 sm:h-5 sm:w-5" />
                   Add New
                 </Button>
               </div>

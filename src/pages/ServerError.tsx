@@ -14,7 +14,7 @@ const ServerError = () => {
         title="Server Error - hA.I.r"
         description="Something went wrong on our end. We're working to fix it."
       />
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-destructive/10 via-secondary/10 to-accent/10 p-4">
+      <div className="flex min-h-screen-safe items-center justify-center bg-gradient-to-br from-destructive/10 via-secondary/10 to-accent/10 p-4">
         <div className="text-center max-w-md mx-auto p-8 bg-card border-[3px] border-foreground rounded-xl shadow-[8px_8px_0px_0px_hsl(var(--foreground))] animate-fade-in">
           <div className="mb-6 flex justify-center">
             <div className="relative">

@@ -195,10 +195,10 @@ export const WeeklyScheduleView = ({
             </div>
             <div className="flex gap-1 flex-shrink-0">
               <Button variant="outline" size="sm" onClick={previousWeek} className="border-[2px] h-6 w-6 p-0">
-                <ChevronLeft className="h-3 w-3" />
+                <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
               <Button variant="outline" size="sm" onClick={nextWeek} className="border-[2px] h-6 w-6 p-0">
-                <ChevronRight className="h-3 w-3" />
+                <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
           </div>

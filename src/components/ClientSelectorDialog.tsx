@@ -53,13 +53,13 @@ export const ClientSelectorDialog = ({
               variant="outline"
               className="w-full"
             >
-              <X className="h-4 w-4 mr-2" />
+              <X className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
               Clear Client Selection
             </Button>
           )}
 
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
             <Input
               placeholder="Search clients..."
               value={searchQuery}

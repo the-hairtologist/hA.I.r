@@ -162,7 +162,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Badge className="bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
-                          <Crown className="h-3 w-3 mr-1" />
+                          <Crown className="h-5 w-5 sm:h-6 sm:w-6 mr-1" />
                           🛡️ ADMIN - FULL ACCESS
                         </Badge>
                       </TooltipTrigger>
@@ -175,9 +175,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   {!isAdmin && userRole && (
                     <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20">
                       {userRole === "stylist" ? (
-                        <><Scissors className="h-3 w-3 mr-1" /> Stylist</>
+                        <><Scissors className="h-5 w-5 sm:h-6 sm:w-6 mr-1" /> Stylist</>
                       ) : (
-                        <><User className="h-3 w-3 mr-1" /> Client</>
+                        <><User className="h-5 w-5 sm:h-6 sm:w-6 mr-1" /> Client</>
                       )}
                     </Badge>
                   )}
@@ -200,7 +200,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                             <span className="hidden sm:inline truncate max-w-[100px] text-sm">
                               {user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Account"}
                             </span>
-                            <ChevronDown className="h-3 w-3 opacity-50" />
+                            <ChevronDown className="h-5 w-5 sm:h-6 sm:w-6 opacity-50" />
                           </Button>
                         </DropdownMenuTrigger>
                       </TooltipTrigger>
@@ -217,36 +217,36 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => navigate("/profile")}>
-                        <User className="h-4 w-4 mr-2" />
+                        <User className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         My Profile
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate("/settings")}>
-                        <HelpCircle className="h-4 w-4 mr-2" />
+                        <HelpCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Settings
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => navigate("/install")}>
-                        <Download className="h-4 w-4 mr-2" />
+                        <Download className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Install App
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate("/settings?tab=privacy")}>
-                        <FileJson className="h-4 w-4 mr-2" />
+                        <FileJson className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Download My Data
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuLabel className="text-xs text-muted-foreground">Theme</DropdownMenuLabel>
                       <DropdownMenuItem onClick={() => setTheme("light")}>
-                        <Sun className="h-4 w-4 mr-2" />
+                        <Sun className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Light
                         {theme === "light" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setTheme("dark")}>
-                        <Moon className="h-4 w-4 mr-2" />
+                        <Moon className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Dark
                         {theme === "dark" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setTheme("system")}>
-                        <Monitor className="h-4 w-4 mr-2" />
+                        <Monitor className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         System
                         {theme === "system" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
                       </DropdownMenuItem>
@@ -255,12 +255,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         localStorage.removeItem('onboarding_complete');
                         window.location.reload();
                       }}>
-                        <HelpCircle className="h-4 w-4 mr-2" />
+                        <HelpCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Restart Tutorial
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
-                        <LogOut className="h-4 w-4 mr-2" />
+                        <LogOut className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                         Sign Out
                       </DropdownMenuItem>
                     </DropdownMenuContent>

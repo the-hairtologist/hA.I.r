@@ -48,7 +48,7 @@ export const MinimalFAQ = () => {
           {faqs.map((faq, index) => (
             <div 
               key={faq.question} 
-              className={`border-4 border-black bg-white hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:translate-x-1 ${
+              className={`border-4 border-foreground bg-card hover:shadow-brutal-lg transition-all duration-300 hover:translate-x-1 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
               }`}
               style={{
@@ -60,7 +60,7 @@ export const MinimalFAQ = () => {
                   <span className="font-sans text-sm sm:text-base">{faq.question}</span>
                   <span className="font-pixel text-xl group-open:rotate-90 transition-transform duration-300">▶</span>
                 </summary>
-                <div className="px-4 pb-4 border-t-2 border-black pt-4 bg-muted/30">
+                <div className="px-4 pb-4 border-t-2 border-border pt-4 bg-muted/30">
                   <p className="font-sans text-sm text-muted-foreground">{faq.answer}</p>
                 </div>
               </details>
@@ -72,7 +72,7 @@ export const MinimalFAQ = () => {
           <p className="text-accent-foreground/80 mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
-            className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase border-4 border-black bg-white px-6 xs:px-8 py-3 xs:py-4 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300"
+            className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase border-4 border-foreground bg-card px-6 xs:px-8 py-3 xs:py-4 inline-block shadow-brutal hover:shadow-brutal-lg hover:-translate-y-1 transition-all duration-300"
           >
             Contact Support
           </a>

@@ -141,17 +141,17 @@ export const AudioGuidePlayer = ({
           className="shrink-0"
         >
           {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
           ) : isPlaying ? (
-            <Pause className="h-4 w-4" />
+            <Pause className="h-5 w-5 sm:h-6 sm:w-6" />
           ) : (
-            <Play className="h-4 w-4 ml-0.5" />
+            <Play className="h-5 w-5 sm:h-6 sm:w-6 ml-0.5" />
           )}
         </Button>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <Volume2 className="h-4 w-4 text-primary shrink-0" />
+            <Volume2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
             <p className="text-sm font-medium truncate">{title}</p>
           </div>
           <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
@@ -170,7 +170,7 @@ export const AudioGuidePlayer = ({
           className="shrink-0"
           title="Download audio guide"
         >
-          <Download className="h-4 w-4" />
+          <Download className="h-5 w-5 sm:h-6 sm:w-6" />
         </Button>
       </div>
     </Card>

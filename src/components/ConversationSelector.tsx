@@ -71,10 +71,10 @@ export const ConversationSelector = ({
             onClick={() => {
               onNewConversation();
               onOpenChange(false);
-            }}
+          }}
             className="w-full"
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
             New Conversation
           </Button>
 
@@ -115,7 +115,7 @@ export const ConversationSelector = ({
                         onClick={(e) => handleDelete(conv.id, e)}
                         className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
                       >
-                        <Trash2 className="h-4 w-4 text-destructive" />
+                        <Trash2 className="h-5 w-5 sm:h-6 sm:w-6 text-destructive" />
                       </Button>
                     </div>
                   </div>

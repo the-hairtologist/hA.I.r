@@ -140,8 +140,8 @@ export class MediaErrorBoundary extends Component<Props, State> {
                     onClick={action.action}
                     size="sm"
                   >
-                    {i === 0 && <RefreshCw className="h-4 w-4 mr-2" />}
-                    {i === 1 && <Upload className="h-4 w-4 mr-2" />}
+                    {i === 0 && <RefreshCw className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />}
+                    {i === 1 && <Upload className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />}
                     {action.label}
                   </Button>
                 ))}

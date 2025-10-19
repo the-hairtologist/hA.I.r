@@ -235,7 +235,7 @@ export const CameraCapture = ({
         onClick={handleCapture}
         disabled={disabled || capturing || processing}
         className={cn(
-          "fixed bottom-[104px] right-20 h-14 w-14 rounded-full shadow-2xl z-50 touch-manipulation active:scale-95",
+          "fixed bottom-[104px] right-20 h-14 w-14 rounded-full shadow-2xl z-fixed touch-manipulation active:scale-95",
           "bg-gradient-to-br from-primary to-secondary",
           "hover:opacity-90",
           "transform transition-all duration-300 hover:scale-110",
@@ -265,12 +265,12 @@ export const CameraCapture = ({
       >
         {capturing || processing ? (
           <>
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
             {processing ? "Processing..." : "Capturing..."}
           </>
         ) : (
           <>
-            <Camera className="h-4 w-4" />
+            <Camera className="h-5 w-5 sm:h-6 sm:w-6" />
             Capture
           </>
         )}
@@ -303,18 +303,18 @@ export const CameraCapture = ({
               priority={true}
               className="w-full h-48 object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent flex items-end p-4">
               <div className="flex-1">
-                <p className="text-white font-medium">{messages.processing}</p>
+                <p className="text-foreground font-medium">{messages.processing}</p>
                 <Progress value={uploadProgress} className="h-2 mt-2" />
               </div>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={handleCancel}
-                className="text-white hover:bg-white/20"
+                className="text-foreground hover:bg-accent"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
           </div>
@@ -338,7 +338,7 @@ export const CameraCapture = ({
 
           {error && (
             <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive">
-              <AlertCircle className="h-4 w-4" />
+              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
               <p className="text-sm">{error}</p>
             </div>
           )}

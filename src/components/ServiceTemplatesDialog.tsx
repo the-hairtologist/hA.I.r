@@ -235,7 +235,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
                         }`}
                       >
                         {selectedServices.includes(service.id) && (
-                          <Check className="h-3 w-3 text-primary-foreground" />
+                          <Check className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
                         )}
                       </div>
                       <div className="flex-1">
@@ -309,7 +309,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
                           onClick={() => handleDeleteTemplate(template.id)}
                           className="h-8 w-8 p-0 text-destructive hover:text-destructive/80"
                         >
-                          <Trash2 className="h-3.5 w-3.5" />
+                          <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
                         </Button>
                       </div>
                     </div>

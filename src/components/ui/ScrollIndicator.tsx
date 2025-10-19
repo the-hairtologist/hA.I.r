@@ -27,12 +27,12 @@ export const ScrollIndicator = () => {
   return (
     <button
       onClick={handleClick}
-      className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-opacity duration-300 ${
+      className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-10 transition-opacity duration-300 ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
       aria-label="Scroll down"
     >
-      <ChevronDown className="w-8 h-8 animate-bounce text-foreground" />
+      <ChevronDown className="w-10 h-10 sm:w-12 sm:h-12 animate-bounce text-foreground drop-shadow-lg" />
     </button>
   );
 };

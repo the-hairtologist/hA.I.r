@@ -236,7 +236,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
                       className="gap-1 brutal-shadow-xs"
                     >
                       Take Me There
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
                     </Button>
                   </div>
                 </CardContent>
@@ -255,7 +255,7 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
                 className="gap-1 min-w-[44px] min-h-[44px] touch-manipulation"
                 size="sm"
               >
-                <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                 <span className="hidden xs:inline">Back</span>
               </Button>
             )}
@@ -278,11 +278,11 @@ export const OnboardingWizard = ({ open, onComplete, userRole }: OnboardingWizar
               {currentStep < steps.length - 1 ? (
                 <>
                   <span className="hidden xs:inline">Next</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
                 </>
               ) : (
                 <>
-                  <Check className="h-4 w-4" />
+                  <Check className="h-5 w-5 sm:h-6 sm:w-6" />
                   <span className="hidden xs:inline">Get Started</span>
                 </>
               )}

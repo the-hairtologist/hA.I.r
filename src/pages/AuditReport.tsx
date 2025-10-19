@@ -144,7 +144,7 @@ const AuditReport = () => {
                 ))}
                 {section.warning && (
                   <div className="flex items-start gap-2 text-sm mt-4 p-3 bg-amber-500/10 rounded-lg border border-amber-500/20">
-                    <AlertCircle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                    <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-amber-500 mt-0.5 flex-shrink-0" />
                     <span className="text-amber-700 dark:text-amber-400">{section.warning}</span>
                   </div>
                 )}

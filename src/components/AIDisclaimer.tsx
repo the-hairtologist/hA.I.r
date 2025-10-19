@@ -35,7 +35,7 @@ export const AIDisclaimer = ({ context = "general", className = "" }: AIDisclaim
 
   return (
     <Alert variant="default" className={`border-primary/50 bg-primary/5 ${className}`}>
-      <Sparkles className="h-4 w-4 text-primary" />
+      <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
       <AlertTitle className="text-primary font-pixel">{title}</AlertTitle>
       <AlertDescription className="text-muted-foreground text-xs sm:text-sm mt-2">
         {description}

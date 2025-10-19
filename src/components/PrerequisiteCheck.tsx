@@ -30,7 +30,7 @@ export const PrerequisiteCheck = ({ type, onDismiss }: PrerequisiteCheckProps) =
 
   return (
     <Alert variant="default" className="border-primary/50 bg-primary/5">
-      <AlertCircle className="h-4 w-4 text-primary" />
+      <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
       <AlertTitle className="text-foreground">{title}</AlertTitle>
       <AlertDescription className="text-muted-foreground">
         {description}

@@ -12,13 +12,13 @@ export const SimplePricingCTA = () => {
       <div className={`max-w-4xl mx-auto text-center transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
         <div className="mb-10">
           <div className="flex justify-center gap-6 mb-8">
-            <div className="w-16 h-16 border-4 border-black bg-accent flex items-center justify-center animate-bounce">
+            <div className="w-16 h-16 border-4 border-foreground bg-accent flex items-center justify-center animate-bounce">
               <Sparkles className="h-8 w-8 text-accent-foreground" />
             </div>
-            <div className="w-16 h-16 border-4 border-black bg-secondary flex items-center justify-center animate-bounce" style={{ animationDelay: '0.1s' }}>
+            <div className="w-16 h-16 border-4 border-foreground bg-secondary flex items-center justify-center animate-bounce" style={{ animationDelay: '0.1s' }}>
               <Zap className="h-8 w-8 text-secondary-foreground" />
             </div>
-            <div className="w-16 h-16 border-4 border-black bg-primary flex items-center justify-center animate-bounce" style={{ animationDelay: '0.2s' }}>
+            <div className="w-16 h-16 border-4 border-foreground bg-primary flex items-center justify-center animate-bounce" style={{ animationDelay: '0.2s' }}>
               <Heart className="h-8 w-8 text-primary-foreground" />
             </div>
           </div>
@@ -35,7 +35,7 @@ export const SimplePricingCTA = () => {
         <Button
           size="lg"
           onClick={() => navigate("/auth")}
-          className="text-sm xs:text-base sm:text-lg px-8 xs:px-12 py-6 xs:py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 rounded-none"
+          className="text-sm xs:text-base sm:text-lg px-8 xs:px-12 py-6 xs:py-8 font-pixel uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-4 border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all duration-300 hover:-translate-y-1 rounded-none"
         >
           GET STARTED FREE
         </Button>

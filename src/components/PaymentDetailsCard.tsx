@@ -69,7 +69,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
             variant={paymentStatus === 'completed' ? 'default' : 'secondary'}
             className="flex items-center gap-1"
           >
-            <StatusIcon className={`h-3 w-3 ${statusConfig.color}`} />
+            <StatusIcon className={`h-5 w-5 sm:h-6 sm:w-6 ${statusConfig.color}`} />
             {statusConfig.text}
           </Badge>
         </div>
@@ -85,7 +85,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
         {amountPaid > 0 && (
           <div className="flex items-center justify-between pb-2 border-b border-border/50">
             <div className="flex items-center gap-2">
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
                 {isDeposit ? 'Deposit Paid' : 'Amount Paid'}
               </span>
@@ -100,7 +100,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
         {remainingBalance > 0 && (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-warning" />
+              <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-warning" />
               <span className="text-sm font-medium text-warning">Balance Due</span>
             </div>
             <span className="text-base font-bold text-warning">
@@ -131,7 +131,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
         {/* Fully Paid Notice */}
         {!isDeposit || remainingBalance === 0 && paymentStatus === 'completed' && (
           <div className="mt-3 p-3 bg-success/10 border border-success rounded-lg flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-success" />
+            <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
             <p className="text-xs text-success font-medium">
               Payment complete - You're all set!
             </p>

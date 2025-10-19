@@ -90,7 +90,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
 
   return (
     <div 
-      className="fixed left-4 sm:left-6 md:left-auto md:right-8 z-[60] flex flex-col-reverse items-end gap-3"
+      className="fixed left-4 sm:left-6 md:left-auto md:right-8 z-popover flex flex-col-reverse items-end gap-3"
       style={{
         bottom: 'max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 5.5rem))' // 88px + safe area
       }}
@@ -121,7 +121,7 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
                 "hover:scale-110 transition-all duration-200"
               )}
             >
-              <action.icon className="h-5 w-5 text-on-surface-primary" />
+              <action.icon className="h-6 w-6 text-on-surface-primary" />
             </Button>
           </div>
         ))}
