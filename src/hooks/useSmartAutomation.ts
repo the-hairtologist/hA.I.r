@@ -45,6 +45,15 @@ export const useSmartAutomation = (stylistId?: string) => {
 
     setLoading(true);
     try {
+      // Get stylist timezone
+      const { data: stylist } = await supabase
+        .from('stylist_profiles')
+        .select('timezone')
+        .eq('id', stylistId)
+        .single();
+      
+      const stylistTimezone = stylist?.timezone || 'America/New_York';
+
       // Get all client appointments to detect timing patterns
       const { data: appointments } = await supabase
         .from('appointments')
@@ -81,7 +90,7 @@ export const useSmartAutomation = (stylistId?: string) => {
           clientId,
           optimalHour,
           optimalDay,
-          timezone: 'America/Los_Angeles', // TODO: Detect from client
+          timezone: stylistTimezone,
           confidence
         };
       });
