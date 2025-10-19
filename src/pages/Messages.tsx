@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,8 +17,7 @@ import { KeyboardShortcutHint } from "@/components/KeyboardShortcut";
 
 const Messages = () => {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  const { user, roles, loading: authLoading } = useEnhancedAuth();
   
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState<any[]>([]);
@@ -51,14 +49,14 @@ const Messages = () => {
   }, [selectedConversation, messageText]);
 
   useEffect(() => {
-    if (!authLoading && !roleLoading && user && roles.length > 0) {
+    if (!authLoading && user && roles.length > 0) {
       const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
       setUserRole(primaryRole);
       loadData(user);
     } else if (!authLoading && !user) {
       navigate("/auth");
     }
-  }, [authLoading, roleLoading, user, roles]);
+  }, [authLoading, user, roles]);
 
   useEffect(() => {
     if (!user) return;

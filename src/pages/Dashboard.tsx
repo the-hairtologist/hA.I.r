@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { ProfileCompletionDialog } from "@/components/ProfileCompletionDialog";
 import { StylistSubscriptionPrompt } from "@/components/StylistSubscriptionPrompt";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -77,8 +76,8 @@ import {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user: authUser, loading: authLoading } = useAuth();
-  const { roles, isAdmin, loading: roleLoading } = useUserRole(authUser?.id);
+  const { user: authUser, roles, loading: authLoading } = useEnhancedAuth();
+  const isAdmin = roles.includes('admin');
   const { subscribed, inTrial, loading: subscriptionLoading, checkSubscription } = useSubscription();
   const { isMobile } = useResponsive();
   
@@ -200,7 +199,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Wait for auth and roles to be fully loaded
-    if (!authLoading && !roleLoading && authUser && roles.length > 0) {
+    if (!authLoading && authUser && roles.length > 0) {
       // Prioritize stylist role if user has both roles
       const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
       setUserRole(primaryRole);
@@ -214,7 +213,7 @@ const Dashboard = () => {
     } else if (!authLoading && !authUser) {
       navigate("/auth");
     }
-  }, [authLoading, roleLoading, authUser, roles]);
+  }, [authLoading, authUser, roles]);
 
   useEffect(() => {
     if (userRole && profile) {
@@ -627,7 +626,7 @@ const Dashboard = () => {
 
   // CRITICAL: Wait for ALL loading states to complete before rendering dashboard
   // This prevents crashes from premature database queries or null references
-  if (authLoading || roleLoading || loading || layoutLoading || !user || !userRole) {
+  if (authLoading || loading || layoutLoading || !user || !userRole) {
     return (
       <DashboardLayout>
         <div className="p-4 md:p-6 lg:p-8">

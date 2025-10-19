@@ -24,8 +24,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { haptic } from "@/platform/haptics";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -37,8 +36,10 @@ const contactSchema = z.object({
 
 const Help = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { user } = useAuth();
-  const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
+  const { user, roles } = useEnhancedAuth();
+  const isStylist = roles.includes('stylist');
+  const isClient = roles.includes('client');
+  const isAdmin = roles.includes('admin');
   const navigate = useNavigate();
   const [contactFormErrors, setContactFormErrors] = useState<{ subject?: string; message?: string }>({});
 

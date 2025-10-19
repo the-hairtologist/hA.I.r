@@ -155,10 +155,18 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
           .maybeSingle(),
       ]);
 
-      const profile = profileResult.data;
-      const roles = (rolesResult.data || []).map((r) => r.role as AppRole);
-      const stylistProfile = stylistResult.data;
-      const clientProfile = clientResult.data;
+      // Handle individual errors gracefully
+      const profile = profileResult.error ? null : profileResult.data;
+      const roles = rolesResult.error ? [] : (rolesResult.data || []).map((r) => r.role as AppRole);
+      const stylistProfile = stylistResult.error ? null : stylistResult.data;
+      const clientProfile = clientResult.error ? null : clientResult.data;
+
+      // If roles failed to load (critical), keep loading true
+      if (rolesResult.error) {
+        console.error("[EnhancedAuth] CRITICAL: Roles fetch failed:", rolesResult.error);
+        setState((prev) => ({ ...prev, loading: true, initialized: true }));
+        return;
+      }
 
       // Determine primary role (prefer stylist if user has both)
       const primaryRole = roles.includes("stylist")
@@ -179,9 +187,17 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({
         loading: false,
         initialized: true,
       });
+
+      console.log("[EnhancedAuth] ✅ Auth data loaded:", {
+        roles,
+        primaryRole,
+        hasProfile: !!profile,
+        hasStylistProfile: !!stylistProfile,
+        hasClientProfile: !!clientProfile,
+      });
     } catch (error) {
-      console.error("Error loading auth data:", error);
-      setState((prev) => ({ ...prev, loading: false, initialized: true }));
+      console.error("[EnhancedAuth] Exception loading auth data:", error);
+      setState((prev) => ({ ...prev, loading: true, initialized: true }));
     }
   }, []);
 

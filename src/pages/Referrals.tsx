@@ -1,14 +1,13 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { PageHeader } from "@/components/PageHeader";
 import { ReferralSystem } from "@/components/ReferralSystem";
-import { useUserRole } from "@/hooks/useUserRole";
-import { useAuth } from "@/hooks/useAuth";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle, Gift } from "lucide-react";
 
 const Referrals = () => {
-  const { user } = useAuth();
-  const { isStylist, loading } = useUserRole(user?.id);
+  const { user, roles, loading } = useEnhancedAuth();
+  const isStylist = roles.includes('stylist');
 
   if (loading) {
     return (

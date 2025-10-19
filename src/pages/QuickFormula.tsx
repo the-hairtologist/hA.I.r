@@ -6,8 +6,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -27,8 +26,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function QuickFormula() {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const { roles } = useUserRole(user?.id);
+  const { user, roles } = useEnhancedAuth();
   const analytics = useAIAnalytics();
   
   const [currentLevel, setCurrentLevel] = useState<string>("");

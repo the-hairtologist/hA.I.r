@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,8 +28,7 @@ import { FormFieldError } from "@/components/FormFieldError";
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  const { user, roles, loading: authLoading } = useEnhancedAuth();
   
   const [loading, setLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
@@ -102,14 +100,14 @@ const Settings = () => {
 
   useEffect(() => {
     // Wait for auth and roles to be fully loaded
-    if (!authLoading && !roleLoading && user && roles.length > 0) {
+    if (!authLoading && user && roles.length > 0) {
       const primaryRole = roles.includes('stylist') ? 'stylist' : roles[0];
       setUserRole(primaryRole);
       loadUser(user, primaryRole);
     } else if (!authLoading && !user) {
       navigate("/auth");
     }
-  }, [authLoading, roleLoading, user, roles]);
+  }, [authLoading, user, roles]);
 
   const loadUser = async (sessionUser: any, primaryRole: string) => {
     try {
