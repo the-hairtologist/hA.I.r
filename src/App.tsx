@@ -28,6 +28,8 @@ import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { selfHealing } from "@/lib/selfHealing";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { useLocation } from "react-router-dom";
 
 // Import advanced accessibility features
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
@@ -104,6 +106,8 @@ const queryClient = new QueryClient({
 });
 
 const AnalyticsInitializer = () => {
+  const location = useLocation();
+  
   useEffect(() => {
     // Initialize analytics and monitoring
     initAnalytics();
@@ -124,6 +128,11 @@ const AnalyticsInitializer = () => {
       });
     });
   }, []);
+  
+  // Track navigation changes
+  useEffect(() => {
+    userJourney.trackNavigation(location.pathname, { search: location.search });
+  }, [location]);
   
   useAnalytics();
   useSentryUser(); // Sync user context with Sentry

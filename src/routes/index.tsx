@@ -52,6 +52,7 @@ const AdminCommandCenter = lazyWithRetry(() => import('@/pages/AdminCommandCente
 const AdminUsers = lazyWithRetry(() => import('@/pages/AdminUsers'));
 const AuditLogs = lazyWithRetry(() => import('@/pages/AuditLogs'));
 const ActivityLog = lazyWithRetry(() => import('@/pages/admin/ActivityLog'));
+const DebugTools = lazyWithRetry(() => import('@/pages/admin/DebugTools'));
 const AppDirectory = lazyWithRetry(() => import('@/pages/AppDirectory'));
 const DMCA = lazyWithRetry(() => import('@/pages/DMCA'));
 const Accessibility = lazyWithRetry(() => import('@/pages/Accessibility'));
@@ -349,6 +350,10 @@ export const AppRoutes = () => (
     <Route
       path="/admin/activity"
       element={<ProtectedRoute allowedRoles={['admin']}><ActivityLog /></ProtectedRoute>}
+    />
+    <Route
+      path="/admin/debug-tools"
+      element={<ProtectedRoute allowedRoles={['admin']}><DebugTools /></ProtectedRoute>}
     />
     <Route
       path="/admin/audit-report"

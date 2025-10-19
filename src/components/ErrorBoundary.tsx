@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface Props {
   children: ReactNode;
@@ -38,7 +40,18 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    // Use structured logging instead of console.error
+    const journeySummary = userJourney.getJourneySummary();
+    
+    logger.error('Error caught by boundary', error, {
+      componentStack: errorInfo.componentStack,
+      errorCount: this.state.errorCount,
+      userJourney: journeySummary.recentEvents,
+      lastRoute: journeySummary.lastRoute,
+    });
+    
+    // Track error in journey
+    userJourney.trackError(error, { componentStack: errorInfo.componentStack });
     
     // Track error in production (could send to monitoring service)
     if (import.meta.env.PROD) {
