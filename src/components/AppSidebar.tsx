@@ -141,6 +141,17 @@ export function AppSidebar() {
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(baseItems as SidebarItem[], groupLabels);
 
+  // Auto-expand parent items with children by default
+  useEffect(() => {
+    const itemsWithChildren = new Set<string>();
+    items.forEach(item => {
+      if (item.children && item.children.length > 0) {
+        itemsWithChildren.add(item.id);
+      }
+    });
+    setExpandedItems(itemsWithChildren);
+  }, [items]); // Run when items change
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
