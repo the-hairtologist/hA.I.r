@@ -32,6 +32,7 @@ const routeLabels: Record<string, string> = {
   "access-codes": "Access Codes",
   "system-health": "System Health",
   "app-directory": "App Directory",
+  automation: "Automation Monitoring",
 };
 
 export const Breadcrumbs = () => {

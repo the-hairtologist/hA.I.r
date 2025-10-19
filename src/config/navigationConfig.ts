@@ -412,6 +412,16 @@ export const getAdminNavigationItems = (isAdmin: boolean): NavigationItem[] => {
       color: "text-emerald-400 dark:text-emerald-300",
       description: "Monitor performance" 
     },
+    { 
+      id: "automation-monitoring", 
+      title: "Automation Monitor", 
+      url: "/admin/automation", 
+      icon: Clock,
+      gradient: "bg-[image:var(--gradient-purple-pink)]", 
+      group: "admin", 
+      color: "text-purple-400 dark:text-purple-300",
+      description: "Track automated systems" 
+    },
   ];
 };
 
