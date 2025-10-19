@@ -32,7 +32,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash", // Vision capable, 70% cheaper
+        model: "google/gemini-2.5-pro", // Best accuracy for critical hair analysis
         messages: [
           {
             role: "system",
@@ -88,8 +88,17 @@ serve(async (req) => {
     const aiData = await aiResponse.json();
     const analysis = JSON.parse(aiData.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments || "{}");
 
+    // Add confidence scoring and metadata
+    const confidence = calculateConfidence(analysis);
+    
     return new Response(
-      JSON.stringify({ ...analysis, client_id: clientId }),
+      JSON.stringify({ 
+        ...analysis, 
+        client_id: clientId,
+        confidence_score: confidence,
+        needs_review: confidence < 0.7,
+        model_used: "google/gemini-2.5-pro"
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
@@ -100,3 +109,18 @@ serve(async (req) => {
     );
   }
 });
+
+// Confidence calculation based on analysis completeness
+function calculateConfidence(analysis: any): number {
+  let score = 0;
+  const checks = [
+    analysis.condition_score > 0,
+    analysis.damage_level,
+    analysis.texture,
+    analysis.porosity,
+    analysis.recommendations?.length > 0
+  ];
+  
+  score = checks.filter(Boolean).length / checks.length;
+  return Math.round(score * 100) / 100; // Round to 2 decimals
+}

@@ -34,7 +34,7 @@ serve(async (req) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "google/gemini-2.5-flash",
+            model: "google/gemini-2.5-pro", // Critical formula analysis requires best accuracy
             messages: [
               {
                 role: "system",
@@ -127,9 +127,18 @@ Provide:
         }
 
         const analysis = JSON.parse(toolCall.function.arguments);
+        
+        // Add confidence and quality metrics
+        const confidence = analysis.success_score || 0.5;
+        const needsReview = confidence < 0.7 || analysis.insights?.risk_factors?.length > 2;
 
         // Store intelligence for later (client will save to database)
-        formula.intelligence = analysis;
+        formula.intelligence = {
+          ...analysis,
+          confidence_score: confidence,
+          needs_review: needsReview,
+          model_used: 'google/gemini-2.5-pro'
+        };
       } catch (err) {
         console.error(`Error analyzing formula ${formula.id}:`, err);
       }

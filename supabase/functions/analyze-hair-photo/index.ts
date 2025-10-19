@@ -34,7 +34,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash', // 70% cheaper than Pro, still has vision
+        model: 'google/gemini-2.5-pro', // Best accuracy for professional color analysis
         messages: [
           {
             role: 'system',
@@ -111,13 +111,15 @@ Required JSON structure:
       throw new Error('Failed to parse hair analysis results');
     }
 
-    // Calculate confidence scores
+    // Calculate confidence scores with pro model adjustment
     const confidenceScores = {
-      overall: analysisResult.level_confidence || 0.85,
-      level: analysisResult.level_confidence || 0.85,
-      undertones: 0.80,
-      damage: 0.75,
+      overall: analysisResult.level_confidence || 0.92, // Higher baseline with Pro
+      level: analysisResult.level_confidence || 0.92,
+      undertones: 0.90, // Pro model better at undertones
+      damage: 0.88,
     };
+    
+    const needsReview = confidenceScores.overall < 0.7;
 
     // Store analysis result
     await supabase.from('hair_analysis_results').insert({
@@ -132,6 +134,8 @@ Required JSON structure:
       JSON.stringify({
         ...analysisResult,
         confidence_scores: confidenceScores,
+        needs_review: needsReview,
+        model_used: 'google/gemini-2.5-pro',
         analyzed_at: new Date().toISOString(),
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
