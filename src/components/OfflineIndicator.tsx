@@ -65,7 +65,7 @@ export const OfflineIndicator = () => {
       <div
         className={cn(
           "fixed bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 z-[200]",
-          "bg-amber-500/95 backdrop-blur-sm text-white",
+          "bg-warning/95 backdrop-blur-sm text-warning-foreground",
           "px-4 sm:px-6 py-3 rounded-full",
           "shadow-[4px_4px_0px_0px_rgba(0,0,0,0.25)]",
           "border-2 border-amber-600",

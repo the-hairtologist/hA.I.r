@@ -46,16 +46,16 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: n
   return (
     <div
       ref={ref}
-      className={`space-y-4 border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
+      className={`space-y-4 brutal-border bg-card p-6 brutal-shadow hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
       style={{
         transitionDelay: `${index * 100}ms`,
       }}
     >
-      <div className="relative w-16 h-16 border-4 border-black bg-accent flex items-center justify-center group">
-        <Icon className="h-8 w-8 text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" strokeWidth={2} />
-        <div className="absolute -top-3 -right-3 w-8 h-8 border-4 border-black bg-primary flex items-center justify-center">
+      <div className="relative w-16 h-16 brutal-border bg-accent flex items-center justify-center group">
+...
+        <div className="absolute -top-3 -right-3 w-8 h-8 brutal-border bg-primary flex items-center justify-center">
           <span className="font-pixel text-primary-foreground text-sm">
             {feature.number}
           </span>

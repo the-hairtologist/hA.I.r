@@ -60,7 +60,7 @@ export const AIFormulaQuickStart = ({ onSelectTemplate }: AIFormulaQuickStartPro
                 className="h-auto flex flex-col items-start gap-2 p-4 hover:border-primary/50 transition-all"
                 onClick={() => onSelectTemplate(template.prompt)}
               >
-                <div className={`p-2 rounded-md bg-gradient-to-br ${template.color} text-white`}>
+                <div className={`p-2 rounded-md bg-gradient-to-br ${template.color} text-primary-foreground`}>
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="text-left">

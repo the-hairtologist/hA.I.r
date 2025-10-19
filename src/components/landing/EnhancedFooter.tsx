@@ -34,7 +34,7 @@ export const EnhancedFooter = () => {
           {/* Brand Column */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div className="w-11 h-11 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              <div className="w-11 h-11 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
                 <Scissors className="h-5 w-5 text-secondary-foreground" />
               </div>
               <span className="font-pixel text-xl text-background uppercase">hA.I.r</span>
@@ -47,7 +47,7 @@ export const EnhancedFooter = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 brutal-border bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center brutal-shadow-sm"
                 aria-label="Instagram"
               >
                 <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
@@ -56,7 +56,7 @@ export const EnhancedFooter = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 brutal-border bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center brutal-shadow-sm"
                 aria-label="Facebook"
               >
                 <Facebook className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-foreground" />
@@ -65,7 +65,7 @@ export const EnhancedFooter = () => {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 brutal-border bg-accent hover:bg-accent/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center brutal-shadow-sm"
                 aria-label="Twitter"
               >
                 <Twitter className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
@@ -74,7 +74,7 @@ export const EnhancedFooter = () => {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 sm:w-11 sm:h-11 border-4 border-black bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                className="w-10 h-10 sm:w-11 sm:h-11 brutal-border bg-secondary hover:bg-secondary/90 transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none flex items-center justify-center brutal-shadow-sm"
                 aria-label="YouTube"
               >
                 <Youtube className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-foreground" />
@@ -83,13 +83,13 @@ export const EnhancedFooter = () => {
             
             {/* App Badges */}
             <div className="flex flex-wrap gap-2 pt-3">
-              <div className="w-11 h-11 sm:w-12 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 brutal-border bg-accent flex items-center justify-center brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
                 <Smartphone className="h-4 w-4 sm:h-5 sm:w-5 text-accent-foreground" />
               </div>
-              <div className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+              <div className="px-3 sm:px-4 h-11 sm:h-12 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
                 <span className="font-pixel text-xs sm:text-sm text-secondary-foreground">iOS</span>
               </div>
-              <div className="px-3 sm:px-4 h-11 sm:h-12 border-4 border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+              <div className="px-3 sm:px-4 h-11 sm:h-12 brutal-border bg-accent flex items-center justify-center brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
                 <span className="font-pixel text-xs sm:text-sm text-accent-foreground">ANDROID</span>
               </div>
             </div>
@@ -151,12 +151,12 @@ export const EnhancedFooter = () => {
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-4 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-11 sm:h-12 bg-white text-foreground"
+                className="brutal-border rounded-none brutal-shadow-sm h-11 sm:h-12 bg-background text-foreground"
                 required
               />
               <Button 
                 type="submit" 
-                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11 sm:h-12"
+                className="w-full font-pixel text-xs uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 brutal-border brutal-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all rounded-none h-11 sm:h-12"
               >
                 <Mail className="h-4 w-4 mr-2" />
                 SUBSCRIBE

@@ -183,7 +183,7 @@ export const AdminFinancialDashboard = () => {
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg">
-          <Crown className="h-6 w-6 text-white" />
+          <Crown className="h-6 w-6 text-primary-foreground" />
         </div>
         <div>
           <h2 className="text-2xl font-bold">Financial Command Center</h2>

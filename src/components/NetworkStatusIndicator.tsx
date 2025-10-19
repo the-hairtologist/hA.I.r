@@ -78,7 +78,7 @@ export const NetworkStatusIndicator = () => {
       className={cn(
         'fixed bottom-4 right-4 z-50 flex items-center gap-2 px-4 py-2 rounded-lg shadow-lg backdrop-blur-sm transition-all',
         isOnline
-          ? 'bg-green-500/90 text-white'
+          ? 'bg-success/90 text-success-foreground'
           : 'bg-destructive/90 text-destructive-foreground'
       )}
       role="status"

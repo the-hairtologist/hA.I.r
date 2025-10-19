@@ -71,7 +71,7 @@ export const HairAnalysisPanel = ({ analysis }: HairAnalysisPanelProps) => {
           </div>
           <div className="relative h-8 bg-gradient-to-r from-gray-900 via-amber-700 to-yellow-200 rounded-full overflow-hidden">
             <div 
-              className="absolute top-0 h-full w-1 bg-white shadow-lg"
+              className="absolute top-0 h-full w-1 bg-background shadow-lg"
               style={{ left: `${(analysis.current_level / 10) * 100}%` }}
             >
               <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold bg-background px-2 py-1 rounded shadow-md">

@@ -73,7 +73,7 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
               {import.meta.env.DEV && this.state.error && (
                 <details className="text-xs opacity-70">
                   <summary className="cursor-pointer">Error Details (dev only)</summary>
-                  <pre className="mt-2 p-2 bg-black/10 rounded overflow-auto">
+                  <pre className="mt-2 p-2 bg-muted/50 rounded overflow-auto">
                     {this.state.error.toString()}
                   </pre>
                 </details>

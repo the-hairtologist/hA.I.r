@@ -446,7 +446,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
         >
           {saveMutation.isPending ? (
             <>
-              <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="h-4 w-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div>
               Saving...
             </>
           ) : (
