@@ -5197,10 +5197,6 @@ export type Database = {
         Args: { _client_id: string; _stylist_user_id: string }
         Returns: boolean
       }
-      trigger_appointment_reminders: {
-        Args: Record<PropertyKey, never>
-        Returns: Json
-      }
       user_is_client_of_stylist: {
         Args: { _stylist_id: string; _user_id: string }
         Returns: boolean
