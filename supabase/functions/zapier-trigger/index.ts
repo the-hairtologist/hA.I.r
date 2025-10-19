@@ -3,8 +3,64 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-zapier-signature",
 };
+
+// Input validation schema
+const VALID_EVENT_TYPES = [
+  'appointment.created',
+  'appointment.updated',
+  'appointment.cancelled',
+  'payment.received',
+  'client.created',
+  'review.created',
+];
+
+function validateInput(event: string, data: any): { valid: boolean; error?: string } {
+  // Validate event type
+  if (!event || typeof event !== 'string') {
+    return { valid: false, error: 'Event type is required and must be a string' };
+  }
+  
+  if (!VALID_EVENT_TYPES.includes(event)) {
+    return { valid: false, error: `Invalid event type. Must be one of: ${VALID_EVENT_TYPES.join(', ')}` };
+  }
+
+  // Validate data
+  if (!data || typeof data !== 'object') {
+    return { valid: false, error: 'Data is required and must be an object' };
+  }
+
+  // Validate data size (prevent DoS)
+  const dataSize = JSON.stringify(data).length;
+  if (dataSize > 100000) { // 100KB limit
+    return { valid: false, error: 'Data payload too large (max 100KB)' };
+  }
+
+  return { valid: true };
+}
+
+// Rate limiting (simple in-memory - for production use Redis/Upstash)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT = 100; // requests per minute
+const RATE_WINDOW = 60000; // 1 minute
+
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(identifier, { count: 1, resetTime: now + RATE_WINDOW });
+    return true;
+  }
+
+  if (record.count >= RATE_LIMIT) {
+    return false;
+  }
+
+  record.count++;
+  return true;
+}
 
 const WEBHOOK_TIMEOUT_MS = 10000; // 10 second timeout
 const MAX_RETRIES = 3;
@@ -68,13 +124,35 @@ serve(async (req) => {
   }
 
   try {
-    const { event, data, testMode } = await req.json();
-
-    if (!event || !data) {
-      throw new Error("Event type and data required");
+    // Rate limiting check
+    const clientIp = req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "unknown";
+    if (!checkRateLimit(clientIp)) {
+      console.warn(`[Zapier] Rate limit exceeded for ${clientIp}`);
+      return new Response(
+        JSON.stringify({ error: "Rate limit exceeded. Try again later." }),
+        { 
+          status: 429, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
     }
 
-    console.log("[Zapier] Triggering webhook:", event);
+    const { event, data, testMode } = await req.json();
+
+    // Validate input
+    const validation = validateInput(event, data);
+    if (!validation.valid) {
+      console.error("[Zapier] Validation failed:", validation.error);
+      return new Response(
+        JSON.stringify({ error: validation.error }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
+    }
+
+    console.log("[Zapier] Triggering webhook (validated):", event);
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",

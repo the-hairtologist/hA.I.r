@@ -102,7 +102,19 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     .filter(Boolean)
     .join("\n");
 
-  return cssText ? <style dangerouslySetInnerHTML={{ __html: cssText }} /> : null;
+  // Sanitize CSS to prevent XSS (defense-in-depth)
+  const sanitizedCSS = cssText
+    ? cssText
+        .replace(/javascript:/gi, '')
+        .replace(/<script/gi, '')
+        .replace(/<\/script>/gi, '')
+        .replace(/expression\(/gi, '')
+        .replace(/import\s+/gi, '')
+        .replace(/@import/gi, '')
+        .replace(/behavior:/gi, '')
+    : '';
+
+  return sanitizedCSS ? <style dangerouslySetInnerHTML={{ __html: sanitizedCSS }} /> : null;
 };
 
 const ChartTooltip = RechartsPrimitive.Tooltip;

@@ -140,23 +140,79 @@ serve(async (req) => {
 
 async function fetchUserContext(supabase: any, userId: string) {
   try {
-    // Fetch upcoming appointments
-    const { data: appointments } = await supabase
-      .from('appointments')
-      .select(`
-        id,
-        appointment_date,
-        status,
-        service_type,
-        notes,
-        stylist_profiles (
-          business_name
+    // Fetch client and stylist profile IDs first (prevents SQL injection)
+    const { data: clientProfiles } = await supabase
+      .from('client_profiles')
+      .select('id')
+      .eq('user_id', userId);
+
+    const { data: stylistProfiles } = await supabase
+      .from('stylist_profiles')
+      .select('id')
+      .eq('user_id', userId);
+
+    const clientIds = clientProfiles?.map((p: any) => p.id) || [];
+    const stylistIds = stylistProfiles?.map((p: any) => p.id) || [];
+
+    // Fetch appointments using parameterized queries
+    let appointments: any[] = [];
+
+    // Build OR condition safely by fetching separately and merging
+    if (clientIds.length > 0 || stylistIds.length > 0) {
+      const promises = [];
+      
+      if (clientIds.length > 0) {
+        promises.push(
+          supabase
+            .from('appointments')
+            .select(`
+              id,
+              appointment_date,
+              status,
+              service_type,
+              notes,
+              stylist_profiles (
+                business_name
+              )
+            `)
+            .in('client_id', clientIds)
+            .gte('appointment_date', new Date().toISOString())
+            .order('appointment_date', { ascending: true })
+            .limit(5)
+        );
+      }
+      
+      if (stylistIds.length > 0) {
+        promises.push(
+          supabase
+            .from('appointments')
+            .select(`
+              id,
+              appointment_date,
+              status,
+              service_type,
+              notes,
+              stylist_profiles (
+                business_name
+              )
+            `)
+            .in('stylist_id', stylistIds)
+            .gte('appointment_date', new Date().toISOString())
+            .order('appointment_date', { ascending: true })
+            .limit(5)
+        );
+      }
+
+      const results = await Promise.all(promises);
+      const allAppointments = results
+        .flatMap(result => result.data || [])
+        .sort((a: any, b: any) => 
+          new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime()
         )
-      `)
-      .or(`client_id.in.(select id from client_profiles where user_id='${userId}'),stylist_id.in.(select id from stylist_profiles where user_id='${userId}')`)
-      .gte('appointment_date', new Date().toISOString())
-      .order('appointment_date', { ascending: true })
-      .limit(5);
+        .slice(0, 5);
+
+      appointments = allAppointments;
+    }
 
     // Fetch services
     const { data: services } = await supabase
