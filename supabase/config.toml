@@ -15,9 +15,6 @@ verify_jwt = true
 [functions.predict-needs]
 verify_jwt = true
 
-[functions.automated-reminders]
-verify_jwt = false
-
 [functions.generate-formula]
 verify_jwt = true
 
@@ -133,10 +130,6 @@ verify_jwt = false
 verify_jwt = false
 
 # Cron Jobs - Automated Email System
-[functions.automated-reminders.schedule]
-enabled = true
-cron = "0 */2 * * *"  # Every 2 hours
-
 [functions.automated-appointment-followup.schedule]
 enabled = true
 cron = "0 9 * * *"  # Daily at 9 AM
