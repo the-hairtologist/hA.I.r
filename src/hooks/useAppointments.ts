@@ -130,6 +130,25 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
       toast.success('Appointment created successfully');
       log.info('Appointment created', 'useAppointments', { id: newAppointment.id });
 
+      // Auto-sync to calendar (non-blocking)
+      supabase.functions.invoke('sync-calendar-event', {
+        body: { appointment_id: newAppointment.id, action: 'create' }
+      }).catch(err => log.warn('Calendar sync failed', 'useAppointments', err));
+
+      // Trigger Zapier webhook (non-blocking)
+      supabase.functions.invoke('zapier-trigger', {
+        body: {
+          event: 'appointment.booked',
+          data: {
+            appointment_id: newAppointment.id,
+            client_name: data.client_id,
+            service_type: data.service_type,
+            appointment_date: data.appointment_date,
+            timestamp: new Date().toISOString()
+          }
+        }
+      }).catch(err => log.warn('Zapier trigger failed', 'useAppointments', err));
+
       return newAppointment;
     } catch (error) {
       handleError(error, 'Create Appointment');
@@ -153,6 +172,11 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
       toast.success('Appointment updated successfully');
       log.info('Appointment updated', 'useAppointments', { id });
+
+      // Auto-sync update to calendar (non-blocking)
+      supabase.functions.invoke('sync-calendar-event', {
+        body: { appointment_id: id, action: 'update' }
+      }).catch(err => log.warn('Calendar sync failed', 'useAppointments', err));
     } catch (error) {
       handleError(error, 'Update Appointment');
       throw error;
@@ -180,6 +204,11 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
       toast.success('Appointment cancelled');
       log.info('Appointment cancelled', 'useAppointments', { id });
+
+      // Delete from calendar (non-blocking)
+      supabase.functions.invoke('sync-calendar-event', {
+        body: { appointment_id: id, action: 'delete' }
+      }).catch(err => log.warn('Calendar sync failed', 'useAppointments', err));
     } catch (error) {
       handleError(error, 'Cancel Appointment');
       throw error;

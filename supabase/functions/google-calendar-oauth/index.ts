@@ -2,143 +2,119 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
-const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
-  console.log(`[GOOGLE-OAUTH] ${step}${detailsStr}`);
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const supabaseClient = createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+  );
+
   try {
-    logStep('Function started');
-
-    // Get Google OAuth credentials
-    const clientId = Deno.env.get('GOOGLE_CLIENT_ID');
-    const clientSecret = Deno.env.get('GOOGLE_CLIENT_SECRET');
+    const authHeader = req.headers.get("Authorization")!;
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token);
     
-    if (!clientId || !clientSecret) {
-      throw new Error('Google OAuth credentials not configured');
+    if (userError || !user) {
+      throw new Error("Unauthorized");
     }
 
-    // Initialize Supabase client
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    );
-
-    // Authenticate user
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      throw new Error('No authorization header provided');
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
+    const { code, redirect_uri } = await req.json();
     
-    if (userError) {
-      throw new Error(`Authentication error: ${userError.message}`);
-    }
-    
-    const user = userData.user;
-    if (!user) {
-      throw new Error('User not authenticated');
-    }
-
-    logStep('User authenticated', { userId: user.id });
-
-    // Handle OAuth callback or initial request
-    const url = new URL(req.url);
-    const code = url.searchParams.get('code');
-    const origin = req.headers.get('origin') || 'http://localhost:3000';
-
     if (!code) {
-      // Step 1: Generate OAuth URL
-      const redirectUri = `${Deno.env.get('SUPABASE_URL')}/functions/v1/google-calendar-oauth`;
-      
-      const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-      authUrl.searchParams.set('client_id', clientId);
-      authUrl.searchParams.set('redirect_uri', redirectUri);
-      authUrl.searchParams.set('response_type', 'code');
-      authUrl.searchParams.set('scope', 'https://www.googleapis.com/auth/calendar');
-      authUrl.searchParams.set('access_type', 'offline');
-      authUrl.searchParams.set('prompt', 'consent');
-      authUrl.searchParams.set('state', user.id); // Pass user ID in state
-
-      logStep('Generated OAuth URL');
-
-      return new Response(
-        JSON.stringify({ url: authUrl.toString() }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 200,
-        }
-      );
+      throw new Error("Authorization code required");
     }
 
-    // Step 2: Exchange code for tokens
-    const redirectUri = `${Deno.env.get('SUPABASE_URL')}/functions/v1/google-calendar-oauth`;
-    
-    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
+    const clientId = Deno.env.get("GOOGLE_CLIENT_ID");
+    const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET");
+
+    console.log("[Google OAuth] Exchanging code for tokens");
+
+    // Exchange authorization code for access token
+    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         code,
         client_id: clientId,
         client_secret: clientSecret,
-        redirect_uri: redirectUri,
-        grant_type: 'authorization_code',
+        redirect_uri: redirect_uri || `${req.headers.get("origin")}/integrations/calendar`,
+        grant_type: "authorization_code",
       }),
     });
 
     if (!tokenResponse.ok) {
-      throw new Error('Failed to exchange OAuth code for tokens');
+      const error = await tokenResponse.text();
+      console.error("[Google OAuth] Token exchange failed:", error);
+      throw new Error(`Token exchange failed: ${error}`);
     }
 
     const tokens = await tokenResponse.json();
-    logStep('Exchanged code for tokens');
+    console.log("[Google OAuth] Tokens received successfully");
 
-    // Store tokens in calendar_connections using store_calendar_token function
-    const { data: connectionData, error: storeError } = await supabaseClient.rpc(
-      'store_calendar_token',
-      {
+    // Store tokens using the security definer function
+    const { data: connectionId, error: storeError } = await supabaseClient
+      .rpc("store_calendar_token", {
         p_user_id: user.id,
-        p_provider: 'google',
+        p_provider: "google",
         p_access_token: tokens.access_token,
-        p_refresh_token: tokens.refresh_token || null,
+        p_refresh_token: tokens.refresh_token,
+      });
+
+    if (storeError) {
+      console.error("[Google OAuth] Failed to store tokens:", storeError);
+      throw storeError;
+    }
+
+    // Get calendar list to find primary calendar
+    const calendarResponse = await fetch(
+      "https://www.googleapis.com/calendar/v3/users/me/calendarList",
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.access_token}`,
+        },
       }
     );
 
-    if (storeError) {
-      throw new Error(`Failed to store tokens: ${storeError.message}`);
+    if (calendarResponse.ok) {
+      const calendars = await calendarResponse.json();
+      const primaryCalendar = calendars.items?.find((cal: any) => cal.primary);
+      
+      if (primaryCalendar) {
+        // Update connection with calendar ID
+        await supabaseClient
+          .from("calendar_connections")
+          .update({ calendar_id: primaryCalendar.id })
+          .eq("id", connectionId);
+      }
     }
 
-    logStep('Tokens stored successfully', { connectionId: connectionData });
+    console.log("[Google OAuth] Calendar connected successfully");
 
-    // Redirect back to app
-    return new Response(null, {
-      status: 302,
-      headers: {
-        ...corsHeaders,
-        'Location': `${origin}/settings?calendar_connected=true`,
-      },
-    });
+    return new Response(
+      JSON.stringify({ 
+        success: true,
+        connection_id: connectionId,
+        message: "Calendar connected successfully" 
+      }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      }
+    );
   } catch (error) {
+    console.error("[Google OAuth] Error:", error);
     const errorMessage = error instanceof Error ? error.message : String(error);
-    logStep('ERROR in google-calendar-oauth', { message: errorMessage });
-    
     return new Response(
       JSON.stringify({ error: errorMessage }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
       }
     );

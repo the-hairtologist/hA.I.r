@@ -402,9 +402,14 @@ const Integrations = () => {
   }), []);
 
   const handleConnect = async (integration: Integration) => {
-    // Direct navigation for Zapier to dedicated setup page
+    // Direct navigation for specialized setup pages
     if (integration.id === "zapier") {
       navigate("/integrations/zapier");
+      return;
+    }
+    
+    if (integration.id === "google-calendar") {
+      navigate("/integrations/calendar");
       return;
     }
 

@@ -148,3 +148,15 @@ cron = "0 10 * * *"  # Daily at 10 AM
 
 [functions.support-chat]
 verify_jwt = true
+
+[functions.google-calendar-oauth]
+verify_jwt = true
+
+[functions.sync-calendar-event]
+verify_jwt = false
+
+[functions.zapier-trigger]
+verify_jwt = false
+
+[functions.generate-insights]
+verify_jwt = true

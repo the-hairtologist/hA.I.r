@@ -18,6 +18,7 @@ const StylistDiscovery = lazyWithRetry(() => import('@/pages/StylistDiscovery'))
 const Formulas = lazyWithRetry(() => import('@/pages/Formulas'));
 const Appointments = lazyWithRetry(() => import('@/pages/Appointments'));
 const BookAppointment = lazyWithRetry(() => import('@/pages/BookAppointment'));
+const IntegrationsCalendar = lazyWithRetry(() => import('@/pages/IntegrationsCalendar'));
 const StylistProfile = lazyWithRetry(() => import('@/pages/StylistProfile'));
 const ClientRequests = lazyWithRetry(() => import('@/pages/ClientRequests'));
 const ClientDiscovery = lazyWithRetry(() => import('@/pages/ClientDiscovery'));
@@ -162,6 +163,10 @@ export const AppRoutes = () => (
     <Route
       path="/integrations/zapier"
       element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><ZapierIntegration /></ProtectedRoute>}
+    />
+    <Route
+      path="/integrations/calendar"
+      element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><IntegrationsCalendar /></ProtectedRoute>}
     />
     <Route
       path="/formulas"
