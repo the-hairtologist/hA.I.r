@@ -88,7 +88,7 @@ serve(async (req: Request) => {
       }
 
       await resend.emails.send({
-        from: "hA.I.r Notifications <notifications@hair-ai.app>",
+        from: "hA.I.r Notifications <onboarding@resend.dev>",
         to: [notificationData.stylistEmail],
         subject: `🔔 New Waitlist Request from ${notificationData.clientName}`,
         html: `
@@ -125,7 +125,7 @@ serve(async (req: Request) => {
       }
 
       await resend.emails.send({
-        from: "hA.I.r Notifications <notifications@hair-ai.app>",
+        from: "hA.I.r Notifications <onboarding@resend.dev>",
         to: [notificationData.stylistEmail],
         subject: `ℹ️ Waitlist Request Cancelled - ${notificationData.clientName}`,
         html: `
