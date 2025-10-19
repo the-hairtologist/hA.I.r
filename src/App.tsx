@@ -64,6 +64,31 @@ const RoleSwitchProtection = lazy(() =>
     .catch(() => ({ default: () => null }))
 );
 
+// New production-ready components
+const CoreWebVitals = lazy(() => 
+  import("@/components/CoreWebVitals")
+    .then(m => ({ default: m.CoreWebVitals }))
+    .catch(() => ({ default: () => null }))
+);
+
+const NetworkStatusIndicator = lazy(() => 
+  import("@/components/NetworkStatusIndicator")
+    .then(m => ({ default: m.NetworkStatusIndicator }))
+    .catch(() => ({ default: () => null }))
+);
+
+const ServiceWorkerUpdate = lazy(() => 
+  import("@/components/ServiceWorkerUpdate")
+    .then(m => ({ default: m.ServiceWorkerUpdate }))
+    .catch(() => ({ default: () => null }))
+);
+
+const A11yTester = lazy(() => 
+  import("@/components/A11yTester")
+    .then(m => ({ default: m.A11yTester }))
+    .catch(() => ({ default: () => null }))
+);
+
 // Optimized QueryClient
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -118,6 +143,22 @@ const App = () => {
                     <CookieConsent />
                     {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                     <GlobalAnnouncer />
+                    {/* Core Web Vitals monitoring */}
+                    <ReactSuspense fallback={null}>
+                      <CoreWebVitals />
+                    </ReactSuspense>
+                    {/* Network status indicator */}
+                    <ReactSuspense fallback={null}>
+                      <NetworkStatusIndicator />
+                    </ReactSuspense>
+                    {/* Service worker update notifications */}
+                    <ReactSuspense fallback={null}>
+                      <ServiceWorkerUpdate />
+                    </ReactSuspense>
+                    {/* Accessibility tester (dev only) */}
+                    <ReactSuspense fallback={null}>
+                      <A11yTester />
+                    </ReactSuspense>
                     {/* Performance monitoring (dev only) */}
                     <ReactSuspense fallback={null}>
                       <PerformanceMonitor />
