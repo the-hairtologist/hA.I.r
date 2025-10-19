@@ -88,6 +88,9 @@ const Analytics = lazyWithRetry(() => import('@/pages/Analytics'));
 const Marketplace = lazyWithRetry(() => import('@/pages/Marketplace'));
 const GiftCards = lazyWithRetry(() => import('@/pages/GiftCards'));
 const TeamSchedule = lazyWithRetry(() => import('@/pages/TeamSchedule'));
+const CRMDashboard = lazyWithRetry(() => import('@/pages/CRMDashboard'));
+const SalesDashboard = lazyWithRetry(() => import('@/pages/SalesDashboard'));
+const SupportChat = lazyWithRetry(() => import('@/pages/SupportChat'));
 
 export const AppRoutes = () => (
   <>
@@ -131,6 +134,9 @@ export const AppRoutes = () => (
     <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
     <Route path="/gift-cards" element={<ProtectedRoute><GiftCards /></ProtectedRoute>} />
     <Route path="/team" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><TeamSchedule /></ProtectedRoute>} />
+    <Route path="/crm" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><CRMDashboard /></ProtectedRoute>} />
+    <Route path="/sales-dashboard" element={<ProtectedRoute allowedRoles={['stylist', 'admin']}><SalesDashboard /></ProtectedRoute>} />
+    <Route path="/support-chat" element={<ProtectedRoute><SupportChat /></ProtectedRoute>} />
 
     {/* Stylist Routes */}
     <Route

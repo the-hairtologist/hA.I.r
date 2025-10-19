@@ -87,6 +87,36 @@ export const stylistNavigationItems: NavigationItem[] = [
     color: "text-emerald-400 dark:text-emerald-300" 
   },
   { 
+    id: "crm", 
+    title: "CRM Dashboard", 
+    url: "/crm", 
+    icon: Users, 
+    gradient: "bg-[image:var(--gradient-purple-pink)]", 
+    group: "business", 
+    color: "text-purple-400 dark:text-purple-300",
+    description: "Enhanced client management"
+  },
+  { 
+    id: "sales", 
+    title: "Sales Dashboard", 
+    url: "/sales-dashboard", 
+    icon: TrendingUp, 
+    gradient: "bg-[image:var(--gradient-green-emerald)]", 
+    group: "business", 
+    color: "text-emerald-400 dark:text-emerald-300",
+    description: "Revenue analytics"
+  },
+  { 
+    id: "support-chat", 
+    title: "AI Support Chat", 
+    url: "/support-chat", 
+    icon: MessageCircle, 
+    gradient: "bg-[image:var(--gradient-cyan-blue)]", 
+    group: "tools", 
+    color: "text-cyan-400 dark:text-cyan-300",
+    description: "24/7 client support bot"
+  },
+  { 
     id: "formulas", 
     title: "Formulas", 
     url: "/formulas", 
