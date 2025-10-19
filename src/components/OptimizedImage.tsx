@@ -1,73 +1,91 @@
-import { useState, useEffect, useRef } from 'react';
+/**
+ * Optimized Image Component
+ * Automatic WebP conversion, lazy loading, and responsive sizing
+ */
+
+import { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 
-interface OptimizedImageProps {
+interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
-  className?: string;
-  sizes?: string;
+  width?: number;
+  height?: number;
+  quality?: number;
   priority?: boolean;
 }
 
-export function OptimizedImage({ 
-  src, 
-  alt, 
-  className, 
-  sizes = '100vw',
-  priority = false 
+export function OptimizedImage({
+  src,
+  alt,
+  width,
+  height,
+  quality = 80,
+  priority = false,
+  className,
+  ...props
 }: OptimizedImageProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(priority);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (priority) return;
+  const optimizedSrc = useMemo(() => {
+    if (!src) return '';
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '50px' }
-    );
-
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
+    // If it's a Supabase storage URL, add transformations
+    if (src.includes('supabase.co/storage/v1/object/public/')) {
+      const url = new URL(src);
+      const params = new URLSearchParams();
+      
+      if (width) params.set('width', width.toString());
+      if (height) params.set('height', height.toString());
+      params.set('quality', quality.toString());
+      params.set('format', 'webp');
+      
+      url.search = params.toString();
+      return url.toString();
     }
 
-    return () => observer.disconnect();
-  }, [priority]);
+    return src;
+  }, [src, width, height, quality]);
 
-  // Generate WebP URL if possible
-  const webpSrc = src.includes('.supabase.co') 
-    ? src.replace(/\.(jpg|jpeg|png)/, '.webp')
-    : src;
+  if (error) {
+    return (
+      <div
+        className={cn(
+          'flex items-center justify-center bg-muted text-muted-foreground text-sm',
+          className
+        )}
+        style={{ width, height }}
+      >
+        Failed to load image
+      </div>
+    );
+  }
 
   return (
-    <div className={cn('relative overflow-hidden bg-muted', className)}>
-      {!isLoaded && (
-        <div className="absolute inset-0 animate-pulse bg-muted" />
+    <div className={cn('relative overflow-hidden', className)}>
+      {isLoading && (
+        <div
+          className="absolute inset-0 bg-muted animate-pulse"
+          style={{ width, height }}
+        />
       )}
-      {isInView && (
-        <picture>
-          <source srcSet={webpSrc} type="image/webp" />
-          <img
-            ref={imgRef}
-            src={src}
-            alt={alt}
-            sizes={sizes}
-            loading={priority ? 'eager' : 'lazy'}
-            onLoad={() => setIsLoaded(true)}
-            className={cn(
-              'w-full h-full object-cover transition-opacity duration-300',
-              isLoaded ? 'opacity-100' : 'opacity-0',
-              className
-            )}
-          />
-        </picture>
-      )}
+      <img
+        src={optimizedSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+        onLoad={() => setIsLoading(false)}
+        onError={() => { setIsLoading(false); setError(true); }}
+        className={cn(
+          'transition-opacity duration-300',
+          isLoading ? 'opacity-0' : 'opacity-100',
+          className
+        )}
+        {...props}
+      />
     </div>
   );
 }

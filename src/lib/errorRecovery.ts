@@ -188,6 +188,63 @@ class OfflineBuffer {
 export const offlineBuffer = new OfflineBuffer();
 
 /**
+ * RLS Error Detection Patterns
+ */
+export const RLS_ERROR_PATTERNS = {
+  policy_violation: /new row violates row-level security policy|RLS policy|permission denied/i,
+  missing_policy: /no policy exists|relation.*does not exist/i,
+  auth_required: /JWT expired|invalid JWT|not authenticated/i,
+};
+
+/**
+ * Check if error is RLS-related
+ */
+export function isRLSError(error: AppError): boolean {
+  const message = error.message || '';
+  return Object.values(RLS_ERROR_PATTERNS).some(pattern => pattern.test(message));
+}
+
+/**
+ * Network-aware error checking
+ */
+export function shouldRetryError(error: AppError): boolean {
+  // Check network status first
+  if (!navigator.onLine) {
+    offlineBuffer.save(createQueuedRequest(error));
+    toast.info('No connection. Will sync when online.');
+    return false;
+  }
+  
+  // Don't retry RLS errors (they won't fix themselves)
+  if (isRLSError(error)) {
+    return false;
+  }
+  
+  return isRetryableError(error);
+}
+
+function isRetryableError(error: AppError): boolean {
+  const retryableCodes = ['network_error', 'timeout', 'rate_limit'];
+  const retryableStatuses = [408, 429, 500, 502, 503, 504];
+  
+  return (
+    retryableCodes.includes(error.code || '') ||
+    retryableStatuses.includes(error.statusCode || 0)
+  );
+}
+
+function createQueuedRequest(error: AppError): QueuedRequest {
+  return {
+    id: `offline_${Date.now()}`,
+    operation: async () => {
+      throw error; // Will be retried when online
+    },
+    priority: 2,
+    enqueuedAt: Date.now(),
+  };
+}
+
+/**
  * Determine if an error should attempt automatic recovery
  */
 export function shouldAttemptRecovery(error: AppError, context?: ErrorRecoveryContext): boolean {
@@ -203,6 +260,17 @@ export function shouldAttemptRecovery(error: AppError, context?: ErrorRecoveryCo
  * Get the appropriate recovery strategy for an error
  */
 export function getRecoveryStrategy(error: AppError): RecoveryStrategy | null {
+  // Check for RLS errors first - special handling
+  if (isRLSError(error)) {
+    return {
+      action: 'show_permission_error',
+      config: { 
+        message: 'You don\'t have permission to access this data',
+        showSupport: true 
+      }
+    } as any;
+  }
+
   // Try to match by error code
   if (error.code && RECOVERY_STRATEGIES[error.code]) {
     return RECOVERY_STRATEGIES[error.code];

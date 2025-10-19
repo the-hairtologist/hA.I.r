@@ -13,7 +13,7 @@ serve(async (req) => {
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const authHeader = req.headers.get('Authorization')!;
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
@@ -23,9 +23,10 @@ serve(async (req) => {
     
     const supabase = createClient(supabaseUrl, supabaseKey, {
       global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false }
     });
 
-    const { message, conversationHistory } = await req.json();
+    const { message } = await req.json();
     
     // Get user info
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -34,16 +35,26 @@ serve(async (req) => {
       throw new Error('Authentication required');
     }
 
+    // Load conversation history from database
+    const { data: conversation, error: convError } = await supabase
+      .from('ai_conversations')
+      .select('id, messages, context')
+      .eq('user_id', user.id)
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
     // Fetch user context
     const context = await fetchUserContext(supabase, user.id);
 
     // Build system prompt with context
     const systemPrompt = buildSystemPrompt(context);
 
-    // Call Lovable AI
+    // Build messages array with history
+    const previousMessages = conversation?.messages || [];
     const messages = [
       { role: 'system', content: systemPrompt },
-      ...(conversationHistory || []),
+      ...previousMessages,
       { role: 'user', content: message }
     ];
 
@@ -69,6 +80,35 @@ serve(async (req) => {
 
     const aiData = await aiResponse.json();
     const response = aiData.choices[0]?.message?.content || 'I apologize, but I need more information to help you.';
+
+    // Save conversation to database
+    const updatedMessages = [
+      ...previousMessages,
+      { role: 'user', content: message, timestamp: new Date().toISOString() },
+      { role: 'assistant', content: response, timestamp: new Date().toISOString() }
+    ];
+
+    // Keep only last 20 messages to avoid token limits
+    const trimmedMessages = updatedMessages.slice(-20);
+
+    if (conversation) {
+      await supabase
+        .from('ai_conversations')
+        .update({ 
+          messages: trimmedMessages,
+          context: context,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', conversation.id);
+    } else {
+      await supabase
+        .from('ai_conversations')
+        .insert({
+          user_id: user.id,
+          messages: trimmedMessages,
+          context: context
+        });
+    }
 
     return new Response(
       JSON.stringify({ response }),
