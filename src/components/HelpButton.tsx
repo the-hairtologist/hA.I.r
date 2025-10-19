@@ -26,6 +26,13 @@ export const HelpButton = () => {
 
   const articles: HelpArticle[] = [
     {
+      id: "visual-edits",
+      title: "💡 Using Visual Edits (FREE)",
+      description: "Customize text, colors, and fonts instantly without using AI credits",
+      category: "Getting Started",
+      url: "https://docs.lovable.dev/features/visual-edit",
+    },
+    {
       id: "add-client",
       title: "How to Add Your First Client",
       description: "Step-by-step guide to adding clients and building their hair history",
@@ -135,8 +142,10 @@ export const HelpButton = () => {
                       key={article.id}
                       className="brutal-border hover:border-primary/40 transition-colors cursor-pointer"
                       onClick={() => {
-                        // Article detail view available on click
                         haptic.tap();
+                        if (article.url) {
+                          window.open(article.url, '_blank', 'noopener,noreferrer');
+                        }
                       }}
                     >
                       <CardContent className="p-4">

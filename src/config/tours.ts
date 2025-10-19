@@ -44,6 +44,11 @@ export const tours: Record<string, TourConfig> = {
         content: '⚙️ Customize your profile, notifications, and preferences in Settings.',
         placement: 'left',
       },
+      {
+        target: 'body',
+        content: '💡 Pro Tip: Use Visual Edits to customize text, colors, and fonts instantly for FREE! Click the Edit button in the chat box, then click any element to modify it without using AI credits.',
+        placement: 'center',
+      },
     ],
   },
   
