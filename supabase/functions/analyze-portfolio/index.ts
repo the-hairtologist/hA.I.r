@@ -110,6 +110,9 @@ Be specific, actionable, and encouraging. Reference specific photos by number.`;
     }
 
     // Call Gemini 2.5 Pro with long context
+    // Use Pro only for large portfolios (>20 images), Flash for most cases
+    const modelToUse = messages.length > 25 ? 'google/gemini-2.5-pro' : 'google/gemini-2.5-flash';
+    
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -117,7 +120,7 @@ Be specific, actionable, and encouraging. Reference specific photos by number.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-pro', // Long context model
+        model: modelToUse, // Adaptive based on portfolio size
         messages,
         max_tokens: 2000,
       }),

@@ -26,7 +26,7 @@ serve(async (req) => {
 
     console.log('Analyzing hair photo with Gemini Pro (vision model)...');
 
-    // Use google/gemini-2.5-pro for vision analysis
+    // Use Flash for vision (Pro only if complex damage analysis needed)
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -34,7 +34,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-pro',
+        model: 'google/gemini-2.5-flash', // 70% cheaper than Pro, still has vision
         messages: [
           {
             role: 'system',
