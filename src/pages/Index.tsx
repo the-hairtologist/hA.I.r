@@ -95,25 +95,6 @@ const Index = () => {
           <ScrollIndicator />
         </section>
 
-        {/* Trust Section - Social Proof */}
-        <section className="py-8 xs:py-10 sm:py-12 bg-background border-y-[3px] border-black">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-6 xs:mb-8">
-              <p className="font-pixel text-xs xs:text-sm text-foreground/70 uppercase tracking-wider animate-fade-in">
-                🏆 TRUSTED BY 5,000+ STYLISTS
-              </p>
-            </div>
-            <div className="flex flex-wrap justify-center items-center gap-4 xs:gap-6 sm:gap-8 animate-fade-in" style={{ animationDelay: '100ms' }}>
-              {/* Placeholder trust badges - brutal style */}
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="border-[3px] border-foreground p-3 xs:p-4 bg-muted hover:bg-accent/10 transition-colors duration-300 min-w-[80px] xs:min-w-[100px] h-14 xs:h-16 flex items-center justify-center">
-                  <span className="font-pixel text-[10px] xs:text-xs text-foreground/50">SALON {i}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* How It Works - Clean white background */}
         <section className="py-20 bg-background" style={{
           backgroundImage: `
@@ -146,12 +127,8 @@ const Index = () => {
           <MinimalFAQ />
         </section>
 
-        {/* Final Value Proposition */}
-        <FinalValueProp />
-      </main>
-
-      {/* Stats Section - Yellow background for excitement */}
-      <section className="py-10 xs:py-12 sm:py-14 md:py-16 bg-accent border-t-[3px] xs:border-t-[4px] border-black" style={{
+        {/* Stats Section - Yellow background for excitement */}
+        <section className="py-10 xs:py-12 sm:py-14 md:py-16 bg-accent border-t-[3px] xs:border-t-[4px] border-black" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -174,7 +151,11 @@ const Index = () => {
             <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} />
           </div>
         </div>
-      </section>
+        </section>
+
+        {/* Final Value Proposition */}
+        <FinalValueProp />
+      </main>
 
       <EnhancedFooter />
     </div>
