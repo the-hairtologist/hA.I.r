@@ -1733,23 +1733,25 @@ const Settings = () => {
                   Restart Tutorial
                 </Button>
                 
-                {/* Developer Mode Toggle */}
-                <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="dev-mode" className="font-semibold flex items-center gap-2">
-                      <Code className="h-4 w-4" />
-                      Developer Mode
-                    </Label>
-                    <p className="text-sm text-muted-foreground">
-                      Show performance metrics and debug info
-                    </p>
+                {/* Developer Mode Toggle - Stylist & Admin Only */}
+                {(userRole === "stylist" || roles.includes("admin")) && (
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="dev-mode" className="font-semibold flex items-center gap-2">
+                        <Code className="h-4 w-4" />
+                        Developer Mode
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        Show performance metrics and debug info
+                      </p>
+                    </div>
+                    <ThemeSwitch
+                      id="dev-mode"
+                      checked={isDevMode}
+                      onCheckedChange={toggleDevMode}
+                    />
                   </div>
-                  <ThemeSwitch
-                    id="dev-mode"
-                    checked={isDevMode}
-                    onCheckedChange={toggleDevMode}
-                  />
-                </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
