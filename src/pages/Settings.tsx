@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code, Sliders } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code, Sliders, Activity } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
@@ -31,12 +31,16 @@ import { useDevMode } from "@/hooks/useDevMode";
 const Settings = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading } = useUserRole(user?.id);
+  const { roles, loading: roleLoading, isAdmin, isStylist } = useUserRole(user?.id);
   
   const [loading, setLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
+  
+  // Determine effective role for UI display
+  const isAdminUser = roles.includes('admin');
+  const isStylistUser = roles.includes('stylist') || isAdminUser; // Admins get stylist features
   const [isSaving, setIsSaving] = useState(false);
   const { theme, setTheme } = useTheme();
   const { isDevMode, toggleDevMode } = useDevMode();
@@ -458,48 +462,51 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className={cn("grid w-full", userRole === "stylist" ? "grid-cols-7" : "grid-cols-6")}>
-            <TabsTrigger value="profile" className="text-xs sm:text-sm">
-              <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+          <TabsList className={cn(
+            "grid w-full gap-1",
+            isStylistUser ? "grid-cols-5 sm:grid-cols-7" : "grid-cols-4 sm:grid-cols-4"
+          )}>
+            <TabsTrigger value="profile" className="text-xs sm:text-sm px-2">
+              <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
               <span className="hidden sm:inline">Profile</span>
             </TabsTrigger>
-            <TabsTrigger value="account" className="text-xs sm:text-sm">
-              <Shield className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Account</span>
-            </TabsTrigger>
-            <TabsTrigger value="security" className="text-xs sm:text-sm">
-              <Lock className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+            <TabsTrigger value="security" className="text-xs sm:text-sm px-2">
+              <Lock className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
               <span className="hidden sm:inline">Security</span>
             </TabsTrigger>
-            <TabsTrigger value="notifications" className="text-xs sm:text-sm">
-              <Bell className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+            <TabsTrigger value="notifications" className="text-xs sm:text-sm px-2">
+              <Bell className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
               <span className="hidden sm:inline">Alerts</span>
             </TabsTrigger>
-            <TabsTrigger value="ai-systems" className="text-xs sm:text-sm">
-              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-              <span className="hidden sm:inline">AI</span>
-            </TabsTrigger>
-            {userRole === "stylist" && (
-              <TabsTrigger value="zapier" className="text-xs sm:text-sm">
-                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Zapier</span>
-              </TabsTrigger>
+            {isStylistUser && (
+              <>
+                <TabsTrigger value="business" className="text-xs sm:text-sm px-2">
+                  <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
+                  <span className="hidden sm:inline">Business</span>
+                </TabsTrigger>
+                <TabsTrigger value="ai-systems" className="text-xs sm:text-sm px-2">
+                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
+                  <span className="hidden sm:inline">AI</span>
+                </TabsTrigger>
+                <TabsTrigger value="integrations" className="text-xs sm:text-sm px-2">
+                  <Activity className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
+                  <span className="hidden sm:inline">Integrations</span>
+                </TabsTrigger>
+              </>
             )}
-            <TabsTrigger value="preferences" className="text-xs sm:text-sm">
-              <Sliders className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Prefs</span>
+            <TabsTrigger value="preferences" className="text-xs sm:text-sm px-2">
+              <Sliders className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
+              <span className="hidden sm:inline">App</span>
             </TabsTrigger>
           </TabsList>
 
-          {/* Profile Tab */}
+          {/* Profile Tab - Essential Info Only */}
           <TabsContent value="profile" className="space-y-6">
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
-                <CardTitle>Profile Information</CardTitle>
+                <CardTitle>Personal Profile</CardTitle>
                 <CardDescription>
-                  {userRole === "stylist" 
-                    ? "Manage your business profile and professional details"
-                    : "Manage your personal profile"}
+                  Your basic information and public profile
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
