@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Scissors, Calendar, Palette, Smartphone } from "lucide-react";
+import { useABTest } from "@/hooks/useABTest";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
@@ -13,6 +14,7 @@ import { FinalValueProp } from "@/components/landing/FinalValueProp";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { config } = useABTest();
 
   return (
     <div className="min-h-screen bg-background scroll-smooth">
@@ -61,11 +63,13 @@ const Index = () => {
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
             <div className="max-w-4xl mx-auto space-y-4 xxs:space-y-6 xs:space-y-8">
               <h1 className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-accent leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-4 break-words">
-                STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
+                {config.hero.headline.split(' ').map((word, i, arr) => (
+                  i < arr.length / 2 ? word + ' ' : (i === Math.floor(arr.length / 2) ? <><br className="hidden xxs:block" /><span className="xxs:hidden"> </span>{word} </> : word + ' ')
+                ))}
               </h1>
               
               <p className="text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl font-sans text-primary-foreground max-w-3xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-3 xs:px-4 break-words" style={{ animationDelay: '100ms' }}>
-                Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
+                {config.hero.subheadline}
               </p>
               
               <div className="pt-3 xxs:pt-4 xs:pt-6 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
@@ -74,12 +78,12 @@ const Index = () => {
                   onClick={() => navigate("/auth")} 
                   className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-[3px] xxs:border-[4px] xs:border-[4px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] xxs:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xs:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xxs:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] xs:hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                 >
-                  START FREE TRIAL
+                  {config.cta.primary}
                 </Button>
               </div>
               
               <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base font-sans text-primary-foreground/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
-                No Credit Card • Start In Seconds
+                {config.cta.secondary}
               </p>
 
               {/* Product Demo Mockup */}

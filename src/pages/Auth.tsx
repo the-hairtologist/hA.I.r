@@ -18,6 +18,7 @@ import { FormFieldError } from "@/components/FormFieldError";
 import { eventTracker } from "@/lib/analytics/eventTracker";
 import { PasswordStrength } from "@/components/PasswordStrength";
 import { signInWithGoogle } from "@/lib/api/auth";
+import { trackConversion } from "@/lib/abTesting";
 
 type AuthState = {
   email: string;
@@ -130,6 +131,9 @@ const Auth = () => {
 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not found after signup");
+
+      // Track A/B test conversion
+      trackConversion();
 
       // User will be prompted to select role after successful signup
       toast.success("Welcome to hA.I.r! Let's get you set up.");
