@@ -63,13 +63,13 @@ export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
           
           <div>
             <p className={cn(
-              "text-sm font-display font-semibold mb-1",
+              "text-[10px] xs:text-xs font-pixel uppercase mb-1 tracking-wider",
               gradient ? "text-primary-foreground/90" : "text-muted-foreground"
             )}>
               {label}
             </p>
             <p className={cn(
-              "text-3xl font-display font-bold transition-all duration-300",
+              "text-2xl xs:text-3xl font-pixel transition-all duration-300",
               "group-hover:scale-105 origin-left",
               gradient ? "text-primary-foreground" : "text-foreground"
             )}>

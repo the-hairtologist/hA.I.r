@@ -169,7 +169,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           />
 
           {/* Desktop Header */}
-          <header className={`hidden lg:flex sticky top-0 z-40 border-b-3 lg:border-b-4 ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm shadow-[0_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
+          <header className={`hidden lg:flex sticky top-0 z-40 border-b-[3px] lg:border-b-[4px] ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle shadow-[0_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
             <div className="flex h-14 lg:h-16 items-center gap-2 lg:gap-4 px-3 lg:px-4 w-full">
               {/* CRITICAL: Always-visible sidebar trigger */}
               <SidebarTrigger className="h-9 w-9" />
@@ -179,7 +179,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 className="flex items-center gap-1.5 lg:gap-2 hover:opacity-80 transition-opacity"
               >
                 <Scissors className="h-5 w-5 lg:h-6 lg:w-6 text-primary" />
-                <h1 className="text-lg lg:text-xl font-bold font-pixel">hA.I.r</h1>
+                <h1 className="text-lg lg:text-xl font-pixel uppercase tracking-wider">hA.I.r</h1>
               </button>
 
               <div className="ml-auto flex items-center gap-1.5 md:gap-2 lg:gap-3">

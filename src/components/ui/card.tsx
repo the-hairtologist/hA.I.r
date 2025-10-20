@@ -8,7 +8,7 @@ const cardVariants = cva(
     variants: {
       variant: {
         brutal: "border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1",
-        glass: "glass-brutal backdrop-blur-xl shadow-lg hover:shadow-xl",
+        glass: "brutal-glass-card shadow-lg hover:shadow-xl",
         elevated: "border border-border shadow-lg hover:shadow-2xl hover:-translate-y-0.5",
         flat: "border border-border hover:border-primary/50",
       },
@@ -39,7 +39,7 @@ CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn("text-2xl font-pixel leading-none tracking-tight", className)} {...props} />
+    <h3 ref={ref} className={cn("text-lg sm:text-xl font-pixel uppercase leading-tight tracking-wider", className)} {...props} />
   ),
 );
 CardTitle.displayName = "CardTitle";

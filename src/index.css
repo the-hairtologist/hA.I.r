@@ -401,6 +401,26 @@ All colors MUST be HSL.
     --security-medium: 45 93% 47%;
     --security-low: 217 91% 60%;
     --security-success: 142 76% 36%;
+    
+    /* ============================================ */
+    /* HYBRID BRUTALISM SYSTEM */
+    /* Combining Glass Aesthetics with Brutal Accents */
+    /* ============================================ */
+    
+    /* Grid Textures (subtle for backgrounds) */
+    --grid-texture-sm: 
+      linear-gradient(90deg, transparent 0%, hsl(var(--foreground) / 0.02) 50%, transparent 100%),
+      linear-gradient(0deg, transparent 0%, hsl(var(--foreground) / 0.02) 50%, transparent 100%);
+    --grid-texture-md: 
+      linear-gradient(90deg, transparent 0%, hsl(var(--foreground) / 0.03) 50%, transparent 100%),
+      linear-gradient(0deg, transparent 0%, hsl(var(--foreground) / 0.03) 50%, transparent 100%);
+    --grid-size-sm: 6px 6px;
+    --grid-size-md: 8px 8px;
+    
+    /* Hybrid Brutal Card (glass + borders) */
+    --brutal-glass-bg: hsl(var(--card) / 0.8);
+    --brutal-glass-border: var(--brutal-border-standard);
+    --brutal-glass-blur: 12px;
   }
 
   .dark {
@@ -1620,6 +1640,94 @@ All colors MUST be HSL.
   /* Brutalist Card - Complete pattern */
   .brutal-card {
     @apply border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl bg-card;
+  }
+  
+  /* ============================================ */
+  /* HYBRID BRUTALISM UTILITIES */
+  /* Glass Morphism + Brutal Accents */
+  /* ============================================ */
+  
+  /* Grid Textures for Backgrounds */
+  .brutal-grid-subtle {
+    background-image: var(--grid-texture-sm);
+    background-size: var(--grid-size-sm);
+  }
+  
+  .brutal-grid {
+    background-image: var(--grid-texture-md);
+    background-size: var(--grid-size-md);
+  }
+  
+  /* Hybrid Glass Cards - Backdrop blur + brutal borders */
+  .brutal-glass-card {
+    @apply bg-card/80 backdrop-blur-xl border-[2px] sm:border-[3px] border-border/50;
+  }
+  
+  .brutal-glass-card-interactive {
+    @apply brutal-glass-card transition-all duration-300;
+    box-shadow: var(--brutal-shadow-sm);
+  }
+  
+  .brutal-glass-card-interactive:hover {
+    @apply border-primary/50;
+    box-shadow: var(--brutal-shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  .brutal-glass-card-interactive:active {
+    box-shadow: var(--brutal-shadow-xs);
+    transform: translateY(0);
+  }
+  
+  /* Brutal Headers with Grid Background */
+  .brutal-header-section {
+    @apply brutal-grid-subtle border-b-[3px] sm:border-b-[4px] border-foreground;
+    box-shadow: 0 var(--brutal-border-standard) 0px 0px hsl(var(--foreground));
+  }
+  
+  /* Hybrid Buttons - Glass with brutal shadow */
+  .brutal-button-hybrid {
+    @apply bg-card/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-foreground;
+    box-shadow: var(--brutal-shadow-sm);
+    transition: all 200ms ease;
+  }
+  
+  .brutal-button-hybrid:hover {
+    box-shadow: var(--brutal-shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  .brutal-button-hybrid:active {
+    box-shadow: var(--brutal-shadow-xs);
+    transform: translateY(0);
+  }
+  
+  /* Stat Cards - Hybrid style */
+  .brutal-stat-card {
+    @apply brutal-glass-card p-4 sm:p-5 transition-all duration-300;
+    box-shadow: var(--brutal-shadow-sm);
+  }
+  
+  .brutal-stat-card:hover {
+    box-shadow: var(--brutal-shadow-lg);
+    transform: translateY(-3px) scale(1.02);
+  }
+  
+  /* Quick Action Cards */
+  .brutal-action-card {
+    @apply brutal-glass-card rounded-xl overflow-hidden transition-all duration-300;
+    box-shadow: var(--brutal-shadow-xs);
+  }
+  
+  .brutal-action-card:hover {
+    @apply border-primary/50;
+    box-shadow: var(--brutal-shadow-xl);
+    transform: translateY(-4px) scale(1.03);
+  }
+  
+  .brutal-action-card:active {
+    box-shadow: var(--brutal-shadow-sm);
+    transform: translateY(0) scale(1);
   }
   
   .brutal-card-hover {

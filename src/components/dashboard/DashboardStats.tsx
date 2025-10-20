@@ -96,7 +96,7 @@ export const DashboardStats = memo(({ stats, userRole }: DashboardStatsProps) =>
       {displayStats.map((stat, index) => (
         <div 
           key={stat.label} 
-          className="relative transform transition-all duration-200 sm:duration-300 hover:scale-[1.02] active:scale-[0.98]"
+          className="relative brutal-stat-card"
           style={{ 
             animation: `fadeInUp 0.4s ease-out ${index * 0.1}s both`
           }}

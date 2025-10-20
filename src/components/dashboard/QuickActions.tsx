@@ -272,9 +272,9 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
     <Card 
       variant="glass"
       className={cn(
-        "mb-6 animate-fade-in backdrop-blur-xl",
+        "mb-6 animate-fade-in brutal-glass-card",
         isAdmin 
-          ? "bg-gradient-to-br from-amber-500/10 via-yellow-500/10 to-orange-500/10 border-amber-500/20" 
+          ? "bg-gradient-to-br from-amber-500/10 via-yellow-500/10 to-orange-500/10 border-amber-500/30" 
           : "bg-gradient-to-br from-background/80 to-card/60"
       )}
     >
@@ -392,15 +392,13 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
               const Icon = action.icon;
               
               return (
-                <button
+                  <button
                   key={action.id}
                   onClick={() => !action.disabled && navigate(action.route)}
                   disabled={action.disabled}
                   className={cn(
-                    "group relative rounded-xl brutal-border bg-card transition-all overflow-hidden brutal-shadow-xs",
-                    action.disabled 
-                      ? "opacity-60 cursor-not-allowed" 
-                      : "hover:shadow-[8px_8px_0px_0px_hsl(var(--primary))] hover:-translate-y-2 hover:scale-[1.03] active:brutal-shadow-sm active:translate-y-0 active:scale-100"
+                    "group relative rounded-xl brutal-action-card",
+                    action.disabled && "opacity-60 cursor-not-allowed"
                   )}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
@@ -413,7 +411,7 @@ export const QuickActions = ({ userRole, isAdmin = false }: QuickActionsProps) =
                     </div>
                     <div className="relative">
                       <h4 className={cn(
-                        "font-bold uppercase tracking-wide text-sm sm:text-base lg:text-lg mb-1 transition-colors",
+                        "font-pixel text-xs sm:text-sm lg:text-base mb-1 transition-colors uppercase",
                         !action.disabled && "group-hover:text-primary"
                       )}>
                         {action.label}
