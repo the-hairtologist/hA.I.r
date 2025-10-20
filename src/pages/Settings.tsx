@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code, Sliders, Activity } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code, Sliders } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
@@ -31,16 +31,12 @@ import { useDevMode } from "@/hooks/useDevMode";
 const Settings = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { roles, loading: roleLoading, isAdmin, isStylist } = useUserRole(user?.id);
+  const { roles, loading: roleLoading } = useUserRole(user?.id);
   
   const [loading, setLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
-  
-  // Determine effective role for UI display
-  const isAdminUser = roles.includes('admin');
-  const isStylistUser = roles.includes('stylist') || isAdminUser; // Admins get stylist features
   const [isSaving, setIsSaving] = useState(false);
   const { theme, setTheme } = useTheme();
   const { isDevMode, toggleDevMode } = useDevMode();
@@ -462,541 +458,52 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className={cn(
-            "grid w-full gap-1",
-            isStylistUser ? "grid-cols-5" : "grid-cols-4"
-          )}>
-            <TabsTrigger value="profile" className="text-xs sm:text-sm px-1.5 sm:px-3">
-              <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
-              <span className="hidden xs:inline">Profile</span>
+          <TabsList className={cn("grid w-full", userRole === "stylist" ? "grid-cols-7" : "grid-cols-6")}>
+            <TabsTrigger value="profile" className="text-xs sm:text-sm">
+              <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Profile</span>
             </TabsTrigger>
-            
-            {isStylistUser && (
-              <TabsTrigger value="business" className="text-xs sm:text-sm px-1.5 sm:px-3">
-                <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
-                <span className="hidden xs:inline">Business</span>
+            <TabsTrigger value="account" className="text-xs sm:text-sm">
+              <Shield className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Account</span>
+            </TabsTrigger>
+            <TabsTrigger value="security" className="text-xs sm:text-sm">
+              <Lock className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Security</span>
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="text-xs sm:text-sm">
+              <Bell className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Alerts</span>
+            </TabsTrigger>
+            <TabsTrigger value="ai-systems" className="text-xs sm:text-sm">
+              <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">AI</span>
+            </TabsTrigger>
+            {userRole === "stylist" && (
+              <TabsTrigger value="zapier" className="text-xs sm:text-sm">
+                <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Zapier</span>
               </TabsTrigger>
             )}
-            
-            <TabsTrigger value="security" className="text-xs sm:text-sm px-1.5 sm:px-3">
-              <Lock className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
-              <span className="hidden xs:inline">Security</span>
-            </TabsTrigger>
-            
-            <TabsTrigger value="notifications" className="text-xs sm:text-sm px-1.5 sm:px-3">
-              <Bell className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
-              <span className="hidden xs:inline">Alerts</span>
-            </TabsTrigger>
-            
-            {isStylistUser && (
-              <TabsTrigger value="integrations" className="text-xs sm:text-sm px-1.5 sm:px-3">
-                <Activity className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
-                <span className="hidden xs:inline">Tools</span>
-              </TabsTrigger>
-            )}
-            
-            <TabsTrigger value="preferences" className="text-xs sm:text-sm px-1.5 sm:px-3">
-              <Sliders className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1.5" />
-              <span className="hidden xs:inline">App</span>
+            <TabsTrigger value="preferences" className="text-xs sm:text-sm">
+              <Sliders className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Prefs</span>
             </TabsTrigger>
           </TabsList>
 
-          {/* Profile Tab - Essential Info Only */}
+          {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
                 <CardTitle>Profile Information</CardTitle>
                 <CardDescription>
-                  Your essential profile details {isStylistUser && "and public information"}
+                  {userRole === "stylist" 
+                    ? "Manage your business profile and professional details"
+                    : "Manage your personal profile"}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Basic Info */}
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="fullName">Full Name</Label>
-                    <Input
-                      id="fullName"
-                      value={fullName}
-                      onChange={(e) => { setFullName(e.target.value); setHasChanges(true); }}
-                      placeholder="Your full name"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" value={userEmail} disabled />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Contact support to change your email
-                    </p>
-                  </div>
-
-                  <div>
-                    <Label>Avatar & Gender</Label>
-                    <div className="flex gap-3 items-center mt-2">
-                      {avatarUrl && (
-                        <img src={avatarUrl} alt="Avatar" className="w-16 h-16 rounded-full" />
-                      )}
-                      <Select value={selectedGender} onValueChange={handleGenderChange}>
-                        <SelectTrigger className="flex-1">
-                          <SelectValue placeholder="Select gender for avatar" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stylist-Specific Profile Fields */}
-                {isStylistUser && (
-                  <div className="pt-4 border-t space-y-4">
-                    <h3 className="font-semibold text-lg">Professional Profile</h3>
-                    
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Label htmlFor="businessName">Business Name</Label>
-                        <HelpTooltip
-                          title="Business Name"
-                          content={{
-                            stylist: "Your salon or studio name that clients will see."
-                          }}
-                        />
-                      </div>
-                      <Input
-                        id="businessName"
-                        value={businessName}
-                        onChange={(e) => { setBusinessName(e.target.value); setHasChanges(true); }}
-                        placeholder="Your salon or business name"
-                      />
-                    </div>
-
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Label htmlFor="bio">Professional Bio</Label>
-                        <HelpTooltip
-                          title="Professional Bio"
-                          content={{
-                            stylist: "Share your experience and what makes you unique!"
-                          }}
-                        />
-                      </div>
-                      <TextareaWithCounter
-                        id="bio"
-                        value={bio}
-                        onValueChange={(value) => {
-                          setBio(value);
-                          setHasChanges(true);
-                        }}
-                        placeholder="I'm a color specialist with 8 years of experience..."
-                        maxLength={1000}
-                        className="min-h-[100px]"
-                      />
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="specialty">Specialty</Label>
-                        <Input
-                          id="specialty"
-                          value={specialty}
-                          onChange={(e) => { setSpecialty(e.target.value); setHasChanges(true); }}
-                          placeholder="Balayage, Color Correction..."
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="location">Location</Label>
-                        <Input
-                          id="location"
-                          value={location}
-                          onChange={(e) => { setLocation(e.target.value); setHasChanges(true); }}
-                          placeholder="City, State"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="colorLine">Color Line</Label>
-                        <Input
-                          id="colorLine"
-                          value={colorLine}
-                          onChange={(e) => { setColorLine(e.target.value); setHasChanges(true); }}
-                          placeholder="Redken, Wella..."
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="yearsExperience">Years of Experience</Label>
-                        <Input
-                          id="yearsExperience"
-                          type="number"
-                          value={yearsExperience}
-                          onChange={(e) => { setYearsExperience(e.target.value); setHasChanges(true); }}
-                          placeholder="0"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Client-Specific Fields */}
-                {userRole === "client" && (
-                  <div className="pt-4 border-t space-y-4">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="birthday">Birthday (Optional)</Label>
-                        <Input
-                          id="birthday"
-                          type="date"
-                          value={birthday}
-                          onChange={(e) => { setBirthday(e.target.value); setHasChanges(true); }}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="preferredTimeOfDay">Preferred Appointment Time</Label>
-                        <Select value={preferredTimeOfDay} onValueChange={(value) => { setPreferredTimeOfDay(value); setHasChanges(true); }}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select preference" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="morning">Morning</SelectItem>
-                            <SelectItem value="afternoon">Afternoon</SelectItem>
-                            <SelectItem value="evening">Evening</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="hairGoals">Hair Goals</Label>
-                      <TextareaWithCounter
-                        id="hairGoals"
-                        value={hairGoals}
-                        onValueChange={(value) => { setHairGoals(value); setHasChanges(true); }}
-                        placeholder="What are your hair goals?"
-                        maxLength={500}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex gap-3 pt-4">
-                  <Button 
-                    onClick={handleSaveProfile}
-                    disabled={isSaving || !hasChanges}
-                    data-save-profile
-                    className="flex-1"
-                  >
-                    {isSaving ? (
-                      <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
-                    ) : (
-                      "Save Profile"
-                    )}
-                  </Button>
-                  {isStylistUser && (
-                    <Button 
-                      variant="outline"
-                      onClick={handlePreviewProfile}
-                    >
-                      <Eye className="mr-2 h-4 w-4" />
-                      Preview
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* NEW: Business Settings Tab - Stylist/Admin Only */}
-          {isStylistUser && (
-            <TabsContent value="business" className="space-y-6">
-              {/* Contact Information */}
-              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                <CardHeader>
-                  <CardTitle>Business Contact</CardTitle>
-                  <CardDescription>
-                    Contact information for client inquiries and bookings
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="businessPhone">Business Phone</Label>
-                      <Input
-                        id="businessPhone"
-                        type="tel"
-                        value={businessPhone}
-                        onChange={(e) => { 
-                          const value = e.target.value;
-                          setBusinessPhone(value);
-                          setHasChanges(true);
-                          if (value.trim()) {
-                            const validation = validatePhone(value);
-                            setPhoneError(validation.valid ? undefined : validation.error);
-                          } else {
-                            setPhoneError(undefined);
-                          }
-                        }}
-                        placeholder="(555) 123-4567"
-                      />
-                      {phoneError && <FormFieldError message={phoneError} />}
-                    </div>
-                    <div>
-                      <Label htmlFor="businessEmail">Business Email</Label>
-                      <Input
-                        id="businessEmail"
-                        type="email"
-                        value={businessEmail}
-                        onChange={(e) => { setBusinessEmail(e.target.value); setHasChanges(true); }}
-                        placeholder="contact@yoursalon.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="timezone">Timezone</Label>
-                    <Select value={timezone} onValueChange={(value) => { setTimezone(value); setHasChanges(true); }}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="America/New_York">Eastern Time</SelectItem>
-                        <SelectItem value="America/Chicago">Central Time</SelectItem>
-                        <SelectItem value="America/Denver">Mountain Time</SelectItem>
-                        <SelectItem value="America/Los_Angeles">Pacific Time</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="preferredComm">Preferred Communication</Label>
-                    <Select value={preferredComm} onValueChange={(value) => { setPreferredComm(value); setHasChanges(true); }}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="app">In-App Messages</SelectItem>
-                        <SelectItem value="email">Email</SelectItem>
-                        <SelectItem value="sms">SMS/Text</SelectItem>
-                        <SelectItem value="phone">Phone Call</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Social Media */}
-              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                <CardHeader>
-                  <CardTitle>Social Media</CardTitle>
-                  <CardDescription>Connect your social profiles (optional)</CardDescription>
-                </CardHeader>
-                <CardContent className="grid sm:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="instagram">Instagram</Label>
-                    <Input
-                      id="instagram"
-                      value={instagramHandle}
-                      onChange={(e) => { setInstagramHandle(e.target.value); setHasChanges(true); }}
-                      placeholder="@yourhandle"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="tiktok">TikTok</Label>
-                    <Input
-                      id="tiktok"
-                      value={tiktokHandle}
-                      onChange={(e) => { setTiktokHandle(e.target.value); setHasChanges(true); }}
-                      placeholder="@yourhandle"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="facebook">Facebook</Label>
-                    <Input
-                      id="facebook"
-                      value={facebookUrl}
-                      onChange={(e) => { setFacebookUrl(e.target.value); setHasChanges(true); }}
-                      placeholder="Profile URL"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Business Policies */}
-              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                <CardHeader>
-                  <CardTitle>Business Policies</CardTitle>
-                  <CardDescription>Set your business rules and requirements</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="cancellationPolicy">Cancellation Policy</Label>
-                    <TextareaWithCounter
-                      id="cancellationPolicy"
-                      value={cancellationPolicy}
-                      onValueChange={(value) => { setCancellationPolicy(value); setHasChanges(true); }}
-                      placeholder="e.g., 24 hour cancellation notice required or 50% fee applies"
-                      maxLength={500}
-                    />
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="flex items-center justify-between p-4 border-2 rounded-lg">
-                      <div>
-                        <Label htmlFor="depositRequired">Require Deposit</Label>
-                        <p className="text-sm text-muted-foreground">For new clients or high-value services</p>
-                      </div>
-                      <ThemeSwitch
-                        id="depositRequired"
-                        checked={depositRequired}
-                        onCheckedChange={(checked) => { setDepositRequired(checked); setHasChanges(true); }}
-                      />
-                    </div>
-
-                    {depositRequired && (
-                      <div>
-                        <Label htmlFor="depositPercentage">Deposit Percentage</Label>
-                        <Input
-                          id="depositPercentage"
-                          type="number"
-                          value={depositPercentage}
-                          onChange={(e) => { setDepositPercentage(e.target.value); setHasChanges(true); }}
-                          placeholder="50"
-                          min="0"
-                          max="100"
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="flex items-center justify-between p-4 border-2 rounded-lg">
-                      <div>
-                        <Label htmlFor="acceptsNewClients">Accepting New Clients</Label>
-                        <p className="text-sm text-muted-foreground">Open for new bookings</p>
-                      </div>
-                      <ThemeSwitch
-                        id="acceptsNewClients"
-                        checked={acceptsNewClients}
-                        onCheckedChange={(checked) => { setAcceptsNewClients(checked); setHasChanges(true); }}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="maxClientsPerDay">Max Clients Per Day</Label>
-                      <Input
-                        id="maxClientsPerDay"
-                        type="number"
-                        value={maxClientsPerDay}
-                        onChange={(e) => { setMaxClientsPerDay(e.target.value); setHasChanges(true); }}
-                        placeholder="8"
-                        min="1"
-                        max="20"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="parkingInstructions">Parking Instructions</Label>
-                    <TextareaWithCounter
-                      id="parkingInstructions"
-                      value={parkingInstructions}
-                      onValueChange={(value) => { setParkingInstructions(value); setHasChanges(true); }}
-                      placeholder="e.g., Street parking available on Main St. Parking garage entrance on 2nd Ave."
-                      maxLength={300}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="specialAccommodations">Special Accommodations</Label>
-                    <TextareaWithCounter
-                      id="specialAccommodations"
-                      value={specialAccommodations}
-                      onValueChange={(value) => { setSpecialAccommodations(value); setHasChanges(true); }}
-                      placeholder="e.g., Wheelchair accessible, Kids welcome, Pet-friendly"
-                      maxLength={300}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Quick Links */}
-              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                <CardHeader>
-                  <CardTitle>Quick Access</CardTitle>
-                  <CardDescription>Manage your business tools and settings</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate("/services")}
-                    className="w-full justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4" />
-                      <span>Services & Pricing</span>
-                    </div>
-                    <ExternalLink className="h-3 w-3" />
-                  </Button>
-
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate("/schedule")}
-                    className="w-full justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      <span>Availability & Hours</span>
-                    </div>
-                    <ExternalLink className="h-3 w-3" />
-                  </Button>
-
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate("/booking-page")}
-                    className="w-full justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <ExternalLink className="h-4 w-4" />
-                      <span>My Booking Page</span>
-                    </div>
-                    <ExternalLink className="h-3 w-3" />
-                  </Button>
-
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate("/portfolio")}
-                    className="w-full justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Image className="h-4 w-4" />
-                      <span>Portfolio Management</span>
-                    </div>
-                    <ExternalLink className="h-3 w-3" />
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <div className="flex justify-end">
-                <Button 
-                  onClick={handleSaveProfile}
-                  disabled={isSaving || !hasChanges}
-                  className="min-w-[200px]"
-                >
-                  {isSaving ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
-                  ) : (
-                    "Save Business Settings"
-                  )}
-                </Button>
-              </div>
-            </TabsContent>
-          )}
-
-          {/* Security Tab - Merged Account + Security */}
+              <CardContent className="space-y-4">
+                <div>
                   <Label htmlFor="fullName">Full Name</Label>
                   <Input
                     id="fullName"
@@ -2226,25 +1733,23 @@ const Settings = () => {
                   Restart Tutorial
                 </Button>
                 
-                {/* Developer Mode Toggle - Stylist & Admin Only */}
-                {(userRole === "stylist" || roles.includes("admin")) && (
-                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="dev-mode" className="font-semibold flex items-center gap-2">
-                        <Code className="h-4 w-4" />
-                        Developer Mode
-                      </Label>
-                      <p className="text-sm text-muted-foreground">
-                        Show performance metrics and debug info
-                      </p>
-                    </div>
-                    <ThemeSwitch
-                      id="dev-mode"
-                      checked={isDevMode}
-                      onCheckedChange={toggleDevMode}
-                    />
+                {/* Developer Mode Toggle */}
+                <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="dev-mode" className="font-semibold flex items-center gap-2">
+                      <Code className="h-4 w-4" />
+                      Developer Mode
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Show performance metrics and debug info
+                    </p>
                   </div>
-                )}
+                  <ThemeSwitch
+                    id="dev-mode"
+                    checked={isDevMode}
+                    onCheckedChange={toggleDevMode}
+                  />
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
