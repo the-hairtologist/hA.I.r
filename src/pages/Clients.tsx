@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,6 @@ import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useMemo } from "react";
 import { EmptyState } from "@/components/EmptyState";
 import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
@@ -47,7 +46,6 @@ import { SaveIndicator } from "@/components/SaveIndicator";
 import { ReEngagementDialog } from "@/components/ReEngagementDialog";
 import { ClientActivityIndicator } from "@/components/ClientActivityIndicator";
 import { VirtualList } from "@/components/VirtualList";
-import { useCallback, memo } from "react";
 import { ClientCard } from "@/components/ClientCard";
 
 interface ClientProfile {
@@ -120,28 +118,6 @@ export default function Clients() {
     loadStylistProfile();
   }, []);
 
-  // Global keyboard shortcuts
-  useKeyboardShortcuts([
-    {
-      key: 'n',
-      ctrlKey: true,
-      description: 'New client',
-      action: () => !isDialogOpen && setIsDialogOpen(true),
-    },
-    {
-      key: 'e',
-      ctrlKey: true,
-      description: 'Export clients',
-      action: () => handleExportCSV(),
-    },
-  ]);
-
-  useEffect(() => {
-    if (stylistId) {
-      loadClients();
-    }
-  }, [stylistId]);
-
   const loadStylistProfile = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -160,45 +136,23 @@ export default function Clients() {
         setStylistId(stylistProfile.id);
         setStylistName(stylistProfile.user?.full_name || "");
       } else {
-        // User is not a stylist - show friendly message
         toast.info("This feature is for stylists", {
           description: "The Client Management page is designed for hair stylists to manage their clients."
         });
         setLoading(false);
-        // Don't navigate away, just show empty state
       }
     } catch (error) {
       console.error("Error loading stylist profile:", error);
-      const errorConfig = networkErrors.loadFailed("profile", () => loadStylistProfile());
-      toast.error(errorConfig.title, {
-        description: errorConfig.description,
-        action: errorConfig.action ? {
-          label: errorConfig.action.label,
-          onClick: errorConfig.action.onClick,
-        } : undefined,
-      });
+      toast.error("Failed to load profile");
       setLoading(false);
     }
   };
 
-  // Listen for keyboard shortcut to open dialog
   useEffect(() => {
-    const handleOpenDialog = () => {
-      setIsDialogOpen(true);
-    };
-
-    const handleSearchFocus = () => {
-      searchInputRef.current?.focus();
-    };
-
-    window.addEventListener('open-add-client-dialog', handleOpenDialog);
-    window.addEventListener('global-search-focus', handleSearchFocus);
-    
-    return () => {
-      window.removeEventListener('open-add-client-dialog', handleOpenDialog);
-      window.removeEventListener('global-search-focus', handleSearchFocus);
-    };
-  }, []);
+    if (stylistId) {
+      loadClients();
+    }
+  }, [stylistId]);
 
   const loadClients = async () => {
     if (!stylistId) return;
@@ -206,7 +160,6 @@ export default function Clients() {
     try {
       setLoading(true);
       
-      // Load basic client data
       const { data: clientsData, error: clientsError } = await supabase
         .from("client_profiles")
         .select("*")
@@ -215,13 +168,11 @@ export default function Clients() {
 
       if (clientsError) throw clientsError;
 
-      // Load statistics
-      const { data: statsData, error: statsError } = await supabase
+      const { data: statsData } = await supabase
         .from("client_statistics")
         .select("*")
         .eq("preferred_stylist_id", stylistId);
 
-      // Merge statistics with client data
       const enrichedClients = (clientsData || []).map((client: any) => {
         const stats = (statsData || []).find((s: any) => s.id === client.id);
         return {
@@ -235,30 +186,107 @@ export default function Clients() {
       setClients(enrichedClients);
     } catch (error) {
       console.error("Error loading clients:", error);
-      const errorConfig = networkErrors.loadFailed("client list", () => loadClients());
-      toast.error(errorConfig.title, {
-        description: errorConfig.description,
-        action: errorConfig.action ? {
-          label: errorConfig.action.label,
-          onClick: errorConfig.action.onClick,
-        } : undefined,
-      });
+      toast.error("Failed to load clients");
     } finally {
       setLoading(false);
     }
   };
 
-  // Real-time updates
   useRealtimeUpdates("client_profiles", loadClients, stylistId || undefined);
 
   const handleSubmit = async (e: React.FormEvent) => {
+
+  // Export callback
+  const handleExportCSV = useCallback(() => {
+    if (filteredClients.length === 0) {
+      toast.error("No clients to export");
+      return;
+    }
+    
+    const exportData = filteredClients.map(c => ({
+      name: c.full_name || "",
+      email: c.email || "",
+      phone: c.phone || "",
+      hair_type: c.hair_type || "",
+      allergies: c.allergies || "",
+      total_appointments: c.total_appointments || 0,
+      last_appointment: c.last_appointment_date 
+        ? new Date(c.last_appointment_date).toLocaleDateString()
+        : "Never",
+      days_since_last: c.last_appointment_date
+        ? Math.floor((new Date().getTime() - new Date(c.last_appointment_date).getTime()) / (1000 * 60 * 60 * 24))
+        : "N/A",
+    }));
+    
+    exportToCSV(exportData, "clients");
+    toast.success("Clients exported!");
+  }, [filteredClients]);
+
+  // Global keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'n',
+      ctrlKey: true,
+      description: 'New client',
+      action: () => !isDialogOpen && setIsDialogOpen(true),
+    },
+    {
+      key: 'e',
+      ctrlKey: true,
+      description: 'Export clients',
+      action: () => handleExportCSV(),
+    },
+  ]);
+
+  useEffect(() => {
+    const handleOpenDialog = () => {
+      setIsDialogOpen(true);
+    };
+    const handleSearchFocus = () => {
+      searchInputRef.current?.focus();
+    };
+    window.addEventListener('open-add-client-dialog', handleOpenDialog);
+    window.addEventListener('global-search-focus', handleSearchFocus);
+    return () => {
+      window.removeEventListener('open-add-client-dialog', handleOpenDialog);
+      window.removeEventListener('global-search-focus', handleSearchFocus);
+    };
+  }, []);
+
+  const openEditDialog = async (client: ClientProfile) => {
+    setSelectedClient(client);
+    setEditFormData({
+      full_name: client.full_name || "",
+      email: client.email || "",
+      phone: client.phone || "",
+      hair_type: client.hair_type || "",
+      allergies: client.allergies || "",
+      notes: client.notes || "",
+    });
+
+    // Load formulas for this client
+    try {
+      const { data: formulas } = await supabase
+        .from("formulas")
+        .select("*")
+        .eq("client_id", client.id)
+        .order("created_at", { ascending: false });
+
+      setClientFormulas(formulas || []);
+    } catch (error) {
+      console.error("Error loading formulas:", error);
+      setClientFormulas([]);
+    }
+
+    setEditDialogOpen(true);
+  }, []);
+
+  // Filter and sort clients (memoized)
+  const filteredClients = useMemo(() => {
     e.preventDefault();
     
-    // Prevent double submission
-    if (isSubmitting) return;
-    if (!stylistId) return;
+    if (isSubmitting || !stylistId) return;
 
-    // Validate with zod schema
     try {
       const validatedData = clientSchema.parse({
         full_name: formData.full_name,
@@ -271,7 +299,8 @@ export default function Clients() {
       });
 
       setIsSubmitting(true);
-      const { error } = await supabase.from("client_profiles").insert({
+      
+      await createClientMutation.mutateAsync({
         preferred_stylist_id: stylistId,
         full_name: validatedData.full_name.trim(),
         email: validatedData.email?.trim() || null,
@@ -280,8 +309,6 @@ export default function Clients() {
         allergies: validatedData.allergies?.trim() || null,
         notes: validatedData.notes?.trim() || null,
       });
-
-      if (error) throw error;
 
       showCelebration("client-added", undefined, clients.length + 1);
       setIsDialogOpen(false);
@@ -293,7 +320,6 @@ export default function Clients() {
         allergies: "",
         notes: "",
       });
-      loadClients();
     } catch (error: any) {
       if (error.name === 'ZodError') {
         const firstError = error.errors[0];
@@ -305,15 +331,13 @@ export default function Clients() {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [isSubmitting, stylistId, formData, createClientMutation, clients.length]);
 
-  const handleEditClient = async (e: React.FormEvent) => {
+  const handleEditClient = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (isEditSubmitting) return;
-    if (!selectedClient) return;
+    if (isEditSubmitting || !selectedClient) return;
 
-    // Validate with zod schema
     try {
       const validatedData = clientSchema.parse({
         full_name: editFormData.full_name,
@@ -327,25 +351,20 @@ export default function Clients() {
       setIsEditSubmitting(true);
       setSaveStatus("saving");
       
-      const { error } = await supabase
-        .from("client_profiles")
-        .update({
-          full_name: validatedData.full_name.trim(),
-          email: validatedData.email?.trim() || null,
-          phone: validatedData.phone?.trim() || null,
-          hair_type: validatedData.hair_type?.trim() || null,
-          allergies: validatedData.allergies?.trim() || null,
-          notes: validatedData.notes?.trim() || null,
-        })
-        .eq("id", selectedClient.id);
-
-      if (error) throw error;
+      await updateClientMutation.mutateAsync({
+        id: selectedClient.id,
+        full_name: validatedData.full_name.trim(),
+        email: validatedData.email?.trim() || null,
+        phone: validatedData.phone?.trim() || null,
+        hair_type: validatedData.hair_type?.trim() || null,
+        allergies: validatedData.allergies?.trim() || null,
+        notes: validatedData.notes?.trim() || null,
+      });
 
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
       toast.success("Client updated successfully!");
       setEditDialogOpen(false);
-      loadClients();
     } catch (error: any) {
       setSaveStatus("error");
       setTimeout(() => setSaveStatus("idle"), 2000);
@@ -355,14 +374,7 @@ export default function Clients() {
         toast.error(firstError.message);
       } else {
         console.error("Error updating client:", error);
-        const errorConfig = dataErrors.updateFailed("client", () => handleEditClient(e));
-        toast.error(errorConfig.title, {
-          description: errorConfig.description,
-          action: errorConfig.action ? {
-            label: errorConfig.action.label,
-            onClick: errorConfig.action.onClick,
-          } : undefined,
-        });
+        toast.error("Failed to update client");
       }
     } finally {
       setIsEditSubmitting(false);
@@ -397,7 +409,7 @@ export default function Clients() {
     setEditDialogOpen(true);
   };
 
-  // Filter and sort clients
+  // Filter and sort clients (memoized)
   const filteredClients = useMemo(() => {
     let filtered = clients;
 
@@ -450,29 +462,6 @@ export default function Clients() {
     return filtered;
   }, [clients, debouncedSearch, sortBy, riskFilter]);
 
-  // Pagination
-  const {
-    currentPage,
-    pageSize,
-    totalPages,
-    canGoNext,
-    canGoPrevious,
-    goToPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    getPaginatedData,
-    paginationInfo,
-  } = usePagination<ClientProfile>({
-    totalItems: filteredClients.length,
-    initialPageSize: typeof window !== 'undefined' && window.innerWidth < 768 ? 25 : 50,
-  });
-
-  const paginatedClients = useMemo(
-    () => getPaginatedData(filteredClients),
-    [filteredClients, getPaginatedData]
-  );
-
   const handleExportCSV = () => {
     if (filteredClients.length === 0) {
       toast.error("No clients to export");
@@ -498,10 +487,32 @@ export default function Clients() {
     toast.success("Clients exported!");
   };
 
+  // Pagination
+  const {
+    currentPage,
+    pageSize,
+    totalPages,
+    canGoNext,
+    canGoPrevious,
+    goToPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    getPaginatedData,
+    paginationInfo,
+  } = usePagination<ClientProfile>({
+    totalItems: filteredClients.length,
+    initialPageSize: typeof window !== 'undefined' && window.innerWidth < 768 ? 25 : 50,
+  });
+
+  const paginatedClients = useMemo(
+    () => getPaginatedData(filteredClients),
+    [filteredClients, getPaginatedData]
+  );
+
   const handleBulkDelete = async () => {
     if (selectedCount === 0) return;
     
-    // Count related data
     const clientIds = Array.from(selectedIds);
     
     const { count: formulaCount } = await supabase
@@ -516,9 +527,7 @@ export default function Clients() {
     
     const message = `Delete ${selectedCount} client${selectedCount !== 1 ? 's' : ''}?\n\nThis will also delete:\n• ${formulaCount || 0} formula${(formulaCount || 0) !== 1 ? 's' : ''}\n• ${appointmentCount || 0} appointment${(appointmentCount || 0) !== 1 ? 's' : ''}`;
     
-    if (!confirm(message)) {
-      return;
-    }
+    if (!confirm(message)) return;
 
     try {
       const { error } = await supabase
@@ -633,7 +642,7 @@ export default function Clients() {
                 stylistId={stylistId}
               />
             )}
-            <Button 
+            <Button
               variant="outline"
               onClick={handleExportCSV}
               disabled={filteredClients.length === 0}
