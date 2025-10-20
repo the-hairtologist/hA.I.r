@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { RealtimeChannel } from '@supabase/supabase-js';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/logging/productionLogger';
+import { trackSelect } from '@/lib/logging/supabaseTracker';
 
 interface Appointment {
   id: string;
@@ -28,39 +29,49 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
     // Initial fetch
     const fetchAppointments = async () => {
       try {
-        let query = supabase
-          .from('appointments')
-          .select('*')
-          .order('appointment_date', { ascending: true });
+        await trackSelect(
+          async () => {
+            let query = supabase
+              .from('appointments')
+              .select('*')
+              .order('appointment_date', { ascending: true });
 
-        if (role === 'client') {
-          const { data: clientProfile } = await supabase
-            .from('client_profiles')
-            .select('id')
-            .eq('user_id', userId)
-            .maybeSingle();
+            if (role === 'client') {
+              const { data: clientProfile } = await supabase
+                .from('client_profiles')
+                .select('id')
+                .eq('user_id', userId)
+                .maybeSingle();
 
-          if (clientProfile) {
-            query = query.eq('client_id', clientProfile.id);
-          }
-        } else if (role === 'stylist') {
-          const { data: stylistProfile } = await supabase
-            .from('stylist_profiles')
-            .select('id')
-            .eq('user_id', userId)
-            .maybeSingle();
+              if (clientProfile) {
+                query = query.eq('client_id', clientProfile.id);
+              }
+            } else if (role === 'stylist') {
+              const { data: stylistProfile } = await supabase
+                .from('stylist_profiles')
+                .select('id')
+                .eq('user_id', userId)
+                .maybeSingle();
 
-          if (stylistProfile) {
-            query = query.eq('stylist_id', stylistProfile.id);
-          }
-        }
+              if (stylistProfile) {
+                query = query.eq('stylist_id', stylistProfile.id);
+              }
+            }
 
-        const { data, error } = await query;
+            const { data, error } = await query;
 
-        if (error) throw error;
-        setAppointments(data || []);
+            if (error) throw error;
+            setAppointments(data || []);
+            return { data, error };
+          },
+          'appointments',
+          'useRealtimeAppointments',
+          { userId, role }
+        );
       } catch (error) {
-        console.error('Error fetching appointments:', error);
+        logger.error('Error fetching appointments', error, { 
+          component: 'useRealtimeAppointments' 
+        });
       } finally {
         setIsLoading(false);
       }
@@ -79,7 +90,8 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
           table: 'appointments',
         },
         (payload) => {
-          logger.debug('Appointment change received', 'realtime', { 
+          logger.debug('Appointment change received', { 
+            component: 'useRealtimeAppointments',
             eventType: payload.eventType,
             id: (payload.new as any)?.id || (payload.old as any)?.id
           });

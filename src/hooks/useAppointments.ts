@@ -7,7 +7,9 @@ import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { handleError } from '@/lib/errorHandler';
 import { toast } from 'sonner';
-import { log } from '@/lib/logger';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { trackSelect, trackInsert, trackUpdate } from '@/lib/logging/supabaseTracker';
 import { useEnhancedQuery, invalidateQueryCache } from '@/lib';
 
 export interface Appointment {
@@ -58,51 +60,69 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
     queryKey,
     enabled: autoFetch,
     queryFn: async () => {
-      log.debug('Fetching appointments', 'useAppointments', { stylistId, clientId, status });
+      logger.debug('Fetching appointments', { 
+        component: 'useAppointments', 
+        stylistId, 
+        clientId, 
+        status 
+      });
 
-      let query = supabase
-        .from('appointments')
-        .select(`
-          *,
-          client:client_profiles(
-            id,
-            full_name,
-            email,
-            phone,
-            user:profiles(full_name, email)
-          ),
-          stylist:stylist_profiles(
-            id,
-            business_name,
-            user:profiles(full_name, email, phone)
-          ),
-          service:stylist_services(
-            id,
-            service_name,
-            price,
-            duration_minutes
-          )
-        `)
-        .order('appointment_date', { ascending: false });
+      return await trackSelect(
+        async () => {
+          let query = supabase
+            .from('appointments')
+            .select(`
+              *,
+              client:client_profiles(
+                id,
+                full_name,
+                email,
+                phone,
+                user:profiles(full_name, email)
+              ),
+              stylist:stylist_profiles(
+                id,
+                business_name,
+                user:profiles(full_name, email, phone)
+              ),
+              service:stylist_services(
+                id,
+                service_name,
+                price,
+                duration_minutes
+              )
+            `)
+            .order('appointment_date', { ascending: false });
 
-      if (stylistId) {
-        query = query.eq('stylist_id', stylistId);
-      }
+          if (stylistId) {
+            query = query.eq('stylist_id', stylistId);
+          }
 
-      if (clientId) {
-        query = query.eq('client_id', clientId);
-      }
+          if (clientId) {
+            query = query.eq('client_id', clientId);
+          }
 
-      if (status && status !== 'all') {
-        query = query.eq('status', status);
-      }
+          if (status && status !== 'all') {
+            query = query.eq('status', status);
+          }
 
-      const { data, error: fetchError } = await query;
+          const { data, error: fetchError } = await query;
 
-      if (fetchError) throw fetchError;
+          if (fetchError) throw fetchError;
 
-      log.info('Appointments loaded successfully', 'useAppointments', { count: data?.length });
-      return (data as Appointment[]) || [];
+          logger.info('Appointments loaded successfully', { 
+            component: 'useAppointments', 
+            count: data?.length 
+          });
+          return { data: (data as Appointment[]) || [], error: null };
+        },
+        'appointments',
+        'useAppointments',
+        { stylistId, clientId, status }
+      ).then(result => {
+        if (result.error) throw result.error;
+        return result.data || [];
+      });
     },
     retryOptions: {
       maxRetries: 3,
@@ -114,21 +134,35 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
   const createAppointment = useCallback(async (data: Partial<Appointment>): Promise<Appointment> => {
     try {
-      log.debug('Creating appointment', 'useAppointments', data);
+      logger.debug('Creating appointment', { component: 'useAppointments', data });
+      userJourney.trackAction('Create Appointment', { serviceType: data.service_type });
 
-      const { data: newAppointment, error } = await supabase
-        .from('appointments')
-        .insert(data as any)
-        .select()
-        .maybeSingle();
+      const result = await trackInsert(
+        async () => {
+          const { data: newAppointment, error } = await supabase
+            .from('appointments')
+            .insert(data as any)
+            .select()
+            .maybeSingle();
+          return { data: newAppointment, error };
+        },
+        'appointments',
+        'useAppointments',
+        { serviceType: data.service_type }
+      );
 
-      if (error) throw error;
+      if (result.error) throw result.error;
+      const newAppointment = result.data!;
 
       // Invalidate cache to trigger refetch
       invalidateQueryCache('appointments');
 
       toast.success('Appointment created successfully');
-      log.info('Appointment created', 'useAppointments', { id: newAppointment.id });
+      logger.info('Appointment created', { 
+        component: 'useAppointments', 
+        id: newAppointment.id 
+      });
+      userJourney.trackAction('Appointment Created', { id: newAppointment.id });
 
       // Trigger Zapier webhook
       try {
@@ -140,13 +174,16 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
           client_id: newAppointment.client_id,
         });
       } catch (error) {
-        console.error("[Zapier] Failed to trigger appointment booked webhook:", error);
+        logger.warn('Zapier webhook failed', { 
+          component: 'useAppointments', 
+          error 
+        });
       }
 
       // Auto-sync to calendar (non-blocking)
       supabase.functions.invoke('sync-calendar-event', {
         body: { appointment_id: newAppointment.id, action: 'create' }
-      }).catch(err => log.warn('Calendar sync failed', 'useAppointments', err));
+      }).catch(err => logger.warn('Calendar sync failed', { component: 'useAppointments', error: err }));
 
       // Trigger Zapier webhook (non-blocking)
       supabase.functions.invoke('zapier-trigger', {
@@ -160,10 +197,12 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
             timestamp: new Date().toISOString()
           }
         }
-      }).catch(err => log.warn('Zapier trigger failed', 'useAppointments', err));
+      }).catch(err => logger.warn('Zapier trigger failed', { component: 'useAppointments', error: err }));
 
       return newAppointment;
     } catch (error) {
+      logger.error('Create appointment failed', error, { component: 'useAppointments' });
+      userJourney.trackError(error as Error, { action: 'createAppointment' });
       handleError(error, 'Create Appointment');
       throw error;
     }
@@ -171,26 +210,37 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
   const updateAppointment = useCallback(async (id: string, data: Partial<Appointment>) => {
     try {
-      log.debug('Updating appointment', 'useAppointments', { id, data });
+      logger.debug('Updating appointment', { component: 'useAppointments', id, data });
+      userJourney.trackAction('Update Appointment', { id });
 
-      const { error } = await supabase
-        .from('appointments')
-        .update(data)
-        .eq('id', id);
+      const result = await trackUpdate(
+        async () => {
+          const { error } = await supabase
+            .from('appointments')
+            .update(data)
+            .eq('id', id);
+          return { data: null, error };
+        },
+        'appointments',
+        'useAppointments',
+        { id }
+      );
 
-      if (error) throw error;
+      if (result.error) throw result.error;
 
       // Invalidate cache to trigger refetch
       invalidateQueryCache('appointments');
 
       toast.success('Appointment updated successfully');
-      log.info('Appointment updated', 'useAppointments', { id });
+      logger.info('Appointment updated', { component: 'useAppointments', id });
 
       // Auto-sync update to calendar (non-blocking)
       supabase.functions.invoke('sync-calendar-event', {
         body: { appointment_id: id, action: 'update' }
-      }).catch(err => log.warn('Calendar sync failed', 'useAppointments', err));
+      }).catch(err => logger.warn('Calendar sync failed', { component: 'useAppointments', error: err }));
     } catch (error) {
+      logger.error('Update appointment failed', error, { component: 'useAppointments', id });
+      userJourney.trackError(error as Error, { action: 'updateAppointment', id });
       handleError(error, 'Update Appointment');
       throw error;
     }
@@ -198,31 +248,42 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
 
   const cancelAppointment = useCallback(async (id: string, reason?: string) => {
     try {
-      log.debug('Cancelling appointment', 'useAppointments', { id, reason });
+      logger.debug('Cancelling appointment', { component: 'useAppointments', id, reason });
+      userJourney.trackAction('Cancel Appointment', { id, reason });
 
       const updateData = {
         status: 'cancelled',
         ...(reason && { cancellation_reason: reason }),
       };
 
-      const { error } = await supabase
-        .from('appointments')
-        .update(updateData)
-        .eq('id', id);
+      const result = await trackUpdate(
+        async () => {
+          const { error } = await supabase
+            .from('appointments')
+            .update(updateData)
+            .eq('id', id);
+          return { data: null, error };
+        },
+        'appointments',
+        'useAppointments',
+        { id, reason }
+      );
 
-      if (error) throw error;
+      if (result.error) throw result.error;
 
       // Invalidate cache to trigger refetch
       invalidateQueryCache('appointments');
 
       toast.success('Appointment cancelled');
-      log.info('Appointment cancelled', 'useAppointments', { id });
+      logger.info('Appointment cancelled', { component: 'useAppointments', id });
 
       // Delete from calendar (non-blocking)
       supabase.functions.invoke('sync-calendar-event', {
         body: { appointment_id: id, action: 'delete' }
-      }).catch(err => log.warn('Calendar sync failed', 'useAppointments', err));
+      }).catch(err => logger.warn('Calendar sync failed', { component: 'useAppointments', error: err }));
     } catch (error) {
+      logger.error('Cancel appointment failed', error, { component: 'useAppointments', id });
+      userJourney.trackError(error as Error, { action: 'cancelAppointment', id });
       handleError(error, 'Cancel Appointment');
       throw error;
     }
@@ -233,7 +294,11 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
     type: 'confirmation' | 'reminder' | 'cancellation' | 'reschedule'
   ) => {
     try {
-      log.debug('Sending SMS notification', 'useAppointments', { appointmentId, type });
+      logger.debug('Sending SMS notification', { 
+        component: 'useAppointments', 
+        appointmentId, 
+        type 
+      });
 
       await supabase.functions.invoke('send-sms-notification', {
         body: {
@@ -242,9 +307,13 @@ export function useAppointments(options: UseAppointmentsOptions = {}): UseAppoin
         },
       });
 
-      log.info('SMS notification sent', 'useAppointments', { appointmentId, type });
+      logger.info('SMS notification sent', { 
+        component: 'useAppointments', 
+        appointmentId, 
+        type 
+      });
     } catch (error) {
-      log.warn('SMS notification failed', 'useAppointments', error);
+      logger.warn('SMS notification failed', { component: 'useAppointments', error });
       // Don't throw - SMS failures shouldn't block the operation
     }
   }, []);

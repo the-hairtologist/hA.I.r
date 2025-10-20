@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { RealtimeChannel } from '@supabase/supabase-js';
-import { logger } from '@/lib/logger';
+import { logger } from '@/lib/logging/productionLogger';
+import { trackSelect, trackUpdate } from '@/lib/logging/supabaseTracker';
 
 interface Message {
   id: string;
@@ -28,23 +29,33 @@ export const useRealtimeMessages = (userId?: string) => {
     // Initial fetch
     const fetchMessages = async () => {
       try {
-        const { data, error } = await supabase
-          .from('messages')
-          .select('*')
-          .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
-          .order('created_at', { ascending: false });
+        const result = await trackSelect(
+          async () => {
+            const { data, error } = await supabase
+              .from('messages')
+              .select('*')
+              .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
+              .order('created_at', { ascending: false });
+            return { data, error };
+          },
+          'messages',
+          'useRealtimeMessages',
+          { userId }
+        );
 
-        if (error) throw error;
+        if (result.error) throw result.error;
         
-        setMessages(data || []);
+        setMessages(result.data || []);
         
         // Count unread messages
-        const unread = (data || []).filter(
+        const unread = (result.data || []).filter(
           (msg) => msg.recipient_id === userId && !msg.is_read
         ).length;
         setUnreadCount(unread);
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        logger.error('Error fetching messages', error, { 
+          component: 'useRealtimeMessages' 
+        });
       } finally {
         setIsLoading(false);
       }
@@ -64,7 +75,8 @@ export const useRealtimeMessages = (userId?: string) => {
           filter: `recipient_id=eq.${userId}`,
         },
         (payload) => {
-          logger.debug('Message change received', 'realtime', { 
+          logger.debug('Message change received', { 
+            component: 'useRealtimeMessages',
             eventType: payload.eventType,
             id: (payload.new as any)?.id || (payload.old as any)?.id
           });
@@ -105,14 +117,23 @@ export const useRealtimeMessages = (userId?: string) => {
 
   const markAsRead = async (messageId: string) => {
     try {
-      const { error } = await supabase
-        .from('messages')
-        .update({ is_read: true })
-        .eq('id', messageId);
-
-      if (error) throw error;
+      await trackUpdate(
+        async () => {
+          const { error } = await supabase
+            .from('messages')
+            .update({ is_read: true })
+            .eq('id', messageId);
+          return { data: null, error };
+        },
+        'messages',
+        'useRealtimeMessages',
+        { messageId }
+      );
     } catch (error) {
-      console.error('Error marking message as read:', error);
+      logger.error('Error marking message as read', error, { 
+        component: 'useRealtimeMessages',
+        messageId 
+      });
     }
   };
 
