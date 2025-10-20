@@ -458,7 +458,7 @@ const Settings = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className={cn("grid w-full", userRole === "stylist" ? "grid-cols-5" : "grid-cols-4")}>
+          <TabsList className={cn("grid w-full", userRole === "stylist" ? "grid-cols-7" : "grid-cols-6")}>
             <TabsTrigger value="profile" className="text-xs sm:text-sm">
               <User className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Profile</span>
@@ -466,6 +466,14 @@ const Settings = () => {
             <TabsTrigger value="account" className="text-xs sm:text-sm">
               <Shield className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Account</span>
+            </TabsTrigger>
+            <TabsTrigger value="security" className="text-xs sm:text-sm">
+              <Lock className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Security</span>
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="text-xs sm:text-sm">
+              <Bell className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Alerts</span>
             </TabsTrigger>
             <TabsTrigger value="ai-systems" className="text-xs sm:text-sm">
               <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
@@ -1108,12 +1116,14 @@ const Settings = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
 
-            {/* Security Section */}
+          {/* Security Tab */}
+          <TabsContent value="security" className="space-y-6">
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
-                <CardTitle>Security</CardTitle>
-                <CardDescription>Update your password and security settings</CardDescription>
+                <CardTitle>Security Settings</CardTitle>
+                <CardDescription>Manage your password and security preferences</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-4">
@@ -1199,6 +1209,107 @@ const Settings = () => {
             </Card>
           </TabsContent>
 
+          {/* Notifications Tab */}
+          <TabsContent value="notifications" className="space-y-6">
+            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader>
+                <CardTitle>Notification Preferences</CardTitle>
+                <CardDescription>Choose how you want to be notified</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="email-notifications" className="font-semibold">Email Notifications</Label>
+                      <p className="text-sm text-muted-foreground">Receive notifications via email</p>
+                    </div>
+                    <ThemeSwitch
+                      id="email-notifications"
+                      checked={emailNotifications}
+                      onCheckedChange={setEmailNotifications}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="appointment-reminders" className="font-semibold">Appointment Reminders</Label>
+                      <p className="text-sm text-muted-foreground">Get reminded about upcoming appointments</p>
+                    </div>
+                    <ThemeSwitch
+                      id="appointment-reminders"
+                      checked={appointmentReminders}
+                      onCheckedChange={setAppointmentReminders}
+                    />
+                  </div>
+
+                  {userRole === "client" && (
+                    <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="rebooking-reminders" className="font-semibold">Rebooking Reminders</Label>
+                        <p className="text-sm text-muted-foreground">Get notified when it's time to book again</p>
+                      </div>
+                      <ThemeSwitch
+                        id="rebooking-reminders"
+                        checked={rebookingReminders}
+                        onCheckedChange={setRebookingReminders}
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="marketing-emails" className="font-semibold">Marketing Emails</Label>
+                      <p className="text-sm text-muted-foreground">Receive tips, offers, and updates</p>
+                    </div>
+                    <ThemeSwitch
+                      id="marketing-emails"
+                      checked={marketingEmails}
+                      onCheckedChange={setMarketingEmails}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg opacity-50">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="sms-notifications" className="font-semibold">SMS Notifications</Label>
+                      <p className="text-sm text-muted-foreground">Receive text message alerts (Coming Soon)</p>
+                    </div>
+                    <ThemeSwitch
+                      id="sms-notifications"
+                      checked={smsNotifications}
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                {userRole === "stylist" && (
+                  <div className="mt-6">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/email-settings")}
+                      className="w-full"
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      Advanced Email Settings
+                      <ExternalLink className="ml-2 h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Client Email Sequence Preferences */}
+            {userRole === "client" && (
+              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                <CardHeader>
+                  <CardTitle>Email Sequence Preferences</CardTitle>
+                  <CardDescription>Control automated emails from your stylists</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ClientPreferenceCenter />
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
 
           {/* AI Systems Tab */}
           <TabsContent value="ai-systems" className="space-y-6">
@@ -1486,106 +1597,6 @@ const Settings = () => {
             )}
             
             <PrivacySettings userId={user?.id || ''} userRole={userRole} />
-
-            {/* Notification Preferences */}
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle>Notifications</CardTitle>
-                <CardDescription>Choose how you want to be notified</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="email-notifications" className="font-semibold">Email Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Receive notifications via email</p>
-                    </div>
-                    <ThemeSwitch
-                      id="email-notifications"
-                      checked={emailNotifications}
-                      onCheckedChange={setEmailNotifications}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="appointment-reminders" className="font-semibold">Appointment Reminders</Label>
-                      <p className="text-sm text-muted-foreground">Get reminded about upcoming appointments</p>
-                    </div>
-                    <ThemeSwitch
-                      id="appointment-reminders"
-                      checked={appointmentReminders}
-                      onCheckedChange={setAppointmentReminders}
-                    />
-                  </div>
-
-                  {userRole === "client" && (
-                    <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                      <div className="space-y-0.5">
-                        <Label htmlFor="rebooking-reminders" className="font-semibold">Rebooking Reminders</Label>
-                        <p className="text-sm text-muted-foreground">Get notified when it's time to book again</p>
-                      </div>
-                      <ThemeSwitch
-                        id="rebooking-reminders"
-                        checked={rebookingReminders}
-                        onCheckedChange={setRebookingReminders}
-                      />
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="marketing-emails" className="font-semibold">Marketing Emails</Label>
-                      <p className="text-sm text-muted-foreground">Receive tips, offers, and updates</p>
-                    </div>
-                    <ThemeSwitch
-                      id="marketing-emails"
-                      checked={marketingEmails}
-                      onCheckedChange={setMarketingEmails}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg opacity-50">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="sms-notifications" className="font-semibold">SMS Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Receive text message alerts (Coming Soon)</p>
-                    </div>
-                    <ThemeSwitch
-                      id="sms-notifications"
-                      checked={smsNotifications}
-                      disabled
-                    />
-                  </div>
-                </div>
-
-                {userRole === "stylist" && (
-                  <div className="mt-6">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => navigate("/email-settings")}
-                      className="w-full"
-                    >
-                      <Mail className="mr-2 h-4 w-4" />
-                      Advanced Email Settings
-                      <ExternalLink className="ml-2 h-3 w-3" />
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Client Email Sequence Preferences */}
-            {userRole === "client" && (
-              <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                <CardHeader>
-                  <CardTitle>Email Sequence Preferences</CardTitle>
-                  <CardDescription>Control automated emails from your stylists</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ClientPreferenceCenter />
-                </CardContent>
-              </Card>
-            )}
             
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>

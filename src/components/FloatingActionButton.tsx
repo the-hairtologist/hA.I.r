@@ -20,11 +20,6 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Don't show for admins - they have admin controls
-  if (userRole === "admin") {
-    return null;
-  }
-
   const stylistActions: FloatingAction[] = [
     {
       label: "AI Assistant",

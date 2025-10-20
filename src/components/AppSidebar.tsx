@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { Edit3, RotateCcw, ChevronDown } from "lucide-react";
+import { Edit3, RotateCcw } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -16,6 +15,15 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
@@ -36,7 +44,9 @@ import {
 } from "@/config/navigationConfig";
 
 export function AppSidebar() {
+  const { state } = useSidebar();
   const { user, isAdmin, isStylist, isClient } = useEnhancedAuth();
+  const collapsed = state === "collapsed";
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
@@ -131,6 +141,9 @@ export function AppSidebar() {
   
   const { items, groupedItems, groupLabels: labels, isLoading, saveSidebarOrder, resetSidebarOrder } = useSidebarOrder(baseItems as SidebarItem[], groupLabels);
 
+  // Keep groups collapsed by default - user can expand what they need
+  // This prevents overwhelming the sidebar
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -156,9 +169,9 @@ export function AppSidebar() {
 
   if (isLoading) {
     return (
-      <aside className="hidden lg:flex w-64 border-r-[3px] border-foreground/10 bg-background">
-        <div className="flex flex-col gap-3 p-4 w-full">
-          {/* Skeleton loaders */}
+      <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
+        <SidebarContent className="flex flex-col gap-3 p-4">
+          {/* Skeleton loaders with brutal styling */}
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-md bg-muted/50 border-[2px] border-foreground/10 shadow-[var(--brutal-shadow-sm)] animate-pulse" />
             <div className="flex-1 space-y-2">
@@ -172,22 +185,22 @@ export function AppSidebar() {
               <div className="h-4 w-2/3 bg-muted/40 border-[2px] border-foreground/5 rounded animate-pulse" />
             </div>
           ))}
-        </div>
-      </aside>
+        </SidebarContent>
+      </Sidebar>
     );
   }
 
   return (
-    <aside className="hidden lg:flex w-64 border-r-[3px] border-foreground/10 bg-background overflow-y-auto">
-      <div className="flex flex-col w-full pb-4">
-        {/* Next Appointment Banner */}
-        {(isStylist || isAdmin) && <NextAppointmentBanner />}
+    <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
+      <SidebarContent className="pb-4">
+        {/* Next Appointment Banner - Shows time until next appointment */}
+        {(isStylist || isAdmin) && !collapsed && <NextAppointmentBanner />}
         
-        {/* Today's Schedule Widget */}
-        {(isStylist || isAdmin) && <TodaysScheduleWidget />}
+        {/* Today's Schedule Widget - Only for stylists and admins */}
+        {(isStylist || isAdmin) && !collapsed && <TodaysScheduleWidget />}
         
-        {/* Customize Controls */}
-        {(isStylist || isAdmin) && !isClient && (
+        {/* Customize Controls - Only for stylists and admins */}
+        {!collapsed && (isStylist || isAdmin) && !isClient && (
           <div className="px-3 py-3 border-b-[3px] border-foreground/10">
             <div className="flex items-center gap-2">
               <Button
@@ -230,38 +243,40 @@ export function AppSidebar() {
             items={items.map((item) => item.id)}
             strategy={verticalListSortingStrategy}
           >
-            <nav className="flex-1">
-              {Object.entries(groupedItems).map(([groupKey, groupItems], index) => {
-                const isGroupCollapsed = collapsedGroups.has(groupKey);
-                const showSeparator = isAdmin && index > 0;
-                
-                return (
-                  <div key={groupKey}>
-                    {showSeparator && (
-                      <div className="relative my-4 mx-3">
-                        <div className="border-t-[3px] border-foreground/20" />
-                        {groupKey.startsWith('admin-') && (
-                          <div className="absolute -top-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500/60 to-transparent shadow-[0_2px_8px_rgba(251,191,36,0.3)]" />
-                        )}
-                      </div>
-                    )}
-                    <div className="mb-2">
-                      <button 
-                        className="cursor-pointer hover:bg-muted/80 px-3 py-2 flex items-center justify-between transition-all border-l-[3px] border-transparent hover:border-primary/50 w-full text-left"
-                        onClick={() => toggleGroupCollapsed(groupKey)}
-                      >
-                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider drop-shadow-sm">{labels[groupKey]}</span>
-                        <ChevronDown 
-                          className={`h-3 w-3 text-muted-foreground transition-transform duration-200 ${isGroupCollapsed ? '-rotate-90' : ''}`}
-                        />
-                      </button>
-                      {!isGroupCollapsed && (
-                        <div className="px-2 py-1">
+            {Object.entries(groupedItems).map(([groupKey, groupItems], index) => {
+              const isGroupCollapsed = collapsedGroups.has(groupKey);
+              const showSeparator = isAdmin && index > 0;
+              
+              return (
+                <div key={groupKey}>
+                  {showSeparator && (
+                    <div className="relative my-4 mx-3">
+                      <div className="border-t-[3px] border-foreground/20" />
+                      {groupKey.startsWith('admin-') && (
+                        <div className="absolute -top-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500/60 to-transparent shadow-[0_2px_8px_rgba(251,191,36,0.3)]" />
+                      )}
+                    </div>
+                  )}
+                  <SidebarGroup className="mb-2">
+                    <SidebarGroupLabel 
+                      className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/80 px-2 py-2 flex items-center justify-between transition-all border-l-[3px] border-transparent hover:border-primary/50"}`}
+                      onClick={() => !collapsed && toggleGroupCollapsed(groupKey)}
+                    >
+                      <span className="drop-shadow-sm">{labels[groupKey]}</span>
+                      {!collapsed && (
+                        <span className="text-[10px] transition-transform duration-200 font-bold" style={{ transform: isGroupCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
+                          ▼
+                        </span>
+                      )}
+                    </SidebarGroupLabel>
+                    {!isGroupCollapsed && (
+                      <SidebarGroupContent>
+                        <SidebarMenu>
                           {groupItems.map((item) => (
                             <SortableNavItem
                               key={item.id}
                               item={item}
-                              collapsed={false}
+                              collapsed={collapsed}
                               getNavClassName={getNavClassName}
                               isEditMode={isEditMode}
                               expandedItems={expandedItems}
@@ -269,22 +284,22 @@ export function AppSidebar() {
                               notificationCount={notifications[item.id]}
                             />
                           ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </nav>
+                        </SidebarMenu>
+                      </SidebarGroupContent>
+                    )}
+                  </SidebarGroup>
+                </div>
+              );
+            })}
           </SortableContext>
         </DndContext>
 
-        {/* Calendar Sync Indicator */}
-        {(isStylist || isAdmin) && <CalendarSyncIndicator />}
+        {/* Calendar Sync Indicator - Only for stylists and admins */}
+        {(isStylist || isAdmin) && !collapsed && <CalendarSyncIndicator />}
         
-        {/* Dark Mode Toggle */}
-        <DarkModeToggle />
-      </div>
-    </aside>
+        {/* Dark Mode Toggle - For all users */}
+        {!collapsed && <DarkModeToggle />}
+      </SidebarContent>
+    </Sidebar>
   );
 }
