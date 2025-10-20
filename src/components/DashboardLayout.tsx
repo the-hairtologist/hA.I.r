@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
@@ -152,7 +151,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <SidebarProvider>
+    <>
       <a href="#main-content" className="skip-to-main">
         Skip to main content
       </a>
@@ -313,6 +312,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* New UX Components */}
       <SessionExpiryWarning />
       <KeyboardShortcuts />
-    </SidebarProvider>
+    </>
   );
 }

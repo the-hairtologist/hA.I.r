@@ -4,13 +4,6 @@ import { useLocation, NavLink } from "react-router-dom";
 import { ChevronDown, GripVertical } from "lucide-react";
 import { NavigationItem } from "@/config/navigationConfig";
 import { NotificationDot } from "@/components/NotificationDot";
-import {
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
-} from "@/components/ui/sidebar";
 
 interface SortableNavItemProps {
   item: NavigationItem;
@@ -55,22 +48,20 @@ export function SortableNavItem({
   );
 
   return (
-    <SidebarMenuItem ref={setNodeRef} style={style}>
-      <SidebarMenuButton 
-        asChild={!hasChildren} 
-        tooltip={item.title} 
-        className="min-h-[44px] group relative p-0"
-        onClick={hasChildren ? (e) => {
-          e.preventDefault();
-          toggleExpanded(item.id);
-        } : undefined}
-      >
-        {hasChildren ? (
-          <div className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
-            isParentActive || isAnyChildActive
-              ? 'bg-primary/10' 
-              : 'hover:bg-muted/50'
-          }`}>
+    <div ref={setNodeRef} style={style}>
+      {hasChildren ? (
+        <div>
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              toggleExpanded(item.id);
+            }}
+            className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
+              isParentActive || isAnyChildActive
+                ? 'bg-primary/10' 
+                : 'hover:bg-muted/50'
+            }`}
+          >
             {isEditMode && !collapsed && (
               <div
                 {...attributes}
@@ -113,9 +104,46 @@ export function SortableNavItem({
                 </div>
               </>
             )}
-          </div>
-        ) : (
-          <NavLink to={item.url} className={getNavClassName}>
+          </button>
+          {!collapsed && (
+            <div 
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <div className="mt-1 mb-2 ml-4 space-y-1">
+                {item.children!.map((child) => {
+                  const isChildActive = location.pathname + location.hash === child.url;
+                  return (
+                    <div key={child.id}>
+                      <NavLink 
+                        to={child.url} 
+                        className={`group relative pl-3 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-3 ${
+                          isChildActive 
+                            ? 'bg-primary/10' 
+                            : 'hover:bg-muted/50'
+                        }`}
+                      >
+                        <div className="relative flex-shrink-0">
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${child.gradient} ${
+                            isChildActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'
+                          }`}>
+                            <child.icon className="h-4 w-4 text-on-surface-primary" />
+                          </div>
+                        </div>
+                        <span className={`text-sm truncate ${child.color || 'text-foreground'}`}>
+                          {child.title}
+                        </span>
+                      </NavLink>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <NavLink to={item.url} className={getNavClassName}>
             {isEditMode && !collapsed && (
               <div
                 {...attributes}
@@ -155,45 +183,6 @@ export function SortableNavItem({
             )}
           </NavLink>
         )}
-      </SidebarMenuButton>
-      {hasChildren && !collapsed && (
-        <div 
-          className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <SidebarMenuSub className="mt-1 mb-2 ml-4 space-y-1">
-            {item.children!.map((child) => {
-              const isChildActive = location.pathname + location.hash === child.url;
-              return (
-                <SidebarMenuSubItem key={child.id}>
-                  <SidebarMenuSubButton asChild>
-                    <NavLink 
-                      to={child.url} 
-                      className={`group relative pl-3 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-3 ${
-                        isChildActive 
-                          ? 'bg-primary/10' 
-                          : 'hover:bg-muted/50'
-                      }`}
-                    >
-                      <div className="relative flex-shrink-0">
-                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${child.gradient} ${
-                          isChildActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'
-                        }`}>
-                          <child.icon className="h-4 w-4 text-on-surface-primary" />
-                        </div>
-                      </div>
-                      <span className={`text-sm truncate ${child.color || 'text-foreground'}`}>
-                        {child.title}
-                      </span>
-                    </NavLink>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              );
-            })}
-          </SidebarMenuSub>
-        </div>
-      )}
-    </SidebarMenuItem>
+    </div>
   );
 }
