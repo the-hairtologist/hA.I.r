@@ -701,6 +701,7 @@ const Dashboard = () => {
       )}
       
       {/* Quick Add Client FAB - Only for stylists */}
+      {/* Quick Add Client FAB - Only for stylists in their own view (not admin god-mode) */}
       {userRole === "stylist" && !isAdmin && <QuickAddClientFAB />}
       
       <div className="w-full space-y-4 sm:space-y-6">
