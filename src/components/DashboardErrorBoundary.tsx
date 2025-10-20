@@ -69,10 +69,10 @@ export class DashboardErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-          <Card className="max-w-lg w-full border-[3px] border-foreground shadow-[8px_8px_0px_0px_hsl(var(--foreground))] bg-warning/20 dark:bg-warning/30">
+          <Card className="max-w-lg w-full brutal-border brutal-shadow-lg bg-warning/20 dark:bg-warning/30">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-full bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-card brutal-border brutal-shadow-xs flex items-center justify-center">
                   <AlertTriangle className="h-6 w-6 text-warning" />
                 </div>
                 <div>

@@ -98,7 +98,7 @@ export const ClientHistoryTimeline = ({ clientId }: ClientHistoryTimelineProps) 
   }
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+    <Card className="brutal-border brutal-shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <History className="h-5 w-5" />

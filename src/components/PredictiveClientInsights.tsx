@@ -16,7 +16,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
 
   if (loading) {
     return (
-      <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+      <Card className="brutal-border brutal-shadow-sm">
         <CardContent className="p-6 flex items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </CardContent>
@@ -36,7 +36,7 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
   };
 
   return (
-    <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-accent/5 to-primary/5">
+    <Card className="brutal-border brutal-shadow-sm bg-gradient-to-br from-accent/5 to-primary/5">
       <CardHeader>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-primary flex items-center justify-center">

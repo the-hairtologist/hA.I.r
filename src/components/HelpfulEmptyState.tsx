@@ -22,7 +22,7 @@ export const HelpfulEmptyState = ({
   onSecondaryAction,
 }: HelpfulEmptyStateProps) => {
   return (
-    <Card className="border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-gradient-to-br from-primary/5 to-secondary/5">
+    <Card className="brutal-border brutal-shadow-md bg-gradient-to-br from-primary/5 to-secondary/5">
       <CardContent className="py-12 text-center">
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary">
           <Icon className="h-8 w-8 text-primary" />

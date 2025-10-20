@@ -22,9 +22,9 @@ export const EmptyState = ({
   gradient = "bg-gradient-purple-pink",
 }: EmptyStateProps) => {
   return (
-    <Card className={`animate-fade-in border-[3px] border-foreground shadow-brutal-lg hover:shadow-brutal-xl transition-all duration-300 ${className}`}>
+    <Card className={`animate-fade-in brutal-border shadow-brutal-lg hover:shadow-brutal-xl transition-all duration-300 ${className}`}>
       <CardContent className="flex flex-col items-center justify-center py-16 px-4 text-center">
-        <div className={`w-20 h-20 rounded-2xl ${gradient} flex items-center justify-center mb-6 border-[3px] border-foreground shadow-brutal-md animate-scale-in`}>
+        <div className={`w-20 h-20 rounded-2xl ${gradient} flex items-center justify-center mb-6 brutal-border shadow-brutal-md animate-scale-in`}>
           <Icon className="h-10 w-10 text-on-surface-primary" />
         </div>
         <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 font-pixel">{title}</h3>

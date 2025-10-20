@@ -97,7 +97,7 @@ export const MobileQuickActions = () => {
           "lg:hidden",
           "h-14 w-14 rounded-full shadow-brutal-lg",
           "bg-gradient-to-br from-primary to-primary/80",
-          "border-[3px] border-foreground",
+          "brutal-border",
           "hover:scale-110 active:scale-95",
           "transition-all duration-200"
         )}
@@ -122,11 +122,11 @@ export const MobileQuickActions = () => {
                 onClick={() => handleAction(action)}
                 className={cn(
                   "relative p-4 rounded-xl",
-                  "border-[3px] border-foreground",
+                  "brutal-border",
                   "bg-gradient-to-br from-card to-secondary/10",
-                  "shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
-                  "hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_hsl(var(--foreground))]",
-                  "active:translate-y-[1px] active:shadow-[2px_2px_0px_0px_hsl(var(--foreground))]",
+                  "brutal-shadow-sm",
+                  "hover:translate-y-[-2px] hover:brutal-shadow-md",
+                  "active:translate-y-[1px] active:brutal-shadow-xs",
                   "transition-all duration-200",
                   "text-left group"
                 )}

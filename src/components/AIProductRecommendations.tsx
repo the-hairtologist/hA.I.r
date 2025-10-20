@@ -139,7 +139,7 @@ export const AIProductRecommendations = ({
 
   if (loading) {
     return (
-      <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+      <Card className="brutal-border brutal-shadow-sm">
         <CardContent className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </CardContent>
