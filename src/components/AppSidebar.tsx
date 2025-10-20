@@ -169,7 +169,7 @@ export function AppSidebar() {
 
   if (isLoading) {
     return (
-      <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
+      <Sidebar collapsible="none" className="border-r-[3px] border-foreground/10 hidden lg:flex">
         <SidebarContent className="flex flex-col gap-3 p-4">
           {/* Skeleton loaders with brutal styling */}
           <div className="flex items-center gap-3">
@@ -191,7 +191,7 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
+    <Sidebar collapsible="none" className="border-r-[3px] border-foreground/10 hidden lg:flex">
       <SidebarContent className="pb-4">
         {/* Next Appointment Banner - Shows time until next appointment */}
         {(isStylist || isAdmin) && !collapsed && <NextAppointmentBanner />}
