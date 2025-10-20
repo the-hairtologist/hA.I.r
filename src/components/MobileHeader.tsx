@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Scissors, Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
-import { useSidebar } from "@/components/ui/sidebar";
 import { NotificationDot } from "./NotificationDot";
+import { MobileDrawer } from "./MobileDrawer";
 
 interface MobileHeaderProps {
   notificationCount?: number;
@@ -14,8 +13,8 @@ interface MobileHeaderProps {
 
 export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
   const navigate = useNavigate();
-  const { toggleSidebar } = useSidebar();
   const [scrolled, setScrolled] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     let ticking = false;
@@ -37,7 +36,7 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
 
   const handleMenuClick = () => {
     haptic.tap();
-    toggleSidebar();
+    setIsDrawerOpen(true);
   };
 
   return (
@@ -136,6 +135,9 @@ export const MobileHeader = ({ notificationCount = 0 }: MobileHeaderProps) => {
           </Button>
         </div>
       </div>
+
+      {/* Mobile Drawer */}
+      <MobileDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </header>
   );
 };
