@@ -23,7 +23,8 @@ export function DarkModeToggle() {
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start h-9"
+            className="w-full justify-start h-11"
+            aria-label={`Current theme: ${theme === "light" ? "Light" : theme === "dark" ? "Dark" : "System"}. Click to change theme`}
           >
             {theme === "light" && <Sun className="h-4 w-4 mr-2" />}
             {theme === "dark" && <Moon className="h-4 w-4 mr-2" />}
