@@ -191,8 +191,9 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
-      <SidebarContent className="pb-4">
+    <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10 brutal-grid-subtle bg-sidebar">
+      <SidebarContent className="pb-4 gap-2 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:py-3"
+>
         {/* Next Appointment Banner - Shows time until next appointment */}
         {(isStylist || isAdmin) && !collapsed && <NextAppointmentBanner />}
         
