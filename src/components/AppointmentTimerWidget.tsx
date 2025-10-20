@@ -11,6 +11,9 @@ import { Play, Pause, Square, Clock, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { trackSelect, trackInsert, trackUpdate } from "@/lib/logging/supabaseTracker";
 
 interface TimerSession {
   id: string;
@@ -54,41 +57,53 @@ export function AppointmentTimerWidget() {
 
   const loadActiveSession = async () => {
     try {
-      const { data, error } = await supabase
-        .from("appointment_timers")
-        .select("*")
-        .is("end_time", null)
-        .order("start_time", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+      const result = await trackSelect(
+        async () => await supabase
+          .from("appointment_timers")
+          .select("*")
+          .is("end_time", null)
+          .order("start_time", { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        'appointment_timers',
+        'AppointmentTimerWidget'
+      );
 
-      if (error && error.code !== 'PGRST116') throw error;
-      if (data) {
-        setActiveSession(data as TimerSession);
+      if (result.error && result.error.code !== 'PGRST116') throw result.error;
+      if (result.data) {
+        setActiveSession(result.data as TimerSession);
       }
     } catch (error) {
-      console.error("Error loading timer session:", error);
+      logger.error('Error loading timer session', error, { component: 'AppointmentTimerWidget' });
+      userJourney.trackError(error as Error, { action: 'load-timer-session' });
     }
   };
 
   const startTimer = async (appointmentId: string) => {
     try {
-      const { data, error } = await supabase
-        .from("appointment_timers")
-        .insert({
-          appointment_id: appointmentId,
-          start_time: new Date().toISOString(),
-          duration_seconds: 0,
-        })
-        .select()
-        .maybeSingle();
+      const result = await trackInsert(
+        async () => await supabase
+          .from("appointment_timers")
+          .insert({
+            appointment_id: appointmentId,
+            start_time: new Date().toISOString(),
+            duration_seconds: 0,
+          })
+          .select()
+          .maybeSingle(),
+        'appointment_timers',
+        'AppointmentTimerWidget',
+        { appointmentId }
+      );
 
-      if (error) throw error;
-      setActiveSession(data as TimerSession);
+      if (result.error) throw result.error;
+      setActiveSession(result.data as TimerSession);
       setIsPaused(false);
+      userJourney.trackAction('Timer Started', { appointmentId });
       toast.success("Timer started");
     } catch (error: any) {
-      console.error("Error starting timer:", error);
+      logger.error('Error starting timer', error, { component: 'AppointmentTimerWidget', appointmentId });
+      userJourney.trackError(error, { action: 'start-timer' });
       toast.error("Failed to start timer");
     }
   };
@@ -102,22 +117,35 @@ export function AppointmentTimerWidget() {
     if (!activeSession) return;
 
     try {
-      const { error } = await supabase
-        .from("appointment_timers")
-        .update({
-          end_time: new Date().toISOString(),
-          duration_seconds: elapsed,
-        })
-        .eq("id", activeSession.id);
+      const result = await trackUpdate(
+        async () => await supabase
+          .from("appointment_timers")
+          .update({
+            end_time: new Date().toISOString(),
+            duration_seconds: elapsed,
+          })
+          .eq("id", activeSession.id),
+        'appointment_timers',
+        'AppointmentTimerWidget',
+        { timerId: activeSession.id, duration: elapsed }
+      );
 
-      if (error) throw error;
+      if (result.error) throw result.error;
 
+      userJourney.trackAction('Timer Stopped', { 
+        appointmentId: activeSession.appointment_id, 
+        duration: elapsed 
+      });
       toast.success(`Session completed: ${formatTime(elapsed)}`);
       setActiveSession(null);
       setElapsed(0);
       setIsPaused(false);
     } catch (error: any) {
-      console.error("Error stopping timer:", error);
+      logger.error('Error stopping timer', error, { 
+        component: 'AppointmentTimerWidget', 
+        timerId: activeSession.id 
+      });
+      userJourney.trackError(error, { action: 'stop-timer' });
       toast.error("Failed to stop timer");
     }
   };

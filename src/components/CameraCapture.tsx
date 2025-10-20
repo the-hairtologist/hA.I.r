@@ -13,6 +13,8 @@ import { z } from "zod";
 import { MediaErrorBoundary } from "./MediaErrorBoundary";
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { uploadToStorage } from "@/utils/supabaseStorageHelper";
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 interface CameraCaptureProps {
   onCapture: (imageUrl: string, metadata?: CaptureMetadata) => void | Promise<void>;
@@ -118,7 +120,7 @@ export const CameraCapture = ({
 
       return { blob: compressedBlob, metadata };
     } catch (error) {
-      console.error('Compression error:', error);
+      logger.error('Image compression error', error, { component: 'CameraCapture', context });
       if (error instanceof z.ZodError) {
         throw new Error('Invalid image metadata: ' + error.errors[0].message);
       }
@@ -198,6 +200,12 @@ export const CameraCapture = ({
       try {
         await onCapture(storageUrl, metadata);
         
+        userJourney.trackAction('Photo Captured', { 
+          context, 
+          compressionRatio: metadata.compressionRatio,
+          size: metadata.compressedSize 
+        });
+        
         await haptic.success();
         toast.success(messages.success, {
           description: `Saved ${metadata.compressionRatio}% space • ${(metadata.compressedSize / 1024).toFixed(0)}KB`
@@ -209,7 +217,8 @@ export const CameraCapture = ({
       }
       
     } catch (error: any) {
-      console.error('Capture error:', error);
+      logger.error('Camera capture error', error, { component: 'CameraCapture', context });
+      userJourney.trackError(error, { action: 'camera-capture', context });
       await haptic.error();
       
       const errorMessage = error.message || 'Failed to capture photo';

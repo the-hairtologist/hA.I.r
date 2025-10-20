@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { trackSelect, trackInsert } from "@/lib/logging/supabaseTracker";
 import {
   Dialog,
   DialogContent,
@@ -103,41 +106,57 @@ export const AddClientDialog = ({
 
       // Check if email already exists (only if email provided)
       if (validatedData.email) {
-        const { data: existingClient, error: checkError } = await supabase
-          .from("client_profiles")
-          .select("id, user:profiles(full_name)")
-          .eq("email", validatedData.email)
-          .maybeSingle();
+        const result = await trackSelect(
+          async () => await supabase
+            .from("client_profiles")
+            .select("id, user:profiles(full_name)")
+            .eq("email", validatedData.email)
+            .maybeSingle(),
+          'client_profiles',
+          'AddClientDialog',
+          { email: validatedData.email }
+        );
 
-        if (checkError) {
-          console.error('Error checking email:', checkError);
+        if (result.error) {
+          logger.error('Error checking email', result.error, { component: 'AddClientDialog' });
         }
 
-        if (existingClient) {
+        if (result.data) {
           toast.error("Email already exists", {
-            description: `This email is already registered for ${existingClient.user?.full_name || "another client"}`,
+            description: `This email is already registered for ${result.data.user?.full_name || "another client"}`,
           });
           return;
         }
       }
 
       // Create the client profile
-      const { data: newClient, error } = await supabase
-        .from("client_profiles")
-        .insert({
-          full_name: validatedData.full_name,
-          email: validatedData.email,
-          phone: validatedData.phone || null,
-          notes: validatedData.notes || null,
-          allergies: allergies || null,
-          medical_info_consent: medicalConsent,
-          preferred_stylist_id: stylistId,
-        })
-        .select()
-        .maybeSingle();
+      const clientResult = await trackInsert(
+        async () => await supabase
+          .from("client_profiles")
+          .insert({
+            full_name: validatedData.full_name,
+            email: validatedData.email,
+            phone: validatedData.phone || null,
+            notes: validatedData.notes || null,
+            allergies: allergies || null,
+            medical_info_consent: medicalConsent,
+            preferred_stylist_id: stylistId,
+          })
+          .select()
+          .maybeSingle(),
+        'client_profiles',
+        'AddClientDialog',
+        { clientName: validatedData.full_name }
+      );
 
-      if (error) throw error;
+      if (clientResult.error) throw clientResult.error;
+      const newClient = clientResult.data as any;
 
+      userJourney.trackAction('Client Added', { 
+        clientId: newClient.id, 
+        clientName: validatedData.full_name 
+      });
+      
       toast.success("Client added successfully! ✨", {
         description: `${validatedData.full_name} has been added to your clients`,
       });
@@ -152,7 +171,10 @@ export const AddClientDialog = ({
           client_phone: validatedData.phone,
         });
       } catch (error) {
-        console.error("[Zapier] Failed to trigger new client webhook:", error);
+        logger.error('[Zapier] Failed to trigger new client webhook', error, { 
+          component: 'AddClientDialog',
+          clientId: newClient.id 
+        });
       }
 
       // Notify parent and close
@@ -171,7 +193,8 @@ export const AddClientDialog = ({
         setErrors(newErrors);
         toast.error("Please check the form for errors");
       } else {
-        console.error("Error adding client:", error);
+        logger.error('Error adding client', error, { component: 'AddClientDialog', stylistId });
+        userJourney.trackError(error, { action: 'add-client' });
         const errorConfig = dataErrors.saveFailed("client");
         toast.error(errorConfig.title, {
           description: errorConfig.description,

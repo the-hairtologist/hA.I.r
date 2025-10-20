@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Calendar, Link as LinkIcon, Unlink, Loader2, CheckCircle2, XCircle, RefreshCw } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { trackSelect, trackDelete } from "@/lib/logging/supabaseTracker";
 
 type CalendarProvider = 'google' | 'outlook';
 
@@ -35,15 +38,20 @@ const CalendarSync = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
 
-      const { data, error } = await supabase
-        .from('calendar_connections')
-        .select('*')
-        .eq('user_id', session.user.id);
+      const result = await trackSelect(
+        async () => await supabase
+          .from('calendar_connections')
+          .select('*')
+          .eq('user_id', session.user.id),
+        'calendar_connections',
+        'CalendarSync'
+      );
 
-      if (error) throw error;
-      setConnections((data || []) as CalendarConnection[]);
+      if (result.error) throw result.error;
+      setConnections((result.data || []) as CalendarConnection[]);
     } catch (error) {
-      console.error('Error loading connections:', error);
+      logger.error('Error loading calendar connections', error, { component: 'CalendarSync' });
+      userJourney.trackError(error as Error, { action: 'load-connections' });
       toast.error('Failed to load calendar connections');
     } finally {
       setLoading(false);
@@ -67,7 +75,8 @@ const CalendarSync = () => {
       window.location.href = data.url;
       
     } catch (error: any) {
-      console.error('Error connecting calendar:', error);
+      logger.error('Error connecting calendar', error, { component: 'CalendarSync', provider });
+      userJourney.trackError(error, { action: 'connect-calendar', provider });
       toast.error(error.message || 'Failed to connect calendar');
     } finally {
       setConnecting(null);
@@ -84,17 +93,24 @@ const CalendarSync = () => {
     
     setDisconnecting(selectedConnection.id);
     try {
-      const { error } = await supabase
-        .from('calendar_connections')
-        .delete()
-        .eq('id', selectedConnection.id);
+      const result = await trackDelete(
+        async () => await supabase
+          .from('calendar_connections')
+          .delete()
+          .eq('id', selectedConnection.id),
+        'calendar_connections',
+        'CalendarSync',
+        { connectionId: selectedConnection.id }
+      );
 
-      if (error) throw error;
+      if (result.error) throw result.error;
       
+      userJourney.trackAction('Calendar Disconnected', { provider: selectedConnection.provider });
       toast.success('Calendar disconnected successfully');
       loadConnections();
     } catch (error) {
-      console.error('Error disconnecting calendar:', error);
+      logger.error('Error disconnecting calendar', error, { component: 'CalendarSync' });
+      userJourney.trackError(error as Error, { action: 'disconnect-calendar' });
       toast.error('Failed to disconnect calendar');
     } finally {
       setDisconnecting(null);
@@ -123,14 +139,16 @@ const CalendarSync = () => {
           });
           if (!error) syncedCount++;
         } catch (err) {
-          console.error('Failed to sync appointment:', apt.id, err);
+          logger.error('Failed to sync appointment', err, { component: 'CalendarSync', appointmentId: apt.id });
         }
       }
       
+      userJourney.trackAction('Calendar Synced', { syncedCount, connectionId });
       toast.success(`${syncedCount} appointment(s) synced successfully`);
       loadConnections();
     } catch (error: any) {
-      console.error('Error syncing calendar:', error);
+      logger.error('Error syncing calendar', error, { component: 'CalendarSync', connectionId });
+      userJourney.trackError(error, { action: 'sync-calendar' });
       toast.error(error.message || 'Failed to sync appointments');
     } finally {
       setSyncing(null);
@@ -146,6 +164,10 @@ const CalendarSync = () => {
 
       if (error) throw error;
       
+      userJourney.trackAction('Calendar Sync Toggled', { 
+        connectionId: connection.id, 
+        enabled: !connection.sync_enabled 
+      });
       toast.success(
         connection.sync_enabled 
           ? 'Auto-sync disabled' 
@@ -153,7 +175,8 @@ const CalendarSync = () => {
       );
       loadConnections();
     } catch (error) {
-      console.error('Error toggling sync:', error);
+      logger.error('Error toggling sync', error, { component: 'CalendarSync', connectionId: connection.id });
+      userJourney.trackError(error as Error, { action: 'toggle-sync' });
       toast.error('Failed to update sync settings');
     }
   };

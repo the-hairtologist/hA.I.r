@@ -12,6 +12,9 @@ import { clientRetentionAI } from '@/lib/ai/ClientRetentionAI';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { trackSelect } from '@/lib/logging/supabaseTracker';
 
 export const AIRetentionDashboard = () => {
   const { user } = useAuth();
@@ -33,20 +36,24 @@ export const AIRetentionDashboard = () => {
   const loadStylistId = async () => {
     if (!user) return;
     
-    const { data, error } = await supabase
-      .from('stylist_profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle();
+    const result = await trackSelect(
+      async () => await supabase
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle(),
+      'stylist_profiles',
+      'AIRetentionDashboard'
+    );
     
-    if (error) {
-      console.error('Error loading stylist ID:', error);
+    if (result.error) {
+      logger.error('Error loading stylist ID', result.error, { component: 'AIRetentionDashboard' });
       toast.error('Failed to load stylist profile');
       return;
     }
     
-    if (data) {
-      setStylistId(data.id);
+    if (result.data) {
+      setStylistId(result.data.id);
     }
   };
 
@@ -62,8 +69,18 @@ export const AIRetentionDashboard = () => {
         const aiInsights = await clientRetentionAI.getAIRetentionInsights(scores);
         setInsights(aiInsights);
       }
+      
+      userJourney.trackAction('Retention Data Loaded', { 
+        stylistId, 
+        clientCount: scores.length,
+        atRiskCount: scores.filter(s => s.riskLevel !== 'low').length 
+      });
     } catch (error) {
-      console.error('Failed to load retention data:', error);
+      logger.error('Failed to load retention data', error, { 
+        component: 'AIRetentionDashboard', 
+        stylistId 
+      });
+      userJourney.trackError(error as Error, { action: 'load-retention-data' });
     } finally {
       setLoading(false);
     }
