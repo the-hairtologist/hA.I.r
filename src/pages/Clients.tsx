@@ -701,17 +701,17 @@ export default function Clients() {
           </Card>
         )}
 
-        {/* Search and Filters */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
-          <SearchInput
+            {/* Search and Filters - Mobile responsive */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in w-full">
+              <SearchInput
             ref={searchInputRef}
             value={searchQuery}
             onChange={setSearchQuery}
             placeholder="Search by name, email, or phone number (Press / or Cmd+K)"
-            className="flex-1 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]"
+            className="flex-1 brutal-border min-h-[44px]"
           />
           <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-            <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+            <SelectTrigger className="w-full sm:w-48 brutal-border min-h-[44px]">
               <Filter className="h-4 w-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -723,8 +723,8 @@ export default function Clients() {
           </Select>
           <Select value={riskFilter} onValueChange={(value: any) => setRiskFilter(value)}>
             <SelectTrigger className={cn(
-              "w-full sm:w-48 border-[2px] shadow-[3px_3px_0px_0px_hsl(var(--foreground))]",
-              riskFilter !== "all" ? "border-destructive bg-destructive/5" : "border-foreground"
+              "w-full sm:w-48 brutal-border min-h-[44px]",
+              riskFilter !== "all" ? "border-destructive bg-destructive/5" : ""
             )}>
               <SelectValue placeholder="At-Risk Filter" />
             </SelectTrigger>

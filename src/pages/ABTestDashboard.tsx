@@ -85,10 +85,10 @@ export default function ABTestDashboard() {
 
         {/* Winner Announcement */}
         {winner && (
-          <Card className="border-[3px] border-accent bg-accent/10">
+          <Card className="brutal-border border-accent bg-accent/10">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 border-[3px] border-accent bg-accent flex items-center justify-center">
+                <div className="w-12 h-12 brutal-border border-accent bg-accent flex items-center justify-center">
                   <Trophy className="h-6 w-6 text-accent-foreground" />
                 </div>
                 <div>
@@ -105,13 +105,13 @@ export default function ABTestDashboard() {
         )}
 
         {/* Variant Comparison */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Variant A */}
-          <Card className="border-[3px] border-black">
+          <Card className="brutal-border">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 border-[3px] border-primary bg-primary flex items-center justify-center">
+                  <div className="w-10 h-10 brutal-border border-primary bg-primary flex items-center justify-center">
                     <span className="font-pixel text-primary-foreground">A</span>
                   </div>
                   <CardTitle className="font-pixel text-lg uppercase">VARIANT A</CardTitle>
@@ -123,7 +123,7 @@ export default function ABTestDashboard() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Copy Preview */}
-              <div className="border-[2px] border-border p-3 bg-muted/30">
+              <div className="border-border p-3 bg-muted/30">
                 <p className="font-pixel text-xs text-muted-foreground mb-2">HEADLINE:</p>
                 <p className="font-sans text-sm font-bold">{VARIANTS.A.hero.headline}</p>
                 <p className="font-pixel text-xs text-muted-foreground mt-3 mb-2">CTA:</p>
@@ -132,15 +132,15 @@ export default function ABTestDashboard() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="border-[2px] border-primary bg-primary/10 p-3 text-center">
+                <div className="border-primary bg-primary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-primary">{results.A.views}</p>
                   <p className="font-sans text-xs text-muted-foreground">Views</p>
                 </div>
-                <div className="border-[2px] border-primary bg-primary/10 p-3 text-center">
+                <div className="border-primary bg-primary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-primary">{results.A.conversions}</p>
                   <p className="font-sans text-xs text-muted-foreground">Signups</p>
                 </div>
-                <div className="border-[2px] border-accent bg-accent/10 p-3 text-center">
+                <div className="border-accent bg-accent/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-accent">{rateA.toFixed(1)}%</p>
                   <p className="font-sans text-xs text-muted-foreground">Rate</p>
                 </div>
@@ -149,11 +149,11 @@ export default function ABTestDashboard() {
           </Card>
 
           {/* Variant B */}
-          <Card className="border-[3px] border-black">
+          <Card className="brutal-border">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 border-[3px] border-secondary bg-secondary flex items-center justify-center">
+                  <div className="w-10 h-10 brutal-border border-secondary bg-secondary flex items-center justify-center">
                     <span className="font-pixel text-secondary-foreground">B</span>
                   </div>
                   <CardTitle className="font-pixel text-lg uppercase">VARIANT B</CardTitle>
@@ -165,7 +165,7 @@ export default function ABTestDashboard() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Copy Preview */}
-              <div className="border-[2px] border-border p-3 bg-muted/30">
+              <div className="border-border p-3 bg-muted/30">
                 <p className="font-pixel text-xs text-muted-foreground mb-2">HEADLINE:</p>
                 <p className="font-sans text-sm font-bold">{VARIANTS.B.hero.headline}</p>
                 <p className="font-pixel text-xs text-muted-foreground mt-3 mb-2">CTA:</p>
@@ -174,15 +174,15 @@ export default function ABTestDashboard() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="border-[2px] border-secondary bg-secondary/10 p-3 text-center">
+                <div className="border-secondary bg-secondary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-secondary">{results.B.views}</p>
                   <p className="font-sans text-xs text-muted-foreground">Views</p>
                 </div>
-                <div className="border-[2px] border-secondary bg-secondary/10 p-3 text-center">
+                <div className="border-secondary bg-secondary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-secondary">{results.B.conversions}</p>
                   <p className="font-sans text-xs text-muted-foreground">Signups</p>
                 </div>
-                <div className="border-[2px] border-accent bg-accent/10 p-3 text-center">
+                <div className="border-accent bg-accent/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-accent">{rateB.toFixed(1)}%</p>
                   <p className="font-sans text-xs text-muted-foreground">Rate</p>
                 </div>
@@ -192,10 +192,10 @@ export default function ABTestDashboard() {
         </div>
 
         {/* Overall Stats */}
-        <Card className="border-[3px] border-black">
+        <Card className="brutal-border">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 border-[3px] border-foreground bg-accent flex items-center justify-center">
+              <div className="w-10 h-10 brutal-border border-foreground bg-accent flex items-center justify-center">
                 <BarChart className="h-5 w-5 text-accent-foreground" />
               </div>
               <CardTitle className="font-pixel text-lg uppercase">COMBINED STATS</CardTitle>
@@ -228,10 +228,10 @@ export default function ABTestDashboard() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="border-[3px] border-black bg-muted/30">
+        <Card className="brutal-border bg-muted/30">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 border-[3px] border-primary bg-primary flex items-center justify-center">
+              <div className="w-10 h-10 brutal-border border-primary bg-primary flex items-center justify-center">
                 <TrendingUp className="h-5 w-5 text-primary-foreground" />
               </div>
               <CardTitle className="font-pixel text-lg uppercase">NEXT STEPS</CardTitle>

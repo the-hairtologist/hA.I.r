@@ -26,7 +26,7 @@ const Index = () => {
         Skip to main content
       </a>
       
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b-[2px] xs:border-b-[3px] sm:border-b-[4px] border-black" role="banner" style={{
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black brutal-border border-black" role="banner" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)
@@ -35,7 +35,7 @@ const Index = () => {
       }}>
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-2.5 xs:py-3 sm:py-4 flex items-center justify-between max-w-full overflow-hidden">
           <button onClick={() => navigate("/")} className="flex items-center gap-1 xs:gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity min-w-0">
-            <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 border-2 border-white bg-primary flex items-center justify-center flex-shrink-0">
+            <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 brutal-border border-white bg-primary flex items-center justify-center flex-shrink-0">
               <Scissors className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4 text-primary-foreground" />
             </div>
             <span className="text-xs xs:text-sm sm:text-base font-pixel text-white uppercase truncate">hA.I.r</span>
@@ -43,7 +43,7 @@ const Index = () => {
           <Button 
             onClick={() => navigate("/auth")} 
             size="sm" 
-            className="font-pixel text-[9px] xxs:text-[10px] xs:text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-[2px] xs:border-[3px] border-white shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] xs:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] xs:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none px-3 xxs:px-4 xs:px-6 py-2 xs:py-2.5 min-h-[44px] flex-shrink-0"
+            className="font-pixel text-[9px] xxs:text-[10px] xs:text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-white brutal-shadow-sm hover:brutal-shadow-md transition-all duration-300 hover:-translate-y-0.5 rounded-none px-3 xxs:px-4 xs:px-6 py-2 xs:py-2.5 min-h-[44px] flex-shrink-0"
           >
             <span className="hidden xxs:inline">Get Started</span>
             <span className="xxs:hidden">Start</span>
@@ -76,7 +76,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-[3px] xxs:border-[4px] xs:border-[4px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] xxs:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xs:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xxs:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] xs:hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 brutal-border border-black brutal-shadow-md hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                 >
                   {config.cta.primary}
                 </Button>
@@ -128,7 +128,7 @@ const Index = () => {
         </section>
 
         {/* Stats Section - Yellow background for excitement */}
-        <section className="py-10 xs:py-12 sm:py-14 md:py-16 bg-accent border-t-[3px] xs:border-t-[4px] border-black" style={{
+        <section className="py-10 xs:py-12 sm:py-14 md:py-16 bg-accent brutal-border border-black" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -137,7 +137,7 @@ const Index = () => {
       }}>
         <div className="container mx-auto px-4 xs:px-5 sm:px-6">
           <div className="text-center mb-8 xs:mb-10 sm:mb-12">
-            <div className="inline-block border-[3px] border-black bg-secondary px-4 xs:px-6 py-2 xs:py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-4 xs:mb-6">
+            <div className="inline-block brutal-border border-black bg-secondary px-4 xs:px-6 py-2 xs:py-3 brutal-shadow-sm mb-4 xs:mb-6">
               <span className="font-pixel text-xs xs:text-sm text-secondary-foreground uppercase">REAL RESULTS</span>
             </div>
             <h2 className="font-pixel text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl text-accent-foreground uppercase tracking-wide xs:tracking-wider px-2 xs:px-4 leading-tight break-words">

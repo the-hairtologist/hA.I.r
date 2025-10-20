@@ -83,7 +83,7 @@ export default function ABTestDashboardSupabase() {
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <div className="w-16 h-16 border-[4px] border-primary border-t-transparent animate-spin mx-auto mb-4"></div>
+            <div className="w-16 h-16 brutal-border border-primary border-t-transparent animate-spin mx-auto mb-4"></div>
             <p className="font-pixel text-sm text-muted-foreground">LOADING...</p>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function ABTestDashboardSupabase() {
     return (
       <DashboardLayout>
         <div className="max-w-2xl mx-auto text-center py-12">
-          <div className="w-20 h-20 border-[4px] border-primary bg-primary/10 flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 brutal-border border-primary bg-primary/10 flex items-center justify-center mx-auto mb-6">
             <BarChart className="h-10 w-10 text-primary" />
           </div>
           
@@ -180,10 +180,10 @@ export default function ABTestDashboardSupabase() {
 
         {/* Winner Announcement */}
         {winner && (
-          <Card className="border-[3px] border-accent bg-accent/10">
+          <Card className="brutal-border border-accent bg-accent/10">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 border-[3px] border-accent bg-accent flex items-center justify-center">
+                <div className="w-12 h-12 brutal-border border-accent bg-accent flex items-center justify-center">
                   <Trophy className="h-6 w-6 text-accent-foreground" />
                 </div>
                 <div>
@@ -200,13 +200,13 @@ export default function ABTestDashboardSupabase() {
         )}
 
         {/* Variant Comparison */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Variant A */}
-          <Card className="border-[3px] border-black">
+          <Card className="brutal-border">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 border-[3px] border-primary bg-primary flex items-center justify-center">
+                  <div className="w-10 h-10 brutal-border border-primary bg-primary flex items-center justify-center">
                     <span className="font-pixel text-primary-foreground">A</span>
                   </div>
                   <CardTitle className="font-pixel text-lg uppercase">VARIANT A</CardTitle>
@@ -218,7 +218,7 @@ export default function ABTestDashboardSupabase() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Copy Preview */}
-              <div className="border-[2px] border-border p-3 bg-muted/30">
+              <div className="border-border p-3 bg-muted/30">
                 <p className="font-pixel text-xs text-muted-foreground mb-2">HEADLINE:</p>
                 <p className="font-sans text-sm font-bold">{VARIANTS.A.hero.headline}</p>
                 <p className="font-pixel text-xs text-muted-foreground mt-3 mb-2">CTA:</p>
@@ -227,15 +227,15 @@ export default function ABTestDashboardSupabase() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="border-[2px] border-primary bg-primary/10 p-3 text-center">
+                <div className="border-primary bg-primary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-primary">{viewsA}</p>
                   <p className="font-sans text-xs text-muted-foreground">Views</p>
                 </div>
-                <div className="border-[2px] border-primary bg-primary/10 p-3 text-center">
+                <div className="border-primary bg-primary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-primary">{conversionsA}</p>
                   <p className="font-sans text-xs text-muted-foreground">Signups</p>
                 </div>
-                <div className="border-[2px] border-accent bg-accent/10 p-3 text-center">
+                <div className="border-accent bg-accent/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-accent">{rateA.toFixed(1)}%</p>
                   <p className="font-sans text-xs text-muted-foreground">Rate</p>
                 </div>
@@ -244,11 +244,11 @@ export default function ABTestDashboardSupabase() {
           </Card>
 
           {/* Variant B */}
-          <Card className="border-[3px] border-black">
+          <Card className="brutal-border">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 border-[3px] border-secondary bg-secondary flex items-center justify-center">
+                  <div className="w-10 h-10 brutal-border border-secondary bg-secondary flex items-center justify-center">
                     <span className="font-pixel text-secondary-foreground">B</span>
                   </div>
                   <CardTitle className="font-pixel text-lg uppercase">VARIANT B</CardTitle>
@@ -260,7 +260,7 @@ export default function ABTestDashboardSupabase() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Copy Preview */}
-              <div className="border-[2px] border-border p-3 bg-muted/30">
+              <div className="border-border p-3 bg-muted/30">
                 <p className="font-pixel text-xs text-muted-foreground mb-2">HEADLINE:</p>
                 <p className="font-sans text-sm font-bold">{VARIANTS.B.hero.headline}</p>
                 <p className="font-pixel text-xs text-muted-foreground mt-3 mb-2">CTA:</p>
@@ -269,15 +269,15 @@ export default function ABTestDashboardSupabase() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="border-[2px] border-secondary bg-secondary/10 p-3 text-center">
+                <div className="border-secondary bg-secondary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-secondary">{viewsB}</p>
                   <p className="font-sans text-xs text-muted-foreground">Views</p>
                 </div>
-                <div className="border-[2px] border-secondary bg-secondary/10 p-3 text-center">
+                <div className="border-secondary bg-secondary/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-secondary">{conversionsB}</p>
                   <p className="font-sans text-xs text-muted-foreground">Signups</p>
                 </div>
-                <div className="border-[2px] border-accent bg-accent/10 p-3 text-center">
+                <div className="border-accent bg-accent/10 p-3 text-center">
                   <p className="font-pixel text-2xl text-accent">{rateB.toFixed(1)}%</p>
                   <p className="font-sans text-xs text-muted-foreground">Rate</p>
                 </div>
@@ -287,10 +287,10 @@ export default function ABTestDashboardSupabase() {
         </div>
 
         {/* Overall Stats */}
-        <Card className="border-[3px] border-black">
+        <Card className="brutal-border">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 border-[3px] border-foreground bg-accent flex items-center justify-center">
+              <div className="w-10 h-10 brutal-border border-foreground bg-accent flex items-center justify-center">
                 <BarChart className="h-5 w-5 text-accent-foreground" />
               </div>
               <CardTitle className="font-pixel text-lg uppercase">COMBINED STATS</CardTitle>
@@ -319,10 +319,10 @@ export default function ABTestDashboardSupabase() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="border-[3px] border-black bg-muted/30">
+        <Card className="brutal-border bg-muted/30">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 border-[3px] border-primary bg-primary flex items-center justify-center">
+              <div className="w-10 h-10 brutal-border border-primary bg-primary flex items-center justify-center">
                 <TrendingUp className="h-5 w-5 text-primary-foreground" />
               </div>
               <CardTitle className="font-pixel text-lg uppercase">NEXT STEPS</CardTitle>

@@ -399,8 +399,8 @@ const Appointments = () => {
               </div>
             )}
 
-            {/* Search and Filters */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in">
+            {/* Search and Filters - Mobile responsive */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in w-full">
               <SearchInput
                 ref={searchInputRef}
                 value={searchQuery}
@@ -413,7 +413,7 @@ const Appointments = () => {
                 className="flex-1"
               />
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-48 border-[2px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]">
+                <SelectTrigger className="w-full sm:w-48 brutal-border min-h-[44px]">
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
