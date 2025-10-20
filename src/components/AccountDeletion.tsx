@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { logger } from "@/lib/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +43,8 @@ export const AccountDeletion = () => {
 
       if (error) throw error;
 
+      userJourney.trackAction('Account Deletion Requested', { userId: user.id });
+      
       toast({
         title: "Account Deletion Requested",
         description: "Your account deletion request has been submitted. You will receive a confirmation email within 72 hours.",
@@ -50,7 +54,8 @@ export const AccountDeletion = () => {
       await signOut();
       navigate('/');
     } catch (error) {
-      console.error('Error deleting account:', error);
+      logger.error('Error deleting account', error, { context: 'AccountDeletion', data: { userId: user?.id } });
+      userJourney.trackError(error as Error, { action: 'delete-account' });
       toast({
         title: "Deletion Failed",
         description: "Unable to process your deletion request. Please contact support.",

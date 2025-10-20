@@ -6,6 +6,9 @@ import { Loader2, ExternalLink, TrendingUp, Tag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { analytics } from "@/lib/analytics";
+import { logger } from "@/lib/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { trackSelect } from "@/lib/logging/supabaseTracker";
 
 interface ProductRecommendation {
   id: string;
@@ -50,16 +53,20 @@ export const AIProductRecommendations = ({
     try {
       // Get stylist's affiliate codes
       if (stylistId) {
-        const { data: codes } = await supabase
-          .from('stylist_affiliate_codes')
-          .select('referral_code')
-          .eq('stylist_id', stylistId)
-          .eq('is_active', true)
-          .limit(1)
-          .maybeSingle();
+        const result = await trackSelect(
+          async () => await supabase
+            .from('stylist_affiliate_codes')
+            .select('referral_code')
+            .eq('stylist_id', stylistId)
+            .eq('is_active', true)
+            .limit(1)
+            .maybeSingle(),
+          'stylist_affiliate_codes',
+          'AIProductRecommendations'
+        );
 
-        if (codes?.referral_code) {
-          setAffiliateCode(codes.referral_code);
+        if (result.data?.referral_code) {
+          setAffiliateCode(result.data.referral_code);
         }
       }
 
@@ -103,7 +110,8 @@ export const AIProductRecommendations = ({
 
       setRecommendations(mockRecommendations);
     } catch (error) {
-      console.error('Error loading recommendations:', error);
+      logger.error('Error loading AI product recommendations', error, { context: 'AIProductRecommendations', data: { stylistId } });
+      userJourney.trackError(error as Error, { action: 'load-product-recommendations' });
       toast.error('Failed to load product recommendations');
     } finally {
       setLoading(false);
@@ -112,6 +120,11 @@ export const AIProductRecommendations = ({
 
   const handleProductClick = (product: ProductRecommendation) => {
     // Track click
+    userJourney.trackAction('Product Recommendation Clicked', { 
+      product: product.name, 
+      brand: product.brand,
+      affiliateCode: affiliateCode || 'none'
+    });
     analytics.affiliateCodeUsed(product.brand, affiliateCode || 'none');
     
     // Open affiliate link with code if available

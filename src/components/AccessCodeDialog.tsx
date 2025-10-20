@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Key } from "lucide-react";
 import { sanitizeInput, detectSQLInjection } from "@/lib/security/inputSanitization";
+import { logger } from "@/lib/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 interface AccessCodeDialogProps {
   open: boolean;
@@ -88,12 +90,14 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
         return data;
       });
 
+      userJourney.trackAction('Access Code Redeemed', { code: sanitizedCode.substring(0, 4) + '***' });
       toast.success("Access code redeemed! You now have full access to all features.");
       setCode("");
       onOpenChange(false);
       onSuccess();
     } catch (error: any) {
-      console.error("Error redeeming access code:", error);
+      logger.error('Error redeeming access code', error, { context: 'AccessCodeDialog' });
+      userJourney.trackError(error, { action: 'redeem-access-code' });
       toast.error(error.message || "Invalid or already used access code");
     } finally {
       setIsSubmitting(false);

@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2, LucideIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 interface AIEnhancedEmptyStateProps {
   icon: LucideIcon;
@@ -56,7 +58,8 @@ export const AIEnhancedEmptyState = ({
         );
       }
     } catch (error) {
-      console.error('Failed to fetch AI suggestions:', error);
+      logger.error('Failed to fetch AI suggestions', error, { context: 'AIEnhancedEmptyState', data: { context } });
+      userJourney.trackError(error as Error, { action: 'fetch-ai-suggestions', context });
       // Fallback suggestions based on context
       setSuggestions(getDefaultSuggestions(context));
     } finally {

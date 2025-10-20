@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { logger } from '@/lib/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 import { 
   Shield, 
   Activity, 
@@ -62,7 +64,8 @@ export const AdminDivineWeapon = () => {
       setSystemHealth({ healthy: true });
       
     } catch (error) {
-      console.error('Error loading dashboard:', error);
+      logger.error('Error loading admin dashboard', error, { context: 'AdminDivineWeapon' });
+      userJourney.trackError(error as Error, { action: 'load-admin-dashboard' });
       toast({
         title: "Error",
         description: "Failed to load dashboard data",

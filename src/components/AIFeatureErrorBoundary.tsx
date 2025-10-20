@@ -7,6 +7,8 @@ import React from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, RefreshCw } from 'lucide-react';
+import { logger } from '@/lib/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface Props {
   children: React.ReactNode;
@@ -31,7 +33,17 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error(`[${this.props.featureName}] Error:`, error, errorInfo);
+    logger.error(`AI Feature Error: ${this.props.featureName}`, error, { 
+      context: 'AIFeatureErrorBoundary',
+      data: {
+        feature: this.props.featureName,
+        componentStack: errorInfo.componentStack
+      }
+    });
+    userJourney.trackError(error, { 
+      feature: this.props.featureName,
+      componentStack: errorInfo.componentStack
+    });
     this.setState({ errorInfo });
 
     // Send to Sentry
@@ -43,7 +55,7 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
         source: 'AIFeatureErrorBoundary',
       });
     } catch (e) {
-      console.error('Error logging failed:', e);
+      logger.error('Error logging failed', e, { context: 'AIFeatureErrorBoundary' });
     }
   }
 

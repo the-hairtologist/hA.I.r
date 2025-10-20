@@ -7,6 +7,9 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { haptic } from "@/platform/haptics";
+import { logger } from "@/lib/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { trackInsert } from "@/lib/logging/supabaseTracker";
 
 interface AIFeedbackPromptProps {
   context: "formula" | "recommendation" | "suggestion";
@@ -42,13 +45,19 @@ export const AIFeedbackPrompt = ({
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
-        await supabase.from("ai_feedback").insert({
-          user_id: user.id,
-          context_type: context,
-          context_id: contextId,
-          feedback_type: feedbackType,
-          comment: userComment || null,
-        });
+        userJourney.trackAction(`AI Feedback: ${feedbackType}`, { context, feedbackType });
+        
+        await trackInsert(
+          async () => await supabase.from("ai_feedback").insert({
+            user_id: user.id,
+            context_type: context,
+            context_id: contextId,
+            feedback_type: feedbackType,
+            comment: userComment || null,
+          }),
+          'ai_feedback',
+          'AIFeedbackPrompt'
+        );
       }
 
       haptic.success();
@@ -62,7 +71,8 @@ export const AIFeedbackPrompt = ({
         onDismiss?.();
       }, 1000);
     } catch (error) {
-      console.error("Error submitting feedback:", error);
+      logger.error('Error submitting AI feedback', error, { context: 'AIFeedbackPrompt', data: { context } });
+      userJourney.trackError(error as Error, { action: 'submit-ai-feedback', context });
       haptic.error();
     } finally {
       setSubmitting(false);
