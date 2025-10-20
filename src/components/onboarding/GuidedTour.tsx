@@ -58,7 +58,7 @@ export const GuidedTour = () => {
       tooltipComponent={TourTooltip}
       styles={{
         options: {
-          zIndex: 10000,
+          zIndex: 60,
         },
         overlay: {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
