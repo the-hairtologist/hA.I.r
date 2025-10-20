@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -33,15 +33,13 @@ import { AIFormulaAnalyzer } from "@/components/AIFormulaAnalyzer";
 import { formulaSchema } from "@/lib/validation/formulaSchemas";
 import { cn } from "@/lib/utils";
 import { VirtualList } from "@/components/VirtualList";
-import { useCallback, memo } from "react";
 import { FormulaCard } from "@/components/FormulaCard";
+import { useFormulasByStylist, useCreateFormula, useUpdateFormula, useDeleteFormula } from "@/hooks/useFormulas";
+import { useClients } from "@/hooks/useClients";
 
 const Formulas = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [formulas, setFormulas] = useState<any[]>([]);
-  const [clients, setClients] = useState<any[]>([]);
-  const [stylistProfile, setStylistProfile] = useState<any>(null);
+  const [stylistId, setStylistId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   
@@ -78,47 +76,20 @@ const Formulas = () => {
   const [whatWorked, setWhatWorked] = useState("");
   const [whatToAvoid, setWhatToAvoid] = useState("");
 
+  // Load stylist profile
   useEffect(() => {
-    loadData();
-  }, []);
-  
-  // Global keyboard shortcuts
-  useKeyboardShortcuts([
-    {
-      key: 'n',
-      ctrlKey: true,
-      description: 'New formula',
-      action: () => !dialogOpen && setDialogOpen(true),
-    },
-    {
-      key: 'e',
-      ctrlKey: true,
-      description: 'Export formulas',
-      action: () => handleExportCSV(),
-    },
-  ]);
-
-  const loadData = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+    const loadStylistProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
         navigate("/auth");
         return;
       }
 
-      // Get stylist profile
-      const { data: stylist, error } = await supabase
+      const { data: stylist } = await supabase
         .from("stylist_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
+        .select("id")
+        .eq("user_id", user.id)
         .maybeSingle();
-
-      if (error) {
-        console.error("Error fetching stylist profile:", error);
-        toast.error("Error loading profile");
-        navigate("/dashboard");
-        return;
-      }
 
       if (!stylist) {
         toast.error("Stylist profile not found");
@@ -126,200 +97,26 @@ const Formulas = () => {
         return;
       }
 
-      setStylistProfile(stylist);
+      setStylistId(stylist.id);
+    };
 
-      // Get formulas
-      const { data: formulasData } = await supabase
-        .from("formulas")
-        .select(`
-          *,
-          client:client_profiles(
-            id,
-            full_name,
-            email
-          )
-        `)
-        .eq("stylist_id", stylist.id)
-        .order("created_at", { ascending: false });
+    loadStylistProfile();
+  }, [navigate]);
 
-      setFormulas(formulasData || []);
+  // React Query hooks for data fetching
+  const { data: formulas = [], isLoading: formulasLoading } = useFormulasByStylist(stylistId);
+  const { data: clients = [], isLoading: clientsLoading } = useClients(stylistId);
+  
+  const loading = formulasLoading || clientsLoading;
 
-      // Get clients
-      const { data: clientsData } = await supabase
-        .from("client_profiles")
-        .select("id, full_name, email")
-        .eq("preferred_stylist_id", stylist.id)
-        .order("full_name");
+  // Mutation hooks
+  const createFormulaMutation = useCreateFormula(stylistId || '');
+  const updateFormulaMutation = useUpdateFormula(stylistId || '');
+  const deleteFormulaMutation = useDeleteFormula(stylistId || '');
 
-      setClients(clientsData || []);
-    } catch (error: any) {
-      console.error("Error loading data:", error);
-      toast.error("Error loading formulas");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSaveFormula = async () => {
-    // Validate with zod schema
-    try {
-      const validatedData = formulaSchema.parse({
-        client_id: selectedClient,
-        formula_text: formulaText,
-        instructions,
-        color_line: colorLine,
-        result_notes: resultNotes,
-        processing_time_minutes: processingTime ? parseInt(processingTime) : null,
-        developer_volume: developerVolume,
-        application_notes: applicationNotes,
-        what_worked: whatWorked,
-        what_to_avoid: whatToAvoid,
-        tags: tags.length > 0 ? tags : undefined
-      });
-      
-      setValidationErrors({});
-    } catch (error: any) {
-      const errors: Record<string, string> = {};
-      error.errors?.forEach((err: any) => {
-        errors[err.path[0]] = err.message;
-      });
-      setValidationErrors(errors);
-      toast.error("Please fix validation errors");
-      return;
-    }
-
-    try {
-      const formulaData = {
-        formula_text: formulaText,
-        instructions,
-        color_line: colorLine,
-        result_notes: resultNotes,
-        tags: tags.length > 0 ? tags : null,
-        processing_time_minutes: processingTime ? parseInt(processingTime) : null,
-        developer_volume: developerVolume || null,
-        application_notes: applicationNotes || null,
-        what_worked: whatWorked || null,
-        what_to_avoid: whatToAvoid || null,
-      };
-
-      if (editingFormula) {
-        // Update existing formula
-        const { error } = await supabase
-          .from("formulas")
-          .update(formulaData)
-          .eq("id", editingFormula.id);
-
-        if (error) throw error;
-        toast.success("Formula updated successfully!");
-      } else {
-        // Create new formula
-        const { error } = await supabase
-          .from("formulas")
-          .insert({
-            stylist_id: stylistProfile.id,
-            client_id: selectedClient,
-            ...formulaData,
-          });
-
-        if (error) throw error;
-        
-        // Show celebration
-        showCelebration("formula-saved", undefined, formulas.length + 1);
-      }
-
-      handleCloseDialog();
-      loadData();
-    } catch (error: any) {
-      console.error("Error saving formula:", error);
-      toast.error("Error saving formula");
-    }
-  };
-
-  const handleEditFormula = (formula: any) => {
-    setEditingFormula(formula);
-    setSelectedClient(formula.client_id);
-    setFormulaText(formula.formula_text || "");
-    setInstructions(formula.instructions || "");
-    setColorLine(formula.color_line || "");
-    setResultNotes(formula.result_notes || "");
-    setTags(formula.tags || []);
-    setProcessingTime(formula.processing_time_minutes?.toString() || "");
-    setDeveloperVolume(formula.developer_volume || "");
-    setApplicationNotes(formula.application_notes || "");
-    setWhatWorked(formula.what_worked || "");
-    setWhatToAvoid(formula.what_to_avoid || "");
-    setDialogOpen(true);
-  };
-
-  const handleDuplicateFormula = (formula: any) => {
-    setEditingFormula(null); // Not editing, creating new
-    setSelectedClient(formula.client_id);
-    setFormulaText(formula.formula_text || "");
-    setInstructions(formula.instructions || "");
-    setColorLine(formula.color_line || "");
-    setResultNotes(formula.result_notes || "");
-    setTags(formula.tags || []);
-    setProcessingTime(formula.processing_time_minutes?.toString() || "");
-    setDeveloperVolume(formula.developer_volume || "");
-    setApplicationNotes(formula.application_notes || "");
-    setWhatWorked(formula.what_worked || "");
-    setWhatToAvoid(formula.what_to_avoid || "");
-    setDialogOpen(true);
-    toast.success("Formula duplicated! Make any changes and save.");
-  };
-
-  const handleDeleteFormula = async (formulaId: string) => {
-    const confirmed = window.confirm(
-      "Delete this formula?\n\nThis will permanently remove the formula from your records. This action cannot be undone."
-    );
-    if (!confirmed) return;
-
-    try {
-      const { error } = await supabase
-        .from("formulas")
-        .delete()
-        .eq("id", formulaId);
-
-      if (error) throw error;
-      toast.success("Formula deleted successfully!");
-      loadData();
-    } catch (error: any) {
-      console.error("Error deleting formula:", error);
-      toast.error("Error deleting formula");
-    }
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-    setEditingFormula(null);
-    setSelectedClient("");
-    setFormulaText("");
-    setInstructions("");
-    setColorLine("");
-    setResultNotes("");
-    setTags([]);
-    setTagInput("");
-    setProcessingTime("");
-    setDeveloperVolume("");
-    setApplicationNotes("");
-    setWhatWorked("");
-    setWhatToAvoid("");
-  };
-
-  const handleAddTag = () => {
-    const newTag = tagInput.trim().toLowerCase();
-    if (newTag && !tags.includes(newTag)) {
-      setTags([...tags, newTag]);
-      setTagInput("");
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter(t => t !== tagToRemove));
-  };
-
+  // Filtered formulas computation
   const filteredFormulas = useMemo(() => {
-    let filtered = formulas;
+    let filtered = [...(formulas as any[])];
 
     // Enhanced fuzzy text search
     if (searchTerm) {
@@ -399,26 +196,30 @@ const Formulas = () => {
     }
 
     return filtered;
-  }, [formulas, searchTerm, filters]);
+  }, [formulas, searchTerm, filters, processingTimeSort]);
 
   // Extract unique color lines and tags
   const uniqueColorLines = useMemo(() => {
-    const lines = formulas
+    const lines = (formulas as any[])
       .map(f => f.color_line)
       .filter((line): line is string => !!line);
     return Array.from(new Set(lines)).sort();
   }, [formulas]);
 
   const availableTags = useMemo(() => {
-    const allTags = formulas
+    const allTags = (formulas as any[])
       .flatMap(f => f.tags || [])
       .filter((tag): tag is string => !!tag);
     return Array.from(new Set(allTags)).sort();
   }, [formulas]);
 
-  const selectedClientData = clients.find(c => c.id === selectedClient);
+  const selectedClientData = useMemo(
+    () => clients.find(c => c.id === selectedClient),
+    [clients, selectedClient]
+  );
 
-  const handleExportCSV = () => {
+  // Export callback
+  const handleExportCSV = useCallback(() => {
     if (filteredFormulas.length === 0) {
       toast.error("No formulas to export");
       return;
@@ -437,6 +238,168 @@ const Formulas = () => {
     
     exportToCSV(exportData, "formulas");
     toast.success("Formulas exported!");
+  }, [filteredFormulas]);
+  
+  // Global keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'n',
+      ctrlKey: true,
+      description: 'New formula',
+      action: () => !dialogOpen && setDialogOpen(true),
+    },
+    {
+      key: 'e',
+      ctrlKey: true,
+      description: 'Export formulas',
+      action: () => handleExportCSV(),
+    },
+  ]);
+
+  const handleSaveFormula = useCallback(async () => {
+    if (!stylistId) return;
+
+    // Validate with zod schema
+    try {
+      const validatedData = formulaSchema.parse({
+        client_id: selectedClient,
+        formula_text: formulaText,
+        instructions,
+        color_line: colorLine,
+        result_notes: resultNotes,
+        processing_time_minutes: processingTime ? parseInt(processingTime) : null,
+        developer_volume: developerVolume,
+        application_notes: applicationNotes,
+        what_worked: whatWorked,
+        what_to_avoid: whatToAvoid,
+        tags: tags.length > 0 ? tags : undefined
+      });
+      
+      setValidationErrors({});
+    } catch (error: any) {
+      const errors: Record<string, string> = {};
+      error.errors?.forEach((err: any) => {
+        errors[err.path[0]] = err.message;
+      });
+      setValidationErrors(errors);
+      toast.error("Please fix validation errors");
+      return;
+    }
+
+    const formulaData = {
+      stylist_id: stylistId,
+      client_id: selectedClient,
+      formula_text: formulaText,
+      instructions: instructions || undefined,
+      color_line: colorLine || undefined,
+      processing_time_minutes: processingTime ? parseInt(processingTime) : undefined,
+      developer_volume: developerVolume || undefined,
+      application_notes: applicationNotes || undefined,
+      what_worked: whatWorked || undefined,
+      what_to_avoid: whatToAvoid || undefined,
+    };
+
+    if (editingFormula) {
+      // Update existing formula
+      updateFormulaMutation.mutate({ id: editingFormula.id, ...formulaData });
+    } else {
+      // Create new formula
+      createFormulaMutation.mutate(formulaData, {
+        onSuccess: () => {
+          showCelebration("formula-saved", undefined, formulas.length + 1);
+        }
+      });
+    }
+
+    handleCloseDialog();
+  }, [
+    stylistId,
+    selectedClient,
+    formulaText,
+    instructions,
+    colorLine,
+    resultNotes,
+    processingTime,
+    developerVolume,
+    applicationNotes,
+    whatWorked,
+    whatToAvoid,
+    tags,
+    editingFormula,
+    createFormulaMutation,
+    updateFormulaMutation,
+    formulas.length
+  ]);
+
+  const handleEditFormula = (formula: any) => {
+    setEditingFormula(formula);
+    setSelectedClient(formula.client_id);
+    setFormulaText(formula.formula_text || "");
+    setInstructions(formula.instructions || "");
+    setColorLine(formula.color_line || "");
+    setResultNotes(formula.result_notes || "");
+    setTags(formula.tags || []);
+    setProcessingTime(formula.processing_time_minutes?.toString() || "");
+    setDeveloperVolume(formula.developer_volume || "");
+    setApplicationNotes(formula.application_notes || "");
+    setWhatWorked(formula.what_worked || "");
+    setWhatToAvoid(formula.what_to_avoid || "");
+    setDialogOpen(true);
+  };
+
+  const handleDuplicateFormula = (formula: any) => {
+    setEditingFormula(null); // Not editing, creating new
+    setSelectedClient(formula.client_id);
+    setFormulaText(formula.formula_text || "");
+    setInstructions(formula.instructions || "");
+    setColorLine(formula.color_line || "");
+    setResultNotes(formula.result_notes || "");
+    setTags(formula.tags || []);
+    setProcessingTime(formula.processing_time_minutes?.toString() || "");
+    setDeveloperVolume(formula.developer_volume || "");
+    setApplicationNotes(formula.application_notes || "");
+    setWhatWorked(formula.what_worked || "");
+    setWhatToAvoid(formula.what_to_avoid || "");
+    setDialogOpen(true);
+    toast.success("Formula duplicated! Make any changes and save.");
+  };
+
+  const handleDeleteFormula = useCallback((formulaId: string) => {
+    const confirmed = window.confirm(
+      "Delete this formula?\n\nThis will permanently remove the formula from your records. This action cannot be undone."
+    );
+    if (!confirmed) return;
+
+    deleteFormulaMutation.mutate(formulaId);
+  }, [deleteFormulaMutation]);
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setEditingFormula(null);
+    setSelectedClient("");
+    setFormulaText("");
+    setInstructions("");
+    setColorLine("");
+    setResultNotes("");
+    setTags([]);
+    setTagInput("");
+    setProcessingTime("");
+    setDeveloperVolume("");
+    setApplicationNotes("");
+    setWhatWorked("");
+    setWhatToAvoid("");
+  };
+
+  const handleAddTag = () => {
+    const newTag = tagInput.trim().toLowerCase();
+    if (newTag && !tags.includes(newTag)) {
+      setTags([...tags, newTag]);
+      setTagInput("");
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter(t => t !== tagToRemove));
   };
 
   if (loading) {
@@ -592,20 +555,15 @@ const Formulas = () => {
                           `Delete ${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''}?\n\nThis will permanently remove the selected formulas from your records.`
                         );
                         if (confirmed) {
-                          try {
-                            const { error } = await supabase
-                              .from("formulas")
-                              .delete()
-                              .in("id", Array.from(selectedFormulas));
-                            
-                            if (error) throw error;
-                            toast.success(`${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''} deleted`);
+                          const formulaIds = Array.from(selectedFormulas);
+                          Promise.all(
+                            formulaIds.map(id => deleteFormulaMutation.mutateAsync(id))
+                          ).then(() => {
+                            toast.success(`${formulaIds.length} formula${formulaIds.length !== 1 ? 's' : ''} deleted`);
                             setSelectedFormulas(new Set());
-                            loadData();
-                          } catch (error) {
-                            console.error("Error deleting formulas:", error);
-                            toast.error("Failed to delete formulas");
-                          }
+                          }).catch(() => {
+                            toast.error("Failed to delete some formulas");
+                          });
                         }
                       }}
                     >
@@ -1051,10 +1009,10 @@ const Formulas = () => {
       <AddClientDialog
         open={addClientDialogOpen}
         onOpenChange={setAddClientDialogOpen}
-        stylistId={stylistProfile?.id}
+        stylistId={stylistId || undefined}
         onClientAdded={() => {
-          loadData();
           setAddClientDialogOpen(false);
+          toast.success("Client added successfully!");
         }}
       />
     </DashboardLayout>

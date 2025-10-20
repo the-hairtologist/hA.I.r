@@ -15,13 +15,16 @@ export interface Formula {
   what_worked?: string | null;
   what_to_avoid?: string | null;
   hair_photo_url?: string | null;
+  result_notes?: string | null;
+  tags?: string[] | null;
   created_at: string;
 }
 
 export interface FormulaWithClient extends Formula {
-  client_profiles?: {
+  client?: {
     id: string;
     full_name: string | null;
+    email?: string | null;
   } | null;
 }
 
