@@ -86,18 +86,9 @@ export const stylistNavigationItems: NavigationItem[] = [
     group: "main", 
     color: "text-emerald-400 dark:text-emerald-300" 
   },
+  // REMOVED: CRM Dashboard - feature removed per user request
   { 
-    id: "crm", 
-    title: "CRM Dashboard", 
-    url: "/crm", 
-    icon: Users, 
-    gradient: "bg-[image:var(--gradient-purple-pink)]", 
-    group: "business", 
-    color: "text-purple-400 dark:text-purple-300",
-    description: "Enhanced client management"
-  },
-  { 
-    id: "sales", 
+    id: "sales",
     title: "Sales Dashboard", 
     url: "/sales-dashboard", 
     icon: TrendingUp, 
