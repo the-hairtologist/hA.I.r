@@ -21,7 +21,7 @@ export const TourTooltip = ({
   return (
     <div
       {...tooltipProps}
-      className="bg-background border-[3px] border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none max-w-[calc(100vw-2rem)] sm:max-w-sm w-full"
+      className="bg-background border-[3px] border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none max-w-[min(calc(100vw-2rem),400px)] sm:max-w-sm w-full"
     >
       {/* Header */}
       <div className="flex items-center justify-between p-3 sm:p-4 border-b-[2px] border-foreground">
@@ -54,38 +54,43 @@ export const TourTooltip = ({
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between gap-2 p-3 sm:p-4 border-t-[2px] border-foreground bg-muted/20">
+      <div className="flex items-center justify-end gap-3 p-3 sm:p-4 border-t-[2px] border-foreground bg-muted/20 flex-wrap">
         {index > 0 ? (
           <Button
             {...backProps}
             variant="outline"
             size="sm"
-            className="font-semibold text-[10px] sm:text-xs uppercase border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-2 sm:px-3 h-9"
+            className="font-semibold text-xs sm:text-xs uppercase border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-2.5 sm:px-3 h-8 sm:h-9 min-w-[64px]"
+            aria-label="Go back to previous step"
           >
-            Back
+            <span className="hidden xs:inline">Back</span>
+            <span className="inline xs:hidden">←</span>
           </Button>
         ) : (
           <Button
             {...skipProps}
             variant="ghost"
             size="sm"
-            className="font-semibold text-[10px] sm:text-xs uppercase px-2 sm:px-3 h-9"
+            className="font-semibold text-xs uppercase px-2.5 sm:px-3 h-8 sm:h-9 min-w-[64px]"
           >
             Skip
           </Button>
         )}
 
-        <div className="flex gap-2">
-          {continuous && (
-            <Button
-              {...primaryProps}
-              size="sm"
-              className="font-semibold text-[10px] sm:text-xs uppercase bg-primary text-primary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-3 sm:px-4 h-9"
-            >
-              {index === size - 1 ? 'Finish' : 'Next'}
-            </Button>
-          )}
-        </div>
+        {continuous && (
+          <Button
+            {...primaryProps}
+            size="sm"
+            className="font-semibold text-xs uppercase bg-primary text-primary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-3 sm:px-4 h-8 sm:h-9 min-w-[64px]"
+          >
+            {index === size - 1 ? (
+              <>
+                <span className="hidden xs:inline">Finish</span>
+                <span className="inline xs:hidden">Done</span>
+              </>
+            ) : 'Next'}
+          </Button>
+        )}
       </div>
 
       {/* Progress bar */}
