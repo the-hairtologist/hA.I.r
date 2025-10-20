@@ -171,7 +171,7 @@ export function AppSidebar() {
     return (
       <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
         <SidebarContent className="flex flex-col gap-3 p-4">
-          {/* Skeleton loaders */}
+          {/* Skeleton loaders with brutal styling */}
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-md bg-muted/50 border-[2px] border-foreground/10 shadow-[var(--brutal-shadow-sm)] animate-pulse" />
             <div className="flex-1 space-y-2">
@@ -193,11 +193,13 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
       <SidebarContent className="pb-4">
-        {/* Widgets */}
+        {/* Next Appointment Banner - Shows time until next appointment */}
         {(isStylist || isAdmin) && !collapsed && <NextAppointmentBanner />}
+        
+        {/* Today's Schedule Widget - Only for stylists and admins */}
         {(isStylist || isAdmin) && !collapsed && <TodaysScheduleWidget />}
         
-        {/* Customize Controls */}
+        {/* Customize Controls - Only for stylists and admins */}
         {!collapsed && (isStylist || isAdmin) && !isClient && (
           <div className="px-3 py-3 border-b-[3px] border-foreground/10">
             <div className="flex items-center gap-2">
@@ -292,8 +294,10 @@ export function AppSidebar() {
           </SortableContext>
         </DndContext>
 
-        {/* Footer widgets */}
+        {/* Calendar Sync Indicator - Only for stylists and admins */}
         {(isStylist || isAdmin) && !collapsed && <CalendarSyncIndicator />}
+        
+        {/* Dark Mode Toggle - For all users */}
         {!collapsed && <DarkModeToggle />}
       </SidebarContent>
     </Sidebar>

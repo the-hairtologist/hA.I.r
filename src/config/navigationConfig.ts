@@ -184,58 +184,52 @@ export const stylistNavigationItems: NavigationItem[] = [
     group: "scheduling", 
     color: "text-purple-400 dark:text-purple-300" 
   },
-  // Consolidated: Top 4 growth tools promoted to main level
   { 
-    id: "analytics", 
-    title: "Analytics", 
-    url: "/analytics", 
-    icon: Activity, 
-    gradient: "bg-[image:var(--gradient-green-emerald)]", 
-    group: "growth",
-    color: "text-emerald-400 dark:text-emerald-300",
-    description: "Business insights"
-  },
-  { 
-    id: "retention", 
-    title: "Client Retention", 
-    url: "/client-retention", 
-    icon: Heart, 
-    gradient: "bg-[image:var(--gradient-pink-rose)]", 
-    group: "growth",
-    color: "text-pink-400 dark:text-pink-300",
-    description: "Keep clients coming back"
-  },
-  { 
-    id: "portfolio", 
-    title: "Portfolio", 
-    url: "/portfolio", 
-    icon: Palette, 
-    gradient: "bg-[image:var(--gradient-orange-red)]", 
-    group: "growth",
-    color: "text-orange-400 dark:text-orange-300",
-    description: "Showcase your work"
-  },
-  { 
-    id: "referrals", 
-    title: "Referrals", 
-    url: "/referrals", 
-    icon: Gift, 
-    gradient: "bg-[image:var(--gradient-purple-pink)]", 
-    group: "growth",
-    color: "text-purple-400 dark:text-purple-300",
-    description: "Reward client referrals"
-  },
-  // Marketing Hub - Consolidated parent with advanced tools
-  { 
-    id: "marketing-hub", 
-    title: "Marketing Tools", 
+    id: "growth", 
+    title: "Growth & Marketing", 
     url: "#", 
     icon: TrendingUp, 
     gradient: "bg-[image:var(--gradient-green-emerald)]", 
     group: "growth", 
     color: "text-emerald-400 dark:text-emerald-300",
-    description: "Email, ads & forms",
     children: [
+      { 
+        id: "retention", 
+        title: "Client Retention", 
+        url: "/client-retention", 
+        icon: Heart, 
+        gradient: "bg-[image:var(--gradient-pink-rose)]", 
+        group: "growth",
+        color: "text-pink-400 dark:text-pink-300",
+        description: "AI-powered client retention insights"
+      },
+      { 
+        id: "analytics", 
+        title: "Analytics", 
+        url: "/analytics", 
+        icon: Activity, 
+        gradient: "bg-[image:var(--gradient-green-emerald)]", 
+        group: "growth",
+        color: "text-emerald-400 dark:text-emerald-300" 
+      },
+      { 
+        id: "referrals", 
+        title: "Referrals", 
+        url: "/referrals", 
+        icon: Gift, 
+        gradient: "bg-[image:var(--gradient-purple-pink)]", 
+        group: "growth",
+        color: "text-purple-400 dark:text-purple-300" 
+      },
+      { 
+        id: "portfolio", 
+        title: "Portfolio", 
+        url: "/portfolio", 
+        icon: Palette, 
+        gradient: "bg-[image:var(--gradient-orange-red)]", 
+        group: "growth",
+        color: "text-orange-400 dark:text-orange-300" 
+      },
       { 
         id: "email-campaigns", 
         title: "Email Campaigns", 
@@ -253,17 +247,7 @@ export const stylistNavigationItems: NavigationItem[] = [
         gradient: "bg-[image:var(--gradient-cyan-blue)]", 
         group: "growth",
         color: "text-cyan-400 dark:text-cyan-300",
-        description: "Automated emails"
-      },
-      { 
-        id: "ad-generator", 
-        title: "Ad Generator", 
-        url: "/ad-generator", 
-        icon: Sparkles, 
-        gradient: "bg-[image:var(--gradient-purple-pink)]", 
-        group: "growth",
-        color: "text-purple-400 dark:text-purple-300",
-        description: "AI marketing content"
+        description: "Automated email campaigns"
       },
       { 
         id: "intake-forms", 
@@ -273,7 +257,7 @@ export const stylistNavigationItems: NavigationItem[] = [
         gradient: "bg-[image:var(--gradient-purple-blue)]", 
         group: "growth",
         color: "text-purple-400 dark:text-purple-300",
-        description: "Intake forms"
+        description: "Client intake forms"
       },
       { 
         id: "aftercare-guides", 
@@ -284,6 +268,16 @@ export const stylistNavigationItems: NavigationItem[] = [
         group: "growth",
         color: "text-green-400 dark:text-green-300",
         description: "Aftercare instructions"
+      },
+      { 
+        id: "ad-generator", 
+        title: "Ad Generator", 
+        url: "/ad-generator", 
+        icon: Sparkles, 
+        gradient: "bg-[image:var(--gradient-purple-pink)]", 
+        group: "growth",
+        color: "text-purple-400 dark:text-purple-300",
+        description: "Create marketing content with AI"
       },
     ]
   },
@@ -507,7 +501,7 @@ export const stylistGroupLabels: NavigationGroup = {
   marketplace: "Marketplace",
   scheduling: "Calendar & Bookings",
   business: "Client Management",
-  growth: "Growth & Marketing",
+  growth: "Business Growth",
   tools: "Business Tools",
   account: "Account",
   help: "Support",

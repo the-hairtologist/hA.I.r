@@ -6,7 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
-
+import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
 import { MobileQuickActions } from "@/components/MobileQuickActions";
 import { DemoModeIndicator } from "@/components/demo/DemoMode";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -159,6 +159,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <OfflineIndicator />
       <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
         <AppSidebar />
+        <MobileSidebarOverlay />
         <DemoModeIndicator />
         
         <div className="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
@@ -170,8 +171,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Desktop Header */}
           <header className={`hidden lg:flex sticky top-0 z-40 border-b-3 lg:border-b-4 ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm shadow-[0_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
             <div className="flex h-14 lg:h-16 items-center gap-2 lg:gap-4 px-3 lg:px-4 w-full">
+              {/* CRITICAL: Always-visible sidebar trigger */}
               <SidebarTrigger className="h-9 w-9" />
-              <button
+              
+              <button 
                 onClick={() => navigate("/dashboard")}
                 className="flex items-center gap-1.5 lg:gap-2 hover:opacity-80 transition-opacity"
               >
