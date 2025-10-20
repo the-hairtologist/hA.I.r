@@ -50,8 +50,8 @@ export const GuidedTour = () => {
       steps={tour.steps}
       run={isRunning}
       continuous
-      showProgress
-      showSkipButton
+      showProgress={false}
+      showSkipButton={false}
       disableOverlayClose
       spotlightClicks
       callback={handleJoyrideCallback}
