@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Circle, Sparkles, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logging/productionLogger";
 
 interface Milestone {
   id: string;
@@ -67,7 +68,7 @@ export const ProgressTracker = () => {
       setTotalPoints(points);
       setLevel(Math.floor(points / 50) + 1);
     } catch (error) {
-      console.error("Error loading progress:", error);
+      logger.error("Error loading progress", error, { component: 'ProgressTracker' });
     } finally {
       setLoading(false);
     }
@@ -140,7 +141,7 @@ export const ProgressTracker = () => {
           return false;
       }
     } catch (error) {
-      console.error(`Error checking milestone ${milestoneId}:`, error);
+      logger.error(`Error checking milestone ${milestoneId}`, error, { component: 'ProgressTracker', milestoneId });
       return false;
     }
   };

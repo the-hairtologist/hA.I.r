@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Camera, Mic, Shield, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { logger } from "@/lib/logging/productionLogger";
 
 interface PrivacyConsentDialogProps {
   open: boolean;
@@ -42,7 +43,7 @@ export const setStoredConsent = (type: 'camera' | 'microphone', granted: boolean
     consent[`${type}_timestamp`] = new Date().toISOString();
     localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consent));
   } catch (error) {
-    console.error('Failed to store consent:', error);
+    logger.error('Failed to store consent', error, { component: 'PrivacyConsentDialog', type });
   }
 };
 

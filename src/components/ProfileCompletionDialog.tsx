@@ -10,6 +10,8 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { CheckCircle, ArrowRight, Sparkles, Upload } from "lucide-react";
 import { OptimizedImage } from '@/components/OptimizedImage';
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 interface ProfileCompletionDialogProps {
   open: boolean;
@@ -77,7 +79,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
         }
       }
     } catch (error) {
-      console.error("Error loading profile data:", error);
+      logger.error("Error loading profile data", error, { component: 'ProfileCompletionDialog', userId });
     }
   };
 
@@ -121,9 +123,10 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
         .getPublicUrl(fileName);
 
       setAvatarUrl(publicUrl);
+      userJourney.trackAction('Avatar uploaded');
       toast.success("Photo uploaded!");
     } catch (error: any) {
-      console.error("Error uploading photo:", error);
+      logger.error("Error uploading photo", error, { component: 'ProfileCompletionDialog', userId });
       toast.error("Failed to upload photo");
     } finally {
       setUploading(false);
@@ -184,6 +187,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
       localStorage.setItem('profile_completed', 'true');
       localStorage.setItem('profile_completed_at', new Date().toISOString());
       
+      userJourney.trackAction('Profile completed', { userRole });
       toast.success("Profile completed! Welcome to hA.I.r!", {
         description: "Your profile has been saved successfully",
         duration: 4000,
@@ -191,7 +195,7 @@ export const ProfileCompletionDialog = ({ open, onOpenChange, userRole, userId }
       onOpenChange(false);
       navigate("/dashboard");
     } catch (error: any) {
-      console.error("Error completing profile:", error);
+      logger.error("Error completing profile", error, { component: 'ProfileCompletionDialog', userId, userRole });
       toast.error("Failed to save profile");
     } finally {
       setSaving(false);

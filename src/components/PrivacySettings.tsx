@@ -6,6 +6,9 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Shield, Eye, EyeOff, Users, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { trackSelect, trackUpdate } from "@/lib/logging/supabaseTracker";
 
 interface PrivacySettingsProps {
   userId: string;
@@ -26,31 +29,39 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
   const loadPrivacySettings = async () => {
     try {
       // Load profile privacy settings
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("share_contact_with_stylists, share_contact_with_clients")
-        .eq("id", userId)
-        .maybeSingle();
+      const profileResult = await trackSelect(
+        async () => await supabase
+          .from("profiles")
+          .select("share_contact_with_stylists, share_contact_with_clients")
+          .eq("id", userId)
+          .maybeSingle(),
+        'profiles',
+        'PrivacySettings'
+      );
 
-      if (profile) {
-        setShareWithStylists(profile.share_contact_with_stylists || false);
-        setShareWithClients(profile.share_contact_with_clients || false);
+      if (profileResult.data) {
+        setShareWithStylists(profileResult.data.share_contact_with_stylists || false);
+        setShareWithClients(profileResult.data.share_contact_with_clients || false);
       }
 
       // Load stylist-specific settings if applicable
       if (userRole === "stylist") {
-        const { data: stylistProfile } = await supabase
-          .from("stylist_profiles")
-          .select("is_public_listing")
-          .eq("user_id", userId)
-          .maybeSingle();
+        const stylistResult = await trackSelect(
+          async () => await supabase
+            .from("stylist_profiles")
+            .select("is_public_listing")
+            .eq("user_id", userId)
+            .maybeSingle(),
+          'stylist_profiles',
+          'PrivacySettings'
+        );
 
-        if (stylistProfile) {
-          setIsPublicListing(stylistProfile.is_public_listing || false);
+        if (stylistResult.data) {
+          setIsPublicListing(stylistResult.data.is_public_listing || false);
         }
       }
     } catch (error) {
-      console.error("Error loading privacy settings:", error);
+      logger.error("Error loading privacy settings", error, { component: 'PrivacySettings', userId });
       toast.error("Failed to load privacy settings");
     } finally {
       setLoading(false);
@@ -60,21 +71,25 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
   const handleTogglePublicListing = async (checked: boolean) => {
     setSaving("public_listing");
     try {
-      const { error } = await supabase
-        .from("stylist_profiles")
-        .update({ is_public_listing: checked })
-        .eq("user_id", userId);
-
-      if (error) throw error;
+      await trackUpdate(
+        async () => await supabase
+          .from("stylist_profiles")
+          .update({ is_public_listing: checked })
+          .eq("user_id", userId),
+        'stylist_profiles',
+        'PrivacySettings',
+        { checked, userId }
+      );
       
       setIsPublicListing(checked);
+      userJourney.trackAction(`Public listing ${checked ? 'enabled' : 'disabled'}`);
       toast.success(
         checked 
           ? "Your profile is now visible in the public directory" 
           : "Your profile has been removed from the public directory"
       );
     } catch (error) {
-      console.error("Error updating public listing:", error);
+      logger.error("Error updating public listing", error, { component: 'PrivacySettings', userId, checked });
       toast.error("Failed to update public listing setting");
     } finally {
       setSaving(null);
@@ -88,12 +103,15 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
         ? { share_contact_with_stylists: checked }
         : { share_contact_with_clients: checked };
 
-      const { error } = await supabase
-        .from("profiles")
-        .update(updateData)
-        .eq("id", userId);
-
-      if (error) throw error;
+      await trackUpdate(
+        async () => await supabase
+          .from("profiles")
+          .update(updateData)
+          .eq("id", userId),
+        'profiles',
+        'PrivacySettings',
+        { type, checked, userId }
+      );
       
       if (type === 'stylists') {
         setShareWithStylists(checked);
@@ -101,9 +119,10 @@ export const PrivacySettings = ({ userId, userRole }: PrivacySettingsProps) => {
         setShareWithClients(checked);
       }
       
+      userJourney.trackAction(`Contact sharing with ${type} ${checked ? 'enabled' : 'disabled'}`);
       toast.success("Contact sharing preference updated");
     } catch (error) {
-      console.error("Error updating contact sharing:", error);
+      logger.error("Error updating contact sharing", error, { component: 'PrivacySettings', type, checked, userId });
       toast.error("Failed to update contact sharing");
     } finally {
       setSaving(null);

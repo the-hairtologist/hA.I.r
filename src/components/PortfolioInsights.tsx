@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Sparkles, Loader2, TrendingUp, Target, Lightbulb, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logging/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface PortfolioInsightsProps {
@@ -34,9 +36,11 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
 
       setAnalysis(data.analysis);
       setPhotosAnalyzed(data.photosAnalyzed);
+      userJourney.trackAction('Portfolio analysis completed', { photosAnalyzed: data.photosAnalyzed });
       toast.success('Portfolio analysis complete!');
     } catch (error: any) {
-      console.error('Error analyzing portfolio:', error);
+      logger.error('Error analyzing portfolio', error, { component: 'PortfolioInsights', stylistId });
+      userJourney.trackError(error, { operation: 'analyzePortfolio', stylistId });
       toast.error('Failed to analyze portfolio');
     } finally {
       setLoading(false);
