@@ -127,21 +127,19 @@ export function CalendarSyncIndicator() {
             size="sm"
             onClick={handleSync}
             disabled={syncing}
-            className="h-11 w-11 p-0"
-            aria-label="Sync calendar now"
+            className="h-6 w-6 p-0"
             title="Sync now"
           >
-            <RefreshCw className={cn("h-4 w-4", syncing && "animate-spin")} />
+            <RefreshCw className={cn("h-3 w-3", syncing && "animate-spin")} />
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate("/integrations")}
-            className="h-11 w-11 p-0"
-            aria-label="Open calendar settings"
+            className="h-6 w-6 p-0"
             title="Calendar settings"
           >
-            <Settings className="h-4 w-4" />
+            <Settings className="h-3 w-3" />
           </Button>
         </div>
       </div>

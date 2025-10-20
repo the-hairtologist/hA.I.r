@@ -170,14 +170,14 @@ export function SortableNavItem({
                   <SidebarMenuSubButton asChild>
                     <NavLink 
                       to={child.url} 
-                      className={`group relative pl-3 pr-3 py-3 rounded-md transition-all duration-200 flex items-center gap-3 min-h-[44px] ${
+                      className={`group relative pl-3 pr-3 py-2.5 rounded-md transition-all duration-200 flex items-center gap-3 ${
                         isChildActive 
                           ? 'bg-primary/10' 
                           : 'hover:bg-muted/50'
                       }`}
                     >
                       <div className="relative flex-shrink-0">
-                        <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${child.gradient} ${
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 retro-nav-icon-container ${child.gradient} ${
                           isChildActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'
                         }`}>
                           <child.icon className="h-4 w-4 text-on-surface-primary" />
