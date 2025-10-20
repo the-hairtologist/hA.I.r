@@ -24,6 +24,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { z } from "zod";
 import { useDebouncedSearch } from "./useDebouncedSearch";
+import { logger } from "@/lib/productionLogger";
 
 /**
  * Configuration options for form validation
@@ -181,7 +182,7 @@ export function useFormValidation<T extends Record<string, any>>({
       try {
         await onSubmit(values as T);
       } catch (error) {
-        console.error("Form submission error:", error);
+        logger.error("Form submission error", error, { context: 'useFormValidation' });
       } finally {
         setIsSubmitting(false);
       }

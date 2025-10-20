@@ -5,6 +5,9 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { logger } from "@/lib/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { trackInsert } from "@/lib/logging/supabaseTracker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -74,21 +77,30 @@ export function QuickAddClientFAB() {
       }
 
       // Create client profile
-      const { data: newClient, error } = await supabase
-        .from("client_profiles")
-        .insert({
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone || null,
-          notes: formData.notes || null,
-          preferred_stylist_id: stylistProfile.id,
-        })
-        .select()
-        .maybeSingle();
+      const result = await trackInsert(
+        async () => {
+          return await supabase
+            .from("client_profiles")
+            .insert({
+              full_name: formData.fullName,
+              email: formData.email,
+              phone: formData.phone || null,
+              notes: formData.notes || null,
+              preferred_stylist_id: stylistProfile.id,
+            })
+            .select()
+            .maybeSingle();
+        },
+        'client_profiles',
+        'QuickAddClientFAB'
+      );
+
+      const { data: newClient, error } = result;
 
       if (error) throw error;
 
       toast.success("Client added successfully! 🎉");
+      userJourney.trackAction('Quick added new client', { clientName: formData.fullName });
       setOpen(false);
       setFormData({ fullName: "", email: "", phone: "", notes: "" });
       setErrors({});
@@ -96,7 +108,8 @@ export function QuickAddClientFAB() {
       // Optional: Navigate to client profile
       // navigate(`/clients/${newClient.id}`);
     } catch (error: any) {
-      console.error("Error adding client:", error);
+      logger.error("Error adding client", error, { context: 'QuickAddClientFAB' });
+      userJourney.trackError(error);
       toast.error(error.message || "Failed to add client");
     } finally {
       setLoading(false);

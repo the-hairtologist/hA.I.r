@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { Key, Copy, CheckCircle, XCircle, Calendar, User } from "lucide-react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { logger } from "@/lib/productionLogger";
+import { trackSelect } from "@/lib/logging/supabaseTracker";
 
 interface AccessCode {
   id: string;
@@ -45,15 +47,22 @@ export default function AccessCodes() {
 
   const loadCodes = async () => {
     try {
-      const { data, error } = await supabase
-        .from("access_codes")
-        .select("*")
-        .order("created_at", { ascending: true });
+      const result = await trackSelect(
+        async () => {
+          return await supabase
+            .from("access_codes")
+            .select("*")
+            .order("created_at", { ascending: true });
+        },
+        'access_codes',
+        'AccessCodes'
+      );
 
+      const { data, error } = result;
       if (error) throw error;
       setCodes(data || []);
     } catch (error) {
-      console.error("Error loading access codes:", error);
+      logger.error("Error loading access codes", error, { context: 'AccessCodes' });
       toast.error("Failed to load access codes");
     } finally {
       setLoadingCodes(false);

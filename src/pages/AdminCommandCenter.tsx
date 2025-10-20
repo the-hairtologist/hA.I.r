@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { logger } from "@/lib/productionLogger";
 
 export default function AdminCommandCenter() {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ export default function AdminCommandCenter() {
       });
 
     } catch (error) {
-      console.error('Error loading command center data:', error);
+      logger.error('Error loading command center data', error, { context: 'AdminCommandCenter' });
       toast({
         title: "Error",
         description: "Failed to load dashboard data",

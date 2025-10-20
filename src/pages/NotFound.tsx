@@ -3,12 +3,16 @@ import { useEffect } from "react";
 import { Scissors, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
+import { logger } from "@/lib/productionLogger";
 
 const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    logger.error("404 Error: User attempted to access non-existent route", null, { 
+      context: 'NotFound',
+      data: { pathname: location.pathname } 
+    });
   }, [location.pathname]);
 
   return (

@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/productionLogger';
 
 const DEV_MODE_KEY = 'hair-dev-mode-enabled';
 
@@ -23,7 +24,7 @@ export function useDevMode() {
     try {
       localStorage.setItem(DEV_MODE_KEY, String(newValue));
     } catch (error) {
-      console.error('Failed to save dev mode preference:', error);
+      logger.error('Failed to save dev mode preference', error, { context: 'useDevMode' });
     }
   };
 

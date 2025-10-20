@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { toast } from "sonner";
 import { useDebounce } from "./useDebounce";
+import { logger } from "@/lib/productionLogger";
 
 interface UseAutoSaveOptions<T> {
   data: T;
@@ -48,7 +49,7 @@ export function useAutoSave<T>({
           className: "text-xs"
         });
       } catch (error) {
-        console.error("Auto-save failed:", error);
+        logger.error("Auto-save failed", error, { context: 'useAutoSave' });
         toast.error("Draft save failed", {
           description: "Your changes are still in the form",
           duration: 3000,
@@ -73,7 +74,7 @@ export function useAutoSave<T>({
       lastSavedData.current = data;
       toast.success("Saved successfully");
     } catch (error) {
-      console.error("Save failed:", error);
+      logger.error("Save failed", error, { context: 'useAutoSave' });
       toast.error("Save failed");
     } finally {
       setIsSaving(false);

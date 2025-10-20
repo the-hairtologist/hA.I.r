@@ -13,6 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Sparkles, Copy, Download, Share2, Wand2, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/productionLogger";
+import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 type AdType = "social-media" | "landing-page" | "email" | "banner";
 
@@ -45,9 +47,10 @@ export default function AdGenerator() {
       if (error) throw error;
 
       setGeneratedAd(data);
+      userJourney.trackAction('Generated ad', { adType, includeImage });
       toast.success(includeImage ? "Ad with image generated!" : "Ad copy generated!");
     } catch (error: any) {
-      console.error("Ad generation error:", error);
+      logger.error("Ad generation error", error, { context: 'AdGenerator', data: { adType, includeImage } });
       toast.error(error.message || "Failed to generate ad");
     } finally {
       setGenerating(false);

@@ -18,6 +18,8 @@ import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Navigate } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { exportToCSV } from "@/lib/csvExport";
+import { logger } from "@/lib/productionLogger";
+import { trackSelect } from "@/lib/logging/supabaseTracker";
 
 interface AuditLog {
   id: string;
@@ -60,17 +62,24 @@ export default function AuditLogs() {
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - parseInt(dateRange));
 
-      const { data, error } = await supabase
-        .from("audit_logs")
-        .select("*")
-        .gte("created_at", cutoffDate.toISOString())
-        .order("created_at", { ascending: false })
-        .limit(500);
+      const result = await trackSelect(
+        async () => {
+          return await supabase
+            .from("audit_logs")
+            .select("*")
+            .gte("created_at", cutoffDate.toISOString())
+            .order("created_at", { ascending: false })
+            .limit(500);
+        },
+        'audit_logs',
+        'AuditLogs'
+      );
 
+      const { data, error } = result;
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error("Error loading audit logs:", error);
+      logger.error("Error loading audit logs", error, { context: 'AuditLogs' });
       toast.error("Failed to load audit logs");
     } finally {
       setLoadingLogs(false);

@@ -6,6 +6,7 @@ import { NotificationDot } from "./NotificationDot";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/productionLogger";
 
 interface NavItem {
   icon: any;
@@ -187,7 +188,7 @@ export const MobileBottomNav = () => {
           }
         }
       } catch (e) {
-        console.error("Failed to load mobile nav config:", e);
+        logger.error("Failed to load mobile nav config", e, { context: 'MobileBottomNav' });
       }
     }
     

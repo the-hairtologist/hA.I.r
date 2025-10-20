@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { logger } from "@/lib/productionLogger";
 import { 
   Home, 
   Calendar, 
@@ -271,7 +272,7 @@ export const MobileNavCustomizer = ({ userRole }: MobileNavCustomizerProps) => {
           setItems(orderedItems as NavItem[]);
         }
       } catch (e) {
-        console.error("Failed to load mobile nav config:", e);
+        logger.error("Failed to load mobile nav config", e, { context: 'MobileNavCustomizer' });
       }
     }
   }, [userRole]);

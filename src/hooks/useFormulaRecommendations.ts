@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/lib/productionLogger';
 
 interface Recommendation {
   title: string;
@@ -35,7 +36,7 @@ export const useFormulaRecommendations = () => {
       });
 
       if (error) {
-        console.error('Recommendation error:', error);
+        logger.error('Recommendation error', error, { context: 'useFormulaRecommendations', data: { clientId, stylistId } });
         throw error;
       }
 
@@ -57,7 +58,7 @@ export const useFormulaRecommendations = () => {
       return data.recommendations;
 
     } catch (error: any) {
-      console.error('Formula recommendations error:', error);
+      logger.error('Formula recommendations error', error, { context: 'useFormulaRecommendations', data: { clientId, stylistId } });
       
       let errorMessage = 'Failed to generate recommendations';
       
@@ -100,7 +101,7 @@ export const useFormulaRecommendations = () => {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching insights:', error);
+      logger.error('Error fetching insights', error, { context: 'useFormulaRecommendations', data: { stylistId, clientId } });
       toast({
         title: "Error",
         description: "Failed to load insights",
@@ -127,7 +128,7 @@ export const useFormulaRecommendations = () => {
         description: "The recommendation has been dismissed",
       });
     } catch (error) {
-      console.error('Error dismissing insight:', error);
+      logger.error('Error dismissing insight', error, { context: 'useFormulaRecommendations', data: { insightId } });
       toast({
         title: "Error",
         description: "Failed to dismiss insight",

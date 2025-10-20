@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { differenceInDays, subDays } from 'date-fns';
+import { logger } from '@/lib/productionLogger';
 
 interface ChurnPrediction {
   clientId: string;
@@ -94,7 +95,7 @@ export const useClientChurnPredictor = (stylistId?: string) => {
         await savePredictionsToDatabase(stylistId, criticalPredictions);
       }
     } catch (error) {
-      console.error('Error running churn analysis:', error);
+      logger.error('Error running churn analysis', error, { context: 'useClientChurnPredictor', data: { stylistId } });
     } finally {
       setLoading(false);
     }
