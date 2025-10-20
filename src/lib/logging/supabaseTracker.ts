@@ -1,161 +1,208 @@
 /**
- * Supabase Query Tracker
- * Wraps Supabase queries to add logging and journey tracking
+ * Supabase Query Performance & Error Tracker
+ * Wraps Supabase queries to monitor performance and capture errors
  */
 
 import { logger } from './productionLogger';
 import { userJourney } from './userJourneyTracker';
-import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 
-interface QueryOptions {
-  table: string;
-  operation: 'select' | 'insert' | 'update' | 'delete' | 'rpc';
-  component?: string;
-  context?: Record<string, any>;
+interface TrackingMetadata {
+  [key: string]: any;
 }
 
 /**
- * Track Supabase query performance and log results
+ * Track SELECT queries
  */
-export async function trackQuery<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
-  options: QueryOptions
-): Promise<{ data: T | null; error: any }> {
-  const startTime = Date.now();
-  const { table, operation, component, context } = options;
-
+export async function trackSelect<T>(
+  query: () => Promise<any>,
+  tableName: string,
+  componentName: string,
+  metadata?: TrackingMetadata
+): Promise<any> {
+  const startTime = performance.now();
+  
   try {
-    // Execute query
-    const result = await queryFn();
-    const duration = Date.now() - startTime;
-
-    // Track in user journey
-    userJourney.trackApiCall(
-      operation.toUpperCase(),
-      `/db/${table}`,
-      result.error ? 500 : 200,
-      duration
-    );
-
-    // Log based on result
+    const result = await query();
+    const duration = performance.now() - startTime;
+    
     if (result.error) {
-      logger.error(`${operation} failed on ${table}`, result.error, {
-        component,
-        table,
-        operation,
+      logger.error(`SELECT query failed on ${tableName}`, result.error, {
+        component: componentName,
         duration,
-        ...context,
+        metadata
+      });
+      userJourney.trackError(result.error, { 
+        operation: 'SELECT', 
+        table: tableName,
+        component: componentName
       });
     } else {
-      logger.debug(`${operation} succeeded on ${table}`, {
-        component,
-        table,
-        operation,
+      logger.debug(`SELECT from ${tableName} completed`, {
+        component: componentName,
         duration,
-        ...context,
+        rowCount: result.data?.length || 0,
+        metadata
       });
-
-      // Log performance warning for slow queries
-      if (duration > 1000) {
-        logger.warn(`Slow query detected: ${operation} on ${table}`, {
-          component,
-          table,
-          operation,
-          duration,
-        });
-      }
     }
-
-    // Track performance metrics
-    logger.performance(`DB ${operation}`, duration, {
-      table,
-      component,
-      success: !result.error,
-    });
-
+    
     return result;
   } catch (error) {
-    const duration = Date.now() - startTime;
-
-    logger.error(`${operation} exception on ${table}`, error, {
-      component,
-      table,
-      operation,
+    const duration = performance.now() - startTime;
+    logger.error(`SELECT query exception on ${tableName}`, error, {
+      component: componentName,
       duration,
-      ...context,
+      metadata
     });
-
-    userJourney.trackError(error as Error, {
-      action: `db-${operation}`,
-      table,
-      component,
-    });
-
-    return { data: null, error };
+    throw error;
   }
 }
 
 /**
- * Helper for tracking select queries
+ * Track INSERT queries
  */
-export function trackSelect<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
-  table: string,
-  component?: string,
-  context?: Record<string, any>
-) {
-  return trackQuery(queryFn, { table, operation: 'select', component, context });
+export async function trackInsert<T>(
+  query: () => Promise<any>,
+  tableName: string,
+  componentName: string,
+  metadata?: TrackingMetadata
+): Promise<any> {
+  const startTime = performance.now();
+  
+  try {
+    const result = await query();
+    const duration = performance.now() - startTime;
+    
+    if (result.error) {
+      logger.error(`INSERT query failed on ${tableName}`, result.error, {
+        component: componentName,
+        duration,
+        metadata
+      });
+      userJourney.trackError(result.error, { 
+        operation: 'INSERT', 
+        table: tableName,
+        component: componentName
+      });
+    } else {
+      logger.info(`INSERT into ${tableName} completed`, {
+        component: componentName,
+        duration,
+        metadata
+      });
+      userJourney.trackAction(`Created record in ${tableName}`, { 
+        component: componentName,
+        duration 
+      });
+    }
+    
+    return result;
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    logger.error(`INSERT query exception on ${tableName}`, error, {
+      component: componentName,
+      duration,
+      metadata
+    });
+    throw error;
+  }
 }
 
 /**
- * Helper for tracking insert queries
+ * Track UPDATE queries
  */
-export function trackInsert<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
-  table: string,
-  component?: string,
-  context?: Record<string, any>
-) {
-  return trackQuery(queryFn, { table, operation: 'insert', component, context });
+export async function trackUpdate<T>(
+  query: () => Promise<any>,
+  tableName: string,
+  componentName: string,
+  metadata?: TrackingMetadata
+): Promise<any> {
+  const startTime = performance.now();
+  
+  try {
+    const result = await query();
+    const duration = performance.now() - startTime;
+    
+    if (result.error) {
+      logger.error(`UPDATE query failed on ${tableName}`, result.error, {
+        component: componentName,
+        duration,
+        metadata
+      });
+      userJourney.trackError(result.error, { 
+        operation: 'UPDATE', 
+        table: tableName,
+        component: componentName
+      });
+    } else {
+      logger.info(`UPDATE on ${tableName} completed`, {
+        component: componentName,
+        duration,
+        metadata
+      });
+      userJourney.trackAction(`Updated record in ${tableName}`, { 
+        component: componentName,
+        duration 
+      });
+    }
+    
+    return result;
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    logger.error(`UPDATE query exception on ${tableName}`, error, {
+      component: componentName,
+      duration,
+      metadata
+    });
+    throw error;
+  }
 }
 
 /**
- * Helper for tracking update queries
+ * Track DELETE queries
  */
-export function trackUpdate<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
-  table: string,
-  component?: string,
-  context?: Record<string, any>
-) {
-  return trackQuery(queryFn, { table, operation: 'update', component, context });
-}
-
-/**
- * Helper for tracking delete queries
- */
-export function trackDelete<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
-  table: string,
-  component?: string,
-  context?: Record<string, any>
-) {
-  return trackQuery(queryFn, { table, operation: 'delete', component, context });
-}
-
-/**
- * Helper for tracking RPC calls
- */
-export function trackRPC<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
-  functionName: string,
-  component?: string,
-  context?: Record<string, any>
-) {
-  return trackQuery(queryFn, { 
-    table: functionName, 
-    operation: 'rpc', 
-    component, 
-    context 
-  });
+export async function trackDelete<T>(
+  query: () => Promise<any>,
+  tableName: string,
+  componentName: string,
+  metadata?: TrackingMetadata
+): Promise<any> {
+  const startTime = performance.now();
+  
+  try {
+    const result = await query();
+    const duration = performance.now() - startTime;
+    
+    if (result.error) {
+      logger.error(`DELETE query failed on ${tableName}`, result.error, {
+        component: componentName,
+        duration,
+        metadata
+      });
+      userJourney.trackError(result.error, { 
+        operation: 'DELETE', 
+        table: tableName,
+        component: componentName
+      });
+    } else {
+      logger.info(`DELETE from ${tableName} completed`, {
+        component: componentName,
+        duration,
+        metadata
+      });
+      userJourney.trackAction(`Deleted record from ${tableName}`, { 
+        component: componentName,
+        duration 
+      });
+    }
+    
+    return result;
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    logger.error(`DELETE query exception on ${tableName}`, error, {
+      component: componentName,
+      duration,
+      metadata
+    });
+    throw error;
+  }
 }
