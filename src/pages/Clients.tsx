@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useClients, useCreateClient, useUpdateClient, useDeleteClient, useBulkDeleteClients } from "@/hooks/useClients";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -66,8 +67,6 @@ interface ClientProfile {
 export default function Clients() {
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [clients, setClients] = useState<ClientProfile[]>([]);
-  const [loading, setLoading] = useState(true);
   const [stylistId, setStylistId] = useState<string | null>(null);
   const [stylistName, setStylistName] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -101,9 +100,14 @@ export default function Clients() {
     allergies: "",
     notes: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isEditSubmitting, setIsEditSubmitting] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  // React Query hooks
+  const { data: clients = [], isLoading: loading, refetch: refetchClients } = useClients(stylistId);
+  const createClientMutation = useCreateClient(stylistId || '');
+  const updateClientMutation = useUpdateClient(stylistId || '');
+  const deleteClientMutation = useDeleteClient(stylistId || '');
+  const bulkDeleteMutation = useBulkDeleteClients(stylistId || '');
 
   // Bulk selection
   const {
@@ -115,84 +119,36 @@ export default function Clients() {
   } = useBulkSelection(clients);
 
   useEffect(() => {
+    const loadStylistProfile = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          navigate("/auth");
+          return;
+        }
+
+        const { data: stylistProfile } = await supabase
+          .from("stylist_profiles")
+          .select("id, user:profiles(full_name)")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (stylistProfile) {
+          setStylistId(stylistProfile.id);
+          setStylistName(stylistProfile.user?.full_name || "");
+        } else {
+          toast.info("This feature is for stylists", {
+            description: "The Client Management page is designed for hair stylists to manage their clients."
+          });
+        }
+      } catch (error) {
+        console.error("Error loading stylist profile:", error);
+        toast.error("Failed to load profile");
+      }
+    };
+    
     loadStylistProfile();
-  }, []);
-
-  const loadStylistProfile = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id, user:profiles(full_name)")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (stylistProfile) {
-        setStylistId(stylistProfile.id);
-        setStylistName(stylistProfile.user?.full_name || "");
-      } else {
-        toast.info("This feature is for stylists", {
-          description: "The Client Management page is designed for hair stylists to manage their clients."
-        });
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Error loading stylist profile:", error);
-      toast.error("Failed to load profile");
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (stylistId) {
-      loadClients();
-    }
-  }, [stylistId]);
-
-  const loadClients = async () => {
-    if (!stylistId) return;
-
-    try {
-      setLoading(true);
-      
-      const { data: clientsData, error: clientsError } = await supabase
-        .from("client_profiles")
-        .select("*")
-        .eq("preferred_stylist_id", stylistId)
-        .order("created_at", { ascending: false });
-
-      if (clientsError) throw clientsError;
-
-      const { data: statsData } = await supabase
-        .from("client_statistics")
-        .select("*")
-        .eq("preferred_stylist_id", stylistId);
-
-      const enrichedClients = (clientsData || []).map((client: any) => {
-        const stats = (statsData || []).find((s: any) => s.id === client.id);
-        return {
-          ...client,
-          total_appointments: stats?.total_appointments || 0,
-          last_appointment_date: stats?.last_appointment || null,
-          completion_rate: stats?.completion_rate || 0,
-        };
-      });
-
-      setClients(enrichedClients);
-    } catch (error) {
-      console.error("Error loading clients:", error);
-      toast.error("Failed to load clients");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useRealtimeUpdates("client_profiles", loadClients, stylistId || undefined);
+  }, [navigate]);
 
   // Global keyboard shortcuts
   useKeyboardShortcuts([
@@ -256,7 +212,7 @@ export default function Clients() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (isSubmitting || !stylistId) return;
+    if (!stylistId) return;
 
     try {
       const validatedData = clientSchema.parse({
@@ -269,23 +225,15 @@ export default function Clients() {
         preferred_stylist_id: stylistId
       });
 
-      setIsSubmitting(true);
-      
-      const { data, error } = await supabase
-        .from("client_profiles")
-        .insert({
-          preferred_stylist_id: stylistId,
-          full_name: validatedData.full_name.trim(),
-          email: validatedData.email?.trim() || null,
-          phone: validatedData.phone?.trim() || null,
-          hair_type: validatedData.hair_type?.trim() || null,
-          allergies: validatedData.allergies?.trim() || null,
-          notes: validatedData.notes?.trim() || null,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
+      await createClientMutation.mutateAsync({
+        preferred_stylist_id: stylistId,
+        full_name: validatedData.full_name.trim(),
+        email: validatedData.email?.trim() || null,
+        phone: validatedData.phone?.trim() || null,
+        hair_type: validatedData.hair_type?.trim() || null,
+        allergies: validatedData.allergies?.trim() || null,
+        notes: validatedData.notes?.trim() || null,
+      });
 
       showCelebration("client-added", undefined, clients.length + 1);
       setIsDialogOpen(false);
@@ -297,25 +245,18 @@ export default function Clients() {
         allergies: "",
         notes: "",
       });
-      loadClients();
-      toast.success("Client added successfully!");
     } catch (error: any) {
       if (error.name === 'ZodError') {
         const firstError = error.errors[0];
         toast.error(firstError.message);
-      } else {
-        console.error("Error adding client:", error);
-        toast.error("Unable to add client. Please check all fields and try again.");
       }
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   const handleEditClient = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (isEditSubmitting || !selectedClient) return;
+    if (!selectedClient) return;
 
     try {
       const validatedData = clientSchema.parse({
@@ -327,27 +268,20 @@ export default function Clients() {
         notes: editFormData.notes || null
       });
 
-      setIsEditSubmitting(true);
       setSaveStatus("saving");
       
-      const { error } = await supabase
-        .from("client_profiles")
-        .update({
-          full_name: validatedData.full_name.trim(),
-          email: validatedData.email?.trim() || null,
-          phone: validatedData.phone?.trim() || null,
-          hair_type: validatedData.hair_type?.trim() || null,
-          allergies: validatedData.allergies?.trim() || null,
-          notes: validatedData.notes?.trim() || null,
-        })
-        .eq("id", selectedClient.id);
-
-      if (error) throw error;
+      await updateClientMutation.mutateAsync({
+        id: selectedClient.id,
+        full_name: validatedData.full_name.trim(),
+        email: validatedData.email?.trim() || null,
+        phone: validatedData.phone?.trim() || null,
+        hair_type: validatedData.hair_type?.trim() || null,
+        allergies: validatedData.allergies?.trim() || null,
+        notes: validatedData.notes?.trim() || null,
+      });
 
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
-      loadClients();
-      toast.success("Client updated successfully!");
       setEditDialogOpen(false);
     } catch (error: any) {
       setSaveStatus("error");
@@ -356,12 +290,7 @@ export default function Clients() {
       if (error.name === 'ZodError') {
         const firstError = error.errors[0];
         toast.error(firstError.message);
-      } else {
-        console.error("Error updating client:", error);
-        toast.error("Failed to update client");
       }
-    } finally {
-      setIsEditSubmitting(false);
     }
   };
 
@@ -487,18 +416,10 @@ export default function Clients() {
     if (!confirm(message)) return;
 
     try {
-      const { error } = await supabase
-        .from("client_profiles")
-        .delete()
-        .in("id", clientIds);
-      
-      if (error) throw error;
-      toast.success(`${selectedCount} client${selectedCount !== 1 ? 's' : ''} deleted`);
+      await bulkDeleteMutation.mutateAsync(clientIds);
       clearSelection();
-      loadClients();
     } catch (error) {
       console.error("Error deleting clients:", error);
-      toast.error("Failed to delete clients");
     }
   };
 
@@ -581,7 +502,7 @@ export default function Clients() {
         {/* CSV Import - Week 2 Feature */}
         {stylistId && (
           <>
-            <ClientCSVImport stylistId={stylistId} onImportComplete={loadClients} />
+            <ClientCSVImport stylistId={stylistId} onImportComplete={() => refetchClients()} />
             <CSVImportDialog />
           </>
         )}
@@ -851,7 +772,7 @@ export default function Clients() {
         <BulkActionsBar
           selectedIds={Array.from(selectedIds)}
           onClearSelection={clearSelection}
-          onRefresh={loadClients}
+          onRefresh={() => refetchClients()}
           type="clients"
         />
 
