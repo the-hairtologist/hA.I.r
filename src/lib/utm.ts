@@ -3,6 +3,8 @@
  * Captures and stores campaign tracking parameters
  */
 
+import { logger } from './logging/productionLogger';
+
 export interface UTMParams {
   utm_source?: string;      // google, facebook, tiktok
   utm_medium?: string;       // cpc, paid_social, email
@@ -128,7 +130,7 @@ export function initUTMTracking(): void {
   
   // Log for debugging (remove in production)
   if (import.meta.env.DEV && Object.keys(params).length > 0) {
-    console.log('[UTM Tracking]', params);
+    logger.info('[UTM Tracking]', params);
   }
 }
 

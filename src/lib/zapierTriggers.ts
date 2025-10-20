@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "./logging/productionLogger";
 
 /**
  * Trigger Zapier webhooks via edge function (with automatic retries and tracking)
@@ -25,17 +26,17 @@ const triggerZapierEvent = async (
     });
 
     if (error) {
-      console.error(`[Zapier] Edge function error for ${eventType}:`, error);
+      logger.error(`[Zapier] Edge function error for ${eventType}:`, { error });
       return;
     }
 
     if (data?.triggered > 0) {
-      console.log(`[Zapier] ✅ Triggered ${data.triggered} webhook(s) for ${eventType}`);
+      logger.info(`[Zapier] ✅ Triggered ${data.triggered} webhook(s) for ${eventType}`);
     } else {
-      console.log(`[Zapier] No active webhooks for ${eventType}`);
+      logger.info(`[Zapier] No active webhooks for ${eventType}`);
     }
   } catch (error) {
-    console.error(`[Zapier] Failed to trigger ${eventType}:`, error);
+    logger.error(`[Zapier] Failed to trigger ${eventType}:`, { error });
   }
 };
 

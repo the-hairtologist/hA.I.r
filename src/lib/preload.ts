@@ -2,6 +2,8 @@
  * Page preloading utilities for improved perceived performance
  */
 
+import { logger } from './logging/productionLogger';
+
 const preloadedPages = new Set<string>();
 
 /**
@@ -15,9 +17,9 @@ export const preloadPage = async (pagePath: string): Promise<void> => {
   try {
     await import(/* @vite-ignore */ pagePath);
     preloadedPages.add(pagePath);
-    console.log(`✅ Preloaded: ${pagePath}`);
+    logger.info(`✅ Preloaded: ${pagePath}`);
   } catch (error) {
-    console.warn(`❌ Failed to preload ${pagePath}:`, error);
+    logger.error(`❌ Failed to preload ${pagePath}:`, { error });
   }
 };
 

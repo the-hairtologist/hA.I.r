@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { 
+  useAppointmentsByStylist,
+  useAppointmentsByClient,
+  useUpdateAppointmentStatus,
+  useDeleteAppointment 
+} from "@/hooks/appointments/useAppointments";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -41,11 +47,10 @@ import { AppointmentPhotoButton } from "@/components/AppointmentPhotoButton";
 const Appointments = () => {
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [loading, setLoading] = useState(true);
-  const [appointments, setAppointments] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
   const [clientProfile, setClientProfile] = useState<any>(null);
   const [userRole, setUserRole] = useState<"stylist" | "client" | null>(null);
+  const [profilesLoaded, setProfilesLoaded] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -67,6 +72,20 @@ const Appointments = () => {
   const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
   const [serviceTemplateMode, setServiceTemplateMode] = useState(false);
 
+  // React Query hooks for appointments
+  const { data: stylistAppointments = [], isLoading: loadingStylistAppointments, refetch: refetchStylistAppointments } = 
+    useAppointmentsByStylist(profilesLoaded && userRole === "stylist" ? stylistProfile?.id : null);
+  
+  const { data: clientAppointments = [], isLoading: loadingClientAppointments, refetch: refetchClientAppointments } = 
+    useAppointmentsByClient(profilesLoaded && userRole === "client" ? clientProfile?.id : null);
+
+  const updateStatusMutation = useUpdateAppointmentStatus();
+  const deleteAppointmentMutation = useDeleteAppointment();
+
+  // Determine which appointments to use
+  const appointments = userRole === "stylist" ? stylistAppointments : clientAppointments;
+  const loading = !profilesLoaded || (userRole === "stylist" ? loadingStylistAppointments : loadingClientAppointments);
+
   // Global keyboard shortcut for search focus
   useEffect(() => {
     const handleSearchFocus = () => {
@@ -77,104 +96,69 @@ const Appointments = () => {
     return () => window.removeEventListener('global-search-focus', handleSearchFocus);
   }, []);
 
+  // Load user profiles on mount
   useEffect(() => {
-    loadData();
-  }, []);
+    const loadProfiles = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          navigate("/auth");
+          return;
+        }
 
-  const loadData = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
+        // Check if user is a stylist
+        const { data: stylist } = await supabase
+          .from("stylist_profiles")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+
+        // Check if user is a client
+        const { data: client } = await supabase
+          .from("client_profiles")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+
+        if (stylist) {
+          setUserRole("stylist");
+          setStylistProfile(stylist);
+
+          // Get services
+          const { data: servicesData } = await supabase
+            .from("stylist_services")
+            .select("id")
+            .eq("stylist_id", stylist.id);
+          setServices(servicesData || []);
+        } else if (client) {
+          setUserRole("client");
+          setClientProfile(client);
+        } else {
+          toast.error("No profile found");
+          navigate("/dashboard");
+          return;
+        }
+        
+        setProfilesLoaded(true);
+      } catch (error: any) {
+        toast.error("Unable to load your profile. Please refresh the page.");
       }
+    };
 
-      // Check if user is a stylist
-      const { data: stylist } = await supabase
-        .from("stylist_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
-
-      // Check if user is a client
-      const { data: client } = await supabase
-        .from("client_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
-
-      if (stylist) {
-        // Stylist view
-        setUserRole("stylist");
-        setStylistProfile(stylist);
-
-        // Get services
-        const { data: servicesData } = await supabase
-          .from("stylist_services")
-          .select("id")
-          .eq("stylist_id", stylist.id);
-
-        setServices(servicesData || []);
-
-        // Get appointments for this stylist
-        const { data: appointmentsData } = await supabase
-          .from("appointments")
-          .select(`
-            *,
-            client:client_profiles(
-              id,
-              user:profiles(full_name, email, phone)
-            ),
-            stylist:stylist_profiles(
-              business_name,
-              user:profiles(full_name)
-            )
-          `)
-          .eq("stylist_id", stylist.id)
-          .order("appointment_date", { ascending: true });
-
-        setAppointments(appointmentsData || []);
-      } else if (client) {
-        // Client view
-        setUserRole("client");
-        setClientProfile(client);
-
-        // Get appointments for this client
-        const { data: appointmentsData } = await supabase
-          .from("appointments")
-          .select(`
-            *,
-            stylist:stylist_profiles(
-              id,
-              business_name,
-              user:profiles(full_name, email, phone)
-            ),
-            client:client_profiles(
-              id,
-              user:profiles(full_name)
-            )
-          `)
-          .eq("client_id", client.id)
-          .order("appointment_date", { ascending: true });
-
-        setAppointments(appointmentsData || []);
-      } else {
-        toast.error("No profile found");
-        navigate("/dashboard");
-      }
-    } catch (error: any) {
-      console.error("Error loading data:", error);
-      toast.error("Unable to load your appointments. Please refresh the page or check your connection.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Real-time updates
-  useRealtimeUpdates("appointments", loadData, stylistProfile?.id || clientProfile?.id);
+    loadProfiles();
+  }, [navigate]);
 
   // Keyboard shortcuts
   useGlobalShortcuts(searchInputRef);
+
+  // Helper function to refetch appointments
+  const refetchAppointments = () => {
+    if (userRole === "stylist") {
+      refetchStylistAppointments();
+    } else if (userRole === "client") {
+      refetchClientAppointments();
+    }
+  };
 
   const toggleAvailability = async () => {
     try {
@@ -188,7 +172,6 @@ const Appointments = () => {
       setStylistProfile({ ...stylistProfile, is_available: !stylistProfile.is_available });
       toast.success(`You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} appointments`);
     } catch (error: any) {
-      console.error("Error updating availability:", error);
       toast.error("Unable to update your availability status. Please try again.");
     }
   };
@@ -201,7 +184,7 @@ const Appointments = () => {
     }
     
     const appointment = appointments.find(a => a.id === appointmentId);
-    const clientName = appointment?.client?.user?.full_name || "this client";
+    const clientName = appointment?.client_profiles?.full_name || "this client";
     const statusAction = newStatus === "cancelled" ? "cancel" : newStatus;
     
     setConfirmDialog({
@@ -211,13 +194,6 @@ const Appointments = () => {
       onConfirm: async () => {
         setUpdatingStatus(appointmentId);
         try {
-          const { error } = await supabase
-            .from("appointments")
-            .update({ status: newStatus })
-            .eq("id", appointmentId);
-
-          if (error) throw error;
-
           // Send SMS notification for cancellation
           if (newStatus === "cancelled") {
             try {
@@ -228,9 +204,12 @@ const Appointments = () => {
                 },
               });
             } catch (smsError) {
-              console.error("SMS notification failed:", smsError);
+              // SMS notification is optional, don't block the update
             }
           }
+
+          // Use React Query mutation
+          await updateStatusMutation.mutateAsync({ id: appointmentId, status: newStatus });
 
           // Celebration for completed appointments
           if (newStatus === "completed") {
@@ -240,7 +219,7 @@ const Appointments = () => {
             const { data: milestones } = await supabase
               .from("client_milestones")
               .select("*")
-              .eq("client_id", selectedAppointment.client_id)
+              .eq("client_id", appointment.client_id)
               .eq("celebrated", false)
               .order("created_at", { ascending: false })
               .limit(1);
@@ -251,14 +230,10 @@ const Appointments = () => {
                 duration: 5000,
               });
             }
-          } else {
-            toast.success(`Appointment ${newStatus}`);
           }
           setDetailsOpen(false);
-          loadData();
         } catch (error: any) {
-          console.error("Error updating appointment:", error);
-          toast.error("Unable to update appointment status. Please try again.");
+          // Error already handled by mutation
         } finally {
           setUpdatingStatus(null);
         }
@@ -492,9 +467,8 @@ const Appointments = () => {
                             if (error) throw error;
                             toast.success(`${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} completed`);
                             setSelectedAppointments(new Set());
-                            loadData();
+                            refetchAppointments();
                           } catch (error) {
-                            console.error("Error updating appointments:", error);
                             toast.error("Failed to update appointments");
                           }
                         }
@@ -629,9 +603,8 @@ const Appointments = () => {
 
                                   if (error) throw error;
                                   toast.success("⏱️ Timer started!");
-                                  loadData();
+                                  refetchAppointments();
                                 } catch (error) {
-                                  console.error("Error starting timer:", error);
                                   toast.error("Failed to start timer");
                                 }
                               }}
@@ -658,7 +631,7 @@ const Appointments = () => {
                                   appointmentId={apt.id}
                                   stylistId={apt.stylist_id}
                                   stylistName={apt.stylist?.business_name || apt.stylist?.user?.full_name || "Your Stylist"}
-                                  onSuccess={loadData}
+                                  onSuccess={refetchAppointments}
                                   className="h-8 opacity-0 group-hover:opacity-100 transition-opacity relative"
                                 />
                               )}
@@ -881,7 +854,7 @@ const Appointments = () => {
                       appointmentId={selectedAppointment.id}
                       stylistId={selectedAppointment.stylist_id}
                       stylistName={selectedAppointment.stylist?.business_name || selectedAppointment.stylist?.user?.full_name || "Your Stylist"}
-                      onSuccess={loadData}
+                      onSuccess={refetchAppointments}
                       className="relative w-full h-10 rounded-lg"
                     />
                   )}
@@ -920,14 +893,14 @@ const Appointments = () => {
         open={rebookDialogOpen}
         onOpenChange={setRebookDialogOpen}
         appointment={rebookAppointment}
-        onSuccess={loadData}
+        onSuccess={refetchAppointments}
       />
 
       <RescheduleDialog
         open={rescheduleDialogOpen}
         onOpenChange={setRescheduleDialogOpen}
         appointment={rescheduleAppointment}
-        onSuccess={loadData}
+        onSuccess={refetchAppointments}
       />
 
       <WaitlistDialog />
@@ -938,7 +911,7 @@ const Appointments = () => {
           appointmentId={selectedAppointment.id}
           stylistId={selectedAppointment.stylist_id}
           stylistName={selectedAppointment.stylist?.business_name || selectedAppointment.stylist?.user?.full_name || "Your Stylist"}
-          onSuccess={loadData}
+          onSuccess={refetchAppointments}
         />
       )}
     </div>
