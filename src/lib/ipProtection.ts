@@ -51,8 +51,10 @@ export const protectConsole = () => {
  * Add copyright notice to console
  */
 export const addCopyrightNotice = () => {
-  const style = 'color: #ef4444; font-size: 16px; font-weight: bold;';
-  const message = `
+  // Only show copyright notice in development
+  if (import.meta.env.DEV) {
+    const style = 'color: #ef4444; font-size: 16px; font-weight: bold;';
+    const message = `
 %c⚠️ WARNING ⚠️
 
 This is proprietary software owned by hA.I.r.
@@ -66,8 +68,9 @@ Unauthorized access, copying, or reverse engineering is:
 If you're interested in licensing or partnership:
 Contact us through official channels.
 `;
-  
-  console.log(message, style);
+    
+    console.log(message, style);
+  }
 };
 
 /**

@@ -13,6 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Zap, Check, ArrowLeft, ExternalLink, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logging/productionLogger';
 
 const ZapierIntegration = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const ZapierIntegration = () => {
     setTestSuccess(false);
 
     try {
-      console.log('[Zapier] Testing webhook:', webhookUrl);
+      logger.info('[Zapier] Testing webhook', { webhookUrl });
 
       const response = await fetch(webhookUrl, {
         method: 'POST',

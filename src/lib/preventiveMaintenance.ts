@@ -5,6 +5,7 @@
 
 import { errorDetection } from './errorDetection';
 import { dependencyValidator } from './dependencyValidator';
+import { logger } from './logging/productionLogger';
 
 interface MaintenanceCheck {
   name: string;
@@ -173,9 +174,11 @@ class PreventiveMaintenanceSystem {
 
     // Log results
     if (failed > 0) {
-      console.warn('⚠️ Preventive Maintenance: Some checks failed', results.filter(r => !r.passed));
+      logger.warn('Preventive Maintenance: Some checks failed', { 
+        failedChecks: results.filter(r => !r.passed) 
+      });
     } else {
-      console.log('✅ Preventive Maintenance: All checks passed');
+      logger.info('Preventive Maintenance: All checks passed');
     }
 
     return {
@@ -198,7 +201,7 @@ class PreventiveMaintenanceSystem {
       this.runChecks();
     }, this.checkInterval);
 
-    console.log('🔄 Preventive Maintenance: Auto-checks started');
+    logger.info('Preventive Maintenance: Auto-checks started');
   }
 
   /**
@@ -247,5 +250,5 @@ export const preventiveMaintenance = new PreventiveMaintenanceSystem();
  */
 export function initializePreventiveMaintenance(): void {
   preventiveMaintenance.startAutoMaintenance();
-  console.log('✅ Preventive Maintenance System initialized');
+  logger.info('Preventive Maintenance System initialized');
 }

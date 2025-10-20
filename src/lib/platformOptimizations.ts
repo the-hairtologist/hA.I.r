@@ -1,5 +1,6 @@
 import { Platform, haptic } from '@/platform';
 import { analytics } from './analytics';
+import { logger } from './logging/productionLogger';
 
 /**
  * Platform-specific optimizations and integrations
@@ -81,7 +82,7 @@ export const optimizeForPlatform = () => {
   }
 
   // Log capabilities for debugging
-  console.log('[Platform] Device capabilities:', capabilities);
+  logger.debug('[Platform] Device capabilities', { capabilities });
   
   analytics.track('platform_detected', capabilities);
   

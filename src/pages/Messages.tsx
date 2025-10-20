@@ -15,6 +15,7 @@ import { MessageSquare, ArrowLeft, Send, Upload, Video, Loader2, User, Plus } fr
 import { format } from "date-fns";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { KeyboardShortcutHint } from "@/components/KeyboardShortcut";
+import { logger } from "@/lib/logging/productionLogger";
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const Messages = () => {
           table: 'messages',
         },
         (payload) => {
-          console.log('Realtime message update:', payload);
+          logger.debug('Realtime message update', { payload });
           
           // Reload data when any message changes
           if (user) {

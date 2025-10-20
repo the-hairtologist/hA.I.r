@@ -1,4 +1,5 @@
 import { analytics } from '../analytics';
+import { logger } from '../logging/productionLogger';
 
 /**
  * Zapier Webhook Integration
@@ -37,7 +38,7 @@ export class ZapierWebhooks {
         event_type: eventType,
       });
 
-      console.log('[Zapier] Webhook triggered:', eventType);
+      logger.info('[Zapier] Webhook triggered', { eventType });
       return true;
     } catch (error) {
       console.error('[Zapier] Webhook failed:', error);
