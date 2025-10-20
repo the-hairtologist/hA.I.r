@@ -220,3 +220,90 @@ export const validateFileUpload = (file: File, options: {
   
   return true;
 };
+
+/**
+ * Additional validation schemas for complex forms
+ */
+
+// Client creation with all fields
+export const clientCreateSchema = z.object({
+  full_name: commonValidators.name,
+  email: commonValidators.email,
+  phone: commonValidators.phone,
+  hair_type: z.string().max(50).optional().or(z.literal('')),
+  allergies: z.string().max(500).optional().or(z.literal('')),
+  notes: z.string().max(2000).optional().or(z.literal('')),
+  special_requests: z.string().max(500).optional().or(z.literal('')),
+  hair_goals: z.string().max(500).optional().or(z.literal('')),
+  sensitivity_notes: z.string().max(500).optional().or(z.literal(''))
+});
+
+export type ClientCreateData = z.infer<typeof clientCreateSchema>;
+
+// AI prompt validation
+export const aiPromptSchema = z.object({
+  prompt: z.string()
+    .trim()
+    .min(3, { message: "Prompt must be at least 3 characters" })
+    .max(2000, { message: "Prompt must be less than 2000 characters" }),
+  context: z.record(z.unknown()).optional()
+});
+
+export type AIPromptData = z.infer<typeof aiPromptSchema>;
+
+// Search query validation
+export const searchQuerySchema = z.object({
+  query: z.string()
+    .trim()
+    .max(200, { message: "Search query must be less than 200 characters" }),
+  filters: z.object({
+    dateFrom: z.date().optional(),
+    dateTo: z.date().optional(),
+    category: z.string().max(50).optional(),
+    status: z.string().max(20).optional()
+  }).optional()
+});
+
+export type SearchQueryData = z.infer<typeof searchQuerySchema>;
+
+// Password change schema
+export const passwordChangeSchema = z.object({
+  currentPassword: z.string().min(1, { message: "Current password is required" }),
+  newPassword: commonValidators.password,
+  confirmPassword: z.string()
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"]
+});
+
+export type PasswordChangeData = z.infer<typeof passwordChangeSchema>;
+
+/**
+ * Validate and sanitize external URLs
+ */
+export const sanitizeExternalUrl = (url: string): string | null => {
+  try {
+    const parsed = new URL(url);
+    // Only allow http and https protocols
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return null;
+    }
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * Deep sanitize object (removes undefined, null, empty strings)
+ */
+export const sanitizeObject = <T extends Record<string, any>>(obj: T): Partial<T> => {
+  const result: any = {};
+  for (const key in obj) {
+    const value = obj[key];
+    if (value !== undefined && value !== null && value !== '') {
+      result[key] = value;
+    }
+  }
+  return result;
+};
