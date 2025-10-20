@@ -15,19 +15,28 @@ export const GuidedTour = () => {
   const tour = currentTour ? tours[currentTour] : null;
 
   const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status, type } = data;
+    const { status, type, action } = data;
 
-    // Tour finished or skipped
-    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-      if (status === STATUS.FINISHED) {
-        endTour();
-      } else {
-        skipTour();
-      }
+    // Handle tour completion
+    if (status === STATUS.FINISHED) {
+      endTour();
+      return;
+    }
+
+    // Handle tour skip
+    if (status === STATUS.SKIPPED) {
+      skipTour();
+      return;
     }
 
     // Handle close button click
-    if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
+    if (type === EVENTS.TOUR_END) {
+      endTour();
+      return;
+    }
+
+    // Handle target not found - continue tour
+    if (type === EVENTS.TARGET_NOT_FOUND) {
       // Continue tour
     }
   };
