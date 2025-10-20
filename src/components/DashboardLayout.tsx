@@ -6,7 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { MobileHeader } from "@/components/MobileHeader";
-import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
+
 import { MobileQuickActions } from "@/components/MobileQuickActions";
 import { DemoModeIndicator } from "@/components/demo/DemoMode";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -159,7 +159,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <OfflineIndicator />
       <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
         <AppSidebar />
-        <MobileSidebarOverlay />
         <DemoModeIndicator />
         
         <div className="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">

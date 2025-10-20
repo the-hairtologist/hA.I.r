@@ -70,7 +70,7 @@ export const MobileSidebarOverlay = () => {
   return (
     <div
       className={cn(
-        "lg:hidden fixed inset-0 z-30 bg-background/80 backdrop-blur-sm",
+        "lg:hidden fixed inset-0 z-[10001] bg-background/80 backdrop-blur-sm",
         "animate-fade-in touch-manipulation"
       )}
       onClick={() => setOpenMobile(false)}
