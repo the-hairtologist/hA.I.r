@@ -95,7 +95,7 @@ const CRMDashboard = lazyWithRetry(() => import('@/pages/CRMDashboard'));
 const SalesDashboard = lazyWithRetry(() => import('@/pages/SalesDashboard'));
 const SupportChat = lazyWithRetry(() => import('@/pages/SupportChat'));
 const AutomationMonitoring = lazyWithRetry(() => import('@/pages/AutomationMonitoring'));
-const ABTestDashboard = lazyWithRetry(() => import('@/pages/ABTestDashboard'));
+const ABTestDashboard = lazyWithRetry(() => import('@/pages/ABTestDashboardSupabase'));
 
 export const AppRoutes = () => (
   <>

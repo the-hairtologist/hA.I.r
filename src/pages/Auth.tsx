@@ -18,7 +18,7 @@ import { FormFieldError } from "@/components/FormFieldError";
 import { eventTracker } from "@/lib/analytics/eventTracker";
 import { PasswordStrength } from "@/components/PasswordStrength";
 import { signInWithGoogle } from "@/lib/api/auth";
-import { trackConversion } from "@/lib/abTesting";
+import { trackConversion } from "@/lib/abTestingSupabase";
 
 type AuthState = {
   email: string;
