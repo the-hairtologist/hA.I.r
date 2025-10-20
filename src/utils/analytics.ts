@@ -1,5 +1,7 @@
 // Comprehensive analytics tracking
 
+import { logger } from '../lib/logging/productionLogger';
+
 interface AnalyticsEvent {
   category: string;
   action: string;
@@ -20,7 +22,7 @@ class AnalyticsManager {
     // Initialize GA4 if available
     if (window.gtag) {
       this.isInitialized = true;
-      console.log('Analytics initialized');
+      logger.info('Analytics initialized');
     }
 
     // Flush queue
@@ -48,7 +50,7 @@ class AnalyticsManager {
 
     // Also log to console in development
     if (import.meta.env.DEV) {
-      console.log('Analytics:', enrichedEvent);
+      logger.info('Analytics:', enrichedEvent);
     }
   }
 

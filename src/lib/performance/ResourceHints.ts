@@ -3,6 +3,8 @@
  * Optimizes page load performance with strategic resource loading
  */
 
+import { logger } from '../logging/productionLogger';
+
 /**
  * Add DNS prefetch for external domains
  */
@@ -90,7 +92,7 @@ export const initResourceHints = () => {
     },
   ]);
 
-  console.log('✅ Resource hints initialized');
+  logger.info('✅ Resource hints initialized');
 };
 
 /**
@@ -137,7 +139,7 @@ export const smartPrefetch = (urls: string[]) => {
       connection.saveData;
 
     if (slowConnection) {
-      console.log('⚠️ Slow connection detected, skipping prefetch');
+      logger.info('⚠️ Slow connection detected, skipping prefetch');
       return;
     }
   }

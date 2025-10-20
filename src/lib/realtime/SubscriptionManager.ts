@@ -14,6 +14,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { logger } from "../logging/productionLogger";
 
 type EventCallback = (payload: any) => void;
 type UnsubscribeFunction = () => void;
@@ -95,20 +96,20 @@ class RealtimeSubscriptionManager {
         "postgres_changes" as any,
         changeConfig,
         (payload: any) => {
-          console.log(`[Realtime] ${table} ${payload.eventType}:`, payload);
+          logger.info(`[Realtime] ${table} ${payload.eventType}:`, payload);
           this.emit(channelKey, payload);
           this.reconnectAttempts.set(channelKey, 0); // Reset on successful message
         }
       )
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
-          console.log(`[Realtime] Subscribed to ${channelKey}`);
+          logger.info(`[Realtime] Subscribed to ${channelKey}`);
           this.reconnectAttempts.set(channelKey, 0);
         } else if (status === "CHANNEL_ERROR") {
-          console.error(`[Realtime] Error subscribing to ${channelKey}`);
+          logger.error(`[Realtime] Error subscribing to ${channelKey}`);
           this.handleReconnect(config, channelKey);
         } else if (status === "TIMED_OUT") {
-          console.error(`[Realtime] Timeout subscribing to ${channelKey}`);
+          logger.error(`[Realtime] Timeout subscribing to ${channelKey}`);
           this.handleReconnect(config, channelKey);
         }
       });
@@ -130,7 +131,7 @@ class RealtimeSubscriptionManager {
     const delay = Math.min(1000 * Math.pow(2, attempts), 30000); // Max 30s
     this.reconnectAttempts.set(channelKey, attempts + 1);
 
-    console.log(`[Realtime] Reconnecting ${channelKey} in ${delay}ms (attempt ${attempts + 1})`);
+    logger.info(`[Realtime] Reconnecting ${channelKey} in ${delay}ms (attempt ${attempts + 1})`);
     
     await new Promise(resolve => setTimeout(resolve, delay));
     
@@ -170,7 +171,7 @@ class RealtimeSubscriptionManager {
       this.channels.delete(channelKey);
       this.listeners.delete(channelKey);
       this.reconnectAttempts.delete(channelKey);
-      console.log(`[Realtime] Removed channel ${channelKey}`);
+      logger.info(`[Realtime] Removed channel ${channelKey}`);
     }
   }
 
@@ -186,7 +187,7 @@ class RealtimeSubscriptionManager {
    * Clean up all subscriptions
    */
   async cleanup() {
-    console.log("[Realtime] Cleaning up all subscriptions");
+    logger.info("[Realtime] Cleaning up all subscriptions");
     const channels = Array.from(this.channels.values());
     
     for (const channel of channels) {
