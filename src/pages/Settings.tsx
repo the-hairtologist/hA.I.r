@@ -475,6 +475,7 @@ const Settings = () => {
               <TabsTrigger value="zapier" className="text-xs sm:text-sm">
                 <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Zapier</span>
+                <span className="ml-1.5 text-[9px] opacity-70">✂️</span>
               </TabsTrigger>
             )}
             <TabsTrigger value="preferences" className="text-xs sm:text-sm">
