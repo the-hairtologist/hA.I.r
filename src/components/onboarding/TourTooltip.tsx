@@ -21,17 +21,17 @@ export const TourTooltip = ({
   return (
     <div
       {...tooltipProps}
-      className="bg-background border-[3px] border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none max-w-sm"
+      className="bg-background border-[3px] border-foreground shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none max-w-[calc(100vw-2rem)] sm:max-w-sm w-full"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b-[2px] border-foreground">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary border-[2px] border-foreground flex items-center justify-center">
-            <span className="text-primary-foreground font-pixel text-sm">
+      <div className="flex items-center justify-between p-3 sm:p-4 border-b-[2px] border-foreground">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-primary border-[2px] border-foreground flex items-center justify-center flex-shrink-0">
+            <span className="text-primary-foreground font-bold text-xs sm:text-sm">
               {index + 1}
             </span>
           </div>
-          <span className="font-pixel text-xs uppercase text-muted-foreground">
+          <span className="font-medium text-[10px] sm:text-xs uppercase text-muted-foreground truncate">
             Step {index + 1} of {size}
           </span>
         </div>
@@ -39,28 +39,28 @@ export const TourTooltip = ({
           {...closeProps}
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0"
+          className="h-7 w-7 sm:h-8 sm:w-8 p-0 flex-shrink-0 ml-2"
           aria-label="Close tour"
         >
-          <X className="h-4 w-4" />
+          <X className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <div className="text-sm text-foreground leading-relaxed">
+      <div className="p-3 sm:p-4">
+        <div className="text-xs sm:text-sm text-foreground leading-relaxed">
           {step.content}
         </div>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between gap-2 p-4 border-t-[2px] border-foreground bg-muted/20">
+      <div className="flex items-center justify-between gap-2 p-3 sm:p-4 border-t-[2px] border-foreground bg-muted/20">
         {index > 0 ? (
           <Button
             {...backProps}
             variant="outline"
             size="sm"
-            className="font-pixel text-xs uppercase border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+            className="font-semibold text-[10px] sm:text-xs uppercase border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-2 sm:px-3 h-9"
           >
             Back
           </Button>
@@ -69,9 +69,9 @@ export const TourTooltip = ({
             {...skipProps}
             variant="ghost"
             size="sm"
-            className="font-pixel text-xs uppercase"
+            className="font-semibold text-[10px] sm:text-xs uppercase px-2 sm:px-3 h-9"
           >
-            Skip Tour
+            Skip
           </Button>
         )}
 
@@ -80,7 +80,7 @@ export const TourTooltip = ({
             <Button
               {...primaryProps}
               size="sm"
-              className="font-pixel text-xs uppercase bg-primary text-primary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+              className="font-semibold text-[10px] sm:text-xs uppercase bg-primary text-primary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all px-3 sm:px-4 h-9"
             >
               {index === size - 1 ? 'Finish' : 'Next'}
             </Button>
