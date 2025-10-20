@@ -30,19 +30,34 @@ export const tours: Record<string, TourConfig> = {
         placement: 'right',
       },
       {
+        target: '[data-tour="settings"]',
+        content: '⚙️ First, complete your profile in Settings. Add your business name, specialty, and location so clients can find you. (Takes 2 minutes)',
+        placement: 'left',
+      },
+      {
         target: '[data-tour="quick-actions"]',
         content: '⚡ Quick Actions let you add clients, book appointments, and access AI tools with one click.',
         placement: 'bottom',
       },
       {
+        target: '[data-tour="quick-actions"]',
+        content: '👥 Next, add your first client to see how the Hair Memory Timeline works. You can import existing clients or add new ones. (Takes 2 minutes)',
+        placement: 'bottom',
+      },
+      {
+        target: '[data-tour="quick-actions"]',
+        content: '📅 Then, set up your availability so clients can book appointments. Update this anytime in Schedule Management. (Takes 3 minutes)',
+        placement: 'bottom',
+      },
+      {
         target: '[data-tour="ai-assistant"]',
-        content: '🤖 Your AI Assistant can help with formulas, client insights, and business questions.',
+        content: '🤖 Your AI Assistant can help with formulas, client insights, and business questions. Ask anything!',
         placement: 'left',
       },
       {
-        target: '[data-tour="settings"]',
-        content: '⚙️ Customize your profile, notifications, and preferences in Settings.',
-        placement: 'left',
+        target: 'body',
+        content: '🎨 Upload portfolio photos to showcase your work and attract new clients. Build your Hair Memory Timeline!',
+        placement: 'center',
       },
       {
         target: 'body',

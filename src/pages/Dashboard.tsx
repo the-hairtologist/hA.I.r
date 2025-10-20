@@ -32,7 +32,7 @@ import { BirthdayAlertsWidget } from "@/components/BirthdayAlertsWidget";
 import { StatsToggleButton } from "@/components/admin/StatsToggleButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 
-import { WelcomeChecklist } from "@/components/WelcomeChecklist";
+
 import { EmptyStateGuidance } from "@/components/dashboard/EmptyStateGuidance";
 import { useDashboardLayout, DashboardSection } from "@/hooks/useDashboardLayout";
 import { FirstTimeTooltip } from "@/components/FirstTimeTooltip";
@@ -801,31 +801,6 @@ const Dashboard = () => {
         
         {!isEditMode && stats && (
           <>
-            {/* Stylist Welcome Checklist - Show only for new stylists */}
-            {userRole === "stylist" && !isAdmin && stats.todayAppointments === 0 && stats.totalClients === 0 && (
-              <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
-                <WelcomeChecklist 
-                  userRole="stylist"
-                  profileComplete={!!userProfile?.full_name && !!profile?.business_name && !!profile?.color_line}
-                  hasClients={stats.totalClients > 0}
-                  hasAppointments={stats.upcomingAppointments > 0}
-                  hasPortfolio={false}
-                />
-              </div>
-            )}
-            
-            {/* Client Welcome Checklist - Show only for clients, not admins */}
-            {userRole === "client" && !isAdmin && stats.upcomingAppointments === 0 && (
-              <div className="mb-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
-                <WelcomeChecklist 
-                  userRole="client"
-                  profileComplete={!!userProfile?.full_name}
-                  hasAppointments={stats.upcomingAppointments > 0}
-                />
-              </div>
-            )}
-            
-            {/* Rebooking Prompt - Clients only, not admins */}
             {userRole === "client" && !isAdmin && (
               <div className="animate-fade-in" style={{ animationDelay: '320ms' }}>
                 <RebookingPrompt />
