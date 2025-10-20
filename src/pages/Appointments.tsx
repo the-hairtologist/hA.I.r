@@ -15,7 +15,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, FileText, User, Calendar as CalendarIcon, ArrowLeft, Clock, CheckCircle, XCircle, Filter, CalendarDays, Repeat } from "lucide-react";
+import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, FileText, User, Calendar as CalendarIcon, Clock, CheckCircle, XCircle, Filter, CalendarDays, Repeat } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/CalendarView";
@@ -317,39 +318,23 @@ const Appointments = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <header role="banner" className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-[4px_4px_0px_0px_hsl(var(--foreground)_/_0.1)]">
-        <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <div className="flex items-center gap-4 min-w-0">
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={() => navigate("/dashboard")} 
-                  className="min-h-[44px] min-w-[44px] flex-shrink-0 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
-                  aria-label="Go back to dashboard"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-                <div className="flex items-center gap-2 min-w-0">
-                  <CalendarIcon className="h-6 w-6 text-primary flex-shrink-0" />
-                  <h1 className="text-xl sm:text-2xl font-pixel gradient-text truncate">
-                    {userRole === "client" ? "My Appointments" : "Appointments"}
-                  </h1>
-                </div>
-              </div>
-              {userRole === "stylist" && (
-                <div className="flex items-center gap-2">
-                  <Label htmlFor="availability" className="whitespace-nowrap">Accepting Bookings</Label>
-                  <Switch
-                    id="availability"
-                    checked={stylistProfile?.is_available}
-                    onCheckedChange={toggleAvailability}
-                  />
-                </div>
-              )}
+      <PageHeader
+        title={userRole === "client" ? "My Appointments" : "Appointments"}
+        icon={<CalendarIcon className="h-6 w-6" />}
+        backTo="/dashboard"
+        actions={
+          userRole === "stylist" ? (
+            <div className="flex items-center gap-2">
+              <Label htmlFor="availability" className="whitespace-nowrap">Accepting Bookings</Label>
+              <Switch
+                id="availability"
+                checked={stylistProfile?.is_available}
+                onCheckedChange={toggleAvailability}
+              />
             </div>
-        </div>
-      </header>
+          ) : undefined
+        }
+      />
 
       <main id="main-content" role="main" aria-label="Appointments" className="container mx-auto px-4 py-8">
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar" | "week")} className="space-y-6">

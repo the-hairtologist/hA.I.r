@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, ArrowLeft, Trash2, Sparkles } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Loader2, ArrowUp, ArrowDown, Trash2, Sparkles } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { Switch } from "@/components/ui/switch";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
@@ -268,16 +269,6 @@ const Portfolio = () => {
     return (
       <DashboardLayout>
         <div className="container mx-auto p-6 max-w-6xl">
-          <div className="mb-6">
-            <Button 
-              variant="outline" 
-              onClick={() => navigate(-1)} 
-              className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Button>
-          </div>
           <div className="mb-8">
             <h1 className="text-4xl font-pixel mb-2">My Portfolio</h1>
             <p className="text-muted-foreground font-sans">Showcase your best work to attract more clients</p>
@@ -295,17 +286,6 @@ const Portfolio = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto p-6 max-w-6xl animate-fade-in">
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate("/dashboard")}
-            className="gap-2 hover:bg-secondary/20 hover:-translate-x-1 transition-all"
-            aria-label="Back to dashboard"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-        </div>
         <div className="mb-8">
           <h1 className="text-4xl font-pixel mb-2">My Portfolio</h1>
           <p className="text-muted-foreground font-sans">Showcase your best work to attract more clients</p>

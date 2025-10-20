@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { DollarSign, ArrowLeft, Plus, Edit, Loader2, Trash2, Info, Palette } from "lucide-react";
+import { DollarSign, Plus, Edit, Loader2, Trash2, Info, Palette } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
@@ -257,35 +258,28 @@ const Services = () => {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
-      <header role="banner" className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm sticky top-0 z-10 shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4 min-w-0 flex-1">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                onClick={() => navigate("/dashboard")} 
-                className="border-2 border-foreground min-h-[44px] min-w-[44px] flex-shrink-0 bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
-                aria-label="Go back to dashboard"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <div className="flex items-center gap-2 min-w-0">
-                <DollarSign className="h-6 w-6 text-primary flex-shrink-0" />
-                <h1 className="text-2xl font-pixel truncate">Service Pricing</h1>
-              </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <ServiceTemplatesDialog />
-              <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-                <DialogTrigger asChild>
-                  <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Service
-                  </Button>
-                </DialogTrigger>
-              <DialogContent>
+      <PageHeader
+        title="Service Pricing"
+        icon={<DollarSign className="h-6 w-6" />}
+        backTo="/dashboard"
+        actions={
+          <div className="flex items-center gap-2 flex-wrap">
+            <ServiceTemplatesDialog />
+            <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+              <DialogTrigger asChild>
+                <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Service
+                </Button>
+              </DialogTrigger>
+            </Dialog>
+          </div>
+        }
+      />
+      
+      {/* Service Dialog Content */}
+      <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+        <DialogContent>
                 <DialogHeader>
                   <DialogTitle>{editingService ? "Edit Service" : "Add New Service"}</DialogTitle>
                   <DialogDescription>
@@ -565,9 +559,6 @@ const Services = () => {
                 </form>
               </DialogContent>
             </Dialog>
-          </div>
-        </div>
-      </header>
 
       <main id="main-content" role="main" aria-label="Service Pricing" className="container mx-auto px-4 py-8 max-w-4xl">
           {services.length === 0 ? (

@@ -11,7 +11,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { MessageSquare, ArrowLeft, Send, Upload, Video, Loader2, User, Plus } from "lucide-react";
+import { MessageSquare, Send, Upload, Video, Loader2, User, Plus } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { format } from "date-fns";
 import { NewConversationDialog } from "@/components/NewConversationDialog";
 import { KeyboardShortcutHint } from "@/components/KeyboardShortcut";
@@ -333,28 +334,17 @@ const Messages = () => {
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
-      <header className="border-b-4 border-foreground bg-card/90 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/dashboard")}
-              aria-label="Back to dashboard"
-              className="hover:bg-secondary/20 hover:-translate-x-1 transition-all"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
-          <div className="flex items-center gap-2">
-            <MessageSquare className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-pixel">Messages</h1>
-          </div>
+      <PageHeader
+        title="Messages"
+        icon={<MessageSquare className="h-6 w-6" />}
+        backTo="/dashboard"
+        actions={
           <Button size="sm" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
             <Plus className="h-4 w-4 mr-2" />
             New Chat
           </Button>
-        </div>
-      </header>
+        }
+      />
 
       <div className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 h-full flex gap-4 py-4">

@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, ArrowLeft, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2, AlertTriangle, Users } from "lucide-react";
+import { Plus, Mail, Phone, User, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2, AlertTriangle, Users } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
 import { SkeletonList } from "@/components/ui/skeleton-list";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -431,20 +432,11 @@ export default function Clients() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-8 px-4">
-        <Breadcrumbs />
-        <div className="mb-6">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate(-1)} 
-            className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <PageHeader title="Clients" icon={<Users className="h-6 w-6" />} backTo="/dashboard" />
+        <div className="container mx-auto py-8 px-4">
+          <SkeletonList count={9} variant="grid" />
         </div>
-        <SkeletonList count={9} variant="grid" />
       </div>
     );
   }
@@ -453,19 +445,8 @@ export default function Clients() {
   if (!stylistId) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <PageHeader title="Clients" icon={<Users className="h-6 w-6" />} backTo="/dashboard" />
         <main className="container mx-auto py-8 px-4">
-          <Breadcrumbs />
-          <div className="mb-6">
-            <Button 
-              variant="outline" 
-              onClick={() => navigate("/dashboard")} 
-              className="gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Dashboard
-            </Button>
-          </div>
-          
           <EmptyState
             icon={Users}
             title="This Feature is for Stylists"
@@ -484,20 +465,8 @@ export default function Clients() {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg">
         Skip to main content
       </a>
+      <PageHeader title="Clients" icon={<Users className="h-6 w-6" />} backTo="/dashboard" />
       <main id="main-content" role="main" aria-label="Clients" className="container mx-auto py-8 px-4">
-        <Breadcrumbs />
-        
-        <div className="mb-6">
-          <Button
-            variant="outline"
-            onClick={() => navigate(-1)}
-            className="gap-2 border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-        </div>
         
         {/* CSV Import - Week 2 Feature */}
         {stylistId && (
