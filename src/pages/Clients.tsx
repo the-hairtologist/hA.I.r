@@ -194,34 +194,6 @@ export default function Clients() {
 
   useRealtimeUpdates("client_profiles", loadClients, stylistId || undefined);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-
-  // Export callback
-  const handleExportCSV = useCallback(() => {
-    if (filteredClients.length === 0) {
-      toast.error("No clients to export");
-      return;
-    }
-    
-    const exportData = filteredClients.map(c => ({
-      name: c.full_name || "",
-      email: c.email || "",
-      phone: c.phone || "",
-      hair_type: c.hair_type || "",
-      allergies: c.allergies || "",
-      total_appointments: c.total_appointments || 0,
-      last_appointment: c.last_appointment_date 
-        ? new Date(c.last_appointment_date).toLocaleDateString()
-        : "Never",
-      days_since_last: c.last_appointment_date
-        ? Math.floor((new Date().getTime() - new Date(c.last_appointment_date).getTime()) / (1000 * 60 * 60 * 24))
-        : "N/A",
-    }));
-    
-    exportToCSV(exportData, "clients");
-    toast.success("Clients exported!");
-  }, [filteredClients]);
-
   // Global keyboard shortcuts
   useKeyboardShortcuts([
     {
@@ -279,10 +251,9 @@ export default function Clients() {
     }
 
     setEditDialogOpen(true);
-  }, []);
+  };
 
-  // Filter and sort clients (memoized)
-  const filteredClients = useMemo(() => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (isSubmitting || !stylistId) return;
@@ -300,15 +271,21 @@ export default function Clients() {
 
       setIsSubmitting(true);
       
-      await createClientMutation.mutateAsync({
-        preferred_stylist_id: stylistId,
-        full_name: validatedData.full_name.trim(),
-        email: validatedData.email?.trim() || null,
-        phone: validatedData.phone?.trim() || null,
-        hair_type: validatedData.hair_type?.trim() || null,
-        allergies: validatedData.allergies?.trim() || null,
-        notes: validatedData.notes?.trim() || null,
-      });
+      const { data, error } = await supabase
+        .from("client_profiles")
+        .insert({
+          preferred_stylist_id: stylistId,
+          full_name: validatedData.full_name.trim(),
+          email: validatedData.email?.trim() || null,
+          phone: validatedData.phone?.trim() || null,
+          hair_type: validatedData.hair_type?.trim() || null,
+          allergies: validatedData.allergies?.trim() || null,
+          notes: validatedData.notes?.trim() || null,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
 
       showCelebration("client-added", undefined, clients.length + 1);
       setIsDialogOpen(false);
@@ -320,6 +297,8 @@ export default function Clients() {
         allergies: "",
         notes: "",
       });
+      loadClients();
+      toast.success("Client added successfully!");
     } catch (error: any) {
       if (error.name === 'ZodError') {
         const firstError = error.errors[0];
@@ -331,9 +310,9 @@ export default function Clients() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [isSubmitting, stylistId, formData, createClientMutation, clients.length]);
+  };
 
-  const handleEditClient = useCallback(async (e: React.FormEvent) => {
+  const handleEditClient = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (isEditSubmitting || !selectedClient) return;
@@ -351,18 +330,23 @@ export default function Clients() {
       setIsEditSubmitting(true);
       setSaveStatus("saving");
       
-      await updateClientMutation.mutateAsync({
-        id: selectedClient.id,
-        full_name: validatedData.full_name.trim(),
-        email: validatedData.email?.trim() || null,
-        phone: validatedData.phone?.trim() || null,
-        hair_type: validatedData.hair_type?.trim() || null,
-        allergies: validatedData.allergies?.trim() || null,
-        notes: validatedData.notes?.trim() || null,
-      });
+      const { error } = await supabase
+        .from("client_profiles")
+        .update({
+          full_name: validatedData.full_name.trim(),
+          email: validatedData.email?.trim() || null,
+          phone: validatedData.phone?.trim() || null,
+          hair_type: validatedData.hair_type?.trim() || null,
+          allergies: validatedData.allergies?.trim() || null,
+          notes: validatedData.notes?.trim() || null,
+        })
+        .eq("id", selectedClient.id);
+
+      if (error) throw error;
 
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
+      loadClients();
       toast.success("Client updated successfully!");
       setEditDialogOpen(false);
     } catch (error: any) {
@@ -379,34 +363,6 @@ export default function Clients() {
     } finally {
       setIsEditSubmitting(false);
     }
-  };
-
-  const openEditDialog = async (client: ClientProfile) => {
-    setSelectedClient(client);
-    setEditFormData({
-      full_name: client.full_name || "",
-      email: client.email || "",
-      phone: client.phone || "",
-      hair_type: client.hair_type || "",
-      allergies: client.allergies || "",
-      notes: client.notes || "",
-    });
-
-    // Load formulas for this client
-    try {
-      const { data: formulas } = await supabase
-        .from("formulas")
-        .select("*")
-        .eq("client_id", client.id)
-        .order("created_at", { ascending: false });
-
-      setClientFormulas(formulas || []);
-    } catch (error) {
-      console.error("Error loading formulas:", error);
-      setClientFormulas([]);
-    }
-
-    setEditDialogOpen(true);
   };
 
   // Filter and sort clients (memoized)
@@ -462,7 +418,8 @@ export default function Clients() {
     return filtered;
   }, [clients, debouncedSearch, sortBy, riskFilter]);
 
-  const handleExportCSV = () => {
+  // Export callback (depends on filteredClients)
+  const handleExportCSV = useCallback(() => {
     if (filteredClients.length === 0) {
       toast.error("No clients to export");
       return;
@@ -485,7 +442,7 @@ export default function Clients() {
     
     exportToCSV(exportData, "clients");
     toast.success("Clients exported!");
-  };
+  }, [filteredClients]);
 
   // Pagination
   const {
