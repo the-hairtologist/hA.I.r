@@ -265,19 +265,15 @@ const Services = () => {
         actions={
           <div className="flex items-center gap-2 flex-wrap">
             <ServiceTemplatesDialog />
-            <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
-              <DialogTrigger asChild>
-                <Button className="border-2 border-foreground min-h-[44px] flex-shrink-0">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Service
-                </Button>
-              </DialogTrigger>
-            </Dialog>
+            <Button onClick={() => setDialogOpen(true)} className="border-2 border-foreground min-h-[44px] flex-shrink-0">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Service
+            </Button>
           </div>
         }
       />
-      
-      {/* Service Dialog Content */}
+
+      {/* Service Dialog */}
       <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
         <DialogContent>
                 <DialogHeader>
@@ -558,7 +554,7 @@ const Services = () => {
                   </Button>
                 </form>
               </DialogContent>
-            </Dialog>
+      </Dialog>
 
       <main id="main-content" role="main" aria-label="Service Pricing" className="container mx-auto px-4 py-8 max-w-4xl">
           {services.length === 0 ? (

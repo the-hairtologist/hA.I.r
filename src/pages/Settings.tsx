@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code, Sliders } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
@@ -486,7 +486,7 @@ const Settings = () => {
               </TabsTrigger>
             )}
             <TabsTrigger value="preferences" className="text-xs sm:text-sm">
-              <SettingsIcon className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+              <Sliders className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Prefs</span>
             </TabsTrigger>
           </TabsList>
