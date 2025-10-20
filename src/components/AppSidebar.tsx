@@ -15,15 +15,6 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  useSidebar,
-} from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
@@ -44,9 +35,8 @@ import {
 } from "@/config/navigationConfig";
 
 export function AppSidebar() {
-  const { state } = useSidebar();
   const { user, isAdmin, isStylist, isClient } = useEnhancedAuth();
-  const collapsed = state === "collapsed";
+  const collapsed = false; // Always expanded on desktop
   const [isEditMode, setIsEditMode] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
@@ -169,8 +159,8 @@ export function AppSidebar() {
 
   if (isLoading) {
     return (
-      <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
-        <SidebarContent className="flex flex-col gap-3 p-4">
+      <aside className="hidden lg:flex w-64 border-r-[3px] border-foreground/10 bg-card">
+        <div className="flex flex-col gap-3 p-4 w-full">
           {/* Skeleton loaders with brutal styling */}
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-md bg-muted/50 border-[2px] border-foreground/10 shadow-[var(--brutal-shadow-sm)] animate-pulse" />
@@ -185,22 +175,22 @@ export function AppSidebar() {
               <div className="h-4 w-2/3 bg-muted/40 border-[2px] border-foreground/5 rounded animate-pulse" />
             </div>
           ))}
-        </SidebarContent>
-      </Sidebar>
+        </div>
+      </aside>
     );
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
-      <SidebarContent className="pb-4">
+    <aside className="hidden lg:flex w-64 border-r-[3px] border-foreground/10 bg-card">
+      <div className="flex flex-col h-full overflow-y-auto pb-4 w-full">
         {/* Next Appointment Banner - Shows time until next appointment */}
-        {(isStylist || isAdmin) && !collapsed && <NextAppointmentBanner />}
+        {(isStylist || isAdmin) && <NextAppointmentBanner />}
         
         {/* Today's Schedule Widget - Only for stylists and admins */}
-        {(isStylist || isAdmin) && !collapsed && <TodaysScheduleWidget />}
+        {(isStylist || isAdmin) && <TodaysScheduleWidget />}
         
         {/* Customize Controls - Only for stylists and admins */}
-        {!collapsed && (isStylist || isAdmin) && !isClient && (
+        {(isStylist || isAdmin) && !isClient && (
           <div className="px-3 py-3 border-b-[3px] border-foreground/10">
             <div className="flex items-center gap-2">
               <Button
@@ -257,37 +247,33 @@ export function AppSidebar() {
                       )}
                     </div>
                   )}
-                  <SidebarGroup className="mb-2">
-                    <SidebarGroupLabel 
-                      className={`${collapsed ? "sr-only" : "cursor-pointer hover:bg-muted/80 px-2 py-2 flex items-center justify-between transition-all border-l-[3px] border-transparent hover:border-primary/50"}`}
-                      onClick={() => !collapsed && toggleGroupCollapsed(groupKey)}
+                  <div className="mb-2">
+                    <div 
+                      className="cursor-pointer hover:bg-muted/80 px-2 py-2 flex items-center justify-between transition-all border-l-[3px] border-transparent hover:border-primary/50"
+                      onClick={() => toggleGroupCollapsed(groupKey)}
                     >
-                      <span className="drop-shadow-sm">{labels[groupKey]}</span>
-                      {!collapsed && (
-                        <span className="text-[10px] transition-transform duration-200 font-bold" style={{ transform: isGroupCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
-                          ▼
-                        </span>
-                      )}
-                    </SidebarGroupLabel>
+                      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground drop-shadow-sm">{labels[groupKey]}</span>
+                      <span className="text-[10px] transition-transform duration-200 font-bold" style={{ transform: isGroupCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}>
+                        ▼
+                      </span>
+                    </div>
                     {!isGroupCollapsed && (
-                      <SidebarGroupContent>
-                        <SidebarMenu>
-                          {groupItems.map((item) => (
-                            <SortableNavItem
-                              key={item.id}
-                              item={item}
-                              collapsed={collapsed}
-                              getNavClassName={getNavClassName}
-                              isEditMode={isEditMode}
-                              expandedItems={expandedItems}
-                              toggleExpanded={toggleExpanded}
-                              notificationCount={notifications[item.id]}
-                            />
-                          ))}
-                        </SidebarMenu>
-                      </SidebarGroupContent>
+                      <nav className="space-y-1 px-2">
+                        {groupItems.map((item) => (
+                          <SortableNavItem
+                            key={item.id}
+                            item={item}
+                            collapsed={collapsed}
+                            getNavClassName={getNavClassName}
+                            isEditMode={isEditMode}
+                            expandedItems={expandedItems}
+                            toggleExpanded={toggleExpanded}
+                            notificationCount={notifications[item.id]}
+                          />
+                        ))}
+                      </nav>
                     )}
-                  </SidebarGroup>
+                  </div>
                 </div>
               );
             })}
@@ -295,11 +281,11 @@ export function AppSidebar() {
         </DndContext>
 
         {/* Calendar Sync Indicator - Only for stylists and admins */}
-        {(isStylist || isAdmin) && !collapsed && <CalendarSyncIndicator />}
+        {(isStylist || isAdmin) && <CalendarSyncIndicator />}
         
         {/* Dark Mode Toggle - For all users */}
-        {!collapsed && <DarkModeToggle />}
-      </SidebarContent>
-    </Sidebar>
+        <DarkModeToggle />
+      </div>
+    </aside>
   );
 }
