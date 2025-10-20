@@ -208,8 +208,8 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           {/* Photo Preview Grid */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             {/* Before Photo */}
-            <div className={`relative aspect-square rounded-lg overflow-hidden border-2 ${
-              beforePhoto ? 'border-green-500' : 'border-dashed border-muted'
+            <div className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
+              beforePhoto ? 'border-info shadow-[3px_3px_0px_0px_hsl(var(--info))]' : 'border-dashed border-muted'
             }`}>
               {beforePhoto ? (
                 <>
@@ -219,7 +219,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 left-2">
-                    <Badge className="bg-blue-500 text-white">
+                    <Badge className="bg-info text-info-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                       <Check className="h-3 w-3 mr-1" />
                       Before
                     </Badge>
@@ -234,8 +234,8 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             </div>
 
             {/* After Photo */}
-            <div className={`relative aspect-square rounded-lg overflow-hidden border-2 ${
-              afterPhoto ? 'border-green-500' : 'border-dashed border-muted'
+            <div className={`relative aspect-square rounded-lg overflow-hidden border-[3px] ${
+              afterPhoto ? 'border-success shadow-[3px_3px_0px_0px_hsl(var(--success))]' : 'border-dashed border-muted'
             }`}>
               {afterPhoto ? (
                 <>
@@ -245,13 +245,13 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 left-2">
-                    <Badge className="bg-purple-500 text-white">
+                    <Badge className="bg-secondary text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                       <Check className="h-3 w-3 mr-1" />
                       After
                     </Badge>
                   </div>
                   <div className="absolute top-2 right-2">
-                    <Badge className="bg-green-500 text-white">
+                    <Badge className="bg-success text-success-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
                       <Sparkles className="h-3 w-3 mr-1" />
                       AI Enhanced
                     </Badge>
@@ -359,19 +359,19 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
           {beforePhoto && afterPhoto && (
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Badge className="bg-blue-500 text-white">Before</Badge>
+                <Badge className="bg-info text-info-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">Before</Badge>
                 <img 
                   src={beforePhoto} 
                   alt="Before" 
-                  className="w-full rounded-lg border-2 border-blue-500"
+                  className="w-full rounded-lg border-[3px] border-info shadow-[4px_4px_0px_0px_hsl(var(--info))]"
                 />
               </div>
               <div className="space-y-2">
-                <Badge className="bg-purple-500 text-white">After</Badge>
+                <Badge className="bg-secondary text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">After</Badge>
                 <img 
                   src={afterPhoto} 
                   alt="After" 
-                  className="w-full rounded-lg border-2 border-purple-500"
+                  className="w-full rounded-lg border-[3px] border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary))]"
                 />
               </div>
             </div>
