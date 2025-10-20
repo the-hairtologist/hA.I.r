@@ -716,9 +716,9 @@ const Dashboard = () => {
       
       <div className="w-full space-y-4 sm:space-y-6">
         
-        <div className="mb-6 sm:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
+        <div className="mb-4 sm:mb-6 md:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-[11px] sm:text-xs md:text-sm font-bold">
+            <span className="text-background font-mono text-[10px] xs:text-[11px] sm:text-xs md:text-sm font-bold truncate max-w-[70vw]">
               {new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
             </span>
             <div className="window-controls">
@@ -728,11 +728,11 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="bg-blue-600 p-2 sm:p-3 md:p-5 relative overflow-hidden">
+          <div className="bg-blue-600 p-3 xs:p-4 sm:p-5 md:p-6 relative overflow-hidden">
             <div className="window-scrollbar"></div>
             
             <div className="w-full">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-pixel font-bold mb-2 sm:mb-3 text-pink-400 uppercase leading-tight animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <h2 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-pixel font-bold mb-2 sm:mb-3 text-pink-400 uppercase leading-tight animate-fade-in break-words" style={{ animationDelay: '100ms' }}>
                 Welcome back, {user?.user_metadata?.full_name?.split(' ')[0] || "there"}!
               </h2>
               
@@ -764,35 +764,35 @@ const Dashboard = () => {
 
         {/* Customize Dashboard Controls */}
         {isEditMode && (
-          <div className="mb-4 sm:mb-6 p-4 sm:p-5 md:p-6 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
+          <div className="mb-4 sm:mb-6 p-3 xs:p-4 sm:p-5 md:p-6 bg-primary/5 border-2 border-primary/20 rounded-lg animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h3 className="text-xs sm:text-sm font-pixel text-foreground mb-1 flex items-center gap-2">
-                  <Edit3 className="h-3.5 w-3.5 text-primary" />
-                  Customize Dashboard
+                  <Edit3 className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                  <span className="truncate">Customize Dashboard</span>
                 </h3>
-                <p className="text-[11px] sm:text-xs font-sans text-muted-foreground">
+                <p className="text-[10px] xs:text-[11px] sm:text-xs font-sans text-muted-foreground">
                   <span className="hidden sm:inline">Drag sections to reorder • Click eye icon to show/hide sections</span>
                   <span className="sm:hidden">Long-press to drag • Tap eye to toggle</span>
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-full sm:w-auto">
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={handleReset}
-                  className="text-xs font-bold uppercase tracking-wide"
+                  className="text-[10px] xs:text-xs font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
-                  Reset
+                  <span className="hidden xs:inline">Reset</span>
                 </Button>
                 <Button
                   size="sm"
                   onClick={handleSave}
-                  className="text-xs font-bold uppercase tracking-wide"
+                  className="text-[10px] xs:text-xs font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
                 >
                   <Save className="h-3.5 w-3.5 mr-1" />
-                  Done
+                  <span className="hidden xs:inline">Done</span>
                 </Button>
               </div>
             </div>

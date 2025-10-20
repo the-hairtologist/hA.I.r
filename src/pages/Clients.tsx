@@ -507,12 +507,12 @@ export default function Clients() {
           </>
         )}
 
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div className="flex flex-col gap-4 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel mb-2 gradient-text">Clients & Formulas</h1>
-            <p className="text-muted-foreground font-sans">Manage your client profiles, formulas, and preferences</p>
+            <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel mb-2 gradient-text break-words">Clients & Formulas</h1>
+            <p className="text-sm sm:text-base text-muted-foreground font-sans">Manage your client profiles, formulas, and preferences</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {/* Re-engagement Campaign Button - Shows when clients selected */}
             {selectedCount > 0 && stylistId && (
               <ReEngagementDialog
@@ -524,39 +524,39 @@ export default function Clients() {
               variant="outline"
               onClick={handleExportCSV}
               disabled={filteredClients.length === 0}
-              className="gap-2"
+              className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none"
             >
-              <Download className="h-4 w-4" />
-              Export
+              <Download className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+              <span className="hidden xxs:inline">Export</span>
             </Button>
             <Button 
               variant="outline"
               onClick={() => navigate("/formulas")}
-              className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+              className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
             >
-              <FileText className="h-4 w-4" />
-              Formulas
+              <FileText className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+              <span className="hidden xxs:inline">Formulas</span>
             </Button>
             <Button 
               onClick={() => setInviteDialogOpen(true)} 
               variant="outline"
-              className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+              className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
             >
-              <UserPlus className="h-4 w-4" />
-              Invite Client
+              <UserPlus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+              <span className="hidden sm:inline">Invite</span>
             </Button>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="gap-2 border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
-                  <Plus className="h-4 w-4" />
-                  Add Client
+                <Button className="gap-1.5 xs:gap-2 text-xs xs:text-sm min-h-[44px] flex-1 xs:flex-none border-[2px] xs:border-[3px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] xs:shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] xs:hover:translate-x-[2px] xs:hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_hsl(var(--foreground))] xs:hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all">
+                  <Plus className="h-3.5 w-3.5 xs:h-4 xs:w-4" />
+                  <span className="hidden xxs:inline">Add</span>
                 </Button>
               </DialogTrigger>
-          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[3px] border-foreground shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
+          <DialogContent className="max-w-[calc(100vw-2rem)] xs:max-w-md max-h-[85vh] xs:max-h-[90vh] overflow-y-auto border-[2px] xs:border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] xs:shadow-[6px_6px_0px_0px_hsl(var(--foreground))]">
             <DialogHeader>
-              <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-pixel gradient-text">Add a New Client</DialogTitle>
+              <DialogTitle className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-pixel gradient-text break-words">Add a New Client</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3 xs:space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Label htmlFor="full_name">Full Name *</Label>

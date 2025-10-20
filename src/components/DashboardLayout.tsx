@@ -169,20 +169,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           />
 
           {/* Desktop Header */}
-          <header className={`hidden lg:flex sticky top-0 z-40 border-b-4 ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
-            <div className="flex h-16 items-center gap-4 px-4 w-full">
+          <header className={`hidden lg:flex sticky top-0 z-40 border-b-3 lg:border-b-4 ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm shadow-[0_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
+            <div className="flex h-14 lg:h-16 items-center gap-2 lg:gap-4 px-3 lg:px-4 w-full">
               {/* CRITICAL: Always-visible sidebar trigger */}
               <SidebarTrigger className="h-9 w-9" />
               
               <button 
                 onClick={() => navigate("/dashboard")}
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-1.5 lg:gap-2 hover:opacity-80 transition-opacity"
               >
-                <Scissors className="h-6 w-6 text-primary" />
-                <h1 className="text-xl font-bold font-pixel">hA.I.r</h1>
+                <Scissors className="h-5 w-5 lg:h-6 lg:w-6 text-primary" />
+                <h1 className="text-lg lg:text-xl font-bold font-pixel">hA.I.r</h1>
               </button>
 
-              <div className="ml-auto flex items-center gap-2 md:gap-3">
+              <div className="ml-auto flex items-center gap-1.5 md:gap-2 lg:gap-3">
                 <TooltipProvider>
                   {isAdmin && (
                     <Tooltip>
@@ -290,11 +290,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Main Content - CRITICAL: Prevent overflow */}
           <main
             id="main-content"
-            className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-20 lg:pb-0"
+            className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-20 lg:pb-4"
             role="main"
             aria-label="Main content"
           >
-            <div className="container mx-auto p-4 sm:p-6 animate-fade-in-fast w-full max-w-full">
+            <div className="container mx-auto p-3 xs:p-4 sm:p-5 md:p-6 animate-fade-in-fast w-full max-w-full">
               <Breadcrumbs />
               {children}
             </div>
