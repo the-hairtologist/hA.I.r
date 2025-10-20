@@ -58,30 +58,49 @@ const Index = () => {
         }}>
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
             <div className="max-w-4xl mx-auto space-y-4 xxs:space-y-6 xs:space-y-8">
-              <h1 className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-secondary leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-4 break-words">
-                YOUR HAIR, SMARTER.<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>YOUR SALON, EFFORTLESS.
+              <h1 className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-accent leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-4 break-words">
+                STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
               </h1>
               
-              <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base md:text-lg font-pixel text-primary-foreground/90 max-w-2xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-3 xs:px-4 break-words" style={{ animationDelay: '100ms' }}>
-                BOOK SMARTER. STYLE BETTER. GET PAID FASTER.
+              <p className="text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl font-sans text-primary-foreground max-w-3xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-3 xs:px-4 break-words" style={{ animationDelay: '100ms' }}>
+                Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
               </p>
               
               <div className="pt-3 xxs:pt-4 xs:pt-6 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
                 <Button 
                   size="lg" 
                   onClick={() => navigate("/auth")} 
-                  className="text-[10px] xxs:text-xs xs:text-sm sm:text-base md:text-lg px-4 xxs:px-5 xs:px-6 sm:px-8 md:px-12 py-3 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-accent text-accent-foreground hover:bg-accent/90 border-[2px] xxs:border-[3px] xs:border-[4px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] xxs:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] xs:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] xxs:hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xs:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 xs:hover:-translate-y-1 rounded-none animate-pulse-subtle min-h-[48px] xxs:min-h-[52px] xs:min-h-[56px] w-full max-w-[90vw] xs:w-auto"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 border-[3px] xxs:border-[4px] xs:border-[4px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] xxs:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xs:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] xxs:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] xs:hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                 >
-                  GET STARTED FREE
+                  START FREE TRIAL
                 </Button>
               </div>
               
-              <p className="text-[9px] xxs:text-[10px] xs:text-xs sm:text-sm font-pixel text-primary-foreground/80 uppercase animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
-                Free Trial • No Credit Card Required
+              <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base font-sans text-primary-foreground/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
+                No Credit Card • Start In Seconds
               </p>
             </div>
           </div>
           <ScrollIndicator />
+        </section>
+
+        {/* Trust Section - Social Proof */}
+        <section className="py-8 xs:py-10 sm:py-12 bg-background border-y-[3px] border-black">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-6 xs:mb-8">
+              <p className="font-pixel text-xs xs:text-sm text-foreground/70 uppercase tracking-wider animate-fade-in">
+                🏆 TRUSTED BY 5,000+ STYLISTS
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center items-center gap-4 xs:gap-6 sm:gap-8 animate-fade-in" style={{ animationDelay: '100ms' }}>
+              {/* Placeholder trust badges - brutal style */}
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="border-[3px] border-foreground p-3 xs:p-4 bg-muted hover:bg-accent/10 transition-colors duration-300 min-w-[80px] xs:min-w-[100px] h-14 xs:h-16 flex items-center justify-center">
+                  <span className="font-pixel text-[10px] xs:text-xs text-foreground/50">SALON {i}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* How It Works - Clean white background */}

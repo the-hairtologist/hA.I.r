@@ -3,16 +3,16 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const testimonials = [
   {
-    quote: "Saved me 2 hours every week on scheduling. My clients love the reminders!",
-    author: "Sarah M.",
-    role: "Independent Stylist",
-    initials: "SM",
+    quote: "I got back 2 hours a day. My clients love the automated reminders. No more missed appointments.",
+    author: "Jessica Martinez",
+    role: "Colorist, Miami",
+    initials: "JM",
   },
   {
-    quote: "First app that actually tracks my color formulas. Game changer for repeat clients.",
-    author: "Jessica P.",
-    role: "Salon Owner",
-    initials: "JP",
+    quote: "First app that actually remembers every formula. My repeat clients are obsessed with their consistency.",
+    author: "Sarah Chen",
+    role: "Salon Owner, LA",
+    initials: "SC",
   },
 ];
 

@@ -3,38 +3,38 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const features = [
   {
-    icon: Sparkles,
-    title: "AI-Powered Hair Recommendations",
-    headline: "Say goodbye to guesswork.",
-    description: "Our AI analyzes your hair type, style history, and goals to recommend treatments, products, and styles that actually work. Every day can be a great hair day - without trial and error.",
+    icon: Calendar,
+    title: "Smart Appointment Booking",
+    headline: "ZERO DOUBLE-BOOKINGS",
+    description: "AI cross-checks your calendar, blocks conflicts, sends you alerts before they happen. Never lose a client to scheduling chaos again.",
     number: "①",
   },
   {
-    icon: Calendar,
-    title: "Smart Appointment Booking",
-    headline: "Never wait. Never miss a slot.",
-    description: "Book appointments in seconds, see real-time availability, and get reminders. Stylists stay organized while you enjoy a seamless, stress-free experience.",
+    icon: Smartphone,
+    title: "Automated Reminders",
+    headline: "CLIENTS NEVER MISS",
+    description: "Automatic text & email reminders mean 90% fewer no-shows. Your clients remember. Your chair stays full. Your time stays valuable.",
     number: "②",
-  },
-  {
-    icon: CreditCard,
-    title: "Instant Payments & Transparent Commissions",
-    headline: "Pay or get paid effortlessly.",
-    description: "Secure in-app payments remove awkward cash exchanges. Stylists can track earnings automatically, keeping the focus on great service - not spreadsheets.",
-    number: "③",
   },
   {
     icon: Heart,
     title: "Personalized Client Management",
-    headline: "Your hair story, remembered.",
-    description: "Stylists access your hair history and preferences instantly, so every appointment is smarter, faster, and tailored just for you.",
+    headline: "EVERY DETAIL REMEMBERED",
+    description: "Hair history, preferences, formulas—instantly accessible. Spend less time taking notes, more time creating magic.",
+    number: "③",
+  },
+  {
+    icon: Sparkles,
+    title: "Formula Tracking & Hair History",
+    headline: "NEVER GUESS AGAIN",
+    description: "Every color formula, treatment, product—saved forever. Access complete client history in one tap. Consistency = loyalty.",
     number: "④",
   },
   {
-    icon: Smartphone,
-    title: "Formula Tracking & Hair History",
-    headline: "Never forget a formula again.",
-    description: "Save every color formula, treatment, and product used. Access complete client hair history instantly—no more guessing what worked last time.",
+    icon: CreditCard,
+    title: "Instant Payments",
+    headline: "GET PAID IMMEDIATELY",
+    description: "Secure in-app payments. Track earnings automatically. No awkward cash exchanges. No spreadsheets. Just instant deposits.",
     number: "⑤",
   },
 ];
@@ -61,10 +61,10 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: n
           </span>
         </div>
       </div>
-      <h3 className="font-pixel text-xs xs:text-sm text-foreground uppercase tracking-wide">
+      <h3 className="font-pixel text-sm xs:text-base text-accent uppercase tracking-wide">
         {feature.headline}
       </h3>
-      <p className="text-xs xs:text-sm font-sans text-muted-foreground leading-relaxed">
+      <p className="text-sm xs:text-base font-sans text-foreground leading-relaxed">
         {feature.description}
       </p>
     </div>
@@ -76,10 +76,10 @@ export const MinimalFeatures = () => {
     <div className="container mx-auto px-4">
       <div className="text-center mb-16">
         <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
-          WHY HAIR PROS CHOOSE hA.I.r
+          THE PROBLEMS WE SOLVE
         </h2>
         <p className="font-sans text-sm xs:text-base text-muted-foreground max-w-2xl mx-auto">
-          Everything you need for smarter bookings, better results, and happier clients
+          No more chaos. Just clients, color, and calm.
         </p>
       </div>
       
