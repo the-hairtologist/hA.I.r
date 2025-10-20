@@ -25,7 +25,7 @@ import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
-import { OnboardingWizard } from "@/components/OnboardingWizard";
+
 import { AppointmentTimerWidget } from "@/components/AppointmentTimerWidget";
 import { logger } from "@/lib/logging/productionLogger";
 import { BirthdayAlertsWidget } from "@/components/BirthdayAlertsWidget";
@@ -86,7 +86,7 @@ const Dashboard = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [showProfileCompletion, setShowProfileCompletion] = useState(false);
-  const [showOnboardingWizard, setShowOnboardingWizard] = useState(false);
+  
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false);
   const [stats, setStats] = useState<any>({});
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
@@ -204,18 +204,7 @@ const Dashboard = () => {
     if (userRole && profile) {
       loadDashboardData();
       
-      // Check if we should show onboarding - only OnboardingWizard
-      const onboardingComplete = localStorage.getItem('onboarding_completed');
-      const profileComplete = localStorage.getItem('profile_completed');
-      
-      if (!onboardingComplete && user) {
-        setTimeout(() => setShowOnboardingWizard(true), 500);
-      }
-      
-      // Only check profile completion if not already marked complete AND onboarding is done
-      if (profileComplete || !onboardingComplete) {
-        return; // Skip profile completion check
-      }
+      // GuidedTour handles onboarding automatically via useTour hook
       
       // Check profile completion
       checkProfileCompletion();
@@ -904,22 +893,6 @@ const Dashboard = () => {
           <NotificationManager userId={user.id} userRole={userRole as "stylist" | "client"} />
         )}
 
-        {/* New Onboarding Wizard */}
-        {userRole && (
-          <OnboardingWizard
-            open={showOnboardingWizard}
-            onComplete={() => {
-              setShowOnboardingWizard(false);
-              // Reload dashboard data after onboarding completes
-              setTimeout(() => {
-                if (userRole && profile) {
-                  loadDashboardData();
-                }
-              }, 100);
-            }}
-            userRole={userRole as "stylist" | "client" | "admin"}
-          />
-        )}
 
       </div>
     </DashboardLayout>
