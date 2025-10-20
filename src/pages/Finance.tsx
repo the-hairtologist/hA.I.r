@@ -50,15 +50,11 @@ const Finance = () => {
         return;
       }
 
-      console.log("Finance: Loading stylist profile for user:", session.user.id);
-
       const { data: stylist, error: stylistError } = await supabase
         .from("stylist_profiles")
         .select("*")
         .eq("user_id", session.user.id)
         .maybeSingle();
-
-      console.log("Finance: Stylist profile query result:", { stylist, stylistError });
 
       if (stylistError) {
         console.error("Error fetching stylist profile:", stylistError);

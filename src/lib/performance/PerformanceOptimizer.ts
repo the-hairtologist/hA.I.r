@@ -5,6 +5,7 @@
 
 import { initResourceHints, smartPrefetch } from './ResourceHints';
 import { preconnectCriticalDomains, loadPolyfills } from './BundleOptimizer';
+import { logger } from '../logging/productionLogger';
 
 class PerformanceOptimizerService {
   private initialized = false;
@@ -15,7 +16,7 @@ class PerformanceOptimizerService {
   async init() {
     if (this.initialized) return;
 
-    console.log('🚀 Initializing performance optimizations...');
+    logger.info('🚀 Initializing performance optimizations...');
 
     // Phase 1: Critical resource hints (immediate)
     initResourceHints();
@@ -41,7 +42,7 @@ class PerformanceOptimizerService {
     this.monitorPerformance();
 
     this.initialized = true;
-    console.log('✅ Performance optimizations complete');
+    logger.info('✅ Performance optimizations complete');
   }
 
   /**
@@ -57,7 +58,7 @@ class PerformanceOptimizerService {
           img.setAttribute('decoding', 'async');
         });
 
-        console.log(`✅ Optimized ${images.length} images`);
+        logger.info(`✅ Optimized ${images.length} images`);
       });
     }
   }
@@ -139,7 +140,7 @@ class PerformanceOptimizerService {
     // Use font-display: swap for better perceived performance
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
-        console.log('✅ Fonts loaded');
+        logger.info('✅ Fonts loaded');
       });
     }
   }
@@ -152,9 +153,9 @@ class PerformanceOptimizerService {
     const supportsCompression = 'CompressionStream' in window;
     
     if (supportsCompression) {
-      console.log('✅ Compression API available');
+      logger.info('✅ Compression API available');
     } else {
-      console.log('ℹ️ Compression API not available');
+      logger.info('ℹ️ Compression API not available');
     }
   }
 

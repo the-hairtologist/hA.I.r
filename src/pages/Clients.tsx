@@ -1106,7 +1106,7 @@ export default function Clients() {
                     <HairPhotoAnalysis 
                       clientId={selectedClient.id}
                       onAnalysisComplete={(result) => {
-                        console.log('Analysis complete:', result);
+                        // Analysis complete
                         toast.success("Analysis Complete");
                       }}
                     />

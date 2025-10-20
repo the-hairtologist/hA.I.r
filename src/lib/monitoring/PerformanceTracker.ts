@@ -1,4 +1,5 @@
 import { analytics } from '../analytics';
+import { logger } from '../logging/productionLogger';
 
 /**
  * Performance tracking for Core Web Vitals and custom metrics
@@ -20,7 +21,7 @@ class PerformanceTracker {
     this.observeWebVitals();
 
     this.initialized = true;
-    console.log('[Performance] Tracker initialized');
+    logger.info('[Performance] Tracker initialized');
   }
 
   private trackPageLoad() {
@@ -37,7 +38,7 @@ class PerformanceTracker {
         first_paint: Math.round(firstPaint),
       });
 
-      console.log('[Performance] Page load:', {
+      logger.info('[Performance] Page load:', {
         loadTime: Math.round(loadTime) + 'ms',
         domContentLoaded: Math.round(domContentLoaded) + 'ms',
       });
@@ -125,7 +126,7 @@ class PerformanceTracker {
           duration: Math.round(measure.duration),
         });
 
-        console.log(`[Performance] ${name}: ${Math.round(measure.duration)}ms`);
+        logger.info(`[Performance] ${name}: ${Math.round(measure.duration)}ms`);
       }
     } catch (error) {
       console.warn(`[Performance] Failed to measure ${name}:`, error);
