@@ -63,14 +63,19 @@ export const MobileDrawer = ({ isOpen, onClose }: MobileDrawerProps) => {
     return acc;
   }, {} as Record<string, NavigationItem[]>);
 
-  // Auto-expand all groups on mount for better discoverability
+  // Auto-expand group containing active route
   useEffect(() => {
     if (isOpen) {
-      // Expand all groups by default for mobile-friendly browsing
-      const allGroups = Object.keys(groupedItems);
-      setExpandedGroups(new Set(allGroups));
+      const activeGroup = navigationItems.find(
+        (item) => location.pathname === item.url || 
+        item.children?.some(child => location.pathname === child.url)
+      )?.group;
+      
+      if (activeGroup) {
+        setExpandedGroups(new Set([activeGroup]));
+      }
     }
-  }, [isOpen, groupedItems]);
+  }, [isOpen, location.pathname, navigationItems]);
 
   const toggleGroup = (groupKey: string) => {
     haptic.tap();
@@ -153,35 +158,30 @@ export const MobileDrawer = ({ isOpen, onClose }: MobileDrawerProps) => {
         {/* Navigation Content */}
         <ScrollArea className="h-[calc(100%-4rem)]">
           <div className="px-2 py-4 space-y-1">
-            {Object.entries(groupedItems).length === 0 ? (
-              <div className="px-4 py-8 text-center text-muted-foreground">
-                <p>No navigation items available</p>
-              </div>
-            ) : (
-              Object.entries(groupedItems).map(([groupKey, items]) => {
-                const isExpanded = expandedGroups.has(groupKey);
-                const groupLabel = groupLabels[groupKey] || groupKey;
+            {Object.entries(groupedItems).map(([groupKey, items]) => {
+              const isExpanded = expandedGroups.has(groupKey);
+              const groupLabel = groupLabels[groupKey] || groupKey;
 
-                return (
-                  <div key={groupKey} className="mb-4">
-                    {/* Group Header */}
-                    <button
-                      onClick={() => toggleGroup(groupKey)}
-                      className={cn(
-                        "w-full flex items-center justify-between px-3 py-2 rounded-lg",
-                        "text-xs font-bold uppercase tracking-wider",
-                        "text-muted-foreground hover:text-foreground",
-                        "transition-all duration-200 touch-manipulation",
-                        "hover:bg-accent/50 active:scale-98"
-                      )}
-                    >
-                      <span>{groupLabel}</span>
-                      {isExpanded ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      )}
-                    </button>
+              return (
+                <div key={groupKey} className="mb-4">
+                  {/* Group Header */}
+                  <button
+                    onClick={() => toggleGroup(groupKey)}
+                    className={cn(
+                      "w-full flex items-center justify-between px-3 py-2 rounded-lg",
+                      "text-xs font-bold uppercase tracking-wider",
+                      "text-muted-foreground hover:text-foreground",
+                      "transition-all duration-200 touch-manipulation",
+                      "hover:bg-accent/50 active:scale-98"
+                    )}
+                  >
+                    <span>{groupLabel}</span>
+                    {isExpanded ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </button>
 
                   {/* Group Items */}
                   {isExpanded && (
@@ -288,10 +288,9 @@ export const MobileDrawer = ({ isOpen, onClose }: MobileDrawerProps) => {
                       })}
                     </div>
                   )}
-                  </div>
-                );
-              })
-            )}
+                </div>
+              );
+            })}
           </div>
         </ScrollArea>
       </aside>
