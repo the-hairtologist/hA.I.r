@@ -326,7 +326,7 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             )}
 
             {stage === 'after' && beforePhoto && (
-              <Button onClick={resetFlow} variant="outline" size="icon">
+              <Button onClick={resetFlow} variant="outline" size="icon" aria-label="Cancel and reset flow">
                 <X className="h-5 w-5" />
               </Button>
             )}

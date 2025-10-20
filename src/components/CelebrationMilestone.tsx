@@ -155,7 +155,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
                     <code className="flex-1 font-mono text-lg font-bold px-3 py-2 bg-muted rounded">
                       {milestone.discount_code}
                     </code>
-                    <Button size="icon" variant="outline" onClick={copyDiscountCode}>
+                    <Button size="icon" variant="outline" onClick={copyDiscountCode} aria-label="Copy discount code">
                       <Copy className="h-4 w-4" />
                     </Button>
                   </div>

@@ -170,10 +170,10 @@ export const ReferralSystem = () => {
                 readOnly
                 className="font-mono text-lg font-bold"
               />
-              <Button onClick={copyReferralCode} variant="outline" size="icon">
+              <Button onClick={copyReferralCode} variant="outline" size="icon" aria-label="Copy referral code">
                 <Copy className="h-4 w-4" />
               </Button>
-              <Button onClick={shareReferralLink} size="icon">
+              <Button onClick={shareReferralLink} size="icon" aria-label="Share referral link">
                 <Share2 className="h-4 w-4" />
               </Button>
             </div>

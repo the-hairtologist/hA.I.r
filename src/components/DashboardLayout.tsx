@@ -177,6 +177,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <button 
                 onClick={() => navigate("/dashboard")}
                 className="flex items-center gap-1.5 lg:gap-2 hover:opacity-80 transition-opacity"
+                aria-label="Go to dashboard home"
               >
                 <Scissors className="h-5 w-5 lg:h-6 lg:w-6 text-primary" />
                 <h1 className="text-lg lg:text-xl font-pixel uppercase tracking-wider">hA.I.r</h1>
