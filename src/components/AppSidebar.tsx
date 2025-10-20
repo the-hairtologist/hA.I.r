@@ -169,20 +169,20 @@ export function AppSidebar() {
 
   if (isLoading) {
     return (
-      <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10">
+      <Sidebar collapsible="icon" className="brutal-border-r border-foreground/10">
         <SidebarContent className="flex flex-col gap-3 p-4">
           {/* Skeleton loaders with brutal styling */}
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-md bg-muted/50 border-[2px] border-foreground/10 shadow-[var(--brutal-shadow-sm)] animate-pulse" />
+            <div className="h-10 w-10 rounded-md bg-muted/50 brutal-border border-foreground/10 brutal-shadow-xs animate-pulse" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 w-3/4 bg-muted/50 border-[2px] border-foreground/5 rounded animate-pulse" />
-              <div className="h-3 w-1/2 bg-muted/30 border-[2px] border-foreground/5 rounded animate-pulse" />
+              <div className="h-4 w-3/4 bg-muted/50 brutal-border border-foreground/5 rounded animate-pulse" />
+              <div className="h-3 w-1/2 bg-muted/30 brutal-border border-foreground/5 rounded animate-pulse" />
             </div>
           </div>
           {[...Array(5)].map((_, i) => (
             <div key={i} className="flex items-center gap-3" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="h-8 w-8 rounded-md bg-muted/40 border-[2px] border-foreground/10 shadow-[var(--brutal-shadow-sm)] animate-pulse" />
-              <div className="h-4 w-2/3 bg-muted/40 border-[2px] border-foreground/5 rounded animate-pulse" />
+              <div className="h-8 w-8 rounded-md bg-muted/40 brutal-border border-foreground/10 brutal-shadow-xs animate-pulse" />
+              <div className="h-4 w-2/3 bg-muted/40 brutal-border border-foreground/5 rounded animate-pulse" />
             </div>
           ))}
         </SidebarContent>
@@ -191,7 +191,7 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar collapsible="icon" className="border-r-[3px] border-foreground/10 brutal-grid-subtle bg-sidebar">
+    <Sidebar collapsible="icon" className="brutal-border-r border-foreground/10 brutal-grid-subtle bg-sidebar">
       <SidebarContent className="pb-4 gap-2 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:py-3"
 >
         {/* Next Appointment Banner - Shows time until next appointment */}
@@ -202,13 +202,13 @@ export function AppSidebar() {
         
         {/* Customize Controls - Only for stylists and admins */}
         {!collapsed && (isStylist || isAdmin) && !isClient && (
-          <div className="px-3 py-3 border-b-[3px] border-foreground/10">
+          <div className="px-3 py-3 brutal-border-b border-foreground/10">
             <div className="flex items-center gap-2">
               <Button
                 variant={isEditMode ? "default" : "outline"}
                 size="sm"
                 onClick={() => setIsEditMode(!isEditMode)}
-                className="flex-1 h-9 font-bold border-[2px] shadow-[var(--brutal-shadow-sm)] hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5 active:shadow-none active:translate-y-0 transition-all"
+                className="flex-1 h-9 font-bold brutal-border brutal-shadow-sm hover:brutal-shadow-md brutal-hover transition-all"
                 title={isEditMode ? "Finish customizing" : "Drag to prioritize your most-used tools"}
               >
                 <Edit3 className="h-3.5 w-3.5 mr-1.5" />
@@ -219,7 +219,7 @@ export function AppSidebar() {
                   variant="outline"
                   size="sm"
                   onClick={handleReset}
-                  className="h-9 px-2 border-[2px] shadow-[var(--brutal-shadow-sm)] hover:shadow-[var(--brutal-shadow-md)] hover:-translate-y-0.5 active:shadow-none active:translate-y-0 transition-all"
+                  className="h-9 px-2 brutal-border brutal-shadow-sm hover:brutal-shadow-md brutal-hover transition-all"
                   title="Reset to recommended order"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />

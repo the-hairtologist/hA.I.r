@@ -213,8 +213,8 @@ export const MobileBottomNav = () => {
       {/* Navigation bar */}
       <nav 
         className={cn(
-          "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
-          "border-t-[3px]",
+          "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md brutal-shadow-top",
+          "brutal-border-t",
           isAdmin ? "border-t-amber-500 bg-gradient-to-r from-amber-500/5 to-amber-600/5" : "border-foreground"
         )}
         aria-label="Mobile navigation"

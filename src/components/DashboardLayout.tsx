@@ -169,7 +169,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           />
 
           {/* Desktop Header */}
-          <header className={`hidden lg:flex sticky top-0 z-40 border-b-[3px] lg:border-b-[4px] ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle shadow-[0_3px_0px_0px_hsl(var(--foreground))] lg:shadow-[0_4px_0px_0px_hsl(var(--foreground))]`}>
+          <header className={`hidden lg:flex sticky top-0 z-40 brutal-border-b ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle brutal-shadow-sm lg:brutal-shadow-md`}>
             <div className="flex h-14 lg:h-16 items-center gap-2 lg:gap-4 px-3 lg:px-4 w-full">
               {/* CRITICAL: Always-visible sidebar trigger */}
               <SidebarTrigger className="h-9 w-9" />

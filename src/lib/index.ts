@@ -62,4 +62,4 @@ export { useEnhancedQuery, invalidateQueryCache } from '@/hooks/useEnhancedQuery
 export { logger, log } from './logger';
 
 // Utils
-export { cn, rsp } from './utils';
+export { cn, responsive } from './utils';

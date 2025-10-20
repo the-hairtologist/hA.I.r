@@ -5,6 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Re-export responsive system for easy access
-export { responsiveBestPractices as rsp } from './responsiveSystem';
-export * from './responsiveSystem';
+// Re-export unified responsive system
+export { responsive } from './responsive';
+export * from './responsive';
