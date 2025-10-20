@@ -8,6 +8,8 @@ import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
+import { HeroPhoneMockup } from "@/components/landing/HeroPhoneMockup";
+import { FinalValueProp } from "@/components/landing/FinalValueProp";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-12 xxs:py-16 xs:py-20 sm:py-24 md:py-32 overflow-hidden min-h-[80vh] xxs:min-h-[85vh] xs:min-h-[90vh] flex items-center" style={{
+        <section className="relative bg-primary py-12 xxs:py-16 xs:py-20 sm:py-24 md:py-32 overflow-hidden min-h-screen flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -79,6 +81,11 @@ const Index = () => {
               <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base font-sans text-primary-foreground/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
                 No Credit Card • Start In Seconds
               </p>
+
+              {/* Product Demo Mockup */}
+              <div className="mt-8 xs:mt-12 sm:mt-16 animate-fade-in" style={{ animationDelay: '400ms' }}>
+                <HeroPhoneMockup />
+              </div>
             </div>
           </div>
           <ScrollIndicator />
@@ -134,10 +141,13 @@ const Index = () => {
         <section className="py-20 bg-accent">
           <MinimalFAQ />
         </section>
+
+        {/* Final Value Proposition */}
+        <FinalValueProp />
       </main>
 
       {/* Stats Section - Yellow background for excitement */}
-      <section className="py-10 xs:py-12 sm:py-14 md:py-16 bg-secondary border-t-[2px] xs:border-t-[3px] sm:border-t-[4px] border-black" style={{
+      <section className="py-10 xs:py-12 sm:py-14 md:py-16 bg-accent border-t-[3px] xs:border-t-[4px] border-black" style={{
         backgroundImage: `
           linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
           linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -145,11 +155,16 @@ const Index = () => {
         backgroundSize: '8px 8px'
       }}>
         <div className="container mx-auto px-4 xs:px-5 sm:px-6">
-          <h2 className="text-center font-pixel text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl text-secondary-foreground mb-6 xs:mb-8 sm:mb-10 md:mb-12 uppercase tracking-wide xs:tracking-wider px-2 xs:px-4 leading-tight break-words">
-            STYLISTS USING hA.I.r<br className="xs:hidden" /><span className="hidden xs:inline"> </span>CUT ADMIN TIME BY 40%
-          </h2>
+          <div className="text-center mb-8 xs:mb-10 sm:mb-12">
+            <div className="inline-block border-[3px] border-black bg-secondary px-4 xs:px-6 py-2 xs:py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-4 xs:mb-6">
+              <span className="font-pixel text-xs xs:text-sm text-secondary-foreground uppercase">REAL RESULTS</span>
+            </div>
+            <h2 className="font-pixel text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl text-accent-foreground uppercase tracking-wide xs:tracking-wider px-2 xs:px-4 leading-tight break-words">
+              STYLISTS USING hA.I.r<br className="xs:hidden" /><span className="hidden xs:inline"> </span>CUT ADMIN TIME BY 40%
+            </h2>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 xxs:gap-5 xs:gap-6 sm:gap-8 md:gap-10 lg:gap-12 max-w-5xl mx-auto">
-            <AnimatedCounter end={2000} suffix="+" icon={Scissors} label="STYLISTS" />
+            <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" />
             <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" />
             <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" />
             <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} />
