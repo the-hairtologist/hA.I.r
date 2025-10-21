@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { analytics } from "@/lib/analytics";
+import { useState } from "react";
 
 const faqs = [
   {
@@ -32,10 +33,13 @@ const faqs = [
 
 export const MinimalFAQ = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
+  const [showAll, setShowAll] = useState(false);
 
   const handleFAQClick = (question: string) => {
     analytics.faqExpanded('A', question);
   };
+
+  const displayedFAQs = showAll ? faqs : faqs.slice(0, 3);
 
   return (
     <div className="container mx-auto px-4" ref={ref}>
@@ -50,8 +54,8 @@ export const MinimalFAQ = () => {
           </p>
         </div>
 
-        <div className="space-y-4 xs:space-y-5">
-          {faqs.map((faq, index) => {
+        <div className="space-y-3 xs:space-y-4">
+          {displayedFAQs.map((faq, index) => {
             // Rotate through brand colors for borders
             const colors = ['border-primary', 'border-accent', 'border-secondary'];
             const accentColors = ['text-primary', 'text-accent', 'text-secondary'];
@@ -68,11 +72,11 @@ export const MinimalFAQ = () => {
                 }}
               >
                 <details className="group" onClick={() => handleFAQClick(faq.question)}>
-                  <summary className="cursor-pointer list-none p-4 xs:p-5 font-bold text-foreground hover:bg-muted/20 transition-colors duration-200 flex justify-between items-center gap-4">
+                  <summary className="cursor-pointer list-none p-3 xs:p-4 font-bold text-foreground hover:bg-muted/20 transition-colors duration-200 flex justify-between items-center gap-4">
                     <span className="font-sans text-sm sm:text-base text-left">{faq.question}</span>
                     <span className={`font-pixel text-xl ${accentColors[colorIndex]} group-open:rotate-90 transition-transform duration-300 flex-shrink-0`}>▶</span>
                   </summary>
-                  <div className={`px-4 xs:px-5 pb-4 xs:pb-5 border-t-2 ${colors[colorIndex]} pt-4`}>
+                  <div className={`px-3 xs:px-4 pb-3 xs:pb-4 border-t-2 ${colors[colorIndex]} pt-3`}>
                     <p className="font-sans text-sm sm:text-base text-muted-foreground leading-relaxed">{faq.answer}</p>
                   </div>
                 </details>
@@ -81,8 +85,20 @@ export const MinimalFAQ = () => {
           })}
         </div>
 
+        {/* Show More Button */}
+        {!showAll && faqs.length > 3 && (
+          <div className="text-center mt-6">
+            <button
+              onClick={() => setShowAll(true)}
+              className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-6 xs:px-8 py-3 brutal-shadow hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300 min-h-[44px]"
+            >
+              SHOW MORE ({faqs.length - 3} MORE)
+            </button>
+          </div>
+        )}
+
         {/* Contact CTA */}
-        <div className="text-center mt-10 xs:mt-12">
+        <div className="text-center mt-8 xs:mt-10">
           <p className="text-muted-foreground mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"

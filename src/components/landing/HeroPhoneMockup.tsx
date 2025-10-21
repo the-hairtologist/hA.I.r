@@ -13,7 +13,7 @@ export const HeroPhoneMockup = () => {
   }, []);
 
   return (
-    <div ref={ref} className={`relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto mt-8 xs:mt-12 transition-all duration-700 ${animationsEnabled && isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div ref={ref} className={`relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto mt-8 xs:mt-12 transition-all duration-700 ${animationsEnabled && isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
       {/* Phone Frame - Enhanced Brutal Style */}
       <div className="relative border-[4px] border-black bg-white shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-[32px] overflow-hidden transform hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300">
         {/* Phone Notch */}

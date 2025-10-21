@@ -5,14 +5,12 @@ import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 
 import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
-import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
+import { MinimalFooter } from "@/components/landing/MinimalFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { logger } from "@/lib/productionLogger";
 import { StickyCTA } from "@/components/landing/StickyCTA";
-import { ExitIntentModal } from "@/components/landing/ExitIntentModal";
-import { useExitIntent } from "@/hooks/useExitIntent";
 import { useScrollDepthTracking } from "@/hooks/useScrollDepthTracking";
 import { analytics } from "@/lib/analytics";
 
@@ -30,19 +28,9 @@ const HeroPhoneMockup = lazy(() => {
 
 const Index = () => {
   const navigate = useNavigate();
-  const [showExitIntent, setShowExitIntent] = useState(false);
 
   // Track scroll depth milestones
   useScrollDepthTracking({ enabled: true });
-
-  // Exit-intent detection
-  useExitIntent({
-    onExitIntent: () => {
-      setShowExitIntent(true);
-      analytics.track('exit_intent_shown');
-    },
-    enabled: true,
-  });
 
   useEffect(() => {
     logger.info('[Index] Component mounted', { context: 'Landing Page' });
@@ -159,7 +147,7 @@ const Index = () => {
               {/* Product Demo Mockup - Lazy loaded for performance */}
               <div className="mt-4 xs:mt-6 sm:mt-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Suspense fallback={
-                  <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
+                  <div className="relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
                 }>
                   <div data-debug-element="phone-mockup-loaded">
                     <HeroPhoneMockup />
@@ -207,16 +195,10 @@ const Index = () => {
         </section>
       </main>
 
-      <EnhancedFooter />
+      <MinimalFooter />
       
       {/* Sticky CTA (mobile only) */}
       <StickyCTA ctaText="START FREE TRIAL" />
-
-      {/* Exit-intent modal */}
-      <ExitIntentModal 
-        open={showExitIntent} 
-        onOpenChange={setShowExitIntent} 
-      />
     </div>
   );
 };
