@@ -1,6 +1,5 @@
 import { Quote } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import fiveStarRating from "@/assets/5-star-rating-brutalist.png";
 
 const testimonials = [
   {
@@ -24,12 +23,18 @@ export const SingleTestimonial = () => {
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-5xl mx-auto">
         {/* 5-Star Rating Display */}
-        <div className={`flex justify-center mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-          <img 
-            src={fiveStarRating} 
-            alt="5 star rating" 
-            className="h-12 xs:h-16 w-auto"
-          />
+        <div className={`flex justify-center gap-2 mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+          {[...Array(5)].map((_, i) => (
+            <div 
+              key={i} 
+              className="w-8 h-8 xs:w-10 xs:h-10 border-[3px] border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+              style={{
+                transitionDelay: `${i * 50}ms`,
+              }}
+            >
+              <span className="font-pixel text-secondary-foreground text-base xs:text-lg">★</span>
+            </div>
+          ))}
         </div>
 
         <div className="grid md:grid-cols-2 gap-3 xs:gap-4">
