@@ -12,7 +12,7 @@ import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { WeeklyOverview } from "@/components/dashboard/WeeklyOverview";
 import { QuickTasks } from "@/components/dashboard/QuickTasks";
-import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
+import { WeeklyScheduleView, AppointmentTimerWidget } from "@/components/appointments";
 import { QuickAppointmentDialog } from "@/components/QuickAppointmentDialog";
 import { LiveKPICards } from "@/components/dashboard/LiveKPICards";
 import { NotificationManager } from "@/components/NotificationManager";
@@ -26,7 +26,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
-import { AppointmentTimerWidget } from "@/components/AppointmentTimerWidget";
+
 import { logger } from "@/lib/logging/productionLogger";
 import { BirthdayAlertsWidget } from "@/components/BirthdayAlertsWidget";
 import { StatsToggleButton } from "@/components/admin/StatsToggleButton";

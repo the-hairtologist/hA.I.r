@@ -31,7 +31,7 @@ import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useSidebarOrder, SidebarItem } from "@/hooks/useSidebarOrder";
 import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
 import { TodaysScheduleWidget } from "@/components/sidebar/TodaysScheduleWidget";
-import { CalendarSyncIndicator } from "@/components/CalendarSyncIndicator";
+import { CalendarSyncIndicator } from "@/components/appointments";
 import { NextAppointmentBanner } from "@/components/sidebar/NextAppointmentBanner";
 import {
   stylistNavigationItems,

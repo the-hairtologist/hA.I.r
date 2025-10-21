@@ -23,14 +23,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { VoiceInput } from "@/components/VoiceInput";
 import { ContextualAI } from "@/components/ContextualAI";
 import { showCelebration } from "@/components/CelebrationToast";
-import { AIDisclaimer } from "@/components/AIDisclaimer";
+import { AIDisclaimer, AIFormulaAnalyzer } from "@/components/ai";
 import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
 import { FormulaFiltersComponent, FormulaFilters } from "@/components/FormulaFilters";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 import { EnhancedSearch, HighlightedText, fuzzyMatch } from "@/components/EnhancedSearch";
 import { FormulaSuccessPredictor } from "@/components/FormulaSuccessPredictor";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
-import { AIFormulaAnalyzer } from "@/components/AIFormulaAnalyzer";
+
 import { formulaSchema } from "@/lib/validation/formulaSchemas";
 import { cn } from "@/lib/utils";
 import { VirtualList } from "@/components/VirtualList";

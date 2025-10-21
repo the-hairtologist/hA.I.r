@@ -20,8 +20,8 @@ import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy
 import { PageHeader } from "@/components/PageHeader";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { CalendarView } from "@/components/CalendarView";
-import { WeeklyScheduleView } from "@/components/WeeklyScheduleView";
+import { CalendarView, WeeklyScheduleView, SmartSchedulingSuggestions, AppointmentInsights, AppointmentPhotoButton } from "@/components/appointments";
+import { AIScheduleOptimizer } from "@/components/ai";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { SearchInput } from "@/components/SearchInput";
@@ -32,19 +32,15 @@ import { RebookDialog } from "@/components/RebookDialog";
 import { useGlobalShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { QuickRebookButton } from "@/components/QuickRebookButton";
 import { ContextualAI } from "@/components/ContextualAI";
-import { SmartSchedulingSuggestions } from "@/components/SmartSchedulingSuggestions";
 import { showCelebration } from "@/components/CelebrationToast";
 import { QuickReviewButton } from "@/components/QuickReviewButton";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { RescheduleDialog } from "@/components/RescheduleDialog";
 import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
-import { AppointmentInsights } from "@/components/AppointmentInsights";
 import { RevenueOptimizer } from "@/components/RevenueOptimizer";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
-import { AIScheduleOptimizer } from "@/components/AIScheduleOptimizer";
 import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
 import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
-import { AppointmentPhotoButton } from "@/components/AppointmentPhotoButton";
 
 const Appointments = () => {
   const navigate = useNavigate();

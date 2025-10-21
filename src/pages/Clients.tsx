@@ -37,7 +37,7 @@ import { BulkActionsBar } from "@/components/admin/BulkActionsBar";
 import { CSVImportDialog } from "@/components/admin/CSVImportDialog";
 import { ClientRiskIndicator } from "@/components/ClientRiskIndicator";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
-import { AIMessageComposer } from "@/components/AIMessageComposer";
+import { AIMessageComposer } from "@/components/ai";
 import { HairPhotoAnalyzer } from "@/components/HairPhotoAnalyzer";
 import { HairPhotoAnalysis } from "@/components/client/HairPhotoAnalysis";
 import { FormulaSuggestions } from "@/components/formulas/FormulaSuggestions";
