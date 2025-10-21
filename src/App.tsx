@@ -26,7 +26,6 @@ import { initSentry } from "@/lib/monitoring";
 import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
-import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { useLocation } from "react-router-dom";
 
@@ -59,13 +58,6 @@ const AnalyticsInitializer = () => {
     initAnalytics();
     initSentry();
     initUTMTracking();
-    
-    // Initialize comprehensive performance optimizations
-    performanceOptimizer.init().catch((error) => {
-      import('@/lib/logging/productionLogger').then(({ logger }) => {
-        logger.error('Failed to initialize performance optimizations', error);
-      });
-    });
   }, []);
   
   // Track navigation changes
