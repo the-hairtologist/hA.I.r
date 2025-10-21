@@ -44,7 +44,7 @@ export const FAQSection = () => {
   return (
     <div className="space-y-8 max-w-3xl mx-auto">
       <div className="text-center">
-        <h2 className="font-pixel font-black text-3xl sm:text-5xl mb-3">
+        <h2 className="font-pixel text-3xl sm:text-5xl mb-3">
           Common questions
         </h2>
         <p className="font-sans text-muted-foreground">
@@ -60,7 +60,7 @@ export const FAQSection = () => {
               value={`item-${idx}`}
               className="brutal-border brutal-shadow-lg bg-card px-6 rounded-lg data-[state=open]:brutal-shadow-xl transition-all"
             >
-              <AccordionTrigger className="font-pixel font-bold text-left hover:no-underline py-4">
+              <AccordionTrigger className="font-pixel text-left hover:no-underline py-4">
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="font-sans text-muted-foreground leading-relaxed pb-4">
@@ -75,7 +75,7 @@ export const FAQSection = () => {
         <p className="text-muted-foreground mb-4">Still have questions?</p>
         <a
           href="mailto:support@hair-ai.com"
-          className="text-primary hover:underline font-medium"
+          className="font-sans text-primary hover:underline"
         >
           Contact our team →
         </a>

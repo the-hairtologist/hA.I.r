@@ -47,13 +47,9 @@ export const FinalValueProp = () => {
             <span className="font-pixel text-xs xs:text-sm text-secondary uppercase">REAL RESULTS</span>
           </div>
           
-          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground mb-3 uppercase tracking-wider leading-tight">
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground uppercase tracking-wider leading-tight">
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
-          
-          <p className="font-sans text-sm xs:text-base sm:text-lg text-black max-w-2xl mx-auto">
-            Real metrics from real stylists who switched to hA.I.r
-          </p>
         </div>
 
         {/* Animated Counters with rotating colors */}

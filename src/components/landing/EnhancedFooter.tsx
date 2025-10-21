@@ -187,7 +187,7 @@ export const EnhancedFooter = () => {
           {/* Legal Disclaimer */}
           <div className="border-t-2 border-secondary/20 pt-4 mt-4">
             <p className="text-xs font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto">
-              <span className="font-semibold">Disclaimer:</span> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
+              <span>Disclaimer:</span> Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
             </p>
           </div>
         </div>
