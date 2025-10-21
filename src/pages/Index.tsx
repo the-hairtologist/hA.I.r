@@ -130,7 +130,7 @@ const Index = () => {
                 className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] xs:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] md:drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
                 data-debug-element="hero-headline"
               >
-                STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
+                STOP MISSING CLIENTS
               </h1>
               
               <p 
@@ -138,7 +138,7 @@ const Index = () => {
                 style={{ animationDelay: '100ms' }}
                 data-debug-element="hero-subheadline"
               >
-                Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
+                Auto reminders + instant booking. Save 10+ hours weekly.
               </p>
               
               <div className="pt-1 xxs:pt-2 xs:pt-3 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>

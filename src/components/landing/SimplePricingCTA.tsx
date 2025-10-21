@@ -24,15 +24,15 @@ export const SimplePricingCTA = () => {
           </div>
 
           <h2 className="font-pixel text-2xl xs:text-3xl sm:text-4xl mb-4 text-secondary-foreground uppercase tracking-wider leading-tight">
-            STOP THE CHAOS
+            RECLAIM YOUR TIME
           </h2>
 
           <p className="text-sm xs:text-base sm:text-lg font-sans text-secondary-foreground/90 mb-2 max-w-2xl mx-auto leading-relaxed">
-            Join 5,000+ stylists who reclaimed their time
+            5,000+ stylists trust hA.I.r
           </p>
           
           <p className="text-xs xs:text-sm font-pixel text-secondary-foreground/80 uppercase mb-10">
-            10+ Hours/Week Saved • 90% Fewer No-Shows
+            10+ Hours Saved • 90% Fewer No-Shows
           </p>
         </div>
 
