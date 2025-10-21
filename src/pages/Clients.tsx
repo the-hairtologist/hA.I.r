@@ -103,8 +103,11 @@ export default function Clients() {
   });
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
-  // React Query hooks
-  const { data: clients = [], isLoading: loading, refetch: refetchClients } = useClients(stylistId);
+  // React Query hooks with pagination
+  const { data: clientsData, isLoading: loading, refetch: refetchClients } = useClients(stylistId);
+  const clients = clientsData?.clients || [];
+  const totalClients = clientsData?.total || 0;
+  
   const createClientMutation = useCreateClient(stylistId || '');
   const updateClientMutation = useUpdateClient(stylistId || '');
   const deleteClientMutation = useDeleteClient(stylistId || '');

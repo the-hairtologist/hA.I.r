@@ -37,12 +37,19 @@ export interface UpdateAppointmentData extends Partial<CreateAppointmentData> {
 }
 
 /**
- * Fetch appointments for a stylist
+ * Fetch appointments for a stylist (paginated)
  */
-export const fetchAppointmentsByStylist = async (stylistId: string): Promise<Appointment[]> => {
+export const fetchAppointmentsByStylist = async (
+  stylistId: string,
+  page: number = 1,
+  limit: number = 100
+): Promise<{ appointments: Appointment[]; total: number }> => {
   return trackSelect(
     async () => {
-      const { data, error } = await supabase
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+
+      const { data, error, count } = await supabase
         .from("appointments")
         .select(`
           *,
@@ -52,12 +59,13 @@ export const fetchAppointmentsByStylist = async (stylistId: string): Promise<App
             email,
             phone
           )
-        `)
+        `, { count: 'exact' })
         .eq("stylist_id", stylistId)
-        .order("appointment_date", { ascending: true });
+        .order("appointment_date", { ascending: true })
+        .range(from, to);
 
       if (error) throw error;
-      return data || [];
+      return { appointments: data || [], total: count || 0 };
     },
     "appointments",
     "AppointmentAPI.fetchByStylist"

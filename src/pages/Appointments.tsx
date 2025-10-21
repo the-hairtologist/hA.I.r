@@ -73,9 +73,10 @@ const Appointments = () => {
   const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
   const [serviceTemplateMode, setServiceTemplateMode] = useState(false);
 
-  // React Query hooks for appointments
-  const { data: stylistAppointments = [], isLoading: loadingStylistAppointments, refetch: refetchStylistAppointments } = 
+  // React Query hooks for appointments with pagination
+  const { data: stylistAppointmentsData, isLoading: loadingStylistAppointments, refetch: refetchStylistAppointments } = 
     useAppointmentsByStylist(profilesLoaded && userRole === "stylist" ? stylistProfile?.id : null);
+  const stylistAppointments = stylistAppointmentsData?.appointments || [];
   
   const { data: clientAppointments = [], isLoading: loadingClientAppointments, refetch: refetchClientAppointments } = 
     useAppointmentsByClient(profilesLoaded && userRole === "client" ? clientProfile?.id : null);

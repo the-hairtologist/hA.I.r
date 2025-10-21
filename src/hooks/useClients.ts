@@ -22,21 +22,22 @@ import { handleApiError } from "@/lib/api/errorHandler";
 export const clientKeys = {
   all: ['clients'] as const,
   lists: () => [...clientKeys.all, 'list'] as const,
-  list: (stylistId: string) => [...clientKeys.lists(), stylistId] as const,
+  list: (stylistId: string, page?: number) => 
+    page ? [...clientKeys.lists(), stylistId, 'page', page] as const : [...clientKeys.lists(), stylistId] as const,
   details: () => [...clientKeys.all, 'detail'] as const,
   detail: (id: string) => [...clientKeys.details(), id] as const,
 };
 
 /**
- * Fetch all clients for a stylist
+ * Fetch all clients for a stylist (with pagination support)
  */
-export const useClients = (stylistId: string | null) => {
+export const useClients = (stylistId: string | null, page: number = 1, limit: number = 50) => {
   return useQuery({
-    queryKey: clientKeys.list(stylistId || ''),
-    queryFn: () => fetchClientsByStylist(stylistId!),
+    queryKey: clientKeys.list(stylistId || '', page),
+    queryFn: () => fetchClientsByStylist(stylistId!, page, limit),
     enabled: !!stylistId,
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes (increased from 2)
+    gcTime: 15 * 60 * 1000, // 15 minutes (increased from 10)
   });
 };
 

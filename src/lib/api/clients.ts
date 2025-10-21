@@ -43,12 +43,19 @@ export interface UpdateClientData extends Partial<CreateClientData> {
 }
 
 /**
- * Fetch all clients for a stylist with appointment stats
+ * Fetch all clients for a stylist with appointment stats (paginated)
  */
-export const fetchClientsByStylist = async (stylistId: string): Promise<ClientProfile[]> => {
+export const fetchClientsByStylist = async (
+  stylistId: string,
+  page: number = 1,
+  limit: number = 50
+): Promise<{ clients: ClientProfile[]; total: number }> => {
   return trackSelect(
     async () => {
-      const { data, error } = await supabase
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+
+      const { data, error, count } = await supabase
         .from("client_profiles")
         .select(`
           *,
@@ -57,14 +64,15 @@ export const fetchClientsByStylist = async (stylistId: string): Promise<ClientPr
             status,
             appointment_date
           )
-        `)
+        `, { count: 'exact' })
         .eq("preferred_stylist_id", stylistId)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .range(from, to);
 
       if (error) throw error;
 
       // Calculate appointment stats
-      return (data || []).map((client: any) => {
+      const clients = (data || []).map((client: any) => {
         const appointments = client.appointments || [];
         const completedAppointments = appointments.filter(
           (apt: any) => apt.status === "completed"
@@ -85,6 +93,8 @@ export const fetchClientsByStylist = async (stylistId: string): Promise<ClientPr
           last_appointment_date: lastAppointment?.appointment_date || null,
         };
       });
+
+      return { clients, total: count || 0 };
     },
     "client_profiles",
     "ClientAPI.fetchByStylist"

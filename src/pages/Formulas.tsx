@@ -105,7 +105,8 @@ const Formulas = () => {
 
   // React Query hooks for data fetching
   const { data: formulas = [], isLoading: formulasLoading } = useFormulasByStylist(stylistId);
-  const { data: clients = [], isLoading: clientsLoading } = useClients(stylistId);
+  const { data: clientsData, isLoading: clientsLoading } = useClients(stylistId);
+  const clients = clientsData?.clients || [];
   
   const loading = formulasLoading || clientsLoading;
 

@@ -23,22 +23,23 @@ import { handleApiError } from "@/lib/api/errorHandler";
 export const appointmentKeys = {
   all: ['appointments'] as const,
   lists: () => [...appointmentKeys.all, 'list'] as const,
-  listByStylist: (stylistId: string) => [...appointmentKeys.lists(), 'stylist', stylistId] as const,
+  listByStylist: (stylistId: string, page?: number) => 
+    page ? [...appointmentKeys.lists(), 'stylist', stylistId, 'page', page] as const : [...appointmentKeys.lists(), 'stylist', stylistId] as const,
   listByClient: (clientId: string) => [...appointmentKeys.lists(), 'client', clientId] as const,
   details: () => [...appointmentKeys.all, 'detail'] as const,
   detail: (id: string) => [...appointmentKeys.details(), id] as const,
 };
 
 /**
- * Fetch appointments for a stylist
+ * Fetch appointments for a stylist (with pagination support)
  */
-export const useAppointmentsByStylist = (stylistId: string | null) => {
+export const useAppointmentsByStylist = (stylistId: string | null, page: number = 1, limit: number = 100) => {
   return useQuery({
-    queryKey: appointmentKeys.listByStylist(stylistId || ''),
-    queryFn: () => fetchAppointmentsByStylist(stylistId!),
+    queryKey: appointmentKeys.listByStylist(stylistId || '', page),
+    queryFn: () => fetchAppointmentsByStylist(stylistId!, page, limit),
     enabled: !!stylistId,
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 10 * 60 * 1000,
+    staleTime: 3 * 60 * 1000, // 3 minutes (increased from 2)
+    gcTime: 15 * 60 * 1000, // 15 minutes (increased from 10)
   });
 };
 
