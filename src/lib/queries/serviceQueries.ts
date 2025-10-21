@@ -1,113 +1,67 @@
 /**
  * Optimized Service Queries
- * Replaces select("*") with specific field selections
+ * Reduces database load with specific field selection and request deduplication
  */
 
 import { supabase } from "@/integrations/supabase/client";
-
-export interface ServiceFields {
-  id: string;
-  stylist_id: string;
-  service_name: string;
-  description?: string;
-  duration_minutes: number;
-  price: number;
-  is_active: boolean;
-  require_deposit: boolean;
-  deposit_amount?: number;
-  deposit_type?: "fixed" | "percentage";
-  buffer_time_minutes?: number;
-  created_at: string;
-  updated_at: string;
-}
+import { requestDeduplicator } from "@/lib/api/requestDeduplicator";
 
 /**
- * Get all services for a stylist
+ * Get active services by stylist - optimized
  */
-export async function getServicesByStylist(stylistId: string) {
-  const { data, error } = await supabase
-    .from("stylist_services")
-    .select(`
-      id,
-      stylist_id,
-      service_name,
-      description,
-      duration_minutes,
-      price,
-      is_active,
-      require_deposit,
-      deposit_amount,
-      deposit_type,
-      buffer_time_minutes,
-      created_at,
-      updated_at
-    `)
-    .eq("stylist_id", stylistId)
-    .order("created_at", { ascending: false });
+export const getServicesByStylist = async (stylistId: string) => {
+  return requestDeduplicator.deduplicate(
+    `services-stylist-${stylistId}`,
+    async () => {
+      const { data, error } = await supabase
+        .from("stylist_services")
+        .select(`
+          id,
+          service_name,
+          description,
+          duration_minutes,
+          price,
+          is_active,
+          require_deposit,
+          deposit_amount,
+          deposit_type,
+          buffer_time_minutes,
+          created_at
+        `)
+        .eq("stylist_id", stylistId)
+        .order("created_at", { ascending: false });
 
-  if (error) throw error;
-  return data as ServiceFields[];
-}
+      if (error) throw error;
+      return data;
+    }
+  );
+};
 
 /**
- * Get only active services for booking
+ * Get only active bookable services
  */
-export async function getActiveServices(stylistId: string) {
-  const { data, error } = await supabase
-    .from("stylist_services")
-    .select(`
-      id,
-      service_name,
-      description,
-      duration_minutes,
-      price,
-      require_deposit,
-      deposit_amount,
-      deposit_type
-    `)
-    .eq("stylist_id", stylistId)
-    .eq("is_active", true)
-    .order("service_name");
+export const getActiveServicesByStylist = async (stylistId: string) => {
+  return requestDeduplicator.deduplicate(
+    `active-services-${stylistId}`,
+    async () => {
+      const { data, error } = await supabase
+        .from("stylist_services")
+        .select(`
+          id,
+          service_name,
+          description,
+          duration_minutes,
+          price,
+          require_deposit,
+          deposit_amount,
+          deposit_type
+        `)
+        .eq("stylist_id", stylistId)
+        .eq("is_active", true)
+        .order("service_name", { ascending: true });
 
-  if (error) throw error;
-  return data;
-}
-
-/**
- * Get single service by ID
- */
-export async function getServiceById(serviceId: string) {
-  const { data, error } = await supabase
-    .from("stylist_services")
-    .select(`
-      id,
-      stylist_id,
-      service_name,
-      description,
-      duration_minutes,
-      price,
-      is_active,
-      require_deposit,
-      deposit_amount,
-      deposit_type,
-      buffer_time_minutes
-    `)
-    .eq("id", serviceId)
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
-/**
- * Get service count for stylist
- */
-export async function getServiceCount(stylistId: string) {
-  const { count, error } = await supabase
-    .from("stylist_services")
-    .select("id", { count: "exact", head: true })
-    .eq("stylist_id", stylistId);
-
-  if (error) throw error;
-  return count || 0;
-}
+      if (error) throw error;
+      return data;
+    }
+  );
+};

@@ -1,178 +1,92 @@
 /**
  * Optimized Appointment Queries
- * Replaces select("*") with specific field selections
+ * Reduces select("*") calls with specific field selection
  */
 
 import { supabase } from "@/integrations/supabase/client";
-
-export interface AppointmentFields {
-  id: string;
-  stylist_id: string;
-  client_id: string;
-  appointment_date: string;
-  service_type: string;
-  status: string;
-  notes?: string;
-  reminder_sent: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface AppointmentWithRelations extends AppointmentFields {
-  client_profiles?: {
-    id: string;
-    full_name: string;
-    email: string;
-    phone?: string;
-    user_id: string;
-  };
-  stylist_profiles?: {
-    id: string;
-    business_name?: string;
-    user_id: string;
-  };
-}
+import { requestDeduplicator } from "@/lib/api/requestDeduplicator";
 
 /**
- * Fetch appointments by stylist with optimized field selection
+ * Get appointments by stylist with specific fields
  */
-export async function getAppointmentsByStylist(stylistId: string) {
-  const { data, error } = await supabase
-    .from("appointments")
-    .select(`
-      id,
-      stylist_id,
-      client_id,
-      appointment_date,
-      service_type,
-      status,
-      notes,
-      reminder_sent,
-      created_at,
-      updated_at,
-      client_profiles!inner(
-        id,
-        full_name,
-        email,
-        phone,
-        user_id
-      )
-    `)
-    .eq("stylist_id", stylistId)
-    .order("appointment_date", { ascending: true });
+export const getAppointmentsByStylist = async (stylistId: string) => {
+  return requestDeduplicator.deduplicate(
+    `appointments-stylist-${stylistId}`,
+    async () => {
+      const { data, error } = await supabase
+        .from("appointments")
+        .select(`
+          id,
+          appointment_date,
+          service_type,
+          status,
+          notes,
+          created_at,
+          client_id,
+          stylist_id,
+          client_profiles!inner(id, full_name, phone, email)
+        `)
+        .eq("stylist_id", stylistId)
+        .order("appointment_date", { ascending: false });
 
-  if (error) throw error;
-  return data as AppointmentWithRelations[];
-}
+      if (error) throw error;
+      return data;
+    }
+  );
+};
 
 /**
- * Fetch appointments by client with optimized field selection
+ * Get appointments by client with specific fields
  */
-export async function getAppointmentsByClient(clientId: string) {
-  const { data, error } = await supabase
-    .from("appointments")
-    .select(`
-      id,
-      stylist_id,
-      client_id,
-      appointment_date,
-      service_type,
-      status,
-      notes,
-      reminder_sent,
-      created_at,
-      stylist_profiles!inner(
-        id,
-        business_name,
-        user_id
-      )
-    `)
-    .eq("client_id", clientId)
-    .order("appointment_date", { ascending: true });
+export const getAppointmentsByClient = async (clientId: string) => {
+  return requestDeduplicator.deduplicate(
+    `appointments-client-${clientId}`,
+    async () => {
+      const { data, error } = await supabase
+        .from("appointments")
+        .select(`
+          id,
+          appointment_date,
+          service_type,
+          status,
+          notes,
+          created_at,
+          stylist_id,
+          stylist_profiles!inner(id, business_name, phone)
+        `)
+        .eq("client_id", clientId)
+        .order("appointment_date", { ascending: false });
 
-  if (error) throw error;
-  return data;
-}
+      if (error) throw error;
+      return data;
+    }
+  );
+};
 
 /**
- * Fetch single appointment with relations
+ * Get upcoming appointments (uses idx_appointments_stylist_date)
  */
-export async function getAppointmentById(appointmentId: string) {
-  const { data, error } = await supabase
-    .from("appointments")
-    .select(`
-      id,
-      stylist_id,
-      client_id,
-      appointment_date,
-      service_type,
-      status,
-      notes,
-      reminder_sent,
-      created_at,
-      updated_at,
-      client_profiles(id, full_name, email, phone),
-      stylist_profiles(id, business_name, user_id)
-    `)
-    .eq("id", appointmentId)
-    .single();
+export const getUpcomingAppointmentsByStylist = async (stylistId: string, limit = 10) => {
+  return requestDeduplicator.deduplicate(
+    `upcoming-appointments-${stylistId}`,
+    async () => {
+      const { data, error } = await supabase
+        .from("appointments")
+        .select(`
+          id,
+          appointment_date,
+          service_type,
+          status,
+          client_id,
+          client_profiles!inner(id, full_name, phone)
+        `)
+        .eq("stylist_id", stylistId)
+        .gte("appointment_date", new Date().toISOString())
+        .order("appointment_date", { ascending: true })
+        .limit(limit);
 
-  if (error) throw error;
-  return data;
-}
-
-/**
- * Get appointments for a date range (for calendar view)
- */
-export async function getAppointmentsByDateRange(
-  stylistId: string,
-  startDate: string,
-  endDate: string
-) {
-  const { data, error } = await supabase
-    .from("appointments")
-    .select(`
-      id,
-      client_id,
-      appointment_date,
-      service_type,
-      status,
-      client_profiles(full_name)
-    `)
-    .eq("stylist_id", stylistId)
-    .gte("appointment_date", startDate)
-    .lte("appointment_date", endDate)
-    .order("appointment_date");
-
-  if (error) throw error;
-  return data;
-}
-
-/**
- * Get appointment count by status
- */
-export async function getAppointmentStats(stylistId: string) {
-  const [scheduled, confirmed, completed] = await Promise.all([
-    supabase
-      .from("appointments")
-      .select("id", { count: "exact", head: true })
-      .eq("stylist_id", stylistId)
-      .eq("status", "scheduled"),
-    supabase
-      .from("appointments")
-      .select("id", { count: "exact", head: true })
-      .eq("stylist_id", stylistId)
-      .eq("status", "confirmed"),
-    supabase
-      .from("appointments")
-      .select("id", { count: "exact", head: true })
-      .eq("stylist_id", stylistId)
-      .eq("status", "completed"),
-  ]);
-
-  return {
-    scheduled: scheduled.count || 0,
-    confirmed: confirmed.count || 0,
-    completed: completed.count || 0,
-  };
-}
+      if (error) throw error;
+      return data;
+    }
+  );
+};

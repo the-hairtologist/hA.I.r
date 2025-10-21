@@ -1,112 +1,82 @@
 /**
  * Optimized Message Queries
- * Replaces select("*") with specific field selections
+ * Reduces database load with specific field selection and request deduplication
  */
 
 import { supabase } from "@/integrations/supabase/client";
-
-export interface MessageFields {
-  id: string;
-  sender_id: string;
-  recipient_id: string;
-  message_text: string;
-  video_url?: string;
-  is_read: boolean;
-  created_at: string;
-}
-
-export interface MessageWithSender extends MessageFields {
-  sender: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-}
-
-export interface MessageWithParticipants extends MessageFields {
-  sender: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-  recipient: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-}
+import { requestDeduplicator } from "@/lib/api/requestDeduplicator";
 
 /**
- * Get all messages for user (for conversations list)
+ * Get conversations for a user - optimized
  */
-export async function getMessagesForUser(userId: string) {
-  const { data, error } = await supabase
-    .from("messages")
-    .select(`
-      id,
-      sender_id,
-      recipient_id,
-      message_text,
-      video_url,
-      is_read,
-      created_at,
-      sender:profiles!messages_sender_id_fkey(id, full_name, email),
-      recipient:profiles!messages_recipient_id_fkey(id, full_name, email)
-    `)
-    .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
-    .order("created_at", { ascending: false });
+export const getConversationsByUser = async (userId: string) => {
+  return requestDeduplicator.deduplicate(
+    `conversations-${userId}`,
+    async () => {
+      const { data, error } = await supabase
+        .from("messages")
+        .select(`
+          id,
+          sender_id,
+          recipient_id,
+          message_text,
+          is_read,
+          created_at,
+          sender:profiles!messages_sender_id_fkey(id, full_name, email),
+          recipient:profiles!messages_recipient_id_fkey(id, full_name, email)
+        `)
+        .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
 
-  if (error) throw error;
-  return data as any;
-}
+      if (error) throw error;
+      return data;
+    }
+  );
+};
 
 /**
- * Get messages between two users
+ * Get messages in a thread between two users
  */
-export async function getMessageThread(userId: string, partnerId: string) {
-  const { data, error } = await supabase
-    .from("messages")
-    .select(`
-      id,
-      sender_id,
-      recipient_id,
-      message_text,
-      video_url,
-      is_read,
-      created_at,
-      sender:profiles!messages_sender_id_fkey(id, full_name, email)
-    `)
-    .or(
-      `and(sender_id.eq.${userId},recipient_id.eq.${partnerId}),and(sender_id.eq.${partnerId},recipient_id.eq.${userId})`
-    )
-    .order("created_at", { ascending: true });
+export const getMessageThread = async (userId: string, partnerId: string) => {
+  return requestDeduplicator.deduplicate(
+    `thread-${userId}-${partnerId}`,
+    async () => {
+      const { data, error } = await supabase
+        .from("messages")
+        .select(`
+          id,
+          sender_id,
+          recipient_id,
+          message_text,
+          video_url,
+          is_read,
+          created_at,
+          sender:profiles!messages_sender_id_fkey(id, full_name, email)
+        `)
+        .or(`and(sender_id.eq.${userId},recipient_id.eq.${partnerId}),and(sender_id.eq.${partnerId},recipient_id.eq.${userId})`)
+        .order("created_at", { ascending: true });
 
-  if (error) throw error;
-  return data as any;
-}
+      if (error) throw error;
+      return data;
+    }
+  );
+};
 
 /**
- * Get unread message count for user
+ * Get unread message count
  */
-export async function getUnreadMessageCount(userId: string) {
-  const { count, error } = await supabase
-    .from("messages")
-    .select("id", { count: "exact", head: true })
-    .eq("recipient_id", userId)
-    .eq("is_read", false);
+export const getUnreadMessageCount = async (userId: string) => {
+  return requestDeduplicator.deduplicate(
+    `unread-count-${userId}`,
+    async () => {
+      const { count, error } = await supabase
+        .from("messages")
+        .select("id", { count: "exact", head: true })
+        .eq("recipient_id", userId)
+        .eq("is_read", false);
 
-  if (error) throw error;
-  return count || 0;
-}
-
-/**
- * Mark messages as read
- */
-export async function markMessagesAsRead(messageIds: string[]) {
-  const { error } = await supabase
-    .from("messages")
-    .update({ is_read: true })
-    .in("id", messageIds);
-
-  if (error) throw error;
-}
+      if (error) throw error;
+      return count || 0;
+    }
+  );
+};

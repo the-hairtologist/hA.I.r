@@ -27,7 +27,6 @@ import { initUTMTracking } from "@/lib/utm";
 import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 import { performanceOptimizer } from "@/lib/performance/PerformanceOptimizer";
-import { selfHealing } from "@/lib/selfHealing";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { useLocation } from "react-router-dom";
 
@@ -131,13 +130,6 @@ const AnalyticsInitializer = () => {
     performanceOptimizer.init().catch((error) => {
       import('@/lib/logging/productionLogger').then(({ logger }) => {
         logger.error('Failed to initialize performance optimizations', error);
-      });
-    });
-    
-    // Initialize self-healing system (error recovery, health monitoring, auto-maintenance)
-    selfHealing.initialize().catch((error) => {
-      import('@/lib/logging/productionLogger').then(({ logger }) => {
-        logger.error('Failed to initialize self-healing system', error);
       });
     });
   }, []);
