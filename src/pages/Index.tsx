@@ -139,7 +139,7 @@ const Index = () => {
                 Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
               </p>
               
-              <div className="pt-3 xxs:pt-4 xs:pt-6 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
+              <div className="pt-1 xxs:pt-2 xs:pt-3 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
                 <Button 
                   size="lg" 
                   onClick={() => {
