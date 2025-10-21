@@ -23,18 +23,12 @@ export const SingleTestimonial = () => {
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-5xl mx-auto">
         {/* 5-Star Rating Display */}
-        <div className={`flex justify-center gap-2 mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-          {[...Array(5)].map((_, i) => (
-            <div 
-              key={i} 
-              className="w-8 h-8 xs:w-10 xs:h-10 border-[3px] border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-              style={{
-                transitionDelay: `${i * 50}ms`,
-              }}
-            >
-              <span className="font-pixel text-secondary-foreground text-base xs:text-lg">★</span>
-            </div>
-          ))}
+        <div className={`flex justify-center mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+          <div className="border-[3px] border-black bg-secondary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-4 py-2 xs:px-6 xs:py-3 flex gap-2 xs:gap-3">
+            {[...Array(5)].map((_, i) => (
+              <span key={i} className="font-pixel text-secondary-foreground text-xl xs:text-2xl">★</span>
+            ))}
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-3 xs:gap-4">
