@@ -240,7 +240,7 @@ All colors MUST be HSL.
 
     /* Pixelated LEGO-inspired color palette */
     --primary: 8 100% 55%;          /* Vibrant red/orange */
-    --primary-foreground: 0 0% 0%;   /* Black text on red */
+    --primary-foreground: 0 0% 100%;   /* White text on red */
     --primary-glow: 8 100% 65%;
 
     --secondary: 45 100% 50%;        /* Bold yellow */
