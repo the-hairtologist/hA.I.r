@@ -113,7 +113,7 @@ export const FinalValueProp = () => {
         </div>
 
         <div className={`mt-10 xs:mt-12 text-center transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '800ms' }}>
-          <p className="font-mono text-sm xs:text-base sm:text-lg text-white/90 leading-relaxed max-w-3xl mx-auto tracking-wide">
+          <p className="font-mono text-sm xs:text-base sm:text-lg text-primary-foreground leading-relaxed max-w-3xl mx-auto tracking-wide">
             <span className="font-bold text-secondary">That's the difference</span> between managing chaos and running a thriving salon.
           </p>
         </div>
