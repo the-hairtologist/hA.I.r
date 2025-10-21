@@ -14,7 +14,7 @@ export const MinimalFooter = () => {
     }}>
       <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-5 sm:py-6">
         {/* Single Row Layout */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 xs:gap-3 mb-1 xs:mb-1.5">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 xs:gap-4 pb-3 border-b-2 border-secondary/20">
           {/* Logo + Copyright */}
           <div className="flex items-center gap-2 xs:gap-2.5">
             <div className="w-8 h-8 xs:w-9 xs:h-9 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
@@ -38,15 +38,12 @@ export const MinimalFooter = () => {
           </div>
         </div>
 
-        {/* Legal Disclaimer - Collapsed */}
-        <details className="border-t-2 border-secondary/20 pt-2 mt-2">
-          <summary className="text-xs xs:text-sm font-sans text-background/70 cursor-pointer list-none text-center hover:text-background/90 transition-colors min-h-[44px] py-1 flex items-center justify-center">
-            Legal Disclaimer
-          </summary>
-          <p className="text-xs xs:text-sm font-sans text-background/80 leading-relaxed text-center max-w-4xl mx-auto mt-2 px-2">
+        {/* Legal Disclaimer - Compact */}
+        <div className="pt-3">
+          <p className="text-xs xs:text-sm font-sans text-background/70 leading-relaxed text-center">
             Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
           </p>
-        </details>
+        </div>
       </div>
     </footer>
   );
