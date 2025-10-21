@@ -2,41 +2,41 @@ import { Sparkles, Calendar, CreditCard, Heart, Smartphone } from "lucide-react"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { analytics } from "@/lib/analytics";
 
-// CRO-optimized: Clear benefits with zero-gravity metaphor
+// Variant A: Pain-focused messaging (PROBLEMS WE FIX)
 const featuresA = [
   {
     icon: Calendar,
-    title: "Zero-Gravity Scheduling",
-    headline: "BOOK IN 8 SECONDS",
-    description: "Clients book instantly—no back-and-forth texts. AI prevents conflicts. Feels weightless. 94% faster than competitors.",
+    title: "Smart Appointment Booking",
+    headline: "STOP DOUBLE-BOOKINGS",
+    description: "AI cross-checks your calendar, blocks conflicts, sends alerts before disasters happen. Never lose a client to scheduling chaos again.",
     number: "①",
   },
   {
     icon: Smartphone,
-    title: "Autopilot Reminders",
-    headline: "90% FEWER NO-SHOWS",
-    description: "Set once, forget forever. Smart reminders adapt to each client. No-shows drop by 90%. Your calendar stays full, effortlessly.",
+    title: "Automated Reminders",
+    headline: "END NO-SHOWS",
+    description: "Automatic text & email reminders mean 90% fewer no-shows. Stop losing money to empty chairs. Keep your schedule full.",
     number: "②",
   },
   {
     icon: Heart,
-    title: "Instant Client Intel",
-    headline: "EVERY DETAIL, ONE TAP",
-    description: "Hair history, allergies, preferences—surfaces instantly. Zero memory work. Clients feel like VIPs every visit.",
+    title: "Personalized Client Management",
+    headline: "STOP FORGETTING DETAILS",
+    description: "Hair history, preferences, formulas—instantly accessible. No more awkward \"what did we do last time?\" moments. Every client feels special.",
     number: "③",
   },
   {
     icon: Sparkles,
-    title: "Zero-G Flight Rewards",
-    headline: "ACTUAL ZERO-GRAVITY FLIGHTS",
-    description: "Top performers earn real zero-gravity flight experiences. Turn your salon success into unforgettable adventures.",
+    title: "Formula Tracking & Hair History",
+    headline: "END THE GUESSWORK",
+    description: "Every color formula, treatment, product—saved forever. Stop recreating formulas from memory. Consistency = loyalty.",
     number: "④",
   },
   {
     icon: CreditCard,
-    title: "Tap-to-Pay",
-    headline: "PAID IN 2 SECONDS",
-    description: "Client taps. Money lands in your account. Zero awkwardness. Zero spreadsheets. Just instant cash flow.",
+    title: "Instant Payments",
+    headline: "STOP PAYMENT HASSLES",
+    description: "Secure in-app payments. No awkward cash exchanges. No spreadsheet nightmares. Just instant deposits to your account.",
     number: "⑤",
   },
 ];
@@ -139,21 +139,21 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       ref={ref}
       onMouseEnter={handleHover}
       onTouchStart={handleHover}
-      className={`relative overflow-hidden border-[4px] border-black ${bgColors[index]} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] p-6 xs:p-8 ${
+      className={`group relative overflow-hidden border-[4px] border-black ${bgColors[index]} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:border-primary p-6 xs:p-8 ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
       }`}
       style={{
         transitionDelay: `${index * 150}ms`,
       }}
     >
-      {/* Large animated icon */}
-      <div className={`relative w-20 h-20 xs:w-24 xs:h-24 border-[4px] border-black ${iconBgColors[index]} flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:rotate-12 transition-transform duration-500 ${isVisible ? 'animate-bounce' : ''}`}
+      {/* Large animated icon - Enhanced hover states */}
+      <div className={`relative w-20 h-20 xs:w-24 xs:h-24 border-[4px] border-black ${iconBgColors[index]} flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:rotate-[15deg] transition-transform duration-500 ${isVisible ? 'animate-bounce' : ''}`}
         style={{ animationDelay: `${index * 200}ms`, animationIterationCount: '3' }}
       >
         <Icon className={`h-10 w-10 xs:h-12 xs:w-12 ${iconTextColors[index]}`} strokeWidth={2.5} />
         
-        {/* Floating number badge */}
-        <div className="absolute -top-4 -right-4 w-10 h-10 xs:w-12 xs:h-12 border-[3px] border-black bg-white flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+        {/* Floating number badge with pulse on hover */}
+        <div className="absolute -top-4 -right-4 w-10 h-10 xs:w-12 xs:h-12 border-[3px] border-black bg-white flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:animate-pulse">
           <span className="font-pixel text-foreground text-lg xs:text-xl">
             {feature.number}
           </span>
@@ -183,8 +183,8 @@ export const MinimalFeatures = () => {
   const features = featuresA;
   
   const header = {
-    title: "WHY STYLISTS SWITCH",
-    subtitle: "Effortless feels like flying. Because it is.",
+    title: "THE PROBLEMS WE SOLVE",
+    subtitle: "Stop the chaos. Reclaim your time.",
   };
   
   return (
