@@ -33,7 +33,9 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Global Error Boundary caught error:', error, errorInfo);
+    console.error('[GlobalErrorBoundary] CAUGHT ERROR:', error);
+    console.error('[GlobalErrorBoundary] Error Info:', errorInfo);
+    console.error('[GlobalErrorBoundary] Component Stack:', errorInfo.componentStack);
     
     this.setState({
       error,
@@ -48,7 +50,7 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
         source: 'GlobalErrorBoundary',
       });
     } catch (loggingError) {
-      console.error('Error logging failed:', loggingError);
+      console.error('[GlobalErrorBoundary] Error logging failed:', loggingError);
     }
   }
 
