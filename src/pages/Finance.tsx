@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { getPaymentsByStylist, getCommissionsByStylist, getAffiliateCodesByStylist } from "@/lib/queries/financeQueries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -72,51 +73,17 @@ const Finance = () => {
 
       setStylistProfile(stylist);
 
-      // Load payments
-      const { data: paymentsData } = await supabase
-        .from("payments")
-        .select(`
-          *,
-          client:client_profiles(
-            user:profiles(full_name)
-          ),
-          appointment:appointments(service_type)
-        `)
-        .eq("stylist_id", stylist.id)
-        .order("created_at", { ascending: false });
+      // Use optimized queries with request deduplication - load in parallel
+      const [paymentsData, commissionsData, brandsData, codesData] = await Promise.all([
+        getPaymentsByStylist(stylist.id),
+        getCommissionsByStylist(stylist.id),
+        supabase.from("hair_brands").select("*").eq("is_active", true).then(r => r.data),
+        getAffiliateCodesByStylist(stylist.id)
+      ]);
 
       setPayments(paymentsData || []);
-
-      // Load commissions
-      const { data: commissionsData } = await supabase
-        .from("commissions")
-        .select(`
-          *,
-          brand:hair_brands(name, logo_url)
-        `)
-        .eq("stylist_id", stylist.id)
-        .order("created_at", { ascending: false });
-
       setCommissions(commissionsData || []);
-
-      // Load brands
-      const { data: brandsData } = await supabase
-        .from("hair_brands")
-        .select("*")
-        .eq("is_active", true);
-
       setBrands(brandsData || []);
-
-      // Load affiliate codes
-      const { data: codesData } = await supabase
-        .from("stylist_affiliate_codes")
-        .select(`
-          *,
-          brand:hair_brands(*)
-        `)
-        .eq("stylist_id", stylist.id)
-        .eq("is_active", true);
-
       setAffiliateCodes(codesData || []);
     } catch (error: any) {
       console.error("Error loading data:", error);

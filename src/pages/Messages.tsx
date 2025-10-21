@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { getConversationsByUser, getMessageThread } from "@/lib/queries/messageQueries";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Button } from "@/components/ui/button";
@@ -134,16 +135,8 @@ const Messages = () => {
 
   const loadConversations = async (userId: string) => {
     try {
-      // Get all messages where user is sender or recipient
-      const { data: allMessages } = await supabase
-        .from("messages")
-        .select(`
-          *,
-          sender:sender_id(id, full_name, email),
-          recipient:recipient_id(id, full_name, email)
-        `)
-        .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
-        .order("created_at", { ascending: false });
+      // Use optimized query with request deduplication
+      const allMessages = await getConversationsByUser(userId);
 
       if (!allMessages) return;
 
@@ -180,14 +173,8 @@ const Messages = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
 
-      const { data } = await supabase
-        .from("messages")
-        .select(`
-          *,
-          sender:sender_id(id, full_name, email)
-        `)
-        .or(`and(sender_id.eq.${session.user.id},recipient_id.eq.${partnerId}),and(sender_id.eq.${partnerId},recipient_id.eq.${session.user.id})`)
-        .order("created_at", { ascending: true });
+      // Use optimized query with request deduplication
+      const data = await getMessageThread(session.user.id, partnerId);
 
       setMessages(data || []);
 

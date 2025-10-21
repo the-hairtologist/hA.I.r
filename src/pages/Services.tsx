@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { getServicesByStylist } from "@/lib/queries/serviceQueries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -78,12 +79,8 @@ const Services = () => {
 
       setStylistProfile(stylist);
 
-      const { data: servicesData } = await supabase
-        .from("stylist_services")
-        .select("*")
-        .eq("stylist_id", stylist.id)
-        .order("created_at", { ascending: false });
-
+      // Use optimized query with request deduplication
+      const servicesData = await getServicesByStylist(stylist.id);
       setServices(servicesData || []);
     } catch (error: any) {
       console.error("Error loading data:", error);
