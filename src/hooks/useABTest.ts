@@ -33,20 +33,23 @@ export function useABTest() {
               data: { loadTime, variant: assignedVariant }
             });
           } else {
-            logger.info(`[useABTest] Variant loaded successfully in ${loadTime}ms`, {
-              context: 'A/B Testing',
-              data: { variant: assignedVariant, loadTime }
-            });
+          logger.info(`[useABTest] Variant loaded successfully in ${loadTime}ms`, {
+            context: 'A/B Testing',
+            data: { variant: assignedVariant, loadTime }
+          });
           }
           
-          setVariant(assignedVariant);
-          const newConfig = getVariantConfig(assignedVariant);
-          setConfig(newConfig);
-          
-          logger.info(`[useABTest] State updated - variant: ${assignedVariant}`, {
-            context: 'A/B Testing',
-            data: { headline: newConfig.hero.headline }
-          });
+          // Only update state if variant actually changed
+          if (assignedVariant !== variant) {
+            setVariant(assignedVariant);
+            const newConfig = getVariantConfig(assignedVariant);
+            setConfig(newConfig);
+            
+            logger.info(`[useABTest] State updated - variant: ${assignedVariant}`, {
+              context: 'A/B Testing',
+              data: { headline: newConfig.hero.headline }
+            });
+          }
         } catch (error) {
           logger.error('[useABTest] ERROR loading variant', error, { context: 'A/B Testing' });
           logger.info('[useABTest] Falling back to variant A', { context: 'A/B Testing' });
