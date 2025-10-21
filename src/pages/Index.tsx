@@ -28,7 +28,7 @@ const HeroPhoneMockup = lazy(() => {
 
 const Index = () => {
   const navigate = useNavigate();
-  const { config } = useABTest();
+  const { config, variant } = useABTest();
 
   useEffect(() => {
     logger.info('[Index] Component mounted', { context: 'Landing Page' });
@@ -178,7 +178,7 @@ const Index = () => {
           `,
           backgroundSize: '8px 8px'
         }}>
-          <MinimalFeatures />
+          <MinimalFeatures variant={variant} />
         </section>
 
         {/* Testimonial Section - Blue background */}

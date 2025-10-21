@@ -1,45 +1,133 @@
 import { Sparkles, Calendar, CreditCard, Heart, Smartphone } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { Variant } from "@/lib/abTestingSupabase";
 
-const features = [
+// Variant A: Pain-focused messaging (PROBLEMS WE FIX)
+const featuresA = [
   {
     icon: Calendar,
     title: "Smart Appointment Booking",
-    headline: "ZERO DOUBLE-BOOKINGS",
-    description: "AI cross-checks your calendar, blocks conflicts, sends you alerts before they happen. Never lose a client to scheduling chaos again.",
+    headline: "STOP DOUBLE-BOOKINGS",
+    description: "AI cross-checks your calendar, blocks conflicts, sends alerts before disasters happen. Never lose a client to scheduling chaos again.",
     number: "①",
   },
   {
     icon: Smartphone,
     title: "Automated Reminders",
-    headline: "CLIENTS NEVER MISS",
-    description: "Automatic text & email reminders mean 90% fewer no-shows. Your clients remember. Your chair stays full. Your time stays valuable.",
+    headline: "END NO-SHOWS",
+    description: "Automatic text & email reminders mean 90% fewer no-shows. Stop losing money to empty chairs. Keep your schedule full.",
     number: "②",
   },
   {
     icon: Heart,
     title: "Personalized Client Management",
-    headline: "EVERY DETAIL REMEMBERED",
-    description: "Hair history, preferences, formulas—instantly accessible. Spend less time taking notes, more time creating magic.",
+    headline: "STOP FORGETTING DETAILS",
+    description: "Hair history, preferences, formulas—instantly accessible. No more awkward \"what did we do last time?\" moments. Every client feels special.",
     number: "③",
   },
   {
     icon: Sparkles,
     title: "Formula Tracking & Hair History",
-    headline: "NEVER GUESS AGAIN",
-    description: "Every color formula, treatment, product—saved forever. Access complete client history in one tap. Consistency = loyalty.",
+    headline: "END THE GUESSWORK",
+    description: "Every color formula, treatment, product—saved forever. Stop recreating formulas from memory. Consistency = loyalty.",
     number: "④",
   },
   {
     icon: CreditCard,
     title: "Instant Payments",
-    headline: "GET PAID IMMEDIATELY",
-    description: "Secure in-app payments. Track earnings automatically. No awkward cash exchanges. No spreadsheets. Just instant deposits.",
+    headline: "STOP PAYMENT HASSLES",
+    description: "Secure in-app payments. No awkward cash exchanges. No spreadsheet nightmares. Just instant deposits to your account.",
     number: "⑤",
   },
 ];
 
-const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: number }) => {
+// Variant B: Aspiration-focused messaging (WHAT YOU CAN BUILD)
+const featuresB = [
+  {
+    icon: Calendar,
+    title: "Smart Appointment Booking",
+    headline: "SCALE YOUR SCHEDULE",
+    description: "AI-powered calendar management lets you see more clients without the stress. Build the fully-booked salon you've always dreamed of.",
+    number: "①",
+  },
+  {
+    icon: Smartphone,
+    title: "Automated Reminders",
+    headline: "BUILD CLIENT LOYALTY",
+    description: "Automated reminders keep clients coming back. 90% retention means predictable income. Build your dream clientele.",
+    number: "②",
+  },
+  {
+    icon: Heart,
+    title: "Personalized Client Management",
+    headline: "CREATE RAVING FANS",
+    description: "Remember every detail effortlessly. Build relationships that turn one-time clients into lifelong fans who refer their friends.",
+    number: "③",
+  },
+  {
+    icon: Sparkles,
+    title: "Formula Tracking & Hair History",
+    headline: "BECOME THE GO-TO EXPERT",
+    description: "Access complete client history instantly. Deliver consistent, perfect results every time. Build your reputation as the best in town.",
+    number: "④",
+  },
+  {
+    icon: CreditCard,
+    title: "Instant Payments",
+    headline: "GROW YOUR INCOME",
+    description: "Track earnings automatically. See your business growth in real-time. Build the profitable salon you deserve.",
+    number: "⑤",
+  },
+];
+
+// Variant C: Simplicity-focused messaging (HOW EASY IT IS)
+const featuresC = [
+  {
+    icon: Calendar,
+    title: "Smart Appointment Booking",
+    headline: "SCHEDULING, SIMPLIFIED",
+    description: "One tap to book. One tap to reschedule. AI handles conflicts automatically. It just works.",
+    number: "①",
+  },
+  {
+    icon: Smartphone,
+    title: "Automated Reminders",
+    headline: "SET IT, FORGET IT",
+    description: "Reminders send automatically. Clients show up on time. You focus on hair, not phone calls.",
+    number: "②",
+  },
+  {
+    icon: Heart,
+    title: "Personalized Client Management",
+    headline: "EVERYTHING IN ONE TAP",
+    description: "Client walks in. You tap their name. Their entire history appears. Simple as that.",
+    number: "③",
+  },
+  {
+    icon: Sparkles,
+    title: "Formula Tracking & Hair History",
+    headline: "FORMULAS, REMEMBERED",
+    description: "Snap a photo. Save the formula. Access it anytime. No notebooks. No guessing. Just results.",
+    number: "④",
+  },
+  {
+    icon: CreditCard,
+    title: "Instant Payments",
+    headline: "TAP TO GET PAID",
+    description: "Client pays in-app. Money hits your account. No cash counting. No spreadsheets. Done.",
+    number: "⑤",
+  },
+];
+
+const VARIANT_FEATURES = {
+  A: featuresA,
+  B: featuresB,
+  C: featuresC,
+};
+
+type Feature = typeof featuresA[0];
+
+const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
   const Icon = feature.icon;
 
@@ -71,15 +159,39 @@ const FeatureCard = ({ feature, index }: { feature: typeof features[0]; index: n
   );
 };
 
-export const MinimalFeatures = () => {
+interface MinimalFeaturesProps {
+  variant: Variant;
+}
+
+export const MinimalFeatures = ({ variant }: MinimalFeaturesProps) => {
+  const features = VARIANT_FEATURES[variant];
+  
+  // Variant-specific section headers
+  const headers = {
+    A: {
+      title: "THE PROBLEMS WE SOLVE",
+      subtitle: "Stop the chaos. Reclaim your time.",
+    },
+    B: {
+      title: "WHAT YOU CAN BUILD",
+      subtitle: "5,000+ stylists built their dream salon. Your turn.",
+    },
+    C: {
+      title: "HOW IT WORKS",
+      subtitle: "Simple tools. Powerful results.",
+    },
+  };
+  
+  const header = headers[variant];
+  
   return (
     <div className="container mx-auto px-4">
       <div className="text-center mb-16">
         <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
-          THE PROBLEMS WE SOLVE
+          {header.title}
         </h2>
         <p className="font-sans text-sm xs:text-base text-muted-foreground max-w-2xl mx-auto">
-          No more chaos. Just clients, color, and calm.
+          {header.subtitle}
         </p>
       </div>
       
