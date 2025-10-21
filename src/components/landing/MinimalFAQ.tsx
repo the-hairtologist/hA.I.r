@@ -86,7 +86,7 @@ export const MinimalFAQ = () => {
           <p className="text-foreground mb-3 font-sans text-xs xs:text-sm">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
-            className="font-pixel text-[10px] xs:text-xs text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-4 xs:px-5 py-2 xs:py-2.5 inline-block brutal-shadow hover:brutal-shadow-md hover:-translate-y-0.5 transition-all duration-300 min-h-[44px] flex items-center"
+            className="font-pixel text-[10px] xs:text-xs text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-4 xs:px-5 py-2 inline-block brutal-shadow hover:brutal-shadow-md hover:-translate-y-0.5 transition-all duration-300"
           >
             Contact Support
           </a>
