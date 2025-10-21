@@ -22,58 +22,53 @@ export const SingleTestimonial = () => {
   return (
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-5xl mx-auto">
-        <div className={`text-center mb-6 xs:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-3 text-foreground uppercase tracking-wider">
+        <div className={`text-center mb-6 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-2 text-foreground uppercase tracking-wider">
             STYLISTS ARE RAVING
           </h2>
-          <p className="font-pixel text-xs xs:text-sm text-muted-foreground uppercase">
-            Real results from real stylists
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 xs:gap-8">
+        <div className="grid md:grid-cols-2 gap-4 xs:gap-5">
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className={`border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
+              className={`border-[3px] border-black bg-white p-5 xs:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
               style={{
                 transitionDelay: `${(index + 2) * 100}ms`,
               }}
             >
-              <div className="flex gap-2 mb-6">
+              {/* Compact star rating */}
+              <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <div 
                     key={i} 
-                    className={`w-6 h-6 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
+                    className={`w-5 h-5 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
                       isVisible ? 'scale-100' : 'scale-0'
                     }`}
                     style={{
                       transitionDelay: `${(index * 200) + (i * 50)}ms`,
                     }}
                   >
-                    <span className="font-pixel text-secondary-foreground text-xs">★</span>
+                    <span className="font-pixel text-secondary-foreground text-[10px]">★</span>
                   </div>
                 ))}
               </div>
               
-              <div className="mb-6">
-                <div className="w-8 h-8 border-2 border-black bg-accent flex items-center justify-center mb-4">
-                  <Quote className="h-4 w-4 text-accent-foreground" />
-                </div>
-                <p className="text-base font-sans text-foreground leading-relaxed">
-                  {testimonial.quote}
-                </p>
-              </div>
+              {/* Quote */}
+              <p className="text-sm font-sans text-foreground leading-relaxed mb-4">
+                "{testimonial.quote}"
+              </p>
               
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 border-4 border-black bg-accent flex items-center justify-center">
+              {/* Author - more compact */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 border-3 border-black bg-accent flex items-center justify-center">
                   <span className="font-pixel text-accent-foreground text-xs">{testimonial.initials}</span>
                 </div>
                 <div>
-                  <div className="font-pixel text-sm text-foreground">{testimonial.author}</div>
-                  <div className="font-sans text-xs text-muted-foreground">{testimonial.role}</div>
+                  <div className="font-pixel text-xs text-foreground">{testimonial.author}</div>
+                  <div className="font-sans text-[10px] text-muted-foreground">{testimonial.role}</div>
                 </div>
               </div>
             </div>
