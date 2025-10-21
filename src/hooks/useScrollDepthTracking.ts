@@ -1,13 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { analytics } from '@/lib/analytics';
-import { Variant } from '@/lib/abTestingSupabase';
 
 interface UseScrollDepthTrackingOptions {
-  variant: Variant;
   enabled?: boolean;
 }
 
-export const useScrollDepthTracking = ({ variant, enabled = true }: UseScrollDepthTrackingOptions) => {
+export const useScrollDepthTracking = ({ enabled = true }: UseScrollDepthTrackingOptions) => {
   const tracked = useRef<Set<number>>(new Set());
 
   useEffect(() => {
@@ -24,7 +22,6 @@ export const useScrollDepthTracking = ({ variant, enabled = true }: UseScrollDep
         if (scrollPercent >= milestone && !tracked.current.has(milestone)) {
           tracked.current.add(milestone);
           analytics.track('scroll_depth_reached', {
-            variant,
             depth: milestone,
             timestamp: Date.now(),
           });
@@ -46,7 +43,7 @@ export const useScrollDepthTracking = ({ variant, enabled = true }: UseScrollDep
 
     window.addEventListener('scroll', scrollListener, { passive: true });
     return () => window.removeEventListener('scroll', scrollListener);
-  }, [variant, enabled]);
+  }, [enabled]);
 
   return { maxDepth: Math.max(...Array.from(tracked.current), 0) };
 };

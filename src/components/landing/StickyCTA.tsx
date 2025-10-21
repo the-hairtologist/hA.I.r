@@ -6,16 +6,14 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Platform } from '@/platform';
 import { analytics } from '@/lib/analytics';
-import { Variant } from '@/lib/abTestingSupabase';
 
 interface StickyCTAProps {
   ctaText: string;
-  variant: Variant;
 }
 
 const STORAGE_KEY = 'hair_sticky_cta_dismissed';
 
-export const StickyCTA = ({ ctaText, variant }: StickyCTAProps) => {
+export const StickyCTA = ({ ctaText }: StickyCTAProps) => {
   const navigate = useNavigate();
   const [isDismissed, setIsDismissed] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -47,7 +45,7 @@ export const StickyCTA = ({ ctaText, variant }: StickyCTAProps) => {
 
     setIsDismissed(true);
     localStorage.setItem(STORAGE_KEY, 'true');
-    analytics.track('sticky_cta_dismissed', { variant });
+    analytics.track('sticky_cta_dismissed');
   };
 
   const handleClick = async () => {
@@ -56,7 +54,7 @@ export const StickyCTA = ({ ctaText, variant }: StickyCTAProps) => {
       await Haptics.impact({ style: ImpactStyle.Medium });
     }
 
-    analytics.track('sticky_cta_clicked', { variant });
+    analytics.track('sticky_cta_clicked');
     navigate('/auth');
   };
 

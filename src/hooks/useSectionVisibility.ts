@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { analytics } from '@/lib/analytics';
-import { Variant } from '@/lib/abTestingSupabase';
 
 interface UseSectionVisibilityOptions {
   sectionName: string;
-  variant: Variant;
   threshold?: number;
   enabled?: boolean;
 }
 
 export const useSectionVisibility = ({
   sectionName,
-  variant,
   threshold = 0.5,
   enabled = true,
 }: UseSectionVisibilityOptions) => {
@@ -31,7 +28,6 @@ export const useSectionVisibility = ({
           if (!hasTracked.current) {
             hasTracked.current = true;
             analytics.track('section_viewed', {
-              variant,
               section: sectionName,
               timestamp: Date.now(),
             });
@@ -48,7 +44,7 @@ export const useSectionVisibility = ({
         observer.unobserve(ref.current);
       }
     };
-  }, [sectionName, variant, threshold, enabled]);
+  }, [sectionName, threshold, enabled]);
 
   return { ref, isVisible };
 };

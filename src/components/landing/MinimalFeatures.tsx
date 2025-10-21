@@ -1,6 +1,5 @@
 import { Sparkles, Calendar, CreditCard, Heart, Smartphone } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Variant } from "@/lib/abTestingSupabase";
 import { analytics } from "@/lib/analytics";
 
 // Variant A: Pain-focused messaging (PROBLEMS WE FIX)
@@ -120,20 +119,14 @@ const featuresC = [
   },
 ];
 
-const VARIANT_FEATURES = {
-  A: featuresA,
-  B: featuresB,
-  C: featuresC,
-};
-
 type Feature = typeof featuresA[0];
 
-const FeatureCard = ({ feature, index, variant }: { feature: Feature; index: number; variant: Variant }) => {
+const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
   const Icon = feature.icon;
 
   const handleHover = () => {
-    analytics.featureHovered(variant, feature.title);
+    analytics.featureHovered('A', feature.title);
   };
 
   return (
@@ -166,30 +159,13 @@ const FeatureCard = ({ feature, index, variant }: { feature: Feature; index: num
   );
 };
 
-interface MinimalFeaturesProps {
-  variant: Variant;
-}
-
-export const MinimalFeatures = ({ variant }: MinimalFeaturesProps) => {
-  const features = VARIANT_FEATURES[variant];
+export const MinimalFeatures = () => {
+  const features = featuresA;
   
-  // Variant-specific section headers
-  const headers = {
-    A: {
-      title: "THE PROBLEMS WE SOLVE",
-      subtitle: "Stop the chaos. Reclaim your time.",
-    },
-    B: {
-      title: "WHAT YOU CAN BUILD",
-      subtitle: "5,000+ stylists built their dream salon. Your turn.",
-    },
-    C: {
-      title: "HOW IT WORKS",
-      subtitle: "Simple tools. Powerful results.",
-    },
+  const header = {
+    title: "THE PROBLEMS WE SOLVE",
+    subtitle: "Stop the chaos. Reclaim your time.",
   };
-  
-  const header = headers[variant];
   
   return (
     <div className="container mx-auto px-4">
@@ -204,7 +180,7 @@ export const MinimalFeatures = ({ variant }: MinimalFeaturesProps) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
         {features.map((feature, index) => (
-          <FeatureCard key={feature.title} feature={feature} index={index} variant={variant} />
+          <FeatureCard key={feature.title} feature={feature} index={index} />
         ))}
       </div>
     </div>

@@ -95,7 +95,6 @@ const CRMDashboard = lazyWithRetry(() => import('@/pages/CRMDashboard'));
 const SalesDashboard = lazyWithRetry(() => import('@/pages/SalesDashboard'));
 const SupportChat = lazyWithRetry(() => import('@/pages/SupportChat'));
 const AutomationMonitoring = lazyWithRetry(() => import('@/pages/AutomationMonitoring'));
-const ABTestDashboard = lazyWithRetry(() => import('@/pages/ABTestDashboardSupabase'));
 
 export const AppRoutes = () => (
   <>
@@ -375,10 +374,6 @@ export const AppRoutes = () => (
     <Route
       path="/admin/automation"
       element={<ProtectedRoute allowedRoles={['admin']}><AutomationMonitoring /></ProtectedRoute>}
-    />
-    <Route
-      path="/admin/ab-testing"
-      element={<ProtectedRoute allowedRoles={['admin']}><ABTestDashboard /></ProtectedRoute>}
     />
 
     {/* Error Routes */}

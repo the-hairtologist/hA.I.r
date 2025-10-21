@@ -9,50 +9,33 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Variant } from '@/lib/abTestingSupabase';
 import { analytics } from '@/lib/analytics';
 import { Sparkles } from 'lucide-react';
 
 interface ExitIntentModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  variant: Variant;
 }
 
-const VARIANT_CONTENT = {
-  A: {
-    title: 'Wait! Get Your First Month Free',
-    description: 'Stop losing clients. Try hA.I.r risk-free for 30 days—no credit card required.',
-    primaryCta: 'Start Free Trial',
-    secondaryCta: 'Just browsing',
-  },
-  B: {
-    title: 'Before You Go...',
-    description: '5,000+ stylists started here. Join them with a free 14-day trial—no strings attached.',
-    primaryCta: 'Join Them Free',
-    secondaryCta: 'Maybe later',
-  },
-  C: {
-    title: 'Need More Time?',
-    description: 'See it in action. Watch our 2-minute demo or try it free for 14 days.',
-    primaryCta: 'Try Free Now',
-    secondaryCta: "I'll think about it",
-  },
+const content = {
+  title: 'Wait! Get Your First Month Free',
+  description: 'Stop losing clients. Try hA.I.r risk-free for 30 days—no credit card required.',
+  primaryCta: 'Start Free Trial',
+  secondaryCta: 'Just browsing',
 };
 
-export const ExitIntentModal = ({ open, onOpenChange, variant }: ExitIntentModalProps) => {
+export const ExitIntentModal = ({ open, onOpenChange }: ExitIntentModalProps) => {
   const navigate = useNavigate();
   const [isConverting, setIsConverting] = useState(false);
-  const content = VARIANT_CONTENT[variant];
 
   const handleConvert = async () => {
     setIsConverting(true);
-    analytics.track('exit_intent_converted', { variant });
+    analytics.track('exit_intent_converted');
     navigate('/auth');
   };
 
   const handleDismiss = () => {
-    analytics.track('exit_intent_dismissed', { variant });
+    analytics.track('exit_intent_dismissed');
     onOpenChange(false);
   };
 

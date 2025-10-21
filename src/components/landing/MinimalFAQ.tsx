@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/accordion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { analytics } from "@/lib/analytics";
-import { useABTest } from "@/hooks/useABTest";
 
 const faqs = [
   {
@@ -33,10 +32,9 @@ const faqs = [
 
 export const MinimalFAQ = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
-  const { variant } = useABTest();
 
   const handleFAQClick = (question: string) => {
-    analytics.faqExpanded(variant, question);
+    analytics.faqExpanded('A', question);
   };
 
   return (
