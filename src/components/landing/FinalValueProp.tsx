@@ -43,7 +43,7 @@ export const FinalValueProp = () => {
       <div className="container mx-auto px-4" ref={ref}>
         {/* Unified Header */}
         <div className={`text-center mb-10 xs:mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground mb-3 uppercase tracking-wider leading-tight">
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground mb-5 xs:mb-6 uppercase tracking-wider leading-tight">
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
