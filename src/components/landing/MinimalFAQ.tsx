@@ -82,11 +82,6 @@ export const MinimalFAQ = () => {
           })}
         </div>
 
-        {/* Testimonials */}
-        <div className="mt-12 xs:mt-16">
-          <SingleTestimonial />
-        </div>
-
         {/* Contact CTA */}
         <div className="text-center mt-8 xs:mt-10">
           <p className="text-foreground mb-3 font-sans text-xs xs:text-sm">Still have questions?</p>
@@ -96,6 +91,11 @@ export const MinimalFAQ = () => {
           >
             Contact Support
           </a>
+        </div>
+
+        {/* Testimonials */}
+        <div className="mt-12 xs:mt-16">
+          <SingleTestimonial />
         </div>
       </div>
     </div>
