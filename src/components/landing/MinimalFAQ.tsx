@@ -7,6 +7,7 @@ import {
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { analytics } from "@/lib/analytics";
 import { SingleTestimonial } from "./SingleTestimonial";
+import { Sparkles } from "lucide-react";
 
 const faqs = [
   {
@@ -45,9 +46,13 @@ export const MinimalFAQ = () => {
           {/* Header with black text on yellow background */}
           <div className={`text-center mb-3 xs:mb-4 sm:mb-6 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="inline-block border-[3px] border-black px-2.5 xs:px-3 sm:px-4 py-1.5 xs:py-2 mb-3 xs:mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-success hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:rotate-1">
-              <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl text-secondary uppercase tracking-tight animate-pulse">
-                THE REAL QUESTIONS
-              </h2>
+              <div className="flex items-center justify-center gap-2 xs:gap-3">
+                <Sparkles className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-secondary animate-pulse" style={{ animationDelay: '0.5s' }} />
+                <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl text-secondary uppercase tracking-tight animate-pulse">
+                  THE REAL QUESTIONS
+                </h2>
+                <Sparkles className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-secondary animate-pulse" style={{ animationDelay: '0.5s' }} />
+              </div>
             </div>
             <p className="font-sans text-xs xs:text-sm text-foreground max-w-2xl mx-auto">
               No fluff. Just honest answers.
