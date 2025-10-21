@@ -9,8 +9,14 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
-      gcTime: 1000 * 60 * 10, // 10 minutes (renamed from cacheTime)
+      gcTime: 1000 * 60 * 10, // 10 minutes (garbage collection)
       refetchOnWindowFocus: false,
+      retry: 1,
+      // Enable automatic query deduplication
+      refetchOnMount: false,
+      refetchOnReconnect: "always",
+    },
+    mutations: {
       retry: 1,
     },
   },
