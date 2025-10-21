@@ -44,14 +44,14 @@ export const FinalValueProp = () => {
         {/* Unified Header */}
         <div className={`text-center mb-10 xs:mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-block border-[3px] border-black bg-accent px-4 xs:px-6 py-2 xs:py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-4 xs:mb-6">
-            <span className="font-pixel text-xs xs:text-sm text-accent-foreground uppercase">REAL RESULTS</span>
+            <span className="font-pixel text-xs xs:text-sm text-secondary uppercase">REAL RESULTS</span>
           </div>
           
           <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground mb-3 uppercase tracking-wider leading-tight">
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
-          <p className="font-sans text-sm xs:text-base sm:text-lg text-white max-w-2xl mx-auto">
+          <p className="font-sans text-sm xs:text-base sm:text-lg text-black max-w-2xl mx-auto">
             Real metrics from real stylists who switched to hA.I.r
           </p>
         </div>
