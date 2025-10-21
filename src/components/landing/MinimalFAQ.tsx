@@ -46,9 +46,9 @@ export const MinimalFAQ = () => {
           {/* Header with black text on yellow background */}
           <div className={`text-center mb-3 xs:mb-4 sm:mb-6 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <div className="inline-block border-[3px] border-black px-2 py-1.5 xs:py-2 mb-3 xs:mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-success hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:rotate-1">
-              <div className="flex items-center justify-center -space-x-3">
+              <div className="flex items-center justify-center -space-x-6">
                 <Sparkles className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 text-secondary animate-pulse flex-shrink-0" style={{ animationDelay: '0.5s' }} />
-                <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl text-secondary uppercase tracking-tight animate-pulse px-0.5">
+                <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl text-secondary uppercase tracking-tight animate-pulse">
                   THE REAL QUESTIONS
                 </h2>
                 <Sparkles className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 text-secondary animate-pulse flex-shrink-0" style={{ animationDelay: '0.5s' }} />
