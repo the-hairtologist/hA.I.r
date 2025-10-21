@@ -12,20 +12,20 @@ const faqs = [
     answer: "Real talk: Most stylists save 5-7 hours per week on scheduling, payments, and client notes. That's time back for clients (or yourself). Plus, no more double-bookings or missed appointments.",
   },
   {
-    question: "How quickly can I get up and running?",
-    answer: "Most stylists are booking their first client within 10 minutes. Import existing clients via CSV, or start fresh. No training videos required—it just works.",
-  },
-  {
-    question: "What if my clients aren't tech-savvy?",
-    answer: "Good news: Clients don't need an account to book. They get a simple link, pick a time, and they're done. Works on any phone or computer—no app download needed.",
+    question: "What happens to my client data if I cancel?",
+    answer: "You own your data, period. Export everything (client history, formulas, photos) anytime. Even after you cancel, you get 30 days to download your records.",
   },
   {
     question: "Does the AI replace my expertise as a stylist?",
     answer: "Never. The AI is like a smart assistant—it suggests formulas based on hair history and type, but YOU make the final call. Think of it as a second opinion, not a replacement.",
   },
   {
-    question: "What happens to my client data if I cancel?",
-    answer: "You own your data, period. Export everything (client history, formulas, photos) anytime. Even after you cancel, you get 30 days to download your records.",
+    question: "How quickly can I get up and running?",
+    answer: "Most stylists are booking their first client within 10 minutes. Import existing clients via CSV, or start fresh. No training videos required—it just works.",
+  },
+  {
+    question: "What if my clients aren't tech-savvy?",
+    answer: "Good news: Clients don't need an account to book. They get a simple link, pick a time, and they're done. Works on any phone or computer—no app download needed.",
   },
 ];
 
