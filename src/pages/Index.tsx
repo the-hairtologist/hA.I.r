@@ -168,10 +168,10 @@ const Index = () => {
         </section>
 
         {/* How It Works - Featured prominently */}
-        <section className="py-8 xs:py-10 sm:py-12 bg-green-500" style={{
+        <section className="py-8 xs:py-10 sm:py-12 bg-background" style={{
           backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>
