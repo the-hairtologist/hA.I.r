@@ -47,10 +47,17 @@ export const FinalValueProp = () => {
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
-          <div className="inline-block border-2 border-black bg-accent px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+          <div className="inline-block border-2 border-black bg-accent px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] animate-[float_3s_ease-in-out_infinite]">
             <span className="font-pixel text-[10px] xs:text-xs text-secondary uppercase">REAL RESULTS</span>
           </div>
         </div>
+        
+        <style>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+          }
+        `}</style>
 
         {/* Animated Counters with rotating colors */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 xxs:gap-5 xs:gap-6 sm:gap-8 max-w-5xl mx-auto mb-10 xs:mb-12">
