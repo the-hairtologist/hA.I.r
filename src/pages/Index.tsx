@@ -105,22 +105,22 @@ const Index = () => {
               {/* Icons */}
               <div className="flex justify-center gap-4 xs:gap-6 mb-6 xs:mb-8 animate-fade-in">
                 <div 
-                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border border-white bg-primary flex items-center justify-center animate-bounce"
+                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0s' }}
                 >
-                  <Sparkles className="h-6 w-6 xs:h-8 xs:w-8 text-foreground" />
+                  <Sparkles className="h-6 w-6 xs:h-8 xs:w-8 text-white" strokeWidth={2.5} />
                 </div>
                 <div 
-                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border border-white bg-secondary flex items-center justify-center animate-bounce"
+                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0.1s' }}
                 >
-                  <Zap className="h-6 w-6 xs:h-8 xs:w-8 text-foreground" />
+                  <Zap className="h-6 w-6 xs:h-8 xs:w-8 text-black" strokeWidth={2.5} fill="black" />
                 </div>
                 <div 
-                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border border-white bg-accent flex items-center justify-center animate-bounce"
+                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0.2s' }}
                 >
-                  <Heart className="h-6 w-6 xs:h-8 xs:w-8 text-foreground" />
+                  <Heart className="h-6 w-6 xs:h-8 xs:w-8 text-white" strokeWidth={2.5} fill="white" />
                 </div>
               </div>
               
