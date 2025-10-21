@@ -27,7 +27,7 @@ export const SingleTestimonial = () => {
           {[...Array(5)].map((_, i) => (
             <div 
               key={i} 
-              className="w-7 h-7 xs:w-9 xs:h-9 sm:w-10 sm:h-10 border-[3px] border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+              className="w-7 h-7 xs:w-9 xs:h-9 sm:w-10 sm:h-10 border-[2px] border-black bg-secondary flex items-center justify-center"
               style={{
                 transitionDelay: `${i * 50}ms`,
               }}
@@ -53,7 +53,7 @@ export const SingleTestimonial = () => {
                 {[...Array(5)].map((_, i) => (
                   <div 
                     key={i} 
-                    className={`w-4 h-4 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
+                    className={`w-4 h-4 border border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
                       isVisible ? 'scale-100' : 'scale-0'
                     }`}
                     style={{

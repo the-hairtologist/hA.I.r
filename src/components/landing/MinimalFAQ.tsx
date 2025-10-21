@@ -84,7 +84,7 @@ export const MinimalFAQ = () => {
         </div>
 
         {/* Contact CTA */}
-        <div className="text-center mt-6 xs:mt-8">
+        <div className="text-center mt-4 xs:mt-5">
           <p className="text-foreground mb-3 font-sans text-xs xs:text-sm">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
