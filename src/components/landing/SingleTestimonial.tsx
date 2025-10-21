@@ -1,3 +1,4 @@
+import { Quote } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const testimonials = [
@@ -20,63 +21,63 @@ export const SingleTestimonial = () => {
 
   return (
     <div className="container mx-auto px-4" ref={ref}>
-      <div className="max-w-4xl mx-auto">
-        {/* Prominent 5-Star Rating */}
-        <div className={`flex justify-center gap-2 xs:gap-3 mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      <div className="max-w-5xl mx-auto">
+        {/* 5-Star Rating Display */}
+        <div className={`flex justify-center gap-2 mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
           {[...Array(5)].map((_, i) => (
             <div 
               key={i} 
-              className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 border-[3px] border-black bg-secondary flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300"
+              className="w-8 h-8 xs:w-10 xs:h-10 border-[3px] border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
               style={{
-                transitionDelay: `${i * 80}ms`,
+                transitionDelay: `${i * 50}ms`,
               }}
             >
-              <span className="font-pixel text-secondary-foreground text-lg xs:text-xl sm:text-2xl">★</span>
+              <span className="font-pixel text-secondary-foreground text-base xs:text-lg">★</span>
             </div>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-3 xs:gap-4">
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className={`group relative border-[3px] border-black bg-white p-4 xs:p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 hover:-translate-x-0.5 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+              className={`border-[3px] border-black bg-white p-3 xs:p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
               style={{
-                transitionDelay: `${(index + 3) * 120}ms`,
+                transitionDelay: `${(index + 2) * 100}ms`,
               }}
             >
-              {/* Star rating with animation */}
-              <div className="flex gap-1 mb-3">
+              {/* Compact star rating */}
+              <div className="flex gap-1 mb-2">
                 {[...Array(5)].map((_, i) => (
                   <div 
                     key={i} 
-                    className={`w-5 h-5 border-2 border-black bg-secondary flex items-center justify-center shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ${
-                      isVisible ? 'scale-100 rotate-0' : 'scale-0 rotate-45'
+                    className={`w-4 h-4 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
+                      isVisible ? 'scale-100' : 'scale-0'
                     }`}
                     style={{
-                      transitionDelay: `${(index * 150) + (i * 60)}ms`,
+                      transitionDelay: `${(index * 200) + (i * 50)}ms`,
                     }}
                   >
-                    <span className="font-pixel text-secondary-foreground text-[10px]">★</span>
+                    <span className="font-pixel text-secondary-foreground text-[8px]">★</span>
                   </div>
                 ))}
               </div>
               
-              {/* Quote with better typography */}
-              <p className="text-sm font-sans text-foreground leading-relaxed mb-4 min-h-[60px]">
+              {/* Quote - more compact */}
+              <p className="text-xs font-sans text-foreground leading-snug mb-3">
                 "{testimonial.quote}"
               </p>
               
-              {/* Author section with improved design */}
-              <div className="flex items-center gap-3 pt-3 border-t-2 border-black/10">
-                <div className="w-10 h-10 border-[3px] border-black bg-accent flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-300">
-                  <span className="font-pixel text-accent-foreground text-xs">{testimonial.initials}</span>
+              {/* Author - ultra compact */}
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 border-2 border-black bg-accent flex items-center justify-center">
+                  <span className="font-pixel text-accent-foreground text-[10px]">{testimonial.initials}</span>
                 </div>
-                <div className="flex-1">
-                  <div className="font-pixel text-xs text-foreground uppercase tracking-wide">{testimonial.author}</div>
-                  <div className="font-sans text-[11px] text-muted-foreground mt-0.5">{testimonial.role}</div>
+                <div>
+                  <div className="font-pixel text-[10px] text-foreground">{testimonial.author}</div>
+                  <div className="font-sans text-[9px] text-muted-foreground">{testimonial.role}</div>
                 </div>
               </div>
             </div>
