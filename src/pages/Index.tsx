@@ -135,7 +135,7 @@ const Index = () => {
                     return (
                       <div 
                         key={idx}
-                        className={`w-12 h-12 xs:w-16 xs:h-16 brutal-border border-black ${iconConfig.color} flex items-center justify-center animate-bounce`}
+                        className={`w-12 h-12 xs:w-16 xs:h-16 brutal-border border-white ${iconConfig.color} flex items-center justify-center animate-bounce`}
                         style={{ animationDelay: iconConfig.delay }}
                       >
                         <IconComponent className={`h-6 w-6 xs:h-8 xs:w-8 ${iconConfig.color === 'bg-white' ? 'text-primary' : 'text-foreground'}`} />
