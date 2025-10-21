@@ -146,11 +146,11 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       ref={ref}
       onMouseEnter={handleHover}
       onTouchStart={handleHover}
-      className={`relative overflow-hidden border-[3px] border-black ${bgColors[index]} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-1 p-4 xs:p-5 sm:p-6 ${
+      className={`relative overflow-hidden brutal-border ${bgColors[index]} brutal-shadow-sm hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-1 p-4 xs:p-5 sm:p-6 ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
       }`}
       style={{
-        transitionDelay: `${index * 150}ms`,
+        transitionDelay: `${index * 200}ms`,
       }}
     >
       {/* Compact animated icon */}
@@ -166,7 +166,7 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       </div>
 
       {/* Headline */}
-      <h3 className="font-pixel text-sm xs:text-base text-foreground uppercase tracking-wide mb-1 xs:mb-1.5 sm:mb-2 leading-tight">
+      <h3 className="font-pixel text-sm xs:text-base sm:text-lg text-foreground uppercase tracking-wide mb-1 xs:mb-1.5 sm:mb-2 leading-tight">
         {feature.headline}
       </h3>
       
@@ -198,8 +198,8 @@ export const MinimalFeatures = () => {
   };
   
   return (
-    <div className="py-4 xs:py-6 sm:py-8">
-      <div className="container mx-auto px-4 xs:px-6 sm:px-8">
+      <div className="py-4 xs:py-6 sm:py-8">
+        <div className="container mx-auto px-3 xs:px-4 sm:px-6">
         {/* Section Header with dramatic styling */}
         <div className="text-center mb-4 xs:mb-6 sm:mb-8">
         <div className="inline-block border-[3px] border-black px-3 py-2 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle bg-success">

@@ -41,7 +41,7 @@ export const SingleTestimonial = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className={`border-[3px] border-black bg-white p-3 xs:p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 ${
+              className={`brutal-border bg-white p-3 xs:p-4 brutal-shadow-sm hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
               style={{

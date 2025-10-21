@@ -15,7 +15,7 @@ export const HeroPhoneMockup = () => {
   return (
     <div ref={ref} className={`relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto mt-6 xs:mt-10 sm:mt-12 transition-all duration-700 ${animationsEnabled && isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
       {/* Phone Frame - Enhanced Brutal Style */}
-      <div className="relative border-[4px] border-black bg-white shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-[32px] overflow-hidden transform hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300">
+      <div className="relative brutal-border bg-white brutal-shadow-lg rounded-[32px] overflow-hidden transform hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300">
         {/* Phone Notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-10"></div>
         
@@ -42,8 +42,8 @@ export const HeroPhoneMockup = () => {
           <div className="space-y-3">
             {/* New Booking with Success Icon */}
             <div 
-              className="border-[3px] border-black bg-gradient-to-br from-secondary to-secondary/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" 
-              style={{ animationDelay: '400ms' }}
+              className="brutal-border bg-gradient-to-br from-secondary to-secondary/90 brutal-shadow-sm p-3 animate-fade-in" 
+              style={{ animationDelay: '200ms' }}
               role="article"
               aria-label="New booking notification: Sarah Chen - Color & Cut">
               <div className="flex items-start gap-2">
@@ -64,8 +64,8 @@ export const HeroPhoneMockup = () => {
 
             {/* Client Message with Typing Indicator */}
             <div 
-              className="border-[3px] border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" 
-              style={{ animationDelay: '600ms' }}
+              className="brutal-border bg-white brutal-shadow-sm p-3 animate-fade-in" 
+              style={{ animationDelay: '400ms' }}
               role="article"
               aria-label="Client message from recent contact">
               <div className="flex items-start gap-2">
@@ -86,7 +86,7 @@ export const HeroPhoneMockup = () => {
             </div>
 
             {/* Auto Reminder Success */}
-            <div className="border-[3px] border-black bg-gradient-to-br from-accent to-accent/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" style={{ animationDelay: '800ms' }}>
+            <div className="brutal-border bg-gradient-to-br from-accent to-accent/90 brutal-shadow-sm p-3 animate-fade-in" style={{ animationDelay: '600ms' }}>
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 border-[2px] border-black bg-secondary flex items-center justify-center flex-shrink-0">
                   <Clock className="h-4 w-4 text-secondary-foreground" />

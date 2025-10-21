@@ -78,7 +78,7 @@ export const MinimalFAQ = () => {
               >
               <details className="group focus-within:ring-2 focus-within:ring-primary/30 focus-within:ring-offset-1 rounded-sm" onClick={() => handleFAQClick(faq.question)}>
                 <summary className="cursor-pointer list-none p-2 xs:p-2.5 sm:p-3 font-bold text-foreground hover:bg-muted/20 transition-colors duration-200 flex justify-between items-center gap-3">
-                  <span className="font-sans text-xs xs:text-sm text-left">{faq.question}</span>
+                  <span className="font-sans text-xs xs:text-sm sm:text-base text-left">{faq.question}</span>
                   <span className={`font-pixel text-xl ${accentColors[colorIndex]} group-open:rotate-90 transition-transform duration-300 flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center`}>▶</span>
                 </summary>
                 <div className={`px-2 xs:px-2.5 sm:px-3 pb-2 xs:pb-2.5 sm:pb-3 border-t-2 ${colors[colorIndex]} pt-2.5`}>

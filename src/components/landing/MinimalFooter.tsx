@@ -12,7 +12,7 @@ export const MinimalFooter = () => {
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-3 xs:px-4 py-2 xs:py-2.5">
+      <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-5 sm:py-6">
         {/* Single Row Layout */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 xs:gap-3 mb-1 xs:mb-1.5">
           {/* Logo + Copyright */}
