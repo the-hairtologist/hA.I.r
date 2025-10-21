@@ -22,7 +22,7 @@ import { LoyaltyProgressWidget } from "@/components/dashboard/LoyaltyProgressWid
 import { CommissionTrackerWidget } from "@/components/dashboard/CommissionTrackerWidget";
 import { QuickAddClientFAB } from "@/components/QuickAddClientFAB";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from "date-fns";
-import { DashboardLayout } from "@/components/DashboardLayout";
+import { DashboardLayout } from "@/components/layout";
 import { NotificationEnhancer } from "@/components/NotificationEnhancer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
