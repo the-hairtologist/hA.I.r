@@ -3,13 +3,13 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const testimonials = [
   {
-    quote: "Got back 2 hours daily. Clients love auto reminders. Zero no-shows now.",
+    quote: "I got back 2 hours a day. My clients love the automated reminders. No more missed appointments.",
     author: "Jessica Martinez",
     role: "Colorist, Miami",
     initials: "JM",
   },
   {
-    quote: "Finally an app that remembers every formula. My clients are obsessed.",
+    quote: "First app that actually remembers every formula. My repeat clients are obsessed with their consistency.",
     author: "Sarah Chen",
     role: "Salon Owner, LA",
     initials: "SC",
