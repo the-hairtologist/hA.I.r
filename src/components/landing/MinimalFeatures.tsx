@@ -129,32 +129,52 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
     analytics.featureHovered('A', feature.title);
   };
 
+  // Rotate through vibrant background colors
+  const bgColors = ['bg-secondary', 'bg-accent', 'bg-primary', 'bg-secondary', 'bg-accent'];
+  const iconBgColors = ['bg-accent', 'bg-primary', 'bg-secondary', 'bg-accent', 'bg-primary'];
+  const iconTextColors = ['text-white', 'text-white', 'text-black', 'text-white', 'text-white'];
+
   return (
     <div
       ref={ref}
       onMouseEnter={handleHover}
       onTouchStart={handleHover}
-      className={`space-y-4 brutal-border bg-card p-6 brutal-shadow hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      className={`relative overflow-hidden border-[4px] border-black ${bgColors[index]} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] p-6 xs:p-8 ${
+        isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
       }`}
       style={{
-        transitionDelay: `${index * 100}ms`,
+        transitionDelay: `${index * 150}ms`,
       }}
     >
-      <div className="relative w-16 h-16 brutal-border bg-accent flex items-center justify-center group">
-...
-        <div className="absolute -top-3 -right-3 w-8 h-8 brutal-border bg-primary flex items-center justify-center">
-          <span className="font-pixel text-primary-foreground text-sm">
+      {/* Large animated icon */}
+      <div className={`relative w-20 h-20 xs:w-24 xs:h-24 border-[4px] border-black ${iconBgColors[index]} flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:rotate-12 transition-transform duration-500 ${isVisible ? 'animate-bounce' : ''}`}
+        style={{ animationDelay: `${index * 200}ms`, animationIterationCount: '3' }}
+      >
+        <Icon className={`h-10 w-10 xs:h-12 xs:w-12 ${iconTextColors[index]}`} strokeWidth={2.5} />
+        
+        {/* Floating number badge */}
+        <div className="absolute -top-4 -right-4 w-10 h-10 xs:w-12 xs:h-12 border-[3px] border-black bg-white flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+          <span className="font-pixel text-foreground text-lg xs:text-xl">
             {feature.number}
           </span>
         </div>
       </div>
-      <h3 className="font-pixel text-sm xs:text-base text-accent uppercase tracking-wide">
+
+      {/* Headline */}
+      <h3 className="font-pixel text-base xs:text-lg text-foreground uppercase tracking-wide mb-4 leading-tight">
         {feature.headline}
       </h3>
-      <p className="text-sm xs:text-base font-sans text-foreground leading-relaxed">
+      
+      {/* Description */}
+      <p className="text-sm xs:text-base font-sans text-foreground/90 leading-relaxed">
         {feature.description}
       </p>
+
+      {/* Decorative corner accent */}
+      <div className="absolute bottom-0 right-0 w-16 h-16 opacity-20">
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-l-[3px] border-t-[3px] border-black"></div>
+        <div className="absolute bottom-2 right-2 w-8 h-8 border-l-[3px] border-t-[3px] border-black"></div>
+      </div>
     </div>
   );
 };
@@ -169,11 +189,14 @@ export const MinimalFeatures = () => {
   
   return (
     <div className="container mx-auto px-4">
-      <div className="text-center mb-6 xs:mb-8">
-        <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
-          {header.title}
-        </h2>
-        <p className="font-sans text-xs xs:text-sm text-muted-foreground max-w-2xl mx-auto">
+      {/* Section Header with dramatic styling */}
+      <div className="text-center mb-10 xs:mb-12">
+        <div className="inline-block border-[4px] border-black bg-primary px-6 py-3 mb-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle">
+          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl text-white uppercase tracking-wider">
+            {header.title}
+          </h2>
+        </div>
+        <p className="font-sans text-base xs:text-lg text-foreground max-w-2xl mx-auto font-medium">
           {header.subtitle}
         </p>
       </div>
