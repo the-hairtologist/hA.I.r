@@ -33,7 +33,6 @@ import { SortableNavItem } from "@/components/sidebar/SortableNavItem";
 import { TodaysScheduleWidget } from "@/components/sidebar/TodaysScheduleWidget";
 import { CalendarSyncIndicator } from "@/components/CalendarSyncIndicator";
 import { NextAppointmentBanner } from "@/components/sidebar/NextAppointmentBanner";
-import { DarkModeToggle } from "@/components/sidebar/DarkModeToggle";
 import {
   stylistNavigationItems,
   clientNavigationItems,
@@ -298,9 +297,6 @@ export function AppSidebar() {
 
         {/* Calendar Sync Indicator - Only for stylists and admins */}
         {(isStylist || isAdmin) && !collapsed && <CalendarSyncIndicator />}
-        
-        {/* Dark Mode Toggle - For all users */}
-        {!collapsed && <DarkModeToggle />}
       </SidebarContent>
     </Sidebar>
   );

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Sun, Moon, Monitor, Eye, Sparkles, Brain, Code, Sliders } from "lucide-react";
+import { Settings as SettingsIcon, User, Shield, Bell, Loader2, RefreshCw, Lock, ExternalLink, Image, DollarSign, Mail, Calendar, Eye, Sparkles, Brain, Code, Sliders } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { validatePhone } from "@/lib/phoneValidation";
@@ -18,8 +18,7 @@ import { DataExport } from "@/components/DataExport";
 import { AccountDeletion } from "@/components/AccountDeletion";
 import { PrivacySettings } from "@/components/PrivacySettings";
 import { HelpTooltip } from "@/components/HelpTooltip";
-import { useTheme } from "next-themes";
-import { Switch as ThemeSwitch } from "@/components/ui/switch";
+import { Switch } from "@/components/ui/switch";
 import { ClientPreferenceCenter } from "@/components/email-sequences/ClientPreferenceCenter";
 import { MobileNavCustomizer } from "@/components/MobileNavCustomizer";
 import { FirstTimeTooltip } from "@/components/FirstTimeTooltip";
@@ -38,7 +37,6 @@ const Settings = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const { theme, setTheme } = useTheme();
   const { isDevMode, toggleDevMode } = useDevMode();
 
   // Security - Password change
@@ -821,7 +819,7 @@ const Settings = () => {
                               <Label htmlFor="acceptsNewClients" className="font-semibold">Accepting New Clients</Label>
                               <p className="text-xs text-muted-foreground">Toggle when your books are full</p>
                             </div>
-                            <ThemeSwitch
+                            <Switch
                               id="acceptsNewClients"
                               checked={acceptsNewClients}
                               onCheckedChange={(checked) => { setAcceptsNewClients(checked); setHasChanges(true); }}
@@ -832,7 +830,7 @@ const Settings = () => {
                         <div className="flex items-center gap-4 p-4 border-2 border-foreground/10 rounded-lg">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <ThemeSwitch
+                              <Switch
                                 id="depositRequired"
                                 checked={depositRequired}
                                 onCheckedChange={(checked) => { setDepositRequired(checked); setHasChanges(true); }}
@@ -1223,7 +1221,7 @@ const Settings = () => {
                       <Label htmlFor="email-notifications" className="font-semibold">Email Notifications</Label>
                       <p className="text-sm text-muted-foreground">Receive notifications via email</p>
                     </div>
-                    <ThemeSwitch
+                    <Switch
                       id="email-notifications"
                       checked={emailNotifications}
                       onCheckedChange={setEmailNotifications}
@@ -1235,7 +1233,7 @@ const Settings = () => {
                       <Label htmlFor="appointment-reminders" className="font-semibold">Appointment Reminders</Label>
                       <p className="text-sm text-muted-foreground">Get reminded about upcoming appointments</p>
                     </div>
-                    <ThemeSwitch
+                    <Switch
                       id="appointment-reminders"
                       checked={appointmentReminders}
                       onCheckedChange={setAppointmentReminders}
@@ -1248,7 +1246,7 @@ const Settings = () => {
                         <Label htmlFor="rebooking-reminders" className="font-semibold">Rebooking Reminders</Label>
                         <p className="text-sm text-muted-foreground">Get notified when it's time to book again</p>
                       </div>
-                      <ThemeSwitch
+                       <Switch
                         id="rebooking-reminders"
                         checked={rebookingReminders}
                         onCheckedChange={setRebookingReminders}
@@ -1261,7 +1259,7 @@ const Settings = () => {
                       <Label htmlFor="marketing-emails" className="font-semibold">Marketing Emails</Label>
                       <p className="text-sm text-muted-foreground">Receive tips, offers, and updates</p>
                     </div>
-                    <ThemeSwitch
+                    <Switch
                       id="marketing-emails"
                       checked={marketingEmails}
                       onCheckedChange={setMarketingEmails}
@@ -1273,7 +1271,7 @@ const Settings = () => {
                       <Label htmlFor="sms-notifications" className="font-semibold">SMS Notifications</Label>
                       <p className="text-sm text-muted-foreground">Receive text message alerts (Coming Soon)</p>
                     </div>
-                    <ThemeSwitch
+                    <Switch
                       id="sms-notifications"
                       checked={smsNotifications}
                       disabled
@@ -1346,7 +1344,7 @@ const Settings = () => {
                         : "Enable all AI-powered features to optimize your business"}
                     </p>
                   </div>
-                  <ThemeSwitch
+                  <Switch
                     checked={aiEnabled}
                     onCheckedChange={async (checked) => {
                       setAiEnabled(checked);
@@ -1597,44 +1595,6 @@ const Settings = () => {
             )}
             
             <PrivacySettings userId={user?.id || ''} userRole={userRole} />
-            
-            <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-              <CardHeader>
-                <CardTitle>Appearance</CardTitle>
-                <CardDescription>Customize how the app looks</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <Label>Theme</Label>
-                  <div className="grid grid-cols-3 gap-3">
-                    <Button
-                      variant={theme === "light" ? "default" : "outline"}
-                      onClick={() => setTheme("light")}
-                      className="flex flex-col items-center gap-2 h-auto py-3"
-                    >
-                      <Sun className="h-5 w-5" />
-                      <span className="text-xs">Light</span>
-                    </Button>
-                    <Button
-                      variant={theme === "dark" ? "default" : "outline"}
-                      onClick={() => setTheme("dark")}
-                      className="flex flex-col items-center gap-2 h-auto py-3"
-                    >
-                      <Moon className="h-5 w-5" />
-                      <span className="text-xs">Dark</span>
-                    </Button>
-                    <Button
-                      variant={theme === "system" ? "default" : "outline"}
-                      onClick={() => setTheme("system")}
-                      className="flex flex-col items-center gap-2 h-auto py-3"
-                    >
-                      <Monitor className="h-5 w-5" />
-                      <span className="text-xs">System</span>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
@@ -1744,7 +1704,7 @@ const Settings = () => {
                       Show performance metrics and debug info
                     </p>
                   </div>
-                  <ThemeSwitch
+                  <Switch
                     id="dev-mode"
                     checked={isDevMode}
                     onCheckedChange={toggleDevMode}

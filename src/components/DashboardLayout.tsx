@@ -35,7 +35,6 @@ import { SessionExpiryWarning } from "@/components/SessionExpiryWarning";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
-import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { authErrors } from "@/lib/errorMessages";
 
@@ -49,7 +48,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const { unreadCount } = useRealtimeNotifications(user?.id);
-  const { theme, setTheme } = useTheme();
   
   // Determine user role - admin gets full access, no role switching needed
   const userRole = isStylist ? 'stylist' : isClient ? 'client' : 'admin';
@@ -250,23 +248,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       <DropdownMenuItem onClick={() => navigate("/settings")}>
                         <HelpCircle className="h-4 w-4 mr-2" />
                         Settings
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuLabel className="text-xs text-muted-foreground">Theme</DropdownMenuLabel>
-                      <DropdownMenuItem onClick={() => setTheme("light")}>
-                        <Sun className="h-4 w-4 mr-2" />
-                        Light
-                        {theme === "light" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setTheme("dark")}>
-                        <Moon className="h-4 w-4 mr-2" />
-                        Dark
-                        {theme === "dark" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setTheme("system")}>
-                        <Monitor className="h-4 w-4 mr-2" />
-                        System
-                        {theme === "system" && <Badge variant="secondary" className="ml-auto text-[11px]">Active</Badge>}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => {

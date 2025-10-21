@@ -11,12 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useTheme } from "next-themes";
 import { Copy, Check, Palette, Type, Sparkles, Box } from "lucide-react";
 import { toast } from "sonner";
 
 export default function DesignSystem() {
-  const { theme, setTheme } = useTheme();
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
 
   const copyToClipboard = (text: string, label: string) => {
@@ -81,14 +79,6 @@ export default function DesignSystem() {
               Visual language tokens and component patterns
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <Label htmlFor="theme-toggle">Dark Mode</Label>
-            <Switch
-              id="theme-toggle"
-              checked={theme === "dark"}
-              onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
-            />
-          </div>
         </div>
 
         {/* Quality Score */}
@@ -106,7 +96,7 @@ export default function DesignSystem() {
               <div className="flex-1">
                 <Badge className="mb-2">Top 1% Quality</Badge>
                 <p className="text-sm text-muted-foreground">
-                  Zero hardcoded colors • WCAG AA compliant • Full dark mode • Mobile-first
+                  Zero hardcoded colors • WCAG AA compliant • Mobile-first responsive
                 </p>
               </div>
             </div>
@@ -305,7 +295,7 @@ export default function DesignSystem() {
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• HSL color space</li>
                   <li>• Semantic tokens</li>
-                  <li>• Auto dark mode</li>
+                  <li>• Light mode optimized</li>
                   <li>• WCAG AA compliant</li>
                 </ul>
               </div>
