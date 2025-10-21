@@ -69,11 +69,22 @@ export const MinimalFAQ = () => {
             return (
               <div 
                 key={faq.question} 
-                className={`brutal-border ${colors[colorIndex]} bg-white hover:brutal-shadow transition-all duration-300 hover:translate-x-1 ${
+                className={`brutal-border ${colors[colorIndex]} bg-white transition-all duration-300 ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                 }`}
                 style={{
                   transitionDelay: `${index * 100}ms`,
+                  perspective: '1000px',
+                  transformStyle: 'preserve-3d',
+                  boxShadow: '4px 4px 0px rgba(0,0,0,0.8), 6px 6px 0px rgba(0,0,0,0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'rotateX(2deg) translateX(4px) translateY(-2px) scale(1.01)';
+                  e.currentTarget.style.boxShadow = '6px 6px 0px rgba(0,0,0,0.8), 9px 9px 0px rgba(0,0,0,0.4), 12px 12px 0px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'rotateX(0deg) translateX(0) translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = '4px 4px 0px rgba(0,0,0,0.8), 6px 6px 0px rgba(0,0,0,0.3)';
                 }}
               >
               <details className="group focus-within:ring-2 focus-within:ring-primary/30 focus-within:ring-offset-1 rounded-sm" onClick={() => handleFAQClick(faq.question)}>

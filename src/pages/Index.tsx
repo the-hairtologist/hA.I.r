@@ -89,22 +89,34 @@ const Index = () => {
           <div className="container mx-auto px-3 xs:px-4 sm:px-6 text-center relative z-10 w-full max-w-full">
             <div className="max-w-4xl mx-auto space-y-1.5 xxs:space-y-2 xs:space-y-3 sm:space-y-4">
               {/* Icons */}
-              <div className="flex justify-center gap-4 sm:gap-5 mb-3 sm:mb-4 animate-fade-in">
+              <div className="flex justify-center gap-4 sm:gap-5 mb-3 sm:mb-4 animate-fade-in" style={{ perspective: '1000px' }}>
                 <div 
-                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
-                  style={{ animationDelay: '0s' }}
+                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md hover:scale-110 transition-all duration-300"
+                  style={{ 
+                    animationDelay: '0s',
+                    transform: 'rotateY(-15deg) rotateX(5deg)',
+                    boxShadow: '8px 8px 0px rgba(0,0,0,0.3), 12px 12px 0px rgba(0,0,0,0.15)'
+                  }}
                 >
                   <Sparkles className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} />
                 </div>
                 <div 
-                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md"
-                  style={{ animationDelay: '0.1s' }}
+                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md hover:scale-110 transition-all duration-300"
+                  style={{ 
+                    animationDelay: '0.1s',
+                    transform: 'rotateY(0deg) rotateX(5deg) translateZ(10px)',
+                    boxShadow: '8px 8px 0px rgba(0,0,0,0.4), 12px 12px 0px rgba(0,0,0,0.2)'
+                  }}
                 >
                   <Zap className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-black" strokeWidth={2.5} fill="black" />
                 </div>
                 <div 
-                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md"
-                  style={{ animationDelay: '0.2s' }}
+                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md hover:scale-110 transition-all duration-300"
+                  style={{ 
+                    animationDelay: '0.2s',
+                    transform: 'rotateY(15deg) rotateX(5deg)',
+                    boxShadow: '8px 8px 0px rgba(0,0,0,0.3), 12px 12px 0px rgba(0,0,0,0.15)'
+                  }}
                 >
                   <Heart className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} fill="white" />
                 </div>
@@ -125,14 +137,27 @@ const Index = () => {
                 Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
               </p>
               
-              <div className="pt-1 xs:pt-1.5 sm:pt-2 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
+              <div className="pt-1 xs:pt-1.5 sm:pt-2 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms', perspective: '1000px' }}>
                 <Button 
                   size="lg" 
                   onClick={() => {
                     logger.info('[Index] CTA button clicked', { context: 'Landing Page' });
                     navigate("/auth");
                   }} 
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-success hover:bg-secondary/90 brutal-border border-black brutal-shadow-md hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-primary focus-visible:outline-none"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-success hover:bg-secondary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-primary focus-visible:outline-none"
+                  style={{
+                    boxShadow: '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4), 14px 14px 0px rgba(0,0,0,0.2)',
+                    transform: 'rotateX(2deg)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'rotateX(2deg) translateY(-8px) scale(1.02)';
+                    e.currentTarget.style.boxShadow = '8px 8px 0px rgba(0,0,0,0.8), 14px 14px 0px rgba(0,0,0,0.4), 20px 20px 0px rgba(0,0,0,0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'rotateX(2deg)';
+                    e.currentTarget.style.boxShadow = '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4), 14px 14px 0px rgba(0,0,0,0.2)';
+                  }}
                   data-debug-element="hero-cta-button"
                 >
                   START FREE TRIAL

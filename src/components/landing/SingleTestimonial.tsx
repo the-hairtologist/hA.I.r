@@ -37,15 +37,28 @@ export const SingleTestimonial = () => {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-2.5 xs:gap-3 sm:gap-4">
+        <div className="grid md:grid-cols-2 gap-2.5 xs:gap-3 sm:gap-4" style={{ perspective: '1000px' }}>
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className={`brutal-border bg-white p-3 xs:p-4 brutal-shadow-sm hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 ${
+              className={`brutal-border bg-white p-3 xs:p-4 transition-all duration-300 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
               style={{
                 transitionDelay: `${(index + 2) * 100}ms`,
+                transform: index === 0 ? 'rotateY(-3deg) rotateX(2deg)' : 'rotateY(3deg) rotateX(2deg)',
+                transformStyle: 'preserve-3d',
+                boxShadow: '5px 5px 0px rgba(0,0,0,0.8), 8px 8px 0px rgba(0,0,0,0.4), 11px 11px 0px rgba(0,0,0,0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = index === 0 
+                  ? 'rotateY(-1deg) rotateX(1deg) translateY(-6px) scale(1.02)' 
+                  : 'rotateY(1deg) rotateX(1deg) translateY(-6px) scale(1.02)';
+                e.currentTarget.style.boxShadow = '7px 7px 0px rgba(0,0,0,0.8), 11px 11px 0px rgba(0,0,0,0.4), 15px 15px 0px rgba(0,0,0,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = index === 0 ? 'rotateY(-3deg) rotateX(2deg)' : 'rotateY(3deg) rotateX(2deg)';
+                e.currentTarget.style.boxShadow = '5px 5px 0px rgba(0,0,0,0.8), 8px 8px 0px rgba(0,0,0,0.4), 11px 11px 0px rgba(0,0,0,0.2)';
               }}
             >
               {/* Compact star rating */}

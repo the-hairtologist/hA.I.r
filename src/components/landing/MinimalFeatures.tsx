@@ -144,13 +144,24 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
   return (
       <div
       ref={ref}
-      onMouseEnter={handleHover}
+      onMouseEnter={(e) => {
+        handleHover();
+        e.currentTarget.style.transform = 'rotateY(2deg) rotateX(-2deg) translateY(-8px) scale(1.02)';
+        e.currentTarget.style.boxShadow = '8px 8px 0px rgba(0,0,0,0.8), 12px 12px 0px rgba(0,0,0,0.4), 16px 16px 0px rgba(0,0,0,0.2)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = isVisible ? 'rotateY(0deg) rotateX(0deg) translateY(0) scale(1)' : 'translateY(48px) scale(0.95)';
+        e.currentTarget.style.boxShadow = '4px 4px 0px rgba(0,0,0,1)';
+      }}
       onTouchStart={handleHover}
-      className={`relative overflow-hidden brutal-border ${bgColors[index]} brutal-shadow-sm hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-1 p-4 xs:p-5 sm:p-6 ${
+      className={`relative overflow-hidden brutal-border ${bgColors[index]} brutal-shadow-sm transition-all duration-500 p-4 xs:p-5 sm:p-6 ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
       }`}
       style={{
         transitionDelay: `${index * 200}ms`,
+        perspective: '1000px',
+        transformStyle: 'preserve-3d',
+        boxShadow: '4px 4px 0px rgba(0,0,0,1), 8px 8px 0px rgba(0,0,0,0.3)'
       }}
     >
       {/* Compact animated icon */}

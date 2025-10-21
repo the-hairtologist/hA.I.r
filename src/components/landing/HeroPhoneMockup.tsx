@@ -13,9 +13,24 @@ export const HeroPhoneMockup = () => {
   }, []);
 
   return (
-    <div ref={ref} className={`relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto mt-6 xs:mt-10 sm:mt-12 transition-all duration-700 ${animationsEnabled && isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div ref={ref} className={`relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto mt-6 xs:mt-10 sm:mt-12 transition-all duration-700 ${animationsEnabled && isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ perspective: '1500px' }}>
       {/* Phone Frame - Enhanced Brutal Style */}
-      <div className="relative brutal-border bg-white brutal-shadow-lg rounded-[32px] overflow-hidden transform hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300">
+      <div 
+        className="relative brutal-border bg-white rounded-[32px] overflow-hidden transition-all duration-500"
+        style={{
+          transform: 'rotateY(-5deg) rotateX(8deg)',
+          transformStyle: 'preserve-3d',
+          boxShadow: '12px 12px 0px rgba(0,0,0,0.8), 18px 18px 0px rgba(0,0,0,0.4), 24px 24px 0px rgba(0,0,0,0.2)'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'rotateY(-2deg) rotateX(5deg) translateY(-8px) scale(1.02)';
+          e.currentTarget.style.boxShadow = '16px 16px 0px rgba(0,0,0,0.8), 24px 24px 0px rgba(0,0,0,0.4), 32px 32px 0px rgba(0,0,0,0.2)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'rotateY(-5deg) rotateX(8deg)';
+          e.currentTarget.style.boxShadow = '12px 12px 0px rgba(0,0,0,0.8), 18px 18px 0px rgba(0,0,0,0.4), 24px 24px 0px rgba(0,0,0,0.2)';
+        }}
+      >
         {/* Phone Notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-10"></div>
         
