@@ -190,9 +190,8 @@ export const MinimalFeatures = () => {
   const header = {
     title: (
       <>
-        YOU BRING THE ART.
-        <br />
-        hA.I.r WILL DO THE REST!
+        <span className="block mb-1 xs:mb-1.5 sm:mb-2">YOU BRING THE ART.</span>
+        <span className="block">hA.I.r WILL DO THE REST!</span>
       </>
     ),
     subtitle: "No more juggling. Just clients, color, and calm.",
