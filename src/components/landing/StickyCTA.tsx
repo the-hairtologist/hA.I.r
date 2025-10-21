@@ -71,13 +71,13 @@ export const StickyCTA = ({ ctaText }: StickyCTAProps) => {
         <div className="flex items-center gap-2">
           <Button
             onClick={handleClick}
-            className="font-pixel text-xs xs:text-sm uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 rounded-none h-10 px-6 py-2"
+            className="font-pixel text-xs xs:text-sm uppercase bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 rounded-none h-10 px-6 py-2"
           >
             {ctaText}
           </Button>
           <button
             onClick={handleDismiss}
-            className="w-8 h-8 border-[2px] border-black rounded-full bg-background flex items-center justify-center hover:bg-background/90 transition-colors flex-shrink-0"
+            className="flex items-center justify-center hover:opacity-70 transition-opacity flex-shrink-0"
             aria-label="Dismiss sticky CTA"
           >
             <X className="h-4 w-4" />
