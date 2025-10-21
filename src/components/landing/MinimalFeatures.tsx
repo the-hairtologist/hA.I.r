@@ -188,8 +188,8 @@ export const MinimalFeatures = () => {
   const features = featuresA;
   
   const header = {
-    title: "THE PROBLEMS WE SOLVE",
-    subtitle: "Stop the chaos. Reclaim your time.",
+    title: "YOU BRING THE ART. hA.I.r WILL DO THE REST.",
+    subtitle: "No more juggling. Just clients, color, and calm.",
   };
   
   return (
