@@ -47,7 +47,7 @@ export const FinalValueProp = () => {
             <span className="font-pixel text-xs xs:text-sm text-accent-foreground uppercase">REAL RESULTS</span>
           </div>
           
-          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-accent mb-3 uppercase tracking-wider leading-tight">
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground mb-3 uppercase tracking-wider leading-tight">
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
@@ -56,13 +56,13 @@ export const FinalValueProp = () => {
           </p>
         </div>
 
-        {/* Animated Counters with black/yellow theme */}
+        {/* Animated Counters with rotating colors */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 xxs:gap-5 xs:gap-6 sm:gap-8 max-w-5xl mx-auto mb-10 xs:mb-12">
           <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '0ms' }}>
             <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
           </div>
           <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '100ms' }}>
-            <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-white" borderColor="border-black" textColor="text-black" />
+            <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-accent" borderColor="border-white" textColor="text-white" />
           </div>
           <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '200ms' }}>
             <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-white" borderColor="border-black" textColor="text-black" />
@@ -72,18 +72,20 @@ export const FinalValueProp = () => {
           </div>
         </div>
 
-        {/* Benefit Cards with consistent yellow/black theme */}
+        {/* Benefit Cards with rotating colored borders */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8 max-w-6xl mx-auto">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
-            // Alternate between yellow and white backgrounds with black icons
-            const iconBgColors = ['bg-secondary', 'bg-white', 'bg-secondary', 'bg-white'];
-            const statColors = ['text-secondary', 'text-accent', 'text-secondary', 'text-accent'];
+            // Rotate through brand colors for borders and icon backgrounds
+            const borderColors = ['border-secondary', 'border-accent', 'border-white', 'border-secondary'];
+            const iconBgColors = ['bg-primary', 'bg-accent', 'bg-secondary', 'bg-primary'];
+            const iconTextColors = ['text-white', 'text-white', 'text-black', 'text-white'];
+            const statColors = ['text-secondary', 'text-accent', 'text-primary', 'text-secondary'];
             
             return (
               <div
                 key={index}
-                className={`border-[3px] border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 p-6 text-center min-h-[180px] ${
+                className={`border-[3px] ${borderColors[index]} bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 p-6 text-center min-h-[180px] ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{
@@ -91,7 +93,7 @@ export const FinalValueProp = () => {
                 }}
               >
                 <div className={`w-14 h-14 border-[3px] border-black ${iconBgColors[index]} flex items-center justify-center mx-auto mb-4`}>
-                  <Icon className="h-7 w-7 text-black" strokeWidth={2.5} />
+                  <Icon className={`h-7 w-7 ${iconTextColors[index]}`} strokeWidth={2.5} />
                 </div>
 
                 <div className={`font-pixel text-3xl xs:text-4xl ${statColors[index]} mb-2`}>
