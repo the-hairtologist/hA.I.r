@@ -79,7 +79,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-2 xxs:py-3 xs:py-4 sm:py-6 overflow-hidden flex items-center" style={{
+        <section className="relative bg-primary py-1.5 xxs:py-2 xs:py-3 sm:py-4 overflow-hidden flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -87,26 +87,26 @@ const Index = () => {
           backgroundSize: '8px 8px'
         }}>
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
-            <div className="max-w-4xl mx-auto space-y-2 xxs:space-y-3 xs:space-y-4">
+            <div className="max-w-4xl mx-auto space-y-1.5 xxs:space-y-2 xs:space-y-3 sm:space-y-4">
               {/* Icons */}
-              <div className="flex justify-center gap-4 xs:gap-6 mb-3 xs:mb-4 animate-fade-in">
+              <div className="flex justify-center gap-3 xs:gap-4 sm:gap-5 mb-2 xs:mb-3 sm:mb-4 animate-fade-in">
                 <div 
-                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
+                  className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0s' }}
                 >
-                  <Sparkles className="h-6 w-6 xs:h-8 xs:w-8 text-white" strokeWidth={2.5} />
+                  <Sparkles className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} />
                 </div>
                 <div 
-                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md"
+                  className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0.1s' }}
                 >
-                  <Zap className="h-6 w-6 xs:h-8 xs:w-8 text-black" strokeWidth={2.5} fill="black" />
+                  <Zap className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-black" strokeWidth={2.5} fill="black" />
                 </div>
                 <div 
-                  className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md"
+                  className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0.2s' }}
                 >
-                  <Heart className="h-6 w-6 xs:h-8 xs:w-8 text-white" strokeWidth={2.5} fill="white" />
+                  <Heart className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} fill="white" />
                 </div>
               </div>
               
@@ -125,7 +125,7 @@ const Index = () => {
                 Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
               </p>
               
-              <div className="pt-1 xs:pt-2 sm:pt-3 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
+              <div className="pt-1 xs:pt-1.5 sm:pt-2 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
                 <Button 
                   size="lg" 
                   onClick={() => {
@@ -144,9 +144,9 @@ const Index = () => {
               </p>
 
               {/* Product Demo Mockup - Lazy loaded for performance */}
-              <div className="mt-2 xs:mt-3 sm:mt-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
+              <div className="mt-1.5 xs:mt-2 sm:mt-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Suspense fallback={
-                  <div className="relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
+                  <div className="relative w-full max-w-[180px] xs:max-w-[220px] sm:max-w-[280px] md:max-w-[320px] mx-auto h-[400px] xs:h-[450px] sm:h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
                 }>
                   <div data-debug-element="phone-mockup-loaded">
                     <HeroPhoneMockup />
@@ -155,7 +155,7 @@ const Index = () => {
               </div>
               
               {/* Animated Counters - Social Proof */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-2 xs:pt-3 sm:pt-4 animate-fade-in" style={{ animationDelay: '500ms' }}>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 xxs:gap-2 xs:gap-3 sm:gap-4 max-w-4xl mx-auto pt-1.5 xs:pt-2 sm:pt-3 animate-fade-in" style={{ animationDelay: '500ms' }}>
                 <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
