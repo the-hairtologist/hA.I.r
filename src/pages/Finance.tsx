@@ -77,7 +77,7 @@ const Finance = () => {
       const [paymentsData, commissionsData, brandsData, codesData] = await Promise.all([
         getPaymentsByStylist(stylist.id),
         getCommissionsByStylist(stylist.id),
-        supabase.from("hair_brands").select("id, name, logo_url, discount_percentage").eq("is_active", true).then(r => r.data),
+        supabase.from("hair_brands").select("id, name, logo_url, base_commission_rate").eq("is_active", true).then(r => r.data),
         getAffiliateCodesByStylist(stylist.id)
       ]);
 
