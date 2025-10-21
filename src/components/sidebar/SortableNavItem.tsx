@@ -4,6 +4,7 @@ import { useLocation, NavLink } from "react-router-dom";
 import { ChevronDown, GripVertical } from "lucide-react";
 import { NavigationItem } from "@/config/navigationConfig";
 import { NotificationDot } from "@/components/NotificationDot";
+import { usePrefetch } from "@/hooks/usePrefetch";
 import {
   SidebarMenuButton,
   SidebarMenuItem,
@@ -32,6 +33,7 @@ export function SortableNavItem({
   notificationCount,
 }: SortableNavItemProps) {
   const location = useLocation();
+  const { prefetchRelated } = usePrefetch();
   const {
     attributes,
     listeners,
@@ -54,6 +56,13 @@ export function SortableNavItem({
     location.pathname + location.hash === child.url || location.pathname === child.url.split('#')[0]
   );
 
+  // Smart prefetch on hover
+  const handleMouseEnter = () => {
+    if (!isEditMode) {
+      prefetchRelated(item.url, 'user-id'); // Will prefetch related data
+    }
+  };
+
   return (
     <SidebarMenuItem ref={setNodeRef} style={style}>
       <SidebarMenuButton 
@@ -64,6 +73,7 @@ export function SortableNavItem({
           e.preventDefault();
           toggleExpanded(item.id);
         } : undefined}
+        onMouseEnter={handleMouseEnter}
       >
         {hasChildren ? (
           <div className={`flex items-center gap-3 w-full cursor-pointer transition-colors duration-200 px-2 py-2 rounded-md ${
@@ -115,7 +125,11 @@ export function SortableNavItem({
             )}
           </div>
         ) : (
-          <NavLink to={item.url} className={getNavClassName}>
+          <NavLink 
+            to={item.url} 
+            className={getNavClassName}
+            onMouseEnter={handleMouseEnter}
+          >
             {isEditMode && !collapsed && (
               <div
                 {...attributes}

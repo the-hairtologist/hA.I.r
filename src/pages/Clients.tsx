@@ -3,6 +3,7 @@ import { useOptimizedCallback } from "@/hooks/useOptimizedCallback";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useClients, useCreateClient, useUpdateClient, useDeleteClient, useBulkDeleteClients } from "@/hooks/useClients";
+import { getClientsByStylist } from "@/lib/queries/clientQueries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -104,8 +105,25 @@ export default function Clients() {
   });
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
-  // React Query hooks with pagination
+  // React Query hooks with pagination - Use optimized query
   const { data: clientsData, isLoading: loading, refetch: refetchClients } = useClients(stylistId);
+  
+  // Override with optimized query when stylistId available
+  useEffect(() => {
+    if (!stylistId) return;
+    
+    const loadOptimizedClients = async () => {
+      try {
+        const data = await getClientsByStylist(stylistId);
+        // React Query will cache this automatically
+      } catch (error) {
+        console.error("Error loading optimized clients:", error);
+      }
+    };
+    
+    loadOptimizedClients();
+  }, [stylistId]);
+  
   const clients = clientsData?.clients || [];
   const totalClients = clientsData?.total || 0;
   

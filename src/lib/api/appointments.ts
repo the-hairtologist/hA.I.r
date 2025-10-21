@@ -6,6 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { trackSelect, trackInsert, trackUpdate, trackDelete } from "@/lib/logging/supabaseTracker";
 import { logger } from "@/lib/logging/productionLogger";
+import { getAppointmentsByStylist, getAppointmentsByClient } from "@/lib/queries/appointmentQueries";
 
 export interface Appointment {
   id: string;
@@ -38,6 +39,7 @@ export interface UpdateAppointmentData extends Partial<CreateAppointmentData> {
 
 /**
  * Fetch appointments for a stylist (paginated)
+ * Now uses optimized query with request deduplication
  */
 export const fetchAppointmentsByStylist = async (
   stylistId: string,
@@ -46,26 +48,15 @@ export const fetchAppointmentsByStylist = async (
 ): Promise<{ appointments: Appointment[]; total: number }> => {
   return trackSelect(
     async () => {
+      // Use optimized query with deduplication
+      const data = await getAppointmentsByStylist(stylistId);
+      
+      // Apply pagination in-memory for now
       const from = (page - 1) * limit;
-      const to = from + limit - 1;
+      const to = from + limit;
+      const paginatedData = data.slice(from, to);
 
-      const { data, error, count } = await supabase
-        .from("appointments")
-        .select(`
-          *,
-          client_profiles!client_id (
-            id,
-            full_name,
-            email,
-            phone
-          )
-        `, { count: 'exact' })
-        .eq("stylist_id", stylistId)
-        .order("appointment_date", { ascending: true })
-        .range(from, to);
-
-      if (error) throw error;
-      return { appointments: data || [], total: count || 0 };
+      return { appointments: paginatedData || [], total: data.length || 0 };
     },
     "appointments",
     "AppointmentAPI.fetchByStylist"
@@ -74,17 +65,13 @@ export const fetchAppointmentsByStylist = async (
 
 /**
  * Fetch appointments for a client
+ * Now uses optimized query with request deduplication
  */
 export const fetchAppointmentsByClient = async (clientId: string): Promise<Appointment[]> => {
   return trackSelect(
     async () => {
-      const { data, error } = await supabase
-        .from("appointments")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("appointment_date", { ascending: false });
-
-      if (error) throw error;
+      // Use optimized query with deduplication
+      const data = await getAppointmentsByClient(clientId);
       return data || [];
     },
     "appointments",
