@@ -1,4 +1,4 @@
-import { Scissors } from "lucide-react";
+import { Scissors, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const MinimalFooter = () => {
@@ -12,8 +12,8 @@ export const MinimalFooter = () => {
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-5 sm:py-6">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3">
+      <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-3 xs:py-3.5 sm:py-4">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2">
           {/* Logo + Copyright */}
           <div className="flex items-center gap-2 xs:gap-2.5 sm:pr-4">
             <div className="w-8 h-8 xs:w-9 xs:h-9 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
@@ -27,9 +27,9 @@ export const MinimalFooter = () => {
           <div className="w-full sm:w-px h-px sm:h-auto sm:min-h-[60px] bg-secondary/20" />
 
           {/* Links + Disclaimer */}
-          <div className="flex-1 flex flex-col gap-2 sm:pl-4">
+          <div className="flex-1 flex flex-col gap-1.5 sm:pl-4">
             {/* Essential Links */}
-            <div className="flex flex-wrap justify-center sm:justify-start gap-3 xs:gap-4 sm:gap-5 text-sm xs:text-base font-sans">
+            <div className="flex flex-wrap justify-center sm:justify-start gap-2 xs:gap-3 sm:gap-4 text-sm xs:text-base font-sans">
               <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
                 Terms
               </button>
@@ -41,10 +41,16 @@ export const MinimalFooter = () => {
               </a>
             </div>
 
-            {/* Legal Disclaimer */}
-            <p className="text-xs xs:text-sm font-sans text-background/70 leading-relaxed text-center sm:text-left">
-              Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
-            </p>
+            {/* Collapsible Legal Disclaimer */}
+            <details className="group">
+              <summary className="flex items-center gap-1.5 text-xs font-sans text-background/70 hover:text-background/90 cursor-pointer transition-colors min-h-[44px] px-2 -mx-2 list-none focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
+                <ChevronDown className="h-3 w-3 transition-transform group-open:rotate-180" />
+                <span>Legal</span>
+              </summary>
+              <p className="text-xs font-sans text-background/70 leading-relaxed mt-1.5 px-2">
+                Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
+              </p>
+            </details>
           </div>
         </div>
       </div>
