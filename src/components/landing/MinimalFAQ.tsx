@@ -41,43 +41,51 @@ export const MinimalFAQ = () => {
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-2xl mx-auto">
         <div className={`text-center mb-12 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-accent-foreground uppercase tracking-wider">
+          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
             THE REAL QUESTIONS YOU'RE ASKING
           </h2>
-          <p className="font-sans text-sm xs:text-base text-accent-foreground/80 max-w-2xl mx-auto">
+          <p className="font-sans text-sm xs:text-base text-foreground/70 max-w-2xl mx-auto">
             No fluff. Just honest answers.
           </p>
         </div>
 
         <div className="space-y-6">
-          {faqs.map((faq, index) => (
-            <div 
-              key={faq.question} 
-              className={`brutal-border bg-card hover:brutal-shadow transition-all duration-300 hover:translate-x-1 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`}
-              style={{
-                transitionDelay: `${index * 100}ms`,
-              }}
-            >
-              <details className="group" onClick={() => handleFAQClick(faq.question)}>
-                <summary className="cursor-pointer list-none p-4 font-bold text-foreground hover:bg-secondary/10 transition-colors duration-200 flex justify-between items-center">
-                  <span className="font-sans text-sm sm:text-base">{faq.question}</span>
-                  <span className="font-pixel text-xl group-open:rotate-90 transition-transform duration-300">▶</span>
-                </summary>
-                <div className="px-4 pb-4 border-t-2 border-border pt-4 bg-muted/30">
-                  <p className="font-sans text-sm text-muted-foreground">{faq.answer}</p>
-                </div>
-              </details>
-            </div>
-          ))}
+          {faqs.map((faq, index) => {
+            // Rotate through brand colors for visual variety
+            const colors = ['border-primary', 'border-accent', 'border-secondary'];
+            const bgColors = ['bg-primary/5', 'bg-accent/5', 'bg-secondary/5'];
+            const accentColors = ['text-primary', 'text-accent', 'text-secondary'];
+            const colorIndex = index % 3;
+            
+            return (
+              <div 
+                key={faq.question} 
+                className={`brutal-border-4 ${colors[colorIndex]} ${bgColors[colorIndex]} hover:brutal-shadow transition-all duration-300 hover:translate-x-1 ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                }`}
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                }}
+              >
+                <details className="group" onClick={() => handleFAQClick(faq.question)}>
+                  <summary className="cursor-pointer list-none p-4 xs:p-5 font-bold text-foreground hover:bg-white/50 transition-colors duration-200 flex justify-between items-center gap-4">
+                    <span className="font-sans text-sm sm:text-base">{faq.question}</span>
+                    <span className={`font-pixel text-xl ${accentColors[colorIndex]} group-open:rotate-90 transition-transform duration-300 flex-shrink-0`}>▶</span>
+                  </summary>
+                  <div className={`px-4 xs:px-5 pb-4 xs:pb-5 border-t-4 ${colors[colorIndex]} pt-4`}>
+                    <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">{faq.answer}</p>
+                  </div>
+                </details>
+              </div>
+            );
+          })}
         </div>
 
         <div className="text-center mt-12">
-          <p className="text-accent-foreground/80 mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
+          <p className="text-foreground/70 mb-4 font-sans text-sm xs:text-base font-bold">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
-            className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-card px-6 xs:px-8 py-3 xs:py-4 inline-block brutal-shadow hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300"
+            className="font-pixel text-xs xs:text-sm text-white hover:text-white uppercase brutal-border-4 border-black bg-primary px-6 xs:px-8 py-3 xs:py-4 inline-block brutal-shadow-md hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300"
           >
             Contact Support
           </a>
