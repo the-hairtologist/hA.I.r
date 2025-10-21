@@ -113,8 +113,23 @@ export const FinalValueProp = () => {
         </div>
 
         <div className={`mt-10 xs:mt-12 text-center transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '800ms' }}>
-          <div className="inline-block border-[3px] border-black bg-accent px-6 xs:px-8 py-4 xs:py-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <p className="font-sans text-sm xs:text-base text-white leading-relaxed">
+          <div className="inline-block border-[4px] border-black bg-accent px-6 xs:px-8 py-4 xs:py-5 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            {/* Decorative pattern overlay */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: `
+                linear-gradient(45deg, transparent 48%, rgba(0,0,0,0.1) 49%, rgba(0,0,0,0.1) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(0,0,0,0.1) 49%, rgba(0,0,0,0.1) 51%, transparent 52%)
+              `,
+              backgroundSize: '12px 12px'
+            }}></div>
+            
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 w-3 h-3 bg-secondary border-r-2 border-b-2 border-black"></div>
+            <div className="absolute top-0 right-0 w-3 h-3 bg-secondary border-l-2 border-b-2 border-black"></div>
+            <div className="absolute bottom-0 left-0 w-3 h-3 bg-secondary border-r-2 border-t-2 border-black"></div>
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-secondary border-l-2 border-t-2 border-black"></div>
+            
+            <p className="font-sans text-sm xs:text-base text-white leading-relaxed relative z-10">
               <span className="font-bold text-secondary">That's the difference</span> between managing chaos and running a thriving salon.
             </p>
           </div>
