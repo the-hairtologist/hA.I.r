@@ -123,11 +123,11 @@ export const FinalValueProp = () => {
               backgroundSize: '12px 12px'
             }}></div>
             
-            {/* Corner accents */}
-            <div className="absolute top-0 left-0 w-3 h-3 bg-secondary border-r-2 border-b-2 border-black"></div>
-            <div className="absolute top-0 right-0 w-3 h-3 bg-secondary border-l-2 border-b-2 border-black"></div>
-            <div className="absolute bottom-0 left-0 w-3 h-3 bg-secondary border-r-2 border-t-2 border-black"></div>
-            <div className="absolute bottom-0 right-0 w-3 h-3 bg-secondary border-l-2 border-t-2 border-black"></div>
+            {/* Sparkle animations */}
+            <div className="absolute -top-1 -left-1 w-2 h-2 bg-secondary animate-ping" style={{ animationDuration: '2s' }}></div>
+            <div className="absolute -top-1 -right-1 w-2 h-2 bg-secondary animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }}></div>
+            <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-secondary animate-ping" style={{ animationDuration: '2.2s', animationDelay: '1s' }}></div>
+            <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-secondary animate-ping" style={{ animationDuration: '2.8s', animationDelay: '1.5s' }}></div>
             
             <p className="font-sans text-sm xs:text-base text-white leading-relaxed relative z-10">
               <span className="font-bold text-secondary">That's the difference</span> between managing chaos and running a thriving salon.
