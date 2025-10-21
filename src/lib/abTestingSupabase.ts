@@ -6,7 +6,13 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/productionLogger";
 
-export type Variant = 'A' | 'B';
+export type Variant = 'A' | 'B' | 'C';
+
+interface IconConfig {
+  icon: string;
+  color: string;
+  delay: string;
+}
 
 interface VariantConfig {
   hero: {
@@ -17,6 +23,7 @@ interface VariantConfig {
     primary: string;
     secondary: string;
   };
+  icons?: IconConfig[];
 }
 
 // Variant A: Pain-focused (STOP THE PROBLEM)
@@ -43,7 +50,24 @@ const VARIANT_B: VariantConfig = {
   },
 };
 
-export const VARIANTS = { A: VARIANT_A, B: VARIANT_B };
+// Variant C: Visual-first with animated icons
+const VARIANT_C: VariantConfig = {
+  hero: {
+    headline: "YOUR SALON, SIMPLIFIED",
+    subheadline: "Smart scheduling, automated reminders, happy clients—all in one tap",
+  },
+  cta: {
+    primary: "GET STARTED FREE",
+    secondary: "✓ No Setup Fees • ✓ 14-Day Trial • ✓ Cancel Anytime",
+  },
+  icons: [
+    { icon: 'Sparkles', color: 'bg-accent', delay: '0s' },
+    { icon: 'Zap', color: 'bg-secondary', delay: '0.1s' },
+    { icon: 'Heart', color: 'bg-white', delay: '0.2s' },
+  ],
+};
+
+export const VARIANTS = { A: VARIANT_A, B: VARIANT_B, C: VARIANT_C };
 
 const EXPERIMENT_ID_KEY = 'hair_experiment_id';
 const VISITOR_ID_KEY = 'hair_visitor_id';
@@ -106,13 +130,21 @@ async function getActiveExperiment(): Promise<string | null> {
  * Get or assign user to a variant
  */
 export async function getVariant(): Promise<Variant> {
-  logger.info('[abTestingSupabase] getVariant() called', { context: 'A/B Testing' });
+  logger.info('[abTestingSupabase] getVariant() called - SESSION-BASED MODE', { context: 'A/B Testing' });
   
-  // Check if already assigned
-  const cached = localStorage.getItem(ASSIGNED_VARIANT_KEY);
-  if (cached === 'A' || cached === 'B') {
-    logger.info(`[abTestingSupabase] Using cached variant: ${cached}`, { context: 'A/B Testing' });
-    return cached as Variant;
+  // Check sessionStorage first (persists only for current tab session)
+  const sessionCached = sessionStorage.getItem(ASSIGNED_VARIANT_KEY);
+  if (sessionCached === 'A' || sessionCached === 'B' || sessionCached === 'C') {
+    logger.info(`[abTestingSupabase] Using session-cached variant: ${sessionCached}`, { context: 'A/B Testing' });
+    return sessionCached as Variant;
+  }
+
+  // If not in session, check localStorage (for returning visitors)
+  const localCached = localStorage.getItem(ASSIGNED_VARIANT_KEY);
+  if (localCached === 'A' || localCached === 'B' || localCached === 'C') {
+    logger.info(`[abTestingSupabase] Found localStorage variant, copying to session: ${localCached}`, { context: 'A/B Testing' });
+    sessionStorage.setItem(ASSIGNED_VARIANT_KEY, localCached);
+    return localCached as Variant;
   }
 
   logger.info('[abTestingSupabase] No cache found, fetching from DB', { context: 'A/B Testing' });
@@ -172,7 +204,7 @@ export async function getVariant(): Promise<Variant> {
 
     logger.info(`[abTestingSupabase] Found ${variants.length} variants, randomly assigning...`, { context: 'A/B Testing' });
 
-    // Randomly assign variant (50/50 split)
+    // Randomly assign variant (33.3% split for A/B/C)
     const assignedVariant = (variants as any)[Math.floor(Math.random() * variants.length)];
     const variantKey = (assignedVariant as any).variant_key as Variant;
 
@@ -187,8 +219,9 @@ export async function getVariant(): Promise<Variant> {
         visitor_id: visitorId,
       } as any);
 
+    sessionStorage.setItem(ASSIGNED_VARIANT_KEY, variantKey);
     localStorage.setItem(ASSIGNED_VARIANT_KEY, variantKey);
-    logger.info(`[abTestingSupabase] Stored assignment in localStorage: ${variantKey}`, { context: 'A/B Testing' });
+    logger.info(`[abTestingSupabase] Stored assignment in session + localStorage: ${variantKey}`, { context: 'A/B Testing' });
     
     // Track initial view
     await trackView(variantKey);
@@ -329,6 +362,7 @@ export async function initializeExperiment(name: string, description: string) {
     const variants = [
       { experiment_id: (experiment as any).id, variant_key: 'A', config: VARIANT_A },
       { experiment_id: (experiment as any).id, variant_key: 'B', config: VARIANT_B },
+      { experiment_id: (experiment as any).id, variant_key: 'C', config: VARIANT_C },
     ];
 
     const { error: varError } = await supabase

@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Scissors, Calendar, Palette, Smartphone } from "lucide-react";
+import { Scissors, Calendar, Palette, Smartphone, Sparkles, Zap, Heart } from "lucide-react";
 import { useABTest } from "@/hooks/useABTest";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
-import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
+
 import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
@@ -87,7 +87,31 @@ const Index = () => {
         }}>
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
             <div className="max-w-4xl mx-auto space-y-4 xxs:space-y-6 xs:space-y-8">
-              <h1 
+              {/* Conditional Icons - Only show for Variant C */}
+              {config.icons && (
+                <div className="flex justify-center gap-4 xs:gap-6 mb-6 xs:mb-8 animate-fade-in">
+                  {config.icons.map((iconConfig, idx) => {
+                    const iconMap: Record<string, any> = {
+                      Sparkles: Sparkles,
+                      Zap: Zap,
+                      Heart: Heart,
+                    };
+                    const IconComponent = iconMap[iconConfig.icon];
+                    
+                    return (
+                      <div 
+                        key={idx}
+                        className={`w-12 h-12 xs:w-16 xs:h-16 brutal-border border-black ${iconConfig.color} flex items-center justify-center animate-bounce`}
+                        style={{ animationDelay: iconConfig.delay }}
+                      >
+                        <IconComponent className={`h-6 w-6 xs:h-8 xs:w-8 ${iconConfig.color === 'bg-white' ? 'text-primary' : 'text-foreground'}`} />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              
+              <h1
                 className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-accent opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-4 break-words"
                 data-debug-element="hero-headline"
               >
@@ -153,16 +177,6 @@ const Index = () => {
           <SingleTestimonial />
         </section>
 
-        {/* FOMO/CTA Section - Bold yellow */}
-        <section className="py-20 bg-secondary" style={{
-          backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
-          `,
-          backgroundSize: '8px 8px'
-        }}>
-          <SimplePricingCTA />
-        </section>
 
         {/* FAQ Section - Blue background */}
         <section className="py-20 bg-accent">
