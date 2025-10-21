@@ -91,12 +91,20 @@ const Index = () => {
               {config.icons && (
                 <div className="flex justify-center gap-4 xs:gap-6 mb-6 xs:mb-8 animate-fade-in">
                   {config.icons.map((iconConfig, idx) => {
-                    const iconMap: Record<string, any> = {
-                      Sparkles: Sparkles,
-                      Zap: Zap,
-                      Heart: Heart,
-                    };
-                    const IconComponent = iconMap[iconConfig.icon];
+                    const iconMap = {
+                      Sparkles,
+                      Zap,
+                      Heart,
+                    } as const;
+                    
+                    type IconName = keyof typeof iconMap;
+                    const IconComponent = iconMap[iconConfig.icon as IconName];
+                    
+                    // Safety check for invalid icon names
+                    if (!IconComponent) {
+                      logger.warn(`Invalid icon: ${iconConfig.icon}`, { context: 'Landing Page' });
+                      return null;
+                    }
                     
                     return (
                       <div 
@@ -112,7 +120,7 @@ const Index = () => {
               )}
               
               <h1
-                className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-accent opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-4 break-words"
+                className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] xs:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] md:drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
                 data-debug-element="hero-headline"
               >
                 {config.hero.headline.split(' ').map((word, i, arr) => (
