@@ -11,7 +11,7 @@ export const SimplePricingCTA = () => {
     <div className="container mx-auto px-4" ref={ref}>
       <div className={`max-w-4xl mx-auto text-center transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
         <div className="mb-10">
-          <div className="flex justify-center gap-6 mb-8">
+          <div className="flex justify-center gap-6 mb-5">
             <div className="w-16 h-16 border-4 border-black bg-accent flex items-center justify-center animate-bounce">
               <Sparkles className="h-8 w-8 text-accent-foreground" />
             </div>
