@@ -179,7 +179,7 @@ const Index = () => {
           <ScrollIndicator />
         </section>
 
-        {/* How It Works + Testimonials - Combined Section */}
+        {/* How It Works - Featured prominently */}
         <section className="py-8 xs:py-10 sm:py-12 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
@@ -188,14 +188,9 @@ const Index = () => {
           backgroundSize: '8px 8px'
         }}>
           <MinimalFeatures />
-          
-          {/* Testimonials integrated */}
-          <div className="mt-8 xs:mt-10 sm:mt-12">
-            <SingleTestimonial />
-          </div>
         </section>
 
-        {/* FAQ Section - Yellow background with white boxes */}
+        {/* Testimonials + FAQ Section - Combined */}
         <section className="py-8 xs:py-10 sm:py-12 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
@@ -203,7 +198,12 @@ const Index = () => {
           `,
           backgroundSize: '8px 8px'
         }}>
-          <MinimalFAQ />
+          <SingleTestimonial />
+          
+          {/* FAQ integrated below */}
+          <div className="mt-12 xs:mt-16">
+            <MinimalFAQ />
+          </div>
         </section>
       </main>
 
