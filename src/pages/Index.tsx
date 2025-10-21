@@ -171,7 +171,7 @@ const Index = () => {
         </section>
 
         {/* How It Works - Clean white background */}
-        <section className="py-20 bg-background" style={{
+        <section className="py-14 xs:py-16 sm:py-18 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
@@ -182,43 +182,22 @@ const Index = () => {
         </section>
 
         {/* Testimonial Section - Blue background */}
-        <section className="py-20 bg-accent">
+        <section className="py-14 xs:py-16 sm:py-18 bg-accent">
           <SingleTestimonial />
         </section>
 
-
-        {/* FAQ Section - Blue background */}
-        <section className="py-20 bg-accent">
+        {/* FAQ Section - White background for contrast */}
+        <section className="py-14 xs:py-16 sm:py-18 bg-background" style={{
+          backgroundImage: `
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
+          `,
+          backgroundSize: '8px 8px'
+        }}>
           <MinimalFAQ />
         </section>
 
-        {/* Stats Section - Yellow background for excitement */}
-        <section className="py-10 xs:py-12 sm:py-14 md:py-16 bg-accent brutal-border border-black" style={{
-        backgroundImage: `
-          linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-          linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
-        `,
-        backgroundSize: '8px 8px'
-      }}>
-        <div className="container mx-auto px-4 xs:px-5 sm:px-6">
-          <div className="text-center mb-8 xs:mb-10 sm:mb-12">
-            <div className="inline-block brutal-border border-black bg-secondary px-4 xs:px-6 py-2 xs:py-3 brutal-shadow-sm mb-4 xs:mb-6">
-              <span className="font-pixel text-xs xs:text-sm text-secondary-foreground uppercase">REAL RESULTS</span>
-            </div>
-            <h2 className="font-pixel text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl text-accent-foreground uppercase tracking-wide xs:tracking-wider px-2 xs:px-4 leading-tight break-words">
-              STYLISTS USING hA.I.r<br className="xs:hidden" /><span className="hidden xs:inline"> </span>CUT ADMIN TIME BY 40%
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 xxs:gap-5 xs:gap-6 sm:gap-8 md:gap-10 lg:gap-12 max-w-5xl mx-auto">
-            <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" />
-            <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" />
-            <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" />
-            <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} />
-          </div>
-        </div>
-        </section>
-
-        {/* Final Value Proposition */}
+        {/* Unified Stats + Benefits Section */}
         <FinalValueProp />
       </main>
 

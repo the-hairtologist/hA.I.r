@@ -1,5 +1,6 @@
-import { Clock, DollarSign, Users, TrendingUp } from "lucide-react";
+import { Clock, DollarSign, Users, TrendingUp, Scissors, Calendar, Palette, Smartphone } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 
 const benefits = [
   {
@@ -32,7 +33,7 @@ export const FinalValueProp = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
 
   return (
-    <section className="py-16 xs:py-20 sm:py-24 bg-primary relative overflow-hidden" style={{
+    <section className="py-12 xs:py-14 sm:py-16 bg-primary relative overflow-hidden" style={{
       backgroundImage: `
         linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
         linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -40,13 +41,14 @@ export const FinalValueProp = () => {
       backgroundSize: '8px 8px'
     }}>
       <div className="container mx-auto px-4" ref={ref}>
-        <div className={`text-center mb-12 xs:mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        {/* Unified Header */}
+        <div className={`text-center mb-10 xs:mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-block border-[3px] border-black bg-accent px-4 xs:px-6 py-2 xs:py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-4 xs:mb-6">
-            <span className="font-pixel text-xs xs:text-sm text-accent-foreground uppercase">THE NUMBERS DON'T LIE</span>
+            <span className="font-pixel text-xs xs:text-sm text-accent-foreground uppercase">REAL RESULTS</span>
           </div>
           
-          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl md:text-4xl text-primary-foreground mb-4 uppercase tracking-wider leading-tight">
-            WHAT YOU'LL ACTUALLY GET
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground mb-3 uppercase tracking-wider leading-tight">
+            STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
           <p className="font-sans text-sm xs:text-base sm:text-lg text-primary-foreground/90 max-w-2xl mx-auto">
@@ -54,17 +56,26 @@ export const FinalValueProp = () => {
           </p>
         </div>
 
+        {/* Animated Counters */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 xxs:gap-5 xs:gap-6 sm:gap-8 max-w-5xl mx-auto mb-10 xs:mb-12">
+          <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" />
+          <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" />
+          <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" />
+          <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} />
+        </div>
+
+        {/* Benefit Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8 max-w-6xl mx-auto">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (
               <div
                 key={index}
-                className={`border-[3px] border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 p-6 text-center ${
+                className={`border-[3px] border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 p-6 text-center min-h-[180px] ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 }`}
                 style={{
-                  transitionDelay: `${index * 100}ms`,
+                  transitionDelay: `${(index + 4) * 100}ms`,
                 }}
               >
                 <div className="w-14 h-14 border-[3px] border-black bg-secondary flex items-center justify-center mx-auto mb-4">
@@ -87,7 +98,7 @@ export const FinalValueProp = () => {
           })}
         </div>
 
-        <div className={`mt-12 xs:mt-16 text-center transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '400ms' }}>
+        <div className={`mt-10 xs:mt-12 text-center transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '800ms' }}>
           <div className="inline-block border-[3px] border-black bg-secondary/20 backdrop-blur-sm px-6 xs:px-8 py-4 xs:py-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <p className="font-sans text-sm xs:text-base text-primary-foreground leading-relaxed">
               <span className="font-bold text-accent">That's the difference</span> between managing chaos and running a thriving salon.
