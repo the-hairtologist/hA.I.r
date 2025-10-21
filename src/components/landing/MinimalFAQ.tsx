@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { analytics } from "@/lib/analytics";
+import { SingleTestimonial } from "./SingleTestimonial";
 
 const faqs = [
   {
@@ -79,6 +80,11 @@ export const MinimalFAQ = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Testimonials */}
+        <div className="mt-12 xs:mt-16">
+          <SingleTestimonial />
         </div>
 
         {/* Contact CTA */}
