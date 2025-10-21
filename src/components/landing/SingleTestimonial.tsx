@@ -66,7 +66,7 @@ export const SingleTestimonial = () => {
               </div>
               
               {/* Quote - more compact */}
-              <p className="text-xs xs:text-sm font-sans text-foreground leading-snug mb-3">
+              <p className="text-[11px] xs:text-xs sm:text-sm font-sans text-foreground leading-snug mb-3">
                 "{testimonial.quote}"
               </p>
               
@@ -76,8 +76,8 @@ export const SingleTestimonial = () => {
                   <span className="font-pixel text-accent-foreground text-[10px]">{testimonial.initials}</span>
                 </div>
                 <div>
-                  <div className="font-pixel text-[10px] xs:text-xs text-foreground">{testimonial.author}</div>
-                  <div className="font-sans text-[10px] xs:text-xs text-muted-foreground">{testimonial.role}</div>
+                  <div className="font-pixel text-[10px] xs:text-[11px] sm:text-xs text-foreground">{testimonial.author}</div>
+                  <div className="font-sans text-[10px] xs:text-[11px] text-muted-foreground">{testimonial.role}</div>
                 </div>
               </div>
             </div>

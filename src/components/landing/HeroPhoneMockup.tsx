@@ -13,7 +13,7 @@ export const HeroPhoneMockup = () => {
   }, []);
 
   return (
-    <div ref={ref} className={`relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto mt-8 xs:mt-12 transition-all duration-700 ${animationsEnabled && isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div ref={ref} className={`relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto mt-6 xs:mt-10 sm:mt-12 transition-all duration-700 ${animationsEnabled && isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
       {/* Phone Frame - Enhanced Brutal Style */}
       <div className="relative border-[4px] border-black bg-white shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-[32px] overflow-hidden transform hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300">
         {/* Phone Notch */}
@@ -41,7 +41,7 @@ export const HeroPhoneMockup = () => {
           {/* Notification Cards - Enhanced with Animations */}
           <div className="space-y-3">
             {/* New Booking with Success Icon */}
-            <div className="border-[3px] border-black bg-gradient-to-br from-secondary to-secondary/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in transform hover:scale-105 transition-transform duration-200 cursor-pointer" style={{ animationDelay: '400ms' }}>
+            <div className="border-[3px] border-black bg-gradient-to-br from-secondary to-secondary/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 border-[2px] border-black bg-accent flex items-center justify-center flex-shrink-0 relative">
                   <Calendar className="h-4 w-4 text-accent-foreground" />
@@ -59,14 +59,14 @@ export const HeroPhoneMockup = () => {
             </div>
 
             {/* Client Message with Typing Indicator */}
-            <div className="border-[3px] border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in transform hover:scale-105 transition-transform duration-200 cursor-pointer" style={{ animationDelay: '600ms' }}>
+            <div className="border-[3px] border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" style={{ animationDelay: '600ms' }}>
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 border-[2px] border-black bg-primary flex items-center justify-center flex-shrink-0">
                   <MessageSquare className="h-4 w-4 text-primary-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-pixel text-[9px] text-foreground uppercase mb-1">CLIENT MESSAGE</p>
-                  <p className="font-sans text-[10px] text-foreground/90 italic">"Can't wait for my appointment! 💇✨"</p>
+                  <p className="font-sans text-[10px] text-foreground/90 italic">"Can't wait for my appointment!"</p>
                   <p className="font-sans text-[9px] text-muted-foreground">Just now</p>
                 </div>
                 <div className="flex gap-1 items-center">
@@ -78,13 +78,15 @@ export const HeroPhoneMockup = () => {
             </div>
 
             {/* Auto Reminder Success */}
-            <div className="border-[3px] border-black bg-gradient-to-br from-accent to-accent/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in transform hover:scale-105 transition-transform duration-200 cursor-pointer" style={{ animationDelay: '800ms' }}>
+            <div className="border-[3px] border-black bg-gradient-to-br from-accent to-accent/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" style={{ animationDelay: '800ms' }}>
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 border-[2px] border-black bg-secondary flex items-center justify-center flex-shrink-0">
                   <Clock className="h-4 w-4 text-secondary-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-pixel text-[9px] text-accent-foreground uppercase mb-1">AUTO-REMINDERS ✓</p>
+                  <p className="font-pixel text-[9px] text-accent-foreground uppercase mb-1 flex items-center gap-1">
+                    AUTO-REMINDERS <CheckCircle2 className="h-3 w-3" />
+                  </p>
                   <p className="font-sans text-[10px] text-accent-foreground/90">3 clients reminded for tomorrow</p>
                   <p className="font-sans text-[9px] text-accent-foreground/70">All confirmed • 0 no-shows</p>
                 </div>
@@ -121,19 +123,19 @@ export const HeroPhoneMockup = () => {
 
       {/* Floating Success Elements */}
       <div className="absolute -right-4 top-12 animate-bounce" style={{ animationDuration: '3s', animationDelay: '500ms' }}>
-        <div className="w-12 h-12 border-[3px] border-black bg-accent shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rotate-12 hover:rotate-0 transition-transform duration-300">
-          <span className="font-pixel text-accent-foreground text-lg">✓</span>
+        <div className="w-12 h-12 border-[3px] border-black bg-accent shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rotate-12">
+          <CheckCircle2 className="h-6 w-6 text-accent-foreground" />
         </div>
       </div>
 
       <div className="absolute -left-4 top-32 animate-bounce" style={{ animationDuration: '2.5s', animationDelay: '700ms' }}>
-        <div className="w-10 h-10 border-[3px] border-black bg-secondary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center -rotate-12 hover:rotate-0 transition-transform duration-300">
-          <span className="font-pixel text-secondary-foreground text-sm">💬</span>
+        <div className="w-10 h-10 border-[3px] border-black bg-secondary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center -rotate-12">
+          <MessageSquare className="h-5 w-5 text-secondary-foreground" />
         </div>
       </div>
 
       <div className="absolute -right-6 bottom-12 animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '900ms' }}>
-        <div className="w-11 h-11 border-[3px] border-black bg-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rotate-6 hover:rotate-0 transition-transform duration-300">
+        <div className="w-11 h-11 border-[3px] border-black bg-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center rotate-6">
           <span className="font-pixel text-primary-foreground text-base">$</span>
         </div>
       </div>

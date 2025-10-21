@@ -111,7 +111,7 @@ const Index = () => {
               </div>
               
               <h1
-                className="text-lg xxs:text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
+                className="text-lg xxs:text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[1px_2px_0px_rgba(0,0,0,0.6)] xs:drop-shadow-[2px_3px_0px_rgba(0,0,0,1)] md:drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
                 data-debug-element="hero-headline"
               >
                 STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
