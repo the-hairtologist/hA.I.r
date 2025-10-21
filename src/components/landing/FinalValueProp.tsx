@@ -1,4 +1,4 @@
-import { Clock, DollarSign, Users, TrendingUp, Scissors, Calendar, Palette, Smartphone } from "lucide-react";
+import { Clock, DollarSign, Users, TrendingUp, Scissors, Calendar, Palette, Smartphone, Sparkles } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 
@@ -113,8 +113,13 @@ export const FinalValueProp = () => {
         </div>
 
         <div className={`mt-10 xs:mt-12 text-center transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '800ms' }}>
-          <p className="font-mono text-sm xs:text-base sm:text-lg text-white/90 leading-relaxed max-w-3xl mx-auto tracking-wide">
-            <span className="font-bold text-secondary">That's the difference</span> between managing chaos and running a thriving salon.
+          <p className="font-mono text-sm xs:text-base sm:text-lg text-white/90 leading-relaxed max-w-3xl mx-auto tracking-wide flex items-center justify-center gap-2 flex-wrap">
+            <Sparkles className="w-4 h-4 xs:w-5 xs:h-5 text-secondary inline-block" />
+            <span className="font-bold text-secondary" style={{ textShadow: '0 0 20px rgba(251, 191, 36, 0.5), 0 0 40px rgba(251, 191, 36, 0.3)' }}>
+              That's the difference
+            </span>
+            <Sparkles className="w-4 h-4 xs:w-5 xs:h-5 text-secondary inline-block" />
+            <span className="block w-full sm:inline sm:w-auto">between managing chaos and running a thriving salon.</span>
           </p>
         </div>
       </div>
