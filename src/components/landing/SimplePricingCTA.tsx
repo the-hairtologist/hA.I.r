@@ -23,15 +23,15 @@ export const SimplePricingCTA = () => {
             </div>
           </div>
 
-          <h2 className="font-pixel text-2xl xs:text-3xl sm:text-4xl mb-4 text-foreground uppercase tracking-wider leading-tight">
+          <h2 className="font-pixel text-2xl xs:text-3xl sm:text-4xl mb-4 text-secondary-foreground uppercase tracking-wider leading-tight">
             STOP THE CHAOS
           </h2>
 
-          <p className="text-sm xs:text-base sm:text-lg font-sans text-foreground/90 mb-2 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm xs:text-base sm:text-lg font-sans text-secondary-foreground/90 mb-2 max-w-2xl mx-auto leading-relaxed">
             Join 5,000+ stylists who reclaimed their time
           </p>
           
-          <p className="text-xs xs:text-sm font-pixel text-foreground/80 uppercase mb-10">
+          <p className="text-xs xs:text-sm font-pixel text-secondary-foreground/80 uppercase mb-10">
             10+ Hours/Week Saved • 90% Fewer No-Shows
           </p>
         </div>
@@ -44,7 +44,7 @@ export const SimplePricingCTA = () => {
           <span className="group-hover:scale-110 transition-transform duration-300 inline-block">START FREE TRIAL →</span>
         </Button>
 
-        <p className="text-xs xs:text-sm font-sans text-foreground/80 mt-6">
+        <p className="text-xs xs:text-sm font-sans text-secondary-foreground/80 mt-6">
           ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
         </p>
       </div>
