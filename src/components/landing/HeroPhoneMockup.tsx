@@ -41,7 +41,11 @@ export const HeroPhoneMockup = () => {
           {/* Notification Cards - Enhanced with Animations */}
           <div className="space-y-3">
             {/* New Booking with Success Icon */}
-            <div className="border-[3px] border-black bg-gradient-to-br from-secondary to-secondary/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
+            <div 
+              className="border-[3px] border-black bg-gradient-to-br from-secondary to-secondary/90 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" 
+              style={{ animationDelay: '400ms' }}
+              role="article"
+              aria-label="New booking notification: Sarah Chen - Color & Cut">
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 border-[2px] border-black bg-accent flex items-center justify-center flex-shrink-0 relative">
                   <Calendar className="h-4 w-4 text-accent-foreground" />
@@ -59,7 +63,11 @@ export const HeroPhoneMockup = () => {
             </div>
 
             {/* Client Message with Typing Indicator */}
-            <div className="border-[3px] border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" style={{ animationDelay: '600ms' }}>
+            <div 
+              className="border-[3px] border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-3 animate-fade-in" 
+              style={{ animationDelay: '600ms' }}
+              role="article"
+              aria-label="Client message from recent contact">
               <div className="flex items-start gap-2">
                 <div className="w-8 h-8 border-[2px] border-black bg-primary flex items-center justify-center flex-shrink-0">
                   <MessageSquare className="h-4 w-4 text-primary-foreground" />
@@ -97,23 +105,23 @@ export const HeroPhoneMockup = () => {
           {/* Quick Stats with Progress Bars */}
           <div className="grid grid-cols-3 gap-2 mt-4 animate-fade-in" style={{ animationDelay: '1000ms' }}>
             <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
-              <p className="font-pixel text-white text-xs mb-1">12</p>
+              <p className="font-pixel text-white text-xs mb-1" role="status" aria-live="polite" aria-atomic="true">12</p>
               <div className="w-full h-1 bg-black/20 rounded-full mb-1">
-                <div className="h-full bg-accent rounded-full animate-[pulse_2s_ease-in-out_infinite]" style={{ width: '90%' }}></div>
+                <div className="h-full bg-accent rounded-full animate-[pulse_2s_ease-in-out_infinite]" style={{ width: '90%', animationDelay: '0ms' }}></div>
               </div>
               <p className="font-sans text-white/70 text-[8px]">BOOKED</p>
             </div>
             <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
-              <p className="font-pixel text-white text-xs mb-1">98%</p>
+              <p className="font-pixel text-white text-xs mb-1" role="status" aria-live="polite" aria-atomic="true">98%</p>
               <div className="w-full h-1 bg-black/20 rounded-full mb-1">
-                <div className="h-full bg-secondary rounded-full animate-[pulse_2s_ease-in-out_infinite]" style={{ width: '98%' }}></div>
+                <div className="h-full bg-secondary rounded-full animate-[pulse_2s_ease-in-out_infinite]" style={{ width: '98%', animationDelay: '400ms' }}></div>
               </div>
               <p className="font-sans text-white/70 text-[8px]">SHOWED</p>
             </div>
             <div className="border-[2px] border-black bg-white/10 backdrop-blur-sm p-2 text-center group hover:bg-white/20 transition-colors duration-200">
-              <p className="font-pixel text-white text-xs mb-1">$2.4K</p>
+              <p className="font-pixel text-white text-xs mb-1" role="status" aria-live="polite" aria-atomic="true">$2.4K</p>
               <div className="w-full h-1 bg-black/20 rounded-full mb-1">
-                <div className="h-full bg-accent rounded-full animate-[pulse_2s_ease-in-out_infinite]" style={{ width: '80%' }}></div>
+                <div className="h-full bg-accent rounded-full animate-[pulse_2s_ease-in-out_infinite]" style={{ width: '80%', animationDelay: '800ms' }}></div>
               </div>
               <p className="font-sans text-white/70 text-[8px]">TODAY</p>
             </div>

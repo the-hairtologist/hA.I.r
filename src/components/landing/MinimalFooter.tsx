@@ -26,13 +26,13 @@ export const MinimalFooter = () => {
 
           {/* Essential Links */}
           <div className="flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-5 text-sm xs:text-base font-sans">
-            <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center">
+            <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
               Terms
             </button>
-            <button onClick={() => navigate("/help")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center">
+            <button onClick={() => navigate("/help")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
               Help
             </button>
-            <a href="mailto:support@hair-ai.com" className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center">
+            <a href="mailto:support@hair-ai.com" className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
               Contact
             </a>
           </div>
@@ -43,7 +43,7 @@ export const MinimalFooter = () => {
           <summary className="text-xs xs:text-sm font-sans text-background/70 cursor-pointer list-none text-center hover:text-background/90 transition-colors min-h-[44px] py-1 flex items-center justify-center">
             Legal Disclaimer
           </summary>
-          <p className="text-xs xs:text-sm font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto mt-2 px-2">
+          <p className="text-xs xs:text-sm font-sans text-background/80 leading-relaxed text-center max-w-4xl mx-auto mt-2 px-2">
             Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
           </p>
         </details>
