@@ -79,7 +79,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-4 xxs:py-6 xs:py-8 sm:py-12 overflow-hidden flex items-center" style={{
+        <section className="relative bg-primary py-2 xxs:py-3 xs:py-4 sm:py-6 overflow-hidden flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -144,7 +144,7 @@ const Index = () => {
               </p>
 
               {/* Product Demo Mockup - Lazy loaded for performance */}
-              <div className="mt-4 xs:mt-6 sm:mt-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
+              <div className="mt-2 xs:mt-3 sm:mt-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Suspense fallback={
                   <div className="relative w-full max-w-[220px] xs:max-w-[280px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
                 }>
@@ -155,7 +155,7 @@ const Index = () => {
               </div>
               
               {/* Animated Counters - Social Proof */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-3 xs:pt-4 sm:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-2 xs:pt-3 sm:pt-4 animate-fade-in" style={{ animationDelay: '500ms' }}>
                 <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
