@@ -37,10 +37,10 @@ export function VariantSwitcher() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-[9999] bg-secondary backdrop-blur-md brutal-border border-white border-2 p-4 rounded-none brutal-shadow animate-fade-in">
+    <div className="fixed bottom-4 right-4 z-[9999] bg-black/90 backdrop-blur-md brutal-border border-white p-4 rounded-none shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] animate-fade-in">
       <div className="flex flex-col gap-2 min-w-[200px]">
-        <div className="flex items-center justify-between mb-2 pb-2 border-b border-foreground/20">
-          <span className="font-pixel text-[10px] text-foreground uppercase">A/B Tester</span>
+        <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/20">
+          <span className="font-pixel text-[10px] text-white uppercase">A/B Tester</span>
           <span className="font-pixel text-[10px] text-accent">
             {currentVariant || '?'}
           </span>
@@ -53,10 +53,10 @@ export function VariantSwitcher() {
               onClick={() => switchVariant(variant)}
               className={`
                 w-full px-3 py-2 font-pixel text-[10px] uppercase
-                brutal-border transition-all duration-200
+                brutal-border border-white transition-all duration-200
                 ${currentVariant === variant 
-                  ? 'bg-primary text-white border-white border-2 brutal-shadow-sm' 
-                  : 'bg-white text-foreground border-foreground border-2 hover:bg-secondary/30 hover:brutal-shadow-xs'
+                  ? 'bg-primary text-primary-foreground brutal-shadow-sm' 
+                  : 'bg-white/10 text-white hover:bg-white/20 hover:brutal-shadow-xs'
                 }
               `}
             >
@@ -66,7 +66,7 @@ export function VariantSwitcher() {
                   <span className="text-[8px]">●</span>
                 )}
               </div>
-              <div className={`text-[8px] opacity-70 mt-0.5 normal-case font-sans text-left ${currentVariant === variant ? 'text-white' : 'text-foreground'}`}>
+              <div className="text-[8px] opacity-70 mt-0.5 normal-case font-sans text-left">
                 {variant === 'A' && 'Pain-focused'}
                 {variant === 'B' && 'Dream-building'}
                 {variant === 'C' && 'Visual + Icons'}
@@ -75,18 +75,18 @@ export function VariantSwitcher() {
           ))}
         </div>
         
-        <div className="mt-2 pt-2 border-t border-foreground/20">
+        <div className="mt-2 pt-2 border-t border-white/20">
           <a
             href="/"
             className="block w-full px-3 py-2 text-center font-pixel text-[9px] uppercase
-                     bg-destructive text-destructive-foreground brutal-border border-white border-2
+                     bg-destructive text-destructive-foreground brutal-border border-white
                      hover:brutal-shadow-xs transition-all duration-200"
           >
             Clear Cache
           </a>
         </div>
         
-        <div className="text-[8px] text-foreground/50 font-sans text-center mt-1">
+        <div className="text-[8px] text-white/50 font-sans text-center mt-1">
           Dev mode only
         </div>
       </div>
