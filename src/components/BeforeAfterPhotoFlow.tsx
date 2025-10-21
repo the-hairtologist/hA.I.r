@@ -13,6 +13,7 @@ import { Camera, Check, X, RefreshCw, Sparkles, Loader2, Image as ImageIcon, Wan
 import { useToast } from '@/hooks/use-toast';
 import { removeBackground, loadImage } from '@/utils/backgroundRemoval';
 import { supabase } from '@/integrations/supabase/client';
+import { OptimizedImage } from '@/components/OptimizedImage';
 import {
   Dialog,
   DialogContent,
@@ -213,9 +214,11 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             }`}>
               {beforePhoto ? (
                 <>
-                  <img 
+                  <OptimizedImage 
                     src={beforePhoto} 
                     alt="Before" 
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 left-2">
@@ -239,9 +242,11 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             }`}>
               {afterPhoto ? (
                 <>
-                  <img 
+                  <OptimizedImage 
                     src={afterPhoto} 
                     alt="After" 
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 left-2">
@@ -360,17 +365,21 @@ export const BeforeAfterPhotoFlow: React.FC<BeforeAfterPhotoFlowProps> = ({
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Badge className="bg-info text-info-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">Before</Badge>
-                <img 
+                <OptimizedImage 
                   src={beforePhoto} 
                   alt="Before" 
+                  width={600}
+                  height={600}
                   className="w-full rounded-lg border-[3px] border-info shadow-[4px_4px_0px_0px_hsl(var(--info))]"
                 />
               </div>
               <div className="space-y-2">
                 <Badge className="bg-secondary text-secondary-foreground border-[2px] border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">After</Badge>
-                <img 
+                <OptimizedImage 
                   src={afterPhoto} 
                   alt="After" 
+                  width={600}
+                  height={600}
                   className="w-full rounded-lg border-[3px] border-secondary shadow-[4px_4px_0px_0px_hsl(var(--secondary))]"
                 />
               </div>

@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Sparkles, Download, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 export function HairInspirationGenerator() {
   const [prompt, setPrompt] = useState('');
@@ -86,9 +87,11 @@ export function HairInspirationGenerator() {
 
       {generatedImage && (
         <div className="space-y-3">
-          <img 
+          <OptimizedImage 
             src={generatedImage} 
             alt="Generated hair style" 
+            width={800}
+            height={600}
             className="w-full rounded-lg border"
           />
           <div className="flex gap-2">

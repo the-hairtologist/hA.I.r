@@ -5,6 +5,7 @@ import { Upload, Loader2, Sparkles, Camera } from 'lucide-react';
 import { useHairAnalysis } from '@/hooks/useHairAnalysis';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 interface HairPhotoAnalysisProps {
   clientId?: string;
@@ -139,9 +140,11 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
         {previewUrl && !result && (
           <div className="space-y-4">
             <div className="relative rounded-lg overflow-hidden">
-              <img
+              <OptimizedImage
                 src={previewUrl}
                 alt="Hair preview"
+                width={800}
+                height={400}
                 className="w-full h-auto max-h-[400px] object-cover"
               />
             </div>
@@ -180,9 +183,11 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
         {result && (
           <div className="space-y-4">
             <div className="relative rounded-lg overflow-hidden mb-4">
-              <img
+              <OptimizedImage
                 src={previewUrl!}
                 alt="Analyzed hair"
+                width={800}
+                height={300}
                 className="w-full h-auto max-h-[300px] object-cover"
               />
             </div>

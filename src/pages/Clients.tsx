@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useOptimizedCallback } from "@/hooks/useOptimizedCallback";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useClients, useCreateClient, useUpdateClient, useDeleteClient, useBulkDeleteClients } from "@/hooks/useClients";
@@ -76,7 +77,7 @@ export default function Clients() {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearch = useDebounce(searchQuery, 300);
   
-  const handleSearchChange = useCallback((value: string) => {
+  const handleSearchChange = useOptimizedCallback((value: string) => {
     setSearchQuery(value);
   }, []);
   const [sortBy, setSortBy] = useState<"name" | "recent" | "inactive">("recent");

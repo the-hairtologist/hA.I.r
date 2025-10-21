@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, memo } from "react";
+import { useOptimizedCallback } from "@/hooks/useOptimizedCallback";
 import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { supabase } from "@/integrations/supabase/client";
@@ -43,7 +44,7 @@ const Formulas = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   
-  const handleSearchChange = useCallback((value: string) => {
+  const handleSearchChange = useOptimizedCallback((value: string) => {
     setSearchTerm(value);
   }, []);
   const [editingFormula, setEditingFormula] = useState<any>(null);

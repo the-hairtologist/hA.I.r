@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { withMemo } from "@/lib/optimizations/withMemo";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +31,7 @@ interface AIProductRecommendationsProps {
   stylistId?: string;
 }
 
-export const AIProductRecommendations = ({
+const AIProductRecommendationsComponent = ({
   formula,
   hairType,
   desiredResult,
@@ -251,3 +252,8 @@ export const AIProductRecommendations = ({
     </Card>
   );
 };
+
+export const AIProductRecommendations = withMemo(
+  AIProductRecommendationsComponent,
+  ['formula', 'hairType', 'desiredResult', 'stylistId']
+);

@@ -1,12 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { useState, useEffect } from "react";
 import { logger } from "@/lib/productionLogger";
+import { prefetchOnHover } from "@/lib/performance/ResourceHints";
 
 interface NavItem {
   icon: any;
@@ -230,9 +231,16 @@ export const MobileBottomNav = () => {
           {items.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
+            const buttonRef = useRef<HTMLButtonElement>(null);
+            
+            useEffect(() => {
+              if (!buttonRef.current || item.disabled) return;
+              return prefetchOnHover(buttonRef.current, item.path);
+            }, [item.path, item.disabled]);
             
             return (
               <button
+                ref={buttonRef}
                 key={item.path}
                 onClick={() => !item.disabled && handleNavigation(item.path)}
                 disabled={item.disabled}

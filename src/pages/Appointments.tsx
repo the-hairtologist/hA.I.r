@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useOptimizedCallback } from "@/hooks/useOptimizedCallback";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -63,6 +64,10 @@ const Appointments = () => {
     onConfirm: () => void;
   }>({ open: false, title: "", description: "", onConfirm: () => {} });
   const [searchQuery, setSearchQuery] = useState("");
+  
+  const handleSearchChange = useOptimizedCallback((value: string) => {
+    setSearchQuery(value);
+  }, []);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
   const [rebookAppointment, setRebookAppointment] = useState<any>(null);
@@ -405,7 +410,7 @@ const Appointments = () => {
               <SearchInput
                 ref={searchInputRef}
                 value={searchQuery}
-                onChange={setSearchQuery}
+                onChange={handleSearchChange}
                 placeholder={
                   userRole === "client"
                     ? "Search by stylist name or service... (Press / or Ctrl+K)"

@@ -20,6 +20,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 const DEFAULT_EMAIL_SETTINGS = {
   rebooking_enabled: true,
@@ -150,7 +151,7 @@ export default function EmailSettings() {
                 ${formData.show_business_logo && formData.business_logo_url ? `
                 <tr>
                   <td style="padding: 20px; text-align: center; border-bottom: 1px solid #e5e7eb;">
-                    <img src="${formData.business_logo_url}" alt="Logo" style="max-width: 150px; height: auto;">
+                    <img src="${formData.business_logo_url}" alt="Business Logo" style="max-width: 150px; height: auto;">
                   </td>
                 </tr>
                 ` : ''}

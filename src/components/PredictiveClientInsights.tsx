@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { withMemo } from "@/lib/optimizations/withMemo";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Calendar, Loader2, MessageSquare, Sparkles } from "lucide-react";
 import { usePredictiveInsights } from "@/hooks/usePredictiveInsights";
@@ -10,7 +11,7 @@ interface PredictiveClientInsightsProps {
   stylistId?: string;
 }
 
-export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsightsProps) => {
+const PredictiveClientInsightsComponent = ({ stylistId }: PredictiveClientInsightsProps) => {
   const navigate = useNavigate();
   const { clientInsights, loading } = usePredictiveInsights(stylistId);
 
@@ -105,3 +106,8 @@ export const PredictiveClientInsights = ({ stylistId }: PredictiveClientInsights
     </Card>
   );
 };
+
+export const PredictiveClientInsights = withMemo(
+  PredictiveClientInsightsComponent,
+  ['stylistId']
+);

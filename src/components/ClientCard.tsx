@@ -73,12 +73,12 @@ const formatAppointmentInfo = (
   return baseText;
 };
 
-export const ClientCard = memo(({ 
-  client, 
-  isSelected, 
-  onToggleSelection, 
-  onEdit, 
-  onViewHistory, 
+const ClientCardComponent = ({
+  client,
+  isSelected,
+  onToggleSelection,
+  onEdit,
+  onViewHistory,
   onViewNotes,
   missedAppointments = 0
 }: ClientCardProps) => {
@@ -193,6 +193,9 @@ export const ClientCard = memo(({
       </CardContent>
     </Card>
   );
-});
+};
 
-ClientCard.displayName = "ClientCard";
+export const ClientCard = withMemo(
+  ClientCardComponent,
+  ['client.id', 'client.updated_at', 'isSelected', 'client.last_appointment_date']
+);

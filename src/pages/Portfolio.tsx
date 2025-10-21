@@ -18,6 +18,7 @@ import { BackgroundRemovalDialog } from "@/components/BackgroundRemovalDialog";
 import { CameraCapture } from "@/components/CameraCapture";
 import { VoiceControl } from "@/components/VoiceControl";
 import { offlineQueue } from "@/lib/offlineQueue";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 interface PortfolioPhoto {
   id: string;
@@ -327,7 +328,7 @@ const Portfolio = () => {
                   <Label className="text-foreground font-medium">Before Photo</Label>
                   {beforePhotoPreview ? (
                     <div className="relative">
-                      <img src={beforePhotoPreview} alt="Before preview" className="w-full h-48 object-cover rounded-lg" />
+                      <OptimizedImage src={beforePhotoPreview} alt="Before preview" width={400} height={192} className="w-full h-48 object-cover rounded-lg" />
                       <Button
                         size="sm"
                         variant="destructive"
@@ -356,7 +357,7 @@ const Portfolio = () => {
                 <Label className="text-foreground font-medium">{isBeforeAfter ? "After Photo" : "Photo"}</Label>
                 {newPhotoPreview ? (
                   <div className="relative">
-                    <img src={newPhotoPreview} alt="Photo preview" className="w-full h-48 object-cover rounded-lg" />
+                    <OptimizedImage src={newPhotoPreview} alt="Photo preview" width={400} height={192} className="w-full h-48 object-cover rounded-lg" />
                     <Button
                       size="sm"
                       variant="destructive"
@@ -457,17 +458,21 @@ const Portfolio = () => {
                         <div className="grid grid-cols-2 gap-2 mb-2">
                           <div>
                             <p className="text-xs font-bold mb-1 text-center">BEFORE</p>
-                            <img
+                            <OptimizedImage
                               src={photo.before_photo_url}
                               alt="Before"
+                              width={200}
+                              height={128}
                               className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
                             />
                           </div>
                           <div>
                             <p className="text-xs font-bold mb-1 text-center">AFTER</p>
-                            <img
+                            <OptimizedImage
                               src={photo.photo_url}
                               alt="After"
+                              width={200}
+                              height={128}
                               className="w-full h-32 object-cover rounded-lg border-2 border-foreground"
                             />
                           </div>

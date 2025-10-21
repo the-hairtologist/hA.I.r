@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { withMemo } from "@/lib/optimizations/withMemo";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ interface FormulaCardProps {
   isSelected?: boolean;
 }
 
-export const FormulaCard = memo(({
+const FormulaCardComponent = ({
   formula,
   searchTerm,
   onEdit,
@@ -155,6 +155,9 @@ export const FormulaCard = memo(({
       </CardContent>
     </Card>
   );
-});
+};
 
-FormulaCard.displayName = "FormulaCard";
+export const FormulaCard = withMemo(
+  FormulaCardComponent,
+  ['formula.id', 'formula.updated_at', 'searchTerm']
+);

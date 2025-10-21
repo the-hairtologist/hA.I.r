@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { withMemo } from "@/lib/optimizations/withMemo";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Sparkles, Clock, TrendingUp, Loader2 } from "lucide-react";
@@ -17,7 +18,7 @@ interface SmartSchedulingSuggestionsProps {
   onSelectTime?: (datetime: string) => void;
 }
 
-export const SmartSchedulingSuggestions = ({ 
+const SmartSchedulingSuggestionsComponent = ({ 
   stylistId,
   onSelectTime 
 }: SmartSchedulingSuggestionsProps) => {
@@ -163,3 +164,8 @@ export const SmartSchedulingSuggestions = ({
     </Card>
   );
 };
+
+export const SmartSchedulingSuggestions = withMemo(
+  SmartSchedulingSuggestionsComponent,
+  ['stylistId']
+);

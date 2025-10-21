@@ -15,6 +15,7 @@ import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { shareDeepLink, generateTransformationShare, generateInstagramStoryMeta, generateDeepLink } from '@/lib/deepLinks';
 import { enhancedAnalytics, ANALYTICS_EVENTS } from '@/lib/enhancedAnalytics';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 export default function DeepLinkTransformation() {
   const { id } = useParams<{ id: string }>();
@@ -153,9 +154,11 @@ export default function DeepLinkTransformation() {
                 <CardTitle className="text-center text-sm">Before</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <img
+                <OptimizedImage
                   src={photo.before_image_url}
                   alt="Before"
+                  width={600}
+                  height={600}
                   className="w-full aspect-square object-cover"
                 />
               </CardContent>
@@ -166,9 +169,11 @@ export default function DeepLinkTransformation() {
                 <CardTitle className="text-center text-sm text-primary">After</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <img
+                <OptimizedImage
                   src={photo.after_image_url}
                   alt="After"
+                  width={600}
+                  height={600}
                   className="w-full aspect-square object-cover"
                 />
               </CardContent>

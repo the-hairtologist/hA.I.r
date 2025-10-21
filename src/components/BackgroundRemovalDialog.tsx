@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { OptimizedImage } from '@/components/OptimizedImage';
 import {
   Dialog,
   DialogContent,
@@ -144,18 +145,22 @@ export const BackgroundRemovalDialog = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm font-medium mb-2">Original</p>
-              <img
+              <OptimizedImage
                 src={imageUrl}
                 alt="Original"
+                width={600}
+                height={256}
                 className="w-full h-64 object-contain rounded-lg border-2 border-border bg-secondary/20"
               />
             </div>
             <div>
               <p className="text-sm font-medium mb-2">Processed</p>
               {processedImage ? (
-                <img
+                <OptimizedImage
                   src={processedImage}
                   alt="Processed"
+                  width={600}
+                  height={256}
                   className="w-full h-64 object-contain rounded-lg border-2 border-border"
                   style={{
                     backgroundImage:
