@@ -186,12 +186,7 @@ const Index = () => {
           `,
           backgroundSize: '8px 8px'
         }}>
-          <SingleTestimonial />
-          
-          {/* FAQ integrated below */}
-          <div className="mt-12 xs:mt-16">
-            <MinimalFAQ />
-          </div>
+          <MinimalFAQ />
         </section>
       </main>
 
