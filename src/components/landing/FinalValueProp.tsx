@@ -62,10 +62,10 @@ export const FinalValueProp = () => {
             <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
           </div>
           <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '100ms' }}>
-            <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-accent" borderColor="border-white" textColor="text-white" />
+            <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
           </div>
           <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '200ms' }}>
-            <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-white" borderColor="border-black" textColor="text-black" />
+            <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
           </div>
           <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '300ms' }}>
             <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
