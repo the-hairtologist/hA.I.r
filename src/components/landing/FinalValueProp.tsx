@@ -47,15 +47,21 @@ export const FinalValueProp = () => {
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
-          <div className="inline-block border-2 border-black bg-accent px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] animate-[float_3s_ease-in-out_infinite]">
+          <div className="inline-block border-2 border-black bg-accent px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] animate-[glow-pop_2s_ease-in-out_infinite]">
             <span className="font-pixel text-[10px] xs:text-xs text-secondary uppercase">REAL RESULTS</span>
           </div>
         </div>
         
         <style>{`
-          @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+          @keyframes glow-pop {
+            0%, 100% { 
+              transform: scale(1);
+              box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+            }
+            50% { 
+              transform: scale(1.05);
+              box-shadow: 4px 4px 12px 0px rgba(251, 191, 36, 0.6), 2px 2px 0px 0px rgba(0,0,0,1);
+            }
           }
         `}</style>
 
