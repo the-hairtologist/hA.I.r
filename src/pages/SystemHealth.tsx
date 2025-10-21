@@ -1,6 +1,6 @@
-import { DashboardLayout } from "@/components/layout";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { SelfHealingMonitor } from "@/components/SelfHealingMonitor";
-import { AIRetentionDashboard } from "@/components/ai";
+import { AIRetentionDashboard } from "@/components/AIRetentionDashboard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

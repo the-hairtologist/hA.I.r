@@ -20,8 +20,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, User, Edit, FileText, Calendar } from "lucide-react";
-import { ClientRiskIndicator } from "./ClientRiskIndicator";
-import { ClientActivityIndicator } from "./ClientActivityIndicator";
+import { ClientRiskIndicator } from "@/components/ClientRiskIndicator";
+import { ClientActivityIndicator } from "@/components/ClientActivityIndicator";
 
 /**
  * Client data structure for the card display

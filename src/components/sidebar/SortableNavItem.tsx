@@ -3,7 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useLocation, NavLink } from "react-router-dom";
 import { ChevronDown, GripVertical } from "lucide-react";
 import { NavigationItem } from "@/config/navigationConfig";
-import { NotificationDot } from "@/components/shared";
+import { NotificationDot } from "@/components/NotificationDot";
 import {
   SidebarMenuButton,
   SidebarMenuItem,

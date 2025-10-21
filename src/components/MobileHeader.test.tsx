@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { MobileHeader } from './layout/MobileHeader';
+import { MobileHeader } from './MobileHeader';
 import { SidebarProvider } from '@/components/ui/sidebar';
 
 const mockNavigate = vi.fn();

@@ -17,7 +17,7 @@ import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, addDays
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { Textarea } from "@/components/ui/textarea";
-import { CalendarSync } from "@/components/appointments";
+import CalendarSync from "@/components/CalendarSync";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 import { VacationConflictDialog } from "@/components/VacationConflictDialog";
 import { ContextualAI } from "@/components/ContextualAI";

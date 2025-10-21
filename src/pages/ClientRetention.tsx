@@ -1,5 +1,5 @@
-import { DashboardLayout } from "@/components/layout";
-import { AIRetentionDashboard } from "@/components/ai";
+import { DashboardLayout } from "@/components/DashboardLayout";
+import { AIRetentionDashboard } from "@/components/AIRetentionDashboard";
 import { SEOHead } from "@/components/SEOHead";
 
 const ClientRetention = () => {

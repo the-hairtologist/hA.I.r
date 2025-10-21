@@ -3,9 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "./AppSidebar";
-import { MobileBottomNav } from "./MobileBottomNav";
-import { MobileHeader } from "./MobileHeader";
+import { AppSidebar } from "@/components/AppSidebar";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { MobileHeader } from "@/components/MobileHeader";
 import { MobileSidebarOverlay } from "@/components/MobileSidebarOverlay";
 import { MobileQuickActions } from "@/components/MobileQuickActions";
 import { DemoModeIndicator } from "@/components/demo/DemoMode";
@@ -29,8 +29,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
-import { Breadcrumbs } from "@/components/shared";
-import { OfflineIndicator } from "@/components/shared";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { SessionExpiryWarning } from "@/components/SessionExpiryWarning";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 

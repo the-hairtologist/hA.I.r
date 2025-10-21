@@ -6,9 +6,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { AIFormulaAnalyzer } from './ai/AIFormulaAnalyzer';
-import { AIScheduleOptimizer } from './ai/AIScheduleOptimizer';
-import { AIMessageComposer } from './ai/AIMessageComposer';
+import { AIFormulaAnalyzer } from './AIFormulaAnalyzer';
+import { AIScheduleOptimizer } from './AIScheduleOptimizer';
+import { AIMessageComposer } from './AIMessageComposer';
 import { HairPhotoAnalyzer } from './HairPhotoAnalyzer';
 
 // Mock hooks

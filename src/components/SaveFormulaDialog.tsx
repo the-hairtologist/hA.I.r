@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Save, Loader2, UserPlus } from "lucide-react";
-import { AddClientDialog } from "./clients";
+import { AddClientDialog } from "./AddClientDialog";
 import { cn } from "@/lib/utils";
 
 interface SaveFormulaDialogProps {
