@@ -40,8 +40,17 @@ export const MinimalFAQ = () => {
   return (
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-2xl mx-auto">
-        {/* FAQ Items First */}
-        <div className="space-y-3 xs:space-y-4 mb-6 xs:mb-8">
+        {/* Header with black text on yellow background */}
+        <div className={`text-center mb-6 xs:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
+            THE REAL QUESTIONS
+          </h2>
+          <p className="font-sans text-xs xs:text-sm text-foreground max-w-2xl mx-auto">
+            No fluff. Just honest answers.
+          </p>
+        </div>
+
+        <div className="space-y-3 xs:space-y-4">
           {faqs.map((faq, index) => {
             // Rotate through brand colors for borders
             const colors = ['border-primary', 'border-accent', 'border-secondary'];
@@ -70,16 +79,6 @@ export const MinimalFAQ = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* Header Below */}
-        <div className={`text-center mb-6 xs:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
-            THE REAL QUESTIONS
-          </h2>
-          <p className="font-sans text-xs xs:text-sm text-foreground max-w-2xl mx-auto">
-            No fluff. Just honest answers.
-          </p>
         </div>
 
         {/* Contact CTA */}
