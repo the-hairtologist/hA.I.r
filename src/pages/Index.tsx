@@ -131,7 +131,7 @@ const Index = () => {
               </h1>
               
               <p 
-                className="text-xs xxs:text-sm xs:text-base sm:text-lg font-sans text-white max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words" 
+                className="text-xs xxs:text-sm xs:text-base sm:text-lg font-sans text-black max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words" 
                 style={{ animationDelay: '100ms' }}
                 data-debug-element="hero-subheadline"
               >
