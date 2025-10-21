@@ -139,41 +139,39 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       ref={ref}
       onMouseEnter={handleHover}
       onTouchStart={handleHover}
-      className={`relative overflow-hidden border-[4px] border-black ${bgColors[index]} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] p-6 xs:p-8 ${
+      className={`relative overflow-hidden border-[3px] border-black ${bgColors[index]} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-1 p-4 xs:p-5 ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
       }`}
       style={{
         transitionDelay: `${index * 150}ms`,
       }}
     >
-      {/* Large animated icon */}
-      <div className={`relative w-20 h-20 xs:w-24 xs:h-24 border-[4px] border-black ${iconBgColors[index]} flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:rotate-12 transition-transform duration-500 ${isVisible ? 'animate-bounce' : ''}`}
-        style={{ animationDelay: `${index * 200}ms`, animationIterationCount: '3' }}
-      >
-        <Icon className={`h-10 w-10 xs:h-12 xs:w-12 ${iconTextColors[index]}`} strokeWidth={2.5} />
+      {/* Compact animated icon */}
+      <div className={`relative w-12 h-12 xs:w-14 xs:h-14 border-[3px] border-black ${iconBgColors[index]} flex items-center justify-center mb-3 xs:mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform duration-500`}>
+        <Icon className={`h-6 w-6 xs:h-7 xs:w-7 ${iconTextColors[index]}`} strokeWidth={2.5} />
         
         {/* Floating number badge */}
-        <div className="absolute -top-4 -right-4 w-10 h-10 xs:w-12 xs:h-12 border-[3px] border-black bg-white flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-          <span className="font-pixel text-foreground text-lg xs:text-xl">
+        <div className="absolute -top-3 -right-3 w-8 h-8 xs:w-9 xs:h-9 border-[2px] border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+          <span className="font-pixel text-foreground text-sm xs:text-base">
             {feature.number}
           </span>
         </div>
       </div>
 
       {/* Headline */}
-      <h3 className="font-pixel text-base xs:text-lg text-foreground uppercase tracking-wide mb-4 leading-tight">
+      <h3 className="font-pixel text-sm xs:text-base text-foreground uppercase tracking-wide mb-2 xs:mb-3 leading-tight">
         {feature.headline}
       </h3>
       
       {/* Description */}
-      <p className="text-sm xs:text-base font-sans text-foreground/90 leading-relaxed">
+      <p className="text-xs xs:text-sm font-sans text-foreground/90 leading-snug">
         {feature.description}
       </p>
 
       {/* Decorative corner accent */}
-      <div className="absolute bottom-0 right-0 w-16 h-16 opacity-20">
-        <div className="absolute bottom-0 right-0 w-8 h-8 border-l-[3px] border-t-[3px] border-black"></div>
-        <div className="absolute bottom-2 right-2 w-8 h-8 border-l-[3px] border-t-[3px] border-black"></div>
+      <div className="absolute bottom-0 right-0 w-12 h-12 opacity-20">
+        <div className="absolute bottom-0 right-0 w-6 h-6 border-l-[2px] border-t-[2px] border-black"></div>
+        <div className="absolute bottom-1 right-1 w-6 h-6 border-l-[2px] border-t-[2px] border-black"></div>
       </div>
     </div>
   );
@@ -190,18 +188,18 @@ export const MinimalFeatures = () => {
   return (
     <div className="container mx-auto px-4">
       {/* Section Header with dramatic styling */}
-      <div className="text-center mb-10 xs:mb-12">
-        <div className="inline-block border-[4px] border-black bg-primary px-6 py-3 mb-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle">
-          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl text-white uppercase tracking-wider">
+      <div className="text-center mb-6 xs:mb-8">
+        <div className="inline-block border-[3px] border-black bg-primary px-4 py-2 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle">
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl text-white uppercase tracking-wider">
             {header.title}
           </h2>
         </div>
-        <p className="font-sans text-base xs:text-lg text-foreground max-w-2xl mx-auto font-medium">
+        <p className="font-sans text-sm xs:text-base text-foreground max-w-2xl mx-auto font-medium">
           {header.subtitle}
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6 max-w-7xl mx-auto">
         {features.map((feature, index) => (
           <FeatureCard key={feature.title} feature={feature} index={index} />
         ))}
