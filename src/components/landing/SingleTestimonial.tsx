@@ -22,12 +22,12 @@ export const SingleTestimonial = () => {
   return (
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-5xl mx-auto">
-        <div className={`text-center mb-10 xs:mb-12 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-accent-foreground uppercase tracking-wider">
-            STYLISTS AND CLIENTS ARE RAVING
+        <div className={`text-center mb-6 xs:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-3 text-foreground uppercase tracking-wider">
+            STYLISTS ARE RAVING
           </h2>
-          <p className="font-pixel text-xs xs:text-sm text-accent-foreground/90 uppercase">
-            About hA.I.r!
+          <p className="font-pixel text-xs xs:text-sm text-muted-foreground uppercase">
+            Real results from real stylists
           </p>
         </div>
 

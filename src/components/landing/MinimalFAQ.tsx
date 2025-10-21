@@ -41,11 +41,11 @@ export const MinimalFAQ = () => {
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-2xl mx-auto">
         {/* Header with black text on yellow background */}
-        <div className={`text-center mb-8 xs:mb-10 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-black uppercase tracking-wider">
-            THE REAL QUESTIONS YOU'RE ASKING
+        <div className={`text-center mb-6 xs:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
+            THE REAL QUESTIONS
           </h2>
-          <p className="font-sans text-sm xs:text-base text-black/70 max-w-2xl mx-auto">
+          <p className="font-sans text-xs xs:text-sm text-muted-foreground max-w-2xl mx-auto">
             No fluff. Just honest answers.
           </p>
         </div>
@@ -81,9 +81,9 @@ export const MinimalFAQ = () => {
           })}
         </div>
 
-        {/* Contact CTA with black text */}
-        <div className="text-center mt-12">
-          <p className="text-black/70 mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
+        {/* Contact CTA */}
+        <div className="text-center mt-10 xs:mt-12">
+          <p className="text-muted-foreground mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
             className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-6 xs:px-8 py-3 xs:py-4 inline-block brutal-shadow hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300"

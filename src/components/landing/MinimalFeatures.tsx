@@ -169,11 +169,11 @@ export const MinimalFeatures = () => {
   
   return (
     <div className="container mx-auto px-4">
-      <div className="text-center mb-10 xs:mb-12">
-        <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
+      <div className="text-center mb-6 xs:mb-8">
+        <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
           {header.title}
         </h2>
-        <p className="font-sans text-sm xs:text-base text-muted-foreground max-w-2xl mx-auto">
+        <p className="font-sans text-xs xs:text-sm text-muted-foreground max-w-2xl mx-auto">
           {header.subtitle}
         </p>
       </div>

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Scissors, Sparkles, Zap, Heart } from "lucide-react";
+import { Scissors, Sparkles, Zap, Heart, Calendar, Palette, Smartphone } from "lucide-react";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 
@@ -8,7 +8,6 @@ import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
-import { FinalValueProp } from "@/components/landing/FinalValueProp";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { logger } from "@/lib/productionLogger";
 import { StickyCTA } from "@/components/landing/StickyCTA";
@@ -93,7 +92,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-8 xxs:py-12 xs:py-16 sm:py-20 md:py-24 overflow-hidden flex items-center" style={{
+        <section className="relative bg-primary py-6 xxs:py-8 xs:py-12 sm:py-16 overflow-hidden flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -101,9 +100,9 @@ const Index = () => {
           backgroundSize: '8px 8px'
         }}>
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
-            <div className="max-w-4xl mx-auto space-y-3 xxs:space-y-4 xs:space-y-6">
+            <div className="max-w-4xl mx-auto space-y-2 xxs:space-y-3 xs:space-y-4">
               {/* Icons */}
-              <div className="flex justify-center gap-4 xs:gap-6 mb-4 xs:mb-6 animate-fade-in">
+              <div className="flex justify-center gap-4 xs:gap-6 mb-3 xs:mb-4 animate-fade-in">
                 <div 
                   className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0s' }}
@@ -132,7 +131,7 @@ const Index = () => {
               </h1>
               
               <p 
-                className="text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl font-sans text-primary-foreground max-w-3xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-3 xs:px-4 break-words" 
+                className="text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl font-sans text-white max-w-3xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-3 xs:px-4 break-words" 
                 style={{ animationDelay: '100ms' }}
                 data-debug-element="hero-subheadline"
               >
@@ -153,12 +152,12 @@ const Index = () => {
                 </Button>
               </div>
               
-              <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base font-sans text-white/90 animate-fade-in px-3 break-words drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" style={{ animationDelay: '300ms' }}>
+              <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base font-sans text-primary-foreground/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
                 ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
               </p>
 
               {/* Product Demo Mockup - Lazy loaded for performance */}
-              <div className="mt-6 xs:mt-8 sm:mt-12 animate-fade-in" style={{ animationDelay: '400ms' }}>
+              <div className="mt-4 xs:mt-6 sm:mt-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Suspense fallback={
                   <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
                 }>
@@ -167,13 +166,21 @@ const Index = () => {
                   </div>
                 </Suspense>
               </div>
+              
+              {/* Animated Counters - Social Proof */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-4 xs:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
+                <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+              </div>
             </div>
           </div>
           <ScrollIndicator />
         </section>
 
-        {/* How It Works - Clean white background */}
-        <section className="py-10 xs:py-12 sm:py-14 bg-background" style={{
+        {/* How It Works + Testimonials - Combined Section */}
+        <section className="py-8 xs:py-10 sm:py-12 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
@@ -181,15 +188,15 @@ const Index = () => {
           backgroundSize: '8px 8px'
         }}>
           <MinimalFeatures />
-        </section>
-
-        {/* Testimonial Section - Blue background */}
-        <section className="py-10 xs:py-12 sm:py-14 bg-accent">
-          <SingleTestimonial />
+          
+          {/* Testimonials integrated */}
+          <div className="mt-8 xs:mt-10 sm:mt-12">
+            <SingleTestimonial />
+          </div>
         </section>
 
         {/* FAQ Section - Yellow background with white boxes */}
-        <section className="py-10 xs:py-12 sm:py-14 bg-secondary" style={{
+        <section className="py-8 xs:py-10 sm:py-12 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)
@@ -198,9 +205,6 @@ const Index = () => {
         }}>
           <MinimalFAQ />
         </section>
-
-        {/* Unified Stats + Benefits Section */}
-        <FinalValueProp />
       </main>
 
       <EnhancedFooter />
