@@ -12,9 +12,9 @@ export const MinimalFooter = () => {
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-3 xs:px-4 py-3 xs:py-4">
+      <div className="container mx-auto px-3 xs:px-4 py-2 xs:py-2.5">
         {/* Single Row Layout */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 xs:gap-3 mb-2 xs:mb-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 xs:gap-3 mb-1 xs:mb-1.5">
           {/* Logo + Copyright */}
           <div className="flex items-center gap-2 xs:gap-2.5">
             <div className="w-8 h-8 xs:w-9 xs:h-9 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
@@ -25,7 +25,7 @@ export const MinimalFooter = () => {
           </div>
 
           {/* Essential Links */}
-          <div className="flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-5 text-sm font-sans">
+          <div className="flex flex-wrap justify-center gap-2 xs:gap-3 sm:gap-4 text-sm font-sans">
             <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] flex items-center">
               Terms
             </button>
@@ -39,11 +39,11 @@ export const MinimalFooter = () => {
         </div>
 
         {/* Legal Disclaimer - Collapsed */}
-        <details className="border-t-2 border-secondary/20 pt-2 mt-2">
-          <summary className="text-xs font-sans text-background/70 cursor-pointer list-none text-center hover:text-background/90 transition-colors min-h-[40px] py-1 flex items-center justify-center">
+        <details className="border-t-2 border-secondary/20 pt-1.5 mt-1.5">
+          <summary className="text-xs font-sans text-background/70 cursor-pointer list-none text-center hover:text-background/90 transition-colors min-h-[36px] py-0.5 flex items-center justify-center">
             Legal Disclaimer
           </summary>
-          <p className="text-xs font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto mt-2">
+          <p className="text-xs font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto mt-1.5">
             Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
           </p>
         </details>
