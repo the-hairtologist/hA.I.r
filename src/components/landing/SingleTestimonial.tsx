@@ -33,51 +33,74 @@ export const SingleTestimonial = () => {
 
         <div className="grid md:grid-cols-2 gap-10">
           {testimonials.map((testimonial, index) => (
-            <div 
+            <details 
               key={index}
-              className={`border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{
-                transitionDelay: `${(index + 2) * 100}ms`,
-              }}
+              className="group md:open"
+              open={index === 0}
             >
-              <div className="flex gap-2 mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <div 
-                    key={i} 
-                    className={`w-6 h-6 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
-                      isVisible ? 'scale-100' : 'scale-0'
-                    }`}
-                    style={{
-                      transitionDelay: `${(index * 200) + (i * 50)}ms`,
-                    }}
-                  >
-                    <span className="font-pixel text-secondary-foreground text-xs">★</span>
+              <summary className="md:hidden cursor-pointer list-none border-4 border-black bg-white p-4 mb-4 hover:bg-secondary/10 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 border-4 border-black bg-accent flex items-center justify-center">
+                      <span className="font-pixel text-accent-foreground text-xs">{testimonial.initials}</span>
+                    </div>
+                    <span className="font-pixel text-sm">{testimonial.author}</span>
                   </div>
-                ))}
-              </div>
+                  <span className="font-pixel text-xl group-open:rotate-90 transition-transform">▶</span>
+                </div>
+              </summary>
               
-              <div className="mb-6">
-                <div className="w-8 h-8 border-2 border-black bg-accent flex items-center justify-center mb-4">
-                  <Quote className="h-4 w-4 text-accent-foreground" />
+              <div 
+                className={`border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{
+                  transitionDelay: `${(index + 2) * 100}ms`,
+                }}
+              >
+                <div className="flex gap-2 mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`w-6 h-6 border-2 border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
+                        isVisible ? 'scale-100' : 'scale-0'
+                      }`}
+                      style={{
+                        transitionDelay: `${(index * 200) + (i * 50)}ms`,
+                      }}
+                    >
+                      <span className="font-pixel text-secondary-foreground text-xs">★</span>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-base font-sans text-foreground leading-relaxed">
-                  {testimonial.quote}
-                </p>
+                
+                <div className="mb-6">
+                  <div className="w-8 h-8 border-2 border-black bg-accent flex items-center justify-center mb-4">
+                    <Quote className="h-4 w-4 text-accent-foreground" />
+                  </div>
+                  <p className="text-base font-sans text-foreground leading-relaxed">
+                    {testimonial.quote}
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-black bg-accent flex items-center justify-center">
+                    <span className="font-pixel text-accent-foreground text-xs">{testimonial.initials}</span>
+                  </div>
+                  <div>
+                    <div className="font-pixel text-sm text-foreground">{testimonial.author}</div>
+                    <div className="font-sans text-xs text-muted-foreground">{testimonial.role}</div>
+                  </div>
+                </div>
               </div>
-              
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 border-4 border-black bg-accent flex items-center justify-center">
-                  <span className="font-pixel text-accent-foreground text-xs">{testimonial.initials}</span>
-                </div>
-                <div>
-                  <div className="font-pixel text-sm text-foreground">{testimonial.author}</div>
-                  <div className="font-sans text-xs text-muted-foreground">{testimonial.role}</div>
-                </div>
-              </div>
-            </div>
+            </details>
           ))}
+        </div>
+        
+        <div className="text-center mt-8 md:hidden">
+          <p className="font-pixel text-xs text-accent-foreground/60 animate-bounce">
+            ▼ TAP TO READ MORE REVIEWS
+          </p>
         </div>
       </div>
     </div>
