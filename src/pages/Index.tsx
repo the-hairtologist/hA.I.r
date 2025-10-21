@@ -155,7 +155,7 @@ const Index = () => {
               </div>
               
               {/* Animated Counters - Social Proof */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 xxs:gap-2 xs:gap-3 sm:gap-4 max-w-4xl mx-auto pt-1.5 xs:pt-2 sm:pt-3 animate-fade-in" style={{ animationDelay: '500ms' }}>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 xxs:gap-2 xs:gap-3 sm:gap-4 max-w-4xl mx-auto pt-4 xs:pt-5 sm:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
                 <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
