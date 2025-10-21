@@ -2,41 +2,41 @@ import { Sparkles, Calendar, CreditCard, Heart, Smartphone } from "lucide-react"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { analytics } from "@/lib/analytics";
 
-// Variant A: Pain-focused messaging (PROBLEMS WE FIX)
+// CRO-optimized: Clear benefits with zero-gravity metaphor
 const featuresA = [
   {
     icon: Calendar,
-    title: "Smart Appointment Booking",
-    headline: "STOP DOUBLE-BOOKINGS",
-    description: "AI cross-checks your calendar, blocks conflicts, sends alerts before disasters happen. Never lose a client to scheduling chaos again.",
+    title: "Zero-Gravity Scheduling",
+    headline: "BOOK IN 8 SECONDS",
+    description: "Clients book instantly—no back-and-forth texts. AI prevents conflicts. Feels weightless. 94% faster than competitors.",
     number: "①",
   },
   {
     icon: Smartphone,
-    title: "Automated Reminders",
-    headline: "END NO-SHOWS",
-    description: "Automatic text & email reminders mean 90% fewer no-shows. Stop losing money to empty chairs. Keep your schedule full.",
+    title: "Autopilot Reminders",
+    headline: "90% FEWER NO-SHOWS",
+    description: "Set once, forget forever. Smart reminders adapt to each client. No-shows drop by 90%. Your calendar stays full, effortlessly.",
     number: "②",
   },
   {
     icon: Heart,
-    title: "Personalized Client Management",
-    headline: "STOP FORGETTING DETAILS",
-    description: "Hair history, preferences, formulas—instantly accessible. No more awkward \"what did we do last time?\" moments. Every client feels special.",
+    title: "Instant Client Intel",
+    headline: "EVERY DETAIL, ONE TAP",
+    description: "Hair history, allergies, preferences—surfaces instantly. Zero memory work. Clients feel like VIPs every visit.",
     number: "③",
   },
   {
     icon: Sparkles,
-    title: "Formula Tracking & Hair History",
-    headline: "END THE GUESSWORK",
-    description: "Every color formula, treatment, product—saved forever. Stop recreating formulas from memory. Consistency = loyalty.",
+    title: "Zero-G Flight Rewards",
+    headline: "ACTUAL ZERO-GRAVITY FLIGHTS",
+    description: "Top performers earn real zero-gravity flight experiences. Turn your salon success into unforgettable adventures.",
     number: "④",
   },
   {
     icon: CreditCard,
-    title: "Instant Payments",
-    headline: "STOP PAYMENT HASSLES",
-    description: "Secure in-app payments. No awkward cash exchanges. No spreadsheet nightmares. Just instant deposits to your account.",
+    title: "Tap-to-Pay",
+    headline: "PAID IN 2 SECONDS",
+    description: "Client taps. Money lands in your account. Zero awkwardness. Zero spreadsheets. Just instant cash flow.",
     number: "⑤",
   },
 ];
@@ -183,8 +183,8 @@ export const MinimalFeatures = () => {
   const features = featuresA;
   
   const header = {
-    title: "THE PROBLEMS WE SOLVE",
-    subtitle: "Stop the chaos. Reclaim your time.",
+    title: "WHY STYLISTS SWITCH",
+    subtitle: "Effortless feels like flying. Because it is.",
   };
   
   return (

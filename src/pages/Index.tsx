@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Scissors, Sparkles, Zap, Heart, Calendar, Palette, Smartphone } from "lucide-react";
 import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
 import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
-
+import { UrgencyBanner } from "@/components/landing/UrgencyBanner";
+import { SocialProofBar } from "@/components/landing/SocialProofBar";
+import { ZeroGravityFeature } from "@/components/landing/ZeroGravityFeature";
+import { PricingPreview } from "@/components/landing/PricingPreview";
 import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
@@ -91,6 +94,9 @@ const Index = () => {
       </header>
 
       <main id="main-content" className="pt-16">
+        {/* Urgency Banner */}
+        <UrgencyBanner />
+        
         {/* Hero Section - Pixelated LEGO vibes */}
         <section className="relative bg-primary py-6 xxs:py-8 xs:py-12 sm:py-16 overflow-hidden flex items-center" style={{
           backgroundImage: `
@@ -127,7 +133,7 @@ const Index = () => {
                 className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] xs:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] md:drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
                 data-debug-element="hero-headline"
               >
-                STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
+                EFFORTLESS SCHEDULING<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>FEELS LIKE FLYING
               </h1>
               
               <p 
@@ -135,7 +141,7 @@ const Index = () => {
                 style={{ animationDelay: '100ms' }}
                 data-debug-element="hero-subheadline"
               >
-                Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
+                AI automation + zero-gravity booking experience. Save 10+ hours weekly. Plus: Exclusive zero-gravity flight experiences for top stylists.
               </p>
               
               <div className="pt-1 xxs:pt-2 xs:pt-3 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
@@ -148,12 +154,12 @@ const Index = () => {
                   className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-black hover:bg-secondary/90 brutal-border border-black brutal-shadow-md hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                   data-debug-element="hero-cta-button"
                 >
-                  START FREE TRIAL
+                  GET INSTANT ACCESS
                 </Button>
               </div>
               
               <p className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-primary-foreground/80 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
-                ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
+                ✓ No Credit Card • ✓ Setup in 60 Seconds • ✓ 2,487 Stylists Joined This Month
               </p>
 
               {/* Product Demo Mockup - Lazy loaded for performance */}
@@ -179,6 +185,9 @@ const Index = () => {
           <ScrollIndicator />
         </section>
 
+        {/* Social Proof Bar */}
+        <SocialProofBar />
+
         {/* How It Works - Featured prominently */}
         <section className="py-8 xs:py-10 sm:py-12 bg-background" style={{
           backgroundImage: `
@@ -190,7 +199,10 @@ const Index = () => {
           <MinimalFeatures />
         </section>
 
-        {/* Testimonials + FAQ Section - Combined */}
+        {/* Zero-Gravity Feature Spotlight */}
+        <ZeroGravityFeature />
+
+        {/* Testimonials */}
         <section className="py-8 xs:py-10 sm:py-12 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
@@ -199,18 +211,23 @@ const Index = () => {
           backgroundSize: '8px 8px'
         }}>
           <SingleTestimonial />
-          
-          {/* FAQ integrated below */}
-          <div className="mt-12 xs:mt-16">
-            <MinimalFAQ />
-          </div>
+        </section>
+
+        {/* Pricing */}
+        <section className="py-12 xs:py-16 bg-background">
+          <PricingPreview />
+        </section>
+
+        {/* FAQ */}
+        <section className="py-8 xs:py-10 sm:py-12 bg-secondary">
+          <MinimalFAQ />
         </section>
       </main>
 
       <EnhancedFooter />
       
       {/* Sticky CTA (mobile only) */}
-      <StickyCTA ctaText="START FREE TRIAL" />
+      <StickyCTA ctaText="GET INSTANT ACCESS" />
 
       {/* Exit-intent modal */}
       <ExitIntentModal 
