@@ -45,7 +45,7 @@ export const MinimalFAQ = () => {
           <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
             THE REAL QUESTIONS
           </h2>
-          <p className="font-sans text-xs xs:text-sm text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-sans text-xs xs:text-sm text-foreground max-w-2xl mx-auto">
             No fluff. Just honest answers.
           </p>
         </div>
@@ -83,7 +83,7 @@ export const MinimalFAQ = () => {
 
         {/* Contact CTA */}
         <div className="text-center mt-8 xs:mt-10">
-          <p className="text-muted-foreground mb-3 font-sans text-xs xs:text-sm">Still have questions?</p>
+          <p className="text-foreground mb-3 font-sans text-xs xs:text-sm">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
             className="font-pixel text-[10px] xs:text-xs text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-4 xs:px-5 py-2 xs:py-2.5 inline-block brutal-shadow hover:brutal-shadow-md hover:-translate-y-0.5 transition-all duration-300 min-h-[44px] flex items-center"
