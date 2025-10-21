@@ -37,9 +37,9 @@ const VARIANT_A: VariantConfig = {
     secondary: "✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime",
   },
   icons: [
-    { icon: 'Sparkles', color: 'bg-accent', delay: '0s' },
+    { icon: 'Sparkles', color: 'bg-primary', delay: '0s' },
     { icon: 'Zap', color: 'bg-secondary', delay: '0.1s' },
-    { icon: 'Heart', color: 'bg-white', delay: '0.2s' },
+    { icon: 'Heart', color: 'bg-accent', delay: '0.2s' },
   ],
 };
 
@@ -54,9 +54,9 @@ const VARIANT_B: VariantConfig = {
     secondary: "✓ Setup in 10 Minutes • ✓ No Credit Card • ✓ 14-Day Free Trial",
   },
   icons: [
-    { icon: 'Sparkles', color: 'bg-accent', delay: '0s' },
+    { icon: 'Sparkles', color: 'bg-primary', delay: '0s' },
     { icon: 'Zap', color: 'bg-secondary', delay: '0.1s' },
-    { icon: 'Heart', color: 'bg-white', delay: '0.2s' },
+    { icon: 'Heart', color: 'bg-accent', delay: '0.2s' },
   ],
 };
 
@@ -71,9 +71,9 @@ const VARIANT_C: VariantConfig = {
     secondary: "✓ No Setup Fees • ✓ 14-Day Trial • ✓ Cancel Anytime",
   },
   icons: [
-    { icon: 'Sparkles', color: 'bg-accent', delay: '0s' },
+    { icon: 'Sparkles', color: 'bg-primary', delay: '0s' },
     { icon: 'Zap', color: 'bg-secondary', delay: '0.1s' },
-    { icon: 'Heart', color: 'bg-white', delay: '0.2s' },
+    { icon: 'Heart', color: 'bg-accent', delay: '0.2s' },
   ],
 };
 
