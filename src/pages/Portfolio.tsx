@@ -481,6 +481,7 @@ const Portfolio = () => {
                         <img
                           src={photo.photo_url}
                           alt="Portfolio"
+                          loading="lazy"
                           className="w-full h-48 object-cover rounded-lg mb-2 border-2 border-foreground"
                         />
                       )}

@@ -49,6 +49,7 @@ import { SupportChatWidget } from "@/components/dashboard/SupportChatWidget";
 import { PredictiveSuggestions } from "@/components/PredictiveSuggestions";
 import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
 import { FeatureErrorBoundary } from "@/components/errors/FeatureErrorBoundary";
+import { DashboardSectionRenderer } from "@/components/dashboard/DashboardSectionRenderer";
 import { useAIAnalytics } from "@/hooks/useAIAnalytics";
 import { useFeatureFlag } from "@/lib/featureFlags";
 import { Button } from "@/components/ui/button";
@@ -313,49 +314,22 @@ const Dashboard = () => {
         return;
       }
 
-      // Get appropriate profile based on role
-      if (primaryRole === "stylist") {
-        const { data: stylistProfile } = await supabase
-          .from("stylist_profiles")
-          .select("*")
-          .eq("user_id", sessionUser.id)
-          .maybeSingle();
-        setProfile(stylistProfile);
-      } else if (primaryRole === "client") {
-        const { data: clientProfile } = await supabase
-          .from("client_profiles")
-          .select("*")
-          .eq("user_id", sessionUser.id)
-          .maybeSingle();
-        setProfile(clientProfile);
+      // Get appropriate profile based on role - using optimized query
+      const { getUserProfileWithRole } = await import("@/lib/queries/dashboardQueries");
+      const userRoleProfile = await getUserProfileWithRole(sessionUser.id, primaryRole);
+      
+      if (userRoleProfile) {
+        setProfile(userRoleProfile);
       } else if (primaryRole === "admin" || isAdmin) {
-        // For admins, try to get stylist profile first, then client profile
-        const { data: stylistProfile } = await supabase
-          .from("stylist_profiles")
-          .select("*")
-          .eq("user_id", sessionUser.id)
-          .maybeSingle();
-        
-        if (stylistProfile) {
-          setProfile(stylistProfile);
-        } else {
-          const { data: clientProfile } = await supabase
-            .from("client_profiles")
-            .select("*")
-            .eq("user_id", sessionUser.id)
-            .maybeSingle();
-          setProfile(clientProfile);
-        }
+        // For admins without stylist profile, try client profile
+        const clientProfile = await getUserProfileWithRole(sessionUser.id, "client");
+        if (clientProfile) setProfile(clientProfile);
       }
 
-      // Check if profile needs completion
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("full_name, gender")
-        .eq("id", sessionUser.id)
-        .maybeSingle();
-
-      setUserProfile(profileData);
+      // Check if profile needs completion - using optimized query
+      const { getBasicProfile } = await import("@/lib/queries/dashboardQueries");
+      const basicProfile = await getBasicProfile(sessionUser.id);
+      setUserProfile(basicProfile);
       
       // Load predictive insights for stylists
       if (primaryRole === "stylist" && predictiveInsightsEnabled && profile?.id) {
@@ -364,7 +338,7 @@ const Dashboard = () => {
 
       // Only show profile completion if not already marked as complete
       const profileComplete = localStorage.getItem('profile_completed');
-      if (!profileData?.full_name && !profileComplete) {
+      if (!basicProfile?.full_name && !profileComplete) {
         setShowProfileCompletion(true);
       }
     } catch (error: any) {
@@ -388,73 +362,16 @@ const Dashboard = () => {
   };
 
   const loadStylistDashboard = async () => {
-    const today = new Date();
-    const weekStart = startOfWeek(today);
-    const weekEnd = endOfWeek(today);
+    const { getStylistDashboardData, getRecentActivity } = await import("@/lib/queries/dashboardQueries");
+    
+    // Load main dashboard data
+    const { stats: dashboardStats, weekAppointments: weekAppts } = await getStylistDashboardData(profile.id, user.id);
+    setStats(dashboardStats);
+    setWeekAppointments(weekAppts);
 
-    // PERFORMANCE FIX: Parallel queries with Promise.all
-    const [
-      { data: todayAppts },
-      { data: weekAppts },
-      { data: messages },
-      { data: appointments }
-    ] = await Promise.all([
-      supabase
-        .from("appointments")
-        .select("*")
-        .eq("stylist_id", profile.id)
-        .gte("appointment_date", startOfDay(today).toISOString())
-        .lte("appointment_date", endOfDay(today).toISOString())
-        .neq("status", "cancelled"),
-      
-      supabase
-        .from("appointments")
-        .select(`
-          *,
-          client:client_profiles(
-            user:profiles(full_name, email, phone)
-          )
-        `)
-        .eq("stylist_id", profile.id)
-        .gte("appointment_date", weekStart.toISOString())
-        .lte("appointment_date", weekEnd.toISOString())
-        .neq("status", "cancelled"),
-      
-      supabase
-        .from("messages")
-        .select("*")
-        .eq("recipient_id", user.id)
-        .eq("is_read", false),
-      
-      supabase
-        .from("appointments")
-        .select("client_id")
-        .eq("stylist_id", profile.id)
-    ]);
-
-    setWeekAppointments(weekAppts || []);
-
-    const uniqueClients = new Set(appointments?.map(a => a.client_id) || []).size;
-
-    setStats({
-      todayAppointments: todayAppts?.length || 0,
-      upcomingAppointments: weekAppts?.length || 0,
-      unreadMessages: messages?.length || 0,
-      totalClients: uniqueClients,
-    });
-
-    // Load recent activity (can be loaded after initial render)
-    const { data: recentAppts } = await supabase
-      .from("appointments")
-      .select(`
-        *,
-        client:client_profiles(user:profiles(full_name))
-      `)
-      .eq("stylist_id", profile.id)
-      .order("created_at", { ascending: false })
-      .limit(5);
-
-    const activities = (recentAppts || []).map(appt => ({
+    // Load recent activity
+    const recentAppts = await getRecentActivity(profile.id, 5);
+    const activities = recentAppts.map(appt => ({
       id: appt.id,
       type: "appointment" as const,
       title: `Appointment with ${appt.client?.user?.full_name || "Client"}`,
@@ -467,84 +384,20 @@ const Dashboard = () => {
   };
 
   const loadClientDashboard = async () => {
-    const today = new Date();
-    const weekStart = startOfWeek(today);
-    const weekEnd = endOfWeek(today);
+    const { getClientDashboardData } = await import("@/lib/queries/dashboardQueries");
+    
+    const { stats: dashboardStats, weekAppointments: weekAppts } = await getClientDashboardData(profile.id, user.id);
+    setStats(dashboardStats);
+    setWeekAppointments(weekAppts);
 
-    // Get upcoming appointments (including for calendar view)
-    const { data: upcomingAppts } = await supabase
-      .from("appointments")
-      .select(`
-        *,
-        stylist:stylist_profiles(
-          user:profiles(full_name),
-          weekly_schedule
-        )
-      `)
-      .eq("client_id", profile.id)
-      .gte("appointment_date", today.toISOString())
-      .neq("status", "cancelled")
-      .order("appointment_date", { ascending: true });
-
-    // Get week appointments for calendar view
-    const { data: weekAppts } = await supabase
-      .from("appointments")
-      .select(`
-        *,
-        stylist:stylist_profiles(
-          user:profiles(full_name)
-        )
-      `)
-      .eq("client_id", profile.id)
-      .gte("appointment_date", weekStart.toISOString())
-      .lte("appointment_date", weekEnd.toISOString())
-      .neq("status", "cancelled");
-
-    setWeekAppointments(weekAppts || []);
-
-    // Get unread messages
-    const { data: messages } = await supabase
-      .from("messages")
-      .select("*")
-      .eq("recipient_id", user.id)
-      .eq("is_read", false);
-
-    // Get appointments that need reviews
-    const { data: completedAppts } = await supabase
-      .from("appointments")
-      .select(`
-        *,
-        reviews(id)
-      `)
-      .eq("client_id", profile.id)
-      .eq("status", "completed")
-      .is("reviews.id", null);
-
-    setStats({
-      upcomingAppointments: upcomingAppts?.length || 0,
-      unreadMessages: messages?.length || 0,
-      pendingReviews: completedAppts?.length || 0,
-    });
-
-    // Load recent activity
-    const { data: recentAppts } = await supabase
-      .from("appointments")
-      .select(`
-        *,
-        stylist:stylist_profiles(
-          user:profiles(full_name)
-        )
-      `)
-      .eq("client_id", profile.id)
-      .order("created_at", { ascending: false })
-      .limit(5);
-
-    const activities = (recentAppts || []).map(appt => ({
+    // Load recent activity from week appointments
+    const recentAppts = weekAppts.slice(0, 5);
+    const activities = recentAppts.map((appt: any) => ({
       id: appt.id,
       type: "appointment" as const,
       title: `Appointment with ${appt.stylist?.user?.full_name || "Stylist"}`,
       description: `${appt.service_type} - ${format(new Date(appt.appointment_date), "MMM d, h:mm a")}`,
-      timestamp: appt.created_at,
+      timestamp: appt.created_at || appt.appointment_date,
       status: appt.status,
     }));
 
@@ -571,121 +424,21 @@ const Dashboard = () => {
     );
   }
 
+  // Render section using optimized component
   const renderSection = (section: DashboardSection) => {
-    if (!section.enabled) return null;
-
-    switch (section.component) {
-      case "NextAppointment":
-        return (userRole === "client" || isAdmin) ? (
-          <NextAppointmentWidget />
-        ) : null;
-      case "LoyaltyProgress":
-        return (userRole === "client" || isAdmin) ? <LoyaltyProgressWidget /> : null;
-      case "AppointmentTimer":
-        return (userRole === "stylist" || isAdmin) ? <AppointmentTimerWidget /> : null;
-      case "ProgressTracker":
-        return (userRole === "stylist" || isAdmin) ? <ProgressTracker /> : null;
-      case "BirthdayAlerts":
-        return (userRole === "stylist" || isAdmin) ? <BirthdayAlertsWidget /> : null;
-      case "CommissionTracker":
-        return (userRole === "stylist" || isAdmin) ? (
-          <FeatureErrorBoundary featureName="Commission Tracker">
-            <CommissionTrackerWidget />
-          </FeatureErrorBoundary>
-        ) : null;
-      case "LiveKPICards":
-        return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <FeatureErrorBoundary featureName="Live KPIs">
-            <LiveKPICards stylistId={profile.id} />
-          </FeatureErrorBoundary>
-        ) : null;
-      case "QuickActions":
-        return <QuickActions userRole={userRole || ""} isAdmin={isAdmin} />;
-      case "WeeklyOverview":
-        return (userRole === "stylist" || isAdmin) ? (
-          <FeatureErrorBoundary featureName="Weekly Overview">
-            <WeeklyOverview />
-          </FeatureErrorBoundary>
-        ) : null;
-      case "ClientSentimentTracker":
-        return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <FeatureErrorBoundary featureName="Client Sentiment">
-            <ClientSentimentTracker stylistId={profile.id} />
-          </FeatureErrorBoundary>
-        ) : null;
-      case "RevenueTrends":
-        return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <FeatureErrorBoundary featureName="Revenue Analytics">
-            <RevenueTrends stylistId={profile.id} />
-          </FeatureErrorBoundary>
-        ) : null;
-      case "TopServices":
-        return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <FeatureErrorBoundary featureName="Service Performance">
-            <TopServices stylistId={profile.id} />
-          </FeatureErrorBoundary>
-        ) : null;
-      case "ClientRetention":
-        return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <FeatureErrorBoundary featureName="Retention Metrics">
-            <ClientRetention stylistId={profile.id} />
-          </FeatureErrorBoundary>
-        ) : null;
-      case "QuickNotes":
-        return (userRole === "stylist" || isAdmin) ? <QuickNotes /> : null;
-      case "ChurnRisk":
-        return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <AIFeatureErrorBoundary featureName="Churn Prediction">
-            <ChurnRiskWidget stylistId={profile.id} variant="full" />
-          </AIFeatureErrorBoundary>
-        ) : null;
-      case "ProactiveInsights":
-        return (userRole === "stylist" || isAdmin) && profile?.id ? (
-          <AIFeatureErrorBoundary featureName="Proactive Insights">
-            <ProactiveInsightsPanel stylistId={profile.id} />
-          </AIFeatureErrorBoundary>
-        ) : null;
-      case "PredictiveInsights":
-        return (userRole === "stylist" || isAdmin) && predictiveInsightsEnabled && predictiveInsights.length > 0 ? (
-          <AIFeatureErrorBoundary featureName="Predictive Insights">
-            <PredictiveSuggestions 
-              insights={predictiveInsights}
-              onAction={(insightId) => {
-                toast.success("Action taken on prediction");
-                analytics.trackPrediction(predictiveInsights.length);
-              }}
-            />
-          </AIFeatureErrorBoundary>
-        ) : null;
-      case "WeeklySchedule":
-        return null; // Now rendered in welcome box
-      case "RecentActivity":
-        return ((userRole === "stylist" || userRole === "client" || isAdmin) && recentActivities.length > 0) ? (
-          <RecentActivity activities={recentActivities} />
-        ) : null;
-      case "QuickTasks":
-        return (userRole === "stylist" || isAdmin) ? <QuickTasks /> : null;
-      case "FavoriteStylists":
-        return (userRole === "client" || isAdmin) && profile?.id ? (
-          <FavoriteStylists clientId={profile.id} />
-        ) : null;
-      case "ClientMilestones":
-        return (userRole === "client" || isAdmin) && profile?.id ? (
-          <ClientMilestones clientId={profile.id} />
-        ) : null;
-      case "SupportChatWidget":
-        return <SupportChatWidget />;
-      case "UpcomingAppointments":
-        return (userRole === "client" || isAdmin) && stats ? (
-          stats.upcomingAppointments > 0 ? (
-            <RecentActivity activities={recentActivities} />
-          ) : (
-            <EmptyStateGuidance type="appointments" />
-          )
-        ) : null;
-      default:
-        return null;
-    }
+    return (
+      <DashboardSectionRenderer
+        section={section}
+        userRole={userRole}
+        isAdmin={isAdmin}
+        profile={profile}
+        stats={stats}
+        recentActivities={recentActivities}
+        predictiveInsightsEnabled={predictiveInsightsEnabled}
+        predictiveInsights={predictiveInsights}
+        analytics={analytics}
+      />
+    );
   };
 
   return (
