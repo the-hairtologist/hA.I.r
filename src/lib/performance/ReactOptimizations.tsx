@@ -21,6 +21,7 @@ export function lazyWithPreload<T extends ComponentType<any>>(
 
 /**
  * Lazy load with retry logic for failed chunks
+ * Recursively retries with exponential backoff
  */
 export function lazyWithRetry<T extends ComponentType<any>>(
   factory: () => Promise<{ default: T }>,
@@ -28,17 +29,26 @@ export function lazyWithRetry<T extends ComponentType<any>>(
   interval = 1000
 ): React.LazyExoticComponent<T> {
   return lazy(() =>
-    factory().catch((error) => {
-      if (retriesLeft === 0) {
-        throw error;
-      }
+    new Promise<{ default: T }>((resolve, reject) => {
+      const attemptLoad = (attemptsRemaining: number, currentInterval: number) => {
+        factory()
+          .then(resolve)
+          .catch((error) => {
+            if (attemptsRemaining === 0) {
+              console.error('[LazyLoad] Failed to load chunk after retries:', error);
+              reject(error);
+              return;
+            }
 
-      return new Promise<{ default: T }>((resolve, reject) => {
-        setTimeout(() => {
-          lazyWithRetry(factory, retriesLeft - 1, interval * 2);
-          factory().then(resolve).catch(reject);
-        }, interval);
-      });
+            console.warn(`[LazyLoad] Chunk load failed, retrying in ${currentInterval}ms... (${attemptsRemaining} attempts left)`);
+            
+            setTimeout(() => {
+              attemptLoad(attemptsRemaining - 1, currentInterval * 2);
+            }, currentInterval);
+          });
+      };
+
+      attemptLoad(retriesLeft, interval);
     })
   );
 }
