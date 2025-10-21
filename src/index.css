@@ -99,6 +99,37 @@
     }
   }
   
+  /* Touch-friendly minimum sizes */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  /* Responsive container with safe overflow */
+  .responsive-container {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  /* Mobile-first spacing utilities */
+  .mobile-spacing {
+    padding: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .mobile-spacing {
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .mobile-spacing {
+      padding: 2rem;
+    }
+  }
+
+  
   /* CRITICAL: Root container constraints */
   #root {
     min-height: 100vh;

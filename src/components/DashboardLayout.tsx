@@ -167,8 +167,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           />
 
           {/* Desktop Header */}
-          <header className={`hidden lg:flex sticky top-0 z-40 brutal-border-b ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle brutal-shadow-sm lg:brutal-shadow-md`}>
-            <div className="flex h-14 lg:h-16 items-center gap-2 lg:gap-4 px-3 lg:px-4 w-full">
+          <header className={`hidden md:flex sticky top-0 z-40 brutal-border-b ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle brutal-shadow-sm md:brutal-shadow-md`}>
+            <div className="flex h-14 md:h-16 items-center gap-2 md:gap-4 px-3 md:px-4 w-full">
               {/* CRITICAL: Always-visible sidebar trigger */}
               <SidebarTrigger className="h-9 w-9" />
               
@@ -186,7 +186,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   {isAdmin && (
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Badge className="bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
+                        <Badge className="hidden sm:flex bg-amber-500 text-on-surface-primary border border-amber-600 hover:bg-amber-600 transition-colors cursor-help">
                           <Crown className="h-3 w-3 mr-1" />
                           🛡️ ADMIN - FULL ACCESS
                         </Badge>
@@ -198,7 +198,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   )}
                   
                   {!isAdmin && userRole && (
-                    <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20">
+                    <Badge variant="secondary" className="hidden sm:flex bg-primary/10 text-primary border border-primary/20">
                       {userRole === "stylist" ? (
                         <><Scissors className="h-3 w-3 mr-1" /> Stylist</>
                       ) : (
@@ -272,11 +272,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Main Content - CRITICAL: Prevent overflow */}
           <main
             id="main-content"
-            className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-20 lg:pb-4"
+            className="flex-1 w-full max-w-full overflow-y-auto overflow-x-hidden pb-20 md:pb-4"
             role="main"
             aria-label="Main content"
           >
-            <div className="container mx-auto p-3 xs:p-4 sm:p-5 md:p-6 animate-fade-in-fast w-full max-w-full">
+            <div className="container mx-auto px-4 py-4 sm:px-5 sm:py-5 md:p-6 animate-fade-in-fast w-full max-w-full">
               <Breadcrumbs />
               {children}
             </div>
