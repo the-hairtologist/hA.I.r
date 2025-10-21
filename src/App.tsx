@@ -102,15 +102,18 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Optimized QueryClient
+// Enhanced QueryClient with improved caching
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000,
-      gcTime: 5 * 60 * 1000,
+      staleTime: 5 * 60 * 1000, // 5 minutes (increased from 60s)
+      gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
       retry: 3,
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       refetchOnWindowFocus: false,
+      // Enable automatic query deduplication
+      refetchOnMount: false,
+      refetchOnReconnect: true,
     },
   },
 });
