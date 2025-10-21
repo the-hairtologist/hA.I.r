@@ -12,6 +12,7 @@ import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { FinalValueProp } from "@/components/landing/FinalValueProp";
 import { lazy, Suspense, useEffect } from "react";
 import { logger } from "@/lib/productionLogger";
+import { VariantSwitcher } from "@/components/dev/VariantSwitcher";
 
 // Lazy load phone mockup to improve initial load time
 const HeroPhoneMockup = lazy(() => {
@@ -222,6 +223,9 @@ const Index = () => {
       </main>
 
       <EnhancedFooter />
+      
+      {/* Development-only variant switcher */}
+      <VariantSwitcher />
     </div>
   );
 };

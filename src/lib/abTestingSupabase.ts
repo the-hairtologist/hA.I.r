@@ -146,18 +146,23 @@ async function getActiveExperiment(): Promise<string | null> {
  * - Privacy-friendly: No permanent tracking, respects user preferences
  * 
  * @flow Assignment Priority
- * 1. Check sessionStorage (current tab session)
- * 2. Check localStorage (returning visitor same device)
- * 3. Query Supabase for existing assignment (cross-device)
- * 4. Random assignment if new visitor (33.3% split A/B/C)
+ * 1. **URL parameter override** (?variant=A/B/C) - Dev testing only
+ * 2. Check sessionStorage (current tab session)
+ * 3. Check localStorage (returning visitor same device)
+ * 4. Query Supabase for existing assignment (cross-device)
+ * 5. Random assignment if new visitor (33.3% split A/B/C)
  * 
  * @returns {Promise<Variant>} Variant key ('A', 'B', or 'C')
  * @fallback Returns 'A' on any error (DB unavailable, network issue, etc.)
  * 
  * @example
  * ```typescript
+ * // Normal usage
  * const variant = await getVariant(); // Returns 'A', 'B', or 'C'
- * const config = VARIANTS[variant];   // Get variant-specific config
+ * 
+ * // Dev testing - force specific variant
+ * // URL: https://yoursite.com?variant=B
+ * const variant = await getVariant(); // Returns 'B'
  * ```
  * 
  * @performance
@@ -168,6 +173,19 @@ async function getActiveExperiment(): Promise<string | null> {
  */
 export async function getVariant(): Promise<Variant> {
   logger.info('[abTestingSupabase] getVariant() called - SESSION-BASED MODE', { context: 'A/B Testing' });
+  
+  // DEV OVERRIDE: Allow URL parameter to force specific variant for testing
+  // Usage: ?variant=A or ?variant=B or ?variant=C
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceVariant = urlParams.get('variant')?.toUpperCase();
+    if (forceVariant === 'A' || forceVariant === 'B' || forceVariant === 'C') {
+      logger.info(`[abTestingSupabase] 🔧 DEV OVERRIDE: Forcing variant ${forceVariant} from URL`, { context: 'A/B Testing' });
+      // Store in session to persist during testing
+      sessionStorage.setItem(ASSIGNED_VARIANT_KEY, forceVariant);
+      return forceVariant as Variant;
+    }
+  }
   
   // Check sessionStorage first (persists only for current tab session)
   const sessionCached = sessionStorage.getItem(ASSIGNED_VARIANT_KEY);
