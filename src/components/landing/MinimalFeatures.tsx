@@ -188,7 +188,7 @@ export const MinimalFeatures = () => {
   const features = featuresA;
   
   const header = {
-    title: "YOU BRING THE ART. hA.I.r WILL DO THE REST.",
+    title: "YOU BRING THE ART. hA.I.r WILL DO THE REST!",
     subtitle: "No more juggling. Just clients, color, and calm.",
   };
   
