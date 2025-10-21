@@ -47,8 +47,8 @@ export const FinalValueProp = () => {
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
-          <div className="inline-block border-2 border-black/50 bg-accent/70 backdrop-blur-sm px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.4)] animate-[glow-pop_2s_ease-in-out_infinite]">
-            <span className="font-pixel text-[10px] xs:text-xs text-secondary uppercase">BY THE NUMBERS</span>
+          <div className="inline-block border-2 border-black/50 bg-accent/80 backdrop-blur-sm px-2.5 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.4)] animate-[glow-pop_2s_ease-in-out_infinite]">
+            <span className="font-pixel text-[9px] xs:text-[10px] text-secondary uppercase">BY THE NUMBERS</span>
           </div>
         </div>
         
