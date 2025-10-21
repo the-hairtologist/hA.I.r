@@ -32,15 +32,15 @@ export const AnimatedCounter = React.forwardRef<HTMLDivElement, AnimatedCounterP
     return (
       <div
         ref={setRefs}
-        className="flex flex-col items-center gap-4 transition-all duration-300"
+        className="flex flex-col items-center gap-2 transition-all duration-300"
       >
         <div
-          className={`w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 border-4 ${borderColor} ${bgColor} flex items-center justify-center mb-2 transition-all duration-300 brutal-shadow ${
+          className={`w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 border-4 ${borderColor} ${bgColor} flex items-center justify-center mb-1 transition-all duration-300 brutal-shadow ${
             isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
           }`}
         >
           <Icon 
-            className={`h-8 w-8 xs:h-10 xs:w-10 ${textColor} transition-transform duration-300 ${
+            className={`h-6 w-6 xs:h-7 xs:w-7 sm:h-8 sm:w-8 ${textColor} transition-transform duration-300 ${
               isVisible ? 'animate-bounce' : ''
             }`} 
             strokeWidth={2.5}
@@ -48,10 +48,10 @@ export const AnimatedCounter = React.forwardRef<HTMLDivElement, AnimatedCounterP
           />
         </div>
         <div className="text-center">
-          <div className="text-base sm:text-lg font-pixel text-white">
+          <div className="text-sm xs:text-base sm:text-lg font-pixel text-white">
             {count.toLocaleString()}{suffix}
           </div>
-          <div className="text-xs font-pixel text-white/90 uppercase tracking-wider">{label}</div>
+          <div className="text-[10px] xs:text-xs font-pixel text-white/90 uppercase tracking-wider">{label}</div>
         </div>
       </div>
     );
