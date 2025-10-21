@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { OfflineIndicator } from "@/components/shared";
 import { BrowserRouter, Routes } from "react-router-dom";
 import { useEffect, Suspense } from "react";
 import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";

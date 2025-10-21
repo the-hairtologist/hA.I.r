@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { PageHeader } from './PageHeader';
+import { PageHeader } from './layout/PageHeader';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {

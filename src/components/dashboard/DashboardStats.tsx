@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import { StatCard } from "@/components/ui/stat-card";
 import { Calendar, MessageSquare, Star, DollarSign, Users, Clock } from "lucide-react";
-import { HelpTooltip } from "@/components/HelpTooltip";
+import { HelpTooltip } from "@/components/shared";
 
 interface DashboardStatsProps {
   stats: {

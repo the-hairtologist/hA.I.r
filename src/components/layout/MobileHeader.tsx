@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { useSidebar } from "@/components/ui/sidebar";
-import { NotificationDot } from "./NotificationDot";
+import { NotificationDot } from "@/components/shared";
 
 interface MobileHeaderProps {
   notificationCount?: number;

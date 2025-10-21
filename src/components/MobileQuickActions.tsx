@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Plus, UserPlus, Calendar, Palette, Sparkles, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BottomSheet } from "@/components/BottomSheet";
+import { BottomSheet } from "@/components/shared";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/platform/haptics";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";

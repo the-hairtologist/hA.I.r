@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { MobileBottomNav } from './MobileBottomNav';
+import { MobileBottomNav } from './layout/MobileBottomNav';
 
 const mockNavigate = vi.fn();
 const mockUseEnhancedAuth = vi.fn();
