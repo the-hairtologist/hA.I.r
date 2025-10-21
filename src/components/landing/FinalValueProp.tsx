@@ -51,7 +51,7 @@ export const FinalValueProp = () => {
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
-          <p className="font-sans text-sm xs:text-base sm:text-lg text-primary-foreground/90 max-w-2xl mx-auto">
+          <p className="font-sans text-sm xs:text-base sm:text-lg text-white max-w-2xl mx-auto">
             Real metrics from real stylists who switched to hA.I.r
           </p>
         </div>
