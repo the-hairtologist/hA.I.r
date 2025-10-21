@@ -63,24 +63,24 @@ export const StickyCTA = ({ ctaText }: StickyCTAProps) => {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-40 lg:hidden transition-transform duration-300 ${
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-40 lg:hidden transition-transform duration-300 max-w-[90vw] ${
         isVisible ? 'translate-y-0' : 'translate-y-full'
       }`}
     >
-      <div className="bg-secondary brutal-border border-t-4 border-black p-3 xs:p-4 shadow-[0_-8px_16px_rgba(0,0,0,0.2)]">
-        <div className="container mx-auto flex items-center gap-3 xs:gap-4">
+      <div className="bg-secondary border-[3px] border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] pl-4 pr-2 py-2">
+        <div className="flex items-center gap-2">
           <Button
             onClick={handleClick}
-            className="flex-1 font-pixel text-xs xs:text-sm uppercase bg-primary text-primary-foreground hover:bg-primary/90 brutal-border border-black brutal-shadow hover:brutal-shadow-md transition-all duration-300 rounded-none min-h-[56px] py-3 xs:py-4"
+            className="font-pixel text-xs xs:text-sm uppercase bg-primary text-primary-foreground hover:bg-primary/90 border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 rounded-none h-10 px-6 py-2"
           >
             {ctaText}
           </Button>
           <button
             onClick={handleDismiss}
-            className="w-12 h-12 xs:w-14 xs:h-14 brutal-border border-black bg-background flex items-center justify-center hover:bg-background/90 transition-colors flex-shrink-0"
+            className="w-8 h-8 border-[2px] border-black rounded-full bg-background flex items-center justify-center hover:bg-background/90 transition-colors flex-shrink-0"
             aria-label="Dismiss sticky CTA"
           >
-            <X className="h-5 w-5 xs:h-6 xs:w-6" />
+            <X className="h-4 w-4" />
           </button>
         </div>
       </div>
