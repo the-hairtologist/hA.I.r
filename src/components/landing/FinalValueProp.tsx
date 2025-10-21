@@ -113,12 +113,12 @@ export const FinalValueProp = () => {
         </div>
 
         <div className={`mt-10 xs:mt-12 text-center transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '800ms' }}>
-          <p className="font-sans text-base xs:text-lg sm:text-xl md:text-2xl text-white leading-relaxed max-w-3xl mx-auto tracking-wide flex items-center justify-center gap-3 flex-wrap">
-            <Sparkles className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 text-secondary inline-block" />
-            <span className="font-bold text-secondary text-lg xs:text-xl sm:text-2xl md:text-3xl" style={{ textShadow: '0 0 30px rgba(251, 191, 36, 0.8), 0 0 60px rgba(251, 191, 36, 0.5)' }}>
+          <p className="font-sans text-sm xs:text-base sm:text-lg text-white/90 leading-relaxed max-w-3xl mx-auto flex items-center justify-center gap-2 flex-wrap">
+            <Sparkles className="w-4 h-4 xs:w-5 xs:h-5 text-secondary inline-block" />
+            <span className="font-bold text-secondary" style={{ textShadow: '0 0 20px rgba(251, 191, 36, 0.5), 0 0 40px rgba(251, 191, 36, 0.3)' }}>
               That's the difference
             </span>
-            <Sparkles className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 text-secondary inline-block" />
+            <Sparkles className="w-4 h-4 xs:w-5 xs:h-5 text-secondary inline-block" />
             <span className="block w-full sm:inline sm:w-auto">between managing chaos and running a thriving salon.</span>
           </p>
         </div>
