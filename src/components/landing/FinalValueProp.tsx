@@ -113,9 +113,9 @@ export const FinalValueProp = () => {
         </div>
 
         <div className={`mt-10 xs:mt-12 text-center transition-all duration-700 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: '800ms' }}>
-          <div className="inline-block border-[3px] border-black bg-secondary/20 backdrop-blur-sm px-6 xs:px-8 py-4 xs:py-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <p className="font-sans text-sm xs:text-base text-primary-foreground leading-relaxed">
-              <span className="font-bold text-accent">That's the difference</span> between managing chaos and running a thriving salon.
+          <div className="inline-block border-[3px] border-black bg-accent px-6 xs:px-8 py-4 xs:py-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <p className="font-sans text-sm xs:text-base text-white leading-relaxed">
+              <span className="font-bold text-secondary">That's the difference</span> between managing chaos and running a thriving salon.
             </p>
           </div>
         </div>
