@@ -44,8 +44,8 @@ export const MinimalFAQ = () => {
         <div className="max-w-2xl mx-auto">
           {/* Header with black text on yellow background */}
           <div className={`text-center mb-3 xs:mb-4 sm:mb-6 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            <div className="inline-block border-[3px] border-black px-1.5 xs:px-2 py-1 xs:py-1.5 mb-3 xs:mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-success hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 hover:scale-105">
-              <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl text-secondary uppercase tracking-tight animate-pulse">
+            <div className="inline-block border-[3px] border-black px-2.5 xs:px-3 sm:px-4 py-1.5 xs:py-2 mb-3 xs:mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-success hover:shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:rotate-1">
+              <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl text-secondary uppercase tracking-tight animate-pulse">
                 THE REAL QUESTIONS
               </h2>
             </div>
