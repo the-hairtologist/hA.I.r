@@ -47,7 +47,7 @@ export const FinalValueProp = () => {
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
-          <div className="inline-block border-2 border-black/40 bg-accent/30 backdrop-blur-sm px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] animate-[glow-pop_2s_ease-in-out_infinite]">
+          <div className="inline-block border-2 border-black/50 bg-accent/60 backdrop-blur-sm px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.4)] animate-[glow-pop_2s_ease-in-out_infinite]">
             <span className="font-pixel text-[10px] xs:text-xs text-secondary uppercase">REAL RESULTS</span>
           </div>
         </div>
@@ -56,11 +56,11 @@ export const FinalValueProp = () => {
           @keyframes glow-pop {
             0%, 100% { 
               transform: scale(1);
-              box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.3);
+              box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.4);
             }
             50% { 
               transform: scale(1.05);
-              box-shadow: 4px 4px 12px 0px rgba(251, 191, 36, 0.4), 2px 2px 0px 0px rgba(0,0,0,0.3);
+              box-shadow: 4px 4px 12px 0px rgba(251, 191, 36, 0.5), 2px 2px 0px 0px rgba(0,0,0,0.4);
             }
           }
         `}</style>
