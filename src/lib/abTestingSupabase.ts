@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/productionLogger";
 
 export type Variant = 'A' | 'B';
 
@@ -56,6 +57,9 @@ function getVisitorId(): string {
   if (!visitorId) {
     visitorId = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     localStorage.setItem(VISITOR_ID_KEY, visitorId);
+    logger.info(`[abTestingSupabase] Created new visitor ID: ${visitorId}`, { context: 'A/B Testing' });
+  } else {
+    logger.info(`[abTestingSupabase] Retrieved cached visitor ID: ${visitorId}`, { context: 'A/B Testing' });
   }
   return visitorId;
 }
@@ -64,6 +68,8 @@ function getVisitorId(): string {
  * Get active experiment ID
  */
 async function getActiveExperiment(): Promise<string | null> {
+  logger.info('[abTestingSupabase] getActiveExperiment() - querying Supabase...', { context: 'A/B Testing' });
+  
   try {
     const { data, error } = await supabase
       .from('ab_experiments' as any)
@@ -73,15 +79,25 @@ async function getActiveExperiment(): Promise<string | null> {
       .limit(1)
       .single();
 
-    if (error || !data) {
-      console.warn('[A/B Test] No active experiment found');
+    if (error) {
+      logger.warn('[abTestingSupabase] Supabase error fetching experiment', { 
+        context: 'A/B Testing',
+        data: { error: error.message, code: error.code }
+      });
       return null;
     }
 
-    localStorage.setItem(EXPERIMENT_ID_KEY, (data as any).id);
-    return (data as any).id;
+    if (!data) {
+      logger.warn('[abTestingSupabase] No active experiment found', { context: 'A/B Testing' });
+      return null;
+    }
+
+    const experimentId = (data as any).id;
+    localStorage.setItem(EXPERIMENT_ID_KEY, experimentId);
+    logger.info(`[abTestingSupabase] Active experiment found: ${experimentId}`, { context: 'A/B Testing' });
+    return experimentId;
   } catch (error) {
-    console.error('[A/B Test] Error fetching experiment:', error);
+    logger.error('[abTestingSupabase] ERROR fetching experiment', error, { context: 'A/B Testing' });
     return null;
   }
 }
@@ -90,21 +106,27 @@ async function getActiveExperiment(): Promise<string | null> {
  * Get or assign user to a variant
  */
 export async function getVariant(): Promise<Variant> {
+  logger.info('[abTestingSupabase] getVariant() called', { context: 'A/B Testing' });
+  
   // Check if already assigned
   const cached = localStorage.getItem(ASSIGNED_VARIANT_KEY);
   if (cached === 'A' || cached === 'B') {
+    logger.info(`[abTestingSupabase] Using cached variant: ${cached}`, { context: 'A/B Testing' });
     return cached as Variant;
   }
 
+  logger.info('[abTestingSupabase] No cache found, fetching from DB', { context: 'A/B Testing' });
   const visitorId = getVisitorId();
   const experimentId = await getActiveExperiment();
   
   if (!experimentId) {
-    // Fallback to variant A if no active experiment
+    logger.warn('[abTestingSupabase] No active experiment, falling back to variant A', { context: 'A/B Testing' });
     return 'A';
   }
 
   try {
+    logger.info('[abTestingSupabase] Checking for existing assignment...', { context: 'A/B Testing' });
+    
     // Check if already assigned in database
     const { data: existing, error: assignError } = await supabase
       .from('ab_assignments' as any)
@@ -114,6 +136,11 @@ export async function getVariant(): Promise<Variant> {
       .single();
 
     if (!assignError && existing) {
+      logger.info('[abTestingSupabase] Found existing assignment', { 
+        context: 'A/B Testing',
+        data: { variantId: (existing as any).variant_id }
+      });
+      
       // Get the variant details
       const { data: variantData } = await supabase
         .from('ab_variants' as any)
@@ -124,10 +151,13 @@ export async function getVariant(): Promise<Variant> {
       if (variantData) {
         const variantKey = (variantData as any).variant_key as Variant;
         localStorage.setItem(ASSIGNED_VARIANT_KEY, variantKey);
+        logger.info(`[abTestingSupabase] Variant assigned from DB: ${variantKey}`, { context: 'A/B Testing' });
         await trackView(variantKey);
         return variantKey;
       }
     }
+
+    logger.info('[abTestingSupabase] No existing assignment, creating new one...', { context: 'A/B Testing' });
 
     // Get variants for this experiment
     const { data: variants } = await supabase
@@ -136,12 +166,17 @@ export async function getVariant(): Promise<Variant> {
       .eq('experiment_id', experimentId);
 
     if (!variants || variants.length === 0) {
+      logger.warn('[abTestingSupabase] No variants found for experiment, falling back to A', { context: 'A/B Testing' });
       return 'A'; // Fallback
     }
+
+    logger.info(`[abTestingSupabase] Found ${variants.length} variants, randomly assigning...`, { context: 'A/B Testing' });
 
     // Randomly assign variant (50/50 split)
     const assignedVariant = (variants as any)[Math.floor(Math.random() * variants.length)];
     const variantKey = (assignedVariant as any).variant_key as Variant;
+
+    logger.info(`[abTestingSupabase] Randomly selected variant: ${variantKey}`, { context: 'A/B Testing' });
 
     // Store assignment
     await supabase
@@ -153,13 +188,15 @@ export async function getVariant(): Promise<Variant> {
       } as any);
 
     localStorage.setItem(ASSIGNED_VARIANT_KEY, variantKey);
+    logger.info(`[abTestingSupabase] Stored assignment in localStorage: ${variantKey}`, { context: 'A/B Testing' });
     
     // Track initial view
     await trackView(variantKey);
 
     return variantKey;
   } catch (error) {
-    console.error('[A/B Test] Error assigning variant:', error);
+    logger.error('[abTestingSupabase] ERROR assigning variant', error, { context: 'A/B Testing' });
+    logger.warn('[abTestingSupabase] Falling back to variant A due to error', { context: 'A/B Testing' });
     return 'A'; // Fallback
   }
 }

@@ -10,16 +10,36 @@ import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { FinalValueProp } from "@/components/landing/FinalValueProp";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { logger } from "@/lib/productionLogger";
 
 // Lazy load phone mockup to improve initial load time
-const HeroPhoneMockup = lazy(() => 
-  import("@/components/landing/HeroPhoneMockup").then(m => ({ default: m.HeroPhoneMockup }))
-);
+const HeroPhoneMockup = lazy(() => {
+  logger.info('[Index] Lazy loading HeroPhoneMockup...', { context: 'Landing Page' });
+  return import("@/components/landing/HeroPhoneMockup").then(m => {
+    logger.info('[Index] HeroPhoneMockup loaded successfully', { context: 'Landing Page' });
+    return { default: m.HeroPhoneMockup };
+  }).catch(error => {
+    logger.error('[Index] HeroPhoneMockup lazy load FAILED', error, { context: 'Landing Page' });
+    throw error;
+  });
+});
 
 const Index = () => {
   const navigate = useNavigate();
   const { config } = useABTest();
+
+  useEffect(() => {
+    logger.info('[Index] Component mounted', { context: 'Landing Page' });
+    logger.info('[Index] Config received from useABTest', {
+      context: 'Landing Page',
+      data: {
+        headline: config.hero.headline,
+        subheadline: config.hero.subheadline,
+        ctaPrimary: config.cta.primary
+      }
+    });
+  }, [config]);
 
   return (
     <div className="min-h-screen bg-background scroll-smooth">
@@ -67,21 +87,32 @@ const Index = () => {
         }}>
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
             <div className="max-w-4xl mx-auto space-y-4 xxs:space-y-6 xs:space-y-8">
-              <h1 className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-accent leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-4 break-words">
+              <h1 
+                className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-accent leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,0.3)] animate-fade-in px-2 xs:px-4 break-words"
+                data-debug-element="hero-headline"
+              >
                 {config.hero.headline.split(' ').map((word, i, arr) => (
                   i < arr.length / 2 ? word + ' ' : (i === Math.floor(arr.length / 2) ? <><br className="hidden xxs:block" /><span className="xxs:hidden"> </span>{word} </> : word + ' ')
                 ))}
               </h1>
               
-              <p className="text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl font-sans text-primary-foreground max-w-3xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-3 xs:px-4 break-words" style={{ animationDelay: '100ms' }}>
+              <p 
+                className="text-sm xxs:text-base xs:text-lg sm:text-xl md:text-2xl font-sans text-primary-foreground max-w-3xl mx-auto leading-relaxed xs:leading-loose animate-fade-in px-3 xs:px-4 break-words" 
+                style={{ animationDelay: '100ms' }}
+                data-debug-element="hero-subheadline"
+              >
                 {config.hero.subheadline}
               </p>
               
               <div className="pt-3 xxs:pt-4 xs:pt-6 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
                 <Button 
                   size="lg" 
-                  onClick={() => navigate("/auth")} 
+                  onClick={() => {
+                    logger.info('[Index] CTA button clicked', { context: 'Landing Page' });
+                    navigate("/auth");
+                  }} 
                   className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 brutal-border border-black brutal-shadow-md hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
+                  data-debug-element="hero-cta-button"
                 >
                   {config.cta.primary}
                 </Button>
@@ -94,9 +125,11 @@ const Index = () => {
               {/* Product Demo Mockup - Lazy loaded for performance */}
               <div className="mt-8 xs:mt-12 sm:mt-16 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Suspense fallback={
-                  <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" />
+                  <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
                 }>
-                  <HeroPhoneMockup />
+                  <div data-debug-element="phone-mockup-loaded">
+                    <HeroPhoneMockup />
+                  </div>
                 </Suspense>
               </div>
             </div>
