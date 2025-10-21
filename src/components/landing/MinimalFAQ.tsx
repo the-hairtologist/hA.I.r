@@ -39,11 +39,11 @@ export const MinimalFAQ = () => {
   };
 
   return (
-    <div className="py-6 xs:py-8 sm:py-10">
+    <div className="py-4 xs:py-6 sm:py-8">
       <div className="container mx-auto px-3 xs:px-4 sm:px-6" ref={ref}>
         <div className="max-w-2xl mx-auto">
           {/* Header with black text on yellow background */}
-          <div className={`text-center mb-4 xs:mb-6 sm:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className={`text-center mb-3 xs:mb-4 sm:mb-6 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
             THE REAL QUESTIONS
           </h2>
@@ -52,7 +52,7 @@ export const MinimalFAQ = () => {
           </p>
         </div>
 
-        <div className="space-y-2.5 xs:space-y-3 sm:space-y-4">
+        <div className="space-y-2 xs:space-y-2.5 sm:space-y-3">
           {faqs.map((faq, index) => {
             // Rotate through brand colors for borders
             const colors = ['border-primary', 'border-accent', 'border-secondary'];
@@ -96,7 +96,7 @@ export const MinimalFAQ = () => {
         </div>
 
         {/* Testimonials */}
-        <div className="mt-6 xs:mt-8 sm:mt-10">
+        <div className="mt-4 xs:mt-6 sm:mt-8">
           <SingleTestimonial />
         </div>
       </div>

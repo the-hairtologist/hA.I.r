@@ -79,7 +79,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-6 xxs:py-8 xs:py-12 sm:py-16 overflow-hidden flex items-center" style={{
+        <section className="relative bg-primary py-4 xxs:py-6 xs:py-8 sm:py-12 overflow-hidden flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -125,7 +125,7 @@ const Index = () => {
                 Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
               </p>
               
-              <div className="pt-1 xxs:pt-2 xs:pt-3 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
+              <div className="pt-1 xs:pt-2 sm:pt-3 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
                 <Button 
                   size="lg" 
                   onClick={() => {
@@ -155,7 +155,7 @@ const Index = () => {
               </div>
               
               {/* Animated Counters - Social Proof */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-4 xs:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-3 xs:pt-4 sm:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
                 <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
                 <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
@@ -167,7 +167,7 @@ const Index = () => {
         </section>
 
         {/* How It Works - Featured prominently */}
-        <section className="py-8 xs:py-10 sm:py-12 bg-background" style={{
+        <section className="bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
@@ -178,7 +178,7 @@ const Index = () => {
         </section>
 
         {/* Testimonials + FAQ Section - Combined */}
-        <section className="py-8 xs:py-10 sm:py-12 bg-secondary" style={{
+        <section className="bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)

@@ -137,9 +137,9 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
   };
 
   // Rotate through vibrant background colors
-  const bgColors = ['bg-secondary', 'bg-accent', 'bg-primary', 'bg-secondary', 'bg-accent'];
-  const iconBgColors = ['bg-accent', 'bg-primary', 'bg-secondary', 'bg-accent', 'bg-primary'];
-  const iconTextColors = ['text-white', 'text-white', 'text-black', 'text-white', 'text-white'];
+  const bgColors = ['bg-secondary', 'bg-accent', 'bg-primary', 'bg-secondary', 'bg-accent', 'bg-primary'];
+  const iconBgColors = ['bg-accent', 'bg-primary', 'bg-secondary', 'bg-accent', 'bg-primary', 'bg-secondary'];
+  const iconTextColors = ['text-white', 'text-white', 'text-black', 'text-white', 'text-white', 'text-black'];
 
   return (
     <div
@@ -193,10 +193,10 @@ export const MinimalFeatures = () => {
   };
   
   return (
-    <div className="py-6 xs:py-8 sm:py-10">
+    <div className="py-4 xs:py-6 sm:py-8">
       <div className="container mx-auto px-3 xs:px-4 sm:px-6">
         {/* Section Header with dramatic styling */}
-        <div className="text-center mb-4 xs:mb-6 sm:mb-8">
+        <div className="text-center mb-3 xs:mb-4 sm:mb-6">
         <div className="inline-block border-[3px] border-black px-4 py-2 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle" style={{ backgroundColor: 'hsl(140 40% 28%)' }}>
           <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl text-secondary uppercase tracking-wider">
             {header.title}
@@ -207,7 +207,7 @@ export const MinimalFeatures = () => {
         </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 md:gap-5 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 xs:gap-3 md:gap-4 max-w-7xl mx-auto">
           {features.map((feature, index) => (
             <FeatureCard key={feature.title} feature={feature} index={index} />
           ))}
