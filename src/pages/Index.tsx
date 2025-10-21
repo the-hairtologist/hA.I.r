@@ -144,7 +144,7 @@ const Index = () => {
                     logger.info('[Index] CTA button clicked', { context: 'Landing Page' });
                     navigate("/auth");
                   }} 
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-secondary-foreground hover:bg-secondary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-primary focus-visible:outline-none"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-success hover:bg-secondary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-primary focus-visible:outline-none"
                   style={{
                     boxShadow: '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4), 14px 14px 0px rgba(0,0,0,0.2)',
                     transform: 'rotateX(2deg)',
