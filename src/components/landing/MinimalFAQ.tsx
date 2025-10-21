@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/accordion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { analytics } from "@/lib/analytics";
-import { useState } from "react";
 
 const faqs = [
   {
@@ -33,13 +32,10 @@ const faqs = [
 
 export const MinimalFAQ = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
-  const [showAll, setShowAll] = useState(false);
 
   const handleFAQClick = (question: string) => {
     analytics.faqExpanded('A', question);
   };
-
-  const displayedFAQs = showAll ? faqs : faqs.slice(0, 3);
 
   return (
     <div className="container mx-auto px-4" ref={ref}>
@@ -55,7 +51,7 @@ export const MinimalFAQ = () => {
         </div>
 
         <div className="space-y-3 xs:space-y-4">
-          {displayedFAQs.map((faq, index) => {
+          {faqs.map((faq, index) => {
             // Rotate through brand colors for borders
             const colors = ['border-primary', 'border-accent', 'border-secondary'];
             const accentColors = ['text-primary', 'text-accent', 'text-secondary'];
@@ -85,24 +81,12 @@ export const MinimalFAQ = () => {
           })}
         </div>
 
-        {/* Show More Button */}
-        {!showAll && faqs.length > 3 && (
-          <div className="text-center mt-6">
-            <button
-              onClick={() => setShowAll(true)}
-              className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-6 xs:px-8 py-3 brutal-shadow hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300 min-h-[44px]"
-            >
-              SHOW MORE ({faqs.length - 3} MORE)
-            </button>
-          </div>
-        )}
-
         {/* Contact CTA */}
         <div className="text-center mt-8 xs:mt-10">
-          <p className="text-muted-foreground mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
+          <p className="text-muted-foreground mb-3 font-sans text-xs xs:text-sm">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
-            className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-6 xs:px-8 py-3 xs:py-4 inline-block brutal-shadow hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300"
+            className="font-pixel text-[10px] xs:text-xs text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-4 xs:px-5 py-2 xs:py-2.5 inline-block brutal-shadow hover:brutal-shadow-md hover:-translate-y-0.5 transition-all duration-300 min-h-[44px] flex items-center"
           >
             Contact Support
           </a>
