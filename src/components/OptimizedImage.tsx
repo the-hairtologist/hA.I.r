@@ -63,7 +63,7 @@ export function OptimizedImage({
   }
 
   return (
-    <div className={cn('relative overflow-hidden', className)}>
+    <div className={cn('relative overflow-hidden', className)} style={{ aspectRatio: width && height ? `${width}/${height}` : undefined }}>
       {isLoading && (
         <div
           className="absolute inset-0 bg-muted animate-pulse"
@@ -77,13 +77,15 @@ export function OptimizedImage({
         height={height}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
+        fetchPriority={priority ? 'high' : 'auto'}
         onLoad={() => setIsLoading(false)}
         onError={() => { setIsLoading(false); setError(true); }}
         className={cn(
-          'transition-opacity duration-300',
+          'transition-opacity duration-300 w-full h-auto',
           isLoading ? 'opacity-0' : 'opacity-100',
           className
         )}
+        style={{ aspectRatio: width && height ? `${width}/${height}` : undefined }}
         {...props}
       />
     </div>

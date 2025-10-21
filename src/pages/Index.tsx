@@ -9,8 +9,13 @@ import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
-import { HeroPhoneMockup } from "@/components/landing/HeroPhoneMockup";
 import { FinalValueProp } from "@/components/landing/FinalValueProp";
+import { lazy, Suspense } from "react";
+
+// Lazy load phone mockup to improve initial load time
+const HeroPhoneMockup = lazy(() => 
+  import("@/components/landing/HeroPhoneMockup").then(m => ({ default: m.HeroPhoneMockup }))
+);
 
 const Index = () => {
   const navigate = useNavigate();
@@ -86,9 +91,13 @@ const Index = () => {
                 {config.cta.secondary}
               </p>
 
-              {/* Product Demo Mockup */}
+              {/* Product Demo Mockup - Lazy loaded for performance */}
               <div className="mt-8 xs:mt-12 sm:mt-16 animate-fade-in" style={{ animationDelay: '400ms' }}>
-                <HeroPhoneMockup />
+                <Suspense fallback={
+                  <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" />
+                }>
+                  <HeroPhoneMockup />
+                </Suspense>
               </div>
             </div>
           </div>

@@ -67,30 +67,40 @@ const RoleSwitchProtection = lazy(() =>
     .catch(() => ({ default: () => null }))
 );
 
-// New production-ready components
-const CoreWebVitals = lazy(() => 
-  import("@/components/CoreWebVitals")
-    .then(m => ({ default: m.CoreWebVitals }))
-    .catch(() => ({ default: () => null }))
-);
+// Defer non-critical monitoring components until after page load
+let CoreWebVitals: any = null;
+let NetworkStatusIndicator: any = null;
+let ServiceWorkerUpdate: any = null;
+let A11yTester: any = null;
 
-const NetworkStatusIndicator = lazy(() => 
-  import("@/components/NetworkStatusIndicator")
-    .then(m => ({ default: m.NetworkStatusIndicator }))
-    .catch(() => ({ default: () => null }))
-);
+// Load monitoring components after window load for better FCP/LCP
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', () => {
+    CoreWebVitals = lazy(() => 
+      import("@/components/CoreWebVitals")
+        .then(m => ({ default: m.CoreWebVitals }))
+        .catch(() => ({ default: () => null }))
+    );
 
-const ServiceWorkerUpdate = lazy(() => 
-  import("@/components/ServiceWorkerUpdate")
-    .then(m => ({ default: m.ServiceWorkerUpdate }))
-    .catch(() => ({ default: () => null }))
-);
+    NetworkStatusIndicator = lazy(() => 
+      import("@/components/NetworkStatusIndicator")
+        .then(m => ({ default: m.NetworkStatusIndicator }))
+        .catch(() => ({ default: () => null }))
+    );
 
-const A11yTester = lazy(() => 
-  import("@/components/A11yTester")
-    .then(m => ({ default: m.A11yTester }))
-    .catch(() => ({ default: () => null }))
-);
+    ServiceWorkerUpdate = lazy(() => 
+      import("@/components/ServiceWorkerUpdate")
+        .then(m => ({ default: m.ServiceWorkerUpdate }))
+        .catch(() => ({ default: () => null }))
+    );
+
+    A11yTester = lazy(() => 
+      import("@/components/A11yTester")
+        .then(m => ({ default: m.A11yTester }))
+        .catch(() => ({ default: () => null }))
+    );
+  });
+}
 
 // Optimized QueryClient
 const queryClient = new QueryClient({
@@ -157,21 +167,21 @@ const App = () => {
                     <CookieConsent />
                     {/* Advanced accessibility - GlobalAnnouncer for screen readers */}
                     <GlobalAnnouncer />
-                    {/* Core Web Vitals monitoring */}
+                    {/* Core Web Vitals monitoring - deferred after load */}
                     <ReactSuspense fallback={null}>
-                      <CoreWebVitals />
+                      {CoreWebVitals && <CoreWebVitals />}
                     </ReactSuspense>
-                    {/* Network status indicator */}
+                    {/* Network status indicator - deferred after load */}
                     <ReactSuspense fallback={null}>
-                      <NetworkStatusIndicator />
+                      {NetworkStatusIndicator && <NetworkStatusIndicator />}
                     </ReactSuspense>
-                    {/* Service worker update notifications */}
+                    {/* Service worker update notifications - deferred after load */}
                     <ReactSuspense fallback={null}>
-                      <ServiceWorkerUpdate />
+                      {ServiceWorkerUpdate && <ServiceWorkerUpdate />}
                     </ReactSuspense>
-                    {/* Accessibility tester (dev only) */}
+                    {/* Accessibility tester (dev only) - deferred after load */}
                     <ReactSuspense fallback={null}>
-                      <A11yTester />
+                      {A11yTester && <A11yTester />}
                     </ReactSuspense>
                     {/* Performance monitoring (dev only) */}
                     <ReactSuspense fallback={null}>

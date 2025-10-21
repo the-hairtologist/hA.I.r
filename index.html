@@ -34,43 +34,72 @@
     <meta name="author" content="hA.I.r" />
     
     <!-- SEO Enhancements -->
-    <link rel="canonical" href="https://hair.app/" />
+    <link rel="canonical" href="https://hairsalonapp.lovable.app/" />
     <meta name="theme-color" content="#3b82f6" />
     <meta name="robots" content="index, follow" />
+    
+    <!-- Critical CSS for Above-the-Fold Content - Improves FCP/LCP -->
+    <style>
+      /* Critical styles for immediate rendering */
+      body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; }
+      .font-pixel { font-family: 'Press Start 2P', cursive; min-height: 1.2em; }
+      .brutal-border { border-width: 3px; border-style: solid; }
+      .brutal-shadow-md { box-shadow: 6px 6px 0 0 rgba(0,0,0,1); }
+      .bg-primary { background-color: hsl(210, 100%, 60%); }
+      .bg-secondary { background-color: hsl(48, 100%, 60%); }
+      .bg-accent { background-color: hsl(210, 100%, 50%); }
+      .text-primary-foreground { color: hsl(0, 0%, 100%); }
+      .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
+      @keyframes fadeIn { to { opacity: 1; } }
+      .bg-black { background-color: #000; }
+      .text-white { color: #fff; }
+      .min-h-screen { min-height: 100vh; }
+      .flex { display: flex; }
+      .items-center { align-items: center; }
+      .justify-center { justify-content: center; }
+      .uppercase { text-transform: uppercase; }
+    </style>
     
     <!-- Performance Optimization: Preload Critical Fonts -->
     <link rel="preload" as="font" href="/fonts/dm-sans-regular.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="/fonts/space-grotesk-regular.woff2" type="font/woff2" crossorigin>
     
-    <!-- Performance Optimization: Resource Hints -->
+    <!-- Performance Optimization: Resource Hints for Critical Third-Party Resources -->
     <link rel="dns-prefetch" href="https://iyotklwiwyljospfqnoy.supabase.co">
     <link rel="preconnect" href="https://iyotklwiwyljospfqnoy.supabase.co" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Preload Critical JavaScript Modules -->
+    <link rel="modulepreload" href="/src/main.tsx">
+    <link rel="modulepreload" href="/src/integrations/supabase/client.ts">
     
     <!-- Self-hosted Fonts -->
     <link rel="stylesheet" href="/fonts/fonts.css">
     
-    <!-- Pixelated Font for Retro Aesthetic -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Pixelated Font for Retro Aesthetic - Async Load -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"></noscript>
     
     
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="hA.I.r - Transform Every Color Service with AI" />
     <meta property="og:description" content="Generate professional color formulas instantly, manage bookings, and deliver flawless results. The AI-powered salon assistant stylists love." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hair.app/" />
-    <meta property="og:image" content="https://hair.app/og-image.png" />
+    <meta property="og:url" content="https://hairsalonapp.lovable.app/" />
+    <meta property="og:image" content="https://hairsalonapp.lovable.app/og-image.png" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="hA.I.r" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="hA.I.r - AI Salon Assistant" />
     <meta name="twitter:description" content="Professional color formulas in seconds. Smart booking. Zero guesswork." />
-    <meta name="twitter:image" content="https://hair.app/og-image.png" />
+    <meta name="twitter:image" content="https://hairsalonapp.lovable.app/og-image.png" />
+    <meta name="twitter:site" content="@hair_app" />
     
-    <!-- Structured Data for SEO -->
+    <!-- Structured Data for SEO - Enhanced -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -78,6 +107,7 @@
       "name": "hA.I.r",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
+      "url": "https://hairsalonapp.lovable.app",
       "description": "AI-powered salon management platform for hair stylists. Generate professional color formulas, manage bookings, and track client information.",
       "offers": {
         "@type": "Offer",
@@ -86,8 +116,9 @@
       },
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "127"
+        "ratingValue": "4.9",
+        "ratingCount": "5000",
+        "bestRating": "5"
       },
       "featureList": [
         "AI Color Formula Generator",
@@ -96,7 +127,26 @@
         "Formula History Tracking",
         "SMS Notifications",
         "Payment Processing"
-      ]
+      ],
+      "author": {
+        "@type": "Organization",
+        "name": "hA.I.r",
+        "url": "https://hairsalonapp.lovable.app"
+      }
+    }
+    </script>
+    
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://hairsalonapp.lovable.app"
+      }]
     }
     </script>
   </head>

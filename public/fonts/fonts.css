@@ -32,5 +32,8 @@
   src: url('/fonts/space-grotesk-semibold.woff2') format('woff2');
 }
 
+/* Press Start 2P - Google Fonts with optimized loading */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 /* Fallback to Google Fonts for weights not locally available */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Space+Grotesk:wght@700&display=swap');
