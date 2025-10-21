@@ -10,7 +10,6 @@ import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { logger } from "@/lib/productionLogger";
-import { StickyCTA } from "@/components/landing/StickyCTA";
 import { useScrollDepthTracking } from "@/hooks/useScrollDepthTracking";
 import { analytics } from "@/lib/analytics";
 
@@ -191,9 +190,6 @@ const Index = () => {
       </main>
 
       <MinimalFooter />
-      
-      {/* Sticky CTA (mobile only) */}
-      <StickyCTA ctaText="START FREE TRIAL" />
     </div>
   );
 };
