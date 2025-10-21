@@ -189,8 +189,8 @@ export const MinimalFeatures = () => {
     <div className="container mx-auto px-4">
       {/* Section Header with dramatic styling */}
       <div className="text-center mb-6 xs:mb-8">
-        <div className="inline-block border-[3px] border-black bg-emerald-600 px-4 py-2 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle">
-          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl text-white uppercase tracking-wider">
+        <div className="inline-block border-[3px] border-black bg-emerald-500 px-4 py-2 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle">
+          <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl text-secondary uppercase tracking-wider">
             {header.title}
           </h2>
         </div>
