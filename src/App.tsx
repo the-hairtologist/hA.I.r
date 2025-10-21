@@ -29,6 +29,8 @@ import { TourProvider } from "@/components/onboarding/TourProvider";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { useLocation } from "react-router-dom";
 import { performanceTracker } from "@/lib/monitoring/PerformanceTracker";
+import { GlobalLoadingIndicator } from "@/components/GlobalLoadingIndicator";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 // Import advanced accessibility features
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
@@ -89,6 +91,11 @@ const AnalyticsInitializer = () => {
 };
 
 
+const GlobalLoadingWrapper = () => {
+  const { isLoading, message } = useGlobalLoading();
+  return <GlobalLoadingIndicator isLoading={isLoading} message={message} />;
+};
+
 const App = () => {
   return (
     <GlobalErrorBoundary>
@@ -97,6 +104,7 @@ const App = () => {
           <SubscriptionProvider>
             <DemoModeProvider>
               <TooltipProvider>
+                <GlobalLoadingWrapper />
                 <OfflineIndicator />
                 <Toaster />
                 <Sonner />

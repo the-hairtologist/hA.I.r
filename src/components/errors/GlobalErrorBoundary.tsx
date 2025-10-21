@@ -66,9 +66,10 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      // ALWAYS render error UI - never show blank screen
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-          <Card className="max-w-2xl w-full">
+          <Card className="max-w-2xl w-full border-2 border-destructive">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <AlertTriangle className="h-8 w-8 text-destructive" />
@@ -87,7 +88,7 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
                 </div>
               )}
               
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 <Button onClick={this.handleReset} variant="default">
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Try Again

@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { Scissors } from "lucide-react";
+import { useEffect } from "react";
+import { useGlobalLoading } from "@/hooks/useGlobalLoading";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,21 +9,21 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const { user, loading, roles, initialized } = useEnhancedAuth();
+  const { user, loading, roles } = useEnhancedAuth();
   const location = useLocation();
+  const { setLoading } = useGlobalLoading();
 
   // Wait for roles to fully load if user exists
   const isStillLoading = loading || (user && roles.length === 0);
 
+  // Sync loading state with global loader
+  useEffect(() => {
+    setLoading(isStillLoading, "Verifying access...");
+  }, [isStillLoading, setLoading]);
+
   if (isStillLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <Scissors className="h-12 w-12 text-primary animate-pulse mx-auto mb-4" />
-          <p className="text-muted-foreground">Verifying access...</p>
-        </div>
-      </div>
-    );
+    // Return null - the global loader will show
+    return null;
   }
 
   if (!user) {

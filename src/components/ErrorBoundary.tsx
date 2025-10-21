@@ -86,20 +86,20 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      // Show retry option if error count is low
+      // ALWAYS show something - never a blank screen
       const canRetry = this.state.errorCount < 3;
 
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-          <Card className="max-w-md w-full brutal-border shadow-brutal-2xl bg-destructive/20 dark:bg-destructive/30">
+          <Card className="max-w-md w-full brutal-border shadow-brutal-2xl bg-card">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 rounded-full bg-card border-2 border-foreground flex items-center justify-center brutal-shadow-sm">
-                  <AlertTriangle className="h-6 w-6 text-foreground" />
+                <div className="w-12 h-12 rounded-full bg-destructive/20 border-2 border-destructive flex items-center justify-center brutal-shadow-sm">
+                  <AlertTriangle className="h-6 w-6 text-destructive" />
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-pixel text-foreground">Oops!</CardTitle>
-                  <CardDescription className="font-sans text-foreground/80 font-medium">
+                  <CardDescription className="font-sans text-muted-foreground font-medium">
                     Something went wrong
                   </CardDescription>
                 </div>
@@ -118,8 +118,8 @@ export class ErrorBoundary extends Component<Props, State> {
                 </div>
               )}
               
-              {this.state.error && (
-                <details className="text-xs bg-card p-3 rounded-lg brutal-border-subtle brutal-shadow-sm">
+              {this.state.error && import.meta.env.DEV && (
+                <details className="text-xs bg-muted p-3 rounded-lg brutal-border-subtle brutal-shadow-sm">
                   <summary className="cursor-pointer font-bold text-foreground mb-2">
                     Error Details (for support)
                   </summary>
