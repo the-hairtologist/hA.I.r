@@ -188,11 +188,11 @@ const Index = () => {
           <SingleTestimonial />
         </section>
 
-        {/* FAQ Section - White background for consistency */}
-        <section className="py-14 xs:py-16 sm:py-18 bg-background" style={{
+        {/* FAQ Section - Yellow background with white boxes */}
+        <section className="py-14 xs:py-16 sm:py-18 bg-secondary" style={{
           backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
+            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
+            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)
           `,
           backgroundSize: '8px 8px'
         }}>

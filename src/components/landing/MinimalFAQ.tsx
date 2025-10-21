@@ -40,28 +40,27 @@ export const MinimalFAQ = () => {
   return (
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-2xl mx-auto">
-        {/* Simple consistent header like Features section */}
+        {/* Header with black text on yellow background */}
         <div className={`text-center mb-12 xs:mb-16 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
+          <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-black uppercase tracking-wider">
             THE REAL QUESTIONS YOU'RE ASKING
           </h2>
-          <p className="font-sans text-sm xs:text-base text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-sans text-sm xs:text-base text-black/70 max-w-2xl mx-auto">
             No fluff. Just honest answers.
           </p>
         </div>
 
         <div className="space-y-6">
           {faqs.map((faq, index) => {
-            // Rotate through brand colors for visual variety
+            // Rotate through brand colors for borders
             const colors = ['border-primary', 'border-accent', 'border-secondary'];
-            const bgColors = ['bg-card', 'bg-card', 'bg-card'];
             const accentColors = ['text-primary', 'text-accent', 'text-secondary'];
             const colorIndex = index % 3;
             
             return (
               <div 
                 key={faq.question} 
-                className={`brutal-border ${colors[colorIndex]} ${bgColors[colorIndex]} hover:brutal-shadow transition-all duration-300 hover:translate-x-1 ${
+                className={`brutal-border ${colors[colorIndex]} bg-white hover:brutal-shadow transition-all duration-300 hover:translate-x-1 ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                 }`}
                 style={{
@@ -69,7 +68,7 @@ export const MinimalFAQ = () => {
                 }}
               >
                 <details className="group" onClick={() => handleFAQClick(faq.question)}>
-                  <summary className="cursor-pointer list-none p-4 xs:p-5 font-bold text-foreground hover:bg-muted/30 transition-colors duration-200 flex justify-between items-center gap-4">
+                  <summary className="cursor-pointer list-none p-4 xs:p-5 font-bold text-foreground hover:bg-muted/20 transition-colors duration-200 flex justify-between items-center gap-4">
                     <span className="font-sans text-sm sm:text-base text-left">{faq.question}</span>
                     <span className={`font-pixel text-xl ${accentColors[colorIndex]} group-open:rotate-90 transition-transform duration-300 flex-shrink-0`}>▶</span>
                   </summary>
@@ -82,12 +81,12 @@ export const MinimalFAQ = () => {
           })}
         </div>
 
-        {/* Contact CTA matching other sections */}
+        {/* Contact CTA with black text */}
         <div className="text-center mt-12">
-          <p className="text-muted-foreground mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
+          <p className="text-black/70 mb-4 font-sans text-sm xs:text-base">Still have questions?</p>
           <a
             href="mailto:support@hair-ai.com"
-            className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-card px-6 xs:px-8 py-3 xs:py-4 inline-block brutal-shadow hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300"
+            className="font-pixel text-xs xs:text-sm text-primary hover:text-primary/90 transition-colors uppercase brutal-border bg-white px-6 xs:px-8 py-3 xs:py-4 inline-block brutal-shadow hover:brutal-shadow-lg hover:-translate-y-1 transition-all duration-300"
           >
             Contact Support
           </a>
