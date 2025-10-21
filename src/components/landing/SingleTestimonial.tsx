@@ -23,16 +23,16 @@ export const SingleTestimonial = () => {
     <div className="container mx-auto px-3 xs:px-4 sm:px-6" ref={ref}>
       <div className="max-w-5xl mx-auto">
         {/* 5-Star Rating Display */}
-        <div className={`flex justify-center gap-1.5 xs:gap-2 mb-3 xs:mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+        <div className={`hidden xs:flex justify-center gap-2 mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
           {[...Array(5)].map((_, i) => (
             <div 
               key={i} 
-              className="w-7 h-7 xs:w-9 xs:h-9 sm:w-10 sm:h-10 border-[2px] border-black bg-secondary flex items-center justify-center"
+              className="w-9 h-9 sm:w-10 sm:h-10 border-[2px] border-black bg-secondary flex items-center justify-center"
               style={{
                 transitionDelay: `${i * 50}ms`,
               }}
             >
-              <span className="font-pixel text-secondary-foreground text-base xs:text-lg">★</span>
+              <span className="font-pixel text-secondary-foreground text-lg">★</span>
             </div>
           ))}
         </div>
@@ -53,31 +53,31 @@ export const SingleTestimonial = () => {
                 {[...Array(5)].map((_, i) => (
                   <div 
                     key={i} 
-                    className={`w-4 h-4 border border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
+                    className={`w-5 h-5 border border-black bg-secondary flex items-center justify-center transition-all duration-300 ${
                       isVisible ? 'scale-100' : 'scale-0'
                     }`}
                     style={{
                       transitionDelay: `${(index * 200) + (i * 50)}ms`,
                     }}
                   >
-                    <span className="font-pixel text-secondary-foreground text-[8px]">★</span>
+                    <span className="font-pixel text-secondary-foreground text-[9px]">★</span>
                   </div>
                 ))}
               </div>
               
               {/* Quote - more compact */}
-              <p className="text-xs font-sans text-foreground leading-snug mb-3">
+              <p className="text-xs xs:text-sm font-sans text-foreground leading-snug mb-3">
                 "{testimonial.quote}"
               </p>
               
               {/* Author - ultra compact */}
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 border-2 border-black bg-accent flex items-center justify-center">
+                <div className="w-9 h-9 border-2 border-black bg-accent flex items-center justify-center">
                   <span className="font-pixel text-accent-foreground text-[10px]">{testimonial.initials}</span>
                 </div>
                 <div>
-                  <div className="font-pixel text-[10px] text-foreground">{testimonial.author}</div>
-                  <div className="font-sans text-[9px] text-muted-foreground">{testimonial.role}</div>
+                  <div className="font-pixel text-[10px] xs:text-xs text-foreground">{testimonial.author}</div>
+                  <div className="font-sans text-[10px] xs:text-xs text-muted-foreground">{testimonial.role}</div>
                 </div>
               </div>
             </div>

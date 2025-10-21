@@ -69,7 +69,7 @@ const Index = () => {
           <Button 
             onClick={() => navigate("/auth")} 
             size="sm" 
-            className="font-pixel text-[9px] xxs:text-[10px] xs:text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-white brutal-shadow-sm hover:brutal-shadow-md transition-all duration-300 hover:-translate-y-0.5 rounded-none px-3 xxs:px-4 xs:px-6 py-2 xs:py-2.5 min-h-[44px] flex-shrink-0"
+            className="font-pixel text-[10px] xs:text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-white brutal-shadow-sm hover:brutal-shadow-md transition-all duration-300 hover:-translate-y-0.5 rounded-none px-4 xs:px-6 py-2.5 xs:py-3 min-h-[44px] flex-shrink-0"
           >
             <span className="hidden xxs:inline">Get Started</span>
             <span className="xxs:hidden">Start</span>
@@ -89,21 +89,21 @@ const Index = () => {
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
             <div className="max-w-4xl mx-auto space-y-1.5 xxs:space-y-2 xs:space-y-3 sm:space-y-4">
               {/* Icons */}
-              <div className="flex justify-center gap-3 xs:gap-4 sm:gap-5 mb-2 xs:mb-3 sm:mb-4 animate-fade-in">
+              <div className="flex justify-center gap-4 sm:gap-5 mb-3 sm:mb-4 animate-fade-in">
                 <div 
-                  className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
+                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0s' }}
                 >
                   <Sparkles className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} />
                 </div>
                 <div 
-                  className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md"
+                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0.1s' }}
                 >
                   <Zap className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-black" strokeWidth={2.5} fill="black" />
                 </div>
                 <div 
-                  className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md"
+                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0.2s' }}
                 >
                   <Heart className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} fill="white" />
@@ -111,7 +111,7 @@ const Index = () => {
               </div>
               
               <h1
-                className="text-lg xxs:text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] xs:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] md:drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
+                className="text-lg xxs:text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] xs:drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] md:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
                 data-debug-element="hero-headline"
               >
                 STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS

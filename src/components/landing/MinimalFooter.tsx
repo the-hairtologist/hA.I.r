@@ -20,30 +20,30 @@ export const MinimalFooter = () => {
             <div className="w-8 h-8 xs:w-9 xs:h-9 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
               <Scissors className="h-4 w-4 xs:h-4.5 xs:w-4.5 text-secondary-foreground" />
             </div>
-            <span className="font-pixel text-base text-background uppercase">hA.I.r</span>
-            <span className="font-pixel text-sm text-background/70">© 2025</span>
+            <span className="font-pixel text-sm xs:text-base text-background uppercase">hA.I.r</span>
+            <span className="font-pixel text-xs xs:text-sm text-background/70">© 2025</span>
           </div>
 
           {/* Essential Links */}
-          <div className="flex flex-wrap justify-center gap-2 xs:gap-3 sm:gap-4 text-sm font-sans">
-            <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] flex items-center">
+          <div className="flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-5 text-sm xs:text-base font-sans">
+            <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center">
               Terms
             </button>
-            <button onClick={() => navigate("/help")} className="text-background/80 hover:text-background transition-colors min-h-[44px] flex items-center">
+            <button onClick={() => navigate("/help")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center">
               Help
             </button>
-            <a href="mailto:support@hair-ai.com" className="text-background/80 hover:text-background transition-colors min-h-[44px] flex items-center">
+            <a href="mailto:support@hair-ai.com" className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center">
               Contact
             </a>
           </div>
         </div>
 
         {/* Legal Disclaimer - Collapsed */}
-        <details className="border-t-2 border-secondary/20 pt-1.5 mt-1.5">
-          <summary className="text-xs font-sans text-background/70 cursor-pointer list-none text-center hover:text-background/90 transition-colors min-h-[36px] py-0.5 flex items-center justify-center">
+        <details className="border-t-2 border-secondary/20 pt-2 mt-2">
+          <summary className="text-xs xs:text-sm font-sans text-background/70 cursor-pointer list-none text-center hover:text-background/90 transition-colors min-h-[44px] py-1 flex items-center justify-center">
             Legal Disclaimer
           </summary>
-          <p className="text-xs font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto mt-1.5">
+          <p className="text-xs xs:text-sm font-sans text-background/70 leading-relaxed text-center max-w-4xl mx-auto mt-2 px-2">
             Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
           </p>
         </details>

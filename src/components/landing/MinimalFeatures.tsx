@@ -142,11 +142,11 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
   const iconTextColors = ['text-white', 'text-white', 'text-black', 'text-white', 'text-white', 'text-black'];
 
   return (
-    <div
+      <div
       ref={ref}
       onMouseEnter={handleHover}
       onTouchStart={handleHover}
-      className={`relative overflow-hidden border-[3px] border-black ${bgColors[index]} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-1 p-2.5 xs:p-3.5 sm:p-4.5 ${
+      className={`relative overflow-hidden border-[3px] border-black ${bgColors[index]} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-1 p-4 xs:p-5 sm:p-6 ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
       }`}
       style={{
@@ -154,11 +154,11 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       }}
     >
       {/* Compact animated icon */}
-      <div className={`relative w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 border-[3px] border-black ${iconBgColors[index]} flex items-center justify-center mb-2 xs:mb-3 sm:mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform duration-500`}>
+      <div className={`relative w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 border-[3px] border-black ${iconBgColors[index]} flex items-center justify-center mb-3 xs:mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-transform duration-500`}>
         <Icon className={`h-6 w-6 xs:h-7 xs:w-7 ${iconTextColors[index]}`} strokeWidth={2.5} />
         
         {/* Floating number badge */}
-        <div className="absolute -top-3 -right-3 w-7 h-7 xs:w-8 xs:h-8 sm:w-9 sm:h-9 border-[2px] border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        <div className="absolute -top-2 -right-2 w-8 h-8 xs:w-9 xs:h-9 border-[2px] border-black bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
           <span className="font-pixel text-foreground text-sm xs:text-base">
             {feature.number}
           </span>
@@ -198,10 +198,10 @@ export const MinimalFeatures = () => {
   };
   
   return (
-    <div className="py-2 xs:py-3 sm:py-4">
-      <div className="container mx-auto px-3 xs:px-4 sm:px-6">
+    <div className="py-4 xs:py-6 sm:py-8">
+      <div className="container mx-auto px-4 xs:px-6 sm:px-8">
         {/* Section Header with dramatic styling */}
-        <div className="text-center mb-2 xs:mb-3 sm:mb-4">
+        <div className="text-center mb-4 xs:mb-6 sm:mb-8">
         <div className="inline-block border-[3px] border-black px-3 py-2 mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse-subtle bg-success">
           <h2 className="font-pixel text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-secondary uppercase tracking-wider leading-tight">
             {header.title}
@@ -212,7 +212,7 @@ export const MinimalFeatures = () => {
         </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 md:gap-5 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-5 md:gap-6 max-w-7xl mx-auto">
           {features.map((feature, index) => (
             <FeatureCard key={feature.title} feature={feature} index={index} />
           ))}
