@@ -139,21 +139,21 @@ const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) =>
       ref={ref}
       onMouseEnter={handleHover}
       onTouchStart={handleHover}
-      className={`group relative overflow-hidden border-[4px] border-black ${bgColors[index]} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:border-primary p-6 xs:p-8 ${
+      className={`relative overflow-hidden border-[4px] border-black ${bgColors[index]} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] p-6 xs:p-8 ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-95'
       }`}
       style={{
         transitionDelay: `${index * 150}ms`,
       }}
     >
-      {/* Large animated icon - Enhanced hover states */}
-      <div className={`relative w-20 h-20 xs:w-24 xs:h-24 border-[4px] border-black ${iconBgColors[index]} flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:rotate-[15deg] transition-transform duration-500 ${isVisible ? 'animate-bounce' : ''}`}
+      {/* Large animated icon */}
+      <div className={`relative w-20 h-20 xs:w-24 xs:h-24 border-[4px] border-black ${iconBgColors[index]} flex items-center justify-center mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:rotate-12 transition-transform duration-500 ${isVisible ? 'animate-bounce' : ''}`}
         style={{ animationDelay: `${index * 200}ms`, animationIterationCount: '3' }}
       >
         <Icon className={`h-10 w-10 xs:h-12 xs:w-12 ${iconTextColors[index]}`} strokeWidth={2.5} />
         
-        {/* Floating number badge with pulse on hover */}
-        <div className="absolute -top-4 -right-4 w-10 h-10 xs:w-12 xs:h-12 border-[3px] border-black bg-white flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:animate-pulse">
+        {/* Floating number badge */}
+        <div className="absolute -top-4 -right-4 w-10 h-10 xs:w-12 xs:h-12 border-[3px] border-black bg-white flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
           <span className="font-pixel text-foreground text-lg xs:text-xl">
             {feature.number}
           </span>

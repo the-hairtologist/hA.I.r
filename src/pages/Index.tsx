@@ -6,9 +6,6 @@ import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
 
 import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
 import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
-import { SimplePricingCTA } from "@/components/landing/SimplePricingCTA";
-import { TrustBadges } from "@/components/landing/TrustBadges";
-import { SimpleTimeline } from "@/components/landing/SimpleTimeline";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { lazy, Suspense, useEffect, useState } from "react";
@@ -159,16 +156,8 @@ const Index = () => {
                 ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
               </p>
 
-              {/* Animated Counters - Social Proof - Moved above phone mockup */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-4 xs:pt-6 animate-fade-in" style={{ animationDelay: '350ms' }}>
-                <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-              </div>
-
               {/* Product Demo Mockup - Lazy loaded for performance */}
-              <div className="mt-4 xs:mt-6 sm:mt-8 animate-fade-in" style={{ animationDelay: '500ms' }}>
+              <div className="mt-4 xs:mt-6 sm:mt-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Suspense fallback={
                   <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
                 }>
@@ -177,12 +166,20 @@ const Index = () => {
                   </div>
                 </Suspense>
               </div>
+              
+              {/* Animated Counters - Social Proof */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xxs:gap-3 xs:gap-4 max-w-4xl mx-auto pt-4 xs:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
+                <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+              </div>
             </div>
           </div>
           <ScrollIndicator />
         </section>
 
-        {/* How It Works Timeline */}
+        {/* How It Works - Featured prominently */}
         <section className="py-8 xs:py-10 sm:py-12 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
@@ -190,17 +187,7 @@ const Index = () => {
           `,
           backgroundSize: '8px 8px'
         }}>
-          <SimpleTimeline />
-        </section>
-
-        {/* Features - Problems We Solve */}
-        <section className="py-8 xs:py-10 sm:py-12 bg-accent/10">
           <MinimalFeatures />
-        </section>
-
-        {/* Trust Badges */}
-        <section className="py-4 xs:py-6 bg-background">
-          <TrustBadges />
         </section>
 
         {/* Testimonials + FAQ Section - Combined */}
@@ -211,15 +198,6 @@ const Index = () => {
           `,
           backgroundSize: '8px 8px'
         }}>
-          {/* Rating stat above testimonials */}
-          <div className="container mx-auto px-4 text-center mb-8">
-            <div className="inline-block border-[3px] border-black bg-accent px-6 py-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-              <span className="font-pixel text-white text-base xs:text-lg">
-                ⭐ 4.9/5 AVERAGE RATING • 1,200+ REVIEWS
-              </span>
-            </div>
-          </div>
-
           <SingleTestimonial />
           
           {/* FAQ integrated below */}
@@ -227,17 +205,12 @@ const Index = () => {
             <MinimalFAQ />
           </div>
         </section>
-
-        {/* Final CTA Section */}
-        <section className="py-8 xs:py-10 sm:py-12 bg-primary">
-          <SimplePricingCTA />
-        </section>
       </main>
 
       <EnhancedFooter />
       
       {/* Sticky CTA (mobile only) */}
-      <StickyCTA ctaText="START YOUR FREE TRIAL NOW" />
+      <StickyCTA ctaText="START FREE TRIAL" />
 
       {/* Exit-intent modal */}
       <ExitIntentModal 
