@@ -93,7 +93,7 @@ const Index = () => {
 
       <main id="main-content" className="pt-16">
         {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-12 xxs:py-16 xs:py-20 sm:py-24 md:py-32 overflow-hidden min-h-screen flex items-center" style={{
+        <section className="relative bg-primary py-8 xxs:py-12 xs:py-16 sm:py-20 md:py-24 overflow-hidden flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -101,9 +101,9 @@ const Index = () => {
           backgroundSize: '8px 8px'
         }}>
           <div className="container mx-auto px-4 xs:px-5 sm:px-6 text-center relative z-10 w-full max-w-full">
-            <div className="max-w-4xl mx-auto space-y-4 xxs:space-y-6 xs:space-y-8">
+            <div className="max-w-4xl mx-auto space-y-3 xxs:space-y-4 xs:space-y-6">
               {/* Icons */}
-              <div className="flex justify-center gap-4 xs:gap-6 mb-6 xs:mb-8 animate-fade-in">
+              <div className="flex justify-center gap-4 xs:gap-6 mb-4 xs:mb-6 animate-fade-in">
                 <div 
                   className="w-12 h-12 xs:w-16 xs:h-16 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md"
                   style={{ animationDelay: '0s' }}
@@ -158,7 +158,7 @@ const Index = () => {
               </p>
 
               {/* Product Demo Mockup - Lazy loaded for performance */}
-              <div className="mt-8 xs:mt-12 sm:mt-16 animate-fade-in" style={{ animationDelay: '400ms' }}>
+              <div className="mt-6 xs:mt-8 sm:mt-12 animate-fade-in" style={{ animationDelay: '400ms' }}>
                 <Suspense fallback={
                   <div className="relative w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[360px] mx-auto h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
                 }>
@@ -173,7 +173,7 @@ const Index = () => {
         </section>
 
         {/* How It Works - Clean white background */}
-        <section className="py-14 xs:py-16 sm:py-18 bg-background" style={{
+        <section className="py-10 xs:py-12 sm:py-14 bg-background" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
@@ -184,12 +184,12 @@ const Index = () => {
         </section>
 
         {/* Testimonial Section - Blue background */}
-        <section className="py-14 xs:py-16 sm:py-18 bg-accent">
+        <section className="py-10 xs:py-12 sm:py-14 bg-accent">
           <SingleTestimonial />
         </section>
 
         {/* FAQ Section - Yellow background with white boxes */}
-        <section className="py-14 xs:py-16 sm:py-18 bg-secondary" style={{
+        <section className="py-10 xs:py-12 sm:py-14 bg-secondary" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)

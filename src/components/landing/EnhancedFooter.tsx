@@ -29,7 +29,7 @@ export const EnhancedFooter = () => {
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {/* Brand Column */}
           <div className="space-y-3">

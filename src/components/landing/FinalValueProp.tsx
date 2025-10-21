@@ -33,7 +33,7 @@ export const FinalValueProp = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
 
   return (
-    <section className="py-12 xs:py-14 sm:py-16 bg-primary relative overflow-hidden" style={{
+    <section className="py-10 xs:py-12 sm:py-14 bg-primary relative overflow-hidden" style={{
       backgroundImage: `
         linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
         linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -42,7 +42,7 @@ export const FinalValueProp = () => {
     }}>
       <div className="container mx-auto px-4" ref={ref}>
         {/* Unified Header */}
-        <div className={`text-center mb-10 xs:mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center mb-8 xs:mb-10 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl md:text-3xl text-primary-foreground mb-5 xs:mb-6 uppercase tracking-wider leading-tight">
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
@@ -66,7 +66,7 @@ export const FinalValueProp = () => {
         `}</style>
 
         {/* Animated Counters with rotating colors */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 xxs:gap-5 xs:gap-6 sm:gap-8 max-w-5xl mx-auto mb-10 xs:mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 xxs:gap-4 xs:gap-5 sm:gap-6 max-w-5xl mx-auto mb-10 xs:mb-12">
           <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '0ms' }}>
             <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
           </div>
@@ -82,7 +82,7 @@ export const FinalValueProp = () => {
         </div>
 
         {/* Benefit Cards with rotating colored borders */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 xs:gap-6 max-w-6xl mx-auto">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             // Rotate through brand colors for borders and icon backgrounds

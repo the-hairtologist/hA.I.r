@@ -41,7 +41,7 @@ export const MinimalFAQ = () => {
     <div className="container mx-auto px-4" ref={ref}>
       <div className="max-w-2xl mx-auto">
         {/* Header with black text on yellow background */}
-        <div className={`text-center mb-12 xs:mb-16 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <div className={`text-center mb-8 xs:mb-10 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-black uppercase tracking-wider">
             THE REAL QUESTIONS YOU'RE ASKING
           </h2>
@@ -50,7 +50,7 @@ export const MinimalFAQ = () => {
           </p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 xs:space-y-5">
           {faqs.map((faq, index) => {
             // Rotate through brand colors for borders
             const colors = ['border-primary', 'border-accent', 'border-secondary'];

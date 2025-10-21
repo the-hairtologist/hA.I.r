@@ -169,7 +169,7 @@ export const MinimalFeatures = () => {
   
   return (
     <div className="container mx-auto px-4">
-      <div className="text-center mb-16">
+      <div className="text-center mb-10 xs:mb-12">
         <h2 className="font-pixel text-xl xs:text-2xl sm:text-3xl mb-4 text-foreground uppercase tracking-wider">
           {header.title}
         </h2>
@@ -178,7 +178,7 @@ export const MinimalFeatures = () => {
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 max-w-7xl mx-auto">
         {features.map((feature, index) => (
           <FeatureCard key={feature.title} feature={feature} index={index} />
         ))}
