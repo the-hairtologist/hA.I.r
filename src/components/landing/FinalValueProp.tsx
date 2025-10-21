@@ -47,9 +47,9 @@ export const FinalValueProp = () => {
             STYLISTS USING hA.I.r CUT ADMIN TIME BY 40%
           </h2>
           
-          <p className="font-pixel text-[10px] xs:text-xs text-black/60 uppercase tracking-wider">
-            Real Results
-          </p>
+          <div className="inline-block border-2 border-black bg-accent px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <span className="font-pixel text-[10px] xs:text-xs text-secondary uppercase">REAL RESULTS</span>
+          </div>
         </div>
 
         {/* Animated Counters with rotating colors */}
