@@ -13,10 +13,9 @@ export const MinimalFooter = () => {
       backgroundSize: '8px 8px'
     }}>
       <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-5 sm:py-6">
-        {/* Single Row Layout */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 xs:gap-4 pb-3 border-b-2 border-secondary/20">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3">
           {/* Logo + Copyright */}
-          <div className="flex items-center gap-2 xs:gap-2.5">
+          <div className="flex items-center gap-2 xs:gap-2.5 sm:pr-4">
             <div className="w-8 h-8 xs:w-9 xs:h-9 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
               <Scissors className="h-4 w-4 xs:h-4.5 xs:w-4.5 text-secondary-foreground" />
             </div>
@@ -24,25 +23,29 @@ export const MinimalFooter = () => {
             <span className="font-pixel text-xs xs:text-sm text-background/70">© 2025</span>
           </div>
 
-          {/* Essential Links */}
-          <div className="flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-5 text-sm xs:text-base font-sans">
-            <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
-              Terms
-            </button>
-            <button onClick={() => navigate("/help")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
-              Help
-            </button>
-            <a href="mailto:support@hair-ai.com" className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
-              Contact
-            </a>
-          </div>
-        </div>
+          {/* Divider */}
+          <div className="w-full sm:w-px h-px sm:h-auto sm:min-h-[60px] bg-secondary/20" />
 
-        {/* Legal Disclaimer - Compact */}
-        <div className="pt-3">
-          <p className="text-xs xs:text-sm font-sans text-background/70 leading-relaxed text-center">
-            Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
-          </p>
+          {/* Links + Disclaimer */}
+          <div className="flex-1 flex flex-col gap-2 sm:pl-4">
+            {/* Essential Links */}
+            <div className="flex flex-wrap justify-center sm:justify-start gap-3 xs:gap-4 sm:gap-5 text-sm xs:text-base font-sans">
+              <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
+                Terms
+              </button>
+              <button onClick={() => navigate("/help")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
+                Help
+              </button>
+              <a href="mailto:support@hair-ai.com" className="text-background/80 hover:text-background transition-colors min-h-[44px] px-2 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
+                Contact
+              </a>
+            </div>
+
+            {/* Legal Disclaimer */}
+            <p className="text-xs xs:text-sm font-sans text-background/70 leading-relaxed text-center sm:text-left">
+              Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
