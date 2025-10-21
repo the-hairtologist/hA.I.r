@@ -127,12 +127,12 @@ const Index = () => {
               
               <div className="pt-1 xxs:pt-2 xs:pt-3 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms' }}>
                 <Button 
-                  size="default" 
+                  size="lg" 
                   onClick={() => {
                     logger.info('[Index] CTA button clicked', { context: 'Landing Page' });
                     navigate("/auth");
                   }} 
-                  className="text-xs xs:text-sm px-6 xs:px-8 py-3 xs:py-4 font-pixel uppercase bg-secondary text-black hover:bg-secondary/90 brutal-border border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-0.5 rounded-none min-h-[52px] max-w-xs mx-auto"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-black hover:bg-secondary/90 brutal-border border-black brutal-shadow-md hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                   data-debug-element="hero-cta-button"
                 >
                   START FREE TRIAL

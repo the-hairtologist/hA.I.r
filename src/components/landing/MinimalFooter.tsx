@@ -35,12 +35,6 @@ export const MinimalFooter = () => {
             <a href="mailto:support@hair-ai.com" className="text-background/80 hover:text-background transition-colors min-h-[44px] flex items-center">
               Contact
             </a>
-            <button 
-              onClick={() => navigate("/auth")}
-              className="text-[10px] xs:text-xs font-pixel uppercase bg-secondary/90 text-black hover:bg-secondary brutal-border border-black px-4 py-2 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-0.5 min-h-[44px] flex items-center"
-            >
-              Start Free Trial
-            </button>
           </div>
         </div>
 
