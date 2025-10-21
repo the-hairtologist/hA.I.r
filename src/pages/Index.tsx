@@ -153,7 +153,7 @@ const Index = () => {
                 </Button>
               </div>
               
-              <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base font-sans text-primary-foreground/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
+              <p className="text-[10px] xxs:text-xs xs:text-sm sm:text-base font-sans text-white/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
                 ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
               </p>
 
