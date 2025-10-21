@@ -20,14 +20,14 @@ export const SingleTestimonial = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
 
   return (
-    <div className="container mx-auto px-4" ref={ref}>
+    <div className="container mx-auto px-3 xs:px-4 sm:px-6" ref={ref}>
       <div className="max-w-5xl mx-auto">
         {/* 5-Star Rating Display */}
-        <div className={`flex justify-center gap-2 mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+        <div className={`flex justify-center gap-1.5 xs:gap-2 mb-3 xs:mb-4 transition-all duration-500 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
           {[...Array(5)].map((_, i) => (
             <div 
               key={i} 
-              className="w-8 h-8 xs:w-10 xs:h-10 border-[3px] border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+              className="w-7 h-7 xs:w-9 xs:h-9 sm:w-10 sm:h-10 border-[3px] border-black bg-secondary flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
               style={{
                 transitionDelay: `${i * 50}ms`,
               }}
@@ -37,7 +37,7 @@ export const SingleTestimonial = () => {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-3 xs:gap-4">
+        <div className="grid md:grid-cols-2 gap-2.5 xs:gap-3 sm:gap-4">
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}

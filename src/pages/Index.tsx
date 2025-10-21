@@ -111,14 +111,14 @@ const Index = () => {
               </div>
               
               <h1
-                className="text-xl xxs:text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] xs:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] md:drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
+                className="text-lg xxs:text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] xs:drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] md:drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
                 data-debug-element="hero-headline"
               >
                 STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
               </h1>
               
               <p 
-                className="text-xs xxs:text-sm xs:text-base sm:text-lg font-sans text-black max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words" 
+                className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-black max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words" 
                 style={{ animationDelay: '100ms' }}
                 data-debug-element="hero-subheadline"
               >
@@ -132,7 +132,7 @@ const Index = () => {
                     logger.info('[Index] CTA button clicked', { context: 'Landing Page' });
                     navigate("/auth");
                   }} 
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-4 xxs:py-5 xs:py-6 sm:py-7 md:py-9 font-pixel uppercase bg-secondary text-black hover:bg-secondary/90 brutal-border border-black brutal-shadow-md hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-black hover:bg-secondary/90 brutal-border border-black brutal-shadow-md hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 xs:hover:-translate-y-2 rounded-none animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                   data-debug-element="hero-cta-button"
                 >
                   START FREE TRIAL

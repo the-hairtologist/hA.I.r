@@ -35,7 +35,7 @@ export const AnimatedCounter = React.forwardRef<HTMLDivElement, AnimatedCounterP
         className="flex flex-col items-center gap-4 transition-all duration-300"
       >
         <div
-          className={`w-16 h-16 xs:w-20 xs:h-20 border-4 ${borderColor} ${bgColor} flex items-center justify-center mb-2 transition-all duration-300 brutal-shadow ${
+          className={`w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 border-4 ${borderColor} ${bgColor} flex items-center justify-center mb-2 transition-all duration-300 brutal-shadow ${
             isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
           }`}
         >

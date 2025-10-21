@@ -39,10 +39,11 @@ export const MinimalFAQ = () => {
   };
 
   return (
-    <div className="container mx-auto px-4" ref={ref}>
-      <div className="max-w-2xl mx-auto">
-        {/* Header with black text on yellow background */}
-        <div className={`text-center mb-6 xs:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+    <div className="py-6 xs:py-8 sm:py-10">
+      <div className="container mx-auto px-3 xs:px-4 sm:px-6" ref={ref}>
+        <div className="max-w-2xl mx-auto">
+          {/* Header with black text on yellow background */}
+          <div className={`text-center mb-4 xs:mb-6 sm:mb-8 transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <h2 className="font-pixel text-lg xs:text-xl sm:text-2xl mb-3 text-foreground uppercase tracking-wider">
             THE REAL QUESTIONS
           </h2>
@@ -51,7 +52,7 @@ export const MinimalFAQ = () => {
           </p>
         </div>
 
-        <div className="space-y-3 xs:space-y-4">
+        <div className="space-y-2.5 xs:space-y-3 sm:space-y-4">
           {faqs.map((faq, index) => {
             // Rotate through brand colors for borders
             const colors = ['border-primary', 'border-accent', 'border-secondary'];
@@ -68,15 +69,15 @@ export const MinimalFAQ = () => {
                   transitionDelay: `${index * 100}ms`,
                 }}
               >
-                <details className="group" onClick={() => handleFAQClick(faq.question)}>
-                  <summary className="cursor-pointer list-none p-2.5 xs:p-3 font-bold text-foreground hover:bg-muted/20 transition-colors duration-200 flex justify-between items-center gap-3">
-                    <span className="font-sans text-xs xs:text-sm text-left">{faq.question}</span>
-                    <span className={`font-pixel text-lg ${accentColors[colorIndex]} group-open:rotate-90 transition-transform duration-300 flex-shrink-0`}>▶</span>
-                  </summary>
-                  <div className={`px-2.5 xs:px-3 pb-2.5 xs:pb-3 border-t-2 ${colors[colorIndex]} pt-2.5`}>
-                    <p className="font-sans text-xs xs:text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
-                  </div>
-                </details>
+              <details className="group" onClick={() => handleFAQClick(faq.question)}>
+                <summary className="cursor-pointer list-none p-2 xs:p-2.5 sm:p-3 font-bold text-foreground hover:bg-muted/20 transition-colors duration-200 flex justify-between items-center gap-3">
+                  <span className="font-sans text-xs xs:text-sm text-left">{faq.question}</span>
+                  <span className={`font-pixel text-lg ${accentColors[colorIndex]} group-open:rotate-90 transition-transform duration-300 flex-shrink-0`}>▶</span>
+                </summary>
+                <div className={`px-2 xs:px-2.5 sm:px-3 pb-2 xs:pb-2.5 sm:pb-3 border-t-2 ${colors[colorIndex]} pt-2.5`}>
+                  <p className="font-sans text-xs xs:text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+                </div>
+              </details>
               </div>
             );
           })}
@@ -95,9 +96,10 @@ export const MinimalFAQ = () => {
         </div>
 
         {/* Testimonials */}
-        <div className="mt-8 xs:mt-12">
+        <div className="mt-6 xs:mt-8 sm:mt-10">
           <SingleTestimonial />
         </div>
+      </div>
       </div>
     </div>
   );
