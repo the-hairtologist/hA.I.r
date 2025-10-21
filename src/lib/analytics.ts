@@ -363,6 +363,48 @@ class Analytics {
   subscriptionCanceled(tier: string): void {
     this.track('subscription_canceled', { tier });
   }
+
+  // Micro-Conversion Tracking (Landing Page Optimizations)
+  
+  stickyCTAClicked(variant: string): void {
+    this.track('sticky_cta_clicked', { variant });
+  }
+
+  stickyCTADismissed(variant: string): void {
+    this.track('sticky_cta_dismissed', { variant });
+  }
+
+  exitIntentShown(variant: string): void {
+    this.track('exit_intent_shown', { variant });
+  }
+
+  exitIntentConverted(variant: string): void {
+    this.track('exit_intent_converted', { variant });
+  }
+
+  exitIntentDismissed(variant: string): void {
+    this.track('exit_intent_dismissed', { variant });
+  }
+
+  scrollDepthReached(variant: string, depth: number): void {
+    this.track('scroll_depth_reached', { variant, depth });
+  }
+
+  sectionViewed(variant: string, section: string): void {
+    this.track('section_viewed', { variant, section });
+  }
+
+  faqExpanded(variant: string, question: string): void {
+    this.track('faq_expanded', { variant, question });
+  }
+
+  featureHovered(variant: string, feature: string): void {
+    this.track('feature_hovered', { variant, feature });
+  }
+
+  timeOnPage(variant: string, seconds: number): void {
+    this.track('time_on_page', { variant, seconds });
+  }
 }
 
 // Export singleton instance

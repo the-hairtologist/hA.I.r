@@ -5,6 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { analytics } from "@/lib/analytics";
+import { useABTest } from "@/hooks/useABTest";
 
 const faqs = [
   {
@@ -31,6 +33,11 @@ const faqs = [
 
 export const MinimalFAQ = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
+  const { variant } = useABTest();
+
+  const handleFAQClick = (question: string) => {
+    analytics.faqExpanded(variant, question);
+  };
 
   return (
     <div className="container mx-auto px-4" ref={ref}>
@@ -55,7 +62,7 @@ export const MinimalFAQ = () => {
                 transitionDelay: `${index * 100}ms`,
               }}
             >
-              <details className="group">
+              <details className="group" onClick={() => handleFAQClick(faq.question)}>
                 <summary className="cursor-pointer list-none p-4 font-bold text-foreground hover:bg-secondary/10 transition-colors duration-200 flex justify-between items-center">
                   <span className="font-sans text-sm sm:text-base">{faq.question}</span>
                   <span className="font-pixel text-xl group-open:rotate-90 transition-transform duration-300">▶</span>

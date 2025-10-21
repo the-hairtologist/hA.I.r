@@ -1,6 +1,7 @@
 import { Sparkles, Calendar, CreditCard, Heart, Smartphone } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Variant } from "@/lib/abTestingSupabase";
+import { analytics } from "@/lib/analytics";
 
 // Variant A: Pain-focused messaging (PROBLEMS WE FIX)
 const featuresA = [
@@ -127,13 +128,19 @@ const VARIANT_FEATURES = {
 
 type Feature = typeof featuresA[0];
 
-const FeatureCard = ({ feature, index }: { feature: Feature; index: number }) => {
+const FeatureCard = ({ feature, index, variant }: { feature: Feature; index: number; variant: Variant }) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
   const Icon = feature.icon;
+
+  const handleHover = () => {
+    analytics.featureHovered(variant, feature.title);
+  };
 
   return (
     <div
       ref={ref}
+      onMouseEnter={handleHover}
+      onTouchStart={handleHover}
       className={`space-y-4 brutal-border bg-card p-6 brutal-shadow hover:brutal-shadow-lg transition-all duration-300 hover:-translate-y-1 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
@@ -197,7 +204,7 @@ export const MinimalFeatures = ({ variant }: MinimalFeaturesProps) => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
         {features.map((feature, index) => (
-          <FeatureCard key={feature.title} feature={feature} index={index} />
+          <FeatureCard key={feature.title} feature={feature} index={index} variant={variant} />
         ))}
       </div>
     </div>

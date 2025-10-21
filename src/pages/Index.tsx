@@ -10,9 +10,14 @@ import { EnhancedFooter } from "@/components/landing/EnhancedFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { FinalValueProp } from "@/components/landing/FinalValueProp";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { logger } from "@/lib/productionLogger";
 import { VariantSwitcher } from "@/components/dev/VariantSwitcher";
+import { StickyCTA } from "@/components/landing/StickyCTA";
+import { ExitIntentModal } from "@/components/landing/ExitIntentModal";
+import { useExitIntent } from "@/hooks/useExitIntent";
+import { useScrollDepthTracking } from "@/hooks/useScrollDepthTracking";
+import { analytics } from "@/lib/analytics";
 
 // Lazy load phone mockup to improve initial load time
 const HeroPhoneMockup = lazy(() => {
@@ -29,6 +34,19 @@ const HeroPhoneMockup = lazy(() => {
 const Index = () => {
   const navigate = useNavigate();
   const { config, variant } = useABTest();
+  const [showExitIntent, setShowExitIntent] = useState(false);
+
+  // Track scroll depth milestones
+  useScrollDepthTracking({ variant, enabled: true });
+
+  // Exit-intent detection
+  useExitIntent({
+    onExitIntent: () => {
+      setShowExitIntent(true);
+      analytics.track('exit_intent_shown', { variant });
+    },
+    enabled: true,
+  });
 
   useEffect(() => {
     logger.info('[Index] Component mounted', { context: 'Landing Page' });
@@ -40,7 +58,14 @@ const Index = () => {
         ctaPrimary: config.cta.primary
       }
     });
-  }, [config]);
+
+    // Track page load time
+    const startTime = Date.now();
+    return () => {
+      const timeOnPage = Math.floor((Date.now() - startTime) / 1000);
+      analytics.track('time_on_page', { variant, seconds: timeOnPage });
+    };
+  }, [config, variant]);
 
   return (
     <div className="min-h-screen bg-background scroll-smooth">
@@ -202,6 +227,16 @@ const Index = () => {
       </main>
 
       <EnhancedFooter />
+      
+      {/* Sticky CTA (mobile only) */}
+      <StickyCTA ctaText={config.cta.primary} variant={variant} />
+
+      {/* Exit-intent modal */}
+      <ExitIntentModal 
+        open={showExitIntent} 
+        onOpenChange={setShowExitIntent} 
+        variant={variant} 
+      />
       
       {/* Development-only variant switcher */}
       <VariantSwitcher />

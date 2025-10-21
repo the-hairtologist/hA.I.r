@@ -14,6 +14,212 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_assignments: {
+        Row: {
+          assigned_at: string | null
+          experiment_id: string | null
+          id: string
+          variant_id: string | null
+          visitor_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_assignments_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ab_assignments_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "ab_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ab_events: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_type: string
+          experiment_id: string | null
+          id: string
+          variant_id: string | null
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type: string
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type?: string
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_events_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ab_events_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "ab_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ab_experiments: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          ended_at: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+        }
+        Relationships: []
+      }
+      ab_test_results: {
+        Row: {
+          converted: boolean | null
+          created_at: string | null
+          engagement_score: string | null
+          experiment_id: string | null
+          faq_expansions: number | null
+          feature_hovers: number | null
+          id: string
+          scroll_depth_max: number | null
+          sections_viewed: Json | null
+          time_on_page_seconds: number | null
+          updated_at: string | null
+          variant_id: string | null
+          visitor_id: string
+        }
+        Insert: {
+          converted?: boolean | null
+          created_at?: string | null
+          engagement_score?: string | null
+          experiment_id?: string | null
+          faq_expansions?: number | null
+          feature_hovers?: number | null
+          id?: string
+          scroll_depth_max?: number | null
+          sections_viewed?: Json | null
+          time_on_page_seconds?: number | null
+          updated_at?: string | null
+          variant_id?: string | null
+          visitor_id: string
+        }
+        Update: {
+          converted?: boolean | null
+          created_at?: string | null
+          engagement_score?: string | null
+          experiment_id?: string | null
+          faq_expansions?: number | null
+          feature_hovers?: number | null
+          id?: string
+          scroll_depth_max?: number | null
+          sections_viewed?: Json | null
+          time_on_page_seconds?: number | null
+          updated_at?: string | null
+          variant_id?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_test_results_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ab_test_results_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "ab_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ab_variants: {
+        Row: {
+          config: Json
+          created_at: string | null
+          experiment_id: string | null
+          id: string
+          variant_key: string
+        }
+        Insert: {
+          config: Json
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_key: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_variants_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       access_codes: {
         Row: {
           code: string
@@ -5131,6 +5337,15 @@ export type Database = {
           nodeport: number
           schedule: string
           username: string
+        }[]
+      }
+      get_experiment_results: {
+        Args: { exp_id: string }
+        Returns: {
+          conversion_rate: number
+          conversions: number
+          variant_key: string
+          views: number
         }[]
       }
       get_stylist_profile_id: {
