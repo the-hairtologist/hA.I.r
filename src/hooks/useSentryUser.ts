@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { useAuth } from './useAuth';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
 import { setUser, clearUser } from '@/lib/monitoring';
 
 /**
  * Automatically sync authenticated user with Sentry
  */
 export const useSentryUser = () => {
-  const { user } = useAuth();
+  const { user } = useEnhancedAuth();
 
   useEffect(() => {
     if (user) {

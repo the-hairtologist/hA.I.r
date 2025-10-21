@@ -28,6 +28,7 @@ import { AppRoutes } from "@/routes";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { useLocation } from "react-router-dom";
+import { performanceTracker } from "@/lib/monitoring/PerformanceTracker";
 
 // Import advanced accessibility features
 import { GlobalAnnouncer } from "@/components/AccessibilityAnnouncer";
@@ -54,20 +55,36 @@ const AnalyticsInitializer = () => {
   const location = useLocation();
   
   useEffect(() => {
-    // Initialize analytics and monitoring
-    initAnalytics();
-    initSentry();
-    initUTMTracking();
+    // Initialize analytics and monitoring with error boundaries
+    try {
+      initAnalytics();
+      initSentry();
+      initUTMTracking();
+      performanceTracker.initialize();
+    } catch (error) {
+      // Log but don't block render
+      console.error('[App] Failed to initialize monitoring:', error);
+    }
   }, []);
   
   // Track navigation changes
   useEffect(() => {
-    userJourney.trackNavigation(location.pathname, { search: location.search });
+    try {
+      userJourney.trackNavigation(location.pathname, { search: location.search });
+    } catch (error) {
+      console.error('[App] Failed to track navigation:', error);
+    }
   }, [location]);
   
-  useAnalytics();
-  useSentryUser(); // Sync user context with Sentry
-  useSessionTracking(); // Track user sessions
+  // Use hooks with error boundaries
+  try {
+    useAnalytics();
+    useSentryUser(); // Sync user context with Sentry
+    useSessionTracking(); // Track user sessions
+  } catch (error) {
+    console.error('[App] Failed to initialize tracking hooks:', error);
+  }
+  
   return null;
 };
 
