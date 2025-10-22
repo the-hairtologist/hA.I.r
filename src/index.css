@@ -143,9 +143,9 @@
   /* Safe area insets for iOS notch and home indicator */
   body {
     padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    /* Note: padding-bottom removed - footer handles it with pb-safe class */
   }
   
   /* CRITICAL: Prevent any container from breaking layout */
@@ -488,9 +488,8 @@ All colors MUST be HSL.
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-    /* Support for iOS safe areas (notch) */
+    /* Support for iOS safe areas (notch) - footer handles bottom padding */
     padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
