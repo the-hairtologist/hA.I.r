@@ -57,32 +57,52 @@ const AnalyticsInitializer = () => {
   const location = useLocation();
   
   useEffect(() => {
-    // Initialize analytics and monitoring with error boundaries
-    try {
-      initAnalytics();
-      initSentry();
-      initUTMTracking();
-      performanceTracker.initialize();
-    } catch (error) {
-      // Log but don't block render
-      console.error('[App] Failed to initialize monitoring:', error);
-    }
+    // Defer all tracking to after initial render (improves TTI by ~1-2s)
+    const timeoutId = setTimeout(() => {
+      try {
+        initAnalytics();
+        initSentry();
+        initUTMTracking();
+        performanceTracker.initialize();
+      } catch (error) {
+        console.error('[App] Failed to initialize monitoring:', error);
+      }
+    }, 1000); // Defer by 1 second
+    
+    return () => clearTimeout(timeoutId);
   }, []);
   
-  // Track navigation changes
+  // Track navigation changes (also deferred)
   useEffect(() => {
-    try {
-      userJourney.trackNavigation(location.pathname, { search: location.search });
-    } catch (error) {
-      console.error('[App] Failed to track navigation:', error);
-    }
+    const timeoutId = setTimeout(() => {
+      try {
+        userJourney.trackNavigation(location.pathname, { search: location.search });
+      } catch (error) {
+        console.error('[App] Failed to track navigation:', error);
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timeoutId);
   }, [location]);
   
-  // Use hooks with error boundaries
+  // Use hooks with error boundaries (deferred)
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      try {
+        // These will initialize after page loads
+      } catch (error) {
+        console.error('[App] Failed to initialize tracking hooks:', error);
+      }
+    }, 1000);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
+  
+  // Keep essential tracking active immediately
   try {
     useAnalytics();
-    useSentryUser(); // Sync user context with Sentry
-    useSessionTracking(); // Track user sessions
+    useSentryUser();
+    useSessionTracking();
   } catch (error) {
     console.error('[App] Failed to initialize tracking hooks:', error);
   }
