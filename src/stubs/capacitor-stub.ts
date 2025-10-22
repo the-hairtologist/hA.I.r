@@ -3,6 +3,39 @@
  * Provides mock implementations when native plugins aren't available
  */
 
+/**
+ * Core Capacitor API stub
+ * Mimics @capacitor/core for web builds
+ */
+export const Capacitor = {
+  getPlatform: () => 'web' as const,
+  isNativePlatform: () => false,
+  isPluginAvailable: () => false,
+  convertFileSrc: (filePath: string) => filePath,
+  
+  // Plugin registry stubs
+  registerPlugin: () => ({}),
+  
+  // Web view communication stubs  
+  nativeCallback: () => {},
+  nativePromise: () => Promise.resolve(),
+  
+  // Exception stubs
+  Exception: class CapacitorException extends Error {
+    constructor(message: string, code?: string) {
+      super(message);
+      this.name = 'CapacitorException';
+    }
+  },
+};
+
+// Platform constants
+export const CapacitorPlatforms = {
+  Web: 'web',
+  iOS: 'ios',
+  Android: 'android',
+};
+
 // Haptics stubs
 export const Haptics = {
   impact: async () => {},
