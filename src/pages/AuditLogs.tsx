@@ -18,7 +18,7 @@ import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { Navigate } from "react-router-dom";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { exportToCSV } from "@/lib/csvExport";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { trackSelect } from "@/lib/logging/supabaseTracker";
 
 interface AuditLog {

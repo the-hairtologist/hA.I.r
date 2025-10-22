@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Key } from "lucide-react";
 import { sanitizeInput, detectSQLInjection } from "@/lib/security/inputSanitization";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 interface AccessCodeDialogProps {

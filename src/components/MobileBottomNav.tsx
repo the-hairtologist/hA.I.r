@@ -6,7 +6,7 @@ import { haptic } from "@/platform/haptics";
 import { NotificationDot } from "./NotificationDot";
 import { useRealtimeNotifications } from "@/hooks/useRealtimeNotifications";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { prefetchOnHover } from "@/lib/performance/ResourceHints";
 
 interface NavItem {

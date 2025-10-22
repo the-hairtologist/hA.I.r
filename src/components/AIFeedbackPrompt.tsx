@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { haptic } from "@/platform/haptics";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { trackInsert } from "@/lib/logging/supabaseTracker";
 

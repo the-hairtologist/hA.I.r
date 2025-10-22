@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import {
   AlertDialog,

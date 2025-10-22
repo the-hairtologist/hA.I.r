@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { toast } from "sonner";
 import { useDebounce } from "./useDebounce";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 
 interface UseAutoSaveOptions<T> {
   data: T;

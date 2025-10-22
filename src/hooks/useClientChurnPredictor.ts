@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { differenceInDays, subDays } from 'date-fns';
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ChurnPrediction {
   clientId: string;

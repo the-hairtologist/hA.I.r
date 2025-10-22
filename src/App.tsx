@@ -85,27 +85,10 @@ const AnalyticsInitializer = () => {
     return () => clearTimeout(timeoutId);
   }, [location]);
   
-  // Use hooks with error boundaries (deferred)
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      try {
-        // These will initialize after page loads
-      } catch (error) {
-        console.error('[App] Failed to initialize tracking hooks:', error);
-      }
-    }, 1000);
-    
-    return () => clearTimeout(timeoutId);
-  }, []);
-  
-  // Keep essential tracking active immediately
-  try {
-    useAnalytics();
-    useSentryUser();
-    useSessionTracking();
-  } catch (error) {
-    console.error('[App] Failed to initialize tracking hooks:', error);
-  }
+  // Call hooks at top level (React rules require unconditional calls)
+  useAnalytics();
+  useSentryUser();
+  useSessionTracking();
   
   return null;
 };

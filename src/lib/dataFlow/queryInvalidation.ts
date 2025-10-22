@@ -4,7 +4,7 @@
  */
 
 import { QueryClient } from '@tanstack/react-query';
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 
 /**
  * Invalidation patterns for common data relationships

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Key, Copy, CheckCircle, XCircle, Calendar, User } from "lucide-react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { trackSelect } from "@/lib/logging/supabaseTracker";
 
 interface AccessCode {

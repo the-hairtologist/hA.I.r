@@ -3,7 +3,7 @@
  * Tracks data transformations through the pipeline: DB → API → State → UI
  */
 
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 
 type FlowStage = 'database' | 'api' | 'transform' | 'state' | 'ui' | 'validation';
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface Recommendation {
   title: string;

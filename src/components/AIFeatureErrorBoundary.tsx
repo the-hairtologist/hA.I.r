@@ -7,7 +7,7 @@ import React from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, RefreshCw } from 'lucide-react';
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface Props {

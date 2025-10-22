@@ -16,7 +16,7 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 
 export default function AdminCommandCenter() {
   const navigate = useNavigate();

@@ -7,7 +7,7 @@ import React, { Component, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface Props {

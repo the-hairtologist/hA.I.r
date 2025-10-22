@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2, LucideIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 interface AIEnhancedEmptyStateProps {

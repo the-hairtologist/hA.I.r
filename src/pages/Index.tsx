@@ -9,7 +9,7 @@ import { MinimalFooter } from "@/components/landing/MinimalFooter";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { useScrollDepthTracking } from "@/hooks/useScrollDepthTracking";
 import { analytics } from "@/lib/analytics";
 

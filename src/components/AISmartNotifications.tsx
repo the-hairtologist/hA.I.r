@@ -12,7 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
 import { trackSelect } from '@/lib/logging/supabaseTracker';
 

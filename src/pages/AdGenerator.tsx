@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Sparkles, Copy, Download, Share2, Wand2, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 
 type AdType = "social-media" | "landing-page" | "email" | "banner";

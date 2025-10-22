@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Scissors, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 
 const NotFound = () => {
   const location = useLocation();

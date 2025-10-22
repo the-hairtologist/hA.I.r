@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { logger } from '@/lib/productionLogger';
+import { logger } from '@/lib/logging/productionLogger';
 
 const DEV_MODE_KEY = 'hair-dev-mode-enabled';
 

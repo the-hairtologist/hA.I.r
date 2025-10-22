@@ -7,7 +7,7 @@ import { Loader2, ExternalLink, TrendingUp, Tag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { analytics } from "@/lib/analytics";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { trackSelect } from "@/lib/logging/supabaseTracker";
 

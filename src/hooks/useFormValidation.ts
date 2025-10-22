@@ -24,7 +24,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { z } from "zod";
 import { useDebouncedSearch } from "./useDebouncedSearch";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 
 /**
  * Configuration options for form validation

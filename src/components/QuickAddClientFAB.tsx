@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { logger } from "@/lib/productionLogger";
+import { logger } from "@/lib/logging/productionLogger";
 import { userJourney } from "@/lib/logging/userJourneyTracker";
 import { trackInsert } from "@/lib/logging/supabaseTracker";
 import { Button } from "@/components/ui/button";
