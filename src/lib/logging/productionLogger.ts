@@ -4,6 +4,8 @@
  * Following Lovable best practices for zero production overhead
  */
 
+import { safeConsole } from '@/lib/safeLogger';
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
 interface LogContext {
@@ -28,18 +30,14 @@ class ProductionLogger {
    * Debug logs - only in development
    */
   debug(message: string, context?: LogContext): void {
-    if (this.isDevelopment) {
-      console.log(`[DEBUG] ${message}`, context);
-    }
+    safeConsole.debug(`[DEBUG] ${message}`, context);
   }
 
   /**
    * Info logs - important but not critical
    */
   info(message: string, context?: LogContext): void {
-    if (this.isDevelopment) {
-      console.info(`[INFO] ${message}`, context);
-    }
+    safeConsole.info(`[INFO] ${message}`, context);
     this.bufferLog('info', message, context);
   }
 
@@ -47,7 +45,7 @@ class ProductionLogger {
    * Warning logs - potential issues
    */
   warn(message: string, context?: LogContext): void {
-    console.warn(`[WARN] ${message}`, context);
+    safeConsole.warn(`[WARN] ${message}`, context);
     this.bufferLog('warn', message, context);
   }
 
@@ -87,8 +85,8 @@ class ProductionLogger {
    * Performance logging
    */
   performance(label: string, duration: number, context?: LogContext): void {
-    if (this.isDevelopment && duration > 100) {
-      console.warn(`[PERFORMANCE] ${label} took ${duration}ms`, context);
+    if (duration > 100) {
+      safeConsole.warn(`[PERFORMANCE] ${label} took ${duration}ms`, context);
     }
     
     // Only log slow operations in production
@@ -104,9 +102,7 @@ class ProductionLogger {
     const level = status >= 500 ? 'error' : status >= 400 ? 'warn' : 'info';
     const message = `${method} ${endpoint} - ${status} (${duration}ms)`;
     
-    if (this.isDevelopment) {
-      console.log(`[API] ${message}`, context);
-    }
+    safeConsole.log(`[API] ${message}`, context);
     
     if (level !== 'info') {
       this.bufferLog(level, message, context);
@@ -117,10 +113,7 @@ class ProductionLogger {
    * User action logging for analytics
    */
   userAction(action: string, context?: LogContext): void {
-    if (this.isDevelopment) {
-      console.log(`[USER ACTION] ${action}`, context);
-    }
-    
+    safeConsole.log(`[USER ACTION] ${action}`, context);
     this.bufferLog('info', `User action: ${action}`, context);
   }
 

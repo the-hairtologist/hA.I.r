@@ -3,7 +3,7 @@
  * React Query hook for managing formula data
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { 
   fetchFormulasByStylist,
@@ -16,6 +16,8 @@ import {
 } from "@/lib/api/formulas";
 import type { Formula, CreateFormulaData, UpdateFormulaData } from "@/types/formula";
 import { handleApiError } from "@/lib/api/errorHandler";
+import { cacheManager } from "@/lib/cache/CacheManager";
+import { useCachedQuery } from "@/hooks/useCachedQuery";
 
 /**
  * Query key factory for formulas
@@ -33,12 +35,11 @@ export const formulaKeys = {
  * Fetch formulas for a stylist
  */
 export const useFormulasByStylist = (stylistId: string | null) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: formulaKeys.listByStylist(stylistId || ''),
     queryFn: () => fetchFormulasByStylist(stylistId!),
+    cacheType: 'formulas',
     enabled: !!stylistId,
-    staleTime: 3 * 60 * 1000, // 3 minutes
-    gcTime: 10 * 60 * 1000,
   });
 };
 
@@ -46,11 +47,11 @@ export const useFormulasByStylist = (stylistId: string | null) => {
  * Fetch formulas for a client
  */
 export const useFormulasByClient = (clientId: string | null) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: formulaKeys.listByClient(clientId || ''),
     queryFn: () => fetchFormulasByClient(clientId!),
+    cacheType: 'formulas',
     enabled: !!clientId,
-    staleTime: 3 * 60 * 1000,
   });
 };
 
@@ -58,11 +59,11 @@ export const useFormulasByClient = (clientId: string | null) => {
  * Fetch a single formula
  */
 export const useFormula = (formulaId: string | null) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: formulaKeys.detail(formulaId || ''),
     queryFn: () => fetchFormulaById(formulaId!),
+    cacheType: 'formulaDetails',
     enabled: !!formulaId,
-    staleTime: 3 * 60 * 1000,
   });
 };
 
@@ -75,8 +76,8 @@ export const useCreateFormula = (stylistId: string) => {
   return useMutation({
     mutationFn: (data: CreateFormulaData) => createFormula(data),
     onSuccess: (newFormula) => {
-      // Invalidate stylist formulas list
-      queryClient.invalidateQueries({ queryKey: formulaKeys.listByStylist(stylistId) });
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('formula', stylistId);
       
       // If formula has client, invalidate client formulas too
       if (newFormula.client_id) {
@@ -103,6 +104,9 @@ export const useUpdateFormula = (stylistId: string) => {
   return useMutation({
     mutationFn: (data: UpdateFormulaData) => updateFormula(data),
     onSuccess: (updatedFormula) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('formula', stylistId);
+      
       // Update in list cache
       queryClient.setQueryData<Formula[]>(
         formulaKeys.listByStylist(stylistId),
@@ -137,6 +141,9 @@ export const useDeleteFormula = (stylistId: string) => {
   return useMutation({
     mutationFn: (formulaId: string) => deleteFormula(formulaId),
     onSuccess: (_, formulaId) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('formula', stylistId);
+      
       // Remove from list cache
       queryClient.setQueryData<Formula[]>(
         formulaKeys.listByStylist(stylistId),
@@ -167,6 +174,9 @@ export const useUpdateFormulaText = (stylistId: string) => {
     mutationFn: ({ formulaId, formulaText }: { formulaId: string; formulaText: string }) => 
       updateFormulaText(formulaId, formulaText),
     onSuccess: (updatedFormula) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('formula', stylistId);
+      
       // Update caches
       queryClient.setQueryData<Formula[]>(
         formulaKeys.listByStylist(stylistId),

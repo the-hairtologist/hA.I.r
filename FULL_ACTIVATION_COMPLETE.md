@@ -12,6 +12,8 @@
 **Updated Files**:
 - ✅ `src/hooks/useClients.ts` - 2 queries converted
 - ✅ `src/hooks/useAppointments.ts` - 3 queries converted
+- ✅ `src/hooks/useFormulas.ts` - 3 queries converted
+- ✅ `src/lib/cache/CacheManager.ts` - Added formula cache strategies
 
 **Before**:
 ```typescript
@@ -35,22 +37,25 @@ useCachedQuery({
 
 ### 2. Smart Cache Invalidation ✅
 
-**8 mutations updated** with `cacheManager.invalidateAfterMutation`:
-- Client CRUD operations
-- Appointment CRUD operations
+**12 mutations updated** with `cacheManager.invalidateAfterMutation`:
+- Client CRUD operations (4 mutations)
+- Appointment CRUD operations (4 mutations)
+- Formula CRUD operations (4 mutations)
 - Auto-invalidates related caches (analytics, details, lists)
 
 ---
 
 ### 3. Production-Safe Logging ✅
 
-**6 critical files** now use `safeConsole`:
+**8 critical files** now use `safeConsole`:
 - `src/lib/accessibility/announcer.ts`
 - `src/lib/dataFlow/flowLogger.ts`
 - `src/lib/ipProtection.ts`
 - `src/lib/mobile/tapTargets.ts`
 - `src/lib/mobileEnhancements.ts`
 - `src/lib/monitoring/PerformanceTracker.ts`
+- `src/lib/logging/productionLogger.ts` (6 methods)
+- `src/lib/performance/PerformanceOptimizer.ts` (2 methods)
 
 ---
 

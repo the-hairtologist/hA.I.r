@@ -40,6 +40,10 @@ const CACHE_STRATEGIES: Record<string, CacheStrategy> = {
   // Analytics - longer TTL
   analytics: { ttl: 15 * 60 * 1000, priority: 'low' }, // 15 min
   insights: { ttl: 15 * 60 * 1000, priority: 'low' }, // 15 min
+  
+  // Formulas - medium TTL
+  formulas: { ttl: 10 * 60 * 1000, priority: 'medium' }, // 10 min
+  formulaDetails: { ttl: 5 * 60 * 1000, priority: 'medium' }, // 5 min
 };
 
 class CacheManager {
@@ -74,7 +78,7 @@ class CacheManager {
   /**
    * Smart cache invalidation after mutations
    */
-  invalidateAfterMutation(mutationType: 'appointment' | 'client' | 'payment' | 'service' | 'message', stylistId: string): void {
+  invalidateAfterMutation(mutationType: 'appointment' | 'client' | 'payment' | 'service' | 'message' | 'formula', stylistId: string): void {
     logger.info(`Invalidating after ${mutationType} mutation`, 'CacheManager', { stylistId });
     
     switch (mutationType) {
@@ -92,6 +96,9 @@ class CacheManager {
         break;
       case 'message':
         this.invalidateRelated(['messages', 'unreadCount'], stylistId);
+        break;
+      case 'formula':
+        this.invalidateRelated(['formulas', 'formulaDetails'], stylistId);
         break;
     }
   }

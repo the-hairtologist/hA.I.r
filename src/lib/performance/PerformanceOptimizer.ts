@@ -6,6 +6,7 @@
 import { initResourceHints, smartPrefetch } from './ResourceHints';
 import { preconnectCriticalDomains, loadPolyfills } from './BundleOptimizer';
 import { logger } from '../logging/productionLogger';
+import { safeConsole } from '@/lib/safeLogger';
 
 class PerformanceOptimizerService {
   private initialized = false;
@@ -99,7 +100,7 @@ class PerformanceOptimizerService {
         const observer = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
             if (entry.duration > 50) {
-              console.warn('⚠️ Long task detected:', {
+              safeConsole.warn('⚠️ Long task detected:', {
                 duration: entry.duration,
                 startTime: entry.startTime,
               });
@@ -122,7 +123,7 @@ class PerformanceOptimizerService {
             }
           }
           if (clsScore > 0.1) {
-            console.warn('⚠️ High CLS detected:', clsScore);
+            safeConsole.warn('⚠️ High CLS detected:', clsScore);
           }
         });
 

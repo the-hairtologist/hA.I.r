@@ -66,7 +66,7 @@ export function useInvalidateCache() {
       cacheManager.invalidate(type, identifier);
     },
     invalidateAfterMutation: (
-      mutationType: 'appointment' | 'client' | 'payment' | 'service' | 'message',
+      mutationType: 'appointment' | 'client' | 'payment' | 'service' | 'message' | 'formula',
       stylistId: string
     ) => {
       cacheManager.invalidateAfterMutation(mutationType, stylistId);
