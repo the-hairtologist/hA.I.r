@@ -3,6 +3,8 @@
  * Provides user-friendly warnings when approaching or hitting rate limits
  */
 
+import { safeConsole } from '@/lib/safeLogger';
+
 interface RateLimitState {
   remainingRequests: number;
   resetTime: number;
@@ -26,7 +28,7 @@ export class RateLimitManager {
     try {
       localStorage.setItem(RATE_LIMIT_STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
-      console.warn('Failed to store rate limit state:', error);
+      safeConsole.warn('Failed to store rate limit state:', error);
     }
   }
 

@@ -3,6 +3,8 @@
  * Prevents open redirect and malicious URL attacks
  */
 
+import { safeConsole } from '@/lib/safeLogger';
+
 /**
  * Allowed domains for external redirects
  */
@@ -28,7 +30,7 @@ export const isSafeRedirectUrl = (
     
     // Only allow https protocol (except localhost for dev)
     if (urlObj.protocol !== 'https:' && !urlObj.hostname.includes('localhost')) {
-      console.warn('[Security] Rejected non-HTTPS URL:', url);
+      safeConsole.warn('[Security] Rejected non-HTTPS URL:', url);
       return false;
     }
     
@@ -39,13 +41,13 @@ export const isSafeRedirectUrl = (
     );
     
     if (!isAllowed) {
-      console.warn('[Security] Rejected URL from untrusted domain:', urlObj.hostname);
+      safeConsole.warn('[Security] Rejected URL from untrusted domain:', urlObj.hostname);
       return false;
     }
     
     return true;
   } catch (error) {
-    console.error('[Security] Invalid URL format:', url);
+    safeConsole.error('[Security] Invalid URL format:', url);
     return false;
   }
 };

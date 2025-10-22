@@ -4,6 +4,7 @@
  */
 
 import type { LogLevel, LogEntry, LogContext, LoggerInterface } from '@/types/logger';
+import { safeConsole } from '@/lib/safeLogger';
 
 class Logger implements LoggerInterface {
   private logs: LogEntry[] = [];
@@ -45,22 +46,22 @@ class Logger implements LoggerInterface {
     switch (level) {
       case 'DEBUG':
         if (isDevelopment) {
-          console.debug(fullMessage, logContext);
+          safeConsole.debug(fullMessage, logContext);
         }
         break;
       case 'INFO':
         if (isDevelopment) {
-          console.info(fullMessage, logContext);
+          safeConsole.info(fullMessage, logContext);
         }
         break;
       case 'WARN':
         if (isDevelopment) {
-          console.warn(fullMessage, logContext);
+          safeConsole.warn(fullMessage, logContext);
         }
         break;
       case 'ERROR':
         // Always log errors
-        console.error(fullMessage, logContext);
+        safeConsole.error(fullMessage, logContext);
         break;
     }
   }

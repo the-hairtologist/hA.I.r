@@ -8,6 +8,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
+import { safeConsole } from '@/lib/safeLogger';
 
 interface ErrorContext {
   component: string;
@@ -181,7 +182,7 @@ class ErrorRecoverySystem {
       });
     } catch (logError) {
       // Silently fail if table doesn't exist yet
-      console.log('Error logging skipped (table may not exist):', logError);
+      safeConsole.log('Error logging skipped (table may not exist):', logError);
     }
   }
 

@@ -15,6 +15,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { logger } from "../logging/productionLogger";
+import { safeConsole } from '@/lib/safeLogger';
 
 type EventCallback = (payload: any) => void;
 type UnsubscribeFunction = () => void;
@@ -68,7 +69,7 @@ class RealtimeSubscriptionManager {
         try {
           callback(payload);
         } catch (error) {
-          console.error(`Error in realtime listener for ${channelKey}:`, error);
+          safeConsole.error(`Error in realtime listener for ${channelKey}:`, error);
         }
       });
     }
@@ -124,7 +125,7 @@ class RealtimeSubscriptionManager {
     const attempts = this.reconnectAttempts.get(channelKey) || 0;
     
     if (attempts >= this.maxReconnectAttempts) {
-      console.error(`[Realtime] Max reconnect attempts reached for ${channelKey}`);
+      safeConsole.error(`[Realtime] Max reconnect attempts reached for ${channelKey}`);
       return;
     }
 

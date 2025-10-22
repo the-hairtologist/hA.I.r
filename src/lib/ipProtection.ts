@@ -131,7 +131,7 @@ export const generateFingerprint = async (): Promise<string> => {
 export const logSuspiciousActivity = async (activity: string, details?: any) => {
   const fingerprint = await generateFingerprint();
   
-  console.error('🚨 SECURITY ALERT:', {
+  safeConsole.error('🚨 SECURITY ALERT:', {
     activity,
     fingerprint,
     timestamp: new Date().toISOString(),

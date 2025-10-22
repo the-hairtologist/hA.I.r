@@ -3,6 +3,8 @@
  * Catches issues before they reach production
  */
 
+import { safeConsole } from '@/lib/safeLogger';
+
 interface ErrorReport {
   type: 'circular-dependency' | 'import-error' | 'runtime-error' | 'type-error';
   severity: 'critical' | 'high' | 'medium' | 'low';
@@ -39,7 +41,7 @@ class ErrorDetectionSystem {
     this.errors.push(error);
     
     if (error.severity === 'critical') {
-      console.error('🚨 CRITICAL ERROR DETECTED:', error);
+      safeConsole.error('🚨 CRITICAL ERROR DETECTED:', error);
     }
     
     // In production, send to monitoring service

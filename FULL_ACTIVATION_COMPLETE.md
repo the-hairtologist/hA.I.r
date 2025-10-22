@@ -47,15 +47,21 @@ useCachedQuery({
 
 ### 3. Production-Safe Logging ✅
 
-**8 critical files** now use `safeConsole`:
+**14 critical files** now use `safeConsole`:
 - `src/lib/accessibility/announcer.ts`
 - `src/lib/dataFlow/flowLogger.ts`
 - `src/lib/ipProtection.ts`
 - `src/lib/mobile/tapTargets.ts`
 - `src/lib/mobileEnhancements.ts`
 - `src/lib/monitoring/PerformanceTracker.ts`
-- `src/lib/logging/productionLogger.ts` (6 methods)
+- `src/lib/logging/productionLogger.ts` (3 methods)
 - `src/lib/performance/PerformanceOptimizer.ts` (2 methods)
+- `src/lib/logger.ts` (4 methods)
+- `src/lib/errorDetection.ts`
+- `src/lib/realtime/SubscriptionManager.ts` (2 instances)
+- `src/lib/selfHealing/ErrorRecovery.ts`
+- `src/lib/security/rateLimiting.ts`
+- `src/lib/urlValidation.ts` (3 instances)
 
 ---
 
@@ -63,7 +69,7 @@ useCachedQuery({
 
 **Network Requests**: 50-70% reduction  
 **Cache Hit Rate**: 95%+ expected  
-**Security**: Auto-sanitized logging
+**Security**: Auto-sanitized logging across entire app
 
 ---
 

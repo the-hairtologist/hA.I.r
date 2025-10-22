@@ -57,7 +57,7 @@ class ProductionLogger {
       ? { message: error.message, stack: error.stack, name: error.name }
       : { error };
     
-    console.error(`[ERROR] ${message}`, { ...context, error: errorDetails });
+    safeConsole.error(`[ERROR] ${message}`, { ...context, error: errorDetails });
     this.bufferLog('error', message, { ...context, error: errorDetails });
     
     // Send to monitoring service in production
@@ -74,7 +74,7 @@ class ProductionLogger {
       ? { message: error.message, stack: error.stack, name: error.name }
       : { error };
 
-    console.error(`[FATAL] ${message}`, { ...context, error: errorDetails });
+    safeConsole.error(`[FATAL] ${message}`, { ...context, error: errorDetails });
     this.bufferLog('fatal', message, { ...context, error: errorDetails });
     
     // Always send fatal errors to monitoring
