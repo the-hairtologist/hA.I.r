@@ -1712,6 +1712,37 @@ const Settings = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Debug Tools - Only visible in dev mode */}
+            {isDevMode && (
+              <Card className="border-[3px] border-yellow-500 shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Code className="h-5 w-5" />
+                    Debug & Testing Tools
+                  </CardTitle>
+                  <CardDescription>Development and testing utilities</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Sentry Error Monitoring</Label>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Test error tracking by triggering a sample error
+                    </p>
+                    <Button
+                      variant="destructive"
+                      onClick={() => {
+                        // Trigger test error for Sentry
+                        throw new Error("Test error from Settings - Sentry is working! 🎉");
+                      }}
+                      className="w-full"
+                    >
+                      Trigger Test Error
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
 
