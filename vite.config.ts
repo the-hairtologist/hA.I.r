@@ -198,6 +198,6 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: true,
   },
   esbuild: {
-    drop: mode === 'production' ? ['console', 'debugger'] : [],
+    drop: [],
   },
 }));
