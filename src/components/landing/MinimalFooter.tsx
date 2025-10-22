@@ -5,15 +5,15 @@ export const MinimalFooter = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="brutal-border-4 border-secondary bg-foreground" style={{
+    <footer className="brutal-border-4 border-secondary bg-foreground pb-safe" style={{
       backgroundImage: `
         linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
         linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
       `,
       backgroundSize: '8px 8px'
     }}>
-      <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-5 sm:py-6">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3">
+      <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-2 xs:py-3 sm:py-4">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3">
           {/* Logo + Copyright */}
           <div className="flex items-center gap-2 xs:gap-2.5 sm:pr-4">
             <div className="w-8 h-8 xs:w-9 xs:h-9 brutal-border bg-secondary flex items-center justify-center brutal-shadow-sm">
