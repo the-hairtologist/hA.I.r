@@ -32,7 +32,7 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
     <>
       <main id="main-content" className="pt-16">
         {/* Hero Section - Social proof focused */}
-        <section className="relative bg-primary py-4 xs:py-6 sm:py-8 md:py-12 lg:py-16 overflow-hidden flex items-center" style={{
+        <section className="relative bg-accent py-4 xs:py-6 sm:py-8 md:py-12 lg:py-16 overflow-hidden flex items-center" style={{
           backgroundImage: `
             linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
             linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
@@ -43,13 +43,13 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
             <div className="max-w-4xl mx-auto space-y-1.5 xxs:space-y-2 xs:space-y-3 sm:space-y-4">
               {/* Social Proof Icons */}
               <div className="flex justify-center gap-4 sm:gap-5 mb-3 sm:mb-4 animate-fade-in">
-                <div className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md">
+                <div className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md">
                   <Users className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} />
                 </div>
                 <div className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md" style={{ animationDelay: '0.1s' }}>
                   <TrendingUp className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-black" strokeWidth={2.5} />
                 </div>
-                <div className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md" style={{ animationDelay: '0.2s' }}>
+                <div className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md" style={{ animationDelay: '0.2s' }}>
                   <Star className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} fill="white" />
                 </div>
               </div>
@@ -66,17 +66,17 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
                 <Button 
                   size="lg" 
                   onClick={onCTAClick}
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-black hover:bg-secondary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-primary text-white hover:bg-primary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                   style={{
                     boxShadow: '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4)'
                   }}
                 >
-                  START FREE TRIAL
+                  JOIN NOW - FREE
                 </Button>
               </div>
               
               <p className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-white/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
-                ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
+                ✓ Setup in 2 Minutes • ✓ No Credit Card • ✓ 14-Day Trial
               </p>
 
               <div className="mt-1.5 xs:mt-2 sm:mt-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
