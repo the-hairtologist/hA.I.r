@@ -85,13 +85,14 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
+          // 1. Google Fonts (critical)
           {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
+              cacheName: 'fonts-cache',
+              expiration: { 
+                maxEntries: 20, 
                 maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
               },
               cacheableResponse: {
@@ -99,29 +100,16 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
+          
+          // 2. API + User Data (combined)
           {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'gstatic-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          // Critical user data - cache for 7 days
-          {
-            urlPattern: /client_profiles|stylist_profiles|appointments|formulas/i,
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'user-data-cache',
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+              cacheName: 'api-cache',
+              expiration: { 
+                maxEntries: 150, 
+                maxAgeSeconds: 60 * 60 // 1 hour
               },
               networkTimeoutSeconds: 5,
               cacheableResponse: {
@@ -129,42 +117,16 @@ export default defineConfig(({ mode }) => ({
               }
             }
           },
-          // API responses - shorter cache
-          {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 30 // 30 minutes
-              },
-              networkTimeoutSeconds: 3,
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          // Images - cache for 30 days
+          
+          // 3. Images
           {
             urlPattern: /\.(jpg|jpeg|png|gif|webp)$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'image-cache',
-              expiration: {
-                maxEntries: 500,
+              expiration: { 
+                maxEntries: 200, 
                 maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
-            }
-          },
-          {
-            urlPattern: /\/api\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 5 // 5 minutes
               }
             }
           }
@@ -189,48 +151,26 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // React ecosystem
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'react-core';
-          }
-          if (id.includes('node_modules/react-router')) {
-            return 'react-router';
+          // Core React (must load first)
+          if (id.includes('node_modules/react')) {
+            return 'react-vendor';
           }
           
-          // UI libraries
-          if (id.includes('node_modules/@radix-ui')) {
-            return 'radix-ui';
-          }
-          if (id.includes('node_modules/lucide-react')) {
-            return 'icons';
+          // UI layer (depends on React)
+          if (id.includes('node_modules/@radix-ui') || 
+              id.includes('node_modules/lucide-react')) {
+            return 'ui-vendor';
           }
           
-          // Data fetching and state
-          if (id.includes('node_modules/@tanstack/react-query')) {
-            return 'react-query';
-          }
-          if (id.includes('node_modules/@supabase')) {
-            return 'supabase';
+          // Data layer (depends on React)
+          if (id.includes('node_modules/@supabase') || 
+              id.includes('node_modules/@tanstack/react-query')) {
+            return 'data-vendor';
           }
           
-          // Charts and visualization
-          if (id.includes('node_modules/recharts')) {
-            return 'charts';
-          }
-          
-          // AI and transformers
-          if (id.includes('node_modules/@huggingface')) {
-            return 'ai-models';
-          }
-          
-          // Forms and validation
-          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/zod')) {
-            return 'forms';
-          }
-          
-          // Utilities
-          if (id.includes('node_modules/date-fns')) {
-            return 'date-utils';
+          // Everything else
+          if (id.includes('node_modules')) {
+            return 'vendor';
           }
         },
         // Optimize output filenames
@@ -240,7 +180,7 @@ export default defineConfig(({ mode }) => ({
       },
       // Tree shaking optimizations
       treeshake: {
-        moduleSideEffects: 'no-external',
+        moduleSideEffects: true,
         propertyReadSideEffects: false,
         unknownGlobalSideEffects: false,
       },
