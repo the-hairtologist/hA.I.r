@@ -6,9 +6,23 @@
 import { Platform } from '@/platform';
 import { logger } from './logger';
 
-// Analytics configuration
-const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID || '';
-const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '';
+// Analytics configuration - lazy loaded to prevent build-time issues
+let GA4_MEASUREMENT_ID: string | null = null;
+let MIXPANEL_TOKEN: string | null = null;
+
+const getGA4Id = () => {
+  if (GA4_MEASUREMENT_ID === null) {
+    GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID || '';
+  }
+  return GA4_MEASUREMENT_ID;
+};
+
+const getMixpanelToken = () => {
+  if (MIXPANEL_TOKEN === null) {
+    MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '';
+  }
+  return MIXPANEL_TOKEN;
+};
 
 // Initialize analytics on app load
 let analyticsInitialized = false;
@@ -30,8 +44,10 @@ const isValidGA4Id = (id: string): boolean => {
 export const initAnalytics = () => {
   if (analyticsInitialized) return;
 
+  const measurementId = getGA4Id(); // Lazy load env var
+  
   // Google Analytics 4 - with security validation
-  if (!GA4_MEASUREMENT_ID || !isValidGA4Id(GA4_MEASUREMENT_ID)) {
+  if (!measurementId || !isValidGA4Id(measurementId)) {
     logger.info('GA4 not configured or invalid', 'analytics');
     analyticsInitialized = true;
     isInitialized = true;
@@ -42,7 +58,7 @@ export const initAnalytics = () => {
     // GA4 script injection
     const script1 = document.createElement('script');
     script1.async = true;
-    script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`;
+    script1.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
     document.head.appendChild(script1);
 
     const script2 = document.createElement('script');
@@ -50,7 +66,7 @@ export const initAnalytics = () => {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '${GA4_MEASUREMENT_ID}', {
+      gtag('config', '${measurementId}', {
         send_page_view: false,
         debug_mode: ${import.meta.env.DEV}
       });
@@ -59,7 +75,8 @@ export const initAnalytics = () => {
   }
 
   // Mixpanel (optional)
-  if (MIXPANEL_TOKEN) {
+  const mixpanelToken = getMixpanelToken(); // Lazy load env var
+  if (mixpanelToken) {
     // Add Mixpanel initialization here if needed
   }
 
@@ -139,9 +156,11 @@ export const setUserProperties = (userId: string, properties?: Record<string, an
 export const identifyUser = (userId: string, traits?: Record<string, any>) => {
   if (!analyticsInitialized) return;
 
+  const measurementId = getGA4Id(); // Lazy load env var
+  
   // Google Analytics 4
-  if (typeof window !== 'undefined' && 'gtag' in window) {
-    (window as unknown as { gtag: Function }).gtag('config', GA4_MEASUREMENT_ID, {
+  if (typeof window !== 'undefined' && 'gtag' in window && measurementId) {
+    (window as unknown as { gtag: Function }).gtag('config', measurementId, {
       user_id: userId,
       ...traits,
     });

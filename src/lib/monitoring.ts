@@ -22,8 +22,9 @@ import * as Sentry from "@sentry/react";
 import type { ReactNode } from 'react';
 import { logger } from '@/lib/logger';
 
-const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || '';
-const ENVIRONMENT = import.meta.env.DEV ? 'development' : 'production';
+// Lazy environment variable access to prevent build-time issues
+const getSentryDSN = () => import.meta.env.VITE_SENTRY_DSN || '';
+const getEnvironment = () => import.meta.env.DEV ? 'development' : 'production';
 
 let sentryInitialized = false;
 
@@ -36,16 +37,19 @@ export const initSentry = () => {
     return;
   }
   
-  if (!SENTRY_DSN) {
+  const dsn = getSentryDSN(); // Lazy load env var
+  if (!dsn) {
     logger.info('Sentry not configured - error monitoring disabled');
+    sentryInitialized = true;
     return;
   }
 
   try {
+    const environment = getEnvironment(); // Lazy load env var
     
     Sentry.init({
-      dsn: SENTRY_DSN,
-      environment: ENVIRONMENT,
+      dsn: dsn,
+      environment: environment,
       
       // Performance Monitoring
       integrations: [
