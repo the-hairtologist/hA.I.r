@@ -48,10 +48,10 @@ export const AnimatedCounter = React.forwardRef<HTMLDivElement, AnimatedCounterP
           />
         </div>
         <div className="text-center">
-          <div className="text-sm xs:text-base sm:text-lg font-pixel text-white">
+          <div className={`text-sm xs:text-base sm:text-lg font-pixel ${textColor}`}>
             {count.toLocaleString()}{suffix}
           </div>
-          <div className="text-[10px] xs:text-xs font-pixel text-white/90 uppercase tracking-wider">{label}</div>
+          <div className={`text-[10px] xs:text-xs font-pixel ${textColor}/90 uppercase tracking-wider`}>{label}</div>
         </div>
       </div>
     );
