@@ -10,6 +10,7 @@ interface Props {
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
+  onReset?: () => void;
 }
 
 interface State {
@@ -77,6 +78,7 @@ export class ErrorBoundary extends Component<Props, State> {
       error: null,
       errorCount: this.state.errorCount + 1,
     });
+    this.props.onReset?.();
   };
 
   render() {

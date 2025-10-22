@@ -6,7 +6,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tanstack/react-query";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { BrowserRouter, Routes } from "react-router-dom";
 import { useEffect, Suspense } from "react";
@@ -65,7 +65,7 @@ const AnalyticsInitializer = () => {
         initUTMTracking();
         performanceTracker.initialize();
       } catch (error) {
-        console.error('[App] Failed to initialize monitoring:', error);
+        // Silent fail - monitoring is not critical
       }
     }, 1000); // Defer by 1 second
     
@@ -78,7 +78,7 @@ const AnalyticsInitializer = () => {
       try {
         userJourney.trackNavigation(location.pathname, { search: location.search });
       } catch (error) {
-        console.error('[App] Failed to track navigation:', error);
+        // Silent fail - tracking is not critical
       }
     }, 1000);
     
@@ -102,8 +102,10 @@ const GlobalLoadingWrapper = () => {
 const App = () => {
   return (
     <GlobalErrorBoundary>
-      <ErrorBoundary>
-        <QueryClientProvider client={queryClient}>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary onReset={reset}>
+            <QueryClientProvider client={queryClient}>
           <SubscriptionProvider>
             <DemoModeProvider>
               <TooltipProvider>
@@ -129,8 +131,10 @@ const App = () => {
               </TooltipProvider>
             </DemoModeProvider>
           </SubscriptionProvider>
-        </QueryClientProvider>
-      </ErrorBoundary>
+            </QueryClientProvider>
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
     </GlobalErrorBoundary>
   );
 };
