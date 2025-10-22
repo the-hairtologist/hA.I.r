@@ -40,11 +40,6 @@ export const MinimalFooter = () => {
                 Contact
               </a>
             </div>
-
-            {/* Legal Disclaimer */}
-            <p className="text-xs xs:text-sm font-sans text-background/70 leading-relaxed text-center sm:text-left">
-              Individual results may vary. AI recommendations are assistive tools only and not professional advice. Stylists are independent contractors responsible for maintaining their own professional liability insurance and state licenses.
-            </p>
           </div>
         </div>
       </div>
