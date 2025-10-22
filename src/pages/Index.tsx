@@ -1,46 +1,50 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Scissors, Sparkles, Zap, Heart, Calendar, Palette, Smartphone } from "lucide-react";
-import { MinimalFeatures } from "@/components/landing/MinimalFeatures";
-import { SingleTestimonial } from "@/components/landing/SingleTestimonial";
-
-import { MinimalFAQ } from "@/components/landing/MinimalFAQ";
-import { MinimalFooter } from "@/components/landing/MinimalFooter";
-import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
-import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Scissors } from "lucide-react";
+import { useEffect } from "react";
 import { logger } from "@/lib/logging/productionLogger";
 import { useScrollDepthTracking } from "@/hooks/useScrollDepthTracking";
 import { analytics } from "@/lib/analytics";
-
-// Lazy load phone mockup to improve initial load time
-const HeroPhoneMockup = lazy(() => {
-  logger.info('[Index] Lazy loading HeroPhoneMockup...', { context: 'Landing Page' });
-  return import("@/components/landing/HeroPhoneMockup").then(m => {
-    logger.info('[Index] HeroPhoneMockup loaded successfully', { context: 'Landing Page' });
-    return { default: m.HeroPhoneMockup };
-  }).catch(error => {
-    logger.error('[Index] HeroPhoneMockup lazy load FAILED', error, { context: 'Landing Page' });
-    throw error;
-  });
-});
+import { useABTest } from "@/hooks/useABTest";
+import { LandingVariantA } from "@/components/landing/LandingVariantA";
+import { LandingVariantB } from "@/components/landing/LandingVariantB";
+import { LandingVariantC } from "@/components/landing/LandingVariantC";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { variant, isLoading, trackConversion } = useABTest();
 
   // Track scroll depth milestones
   useScrollDepthTracking({ enabled: true });
 
   useEffect(() => {
-    logger.info('[Index] Component mounted', { context: 'Landing Page' });
+    logger.info('[Index] Component mounted', { context: 'Landing Page', variant });
 
     // Track page load time
     const startTime = Date.now();
     return () => {
       const timeOnPage = Math.floor((Date.now() - startTime) / 1000);
-      analytics.track('time_on_page', { seconds: timeOnPage });
+      analytics.track('time_on_page', { seconds: timeOnPage, variant });
     };
-  }, []);
+  }, [variant]);
+
+  const handleCTAClick = () => {
+    trackConversion('cta_click');
+    logger.info('[Index] CTA button clicked', { context: 'Landing Page', variant });
+    navigate("/auth");
+  };
+
+  // Show loading state briefly to avoid flash
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-pulse text-center">
+          <Scissors className="h-12 w-12 mx-auto mb-4 text-primary" />
+          <p className="font-pixel text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background scroll-smooth">
@@ -67,7 +71,7 @@ const Index = () => {
             <span className="text-xs xs:text-sm sm:text-base font-pixel text-white uppercase truncate">hA.I.r</span>
           </button>
           <Button 
-            onClick={() => navigate("/auth")} 
+            onClick={handleCTAClick}
             size="sm" 
             className="font-pixel text-[10px] xs:text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-white brutal-shadow-sm hover:brutal-shadow-md transition-all duration-300 hover:-translate-y-0.5 rounded-none px-4 xs:px-6 py-2.5 xs:py-3 min-h-[44px] flex-shrink-0"
           >
@@ -77,144 +81,10 @@ const Index = () => {
         </div>
       </header>
 
-      <main id="main-content" className="pt-16">
-        {/* Hero Section - Pixelated LEGO vibes */}
-        <section className="relative bg-primary py-4 xs:py-6 sm:py-8 md:py-12 lg:py-16 overflow-hidden flex items-center" style={{
-          backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
-          `,
-          backgroundSize: '8px 8px'
-        }}>
-          <div className="container mx-auto px-3 xs:px-4 sm:px-6 text-center relative z-10 w-full max-w-full">
-            <div className="max-w-4xl mx-auto space-y-1.5 xxs:space-y-2 xs:space-y-3 sm:space-y-4">
-              {/* Icons */}
-              <div className="flex justify-center gap-4 sm:gap-5 mb-3 sm:mb-4 animate-fade-in" style={{ perspective: '1000px' }}>
-                <div 
-                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-primary flex items-center justify-center animate-bounce brutal-shadow-md hover:scale-110 transition-all duration-300"
-                  style={{ 
-                    animationDelay: '0s',
-                    transform: 'rotateY(-15deg) rotateX(5deg)',
-                    boxShadow: '8px 8px 0px rgba(0,0,0,0.3), 12px 12px 0px rgba(0,0,0,0.15)'
-                  }}
-                >
-                  <Sparkles className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} />
-                </div>
-                <div 
-                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-black bg-secondary flex items-center justify-center animate-bounce brutal-shadow-md hover:scale-110 transition-all duration-300"
-                  style={{ 
-                    animationDelay: '0.1s',
-                    transform: 'rotateY(0deg) rotateX(5deg) translateZ(10px)',
-                    boxShadow: '8px 8px 0px rgba(0,0,0,0.4), 12px 12px 0px rgba(0,0,0,0.2)'
-                  }}
-                >
-                  <Zap className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-black" strokeWidth={2.5} fill="black" />
-                </div>
-                <div 
-                  className="w-11 h-11 xs:w-12 xs:h-12 sm:w-14 sm:h-14 brutal-border-4 border-white bg-accent flex items-center justify-center animate-bounce brutal-shadow-md hover:scale-110 transition-all duration-300"
-                  style={{ 
-                    animationDelay: '0.2s',
-                    transform: 'rotateY(15deg) rotateX(5deg)',
-                    boxShadow: '8px 8px 0px rgba(0,0,0,0.3), 12px 12px 0px rgba(0,0,0,0.15)'
-                  }}
-                >
-                  <Heart className="h-5 w-5 xs:h-6 xs:w-6 sm:h-7 sm:w-7 text-white" strokeWidth={2.5} fill="white" />
-                </div>
-              </div>
-              
-              <h1
-                className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-pixel uppercase text-white opacity-100 leading-[1.3] xxs:leading-[1.4] xs:leading-relaxed tracking-wide xs:tracking-wider drop-shadow-[1px_2px_0px_rgba(0,0,0,0.6)] xs:drop-shadow-[2px_3px_0px_rgba(0,0,0,1)] md:drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] animate-fade-in px-2 xs:px-4 break-words"
-                data-debug-element="hero-headline"
-              >
-                STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
-              </h1>
-              
-              <p 
-                className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-black max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words" 
-                style={{ animationDelay: '100ms' }}
-                data-debug-element="hero-subheadline"
-              >
-                Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
-              </p>
-              
-              <div className="pt-1 xs:pt-1.5 sm:pt-2 animate-fade-in px-3 xs:px-4" style={{ animationDelay: '200ms', perspective: '1000px' }}>
-                <Button 
-                  size="lg" 
-                  onClick={() => {
-                    logger.info('[Index] CTA button clicked', { context: 'Landing Page' });
-                    navigate("/auth");
-                  }} 
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-success hover:bg-secondary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-primary focus-visible:outline-none"
-                  style={{
-                    boxShadow: '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4), 14px 14px 0px rgba(0,0,0,0.2)',
-                    transform: 'rotateX(2deg)',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'rotateX(2deg) translateY(-8px) scale(1.02)';
-                    e.currentTarget.style.boxShadow = '8px 8px 0px rgba(0,0,0,0.8), 14px 14px 0px rgba(0,0,0,0.4), 20px 20px 0px rgba(0,0,0,0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'rotateX(2deg)';
-                    e.currentTarget.style.boxShadow = '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4), 14px 14px 0px rgba(0,0,0,0.2)';
-                  }}
-                  data-debug-element="hero-cta-button"
-                >
-                  START FREE TRIAL
-                </Button>
-              </div>
-              
-              <p className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-primary-foreground/80 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
-                ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
-              </p>
-
-              {/* Product Demo Mockup - Lazy loaded for performance */}
-              <div className="mt-1.5 xs:mt-2 sm:mt-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
-                <Suspense fallback={
-                  <div className="relative w-full max-w-[180px] xs:max-w-[220px] sm:max-w-[280px] md:max-w-[320px] mx-auto h-[400px] xs:h-[450px] sm:h-[500px] border-[4px] border-black bg-white/10 backdrop-blur-sm shadow-[12px_12px_0px_0px_rgba(0,0,0,0.3)] rounded-[32px] animate-pulse" data-debug-element="phone-mockup-loading" />
-                }>
-                  <div data-debug-element="phone-mockup-loaded">
-                    <HeroPhoneMockup />
-                  </div>
-                </Suspense>
-              </div>
-              
-              {/* Animated Counters - Social Proof */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 max-w-3xl mx-auto pt-4 xs:pt-5 sm:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
-                <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
-              </div>
-            </div>
-          </div>
-          <ScrollIndicator />
-        </section>
-
-        {/* How It Works - Featured prominently */}
-        <section className="bg-background" style={{
-          backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.01) 50%, transparent 100%)
-          `,
-          backgroundSize: '8px 8px'
-        }}>
-          <MinimalFeatures />
-        </section>
-
-        {/* Testimonials + FAQ Section - Combined */}
-        <section className="bg-secondary" style={{
-          backgroundImage: `
-            linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%),
-            linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.02) 50%, transparent 100%)
-          `,
-          backgroundSize: '8px 8px'
-        }}>
-          <MinimalFAQ />
-        </section>
-      </main>
-
-      <MinimalFooter />
+      {/* Render the appropriate variant */}
+      {variant === 'A' && <LandingVariantA onCTAClick={handleCTAClick} />}
+      {variant === 'B' && <LandingVariantB onCTAClick={handleCTAClick} />}
+      {variant === 'C' && <LandingVariantC onCTAClick={handleCTAClick} />}
     </div>
   );
 };
