@@ -3,7 +3,7 @@
  * Supports Google Analytics 4, Mixpanel, and custom event tracking
  */
 
-import { Platform } from '@/platform';
+import { Platform } from '@/platform/index';
 import { logger } from './logger';
 
 // Analytics configuration - lazy loaded to prevent build-time issues
