@@ -28,4 +28,11 @@ const getSupabaseClient = () => {
   return _supabase;
 };
 
-export const supabase = getSupabaseClient();
+// Proxy to enable lazy initialization while maintaining API compatibility
+export const supabase = new Proxy({} as ReturnType<typeof createClient<Database>>, {
+  get(_target, prop) {
+    const client = getSupabaseClient();
+    const value = client[prop as keyof typeof client];
+    return typeof value === 'function' ? value.bind(client) : value;
+  }
+});
