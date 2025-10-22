@@ -27,7 +27,7 @@ export const MinimalFooter = () => {
           <div className="w-full sm:w-px h-px sm:h-auto sm:min-h-[60px] bg-secondary/20" />
 
           {/* Links + Disclaimer */}
-          <div className="flex-1 flex flex-col gap-2 sm:pl-6">
+          <div className="flex-1 flex flex-col sm:pl-6 sm:-mt-1">
             {/* Essential Links */}
             <div className="flex flex-wrap justify-center sm:justify-start gap-2 xs:gap-2.5 sm:gap-3 text-xs xs:text-sm font-sans">
               <button onClick={() => navigate("/terms")} className="text-background/80 hover:text-background transition-colors min-h-[44px] px-1.5 flex items-center focus-visible:underline focus-visible:ring-2 focus-visible:ring-background/50 focus-visible:ring-offset-1 focus-visible:outline-none rounded-sm">
