@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
@@ -6,7 +6,28 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  // Load and validate environment variables
+  const env = loadEnv(mode, process.cwd(), '');
+  
+  // Validate critical env vars for Lovable Cloud
+  const requiredEnvVars = [
+    'VITE_SUPABASE_URL',
+    'VITE_SUPABASE_PUBLISHABLE_KEY',
+    'VITE_SUPABASE_PROJECT_ID'
+  ];
+  
+  const missingVars = requiredEnvVars.filter(key => !env[key]);
+  if (missingVars.length > 0) {
+    console.error('❌ Missing required environment variables:', missingVars.join(', '));
+    process.exit(1);
+  }
+  
+  console.log('✅ All required environment variables present');
+  console.log('📍 Supabase URL:', env.VITE_SUPABASE_URL);
+  console.log('🔑 Supabase Key:', env.VITE_SUPABASE_PUBLISHABLE_KEY ? '✓ Set' : '✗ Missing');
+  
+  return {
   server: {
     host: "::",
     port: 8080,
@@ -200,4 +221,5 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     drop: [],
   },
-}));
+};
+});
