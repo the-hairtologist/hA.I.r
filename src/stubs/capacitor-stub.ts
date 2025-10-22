@@ -117,3 +117,51 @@ export const KeyboardResize = {
   Native: 'native',
   None: 'none',
 };
+
+// Preferences stubs
+export const Preferences = {
+  get: async () => ({ value: null }),
+  set: async () => {},
+  remove: async () => {},
+  clear: async () => {},
+  keys: async () => ({ keys: [] }),
+  migrate: async () => {},
+};
+
+// App stubs
+export const App = {
+  addListener: () => ({ remove: () => {} }),
+  removeAllListeners: async () => {},
+  exitApp: async () => {},
+  getInfo: async () => ({
+    name: 'hair-ai-app',
+    id: 'app.lovable.a1a18f9db2f94d81aa8ce28408bee3a2',
+    build: '1',
+    version: '1.0.0',
+  }),
+  getState: async () => ({ isActive: true }),
+  getLaunchUrl: async () => ({ url: '' }),
+  minimizeApp: async () => {},
+};
+
+// Share stubs
+export const Share = {
+  share: async () => {},
+  canShare: async () => ({ value: false }),
+};
+
+// StatusBar stubs
+export const StatusBar = {
+  setStyle: async () => {},
+  setBackgroundColor: async () => {},
+  setOverlaysWebView: async () => {},
+  show: async () => {},
+  hide: async () => {},
+  getInfo: async () => ({ visible: true, style: 'LIGHT', color: '#000000' }),
+};
+
+export const Style = {
+  Dark: 'DARK',
+  Light: 'LIGHT',
+  Default: 'DEFAULT',
+};
