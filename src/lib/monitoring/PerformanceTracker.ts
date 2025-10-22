@@ -1,5 +1,6 @@
 import { analytics } from '../analytics';
 import { logger } from '../logging/productionLogger';
+import { safeConsole } from '@/lib/safeLogger';
 
 /**
  * Performance tracking for Core Web Vitals and custom metrics
@@ -61,7 +62,7 @@ class PerformanceTracker {
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
     } catch (error) {
-      console.warn('[Performance] LCP observer not supported');
+      safeConsole.warn('[Performance] LCP observer not supported');
     }
 
     // First Input Delay (FID)
@@ -77,7 +78,7 @@ class PerformanceTracker {
       });
       fidObserver.observe({ entryTypes: ['first-input'] });
     } catch (error) {
-      console.warn('[Performance] FID observer not supported');
+      safeConsole.warn('[Performance] FID observer not supported');
     }
 
     // Cumulative Layout Shift (CLS)
@@ -100,7 +101,7 @@ class PerformanceTracker {
         });
       });
     } catch (error) {
-      console.warn('[Performance] CLS observer not supported');
+      safeConsole.warn('[Performance] CLS observer not supported');
     }
   }
 
@@ -129,7 +130,7 @@ class PerformanceTracker {
         logger.info(`[Performance] ${name}: ${Math.round(measure.duration)}ms`);
       }
     } catch (error) {
-      console.warn(`[Performance] Failed to measure ${name}:`, error);
+      safeConsole.warn(`[Performance] Failed to measure ${name}:`, error);
     }
   }
 

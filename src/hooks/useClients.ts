@@ -15,6 +15,8 @@ import {
 } from "@/lib/api/clients";
 import type { ClientProfile, CreateClientData, UpdateClientData } from "@/types/client";
 import { handleApiError } from "@/lib/api/errorHandler";
+import { cacheManager } from "@/lib/cache/CacheManager";
+import { useCachedQuery } from "@/hooks/useCachedQuery";
 
 /**
  * Query key factory for clients
@@ -32,12 +34,11 @@ export const clientKeys = {
  * Fetch all clients for a stylist (with pagination support)
  */
 export const useClients = (stylistId: string | null, page: number = 1, limit: number = 50) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: clientKeys.list(stylistId || '', page),
     queryFn: () => fetchClientsByStylist(stylistId!, page, limit),
+    cacheType: 'clients',
     enabled: !!stylistId,
-    staleTime: 5 * 60 * 1000, // 5 minutes (increased from 2)
-    gcTime: 15 * 60 * 1000, // 15 minutes (increased from 10)
   });
 };
 
@@ -45,11 +46,11 @@ export const useClients = (stylistId: string | null, page: number = 1, limit: nu
  * Fetch a single client by ID
  */
 export const useClient = (clientId: string | null) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: clientKeys.detail(clientId || ''),
     queryFn: () => fetchClientById(clientId!),
+    cacheType: 'clientDetails',
     enabled: !!clientId,
-    staleTime: 2 * 60 * 1000,
   });
 };
 
@@ -62,8 +63,8 @@ export const useCreateClient = (stylistId: string) => {
   return useMutation({
     mutationFn: (data: CreateClientData) => createClient(data),
     onSuccess: (newClient) => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: clientKeys.list(stylistId) });
+      // Smart cache invalidation - auto-invalidates clients, clientDetails, analytics
+      cacheManager.invalidateAfterMutation('client', stylistId);
       
       // Optimistically add to cache
       queryClient.setQueryData<ClientProfile[]>(
@@ -91,6 +92,9 @@ export const useUpdateClient = (stylistId: string) => {
   return useMutation({
     mutationFn: (data: UpdateClientData) => updateClient(data),
     onSuccess: (updatedClient) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('client', stylistId);
+      
       // Update in list cache
       queryClient.setQueryData<ClientProfile[]>(
         clientKeys.list(stylistId),
@@ -125,6 +129,9 @@ export const useDeleteClient = (stylistId: string) => {
   return useMutation({
     mutationFn: (clientId: string) => deleteClient(clientId),
     onSuccess: (_, clientId) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('client', stylistId);
+      
       // Remove from list cache
       queryClient.setQueryData<ClientProfile[]>(
         clientKeys.list(stylistId),
@@ -154,6 +161,9 @@ export const useBulkDeleteClients = (stylistId: string) => {
   return useMutation({
     mutationFn: (clientIds: string[]) => bulkDeleteClients(clientIds),
     onSuccess: (_, clientIds) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('client', stylistId);
+      
       // Remove from list cache
       queryClient.setQueryData<ClientProfile[]>(
         clientKeys.list(stylistId),

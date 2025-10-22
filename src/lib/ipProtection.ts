@@ -4,6 +4,8 @@
  * Proprietary and Confidential
  */
 
+import { safeConsole } from '@/lib/safeLogger';
+
 export const COPYRIGHT_NOTICE = "© 2025 hA.I.r. All Rights Reserved. Proprietary Software.";
 
 /**
@@ -69,7 +71,7 @@ If you're interested in licensing or partnership:
 Contact us through official channels.
 `;
     
-    console.log(message, style);
+    safeConsole.log(message, style);
   }
 };
 

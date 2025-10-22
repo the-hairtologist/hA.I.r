@@ -3,6 +3,8 @@
  * Following WCAG 2.2 AA guidelines for dynamic content
  */
 
+import { safeConsole } from '@/lib/safeLogger';
+
 type Priority = 'polite' | 'assertive';
 
 class ScreenReaderAnnouncer {
@@ -45,7 +47,7 @@ class ScreenReaderAnnouncer {
     const region = priority === 'assertive' ? this.assertiveRegion : this.politeRegion;
     
     if (!region) {
-      console.warn('Live region not initialized');
+      safeConsole.warn('Live region not initialized');
       return;
     }
 

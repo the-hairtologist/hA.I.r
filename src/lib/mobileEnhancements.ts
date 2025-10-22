@@ -1,3 +1,5 @@
+import { safeConsole } from '@/lib/safeLogger';
+
 /**
  * Mobile Enhancement Layer
  * Additional optimizations beyond base mobile support
@@ -69,7 +71,7 @@ export function validateTouchTargets(): void {
   interactiveElements.forEach(el => {
     const rect = el.getBoundingClientRect();
     if (rect.width < MIN_SIZE || rect.height < MIN_SIZE) {
-      console.warn('Touch target too small:', {
+      safeConsole.warn('Touch target too small:', {
         element: el.tagName,
         size: `${rect.width}x${rect.height}`,
         minimum: MIN_SIZE

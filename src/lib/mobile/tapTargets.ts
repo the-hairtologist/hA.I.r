@@ -1,3 +1,5 @@
+import { safeConsole } from '@/lib/safeLogger';
+
 /**
  * Tap Target Validator
  * Ensures all interactive elements meet minimum tap target size (44x44px)
@@ -64,15 +66,13 @@ export const logTapTargetViolations = () => {
   const violations = targets.filter(t => t.isTooSmall);
 
   if (violations.length > 0) {
-    console.group('⚠️ Tap Target Violations');
-    console.log(`Found ${violations.length} elements smaller than ${MIN_TAP_TARGET_SIZE}x${MIN_TAP_TARGET_SIZE}px:`);
-    violations.forEach(target => {
-      console.log(
-        `${target.element.tagName.toLowerCase()}: ${Math.round(target.width)}x${Math.round(target.height)}px`,
-        target.element
+    safeConsole.log(`Found ${violations.length} elements smaller than ${MIN_TAP_TARGET_SIZE}x${MIN_TAP_TARGET_SIZE}px:`);
+    violations.forEach((violation) => {
+      safeConsole.log(
+        `${violation.element.tagName.toLowerCase()}: ${Math.round(violation.width)}x${Math.round(violation.height)}px`,
+        violation.element
       );
     });
-    console.groupEnd();
   }
 };
 

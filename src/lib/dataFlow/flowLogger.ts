@@ -4,6 +4,7 @@
  */
 
 import { logger } from '@/lib/logging/productionLogger';
+import { safeConsole } from '@/lib/safeLogger';
 
 type FlowStage = 'database' | 'api' | 'transform' | 'state' | 'ui' | 'validation';
 
@@ -57,7 +58,7 @@ class DataFlowLogger {
 
     // Log actual data only for small payloads
     if (data && this.getDataSize(data) < 1000) {
-      console.log(`${message} →`, data);
+      safeConsole.log(`${message} →`, data);
     }
   }
 

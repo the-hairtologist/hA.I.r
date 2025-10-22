@@ -16,6 +16,8 @@ import {
 } from "@/lib/api/appointments";
 import type { Appointment, CreateAppointmentData, UpdateAppointmentData } from "@/lib/api/appointments";
 import { handleApiError } from "@/lib/api/errorHandler";
+import { cacheManager } from "@/lib/cache/CacheManager";
+import { useCachedQuery } from "@/hooks/useCachedQuery";
 
 /**
  * Query key factory for appointments
@@ -34,12 +36,11 @@ export const appointmentKeys = {
  * Fetch appointments for a stylist (with pagination support)
  */
 export const useAppointmentsByStylist = (stylistId: string | null, page: number = 1, limit: number = 100) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: appointmentKeys.listByStylist(stylistId || '', page),
     queryFn: () => fetchAppointmentsByStylist(stylistId!, page, limit),
+    cacheType: 'appointments',
     enabled: !!stylistId,
-    staleTime: 3 * 60 * 1000, // 3 minutes (increased from 2)
-    gcTime: 15 * 60 * 1000, // 15 minutes (increased from 10)
   });
 };
 
@@ -47,11 +48,11 @@ export const useAppointmentsByStylist = (stylistId: string | null, page: number 
  * Fetch appointments for a client
  */
 export const useAppointmentsByClient = (clientId: string | null) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: appointmentKeys.listByClient(clientId || ''),
     queryFn: () => fetchAppointmentsByClient(clientId!),
+    cacheType: 'appointments',
     enabled: !!clientId,
-    staleTime: 2 * 60 * 1000,
   });
 };
 
@@ -59,11 +60,11 @@ export const useAppointmentsByClient = (clientId: string | null) => {
  * Fetch a single appointment
  */
 export const useAppointment = (appointmentId: string | null) => {
-  return useQuery({
+  return useCachedQuery({
     queryKey: appointmentKeys.detail(appointmentId || ''),
     queryFn: () => fetchAppointmentById(appointmentId!),
+    cacheType: 'appointments',
     enabled: !!appointmentId,
-    staleTime: 2 * 60 * 1000,
   });
 };
 
@@ -76,8 +77,8 @@ export const useCreateAppointment = (stylistId: string) => {
   return useMutation({
     mutationFn: (data: CreateAppointmentData) => createAppointment(data),
     onSuccess: (newAppointment) => {
-      // Invalidate stylist appointments list
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.listByStylist(stylistId) });
+      // Smart cache invalidation - auto-invalidates appointments, upcomingAppointments, analytics
+      cacheManager.invalidateAfterMutation('appointment', stylistId);
       
       // If appointment has client, invalidate client appointments too
       if (newAppointment.client_id) {
@@ -104,6 +105,9 @@ export const useUpdateAppointment = (stylistId: string) => {
   return useMutation({
     mutationFn: (data: UpdateAppointmentData) => updateAppointment(data),
     onSuccess: (updatedAppointment) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('appointment', stylistId);
+      
       // Update in list cache
       queryClient.setQueryData<Appointment[]>(
         appointmentKeys.listByStylist(stylistId),
@@ -138,6 +142,9 @@ export const useDeleteAppointment = (stylistId: string) => {
   return useMutation({
     mutationFn: (appointmentId: string) => deleteAppointment(appointmentId),
     onSuccess: (_, appointmentId) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('appointment', stylistId);
+      
       // Remove from list cache
       queryClient.setQueryData<Appointment[]>(
         appointmentKeys.listByStylist(stylistId),
@@ -168,6 +175,9 @@ export const useUpdateAppointmentStatus = (stylistId: string) => {
     mutationFn: ({ appointmentId, status }: { appointmentId: string; status: string }) => 
       updateAppointmentStatus(appointmentId, status),
     onSuccess: (updatedAppointment) => {
+      // Smart cache invalidation
+      cacheManager.invalidateAfterMutation('appointment', stylistId);
+      
       // Update caches
       queryClient.setQueryData<Appointment[]>(
         appointmentKeys.listByStylist(stylistId),
