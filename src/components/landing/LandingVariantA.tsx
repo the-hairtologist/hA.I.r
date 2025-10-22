@@ -58,7 +58,7 @@ export const LandingVariantA = ({ onCTAClick }: LandingVariantAProps) => {
                 STOP LOSING CLIENTS<br className="hidden xxs:block" /><span className="xxs:hidden"> </span>TO MISSED TEXTS
               </h1>
               
-              <p className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-black max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words" style={{ animationDelay: '100ms' }}>
+              <p className="text-xs xs:text-sm sm:text-base md:text-lg font-sans text-white max-w-3xl mx-auto leading-relaxed animate-fade-in px-3 xs:px-4 break-words" style={{ animationDelay: '100ms' }}>
                 Automated reminders, instant booking, zero chaos—stylists save 10+ hours/week
               </p>
               
@@ -66,7 +66,7 @@ export const LandingVariantA = ({ onCTAClick }: LandingVariantAProps) => {
                 <Button 
                   size="lg" 
                   onClick={onCTAClick}
-                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-success hover:bg-secondary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
+                  className="text-xs xxs:text-sm xs:text-base sm:text-lg md:text-xl px-6 xxs:px-7 xs:px-8 sm:px-10 md:px-14 py-3.5 xxs:py-4 xs:py-5 sm:py-6 md:py-8 font-pixel uppercase bg-secondary text-black hover:bg-secondary/90 brutal-border border-black animate-pulse-subtle min-h-[52px] xxs:min-h-[56px] xs:min-h-[60px] w-full max-w-[90vw] xs:w-auto"
                   style={{
                     boxShadow: '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4)'
                   }}
@@ -75,7 +75,7 @@ export const LandingVariantA = ({ onCTAClick }: LandingVariantAProps) => {
                 </Button>
               </div>
               
-              <p className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-primary-foreground/80 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
+              <p className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-white/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
                 ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
               </p>
 
