@@ -5,7 +5,7 @@ export const MinimalFooter = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="brutal-border-4 border-secondary bg-foreground pb-safe" style={{
+    <footer className="brutal-border-4 border-secondary bg-foreground pb-safe mt-12 sm:mt-16 md:mt-20" style={{
       backgroundImage: `
         linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
         linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%)
