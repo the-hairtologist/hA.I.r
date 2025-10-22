@@ -71,12 +71,12 @@ export const LandingVariantC = ({ onCTAClick }: LandingVariantCProps) => {
                     boxShadow: '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4)'
                   }}
                 >
-                  GET MORE TIME NOW
+                  START FREE TRIAL
                 </Button>
               </div>
               
               <p className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-black/80 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
-                ✓ Free 14-Day Trial • ✓ No Setup Fees • ✓ Cancel Anytime
+                ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
               </p>
 
               <div className="mt-1.5 xs:mt-2 sm:mt-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
@@ -86,10 +86,10 @@ export const LandingVariantC = ({ onCTAClick }: LandingVariantCProps) => {
               </div>
               
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 max-w-3xl mx-auto pt-4 xs:pt-5 sm:pt-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
-                <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-background" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-background" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-background" borderColor="border-black" textColor="text-black" />
-                <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} bgColor="bg-background" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={5000} suffix="+" icon={Scissors} label="STYLISTS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={50000} suffix="+" icon={Calendar} label="BOOKINGS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={10000} suffix="+" icon={Palette} label="FORMULAS" bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
+                <AnimatedCounter end={4.9} suffix="/5" icon={Smartphone} label="RATING" duration={1200} bgColor="bg-secondary" borderColor="border-black" textColor="text-black" />
               </div>
             </div>
           </div>

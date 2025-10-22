@@ -71,12 +71,12 @@ export const LandingVariantB = ({ onCTAClick }: LandingVariantBProps) => {
                     boxShadow: '6px 6px 0px rgba(0,0,0,0.8), 10px 10px 0px rgba(0,0,0,0.4)'
                   }}
                 >
-                  JOIN NOW - FREE
+                  START FREE TRIAL
                 </Button>
               </div>
               
               <p className="text-[8px] xxs:text-[9px] xs:text-[10px] font-sans text-white/90 animate-fade-in px-3 break-words" style={{ animationDelay: '300ms' }}>
-                ✓ Setup in 2 Minutes • ✓ No Credit Card • ✓ 14-Day Trial
+                ✓ No Credit Card Required • ✓ 14-Day Free Trial • ✓ Cancel Anytime
               </p>
 
               <div className="mt-1.5 xs:mt-2 sm:mt-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
