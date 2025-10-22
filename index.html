@@ -83,17 +83,7 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"></noscript>
     
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA4_MEASUREMENT_ID%"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '%VITE_GA4_MEASUREMENT_ID%', {
-        page_path: window.location.pathname,
-        send_page_view: true
-      });
-    </script>
+    <!-- Google Analytics 4 loads dynamically via src/lib/analytics.ts -->
     
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="hA.I.r - Transform Every Color Service with AI" />
