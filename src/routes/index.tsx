@@ -41,6 +41,7 @@ const DeepLinkAppointment = lazyWithRetry(() => import('@/pages/DeepLinkAppointm
 const DeepLinkTransformation = lazyWithRetry(() => import('@/pages/DeepLinkTransformation'));
 const Privacy = lazyWithRetry(() => import('@/pages/Privacy'));
 const Terms = lazyWithRetry(() => import('@/pages/Terms'));
+const Disclaimer = lazyWithRetry(() => import('@/pages/Disclaimer'));
 const CookiePolicy = lazyWithRetry(() => import('@/pages/CookiePolicy'));
 const NotFound = lazyWithRetry(() => import('@/pages/NotFound'));
 const ServerError = lazyWithRetry(() => import('@/pages/ServerError'));
@@ -103,6 +104,7 @@ export const AppRoutes = () => (
     <Route path="/auth" element={<Auth />} />
     <Route path="/privacy" element={<Privacy />} />
     <Route path="/terms" element={<Terms />} />
+    <Route path="/disclaimer" element={<Disclaimer />} />
     <Route path="/cookie-policy" element={<CookiePolicy />} />
     <Route path="/dmca" element={<DMCA />} />
     <Route path="/accessibility" element={<Accessibility />} />
