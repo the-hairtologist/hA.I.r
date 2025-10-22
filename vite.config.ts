@@ -141,6 +141,12 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Stub Capacitor plugins for production web builds
+      ...(mode === 'production' ? {
+        '@capacitor/haptics': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+        '@capacitor/camera': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+        '@capacitor/keyboard': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      } : {}),
     },
   },
   build: {

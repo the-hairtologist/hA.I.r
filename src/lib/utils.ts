@@ -6,5 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Re-export unified responsive system
-export { responsive } from './responsive';
-export * from './responsive';
+export { 
+  responsive,
+  responsiveBestPractices,
+  useBreakpoint,
+  useIsMobile,
+  useIsTablet,
+  useIsDesktop,
+  BREAKPOINTS,
+} from './responsive';

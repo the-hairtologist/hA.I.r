@@ -3,19 +3,8 @@
  * Ensures smooth performance and native-like feel on mobile devices
  */
 
-// Lazy import Platform to avoid circular dependencies
-let Platform: any;
-try {
-  Platform = require('@/platform').Platform;
-} catch {
-  // Fallback Platform detection if import fails
-  Platform = {
-    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-    isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
-    isAndroid: /Android/.test(navigator.userAgent),
-    isWeb: true,
-  };
-}
+// Import Platform using ESM
+import { Platform } from '@/platform';
 
 /**
  * Prevent elastic scrolling on iOS (prevents bounce effect)

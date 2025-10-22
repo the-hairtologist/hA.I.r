@@ -46,17 +46,16 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
     });
     this.setState({ errorInfo });
 
-    // Send to Sentry
-    try {
-      const { captureError } = require('@/lib/monitoring');
-      captureError(error, {
+    // Send to Sentry (async operation, fire-and-forget)
+    import('@/lib/monitoring').then(monitoring => {
+      monitoring.captureError(error, {
         feature: this.props.featureName,
         componentStack: errorInfo.componentStack,
         source: 'AIFeatureErrorBoundary',
       });
-    } catch (e) {
+    }).catch(e => {
       logger.error('Error logging failed', e, { context: 'AIFeatureErrorBoundary' });
-    }
+    });
   }
 
   handleReset = () => {

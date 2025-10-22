@@ -42,16 +42,15 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
       errorInfo,
     });
 
-    // Send to Sentry
-    try {
-      const { captureError } = require('@/lib/monitoring');
-      captureError(error, {
+    // Send to Sentry (async operation, fire-and-forget)
+    import('@/lib/monitoring').then(monitoring => {
+      monitoring.captureError(error, {
         componentStack: errorInfo.componentStack,
         source: 'GlobalErrorBoundary',
       });
-    } catch (loggingError) {
+    }).catch(loggingError => {
       console.error('[GlobalErrorBoundary] Error logging failed:', loggingError);
-    }
+    });
   }
 
   handleReset = () => {
