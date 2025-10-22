@@ -491,6 +491,34 @@ const Settings = () => {
 
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
+            {/* Developer Mode Toggle - Prominent Position */}
+            <Card className="border-[3px] border-yellow-500 shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Code className="h-5 w-5" />
+                  Developer Mode
+                </CardTitle>
+                <CardDescription>Enable debug tools and performance metrics</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg bg-muted/30">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="dev-mode-top" className="font-semibold">
+                      Show Debug Tools
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Display performance metrics, error tracking, and testing utilities
+                    </p>
+                  </div>
+                  <Switch
+                    id="dev-mode-top"
+                    checked={isDevMode}
+                    onCheckedChange={toggleDevMode}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
               <CardHeader>
                 <CardTitle>Profile Information</CardTitle>
@@ -1692,24 +1720,6 @@ const Settings = () => {
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Restart Tutorial
                 </Button>
-                
-                {/* Developer Mode Toggle */}
-                <div className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="dev-mode" className="font-semibold flex items-center gap-2">
-                      <Code className="h-4 w-4" />
-                      Developer Mode
-                    </Label>
-                    <p className="text-sm text-muted-foreground">
-                      Show performance metrics and debug info
-                    </p>
-                  </div>
-                  <Switch
-                    id="dev-mode"
-                    checked={isDevMode}
-                    onCheckedChange={toggleDevMode}
-                  />
-                </div>
               </CardContent>
             </Card>
 
