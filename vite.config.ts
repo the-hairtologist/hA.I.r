@@ -151,21 +151,22 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Core React (must load first)
-          if (id.includes('node_modules/react')) {
-            return 'react-vendor';
+          // Data layer FIRST (most specific)
+          if (id.includes('node_modules/@supabase') || 
+              id.includes('node_modules/@tanstack')) {
+            return 'data-vendor';
           }
           
-          // UI layer (depends on React)
+          // UI layer SECOND (before React catch-all)
           if (id.includes('node_modules/@radix-ui') || 
               id.includes('node_modules/lucide-react')) {
             return 'ui-vendor';
           }
           
-          // Data layer (depends on React)
-          if (id.includes('node_modules/@supabase') || 
-              id.includes('node_modules/@tanstack/react-query')) {
-            return 'data-vendor';
+          // Core React (after more specific checks)
+          if (id.includes('node_modules/react') ||
+              id.includes('node_modules/scheduler')) {
+            return 'react-vendor';
           }
           
           // Everything else
