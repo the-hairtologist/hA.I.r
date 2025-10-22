@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -14,11 +14,12 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { PortfolioSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
 import { PortfolioInsights } from "@/components/PortfolioInsights";
-import { BackgroundRemovalDialog } from "@/components/BackgroundRemovalDialog";
 import { CameraCapture } from "@/components/CameraCapture";
 import { VoiceControl } from "@/components/VoiceControl";
 import { offlineQueue } from "@/lib/offlineQueue";
 import { OptimizedImage } from "@/components/OptimizedImage";
+
+const BackgroundRemovalDialog = lazy(() => import("@/components/BackgroundRemovalDialog").then(m => ({ default: m.BackgroundRemovalDialog })));
 
 interface PortfolioPhoto {
   id: string;
@@ -556,11 +557,15 @@ const Portfolio = () => {
           variant="destructive"
         />
 
-        <BackgroundRemovalDialog
-          open={bgRemovalDialog.open}
-          onOpenChange={(open) => setBgRemovalDialog({ ...bgRemovalDialog, open })}
-          imageUrl={bgRemovalDialog.imageUrl}
-        />
+        {bgRemovalDialog.open && (
+          <Suspense fallback={<div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+            <BackgroundRemovalDialog
+              open={bgRemovalDialog.open}
+              onOpenChange={(open) => setBgRemovalDialog({ ...bgRemovalDialog, open })}
+              imageUrl={bgRemovalDialog.imageUrl}
+            />
+          </Suspense>
+        )}
       </div>
     </DashboardLayout>
   );

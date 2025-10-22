@@ -4,6 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
+import compression from 'vite-plugin-compression';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -106,7 +107,19 @@ export default defineConfig(({ mode }) => {
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
-          // 1. Google Fonts (critical)
+          // JS/CSS bundles - aggressive caching
+          {
+            urlPattern: /\.(?:js|css)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'static-resources',
+              expiration: {
+                maxEntries: 60,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              },
+            },
+          },
+          // Google Fonts
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
             handler: 'CacheFirst',
@@ -121,8 +134,7 @@ export default defineConfig(({ mode }) => {
               }
             }
           },
-          
-          // 2. API + User Data (combined)
+          // API + User Data
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/rest/i,
             handler: 'NetworkFirst',
@@ -138,8 +150,7 @@ export default defineConfig(({ mode }) => {
               }
             }
           },
-          
-          // 3. Images
+          // Images
           {
             urlPattern: /\.(jpg|jpeg|png|gif|webp)$/i,
             handler: 'CacheFirst',
@@ -157,17 +168,21 @@ export default defineConfig(({ mode }) => {
         enabled: true,
         type: 'module'
       }
-    })
+    }),
+    compression(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Stub Capacitor plugins for production web builds
-      ...(mode === 'production' ? {
-        '@capacitor/haptics': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
-        '@capacitor/camera': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
-        '@capacitor/keyboard': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
-      } : {}),
+      // Stub Capacitor plugins in ALL builds
+      '@capacitor/haptics': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      '@capacitor/camera': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      '@capacitor/keyboard': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      '@capacitor/app': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      '@capacitor/preferences': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      '@capacitor/share': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      '@capacitor/status-bar': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
+      '@capacitor/core': path.resolve(__dirname, './src/stubs/capacitor-stub.ts'),
     },
   },
   build: {
@@ -178,37 +193,34 @@ export default defineConfig(({ mode }) => {
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Data layer FIRST (most specific)
           if (id.includes('node_modules/@supabase') || 
               id.includes('node_modules/@tanstack')) {
             return 'data-vendor';
           }
-          
-          // UI layer SECOND (before React catch-all)
           if (id.includes('node_modules/@radix-ui') || 
               id.includes('node_modules/lucide-react')) {
             return 'ui-vendor';
           }
-          
-          // Core React (after more specific checks)
           if (id.includes('node_modules/react') ||
               id.includes('node_modules/scheduler')) {
             return 'react-vendor';
           }
-          
-          // Everything else
+          if (id.includes('node_modules/recharts')) {
+            return 'charts-vendor';
+          }
+          if (id.includes('node_modules/@huggingface/transformers')) {
+            return 'ai-vendor';
+          }
           if (id.includes('node_modules')) {
             return 'vendor';
           }
         },
-        // Optimize output filenames
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
       },
-      // Tree shaking optimizations
       treeshake: {
-        moduleSideEffects: true,
+        moduleSideEffects: false,
         propertyReadSideEffects: false,
         unknownGlobalSideEffects: false,
       },

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { getPaymentsByStylist, getCommissionsByStylist, getAffiliateCodesByStylist } from "@/lib/queries/financeQueries";
@@ -14,13 +14,40 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
+import type { LineChart as LineChartType, Line as LineType, BarChart as BarChartType, Bar as BarType, XAxis as XAxisType, YAxis as YAxisType, CartesianGrid as CartesianGridType, Tooltip as TooltipType, ResponsiveContainer as ResponsiveContainerType, Legend as LegendType } from "recharts";
+
+// Lazy load recharts components
+let LineChart: typeof LineChartType | undefined;
+let Line: typeof LineType | undefined;
+let BarChart: typeof BarChartType | undefined;
+let Bar: typeof BarType | undefined;
+let XAxis: typeof XAxisType | undefined;
+let YAxis: typeof YAxisType | undefined;
+let CartesianGrid: typeof CartesianGridType | undefined;
+let Tooltip: typeof TooltipType | undefined;
+let ResponsiveContainer: typeof ResponsiveContainerType | undefined;
+let Legend: typeof LegendType | undefined;
+
+const loadCharts = async () => {
+  const charts = await import("recharts");
+  LineChart = charts.LineChart;
+  Line = charts.Line;
+  BarChart = charts.BarChart;
+  Bar = charts.Bar;
+  XAxis = charts.XAxis;
+  YAxis = charts.YAxis;
+  CartesianGrid = charts.CartesianGrid;
+  Tooltip = charts.Tooltip;
+  ResponsiveContainer = charts.ResponsiveContainer;
+  Legend = charts.Legend;
+};
 
 const Finance = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
+  const [chartsLoaded, setChartsLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("payments");
   const [payments, setPayments] = useState<any[]>([]);
   const [commissions, setCommissions] = useState<any[]>([]);
@@ -28,6 +55,11 @@ const Finance = () => {
   const [affiliateCodes, setAffiliateCodes] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
   const [timePeriod, setTimePeriod] = useState<"30d" | "90d" | "year" | "all">("90d");
+
+  // Load charts library on first use
+  useEffect(() => {
+    loadCharts().then(() => setChartsLoaded(true));
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -359,74 +391,86 @@ const Finance = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="date" 
-                      className="text-xs fill-muted-foreground"
-                    />
-                    <YAxis 
-                      className="text-xs fill-muted-foreground"
-                      tickFormatter={(value) => `$${value}`}
-                    />
-                    <Tooltip 
-                      formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
-                    />
-                    <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="payments" 
-                      stroke="hsl(var(--primary))" 
-                      strokeWidth={2}
-                      name="Service Payments"
-                      dot={{ fill: 'hsl(var(--primary))', r: 4 }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="commissions" 
-                      stroke="hsl(var(--chart-3))" 
-                      strokeWidth={2}
-                      name="Commissions"
-                      dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="total" 
-                      stroke="hsl(var(--chart-1))" 
-                      strokeWidth={3}
-                      name="Total Revenue"
-                      dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-
-              {/* Weekly Breakdown Bar Chart */}
-              {timePeriod !== "all" && timePeriod !== "year" && (
-                <div className="mt-8 h-[250px] w-full">
-                  <h3 className="text-sm font-medium mb-4">Weekly Breakdown</h3>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis 
-                        dataKey="date" 
-                        className="text-xs fill-muted-foreground"
-                      />
-                      <YAxis 
-                        className="text-xs fill-muted-foreground"
-                        tickFormatter={(value) => `$${value}`}
-                      />
-                      <Tooltip 
-                        formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
-                      />
-                      <Legend />
-                      <Bar dataKey="payments" fill="hsl(var(--primary))" name="Payments" />
-                      <Bar dataKey="commissions" fill="hsl(var(--chart-3))" name="Commissions" />
-                    </BarChart>
-                  </ResponsiveContainer>
+              {!chartsLoaded ? (
+                <div className="h-[300px] w-full flex items-center justify-center">
+                  <Loader2 className="h-8 w-8 animate-spin" />
                 </div>
+              ) : (
+                <>
+                  <div className="h-[300px] w-full">
+                    {ResponsiveContainer && LineChart && Line && XAxis && YAxis && CartesianGrid && Tooltip && Legend && (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                          <XAxis 
+                            dataKey="date" 
+                            className="text-xs fill-muted-foreground"
+                          />
+                          <YAxis 
+                            className="text-xs fill-muted-foreground"
+                            tickFormatter={(value) => `$${value}`}
+                          />
+                          <Tooltip 
+                            formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+                          />
+                          <Legend />
+                          <Line 
+                            type="monotone" 
+                            dataKey="payments" 
+                            stroke="hsl(var(--primary))" 
+                            strokeWidth={2}
+                            name="Service Payments"
+                            dot={{ fill: 'hsl(var(--primary))', r: 4 }}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="commissions" 
+                            stroke="hsl(var(--chart-3))" 
+                            strokeWidth={2}
+                            name="Commissions"
+                            dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="total" 
+                            stroke="hsl(var(--chart-1))" 
+                            strokeWidth={3}
+                            name="Total Revenue"
+                            dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    )}
+                  </div>
+
+                  {/* Weekly Breakdown Bar Chart */}
+                  {timePeriod !== "all" && timePeriod !== "year" && BarChart && Bar && (
+                    <div className="mt-8 h-[250px] w-full">
+                      <h3 className="text-sm font-medium mb-4">Weekly Breakdown</h3>
+                      {ResponsiveContainer && XAxis && YAxis && CartesianGrid && Tooltip && Legend && (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                            <XAxis 
+                              dataKey="date" 
+                              className="text-xs fill-muted-foreground"
+                            />
+                            <YAxis 
+                              className="text-xs fill-muted-foreground"
+                              tickFormatter={(value) => `$${value}`}
+                            />
+                            <Tooltip 
+                              formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+                            />
+                            <Legend />
+                            <Bar dataKey="payments" fill="hsl(var(--primary))" name="Payments" />
+                            <Bar dataKey="commissions" fill="hsl(var(--chart-3))" name="Commissions" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </CardContent>
           </Card>

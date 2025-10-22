@@ -1,10 +1,13 @@
+import { lazy, Suspense } from "react";
 import { SEOHead } from "@/components/SEOHead";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RealRevenueChart } from "@/components/analytics/RealRevenueChart";
 import { RealClientMetrics } from "@/components/analytics/RealClientMetrics";
-import { RealPerformanceMetrics } from "@/components/analytics/RealPerformanceMetrics";
-import { BarChart3, Users, TrendingUp } from "lucide-react";
+import { BarChart3, Users, TrendingUp, Loader2 } from "lucide-react";
+
+const RealRevenueChart = lazy(() => import("@/components/analytics/RealRevenueChart").then(m => ({ default: m.RealRevenueChart })));
+const RealPerformanceMetrics = lazy(() => import("@/components/analytics/RealPerformanceMetrics").then(m => ({ default: m.RealPerformanceMetrics })));
 
 export default function Analytics() {
   return (
@@ -42,7 +45,15 @@ export default function Analytics() {
           </TabsList>
 
           <TabsContent value="revenue" className="space-y-6">
-            <RealRevenueChart />
+            <Suspense fallback={
+              <Card className="brutal-border">
+                <CardContent className="flex items-center justify-center h-80">
+                  <Loader2 className="h-8 w-8 animate-spin" />
+                </CardContent>
+              </Card>
+            }>
+              <RealRevenueChart />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="clients" className="space-y-6">
@@ -50,7 +61,15 @@ export default function Analytics() {
           </TabsContent>
 
           <TabsContent value="performance" className="space-y-6">
-            <RealPerformanceMetrics />
+            <Suspense fallback={
+              <Card className="brutal-border">
+                <CardContent className="flex items-center justify-center h-80">
+                  <Loader2 className="h-8 w-8 animate-spin" />
+                </CardContent>
+              </Card>
+            }>
+              <RealPerformanceMetrics />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </div>
