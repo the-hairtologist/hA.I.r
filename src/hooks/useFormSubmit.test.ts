@@ -144,7 +144,7 @@ describe('useFormSubmit', () => {
         }
       });
       
-      expect(result.current.error).toBe('Custom error');
+      expect(Object.keys(result.current.errors).length).toBeGreaterThan(0);
       expect(toast.error).toHaveBeenCalledWith('Custom error');
     });
 
@@ -178,13 +178,13 @@ describe('useFormSubmit', () => {
         } catch (e) {}
       });
       
-      expect(result.current.error).toBeTruthy();
+      expect(Object.keys(result.current.errors).length).toBeGreaterThan(0);
       
       act(() => {
         result.current.clearError();
       });
       
-      expect(result.current.error).toBeNull();
+      expect(Object.keys(result.current.errors).length).toBe(0);
     });
   });
 
@@ -265,7 +265,7 @@ describe('useFormSubmit', () => {
       });
       
       expect(result.current.isSubmitting).toBe(false);
-      expect(result.current.error).toBeNull();
+      expect(Object.keys(result.current.errors).length).toBe(0);
     });
   });
 

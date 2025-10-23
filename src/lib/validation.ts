@@ -9,6 +9,15 @@ import { z } from 'zod';
 
 export const emailSchema = z
   .string()
+  .trim()
+  .email('Invalid email address')
+  .max(255, 'Email must be less than 255 characters')
+  .optional()
+  .or(z.literal(''));
+
+export const requiredEmailSchema = z
+  .string()
+  .trim()
   .min(1, 'Email is required')
   .email('Please enter a valid email address')
   .max(255, 'Email must be less than 255 characters');
@@ -21,17 +30,35 @@ export const passwordSchema = z
 export const phoneSchema = z
   .string()
   .trim()
+  .max(20, 'Phone must be less than 20 characters')
+  .regex(/^\+?[\d\s\-\(\)]+$/, 'Invalid phone format')
   .optional()
-  .refine(
-    (val) => !val || /^\+?[\d\s\-\(\)]{10,20}$/.test(val),
-    'Please enter a valid phone number (10-20 digits)'
-  );
+  .or(z.literal(''));
 
 export const nameSchema = z
   .string()
-  .min(1, 'Name is required')
-  .max(100, 'Name must be less than 100 characters')
-  .trim();
+  .trim()
+  .min(2, 'Name must be at least 2 characters')
+  .max(100, 'Name must be less than 100 characters');
+
+// Helper for creating textarea schemas with custom max length
+export const textareaSchema = (maxLength: number) => z
+  .string()
+  .trim()
+  .max(maxLength, `Must be less than ${maxLength} characters`)
+  .optional()
+  .or(z.literal(''));
+
+export const currencySchema = z
+  .number()
+  .min(0, 'Price must be positive')
+  .max(10000, 'Price cannot exceed $10,000');
+
+export const durationSchema = z
+  .number()
+  .int()
+  .min(15, 'Duration must be at least 15 minutes')
+  .max(480, 'Duration must be less than 8 hours');
 
 export const urlSchema = z
   .string()
@@ -108,16 +135,26 @@ export const clientProfileSchema = z.object({
   email: emailSchema,
   phone: phoneSchema,
   hairType: z.string().max(100).optional(),
-  allergies: z.string().trim().max(500, 'Allergies must be less than 500 characters').optional(),
-  notes: z.string().trim().max(1000, 'Notes must be less than 1000 characters').optional(),
+  allergies: textareaSchema(500),
+  notes: textareaSchema(1000),
   medicalInfoConsent: z.boolean().optional(),
+});
+
+// Simplified client schema for quick add forms
+export const clientSchema = z.object({
+  full_name: nameSchema,
+  email: emailSchema,
+  phone: phoneSchema,
+  notes: textareaSchema(500),
+  allergies: textareaSchema(500),
+  medical_info_consent: z.boolean().optional(),
 });
 
 // ============= Invitation Schemas =============
 
 export const invitationSchema = z.object({
-  email: emailSchema,
-  customMessage: z.string().trim().max(500, 'Message must be less than 500 characters').optional(),
+  clientEmail: requiredEmailSchema,
+  customMessage: textareaSchema(500),
 });
 
 // ============= Appointment Schemas =============
@@ -133,14 +170,27 @@ export const appointmentSchema = z.object({
 });
 
 export const serviceSchema = z.object({
-  serviceName: z.string().min(1, 'Service name is required').max(100),
-  description: z.string().max(500).optional(),
-  price: z.number().min(0, 'Price must be positive'),
-  durationMinutes: z.number().min(15, 'Minimum 15 minutes').max(480, 'Maximum 8 hours'),
-  requireDeposit: z.boolean().optional(),
-  depositAmount: z.number().min(0).optional(),
-  depositType: z.enum(['fixed', 'percentage']).optional(),
-});
+  service_name: z.string().min(1, 'Service name required').max(100),
+  description: textareaSchema(500),
+  price: currencySchema,
+  duration_minutes: durationSchema,
+  is_active: z.boolean().optional(),
+  require_deposit: z.boolean().optional(),
+  deposit_amount: z.number().min(0).optional(),
+  deposit_type: z.enum(['fixed', 'percentage']).optional(),
+  buffer_time_minutes: z.number().int().min(0).max(120).optional(),
+}).refine(
+  (data) => !data.require_deposit || (data.deposit_amount && data.deposit_amount > 0),
+  { message: 'Deposit amount required when deposit is enabled', path: ['deposit_amount'] }
+).refine(
+  (data) => {
+    if (data.require_deposit && data.deposit_type === 'percentage' && data.deposit_amount) {
+      return data.deposit_amount <= 100;
+    }
+    return true;
+  },
+  { message: 'Percentage must be 100 or less', path: ['deposit_amount'] }
+);
 
 // ============= Formula Schemas =============
 
@@ -162,10 +212,13 @@ export const messageSchema = z.object({
 // ============= Review Schemas =============
 
 export const reviewSchema = z.object({
-  stylistId: z.string().uuid('Invalid stylist ID'),
-  rating: z.number().min(1, 'Rating must be at least 1').max(5, 'Rating must be at most 5').int('Rating must be a whole number'),
-  reviewText: z.string().trim().max(1000, 'Review must be less than 1000 characters').optional(),
-  appointmentId: z.string().uuid().optional(),
+  rating: z.number().int().min(1, 'Rating required').max(5, 'Rating must be 5 or less'),
+  review_text: z.string().trim()
+    .min(10, 'Review must be at least 10 characters')
+    .max(500, 'Review must be less than 500 characters')
+    .optional()
+    .or(z.literal('')),
+  appointment_id: z.string().uuid().optional(),
 });
 
 // ============= Security Validation =============
@@ -257,3 +310,4 @@ export type FormulaInput = z.infer<typeof formulaSchema>;
 export type MessageInput = z.infer<typeof messageSchema>;
 export type ReviewInput = z.infer<typeof reviewSchema>;
 export type InvitationInput = z.infer<typeof invitationSchema>;
+export type ClientInput = z.infer<typeof clientSchema>;

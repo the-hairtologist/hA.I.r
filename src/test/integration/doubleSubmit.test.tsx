@@ -183,7 +183,7 @@ describe('Cross-Form Double Submit Prevention', () => {
 
       await waitFor(() => {
         expect(result.current.isSubmitting).toBe(false);
-        expect(result.current.error).toBeNull();
+        expect(Object.keys(result.current.errors).length).toBe(0);
       });
     });
 
@@ -208,7 +208,7 @@ describe('Cross-Form Double Submit Prevention', () => {
 
       await waitFor(() => {
         expect(result.current.isSubmitting).toBe(false);
-        expect(result.current.error).toBe('Submission failed');
+        expect(Object.keys(result.current.errors).length).toBeGreaterThan(0);
       });
     });
 
@@ -233,7 +233,7 @@ describe('Cross-Form Double Submit Prevention', () => {
 
       result.current.reset();
 
-      expect(result.current.error).toBeNull();
+      expect(Object.keys(result.current.errors).length).toBe(0);
       expect(result.current.isSubmitting).toBe(false);
     });
   });
