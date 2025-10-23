@@ -187,7 +187,7 @@ const Settings = () => {
 
   const {
     handleSubmit: handleSaveProfile,
-    isSubmitting: isSaving,
+    isSubmitting: isSavingProfile,
   } = useFormSubmit(
     async () => {
       // Validation
