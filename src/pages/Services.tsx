@@ -26,6 +26,7 @@ const Services = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingServiceId, setDeletingServiceId] = useState<string | null>(null);
 
   // Form state
   const [serviceName, setServiceName] = useState("");
@@ -227,6 +228,7 @@ const Services = () => {
     
     if (!confirm(`Delete "${serviceName}"?\n\nThis action cannot be undone. Clients won't be able to book this service anymore.`)) return;
 
+    setDeletingServiceId(serviceId);
     try {
       const { error } = await supabase
         .from("stylist_services")
@@ -239,6 +241,8 @@ const Services = () => {
     } catch (error: any) {
       console.error("Error deleting service:", error);
       toast.error("Error deleting service");
+    } finally {
+      setDeletingServiceId(null);
     }
   };
 
@@ -622,10 +626,15 @@ const Services = () => {
                         variant="outline" 
                         size="icon" 
                         onClick={() => handleDelete(service.id)} 
+                        disabled={deletingServiceId === service.id}
                         className="border-2 border-foreground bg-card hover:bg-destructive hover:text-destructive-foreground min-h-[44px] min-w-[44px] shadow-brutal"
                         aria-label="Delete service"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        {deletingServiceId === service.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                   </div>

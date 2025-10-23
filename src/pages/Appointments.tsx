@@ -77,6 +77,7 @@ const Appointments = () => {
   const [services, setServices] = useState<any[]>([]);
   const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
   const [serviceTemplateMode, setServiceTemplateMode] = useState(false);
+  const [bulkUpdating, setBulkUpdating] = useState(false);
 
   // React Query hooks for appointments with pagination
   const { data: stylistAppointmentsData, isLoading: loadingStylistAppointments, refetch: refetchStylistAppointments } = 
@@ -444,11 +445,13 @@ const Appointments = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      disabled={bulkUpdating}
                       onClick={async () => {
                         const confirmed = window.confirm(
                           `Mark ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} as completed?\n\nThis will update all selected appointments to completed status.`
                         );
                         if (confirmed) {
+                          setBulkUpdating(true);
                           try {
                             const { error } = await supabase
                               .from("appointments")
@@ -461,11 +464,20 @@ const Appointments = () => {
                             refetchAppointments();
                           } catch (error) {
                             toast.error("Failed to update appointments");
+                          } finally {
+                            setBulkUpdating(false);
                           }
                         }
                       }}
                     >
-                      Mark as Completed
+                      {bulkUpdating ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Updating...
+                        </>
+                      ) : (
+                        'Mark as Completed'
+                      )}
                     </Button>
                     <Button
                       variant="ghost"
@@ -813,16 +825,34 @@ const Appointments = () => {
                   <Button
                     className="flex-1 min-h-[44px]"
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "completed")}
+                    disabled={updatingStatus === selectedAppointment.id}
                   >
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Mark Complete
+                    {updatingStatus === selectedAppointment.id ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Updating...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Mark Complete
+                      </>
+                    )}
                   </Button>
                   <Button
                     variant="outline"
                     className="flex-1"
                     onClick={() => updateAppointmentStatus(selectedAppointment.id, "cancelled")}
+                    disabled={updatingStatus === selectedAppointment.id}
                   >
-                    Cancel
+                    {updatingStatus === selectedAppointment.id ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Cancelling...
+                      </>
+                    ) : (
+                      'Cancel'
+                    )}
                   </Button>
                 </div>
               )}

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Plus, Mail, Phone, User, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2, AlertTriangle, Users } from "lucide-react";
+import { Plus, Mail, Phone, User, UserPlus, Filter, Edit, FileText, Calendar, X, Download, Trash2, AlertTriangle, Users, Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
 import { SkeletonList } from "@/components/ui/skeleton-list";
@@ -420,7 +420,7 @@ export default function Clients() {
   );
 
   const handleBulkDelete = async () => {
-    if (selectedCount === 0) return;
+    if (selectedCount === 0 || bulkDeleteMutation.isPending) return;
     
     const clientIds = Array.from(selectedIds);
     
@@ -655,7 +655,16 @@ export default function Clients() {
                   placeholder="Preferences, goals, or important details to remember"
                 />
               </div>
-              <Button type="submit" className="w-full">Add Client</Button>
+              <Button type="submit" disabled={createClientMutation.isPending} className="w-full min-h-[44px]">
+                {createClientMutation.isPending ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Adding Client...
+                  </>
+                ) : (
+                  'Add Client'
+                )}
+              </Button>
             </form>
           </DialogContent>
         </Dialog>
@@ -1025,9 +1034,17 @@ export default function Clients() {
                   </div>
                   <Button 
                     type="submit" 
-                    className="w-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
+                    disabled={updateClientMutation.isPending}
+                    className="w-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all min-h-[44px]"
                   >
-                    Save Changes
+                    {updateClientMutation.isPending ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Changes'
+                    )}
                   </Button>
                 </form>
               </div>
