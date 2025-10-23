@@ -145,6 +145,7 @@ export const clientSchema = z.object({
   full_name: nameSchema,
   email: emailSchema,
   phone: phoneSchema,
+  hair_type: z.string().trim().max(100, 'Hair type must be less than 100 characters').optional().or(z.literal('')),
   notes: textareaSchema(500),
   allergies: textareaSchema(500),
   medical_info_consent: z.boolean().optional(),
