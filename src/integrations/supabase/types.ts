@@ -1040,7 +1040,7 @@ export type Database = {
           connection_id: string
           error_message: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           success: boolean
           user_agent: string | null
           user_id: string
@@ -1051,7 +1051,7 @@ export type Database = {
           connection_id: string
           error_message?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           success?: boolean
           user_agent?: string | null
           user_id: string
@@ -1062,7 +1062,7 @@ export type Database = {
           connection_id?: string
           error_message?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           success?: boolean
           user_agent?: string | null
           user_id?: string
@@ -2275,7 +2275,7 @@ export type Database = {
           accessed_by: string | null
           formula_id: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           user_agent: string | null
         }
         Insert: {
@@ -2284,7 +2284,7 @@ export type Database = {
           accessed_by?: string | null
           formula_id?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
         }
         Update: {
@@ -2293,7 +2293,7 @@ export type Database = {
           accessed_by?: string | null
           formula_id?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
         }
         Relationships: [
@@ -2934,7 +2934,7 @@ export type Database = {
           accessor_user_id: string | null
           client_profile_id: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           user_agent: string | null
         }
         Insert: {
@@ -2943,7 +2943,7 @@ export type Database = {
           accessor_user_id?: string | null
           client_profile_id?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
         }
         Update: {
@@ -2952,7 +2952,7 @@ export type Database = {
           accessor_user_id?: string | null
           client_profile_id?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
         }
         Relationships: [
@@ -3988,7 +3988,7 @@ export type Database = {
           accessed_at: string
           accessed_by: string | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           record_id: string
           table_name: string
           user_agent: string | null
@@ -3998,7 +3998,7 @@ export type Database = {
           accessed_at?: string
           accessed_by?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           record_id: string
           table_name: string
           user_agent?: string | null
@@ -4008,7 +4008,7 @@ export type Database = {
           accessed_at?: string
           accessed_by?: string | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           record_id?: string
           table_name?: string
           user_agent?: string | null
@@ -5240,9 +5240,9 @@ export type Database = {
       }
       security_audit_summary: {
         Row: {
-          column_name: unknown | null
+          column_name: unknown
           data_classification: string | null
-          table_name: unknown | null
+          table_name: unknown
         }
         Relationships: []
       }
@@ -5259,10 +5259,7 @@ export type Database = {
         }
         Returns: string
       }
-      anonymize_old_client_data: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
+      anonymize_old_client_data: { Args: never; Returns: number }
       assign_user_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -5282,10 +5279,7 @@ export type Database = {
         Args: { _client_id: string; _user_id: string }
         Returns: boolean
       }
-      can_view_client_stats: {
-        Args: { _client_id: string }
-        Returns: boolean
-      }
+      can_view_client_stats: { Args: { _client_id: string }; Returns: boolean }
       can_view_referral_tracking: {
         Args: {
           _referred_stylist_id: string
@@ -5294,22 +5288,13 @@ export type Database = {
         }
         Returns: boolean
       }
-      can_view_security_audit: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      can_view_security_audit: { Args: never; Returns: boolean }
       check_client_milestones: {
         Args: { p_client_id: string; p_stylist_id: string }
         Returns: undefined
       }
-      cleanup_expired_insights: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      cleanup_old_error_logs: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      cleanup_expired_insights: { Args: never; Returns: undefined }
+      cleanup_old_error_logs: { Args: never; Returns: undefined }
       generate_referral_code: {
         Args: { stylist_name: string }
         Returns: string
@@ -5321,12 +5306,9 @@ export type Database = {
           refresh_token: string
         }[]
       }
-      get_client_profile_id: {
-        Args: { _user_id: string }
-        Returns: string
-      }
+      get_client_profile_id: { Args: { _user_id: string }; Returns: string }
       get_cron_job_status: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           active: boolean
           command: string
@@ -5348,18 +5330,9 @@ export type Database = {
           views: number
         }[]
       }
-      get_stylist_profile_id: {
-        Args: { _user_id: string }
-        Returns: string
-      }
-      get_user_stylist_ids: {
-        Args: { _user_id: string }
-        Returns: string[]
-      }
-      grant_admin_role: {
-        Args: { _user_id: string }
-        Returns: undefined
-      }
+      get_stylist_profile_id: { Args: { _user_id: string }; Returns: string }
+      get_user_stylist_ids: { Args: { _user_id: string }; Returns: string[] }
+      grant_admin_role: { Args: { _user_id: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -5395,10 +5368,7 @@ export type Database = {
         Args: { _code: string; _user_id: string }
         Returns: boolean
       }
-      revoke_admin_role: {
-        Args: { _user_id: string }
-        Returns: undefined
-      }
+      revoke_admin_role: { Args: { _user_id: string }; Returns: undefined }
       store_calendar_token: {
         Args: {
           p_access_token: string
@@ -5426,10 +5396,7 @@ export type Database = {
         Args: { _formula_id: string; _user_id: string }
         Returns: boolean
       }
-      validate_access_code: {
-        Args: { code_input: string }
-        Returns: boolean
-      }
+      validate_access_code: { Args: { code_input: string }; Returns: boolean }
     }
     Enums: {
       app_role: "stylist" | "client" | "admin"
