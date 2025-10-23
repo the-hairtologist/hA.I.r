@@ -19,8 +19,10 @@ async function loginMobile(page: Page, email: string, password: string) {
   await page.waitForURL('/dashboard', { timeout: 10000 });
 }
 
+// Admin role tests - iPhone 12 Pro
+test.use({ ...devices['iPhone 12 Pro'] });
+
 test.describe('Mobile QA - Admin Role', () => {
-  test.use({ ...devices['iPhone 12 Pro'] });
 
   test.beforeEach(async ({ page }) => {
     await loginMobile(page, TEST_USERS.admin.email, TEST_USERS.admin.password);
@@ -205,8 +207,10 @@ test.describe('Mobile QA - Admin Role', () => {
   });
 });
 
+// Stylist role tests - Pixel 5
+test.use({ ...devices['Pixel 5'] });
+
 test.describe('Mobile QA - Stylist Role', () => {
-  test.use({ ...devices['Pixel 5'] });
 
   test.beforeEach(async ({ page }) => {
     await loginMobile(page, TEST_USERS.stylist.email, TEST_USERS.stylist.password);
@@ -339,8 +343,10 @@ test.describe('Mobile QA - Stylist Role', () => {
   });
 });
 
+// Client role tests - iPhone 12 Pro
+test.use({ ...devices['iPhone 12 Pro'] });
+
 test.describe('Mobile QA - Client Role', () => {
-  test.use({ ...devices['iPhone 12 Pro'] });
 
   test.beforeEach(async ({ page }) => {
     await loginMobile(page, TEST_USERS.client.email, TEST_USERS.client.password);
