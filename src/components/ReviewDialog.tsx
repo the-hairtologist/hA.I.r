@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Star, Send, Sparkles } from "lucide-react";
+import { Star, Send, Sparkles, Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -169,10 +169,13 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
           <Button
             onClick={handleSubmit}
             disabled={submitting || rating === 0}
-            className="flex-1"
+            className="flex-1 min-h-[44px]"
           >
             {submitting ? (
-              "Submitting..."
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Submitting...
+              </>
             ) : (
               <>
                 <Send className="h-4 w-4 mr-2" />

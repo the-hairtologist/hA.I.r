@@ -30,6 +30,7 @@ const Messages = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [messageText, setMessageText] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [sending, setSending] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>("");
   const [newConversationOpen, setNewConversationOpen] = useState(false);
@@ -39,7 +40,7 @@ const Messages = () => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       // Enter to send message (if not shift+enter for newline)
-      if (e.key === "Enter" && !e.shiftKey && selectedConversation && messageText.trim()) {
+      if (e.key === "Enter" && !e.shiftKey && selectedConversation && messageText.trim() && !sending) {
         e.preventDefault();
         handleSendMessage();
       }
@@ -51,7 +52,7 @@ const Messages = () => {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [selectedConversation, messageText]);
+  }, [selectedConversation, messageText, sending]);
 
   useEffect(() => {
     if (!authLoading && !roleLoading && user && roles.length > 0) {
@@ -224,8 +225,9 @@ const Messages = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!messageText.trim() || !selectedConversation) return;
+    if (!messageText.trim() || !selectedConversation || sending) return;
 
+    setSending(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
@@ -246,6 +248,8 @@ const Messages = () => {
     } catch (error: any) {
       console.error("Error sending message:", error);
       toast.error("Error sending message");
+    } finally {
+      setSending(false);
     }
   };
 
@@ -516,12 +520,16 @@ const Messages = () => {
                     />
                     <Button
                       onClick={handleSendMessage}
-                      disabled={!messageText.trim()}
+                      disabled={!messageText.trim() || sending}
                       size="icon"
                       className="h-[60px] w-[60px]"
                       aria-label="Send message"
                     >
-                      <Send className="h-4 w-4" />
+                      {sending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground mt-2">
