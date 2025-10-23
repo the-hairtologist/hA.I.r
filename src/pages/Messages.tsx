@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getConversationsByUser, getMessageThread } from "@/lib/queries/messageQueries";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,11 +31,43 @@ const Messages = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [messageText, setMessageText] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [sending, setSending] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>("");
   const [newConversationOpen, setNewConversationOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const {
+    handleSubmit: sendMessage,
+    isSubmitting: sending,
+  } = useFormSubmit(
+    async () => {
+      if (!messageText.trim() || !selectedConversation) {
+        throw new Error("Cannot send empty message");
+      }
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not authenticated");
+
+      const { error } = await supabase
+        .from("messages")
+        .insert({
+          sender_id: session.user.id,
+          recipient_id: selectedConversation.id,
+          message_text: messageText.trim(),
+        });
+
+      if (error) throw error;
+
+      setMessageText("");
+      await loadMessages(selectedConversation.id);
+      await loadConversations(session.user.id);
+    },
+    {
+      successMessage: undefined, // Silent success (realtime will update)
+      errorMessage: "Failed to send message",
+      preventDoubleSubmit: true,
+    }
+  );
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -42,7 +75,7 @@ const Messages = () => {
       // Enter to send message (if not shift+enter for newline)
       if (e.key === "Enter" && !e.shiftKey && selectedConversation && messageText.trim() && !sending) {
         e.preventDefault();
-        handleSendMessage();
+        sendMessage();
       }
       // Escape to close conversation
       if (e.key === "Escape" && selectedConversation) {
@@ -52,7 +85,7 @@ const Messages = () => {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [selectedConversation, messageText, sending]);
+  }, [selectedConversation, messageText, sending, sendMessage]);
 
   useEffect(() => {
     if (!authLoading && !roleLoading && user && roles.length > 0) {
@@ -224,34 +257,6 @@ const Messages = () => {
     };
   };
 
-  const handleSendMessage = async () => {
-    if (!messageText.trim() || !selectedConversation || sending) return;
-
-    setSending(true);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
-      const { error } = await supabase
-        .from("messages")
-        .insert({
-          sender_id: session.user.id,
-          recipient_id: selectedConversation.id,
-          message_text: messageText.trim(),
-        });
-
-      if (error) throw error;
-
-      setMessageText("");
-      await loadMessages(selectedConversation.id);
-      await loadConversations(session.user.id);
-    } catch (error: any) {
-      console.error("Error sending message:", error);
-      toast.error("Error sending message");
-    } finally {
-      setSending(false);
-    }
-  };
 
   const handleStartConversation = (partnerId: string) => {
     const partner = { id: partnerId };
@@ -511,22 +516,24 @@ const Messages = () => {
                       value={messageText}
                       onChange={(e) => setMessageText(e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
+                        if (e.key === "Enter" && !e.shiftKey && !sending && messageText.trim()) {
                           e.preventDefault();
-                          handleSendMessage();
+                          sendMessage();
                         }
                       }}
+                      disabled={sending}
                       className="min-h-[60px] max-h-[120px] resize-none"
                     />
                     <Button
-                      onClick={handleSendMessage}
+                      onClick={sendMessage}
                       disabled={!messageText.trim() || sending}
                       size="icon"
-                      className="h-[60px] w-[60px]"
-                      aria-label="Send message"
+                      className="h-[60px] w-[60px] min-h-[44px]"
+                      aria-label={sending ? "Sending message" : "Send message"}
+                      aria-busy={sending}
                     >
                       {sending ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                       ) : (
                         <Send className="h-4 w-4" />
                       )}

@@ -108,11 +108,13 @@ export const InviteClientDialog = ({
             <Button
               onClick={handleSendInvite}
               disabled={sending || !clientEmail}
-              className="flex-1"
+              className="flex-1 min-h-[44px]"
+              aria-busy={sending}
+              aria-label={sending ? "Sending invitation" : "Send invitation"}
             >
               {sending ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
                   Sending...
                 </>
               ) : (

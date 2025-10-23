@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 interface ReviewDialogProps {
   open: boolean;
@@ -19,27 +20,24 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async () => {
-    if (rating === 0) {
-      toast.error("Please select a rating");
-      return;
-    }
+  const {
+    handleSubmit: submitReview,
+    isSubmitting: submitting,
+  } = useFormSubmit(
+    async () => {
+      // Validation
+      if (rating === 0) {
+        throw new Error("Please select a rating");
+      }
+      if (reviewText.trim() && reviewText.length < 10) {
+        throw new Error("Review must be at least 10 characters");
+      }
+      if (reviewText.length > 500) {
+        throw new Error("Review must be less than 500 characters");
+      }
 
-    if (reviewText.trim() && reviewText.length < 10) {
-      toast.error("Review must be at least 10 characters");
-      return;
-    }
-
-    if (reviewText.length > 500) {
-      toast.error("Review must be less than 500 characters");
-      return;
-    }
-
-    setSubmitting(true);
-
-    try {
+      // Insert review
       const { data, error } = await supabase.from("reviews").insert({
         stylist_id: appointment.stylist_id,
         client_id: clientProfileId,
@@ -50,7 +48,7 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
 
       if (error) throw error;
 
-      // Trigger Zapier webhook
+      // Trigger Zapier webhook (non-blocking)
       try {
         const { triggerReviewReceived } = await import("@/lib/zapierTriggers");
         await triggerReviewReceived(appointment.stylist_id, {
@@ -64,22 +62,24 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
         console.error("[Zapier] Failed to trigger review received webhook:", error);
       }
 
-      toast.success("Review submitted successfully! Thank you for your feedback!");
-      onOpenChange(false);
+      // Reset form
       setRating(0);
       setReviewText("");
-      onSuccess();
-    } catch (error: any) {
-      console.error("Error submitting review:", error);
-      if (error.code === '23505') {
-        toast.error("You've already reviewed this appointment");
-      } else {
-        toast.error(error.message || "Failed to submit review");
-      }
-    } finally {
-      setSubmitting(false);
+    },
+    {
+      successMessage: "Review submitted successfully! Thank you for your feedback!",
+      errorMessage: "Failed to submit review",
+      onSuccess: () => {
+        onOpenChange(false);
+        onSuccess();
+      },
+      onError: (error: any) => {
+        if (error.code === '23505') {
+          toast.error("You've already reviewed this appointment");
+        }
+      },
     }
-  };
+  );
 
   const displayRating = hoveredRating || rating;
   const stylistName = appointment?.stylist?.user?.full_name || appointment?.stylist?.business_name;
@@ -167,13 +167,15 @@ export const ReviewDialog = ({ open, onOpenChange, appointment, clientProfileId,
             Cancel
           </Button>
           <Button
-            onClick={handleSubmit}
+            onClick={submitReview}
             disabled={submitting || rating === 0}
             className="flex-1 min-h-[44px]"
+            aria-busy={submitting}
+            aria-label={submitting ? "Submitting review" : "Submit review"}
           >
             {submitting ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
                 Submitting...
               </>
             ) : (

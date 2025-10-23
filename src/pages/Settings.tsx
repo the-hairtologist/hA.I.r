@@ -1061,12 +1061,14 @@ const Settings = () => {
                   <Button 
                     onClick={handleSaveProfile} 
                     disabled={!hasChanges || isSavingProfile}
-                    className="w-full sm:w-auto"
+                    className="w-full sm:w-auto min-h-[44px]"
                     data-save-profile
+                    aria-busy={isSavingProfile}
+                    aria-label={isSavingProfile ? "Saving profile" : "Save profile"}
                   >
                     {isSavingProfile ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
                         Saving...
                       </>
                     ) : (
