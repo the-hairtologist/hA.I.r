@@ -1,9 +1,28 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schema
+const requestSchema = z.object({
+  messageType: z.enum(["retention", "followup", "birthday", "reengagement", "appointment_reminder"]),
+  clientId: z.string().uuid(),
+  clientProfile: z.object({
+    full_name: z.string().max(255).optional(),
+  }).passthrough(),
+  stylistProfile: z.object({
+    business_name: z.string().max(255).optional(),
+    specialty: z.string().max(255).optional(),
+  }).passthrough(),
+  recentAppointments: z.array(z.object({
+    appointment_date: z.string(),
+    service_type: z.string().max(255).optional(),
+  }).passthrough()).max(50).optional(),
+  customContext: z.string().max(1000).optional(),
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -11,11 +30,24 @@ serve(async (req) => {
   }
 
   try {
-    const { messageType, clientId, clientProfile, stylistProfile, recentAppointments, customContext } = await req.json();
-
-    if (!messageType || !clientId || !clientProfile || !stylistProfile) {
-      throw new Error("messageType, clientId, clientProfile, and stylistProfile are required");
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input",
+          details: validationResult.error.issues.map(i => i.message).join(", ")
+        }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        }
+      );
     }
+    
+    const { messageType, clientId, clientProfile, stylistProfile, recentAppointments, customContext } = validationResult.data;
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("Missing authorization header");

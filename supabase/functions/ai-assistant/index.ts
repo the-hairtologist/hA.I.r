@@ -1,9 +1,36 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schemas
+const messageSchema = z.object({
+  role: z.enum(["user", "assistant", "system"]),
+  content: z.union([
+    z.string().max(10000),
+    z.array(z.object({
+      type: z.enum(["text", "image_url"]),
+      text: z.string().max(10000).optional(),
+      image_url: z.object({ url: z.string().url() }).optional()
+    }))
+  ])
+});
+
+const requestSchema = z.object({
+  type: z.enum([
+    "smart-scheduling",
+    "formula-recommendation", 
+    "client-insights",
+    "automated-followup",
+    "chat",
+    "correction-formula"
+  ]),
+  data: z.record(z.any()).optional(),
+  messages: z.array(messageSchema).max(100)
+});
 
 // Smart model selection for cost optimization
 function selectOptimalModel(type: string, hasImages: boolean, queryLength: number): string {
@@ -26,7 +53,24 @@ serve(async (req) => {
   }
 
   try {
-    const { type, data, messages } = await req.json();
+    const requestBody = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(requestBody);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input",
+          details: validationResult.error.issues.map(i => i.message).join(", ")
+        }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        }
+      );
+    }
+    
+    const { type, data, messages } = validationResult.data;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {

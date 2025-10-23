@@ -1,9 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schema
+const requestSchema = z.object({
+  photoUrl: z.string().url().startsWith("https://"),
+  clientId: z.string().uuid(),
+  context: z.string().max(500).optional(),
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -11,11 +19,24 @@ serve(async (req) => {
   }
 
   try {
-    const { photoUrl, clientId, context } = await req.json();
-
-    if (!photoUrl || !clientId) {
-      throw new Error("photoUrl and clientId are required");
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input",
+          details: validationResult.error.issues.map(i => i.message).join(", ")
+        }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        }
+      );
     }
+    
+    const { photoUrl, clientId, context } = validationResult.data;
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("Missing authorization header");

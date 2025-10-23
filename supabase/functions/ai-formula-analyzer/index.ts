@@ -1,9 +1,23 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schema
+const formulaSchema = z.object({
+  id: z.string().uuid().optional(),
+  formula_name: z.string().max(255),
+  color_line: z.string().max(255).optional(),
+  steps: z.array(z.any()).max(50),
+  notes: z.string().max(1000).optional(),
+}).passthrough();
+
+const requestSchema = z.object({
+  formulas: z.array(formulaSchema).min(1).max(20)
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -11,11 +25,24 @@ serve(async (req) => {
   }
 
   try {
-    const { formulas } = await req.json();
-
-    if (!formulas || !Array.isArray(formulas)) {
-      throw new Error("formulas array is required");
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input",
+          details: validationResult.error.issues.map(i => i.message).join(", ")
+        }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        }
+      );
     }
+    
+    const { formulas } = validationResult.data;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {

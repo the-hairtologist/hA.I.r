@@ -1,10 +1,18 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation schema
+const requestSchema = z.object({
+  currentTrigger: z.string().max(255),
+  stats: z.record(z.any()).optional(),
+  engagementMetrics: z.record(z.any()).optional(),
+});
 
 // Rate limiting
 const rateLimiter = new Map<string, { count: number; resetAt: number }>();
@@ -45,15 +53,28 @@ serve(async (req) => {
       );
     }
 
+    const body = await req.json();
+    
+    // Validate input
+    const validationResult = requestSchema.safeParse(body);
+    if (!validationResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input",
+          details: validationResult.error.issues.map(i => i.message).join(", ")
+        }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        }
+      );
+    }
+    
     const {
       currentTrigger, 
-      stats,
+      stats = {},
       engagementMetrics = {}
-    } = await req.json();
-
-    if (!currentTrigger) {
-      throw new Error('currentTrigger is required');
-    }
+    } = validationResult.data;
 
     // Call Lovable AI for optimization
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
