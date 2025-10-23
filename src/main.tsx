@@ -24,6 +24,18 @@ const initializeApp = () => {
       console.warn('[Main] Failed to load monitoring module:', error);
     });
 
+    // Initialize self-healing system
+    import("@/lib/selfHealing").then(({ selfHealing }) => {
+      try {
+        selfHealing.initialize();
+        console.log('[Main] Self-healing system initialized');
+      } catch (error) {
+        console.warn('[Main] Self-healing init failed (non-critical):', error);
+      }
+    }).catch((error) => {
+      console.warn('[Main] Failed to load self-healing module:', error);
+    });
+
     // Render app immediately - don't wait for monitoring
     const rootElement = document.getElementById("root");
     if (!rootElement) {
