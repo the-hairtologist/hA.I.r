@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useOptimizedCallback } from "@/hooks/useOptimizedCallback";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { 
   useAppointmentsByStylist,
   useAppointmentsByClient,
@@ -77,7 +78,27 @@ const Appointments = () => {
   const [services, setServices] = useState<any[]>([]);
   const [selectedAppointments, setSelectedAppointments] = useState<Set<string>>(new Set());
   const [serviceTemplateMode, setServiceTemplateMode] = useState(false);
-  const [bulkUpdating, setBulkUpdating] = useState(false);
+
+  const {
+    handleSubmit: handleBulkComplete,
+    isSubmitting: bulkUpdating,
+  } = useFormSubmit(
+    async () => {
+      const { error } = await supabase
+        .from("appointments")
+        .update({ status: "completed" })
+        .in("id", Array.from(selectedAppointments));
+      
+      if (error) throw error;
+      
+      setSelectedAppointments(new Set());
+      refetchAppointments();
+    },
+    {
+      successMessage: `${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} completed`,
+      errorMessage: "Failed to update appointments",
+    }
+  );
 
   // React Query hooks for appointments with pagination
   const { data: stylistAppointmentsData, isLoading: loadingStylistAppointments, refetch: refetchStylistAppointments } = 
@@ -185,12 +206,6 @@ const Appointments = () => {
   };
 
   const updateAppointmentStatus = async (appointmentId: string, newStatus: string) => {
-    // Prevent concurrent updates
-    if (updatingStatus) {
-      toast.error("Please wait for the current update to complete");
-      return;
-    }
-    
     const appointment = appointments.find(a => a.id === appointmentId);
     const clientName = appointment?.client_profiles?.full_name || "this client";
     const statusAction = newStatus === "cancelled" ? "cancel" : newStatus;
@@ -451,22 +466,7 @@ const Appointments = () => {
                           `Mark ${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} as completed?\n\nThis will update all selected appointments to completed status.`
                         );
                         if (confirmed) {
-                          setBulkUpdating(true);
-                          try {
-                            const { error } = await supabase
-                              .from("appointments")
-                              .update({ status: "completed" })
-                              .in("id", Array.from(selectedAppointments));
-                            
-                            if (error) throw error;
-                            toast.success(`${selectedAppointments.size} appointment${selectedAppointments.size !== 1 ? 's' : ''} completed`);
-                            setSelectedAppointments(new Set());
-                            refetchAppointments();
-                          } catch (error) {
-                            toast.error("Failed to update appointments");
-                          } finally {
-                            setBulkUpdating(false);
-                          }
+                          handleBulkComplete();
                         }
                       }}
                     >

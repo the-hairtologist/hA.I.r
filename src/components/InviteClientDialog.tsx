@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
 import { Mail, Loader2 } from "lucide-react";
 
 interface InviteClientDialogProps {
@@ -29,24 +29,22 @@ export const InviteClientDialog = ({
   clientName,
   stylistName,
 }: InviteClientDialogProps) => {
-  const [sending, setSending] = useState(false);
   const [customMessage, setCustomMessage] = useState("");
 
-  const handleSendInvite = async () => {
-    // Validate email format
-    if (!clientEmail || !clientEmail.includes('@')) {
-      toast.error("Valid client email is required");
-      return;
-    }
-
-    // Validate custom message length
-    if (customMessage && customMessage.length > 500) {
-      toast.error("Message must be less than 500 characters");
-      return;
-    }
-
-    setSending(true);
-    try {
+  const {
+    handleSubmit: handleSendInvite,
+    isSubmitting: sending,
+  } = useFormSubmit(
+    async () => {
+      // Validation
+      if (!clientEmail || !clientEmail.includes('@')) {
+        throw new Error("Valid client email is required");
+      }
+      
+      if (customMessage && customMessage.length > 500) {
+        throw new Error("Message must be less than 500 characters");
+      }
+      
       const { error } = await supabase.functions.invoke("send-client-invite", {
         body: {
           clientEmail,
@@ -57,17 +55,16 @@ export const InviteClientDialog = ({
       });
 
       if (error) throw error;
-
-      toast.success(`Invitation sent to ${clientEmail}`);
-      onOpenChange(false);
-      setCustomMessage("");
-    } catch (error: any) {
-      console.error("Error sending invite:", error);
-      toast.error("Failed to send invitation");
-    } finally {
-      setSending(false);
+    },
+    {
+      successMessage: `Invitation sent to ${clientEmail}`,
+      errorMessage: "Failed to send invitation",
+      onSuccess: () => {
+        onOpenChange(false);
+        setCustomMessage("");
+      },
     }
-  };
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

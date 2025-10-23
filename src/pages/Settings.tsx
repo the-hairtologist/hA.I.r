@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -36,14 +37,12 @@ const Settings = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userRole, setUserRole] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
   const { isDevMode, toggleDevMode } = useDevMode();
 
   // Security - Password change
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [passwordErrors, setPasswordErrors] = useState<{
     currentPassword?: string;
     newPassword?: string;
@@ -186,54 +185,44 @@ const Settings = () => {
     }
   };
 
-  const handleSaveProfile = async () => {
-    // Prevent double submission
-    if (isSaving) {
-      return;
-    }
+  const {
+    handleSubmit: handleSaveProfile,
+    isSubmitting: isSaving,
+  } = useFormSubmit(
+    async () => {
+      // Validation
+      if (!fullName?.trim()) {
+        throw new Error("Name is required");
+      }
 
-    // Validate required fields
-    if (!fullName.trim()) {
-      toast.error("Name is required");
-      return;
-    }
+      if (fullName.trim().length > 100) {
+        throw new Error("Name must be less than 100 characters");
+      }
 
-    if (fullName.trim().length > 100) {
-      toast.error("Name must be less than 100 characters");
-      return;
-    }
+      // Validate phone if provided
+      if (phoneError) {
+        throw new Error("Please fix phone number error");
+      }
 
-    // Validate phone if provided
-    if (phoneError) {
-      toast.error("Please fix phone number error");
-      return;
-    }
+      if (bio.length > 1000) {
+        throw new Error("Bio must be less than 1000 characters");
+      }
 
-    if (bio.length > 1000) {
-      toast.error("Bio must be less than 1000 characters");
-      return;
-    }
+      if (businessName.length > 100) {
+        throw new Error("Business name must be less than 100 characters");
+      }
 
-    if (businessName.length > 100) {
-      toast.error("Business name must be less than 100 characters");
-      return;
-    }
+      if (location.length > 200) {
+        throw new Error("Location must be less than 200 characters");
+      }
 
-    if (location.length > 200) {
-      toast.error("Location must be less than 200 characters");
-      return;
-    }
+      const yearsExp = yearsExperience ? parseInt(yearsExperience) : 0;
+      if (yearsExp < 0 || yearsExp > 100) {
+        throw new Error("Years of experience must be between 0 and 100");
+      }
 
-    const yearsExp = yearsExperience ? parseInt(yearsExperience) : 0;
-    if (yearsExp < 0 || yearsExp > 100) {
-      toast.error("Years of experience must be between 0 and 100");
-      return;
-    }
-
-    setIsSaving(true);
-    try {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
+      if (!session) throw new Error("Not authenticated");
 
       // Update profiles table
       const { error: profileError } = await supabase
@@ -299,12 +288,6 @@ const Settings = () => {
         if (clientError) throw clientError;
       }
 
-      // Visual success confirmation
-      toast.success("Profile updated successfully", {
-        description: "All your changes have been saved",
-        duration: 4000,
-      });
-      
       // Flash save button with success state
       const saveButton = document.querySelector('[data-save-profile]');
       if (saveButton) {
@@ -315,13 +298,12 @@ const Settings = () => {
       }
       
       setHasChanges(false);
-    } catch (error: any) {
-      console.error("Error saving profile:", error);
-      toast.error("Failed to save profile");
-    } finally {
-      setIsSaving(false);
+    },
+    {
+      successMessage: "Profile updated successfully",
+      errorMessage: "Failed to save profile",
     }
-  };
+  );
 
   const handleGenderChange = (value: string) => {
     setSelectedGender(value);
@@ -378,56 +360,56 @@ const Settings = () => {
     }
   };
 
-  const handlePasswordChange = async () => {
-    const errors: {
-      currentPassword?: string;
-      newPassword?: string;
-      confirmPassword?: string;
-    } = {};
-    
-    if (!currentPassword) {
-      errors.currentPassword = "Current password is required";
-    }
-    
-    if (!newPassword) {
-      errors.newPassword = "New password is required";
-    } else if (newPassword.length < 8) {
-      errors.newPassword = "Password must be at least 8 characters";
-    }
-    
-    if (!confirmPassword) {
-      errors.confirmPassword = "Please confirm your new password";
-    } else if (newPassword !== confirmPassword) {
-      errors.confirmPassword = "Passwords don't match";
-    }
+  const {
+    handleSubmit: handlePasswordChange,
+    isSubmitting: isChangingPassword,
+  } = useFormSubmit(
+    async () => {
+      const errors: {
+        currentPassword?: string;
+        newPassword?: string;
+        confirmPassword?: string;
+      } = {};
+      
+      if (!currentPassword) {
+        errors.currentPassword = "Current password is required";
+      }
+      
+      if (!newPassword) {
+        errors.newPassword = "New password is required";
+      } else if (newPassword.length < 8) {
+        errors.newPassword = "Password must be at least 8 characters";
+      }
+      
+      if (!confirmPassword) {
+        errors.confirmPassword = "Please confirm your new password";
+      } else if (newPassword !== confirmPassword) {
+        errors.confirmPassword = "Passwords don't match";
+      }
 
-    if (Object.keys(errors).length > 0) {
-      setPasswordErrors(errors);
-      return;
-    }
-    
-    setPasswordErrors({});
+      if (Object.keys(errors).length > 0) {
+        setPasswordErrors(errors);
+        throw new Error("Validation failed");
+      }
+      
+      setPasswordErrors({});
 
-    setIsChangingPassword(true);
-    try {
       const { error } = await supabase.auth.updateUser({
         password: newPassword
       });
 
       if (error) throw error;
 
-      toast.success("Password updated successfully");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setPasswordErrors({});
-    } catch (error: any) {
-      console.error("Error changing password:", error);
-      toast.error(error.message || "Failed to change password");
-    } finally {
-      setIsChangingPassword(false);
+    },
+    {
+      successMessage: "Password updated successfully",
+      errorMessage: "Failed to change password",
     }
-  };
+  );
 
   const handlePreviewProfile = () => {
     if (userRole === "stylist") {

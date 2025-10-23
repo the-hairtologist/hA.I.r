@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { getServicesByStylist } from "@/lib/queries/serviceQueries";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -26,7 +27,6 @@ const Services = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [deletingServiceId, setDeletingServiceId] = useState<string | null>(null);
 
   // Form state
   const [serviceName, setServiceName] = useState("");
@@ -222,28 +222,42 @@ const Services = () => {
     }
   };
 
+  const [serviceToDelete, setServiceToDelete] = useState<string | null>(null);
+
+  const {
+    handleSubmit: confirmDelete,
+    isSubmitting: isDeletingService,
+  } = useFormSubmit(
+    async () => {
+      if (!serviceToDelete) return;
+      
+      const service = services.find(s => s.id === serviceToDelete);
+      const serviceName = service?.service_name || "this service";
+      
+      const { error } = await supabase
+        .from("stylist_services")
+        .delete()
+        .eq("id", serviceToDelete);
+
+      if (error) throw error;
+      
+      await loadData();
+      setServiceToDelete(null);
+    },
+    {
+      successMessage: "Service deleted successfully",
+      errorMessage: "Failed to delete service",
+    }
+  );
+
   const handleDelete = async (serviceId: string) => {
     const service = services.find(s => s.id === serviceId);
     const serviceName = service?.service_name || "this service";
     
     if (!confirm(`Delete "${serviceName}"?\n\nThis action cannot be undone. Clients won't be able to book this service anymore.`)) return;
 
-    setDeletingServiceId(serviceId);
-    try {
-      const { error } = await supabase
-        .from("stylist_services")
-        .delete()
-        .eq("id", serviceId);
-
-      if (error) throw error;
-      toast.success(`${serviceName} deleted successfully`);
-      loadData();
-    } catch (error: any) {
-      console.error("Error deleting service:", error);
-      toast.error("Error deleting service");
-    } finally {
-      setDeletingServiceId(null);
-    }
+    setServiceToDelete(serviceId);
+    await confirmDelete();
   };
 
   if (loading) {
@@ -626,11 +640,11 @@ const Services = () => {
                         variant="outline" 
                         size="icon" 
                         onClick={() => handleDelete(service.id)} 
-                        disabled={deletingServiceId === service.id}
+                        disabled={isDeletingService && serviceToDelete === service.id}
                         className="border-2 border-foreground bg-card hover:bg-destructive hover:text-destructive-foreground min-h-[44px] min-w-[44px] shadow-brutal"
                         aria-label="Delete service"
                       >
-                        {deletingServiceId === service.id ? (
+                        {isDeletingService && serviceToDelete === service.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <Trash2 className="h-4 w-4" />
