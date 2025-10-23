@@ -1060,11 +1060,11 @@ const Settings = () => {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button 
                     onClick={handleSaveProfile} 
-                    disabled={!hasChanges || isSaving}
+                    disabled={!hasChanges || isSavingProfile}
                     className="w-full sm:w-auto"
                     data-save-profile
                   >
-                    {isSaving ? (
+                    {isSavingProfile ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Saving...
