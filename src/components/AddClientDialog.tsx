@@ -11,14 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { UserPlus, Loader2 } from "lucide-react";
-import { z } from "zod";
-import { validatePhone } from "@/lib/phoneValidation";
-import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
+import { clientSchema, type ClientInput } from "@/lib/validation";
+import { StandardFormField } from "@/components/forms/StandardFormField";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { dataErrors } from "@/lib/errorMessages";
 
@@ -29,92 +28,37 @@ interface AddClientDialogProps {
   onClientAdded: (clientId: string) => void;
 }
 
-// Validation schema
-const clientSchema = z.object({
-  full_name: z.string()
-    .trim()
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be less than 100 characters"),
-  email: z.string()
-    .trim()
-    .email("Invalid email address")
-    .max(255, "Email must be less than 255 characters")
-    .optional()
-    .or(z.literal("")),
-  phone: z.string()
-    .trim()
-    .max(20, "Phone must be less than 20 characters")
-    .optional()
-    .or(z.literal("")),
-  notes: z.string()
-    .trim()
-    .max(500, "Notes must be less than 500 characters")
-    .optional()
-    .or(z.literal("")),
-});
-
 export const AddClientDialog = ({
   open,
   onOpenChange,
   stylistId,
   onClientAdded,
 }: AddClientDialogProps) => {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [notes, setNotes] = useState("");
   const [allergies, setAllergies] = useState("");
   const [medicalConsent, setMedicalConsent] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [phoneError, setPhoneError] = useState<string>();
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const resetForm = () => {
-    setFullName("");
-    setEmail("");
-    setPhone("");
-    setNotes("");
-    setAllergies("");
-    setMedicalConsent(false);
-    setErrors({});
-  };
-
-  const handleSubmit = async () => {
-    try {
-      // Validate phone if provided
-      if (phone) {
-        const phoneValidation = validatePhone(phone);
-        if (!phoneValidation.valid) {
-          setErrors({ phone: phoneValidation.error || "Invalid phone number" });
-          toast.error("Invalid phone number", {
-            description: phoneValidation.error,
-          });
-          return;
-        }
-      }
-
-      // Validate input
-      const validatedData = clientSchema.parse({
-        full_name: fullName,
-        email: email,
-        phone: phone,
-        notes: notes,
-      });
-
-      setErrors({});
-      setLoading(true);
-
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    setFieldValue,
+    setFieldTouched,
+    handleSubmit,
+    reset,
+  } = useFormSubmit<ClientInput>(
+    async (data) => {
       // Check if email already exists (only if email provided)
-      if (validatedData.email) {
+      if (data.email) {
         const result = await trackSelect(
           async () => await supabase
             .from("client_profiles")
             .select("id, user:profiles(full_name)")
-            .eq("email", validatedData.email)
+            .eq("email", data.email)
             .maybeSingle(),
           'client_profiles',
           'AddClientDialog',
-          { email: validatedData.email }
+          { email: data.email }
         );
 
         if (result.error) {
@@ -125,7 +69,7 @@ export const AddClientDialog = ({
           toast.error("Email already exists", {
             description: `This email is already registered for ${result.data.user?.full_name || "another client"}`,
           });
-          return;
+          throw new Error("Email already exists");
         }
       }
 
@@ -134,10 +78,10 @@ export const AddClientDialog = ({
         async () => await supabase
           .from("client_profiles")
           .insert({
-            full_name: validatedData.full_name,
-            email: validatedData.email,
-            phone: validatedData.phone || null,
-            notes: validatedData.notes || null,
+            full_name: data.full_name,
+            email: data.email || null,
+            phone: data.phone || null,
+            notes: data.notes || null,
             allergies: allergies || null,
             medical_info_consent: medicalConsent,
             preferred_stylist_id: stylistId,
@@ -146,7 +90,7 @@ export const AddClientDialog = ({
           .maybeSingle(),
         'client_profiles',
         'AddClientDialog',
-        { clientName: validatedData.full_name }
+        { clientName: data.full_name }
       );
 
       if (clientResult.error) throw clientResult.error;
@@ -154,11 +98,7 @@ export const AddClientDialog = ({
 
       userJourney.trackAction('Client Added', { 
         clientId: newClient.id, 
-        clientName: validatedData.full_name 
-      });
-      
-      toast.success("Client added successfully! ✨", {
-        description: `${validatedData.full_name} has been added to your clients`,
+        clientName: data.full_name 
       });
 
       // Trigger Zapier webhook
@@ -166,9 +106,9 @@ export const AddClientDialog = ({
         const { triggerNewClient } = await import("@/lib/zapierTriggers");
         await triggerNewClient(stylistId, {
           client_id: newClient.id,
-          client_name: validatedData.full_name,
-          client_email: validatedData.email,
-          client_phone: validatedData.phone,
+          client_name: data.full_name,
+          client_email: data.email,
+          client_phone: data.phone,
         });
       } catch (error) {
         logger.error('[Zapier] Failed to trigger new client webhook', error, { 
@@ -177,32 +117,33 @@ export const AddClientDialog = ({
         });
       }
 
-      // Notify parent and close
+      // Notify parent
       onClientAdded(newClient.id);
-      resetForm();
-      onOpenChange(false);
-    } catch (error: any) {
-      if (error instanceof z.ZodError) {
-        // Handle validation errors
-        const newErrors: Record<string, string> = {};
-        error.errors.forEach((err) => {
-          if (err.path[0]) {
-            newErrors[err.path[0] as string] = err.message;
-          }
-        });
-        setErrors(newErrors);
-        toast.error("Please check the form for errors");
-      } else {
-        logger.error('Error adding client', error, { component: 'AddClientDialog', stylistId });
-        userJourney.trackError(error, { action: 'add-client' });
-        const errorConfig = dataErrors.saveFailed("client");
-        toast.error(errorConfig.title, {
-          description: errorConfig.description,
-        });
-      }
-    } finally {
-      setLoading(false);
+    },
+    {
+      schema: clientSchema,
+      initialValues: {
+        full_name: "",
+        email: "",
+        phone: "",
+        notes: "",
+        allergies: "",
+        medical_info_consent: false,
+      },
+      successMessage: "Client added successfully! ✨",
+      onSuccess: () => {
+        setAllergies("");
+        setMedicalConsent(false);
+        reset();
+        onOpenChange(false);
+      },
     }
+  );
+
+  const resetForm = () => {
+    setAllergies("");
+    setMedicalConsent(false);
+    reset();
   };
 
   return (
@@ -224,94 +165,73 @@ export const AddClientDialog = ({
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          {/* Full Name */}
-          <div className="space-y-2">
-            <Label htmlFor="fullName">
-              Full Name <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="fullName"
-              placeholder="e.g., Sarah Johnson"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              maxLength={100}
-              className={errors.full_name ? "border-destructive" : ""}
-            />
-            {errors.full_name && (
-              <p className="text-xs text-destructive">{errors.full_name}</p>
-            )}
-          </div>
+          <StandardFormField
+            name="full_name"
+            label="Full Name"
+            type="text"
+            value={values.full_name}
+            onChange={(value) => setFieldValue("full_name", value)}
+            onBlur={() => setFieldTouched("full_name")}
+            error={errors.full_name}
+            touched={touched.full_name}
+            required
+            placeholder="e.g., Sarah Johnson"
+            maxLength={100}
+          />
 
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">
-              Email (Optional)
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="e.g., sarah@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              maxLength={255}
-              className={errors.email ? "border-destructive" : ""}
-            />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              You can add email later - useful for walk-ins or phone bookings
-            </p>
-          </div>
+          <StandardFormField
+            name="email"
+            label="Email"
+            type="email"
+            value={values.email || ""}
+            onChange={(value) => setFieldValue("email", value)}
+            onBlur={() => setFieldTouched("email")}
+            error={errors.email}
+            touched={touched.email}
+            placeholder="e.g., sarah@example.com"
+            maxLength={255}
+            description="Optional - useful for walk-ins or phone bookings"
+          />
 
-          {/* Phone */}
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone (Optional)</Label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="e.g., (555) 123-4567"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              maxLength={20}
-              className={errors.phone ? "border-destructive" : ""}
-            />
-            {errors.phone && (
-              <p className="text-xs text-destructive">{errors.phone}</p>
-            )}
-          </div>
+          <StandardFormField
+            name="phone"
+            label="Phone"
+            type="tel"
+            value={values.phone || ""}
+            onChange={(value) => setFieldValue("phone", value)}
+            onBlur={() => setFieldTouched("phone")}
+            error={errors.phone}
+            touched={touched.phone}
+            placeholder="e.g., (555) 123-4567"
+            maxLength={20}
+          />
 
-          {/* Notes */}
-          <div className="space-y-2">
-            <Label htmlFor="notes">Notes (Optional)</Label>
-            <TextareaWithCounter
-              id="notes"
-              placeholder="Add any special notes about this client..."
-              value={notes}
-              onValueChange={setNotes}
-              maxLength={500}
-              className="min-h-[80px]"
-            />
-            {errors.notes && (
-              <p className="text-xs text-destructive">{errors.notes}</p>
-            )}
-          </div>
+          <StandardFormField
+            name="notes"
+            label="Notes"
+            type="textarea"
+            value={values.notes || ""}
+            onChange={(value) => setFieldValue("notes", value)}
+            onBlur={() => setFieldTouched("notes")}
+            error={errors.notes}
+            touched={touched.notes}
+            placeholder="Add any special notes about this client..."
+            maxLength={500}
+            rows={3}
+          />
 
-          {/* Medical Disclaimer */}
           <MedicalDisclaimer context="allergies" className="mb-4" />
 
-          {/* Allergies */}
-          <div className="space-y-2">
-            <Label htmlFor="allergies">Allergies (Optional)</Label>
-            <TextareaWithCounter
-              id="allergies"
-              placeholder="Any hair product allergies or sensitivities..."
-              value={allergies}
-              onValueChange={setAllergies}
-              maxLength={500}
-              className="min-h-[60px]"
-            />
-          </div>
+          <StandardFormField
+            name="allergies"
+            label="Allergies"
+            type="textarea"
+            value={allergies}
+            onChange={setAllergies}
+            placeholder="Any hair product allergies or sensitivities..."
+            maxLength={500}
+            rows={2}
+          />
 
           {/* Medical Consent */}
           {allergies.trim() && (
@@ -344,16 +264,16 @@ export const AddClientDialog = ({
                 onOpenChange(false);
               }}
               className="flex-1"
-              disabled={loading}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={loading || !fullName.trim()}
+              disabled={isSubmitting || !values.full_name?.trim()}
               className="flex-1 gap-2"
             >
-              {loading ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
                   Adding...

@@ -1,13 +1,5 @@
-/**
- * Quick Add Client - Floating Action Button
- * For stylists to quickly add new clients
- */
-
 import { useState } from "react";
-import { Plus } from "lucide-react";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
-import { trackInsert } from "@/lib/logging/supabaseTracker";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,109 +8,79 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { Plus, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { logger } from "@/lib/logging/productionLogger";
+import { clientSchema, type ClientInput } from "@/lib/validation";
+import { StandardFormField } from "@/components/forms/StandardFormField";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { cn } from "@/lib/utils";
-import { FormFieldError } from "@/components/FormFieldError";
 
-export function QuickAddClientFAB() {
-  const { user } = useAuth();
+interface QuickAddClientFABProps {
+  onClientAdded?: (clientId: string) => void;
+}
+
+export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    notes: "",
-  });
-  const [errors, setErrors] = useState<{
-    fullName?: string;
-    email?: string;
-  }>({});
+  const { user } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const newErrors: { fullName?: string; email?: string } = {};
-    
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Name is required";
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email address";
-    }
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setErrors({});
-
-    setLoading(true);
-
-    try {
-      // Get stylist profile
-      const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
-        .maybeSingle();
-
-      if (!stylistProfile) {
-        throw new Error("Stylist profile not found");
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    setFieldValue,
+    setFieldTouched,
+    handleSubmit,
+    reset,
+  } = useFormSubmit<ClientInput>(
+    async (data) => {
+      if (!user?.id) {
+        throw new Error("No user ID");
       }
 
-      // Create client profile
-      const result = await trackInsert(
-        async () => {
-          return await supabase
-            .from("client_profiles")
-            .insert({
-              full_name: formData.fullName,
-              email: formData.email,
-              phone: formData.phone || null,
-              notes: formData.notes || null,
-              preferred_stylist_id: stylistProfile.id,
-            })
-            .select()
-            .maybeSingle();
-        },
-        'client_profiles',
-        'QuickAddClientFAB'
-      );
-
-      const { data: newClient, error } = result;
+      const { data: newClient, error } = await supabase
+        .from("client_profiles")
+        .insert([
+          {
+            full_name: data.full_name,
+            email: data.email || null,
+            phone: data.phone || null,
+            notes: data.notes || null,
+            preferred_stylist_id: user.id,
+          },
+        ])
+        .select()
+        .single();
 
       if (error) throw error;
 
-      toast.success("Client added successfully! 🎉");
-      userJourney.trackAction('Quick added new client', { clientName: formData.fullName });
-      setOpen(false);
-      setFormData({ fullName: "", email: "", phone: "", notes: "" });
-      setErrors({});
-      
-      // Optional: Navigate to client profile
-      // navigate(`/clients/${newClient.id}`);
-    } catch (error: any) {
-      logger.error("Error adding client", error, { context: 'QuickAddClientFAB' });
-      userJourney.trackError(error);
-      toast.error(error.message || "Failed to add client");
-    } finally {
-      setLoading(false);
+      logger.info("Client added successfully", { clientId: newClient.id });
+
+      if (onClientAdded && newClient) {
+        onClientAdded(newClient.id);
+      }
+    },
+    {
+      schema: clientSchema,
+      initialValues: {
+        full_name: "",
+        email: "",
+        phone: "",
+        notes: "",
+        allergies: "",
+        medical_info_consent: false,
+      },
+      successMessage: "Client added successfully! ✨",
+      onSuccess: () => {
+        reset();
+        setOpen(false);
+      },
     }
-  };
+  );
 
   return (
     <>
-      {/* Floating Action Button */}
       <Button
         onClick={() => setOpen(true)}
         size="lg"
@@ -135,93 +97,104 @@ export function QuickAddClientFAB() {
         <Plus className="h-7 w-7 transition-transform group-hover:rotate-90" />
       </Button>
 
-      {/* Quick Add Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Quick Add Client</DialogTitle>
             <DialogDescription>
-              Add a new client to your roster. You can add more details later from their profile.
+              Add a new client quickly to your roster
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name *</Label>
-              <Input
-                id="fullName"
-                value={formData.fullName}
-                onChange={(e) => {
-                  setFormData({ ...formData, fullName: e.target.value });
-                  setErrors(prev => ({ ...prev, fullName: undefined }));
-                }}
-                placeholder="Jane Smith"
-                required
-                aria-invalid={!!errors.fullName}
-              />
-              {errors.fullName && <FormFieldError message={errors.fullName} />}
-            </div>
+          <div className="space-y-4">
+            <StandardFormField
+              name="full_name"
+              label="Full Name"
+              type="text"
+              value={values.full_name}
+              onChange={(value) => setFieldValue("full_name", value)}
+              onBlur={() => setFieldTouched("full_name")}
+              error={errors.full_name}
+              touched={touched.full_name}
+              required
+              placeholder="e.g., Sarah Johnson"
+              maxLength={100}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email *</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => {
-                  setFormData({ ...formData, email: e.target.value });
-                  setErrors(prev => ({ ...prev, email: undefined }));
-                }}
-                placeholder="jane@example.com"
-                required
-                aria-invalid={!!errors.email}
-              />
-              {errors.email && <FormFieldError message={errors.email} />}
-            </div>
+            <StandardFormField
+              name="email"
+              label="Email"
+              type="email"
+              value={values.email || ""}
+              onChange={(value) => setFieldValue("email", value)}
+              onBlur={() => setFieldTouched("email")}
+              error={errors.email}
+              touched={touched.email}
+              placeholder="e.g., sarah@example.com"
+              maxLength={255}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone (Optional)</Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="(555) 123-4567"
-              />
-            </div>
+            <StandardFormField
+              name="phone"
+              label="Phone"
+              type="tel"
+              value={values.phone || ""}
+              onChange={(value) => setFieldValue("phone", value)}
+              onBlur={() => setFieldTouched("phone")}
+              error={errors.phone}
+              touched={touched.phone}
+              placeholder="e.g., (555) 123-4567"
+              maxLength={20}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="notes">Quick Notes (Optional)</Label>
-              <Textarea
-                id="notes"
-                value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Allergies, preferences, or important info..."
-                rows={3}
-              />
-            </div>
+            <StandardFormField
+              name="notes"
+              label="Notes"
+              type="textarea"
+              value={values.notes || ""}
+              onChange={(value) => setFieldValue("notes", value)}
+              onBlur={() => setFieldTouched("notes")}
+              error={errors.notes}
+              touched={touched.notes}
+              placeholder="Any special notes..."
+              maxLength={500}
+              rows={3}
+            />
 
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-2">
               <Button
                 type="button"
                 variant="outline"
+                onClick={() => {
+                  reset();
+                  setOpen(false);
+                }}
+                disabled={isSubmitting}
                 className="flex-1"
-                onClick={() => setOpen(false)}
-                disabled={loading}
               >
                 Cancel
               </Button>
               <Button
-                type="submit"
-                className="flex-1 bg-gradient-to-br from-emerald-500 to-green-600"
-                disabled={loading}
+                onClick={handleSubmit}
+                disabled={isSubmitting || !values.full_name?.trim()}
+                className="flex-1 gap-2 bg-gradient-to-br from-emerald-500 to-green-600"
               >
-                {loading ? "Adding..." : "Add Client"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Adding...
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-4 w-4" />
+                    Add Client
+                  </>
+                )}
               </Button>
             </div>
-          </form>
+          </div>
         </DialogContent>
       </Dialog>
     </>
   );
-}
+};

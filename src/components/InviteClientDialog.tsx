@@ -1,67 +1,65 @@
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Mail, Loader2 } from "lucide-react";
+} from '@/components/ui/dialog';
+import { Mail, Loader2 } from 'lucide-react';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { invitationSchema, type InvitationInput } from '@/lib/validation';
+import { StandardFormField } from '@/components/forms/StandardFormField';
 
 interface InviteClientDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   clientEmail: string;
-  clientName: string;
+  clientName?: string;
   stylistName: string;
 }
 
-export const InviteClientDialog = ({
-  open,
-  onOpenChange,
-  clientEmail,
+export const InviteClientDialog = ({ 
+  open, 
+  onOpenChange, 
+  clientEmail, 
   clientName,
-  stylistName,
+  stylistName 
 }: InviteClientDialogProps) => {
-  const [customMessage, setCustomMessage] = useState("");
-
   const {
-    handleSubmit: handleSendInvite,
-    isSubmitting: sending,
-  } = useFormSubmit(
-    async () => {
-      // Validation
-      if (!clientEmail || !clientEmail.includes('@')) {
-        throw new Error("Valid client email is required");
-      }
-      
-      if (customMessage && customMessage.length > 500) {
-        throw new Error("Message must be less than 500 characters");
-      }
-      
-      const { error } = await supabase.functions.invoke("send-client-invite", {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    setFieldValue,
+    setFieldTouched,
+    handleSubmit,
+    reset,
+  } = useFormSubmit<InvitationInput>(
+    async (data) => {
+      const { error } = await supabase.functions.invoke('send-client-invite', {
         body: {
-          clientEmail,
+          clientEmail: data.clientEmail,
           clientName,
           stylistName,
-          customMessage: customMessage || undefined,
+          customMessage: data.customMessage || undefined,
         },
       });
 
       if (error) throw error;
     },
     {
+      schema: invitationSchema,
+      initialValues: {
+        clientEmail: clientEmail,
+        customMessage: '',
+      },
       successMessage: `Invitation sent to ${clientEmail}`,
-      errorMessage: "Failed to send invitation",
       onSuccess: () => {
+        reset();
         onOpenChange(false);
-        setCustomMessage("");
       },
     }
   );
@@ -79,42 +77,53 @@ export const InviteClientDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Client Email</Label>
-            <Input value={clientEmail} disabled className="bg-muted" />
-          </div>
+        <div className="space-y-4 py-4">
+          <StandardFormField
+            name="clientEmail"
+            label="Client Email"
+            type="email"
+            value={values.clientEmail}
+            onChange={(value) => setFieldValue('clientEmail', value)}
+            onBlur={() => setFieldTouched('clientEmail')}
+            error={errors.clientEmail}
+            touched={touched.clientEmail}
+            placeholder="client@example.com"
+            disabled={isSubmitting}
+            required
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="custom-message">Personal Message (Optional)</Label>
-            <Textarea
-              id="custom-message"
-              placeholder="Add a personal note to your invitation"
-              value={customMessage}
-              onChange={(e) => setCustomMessage(e.target.value)}
-              rows={4}
-            />
-          </div>
+          <StandardFormField
+            name="customMessage"
+            label="Personal Message"
+            type="textarea"
+            value={values.customMessage || ''}
+            onChange={(value) => setFieldValue('customMessage', value)}
+            onBlur={() => setFieldTouched('customMessage')}
+            error={errors.customMessage}
+            touched={touched.customMessage}
+            placeholder="Add a personal note to your invitation..."
+            maxLength={500}
+            rows={4}
+            disabled={isSubmitting}
+          />
 
-          <div className="flex gap-2 pt-4">
+          <div className="flex gap-2">
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              disabled={sending}
+              disabled={isSubmitting}
               className="flex-1"
             >
               Cancel
             </Button>
             <Button
-              onClick={handleSendInvite}
-              disabled={sending || !clientEmail}
+              onClick={handleSubmit}
+              disabled={isSubmitting || !values.clientEmail}
               className="flex-1 min-h-[44px]"
-              aria-busy={sending}
-              aria-label={sending ? "Sending invitation" : "Send invitation"}
             >
-              {sending ? (
+              {isSubmitting ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                   Sending...
                 </>
               ) : (
