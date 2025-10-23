@@ -5,18 +5,36 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { SkipNavLink, SkipNavContent } from '@reach/skip-nav';
-import '@reach/skip-nav/styles.css';
 
-// Skip Navigation Links
+// Native Skip Navigation Links (React 18 compatible)
 export function SkipLinks() {
   return (
     <>
-      <SkipNavLink>Skip to main content</SkipNavLink>
-      <SkipNavLink contentId="navigation">Skip to navigation</SkipNavLink>
-      <SkipNavLink contentId="footer">Skip to footer</SkipNavLink>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+      <a
+        href="#navigation"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
+      >
+        Skip to navigation
+      </a>
+      <a
+        href="#footer"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg"
+      >
+        Skip to footer
+      </a>
     </>
   );
+}
+
+// Skip Navigation Target Component
+export function SkipNavContent({ id = "main-content" }: { id?: string }) {
+  return <div id={id} />;
 }
 
 // Focus Trap for Modals
