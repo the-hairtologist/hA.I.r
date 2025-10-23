@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  * Comprehensive device and browser testing setup
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: './E2E/tests',
   
   // Maximum time one test can run
   timeout: 30 * 1000,
