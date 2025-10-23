@@ -42,7 +42,7 @@ import { AIMessageComposer } from "@/components/AIMessageComposer";
 import { HairPhotoAnalyzer } from "@/components/HairPhotoAnalyzer";
 import { HairPhotoAnalysis } from "@/components/client/HairPhotoAnalysis";
 import { FormulaSuggestions } from "@/components/formulas/FormulaSuggestions";
-import { clientSchema } from "@/lib/validation/clientSchemas";
+import { clientSchema } from "@/lib/validation";
 import { usePagination } from "@/hooks/usePagination";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { networkErrors, dataErrors } from "@/lib/errorMessages";
