@@ -740,7 +740,7 @@ const Settings = () => {
                               }
                             }}
                             placeholder="(555) 123-4567"
-                            aria-invalid={!!phoneError}
+                            aria-invalid={phoneError ? true : undefined}
                           />
                           {phoneError && <FormFieldError message={phoneError} />}
                         </div>
@@ -1148,7 +1148,7 @@ const Settings = () => {
                         setPasswordErrors(prev => ({ ...prev, currentPassword: undefined }));
                       }}
                       placeholder="Enter current password"
-                      aria-invalid={!!passwordErrors.currentPassword}
+                      aria-invalid={passwordErrors.currentPassword ? true : undefined}
                     />
                     {passwordErrors.currentPassword && <FormFieldError message={passwordErrors.currentPassword} />}
                   </div>
@@ -1164,7 +1164,7 @@ const Settings = () => {
                         setPasswordErrors(prev => ({ ...prev, newPassword: undefined }));
                       }}
                       placeholder="Enter new password (min 8 characters)"
-                      aria-invalid={!!passwordErrors.newPassword}
+                      aria-invalid={passwordErrors.newPassword ? true : undefined}
                     />
                     {passwordErrors.newPassword && <FormFieldError message={passwordErrors.newPassword} />}
                   </div>
@@ -1180,7 +1180,7 @@ const Settings = () => {
                         setPasswordErrors(prev => ({ ...prev, confirmPassword: undefined }));
                       }}
                       placeholder="Confirm new password"
-                      aria-invalid={!!passwordErrors.confirmPassword}
+                      aria-invalid={passwordErrors.confirmPassword ? true : undefined}
                     />
                     {passwordErrors.confirmPassword && <FormFieldError message={passwordErrors.confirmPassword} />}
                   </div>

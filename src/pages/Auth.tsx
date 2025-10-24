@@ -342,7 +342,7 @@ const Auth = () => {
                   minLength={6}
                   placeholder="Enter new password"
                   className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-invalid={!!state.errors.newPassword}
+                  aria-invalid={state.errors.newPassword ? true : undefined}
                 />
                 <PasswordStrength password={state.newPassword} />
                 {state.errors.newPassword && <FormFieldError message={state.errors.newPassword} />}
@@ -358,7 +358,7 @@ const Auth = () => {
                   minLength={6}
                   placeholder="Confirm new password"
                   className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-invalid={!!state.errors.confirmPassword}
+                  aria-invalid={state.errors.confirmPassword ? true : undefined}
                 />
                 {state.errors.confirmPassword && <FormFieldError message={state.errors.confirmPassword} />}
               </div>
@@ -413,7 +413,7 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "email", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                    aria-invalid={!!state.errors.email}
+                    aria-invalid={state.errors.email ? true : undefined}
                   />
                   {state.errors.email && <FormFieldError message={state.errors.email} />}
                 </div>
@@ -426,7 +426,7 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "password", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                    aria-invalid={!!state.errors.password}
+                    aria-invalid={state.errors.password ? true : undefined}
                   />
                   {state.errors.password && <FormFieldError message={state.errors.password} />}
                 </div>
@@ -497,7 +497,7 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "fullName", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                    aria-invalid={!!state.errors.fullName}
+                    aria-invalid={state.errors.fullName ? true : undefined}
                   />
                   {state.errors.fullName && <FormFieldError message={state.errors.fullName} />}
                 </div>
@@ -511,7 +511,7 @@ const Auth = () => {
                     onChange={(e) => dispatch({ type: "SET_FIELD", field: "email", value: e.target.value })}
                     required
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                    aria-invalid={!!state.errors.email}
+                    aria-invalid={state.errors.email ? true : undefined}
                   />
                   {state.errors.email && <FormFieldError message={state.errors.email} />}
                 </div>
@@ -526,7 +526,7 @@ const Auth = () => {
                     required
                     minLength={6}
                     className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                    aria-invalid={!!state.errors.password}
+                    aria-invalid={state.errors.password ? true : undefined}
                   />
                   <PasswordStrength password={state.password} />
                   {state.errors.password && <FormFieldError message={state.errors.password} />}
@@ -578,7 +578,7 @@ const Auth = () => {
                 value={state.resetEmail}
                 onChange={(e) => dispatch({ type: "SET_FIELD", field: "resetEmail", value: e.target.value })}
                 className="border-[2px] border-foreground rounded-none h-11 focus-visible:ring-2 focus-visible:ring-primary"
-                aria-invalid={!!state.errors.resetEmail}
+                aria-invalid={state.errors.resetEmail ? true : undefined}
               />
               {state.errors.resetEmail && <FormFieldError message={state.errors.resetEmail} />}
             </div>

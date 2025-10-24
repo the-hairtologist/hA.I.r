@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format, setHours, setMinutes, addMinutes, parseISO } from "date-fns";
@@ -12,6 +11,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { triggerAppointmentBooked } from "@/lib/zapierTriggers";
 import { FormFieldError } from "@/components/FormFieldError";
 import { networkErrors } from "@/lib/errorMessages";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { StandardFormField } from "@/components/forms/StandardFormField";
+import { z } from "zod";
 
 interface QuickAppointmentDialogProps {
   open: boolean;
@@ -23,6 +25,15 @@ interface QuickAppointmentDialogProps {
   onSuccess?: () => void;
 }
 
+// Quick appointment schema (inline since it's specific to this dialog)
+const quickAppointmentSchema = z.object({
+  client_id: z.string().min(1, "Please select a client"),
+  service_id: z.string().min(1, "Please select a service"),
+  notes: z.string().max(500).optional(),
+});
+
+type QuickAppointmentInput = z.infer<typeof quickAppointmentSchema>;
+
 export const QuickAppointmentDialog = ({
   open,
   onOpenChange,
@@ -32,29 +43,103 @@ export const QuickAppointmentDialog = ({
   stylistId,
   onSuccess
 }: QuickAppointmentDialogProps) => {
-  const [loading, setLoading] = useState(false);
   const [clients, setClients] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
-  const [selectedClient, setSelectedClient] = useState("");
-  const [selectedService, setSelectedService] = useState("");
-  const [notes, setNotes] = useState("");
   const [hasConflict, setHasConflict] = useState(false);
   const [conflictMessage, setConflictMessage] = useState("");
-  const [validationErrors, setValidationErrors] = useState<{
-    client?: string;
-    service?: string;
-  }>({});
+
+  const {
+    values,
+    errors,
+    touched,
+    setFieldValue,
+    setFieldTouched,
+    handleSubmit: submitForm,
+    isSubmitting,
+    reset,
+  } = useFormSubmit<QuickAppointmentInput>(
+    async (data) => {
+      const selectedServiceData = services.find(s => s.id === data.service_id);
+      const selectedClientData = clients.find(c => c.id === data.client_id);
+      
+      if (!selectedServiceData) throw new Error("Service not found");
+
+      const appointmentDate = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
+
+      const { data: newAppointment, error } = await supabase
+        .from("appointments")
+        .insert({
+          client_id: data.client_id,
+          stylist_id: stylistId,
+          service_id: data.service_id,
+          service_type: selectedServiceData.service_name,
+          appointment_date: appointmentDate.toISOString(),
+          duration_minutes: selectedServiceData.duration_minutes || 90,
+          status: "scheduled",
+          notes: data.notes?.trim() || null,
+        })
+        .select()
+        .maybeSingle();
+
+      if (error) throw error;
+
+      // Trigger Zapier webhook
+      if (newAppointment) {
+        try {
+          await triggerAppointmentBooked(stylistId, {
+            appointment_id: newAppointment.id,
+            client_name: selectedClientData?.user?.full_name || selectedClientData?.full_name,
+            service_type: selectedServiceData.service_name,
+            appointment_date: appointmentDate.toISOString(),
+            duration_minutes: selectedServiceData.duration_minutes,
+            price: selectedServiceData.price,
+          });
+        } catch (zapierError) {
+          console.error("Zapier webhook failed:", zapierError);
+        }
+      }
+
+      // Send notifications (non-blocking)
+      try {
+        await supabase.functions.invoke('send-sms-notification', {
+          body: { appointmentId: newAppointment.id, notificationType: 'confirmation' },
+        });
+      } catch {}
+
+      try {
+        await supabase.functions.invoke('send-appointment-confirmation', {
+          body: { appointmentId: newAppointment.id },
+        });
+      } catch {}
+
+      try {
+        await supabase.functions.invoke('sync-calendar-event', {
+          body: { appointment_id: newAppointment.id, action: 'create' },
+        });
+      } catch {}
+    },
+    {
+      schema: quickAppointmentSchema,
+      initialValues: {
+        client_id: "",
+        service_id: "",
+        notes: "",
+      },
+      successMessage: "Appointment created successfully!",
+      onSuccess: () => {
+        reset();
+        onOpenChange(false);
+        onSuccess?.();
+      },
+    }
+  );
 
   useEffect(() => {
     if (open) {
       loadClientsAndServices();
-      // Reset form when opening
-      setSelectedClient("");
-      setSelectedService("");
-      setNotes("");
+      reset();
       setHasConflict(false);
       setConflictMessage("");
-      setValidationErrors({});
     }
   }, [open]);
 
@@ -91,16 +176,16 @@ export const QuickAppointmentDialog = ({
 
   // Check for appointment conflicts when service is selected
   useEffect(() => {
-    if (selectedService && open) {
+    if (values.service_id && open) {
       checkForConflicts();
     }
-  }, [selectedService, open]);
+  }, [values.service_id, open]);
 
   const checkForConflicts = async () => {
-    if (!selectedService) return;
+    if (!values.service_id) return;
 
     try {
-      const selectedServiceData = services.find(s => s.id === selectedService);
+      const selectedServiceData = services.find(s => s.id === values.service_id);
       if (!selectedServiceData) return;
 
       const appointmentStart = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
@@ -135,119 +220,10 @@ export const QuickAppointmentDialog = ({
   };
 
   const handleSubmit = async () => {
-    const errors: { client?: string; service?: string } = {};
-    
-    if (!selectedClient) {
-      errors.client = "Please select a client";
-    }
-
-    if (!selectedService) {
-      errors.service = "Please select a service";
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      return;
-    }
-
     if (hasConflict) {
-      toast.error("Cannot book - time slot conflicts with existing appointment");
-      return;
+      return; // Prevent submission if conflict detected
     }
-    
-    setValidationErrors({});
-
-    setLoading(true);
-    try {
-      const selectedServiceData = services.find(s => s.id === selectedService);
-      if (!selectedServiceData) {
-        throw new Error("Service not found");
-      }
-
-      const appointmentDate = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
-
-      const { data: newAppointment, error } = await supabase
-        .from("appointments")
-        .insert({
-          client_id: selectedClient,
-          stylist_id: stylistId,
-          service_id: selectedService,
-          service_type: selectedServiceData.service_name,
-          appointment_date: appointmentDate.toISOString(),
-          duration_minutes: selectedServiceData.duration_minutes || 90,
-          status: "scheduled",
-          notes: notes.trim() || null,
-        })
-        .select()
-        .maybeSingle();
-
-      if (error) throw error;
-
-      // Trigger Zapier webhook for new appointment
-      if (newAppointment) {
-        try {
-          const clientData = clients.find(c => c.id === selectedClient);
-          await triggerAppointmentBooked(stylistId, {
-            appointment_id: newAppointment.id,
-            client_name: clientData?.user?.full_name || clientData?.full_name,
-            service_type: selectedServiceData.service_name,
-            appointment_date: appointmentDate.toISOString(),
-            duration_minutes: selectedServiceData.duration_minutes,
-            price: selectedServiceData.price,
-          });
-        } catch (zapierError) {
-          console.error("Zapier webhook failed:", zapierError);
-          // Don't block success if Zapier fails
-        }
-      }
-
-      // Send SMS notification
-      try {
-        await supabase.functions.invoke('send-sms-notification', {
-          body: {
-            appointmentId: newAppointment.id,
-            notificationType: 'confirmation',
-          },
-        });
-      } catch (smsError) {
-        console.error("SMS notification failed:", smsError);
-        // Don't block success if SMS fails
-      }
-
-      // Send email confirmation
-      try {
-        await supabase.functions.invoke('send-appointment-confirmation', {
-          body: {
-            appointmentId: newAppointment.id,
-          },
-        });
-      } catch (emailError) {
-        console.error("Email notification failed:", emailError);
-        // Don't block success if email fails
-      }
-
-      // Sync to calendar
-      try {
-        await supabase.functions.invoke('sync-calendar-event', {
-          body: {
-            appointment_id: newAppointment.id,
-            action: 'create',
-          },
-        });
-      } catch (calendarError) {
-        console.error("Calendar sync failed:", calendarError);
-        // Don't block success if calendar sync fails
-      }
-
-      toast.success("Appointment created successfully!");
-      onOpenChange(false);
-      onSuccess?.();
-    } catch (error: any) {
-      console.error("Error creating appointment:", error);
-      toast.error(error.message || "Failed to create appointment");
-    } finally {
-      setLoading(false);
-    }
+    await submitForm();
   };
 
   const appointmentDateTime = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
@@ -291,10 +267,10 @@ export const QuickAppointmentDialog = ({
           <div className="space-y-2">
             <Label htmlFor="client">Client *</Label>
             <Select 
-              value={selectedClient} 
+              value={values.client_id} 
               onValueChange={(value) => {
-                setSelectedClient(value);
-                setValidationErrors(prev => ({ ...prev, client: undefined }));
+                setFieldValue('client_id', value);
+                setFieldTouched('client_id');
               }} 
               disabled={clients.length === 0}
             >
@@ -309,16 +285,18 @@ export const QuickAppointmentDialog = ({
                 ))}
               </SelectContent>
             </Select>
-            {validationErrors.client && <FormFieldError message={validationErrors.client} />}
+            {touched.client_id && errors.client_id && (
+              <FormFieldError message={errors.client_id} />
+            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="service">Service *</Label>
             <Select 
-              value={selectedService} 
+              value={values.service_id} 
               onValueChange={(value) => {
-                setSelectedService(value);
-                setValidationErrors(prev => ({ ...prev, service: undefined }));
+                setFieldValue('service_id', value);
+                setFieldTouched('service_id');
               }} 
               disabled={services.length === 0}
             >
@@ -333,32 +311,35 @@ export const QuickAppointmentDialog = ({
                 ))}
               </SelectContent>
             </Select>
-            {validationErrors.service && <FormFieldError message={validationErrors.service} />}
+            {touched.service_id && errors.service_id && (
+              <FormFieldError message={errors.service_id} />
+            )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="notes">Notes (Optional)</Label>
-            <Textarea
-              id="notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add any special notes or requests..."
-              rows={3}
-              maxLength={500}
-            />
-            <p className="text-xs text-muted-foreground">{notes.length}/500 characters</p>
-          </div>
+          <StandardFormField
+            name="notes"
+            label="Notes (Optional)"
+            type="textarea"
+            value={values.notes || ""}
+            onChange={(val) => setFieldValue('notes', val)}
+            onBlur={() => setFieldTouched('notes')}
+            error={errors.notes}
+            touched={touched.notes}
+            placeholder="Add any special notes or requests..."
+            rows={3}
+            maxLength={500}
+          />
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
             Cancel
           </Button>
           <Button 
             onClick={handleSubmit} 
-            disabled={loading || hasConflict || clients.length === 0 || services.length === 0}
+            disabled={isSubmitting || hasConflict || clients.length === 0 || services.length === 0}
           >
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Appointment
           </Button>
         </DialogFooter>

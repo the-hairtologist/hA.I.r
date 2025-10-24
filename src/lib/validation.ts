@@ -145,6 +145,7 @@ export const clientSchema = z.object({
   full_name: nameSchema,
   email: emailSchema,
   phone: phoneSchema,
+  hair_type: z.string().trim().max(100, 'Hair type must be less than 100 characters').optional().or(z.literal('')),
   notes: textareaSchema(500),
   allergies: textareaSchema(500),
   medical_info_consent: z.boolean().optional(),
@@ -219,6 +220,28 @@ export const reviewSchema = z.object({
     .optional()
     .or(z.literal('')),
   appointment_id: z.string().uuid().optional(),
+});
+
+// ============= Password Change Schema =============
+
+export const passwordChangeSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password required'),
+    newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string().min(1, 'Confirm password required'),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'],
+  });
+
+// ============= Reschedule Schema =============
+
+export const rescheduleSchema = z.object({
+  appointment_id: z.string().uuid('Valid appointment ID required'),
+  new_date: z.string().min(1, 'New date required'),
+  new_time: z.string().min(1, 'New time required'),
+  reason: textareaSchema(500),
 });
 
 // ============= Security Validation =============
@@ -311,3 +334,5 @@ export type MessageInput = z.infer<typeof messageSchema>;
 export type ReviewInput = z.infer<typeof reviewSchema>;
 export type InvitationInput = z.infer<typeof invitationSchema>;
 export type ClientInput = z.infer<typeof clientSchema>;
+export type PasswordChangeInput = z.infer<typeof passwordChangeSchema>;
+export type RescheduleInput = z.infer<typeof rescheduleSchema>;

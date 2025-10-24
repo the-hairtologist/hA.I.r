@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { getServicesByStylist } from "@/lib/queries/serviceQueries";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { serviceSchema, type ServiceInput } from "@/lib/validation";
+import { StandardFormField } from "@/components/forms/StandardFormField";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
@@ -17,7 +17,6 @@ import { PageHeader } from "@/components/PageHeader";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
 import { ServiceTemplatesDialog } from "@/components/ServiceTemplatesDialog";
-import { FormFieldError } from "@/components/FormFieldError";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -26,26 +25,74 @@ const Services = () => {
   const [stylistProfile, setStylistProfile] = useState<any>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
-  const [submitting, setSubmitting] = useState(false);
-
-  // Form state
-  const [serviceName, setServiceName] = useState("");
-  const [description, setDescription] = useState("");
-  const [duration, setDuration] = useState("90");
-  const [price, setPrice] = useState("");
+  
+  // UI-only state (not form data)
   const [isActive, setIsActive] = useState(true);
   const [requireDeposit, setRequireDeposit] = useState(false);
-  const [depositAmount, setDepositAmount] = useState("");
-  const [depositType, setDepositType] = useState<"fixed" | "percentage">("fixed");
-  const [customBufferTime, setCustomBufferTime] = useState<string>("");
   const [useCustomBuffer, setUseCustomBuffer] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<{
-    serviceName?: string;
-    description?: string;
-    price?: string;
-    duration?: string;
-    depositAmount?: string;
-  }>({});
+
+  // Form state managed by useFormSubmit
+  const {
+    values,
+    errors,
+    touched,
+    setFieldValue,
+    setFieldTouched,
+    handleSubmit: submitForm,
+    isSubmitting,
+    reset,
+  } = useFormSubmit<ServiceInput>(
+    async (data) => {
+      const serviceData = {
+        stylist_id: stylistProfile.id,
+        service_name: data.service_name.trim(),
+        description: data.description?.trim() || null,
+        duration_minutes: data.duration_minutes,
+        price: data.price,
+        is_active: isActive,
+        require_deposit: requireDeposit,
+        deposit_amount: requireDeposit ? data.deposit_amount || 0 : 0,
+        deposit_type: requireDeposit ? data.deposit_type || 'fixed' : 'fixed',
+        buffer_time_minutes: useCustomBuffer && data.buffer_time_minutes 
+          ? data.buffer_time_minutes 
+          : null,
+      };
+
+      if (editingService) {
+        const { error } = await supabase
+          .from("stylist_services")
+          .update(serviceData)
+          .eq("id", editingService.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("stylist_services")
+          .insert(serviceData);
+        if (error) throw error;
+      }
+
+      await loadData();
+    },
+    {
+      schema: serviceSchema,
+      initialValues: {
+        service_name: "",
+        description: "",
+        duration_minutes: 90,
+        price: 0,
+        deposit_amount: 0,
+        deposit_type: "fixed",
+        buffer_time_minutes: null,
+      },
+      successMessage: editingService 
+        ? "Service updated successfully!" 
+        : "Service added successfully!",
+      onSuccess: () => {
+        setDialogOpen(false);
+        resetForm();
+      },
+    }
+  );
 
   useEffect(() => {
     loadData();
@@ -92,135 +139,28 @@ const Services = () => {
   };
 
   const resetForm = () => {
-    setServiceName("");
-    setDescription("");
-    setDuration("90");
-    setPrice("");
+    reset();
     setIsActive(true);
     setRequireDeposit(false);
-    setDepositAmount("");
-    setDepositType("fixed");
-    setCustomBufferTime("");
     setUseCustomBuffer(false);
     setEditingService(null);
-    setValidationErrors({});
   };
 
   const handleEdit = (service: any) => {
     setEditingService(service);
-    setServiceName(service.service_name);
-    setDescription(service.description || "");
-    setDuration(service.duration_minutes.toString());
-    setPrice(service.price);
+    setFieldValue('service_name', service.service_name);
+    setFieldValue('description', service.description || "");
+    setFieldValue('duration_minutes', service.duration_minutes);
+    setFieldValue('price', service.price);
+    setFieldValue('deposit_amount', service.deposit_amount || 0);
+    setFieldValue('deposit_type', service.deposit_type || "fixed");
+    setFieldValue('buffer_time_minutes', service.buffer_time_minutes || null);
     setIsActive(service.is_active);
     setRequireDeposit(service.require_deposit || false);
-    setDepositAmount(service.deposit_amount?.toString() || "");
-    setDepositType(service.deposit_type || "fixed");
     setUseCustomBuffer(service.buffer_time_minutes !== null);
-    setCustomBufferTime(service.buffer_time_minutes?.toString() || "");
     setDialogOpen(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Prevent double submission
-    if (submitting) {
-      return;
-    }
-
-    const errors: {
-      serviceName?: string;
-      description?: string;
-      price?: string;
-      duration?: string;
-      depositAmount?: string;
-    } = {};
-
-    // Validate required fields
-    if (!serviceName.trim()) {
-      errors.serviceName = "Service name is required";
-    } else if (serviceName.trim().length > 100) {
-      errors.serviceName = "Service name must be less than 100 characters";
-    }
-
-    if (description.trim().length > 500) {
-      errors.description = "Description must be less than 500 characters";
-    }
-
-    const priceNum = parseFloat(price);
-    if (!price || isNaN(priceNum) || priceNum <= 0) {
-      errors.price = "Please enter a valid price";
-    } else if (priceNum > 10000) {
-      errors.price = "Price cannot exceed $10,000";
-    }
-
-    const durationNum = parseInt(duration);
-    if (!duration || durationNum < 15 || durationNum > 480) {
-      errors.duration = "Duration must be between 15 and 480 minutes";
-    }
-
-    // Validate deposit if required
-    if (requireDeposit) {
-      const depositNum = parseFloat(depositAmount);
-      if (!depositAmount || isNaN(depositNum) || depositNum <= 0) {
-        errors.depositAmount = "Please enter a valid deposit amount";
-      } else if (depositType === "percentage" && depositNum > 100) {
-        errors.depositAmount = "Percentage must be 100 or less";
-      } else if (depositType === "fixed" && depositNum > priceNum) {
-        errors.depositAmount = "Deposit cannot exceed service price";
-      }
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      return;
-    }
-
-    setValidationErrors({});
-
-    setSubmitting(true);
-    try {
-      const serviceData = {
-        stylist_id: stylistProfile.id,
-        service_name: serviceName.trim(),
-        description: description.trim() || null,
-        duration_minutes: durationNum,
-        price: priceNum,
-        is_active: isActive,
-        require_deposit: requireDeposit,
-        deposit_amount: requireDeposit ? parseFloat(depositAmount) : 0,
-        deposit_type: requireDeposit ? depositType : 'fixed',
-        buffer_time_minutes: useCustomBuffer && customBufferTime ? parseInt(customBufferTime) : null,
-      };
-
-      if (editingService) {
-        const { error } = await supabase
-          .from("stylist_services")
-          .update(serviceData)
-          .eq("id", editingService.id);
-
-        if (error) throw error;
-        toast.success("Service updated successfully!");
-      } else {
-        const { error } = await supabase
-          .from("stylist_services")
-          .insert(serviceData);
-
-        if (error) throw error;
-        toast.success("Service added successfully!");
-      }
-
-      setDialogOpen(false);
-      resetForm();
-      loadData();
-    } catch (error: any) {
-      console.error("Error saving service:", error);
-      toast.error("Error saving service");
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const [serviceToDelete, setServiceToDelete] = useState<string | null>(null);
 
@@ -297,38 +237,34 @@ const Services = () => {
                     Define your service offerings and pricing
                   </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="serviceName">Service Name *</Label>
-                    <Input
-                      id="serviceName"
-                      placeholder="e.g., Color & Cut"
-                      value={serviceName}
-                      onChange={(e) => {
-                        setServiceName(e.target.value);
-                        setValidationErrors(prev => ({ ...prev, serviceName: undefined }));
-                      }}
-                      required
-                      aria-invalid={!!validationErrors.serviceName}
-                    />
-                    {validationErrors.serviceName && <FormFieldError message={validationErrors.serviceName} />}
-                  </div>
+                <form onSubmit={submitForm} className="space-y-4">
+                  <StandardFormField
+                    name="service_name"
+                    label="Service Name"
+                    type="text"
+                    value={values.service_name || ""}
+                    onChange={(val) => setFieldValue('service_name', val)}
+                    onBlur={() => setFieldTouched('service_name')}
+                    error={errors.service_name}
+                    touched={touched.service_name}
+                    required
+                    placeholder="e.g., Color & Cut"
+                    maxLength={100}
+                  />
 
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      placeholder="Brief description of the service"
-                      value={description}
-                      onChange={(e) => {
-                        setDescription(e.target.value);
-                        setValidationErrors(prev => ({ ...prev, description: undefined }));
-                      }}
-                      rows={3}
-                      aria-invalid={!!validationErrors.description}
-                    />
-                    {validationErrors.description && <FormFieldError message={validationErrors.description} />}
-                  </div>
+                  <StandardFormField
+                    name="description"
+                    label="Description"
+                    type="textarea"
+                    value={values.description || ""}
+                    onChange={(val) => setFieldValue('description', val)}
+                    onBlur={() => setFieldTouched('description')}
+                    error={errors.description}
+                    touched={touched.description}
+                    placeholder="Brief description of the service"
+                    rows={3}
+                    maxLength={500}
+                  />
 
                   <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -353,20 +289,20 @@ const Services = () => {
                         ]}
                       />
                     </div>
-                    <Input
-                      id="duration"
+                    <StandardFormField
+                      name="duration_minutes"
+                      label=""
                       type="number"
-                      min="15"
-                      step="15"
-                      value={duration}
-                      onChange={(e) => {
-                        setDuration(e.target.value);
-                        setValidationErrors(prev => ({ ...prev, duration: undefined }));
-                      }}
+                      value={values.duration_minutes || 90}
+                      onChange={(val) => setFieldValue('duration_minutes', val)}
+                      onBlur={() => setFieldTouched('duration_minutes')}
+                      error={errors.duration_minutes}
+                      touched={touched.duration_minutes}
                       required
-                      aria-invalid={!!validationErrors.duration}
+                      min={15}
+                      max={480}
+                      step={15}
                     />
-                    {validationErrors.duration && <FormFieldError message={validationErrors.duration} />}
                   </div>
 
                   <div className="space-y-2">
@@ -390,21 +326,21 @@ const Services = () => {
                         ]}
                       />
                     </div>
-                    <Input
-                      id="price"
+                    <StandardFormField
+                      name="price"
+                      label=""
                       type="number"
-                      step="0.01"
-                      min="0"
-                      placeholder="0.00"
-                      value={price}
-                      onChange={(e) => {
-                        setPrice(e.target.value);
-                        setValidationErrors(prev => ({ ...prev, price: undefined }));
-                      }}
+                      value={values.price || 0}
+                      onChange={(val) => setFieldValue('price', val)}
+                      onBlur={() => setFieldTouched('price')}
+                      error={errors.price}
+                      touched={touched.price}
                       required
-                      aria-invalid={!!validationErrors.price}
+                      min={0}
+                      max={10000}
+                      step={0.01}
+                      placeholder="0.00"
                     />
-                    {validationErrors.price && <FormFieldError message={validationErrors.price} />}
                   </div>
                   </div>
 
@@ -452,7 +388,10 @@ const Services = () => {
                           <Label htmlFor="customBufferTime">
                             Buffer Time (minutes)
                           </Label>
-                          <Select value={customBufferTime} onValueChange={setCustomBufferTime}>
+                          <Select 
+                            value={values.buffer_time_minutes?.toString() || "0"} 
+                            onValueChange={(val) => setFieldValue('buffer_time_minutes', parseInt(val))}
+                          >
                             <SelectTrigger id="customBufferTime">
                               <SelectValue placeholder="Select buffer time" />
                             </SelectTrigger>
@@ -466,8 +405,8 @@ const Services = () => {
                             </SelectContent>
                           </Select>
                           <p className="text-xs text-muted-foreground">
-                            Total time slot: {parseInt(duration) + (parseInt(customBufferTime) || 0)} minutes 
-                            ({duration} min service + {customBufferTime || 0} min buffer)
+                            Total time slot: {(values.duration_minutes || 90) + (values.buffer_time_minutes || 0)} minutes 
+                            ({values.duration_minutes || 90} min service + {values.buffer_time_minutes || 0} min buffer)
                           </p>
                         </div>
                       </div>
@@ -516,7 +455,10 @@ const Services = () => {
                       <div className="ml-6 space-y-4 p-4 bg-muted/50 rounded-lg border-2 border-foreground/10">
                         <div className="space-y-2">
                           <Label>Deposit Type</Label>
-                          <Select value={depositType} onValueChange={(value: "fixed" | "percentage") => setDepositType(value)}>
+                          <Select 
+                            value={values.deposit_type || "fixed"} 
+                            onValueChange={(value: "fixed" | "percentage") => setFieldValue('deposit_type', value)}
+                          >
                             <SelectTrigger>
                               <SelectValue />
                             </SelectTrigger>
@@ -527,38 +469,32 @@ const Services = () => {
                           </Select>
                         </div>
 
-                        <div className="space-y-2">
-                          <Label htmlFor="depositAmount">
-                            Deposit {depositType === "fixed" ? "Amount ($)" : "Percentage (%)"}
-                          </Label>
-                          <Input
-                            id="depositAmount"
-                            type="number"
-                            step={depositType === "fixed" ? "0.01" : "1"}
-                            min="0"
-                            max={depositType === "percentage" ? "100" : undefined}
-                            placeholder={depositType === "fixed" ? "50.00" : "50"}
-                            value={depositAmount}
-                            onChange={(e) => {
-                              setDepositAmount(e.target.value);
-                              setValidationErrors(prev => ({ ...prev, depositAmount: undefined }));
-                            }}
-                            required={requireDeposit}
-                            aria-invalid={!!validationErrors.depositAmount}
-                          />
-                          {validationErrors.depositAmount && <FormFieldError message={validationErrors.depositAmount} />}
-                          {depositType === "percentage" && depositAmount && (
-                            <p className="text-sm text-muted-foreground">
-                              = ${((parseFloat(price) || 0) * (parseFloat(depositAmount) / 100)).toFixed(2)} deposit
-                            </p>
-                          )}
-                        </div>
+                        <StandardFormField
+                          name="deposit_amount"
+                          label={`Deposit ${values.deposit_type === "fixed" ? "Amount ($)" : "Percentage (%)"}`}
+                          type="number"
+                          value={values.deposit_amount || 0}
+                          onChange={(val) => setFieldValue('deposit_amount', val)}
+                          onBlur={() => setFieldTouched('deposit_amount')}
+                          error={errors.deposit_amount}
+                          touched={touched.deposit_amount}
+                          required={requireDeposit}
+                          min={0}
+                          max={values.deposit_type === "percentage" ? 100 : 10000}
+                          step={values.deposit_type === "fixed" ? 0.01 : 1}
+                          placeholder={values.deposit_type === "fixed" ? "50.00" : "50"}
+                          description={
+                            values.deposit_type === "percentage" && values.deposit_amount
+                              ? `= $${((values.price || 0) * ((values.deposit_amount || 0) / 100)).toFixed(2)} deposit`
+                              : undefined
+                          }
+                        />
                       </div>
                     )}
                   </div>
 
-                  <Button type="submit" disabled={submitting} className="w-full border-2 border-foreground min-h-[44px]">
-                    {submitting ? (
+                  <Button type="submit" disabled={isSubmitting} className="w-full border-2 border-foreground min-h-[44px]">
+                    {isSubmitting ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                         Saving...
