@@ -2,6 +2,20 @@
 
 AI-powered platform for hair stylists to manage clients, appointments, formulas, and business operations with intelligent automation.
 
+---
+
+## 🎯 **Lost? Read This: [WHAT TO DO NEXT →](./WHAT_TO_DO_NEXT.md)**
+
+**Ultra-quick guide**: 30 seconds to know exactly what to do.
+
+## 🚀 **New Here? [START WITH THIS GUIDE →](./GETTING_STARTED.md)**
+
+**Complete guide**: Everything you need to get started in one place.
+
+**Looking for something specific?** Check the [Documentation Index](./DOCUMENTATION_INDEX.md) which organizes all 495+ documentation files into easy-to-find categories.
+
+---
+
 ## 🚀 Features
 
 ### 🤖 AI-Powered Intelligence
