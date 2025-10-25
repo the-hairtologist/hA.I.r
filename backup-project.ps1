@@ -64,7 +64,6 @@ if ($gitStatus) {
     
     # Check if remote is up to date
     git fetch origin 2>$null
-    $behindCount = (git rev-list HEAD..origin/$(git branch --show-current) --count 2>$null)
     $aheadCount = (git rev-list origin/$(git branch --show-current)..HEAD --count 2>$null)
     
     if ($aheadCount -gt 0) {
