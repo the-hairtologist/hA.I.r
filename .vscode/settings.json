@@ -13,11 +13,11 @@
     "tailwindCSS.experimental.classRegex": [
         [
             "cva\\(([^)]*)\\)",
-            "[\"'`]([^\"'`]*).*?[\"'`]"
+            "[\"\u0027`]([^\"\u0027`]*).*?[\"\u0027`]"
         ],
         [
             "cx\\(([^)]*)\\)",
-            "(?:'|\"|`)([^']*)(?:'|\"|`)"
+            "(?:\u0027|\"|`)([^\u0027]*)(?:\u0027|\"|`)"
         ]
     ],
     "files.exclude": {
@@ -31,5 +31,18 @@
     },
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "powershell.integratedConsole.showOnStartup": false,
-    "playwright.showTrace": true
+    "playwright.showTrace": true,
+    "github.copilot.enable": {
+        "markdown": true,
+        "*": true,
+        "yaml": true,
+        "plaintext": true,
+        "typescript": true,
+        "typescriptreact": true
+    },
+    "github.copilot.chat.experimental.codeActions": true,
+    "github.copilot.editor.enableAutoCompletions": true,
+    "github.copilot.advanced": {
+        "debug.enableLanguageServer": true
+    }
 }

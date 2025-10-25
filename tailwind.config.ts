@@ -170,11 +170,11 @@ export default {
           "50%": { boxShadow: "0 8px 48px rgba(249, 115, 22, 0.5)" },
         },
         "glow-prominent": {
-          "0%, 100%": { 
-            boxShadow: "0 8px 32px rgba(249, 115, 22, 0.4), 0 0 0 0 rgba(249, 115, 22, 0.4)" 
+          "0%, 100%": {
+            boxShadow: "0 8px 32px rgba(249, 115, 22, 0.4), 0 0 0 0 rgba(249, 115, 22, 0.4)"
           },
-          "50%": { 
-            boxShadow: "0 8px 48px rgba(249, 115, 22, 0.6), 0 0 0 8px rgba(249, 115, 22, 0)" 
+          "50%": {
+            boxShadow: "0 8px 48px rgba(249, 115, 22, 0.6), 0 0 0 8px rgba(249, 115, 22, 0)"
           },
         },
         "pulse-ring": {

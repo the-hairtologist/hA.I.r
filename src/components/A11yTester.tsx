@@ -22,6 +22,19 @@ export const A11yTester = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
 
+  // Define all hooks before any conditional returns
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setIsVisible((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
   // Only show in development
   if (import.meta.env.PROD) return null;
 
@@ -134,19 +147,6 @@ export const A11yTester = () => {
     setIssues(foundIssues);
     setIsScanning(false);
   };
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      // Ctrl/Cmd + Shift + A to toggle
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
-        e.preventDefault();
-        setIsVisible((prev) => !prev);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
 
   if (!isVisible) {
     return (
