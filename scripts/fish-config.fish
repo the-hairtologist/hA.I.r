@@ -1,10 +1,24 @@
 # Fish shell configuration for AI Hair Genius development
 # Add this to your ~/.config/fish/config.fish or source this file
 
-# VS Code shell integration
+# VS Code shell integration - Enhanced version
 # This enables enhanced terminal features when using VS Code's integrated terminal
-string match -q "$TERM_PROGRAM" "vscode"
-and . (code --locate-shell-integration-path fish)
+if string match -q "$TERM_PROGRAM" "vscode"
+    echo "🔧 Initializing VS Code shell integration for AI Hair Genius..."
+    
+    # Get the shell integration script path dynamically
+    set SHELL_INTEGRATION_PATH (code --locate-shell-integration-path fish 2>/dev/null)
+    
+    # Source the integration script if it exists
+    if test -n "$SHELL_INTEGRATION_PATH" -a -f "$SHELL_INTEGRATION_PATH"
+        source "$SHELL_INTEGRATION_PATH"
+        echo "✅ VS Code shell integration loaded"
+    else
+        echo "⚠️  VS Code shell integration not found"
+    end
+    
+    echo "🎨 Loading AI Hair Genius Fish shell environment..."
+end
 
 # Development aliases for AI Hair Genius
 alias dev="npm run dev"
