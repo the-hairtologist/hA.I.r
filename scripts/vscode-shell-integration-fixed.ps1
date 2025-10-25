@@ -13,7 +13,8 @@ if ($env:TERM_PROGRAM -eq "vscode") {
             . $integrationPath
             Write-Host "✅ VS Code shell integration loaded" -ForegroundColor Green
         }
-    } catch {
+    }
+    catch {
         Write-Host "⚠️  Could not load VS Code shell integration" -ForegroundColor Yellow
     }
     
@@ -72,10 +73,12 @@ if ($env:TERM_PROGRAM -eq "vscode") {
             Write-Host "✅ In AI Hair Genius project directory" -ForegroundColor Green
             if (Test-Path "node_modules") {
                 Write-Host "✅ Dependencies installed" -ForegroundColor Green
-            } else {
+            }
+            else {
                 Write-Host "⚠️  Dependencies not installed. Run 'npm install'" -ForegroundColor Yellow
             }
-        } else {
+        }
+        else {
             Write-Host "❌ Not in project directory" -ForegroundColor Red
         }
     }
@@ -119,6 +122,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     Write-Host "✨ AI Hair Genius development environment ready!" -ForegroundColor Green
     Write-Host "💡 Type 'Show-HairGeniusHelp' for available commands" -ForegroundColor Cyan
     
-} else {
+}
+else {
     Write-Host "💡 VS Code shell integration only works in VS Code terminal" -ForegroundColor Yellow
 }

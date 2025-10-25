@@ -24,7 +24,8 @@ Write-Host "📁 Creating folder backup..." -ForegroundColor Yellow
 $excludeDirs = @(".git", "node_modules", "dist", ".vscode")
 if (-not $IncludeGit) {
     $robocopyExcludes = "/XD " + ($excludeDirs -join " ")
-} else {
+}
+else {
     $robocopyExcludes = "/XD node_modules dist .vscode"
 }
 
@@ -59,7 +60,8 @@ $gitStatus = git status --porcelain
 if ($gitStatus) {
     Write-Host "⚠️  Uncommitted changes found!" -ForegroundColor Red
     Write-Host "   Consider committing and pushing to GitHub for remote backup" -ForegroundColor Yellow
-} else {
+}
+else {
     Write-Host "✅ Git repository is clean" -ForegroundColor Green
     
     # Check if remote is up to date
@@ -69,7 +71,8 @@ if ($gitStatus) {
     if ($aheadCount -gt 0) {
         Write-Host "⚠️  $aheadCount commit(s) not pushed to GitHub!" -ForegroundColor Red
         Write-Host "   Run 'git push' to backup to remote repository" -ForegroundColor Yellow
-    } else {
+    }
+    else {
         Write-Host "✅ GitHub backup is up to date" -ForegroundColor Green
     }
 }

@@ -119,6 +119,45 @@ npm run dev
 
 The app will be available at `http://localhost:5173`
 
+### 🚀 VS Code Development Shortcuts
+
+If using VS Code, you get automatic shell integration with these shortcuts:
+
+```bash
+# Development
+dev          # Start development server
+test         # Run tests
+testw        # Run tests in watch mode
+build        # Build for production
+lint         # Run ESLint
+format       # Format code with Prettier
+
+# Git Workflow
+gs           # git status
+ga           # git add all
+gcommit 'msg' # git commit with message
+gpush        # git push
+glog         # git log (last 10)
+
+# Navigation
+src          # Go to src folder
+components   # Go to components
+pages        # Go to pages
+supabase     # Go to supabase
+
+# Utilities
+Test-Environment     # Check development environment
+Show-HairGeniusHelp  # Show all available commands
+```
+
+**📋 Available via VS Code Command Palette (`Ctrl+Shift+P`):**
+- Tasks: Start Development Server
+- Tasks: Run Tests
+- Tasks: Build Production
+- Tasks: Lint Code
+
+See [VSCODE_SHORTCUTS_REFERENCE.md](./VSCODE_SHORTCUTS_REFERENCE.md) for complete documentation.
+
 ## 🔐 Environment Setup
 
 Copy `.env.example` to `.env.local` and configure:

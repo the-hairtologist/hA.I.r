@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+.git
+*.md
+*.json
+*.sql
+*.ps1
+*.sh
+.vscode
+public
+.env*
+coverage
