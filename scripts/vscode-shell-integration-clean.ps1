@@ -30,13 +30,12 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     function testw { npm run test:watch }
     function build { npm run build }
     function lint { npm run lint }
-    function type-check { npm run type-check }
     
     # Git workflow functions
     function gs { git status }
     function ga { param($files = ".") git add $files }
     function gc { param($message) git commit -m $message }
-    function gp { git push }
+    function gpush { git push }
     function gl { git log --oneline -10 }
     function gco { param($branch) git checkout $branch }
     function gb { git branch }
@@ -61,7 +60,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     }
     
     # Development environment check
-    function Check-Env {
+    function Test-Environment {
         Write-Host "🔍 AI Hair Genius Environment Check:" -ForegroundColor Cyan
         Write-Host "📍 Current directory: $(Get-Location)" -ForegroundColor White
         
@@ -86,7 +85,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     }
     
     # Show available commands
-    function Hair-Genius-Help {
+    function Show-HairGeniusHelp {
         Write-Host "🎨 AI Hair Genius Development Commands:" -ForegroundColor Cyan
         Write-Host ""
         Write-Host "Development:" -ForegroundColor Yellow
@@ -95,13 +94,12 @@ if ($env:TERM_PROGRAM -eq "vscode") {
         Write-Host "  testw       - Run tests in watch mode"
         Write-Host "  build       - Build for production"
         Write-Host "  lint        - Run ESLint"
-        Write-Host "  type-check  - Run TypeScript check"
         Write-Host ""
         Write-Host "Git Workflow:" -ForegroundColor Yellow
         Write-Host "  gs          - git status"
         Write-Host "  ga [files]  - git add (defaults to all)"
         Write-Host "  gc 'msg'    - git commit with message"
-        Write-Host "  gp          - git push"
+        Write-Host "  gpush       - git push"
         Write-Host "  gl          - git log (last 10)"
         Write-Host "  gco branch  - git checkout branch"
         Write-Host "  gb          - git branch"
@@ -118,12 +116,12 @@ if ($env:TERM_PROGRAM -eq "vscode") {
         Write-Host "  functions   - Go to supabase functions"
         Write-Host ""
         Write-Host "Utilities:" -ForegroundColor Yellow
-        Write-Host "  Check-Env      - Check development environment"
-        Write-Host "  Hair-Genius-Help - Show this help"
+        Write-Host "  Test-Environment      - Check development environment"
+        Write-Host "  Show-HairGeniusHelp   - Show this help"
     }
     
     Write-Host "✨ AI Hair Genius development environment ready!" -ForegroundColor Green
-    Write-Host "💡 Type 'Hair-Genius-Help' for available commands" -ForegroundColor Cyan
+    Write-Host "💡 Type 'Show-HairGeniusHelp' for available commands" -ForegroundColor Cyan
     
 } else {
     Write-Host "💡 VS Code shell integration only works in VS Code terminal" -ForegroundColor Yellow

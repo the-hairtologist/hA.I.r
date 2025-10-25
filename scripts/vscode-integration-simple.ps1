@@ -27,7 +27,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     # Git workflow functions
     function gs { git status }
     function ga { git add . }
-    function gp { git push }
+    function gpush { git push }
     function gl { git log --oneline -10 }
     function gb { git branch }
     function gd { git diff }
@@ -60,7 +60,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     function HairGeniusHelp {
         Write-Host "🎨 AI Hair Genius Commands:" -ForegroundColor Cyan
         Write-Host "Development: dev, test, testw, build, lint, typecheck" -ForegroundColor Yellow
-        Write-Host "Git: gs, ga, gp, gl, gb, gd" -ForegroundColor Yellow
+        Write-Host "Git: gs, ga, gpush, gl, gb, gd" -ForegroundColor Yellow
         Write-Host "Navigation: src, components, pages, hooks, utils" -ForegroundColor Yellow
         Write-Host "Utilities: CheckEnv, HairGeniusHelp" -ForegroundColor Yellow
     }
