@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: ["fix/invite-client-dialog-form-refactor", "copilot/fix-invite-client-dialog-refactor"]
+    branches: ["fix/invite-client-dialog-form-refactor"]
   pull_request:
     branches: ["main"]
 
