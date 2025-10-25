@@ -34,7 +34,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     # Git workflow functions
     function gs { git status }
     function ga { param($files = ".") git add $files }
-    function gc { param($message) git commit -m $message }
+    function gcommit { param($message) git commit -m $message }
     function gpush { git push }
     function glog { git log --oneline -10 }
     function gco { param($branch) git checkout $branch }
@@ -98,7 +98,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
         Write-Host "Git Workflow:" -ForegroundColor Yellow
         Write-Host "  gs          - git status"
         Write-Host "  ga [files]  - git add (defaults to all)"
-        Write-Host "  gc 'msg'    - git commit with message"
+        Write-Host "  gcommit 'msg' - git commit with message"
         Write-Host "  gpush       - git push"
         Write-Host "  glog        - git log (last 10)"
         Write-Host "  gco branch  - git checkout branch"
