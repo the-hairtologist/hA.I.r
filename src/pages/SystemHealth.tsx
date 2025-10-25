@@ -17,6 +17,13 @@ export default function SystemHealth() {
   const { isAdmin, loading: roleLoading } = useUserRole(user?.id);
   const [status, setStatus] = useState<any>(null);
 
+  // Always define the useEffect hook before any conditional returns
+  useEffect(() => {
+    loadStatus();
+    const interval = setInterval(loadStatus, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Redirect non-admins
   if (!authLoading && !roleLoading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
@@ -26,12 +33,6 @@ export default function SystemHealth() {
   if (authLoading || roleLoading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
-
-  useEffect(() => {
-    loadStatus();
-    const interval = setInterval(loadStatus, 10000);
-    return () => clearInterval(interval);
-  }, []);
 
   const loadStatus = async () => {
     const { data: session } = await supabase.auth.getSession();

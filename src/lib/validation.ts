@@ -31,7 +31,7 @@ export const phoneSchema = z
   .string()
   .trim()
   .max(20, 'Phone must be less than 20 characters')
-  .regex(/^\+?[\d\s\-\(\)]+$/, 'Invalid phone format')
+  .regex(/^[\d\s\-+()]+$/, { message: "Please enter a valid phone number" })
   .optional()
   .or(z.literal(''));
 
@@ -39,7 +39,8 @@ export const nameSchema = z
   .string()
   .trim()
   .min(2, 'Name must be at least 2 characters')
-  .max(100, 'Name must be less than 100 characters');
+  .max(100, 'Name must be less than 100 characters')
+  .regex(/^[a-zA-Z\s\-.']+$/, { message: "Name can only contain letters, spaces, hyphens, periods, and apostrophes" });
 
 // Helper for creating textarea schemas with custom max length
 export const textareaSchema = (maxLength: number) => z

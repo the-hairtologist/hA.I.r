@@ -50,7 +50,7 @@ export const uploadImage = async (
     onProgress?.(10);
 
     // Convert blob to file if needed
-    let imageFile = file instanceof File ? file : new File([file], 'image.jpg', { type: 'image/jpeg' });
+    const imageFile = file instanceof File ? file : new File([file], 'image.jpg', { type: 'image/jpeg' });
 
     // Compress image
     onProgress?.(30);

@@ -58,7 +58,7 @@ export default function AuditLogs() {
   const loadLogs = async () => {
     try {
       setLoadingLogs(true);
-      
+
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - parseInt(dateRange));
 
@@ -87,11 +87,11 @@ export default function AuditLogs() {
   };
 
   const filteredLogs = logs.filter(log => {
-    const matchesSearch = 
+    const matchesSearch =
       log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.table_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.user_id.includes(searchTerm);
-    
+
     const matchesAction = actionFilter === "all" || log.action === actionFilter;
     const matchesTable = tableFilter === "all" || log.table_name === tableFilter;
 
@@ -258,7 +258,7 @@ export default function AuditLogs() {
                           {format(new Date(log.created_at), "PPp")}
                         </span>
                       </div>
-                      
+
                       {/* User and record info */}
                       <div className="space-y-1">
                         <p className="font-mono text-xs text-muted-foreground break-all">
@@ -270,7 +270,7 @@ export default function AuditLogs() {
                           </p>
                         )}
                       </div>
-                      
+
                       {/* Changes details */}
                       {log.new_data && (
                         <details className="mt-1">

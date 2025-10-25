@@ -215,7 +215,7 @@ export const VoiceControl = ({
     } catch (error) {
       console.error('Error starting recording:', error);
       
-      let errorMessage = "Could not access microphone";
+      const errorMessage = "Could not access microphone";
       let errorDescription = "Check microphone permissions";
       
       if (error instanceof Error) {

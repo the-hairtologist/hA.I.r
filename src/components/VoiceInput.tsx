@@ -69,7 +69,7 @@ export const VoiceInput = ({
     } catch (error) {
       console.error('Error starting recording:', error);
       
-      let errorMessage = "Could not access microphone";
+      const errorMessage = "Could not access microphone";
       let errorDescription = "Check microphone permissions in browser settings";
       
       if (error instanceof Error) {

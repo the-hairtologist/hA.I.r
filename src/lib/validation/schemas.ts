@@ -17,7 +17,7 @@ export const commonValidators = {
   
   phone: z.string()
     .trim()
-    .regex(/^[\d\s\-\+\(\)]+$/, { message: "Please enter a valid phone number" })
+    .regex(/^[\d\s\-+()]+$/, { message: "Please enter a valid phone number" })
     .min(10, { message: "Phone number must be at least 10 digits" })
     .max(20, { message: "Phone number must be less than 20 characters" })
     .optional()
@@ -27,7 +27,7 @@ export const commonValidators = {
     .trim()
     .min(1, { message: "Name cannot be empty" })
     .max(100, { message: "Name must be less than 100 characters" })
-    .regex(/^[a-zA-Z\s\-\.\']+$/, { message: "Name can only contain letters, spaces, hyphens, periods, and apostrophes" }),
+    .regex(/^[a-zA-Z\s\-.']+$/, { message: "Name can only contain letters, spaces, hyphens, periods, and apostrophes" }),
   
   message: z.string()
     .trim()

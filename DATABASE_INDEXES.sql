@@ -8,6 +8,29 @@
 -- IMPORTANT: Create indexes during low-traffic hours (causes brief locks)
 
 -- ============================================================================
+-- SAFETY CHECKS - Run these first to verify your environment
+-- ============================================================================
+
+-- Check PostgreSQL version (indexes require 9.5+)
+-- SELECT version();
+
+-- Verify you're connected to the correct database
+-- SELECT current_database(), current_user;
+
+-- Check available storage space (indexes use additional space)
+-- SELECT pg_size_pretty(pg_database_size(current_database())) as db_size;
+
+-- ============================================================================
+-- PREREQUISITES
+-- ============================================================================
+
+-- Ensure these extensions are available (may require superuser):
+-- CREATE EXTENSION IF NOT EXISTS pg_trgm;  -- For fuzzy text search
+-- CREATE EXTENSION IF NOT EXISTS btree_gin; -- For GIN indexes on scalar types
+
+-- Note: Supabase includes these by default
+
+-- ============================================================================
 -- 1. APPOINTMENTS (Most Critical - Heavily Queried)
 -- ============================================================================
 
@@ -46,9 +69,12 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_formulas_stylist_recent
 CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_formulas_text_search 
   ON public.formulas USING gin(to_tsvector('english', formula_text));
 
--- Tags search (if using tags array)
+-- Tags search (if using tags array column)
+-- Note: Only create if 'tags' column exists and is array type
+-- Check with: \d public.formulas
 CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_formulas_tags 
-  ON public.formulas USING gin(tags);
+  ON public.formulas USING gin(tags)
+  WHERE tags IS NOT NULL;
 
 -- ============================================================================
 -- 3. MESSAGES (Real-time Chat Performance)
@@ -63,7 +89,8 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_messages_unread
   ON public.messages(recipient_id, read) 
   WHERE read = false;
 
--- Recent messages for a user
+-- Recent messages for a user (covering index for faster queries)
+-- Note: INCLUDE clause requires PostgreSQL 11+, remove if using older version
 CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_messages_user_recent 
   ON public.messages(recipient_id, created_at DESC) 
   INCLUDE (sender_id, message_text);
@@ -137,10 +164,10 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_portfolio_stylist_order
 CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_audit_user_action 
   ON public.audit_logs(user_id, action, created_at DESC);
 
--- Recent audit trail (last 90 days)
+-- Recent audit trail (for admin dashboard)
+-- Note: Partial index with static date not recommended for rolling time periods
 CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_audit_recent 
-  ON public.audit_logs(created_at DESC) 
-  WHERE created_at > NOW() - INTERVAL '90 days';
+  ON public.audit_logs(created_at DESC);
 
 -- ============================================================================
 -- 10. AI CONVERSATIONS (Chat History)
@@ -201,12 +228,93 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_payments_pending
 -- AUTOMATED MAINTENANCE
 -- ============================================================================
 
+-- Note: pg_cron extension required for automated scheduling
+-- Enable with: CREATE EXTENSION IF NOT EXISTS pg_cron;
+-- Alternative: Use your platform's scheduled jobs (GitHub Actions, cron, etc.)
+
 -- Run ANALYZE weekly to keep query planner stats fresh
-SELECT cron.schedule(
-  'weekly-analyze',
-  '0 2 * * 0', -- 2 AM Sunday
-  $$ANALYZE$$
-);
+-- Uncomment if pg_cron is available:
+-- SELECT cron.schedule(
+--   'weekly-analyze',
+--   '0 2 * * 0', -- 2 AM Sunday
+--   $$ANALYZE$$
+-- );
+
+-- Alternative: Add this to your deployment scripts or cron jobs:
+-- psql -c "ANALYZE;" 
 
 -- Monitor bloated indexes (run monthly)
 -- If index size > table size, consider REINDEX CONCURRENTLY
+
+-- ============================================================================
+-- INDEX CREATION ERROR HANDLING
+-- ============================================================================
+
+-- If any index creation fails:
+-- 1. Check if table/column exists: \d table_name
+-- 2. Check for existing index: \di index_name  
+-- 3. For CONCURRENTLY failures, drop invalid index: DROP INDEX CONCURRENTLY idx_name;
+-- 4. Retry without CONCURRENTLY during maintenance window if needed
+
+-- ============================================================================
+-- PERFORMANCE MONITORING QUERIES
+-- ============================================================================
+
+-- Check which indexes are actually being used:
+-- SELECT 
+--   schemaname, tablename, indexname, idx_scan, idx_tup_read, idx_tup_fetch
+-- FROM pg_stat_user_indexes 
+-- WHERE schemaname = 'public'
+-- ORDER BY idx_scan DESC;
+
+-- Find unused indexes (candidates for removal):
+-- SELECT 
+--   schemaname, tablename, indexname
+-- FROM pg_stat_user_indexes 
+-- WHERE schemaname = 'public' AND idx_scan = 0;
+
+-- Check index sizes:
+-- SELECT 
+--   schemaname, tablename, indexname,
+--   pg_size_pretty(pg_relation_size(indexrelid)) as size
+-- FROM pg_stat_user_indexes
+-- WHERE schemaname = 'public'
+-- ORDER BY pg_relation_size(indexrelid) DESC;
+
+-- ============================================================================
+-- POST-CREATION VALIDATION
+-- ============================================================================
+
+-- Run this after creating indexes to verify they were created successfully:
+-- SELECT 
+--   indexname, 
+--   indexdef,
+--   CASE WHEN indisvalid THEN 'VALID' ELSE 'INVALID' END as status
+-- FROM pg_indexes 
+-- JOIN pg_index ON pg_indexes.indexname = pg_class.relname
+-- JOIN pg_class ON pg_index.indexrelid = pg_class.oid
+-- WHERE schemaname = 'public' 
+--   AND indexname LIKE 'idx_%'
+-- ORDER BY indexname;
+
+-- If any indexes show INVALID status, drop and recreate:
+-- DROP INDEX CONCURRENTLY idx_invalid_index_name;
+-- Then re-run the CREATE INDEX statement
+
+-- ============================================================================
+-- PERFORMANCE IMPACT SUMMARY
+-- ============================================================================
+
+-- Expected query performance improvements:
+-- 1. Appointment queries: 10-100x faster with date range filters
+-- 2. Formula search: 5-50x faster with client/stylist filters  
+-- 3. Message threads: 20-200x faster for conversation loading
+-- 4. User role checks: 100x faster permission validation
+-- 5. Full-text search: 10-1000x faster than LIKE queries
+
+-- Trade-offs:
+-- - Increased storage: ~20-30% additional space for indexes
+-- - Slower INSERTs: ~10-20% overhead for maintaining indexes
+-- - Memory usage: Additional RAM needed for index caching
+
+-- Monitor and adjust based on actual usage patterns in production

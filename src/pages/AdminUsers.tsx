@@ -70,9 +70,9 @@ export default function AdminUsers() {
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = filterRole === 'all' || 
-                       user.user_roles?.some((ur: any) => ur.role === filterRole);
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = filterRole === 'all' ||
+      user.user_roles?.some((ur: any) => ur.role === filterRole);
     return matchesSearch && matchesRole;
   });
 
@@ -107,7 +107,7 @@ export default function AdminUsers() {
     try {
       // Note: This would need proper backend implementation with cascading deletes
       toast.info("Bulk delete is a critical operation. Contact system administrator.");
-      
+
       // In production, you'd call an edge function:
       // const { error } = await supabase.functions.invoke('admin-bulk-delete-users', {
       //   body: { userIds: Array.from(selectedUsers) }
@@ -233,9 +233,8 @@ export default function AdminUsers() {
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={`p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors ${
-                    selectedUsers.has(user.id) ? 'bg-primary/5 border-primary' : ''
-                  }`}
+                  className={`p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors ${selectedUsers.has(user.id) ? 'bg-primary/5 border-primary' : ''
+                    }`}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     <input
@@ -252,7 +251,7 @@ export default function AdminUsers() {
                           <p className="font-semibold text-base sm:text-lg truncate">{user.full_name || 'Unknown'}</p>
                           <p className="text-xs sm:text-sm text-muted-foreground truncate">{user.email}</p>
                         </div>
-                        
+
                         {/* Roles and date */}
                         <div className="flex flex-wrap items-center gap-2">
                           {user.user_roles?.map((ur: any) => (
@@ -307,7 +306,7 @@ export default function AdminUsers() {
                                       <p className="text-xs sm:text-sm">{format(new Date(selectedUser.created_at), 'PPp')}</p>
                                     </div>
                                   </div>
-                                  
+
                                   <div>
                                     <p className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Roles</p>
                                     <div className="flex flex-wrap gap-2">
@@ -320,7 +319,7 @@ export default function AdminUsers() {
                               )}
                             </DialogContent>
                           </Dialog>
-                          
+
                           <Select
                             onValueChange={(role) => handleAssignRole(user.id, role as 'client' | 'stylist')}
                           >
