@@ -21,7 +21,7 @@ serve(async (req) => {
       throw new Error("Recipient email is required");
     }
 
-    let emailContent = {
+    const emailContent = {
       from: FROM_EMAIL,
       to: [recipient_email],
       subject: "",

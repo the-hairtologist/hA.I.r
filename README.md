@@ -19,6 +19,7 @@ AI-powered platform for hair stylists to manage clients, appointments, formulas,
 ## 🚀 Features
 
 ### 🤖 AI-Powered Intelligence
+
 - **Smart Appointment Scheduling** - Automated booking optimization
 - **Client Retention Analysis** - Predictive insights for at-risk clients
 - **Automated Upsell Recommendations** - AI-driven product suggestions
@@ -26,23 +27,27 @@ AI-powered platform for hair stylists to manage clients, appointments, formulas,
 - **Intelligent Maintenance** - Self-healing error recovery and performance optimization
 
 ### 📊 Real-Time Sync
+
 - **Live Appointment Updates** - Instant synchronization across devices
 - **Real-Time Messaging** - Instant client communication
 - **Automatic Data Sync** - Seamless multi-device experience
 
 ### 🛡️ Self-Healing Infrastructure
+
 - **Automatic Error Recovery** - Circuit breakers and exponential backoff
 - **Performance Optimization** - Intelligent caching and resource management
 - **Health Monitoring** - 24/7 system health checks
 - **Data Integrity Checks** - Automated validation and repair
 
 ### ♿ WCAG 2.2 AA Compliant
+
 - **Full Accessibility Support** - Screen reader optimized
 - **Keyboard Navigation** - Complete keyboard support
 - **44px Touch Targets** - Mobile-friendly interactions
 - **High Contrast** - AA-compliant color contrast ratios
 
 ### 📱 Mobile-First Design
+
 - **Responsive Layout** - Optimized for 320px to 1920px+ screens
 - **PWA Ready** - Installable on mobile devices
 - **Offline Capable** - Core features work without internet
@@ -76,6 +81,7 @@ npm run test:report
 ```
 
 ### Test Coverage
+
 - ✅ 81 E2E test files
 - ✅ Desktop (Chrome, Firefox, Safari)
 - ✅ Mobile (iOS, Android)
@@ -98,6 +104,7 @@ npm run test:report
 ## 📦 Getting Started
 
 ### Prerequisites
+
 - Node.js 20+ and npm
 - Git
 
@@ -151,6 +158,7 @@ Show-HairGeniusHelp  # Show all available commands
 ```
 
 **📋 Available via VS Code Command Palette (`Ctrl+Shift+P`):**
+
 - Tasks: Start Development Server
 - Tasks: Run Tests
 - Tasks: Build Production
@@ -178,11 +186,13 @@ VITE_SENTRY_DSN=https://xxxxx@sentry.io/xxxxx
 ## 🚢 Deployment
 
 ### Via Lovable
+
 1. Open [Lovable Project](https://lovable.dev/projects/a1a18f9d-b2f9-4d81-aa8c-e28408bee3a2)
 2. Click **Share → Publish**
 3. Your app is live!
 
 ### Custom Domain
+
 1. Navigate to **Project > Settings > Domains**
 2. Click **Connect Domain**
 3. Follow DNS configuration steps

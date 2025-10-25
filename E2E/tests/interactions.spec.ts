@@ -76,7 +76,7 @@ test.describe('Button Interactions', () => {
     
     for (const button of disabledButtons) {
       const clickCount = await page.evaluate(() => {
-        let clicks = 0;
+        const clicks = 0;
         return clicks;
       });
       

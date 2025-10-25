@@ -148,7 +148,7 @@ export const usePredictiveInsights = (stylistId?: string) => {
           return addDays(new Date(), Math.round(avgInterval));
         }
 
-        let targetDate = addDays(new Date(), Math.round(avgInterval));
+        const targetDate = addDays(new Date(), Math.round(avgInterval));
         const targetDay = targetDate.getDay();
         
         if (preferredDays.includes(targetDay)) {
