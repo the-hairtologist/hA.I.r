@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Analytics Integration for Hair A.I.
  * Supports Google Analytics 4, Mixpanel, and custom event tracking
  */
@@ -100,7 +100,7 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
 
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window) {
-    (window as unknown as { gtag: Function }).gtag('event', 'page_view', {
+    (window as unknown as { gtag: (...args: any[]) => void }).gtag('event', 'page_view', {
       page_path: pagePath,
       page_title: pageTitle || document.title,
       platform: Platform.platform,
@@ -127,7 +127,7 @@ export const trackEvent = (
 
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window) {
-    (window as unknown as { gtag: Function }).gtag('event', eventName, eventData);
+    (window as unknown as { gtag: (...args: any[]) => void }).gtag('event', eventName, eventData);
   }
 
   logger.debug('Event tracked', 'analytics', { eventName, eventData });
@@ -141,7 +141,7 @@ export const setUserProperties = (userId: string, properties?: Record<string, an
 
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window) {
-    (window as unknown as { gtag: Function }).gtag('set', 'user_properties', {
+    (window as unknown as { gtag: (...args: any[]) => void }).gtag('set', 'user_properties', {
       user_id: userId,
       ...properties,
     });
@@ -160,7 +160,7 @@ export const identifyUser = (userId: string, traits?: Record<string, any>) => {
   
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window && measurementId) {
-    (window as unknown as { gtag: Function }).gtag('config', measurementId, {
+    (window as unknown as { gtag: (...args: any[]) => void }).gtag('config', measurementId, {
       user_id: userId,
       ...traits,
     });

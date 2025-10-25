@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+﻿import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -231,16 +231,11 @@ export const MobileBottomNav = () => {
           {items.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
-            const buttonRef = useRef<HTMLButtonElement>(null);
-            
-            useEffect(() => {
-              if (!buttonRef.current || item.disabled) return;
-              return prefetchOnHover(buttonRef.current, item.path);
-            }, [item.path, item.disabled]);
+            // Hooks removed from map callback for React compliance
             
             return (
               <button
-                ref={buttonRef}
+                
                 key={item.path}
                 onClick={() => !item.disabled && handleNavigation(item.path)}
                 disabled={item.disabled}
@@ -345,3 +340,5 @@ export const MobileBottomNav = () => {
     </>
   );
 };
+
+

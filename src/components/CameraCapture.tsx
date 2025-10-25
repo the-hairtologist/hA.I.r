@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+﻿import { useState, useRef } from "react";
 import { Camera, Loader2, CheckCircle2, AlertCircle, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -66,25 +66,25 @@ export const CameraCapture = ({
       capture: "Capture professional work",
       processing: "Optimizing image...",
       success: "Photo ready!",
-      tip: "💡 Use good lighting for best results"
+      tip: "ðŸ’¡ Use good lighting for best results"
     },
     profile: { 
       capture: "Take profile photo",
       processing: "Processing portrait...",
       success: "Looking great!",
-      tip: "💡 Center your face in frame"
+      tip: "ðŸ’¡ Center your face in frame"
     },
     analysis: { 
       capture: "Analyze hair photo",
       processing: "Preparing for AI analysis...",
       success: "Ready for analysis!",
-      tip: "💡 Capture in natural light"
+      tip: "ðŸ’¡ Capture in natural light"
     },
     client_post: { 
       capture: "Share hair inspiration",
       processing: "Preparing image...",
       success: "Image ready to post!",
-      tip: "💡 Show desired style clearly"
+      tip: "ðŸ’¡ Show desired style clearly"
     }
   };
 
@@ -208,7 +208,7 @@ export const CameraCapture = ({
         
         await haptic.success();
         toast.success(messages.success, {
-          description: `Saved ${metadata.compressionRatio}% space • ${(metadata.compressedSize / 1024).toFixed(0)}KB`
+          description: `Saved ${metadata.compressionRatio}% space â€¢ ${(metadata.compressedSize / 1024).toFixed(0)}KB`
         });
         
         setPreview(null);
@@ -384,3 +384,4 @@ export const CameraCapture = ({
     </MediaErrorBoundary>
   );
 };
+

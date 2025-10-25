@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Unit Tests for useFormSubmit Hook
  * Tests double submission prevention, loading states, error handling, and success scenarios
  */
@@ -175,7 +175,9 @@ describe('useFormSubmit', () => {
       await act(async () => {
         try {
           await result.current.handleSubmit();
-        } catch (e) {}
+        } catch (e) {
+          // Expected error for test
+        }
       });
       
       expect(Object.keys(result.current.errors).length).toBeGreaterThan(0);
@@ -286,3 +288,5 @@ describe('useFormSubmit', () => {
     });
   });
 });
+
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Audit Logs Page - Week 3 Admin Feature
  * Comprehensive audit log viewer for admins
  */
@@ -41,6 +41,12 @@ export default function AuditLogs() {
   const [tableFilter, setTableFilter] = useState("all");
   const [dateRange, setDateRange] = useState("7");
 
+  // Load logs data
+  useEffect(() => {
+    if (authLoading || !user || !isAdmin) return;
+    loadLogs();
+  }, [dateRange, authLoading, user, isAdmin]);
+
   // Redirect non-admins
   if (!authLoading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
@@ -51,7 +57,8 @@ export default function AuditLogs() {
     return <LoadingSpinner message="Verifying access..." />;
   }
 
-  useEffect(() => {
+  // Additional useEffect removed - consolidated above
+  const uselessEffect = () => {
     loadLogs();
   }, [dateRange]);
 
@@ -293,3 +300,5 @@ export default function AuditLogs() {
     </DashboardLayout>
   );
 }
+
+
