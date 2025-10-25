@@ -58,9 +58,6 @@ export default function AuditLogs() {
   }
 
   // Additional useEffect removed - consolidated above
-  const uselessEffect = () => {
-    loadLogs();
-  }, [dateRange]);
 
   const loadLogs = async () => {
     try {
@@ -300,5 +297,6 @@ export default function AuditLogs() {
     </DashboardLayout>
   );
 }
+
 
 

@@ -36,6 +36,12 @@ export default function AdminUsers() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
+  // Load users effect - must come before conditional returns
+  useEffect(() => {
+    if (loading || !user || !isAdmin) return;
+    loadUsers();
+  }, [loading, user, isAdmin]);
+
   // Redirect non-admins
   if (!loading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
@@ -45,10 +51,6 @@ export default function AdminUsers() {
   if (loading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
 
   const loadUsers = async () => {
     try {
@@ -345,4 +347,6 @@ export default function AdminUsers() {
     </DashboardLayout>
   );
 }
+
+
 
