@@ -28,7 +28,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     function gs { git status }
     function ga { git add . }
     function gpush { git push }
-    function gl { git log --oneline -10 }
+    function glog { git log --oneline -10 }
     function gb { git branch }
     function gd { git diff }
     

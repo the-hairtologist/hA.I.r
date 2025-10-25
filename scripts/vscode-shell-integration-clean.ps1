@@ -36,7 +36,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     function ga { param($files = ".") git add $files }
     function gc { param($message) git commit -m $message }
     function gpush { git push }
-    function gl { git log --oneline -10 }
+    function glog { git log --oneline -10 }
     function gco { param($branch) git checkout $branch }
     function gb { git branch }
     function gd { git diff }
@@ -100,7 +100,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
         Write-Host "  ga [files]  - git add (defaults to all)"
         Write-Host "  gc 'msg'    - git commit with message"
         Write-Host "  gpush       - git push"
-        Write-Host "  gl          - git log (last 10)"
+        Write-Host "  glog        - git log (last 10)"
         Write-Host "  gco branch  - git checkout branch"
         Write-Host "  gb          - git branch"
         Write-Host "  gd          - git diff"

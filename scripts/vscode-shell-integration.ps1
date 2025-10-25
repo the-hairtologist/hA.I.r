@@ -36,8 +36,8 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     function gs { git status }
     function ga { param($files = ".") git add $files }
     function gc { param($message) git commit -m $message }
-    function gp { git push }
-    function gl { git log --oneline -10 }
+    function gpush { git push }
+    function glog { git log --oneline -10 }
     function gco { param($branch) git checkout $branch }
     function gb { git branch }
     function gd { git diff }
@@ -64,7 +64,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     }
     
     # Development environment check
-    function Check-Env {
+    function Test-Environment {
         Write-Host "🔍 AI Hair Genius Environment Check:" -ForegroundColor Cyan
         Write-Host "📍 Current directory: $(Get-Location)" -ForegroundColor White
         
@@ -101,7 +101,7 @@ if ($env:TERM_PROGRAM -eq "vscode") {
     }
     
     # Show available commands
-    function Hair-Genius-Help {
+    function Show-HairGeniusHelp {
         Write-Host "🎨 AI Hair Genius Development Commands:" -ForegroundColor Cyan
         Write-Host ""
         Write-Host "Development:" -ForegroundColor Yellow
@@ -116,8 +116,8 @@ if ($env:TERM_PROGRAM -eq "vscode") {
         Write-Host "  gs          - git status"
         Write-Host "  ga [files]  - git add (defaults to all)"
         Write-Host "  gc 'msg'    - git commit with message"
-        Write-Host "  gp          - git push"
-        Write-Host "  gl          - git log (last 10)"
+        Write-Host "  gpush       - git push"
+        Write-Host "  glog        - git log (last 10)"
         Write-Host "  gco branch  - git checkout branch"
         Write-Host "  gb          - git branch"
         Write-Host "  gd          - git diff"
