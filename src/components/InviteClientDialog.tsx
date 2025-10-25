@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
@@ -52,11 +51,9 @@ export const InviteClientDialog = ({
     },
     {
       schema: invitationSchema,
-      initialValues: {
-        clientEmail: clientEmail,
-        customMessage: '',
-      },
+      initialValues: { clientEmail: clientEmail, customMessage: '' },
       successMessage: `Invitation sent to ${clientEmail}`,
+      errorMessage: 'Failed to send invitation',
       onSuccess: () => {
         reset();
         onOpenChange(false);
