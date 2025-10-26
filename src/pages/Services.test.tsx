@@ -1,32 +1,66 @@
-﻿import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import Services from './Services';
 import { supabase } from '@/integrations/supabase/client';
+import { getServicesByStylist } from '@/lib/queries/serviceQueries';
 
-// Mock Supabase with complete auth mock
+type Mock = ReturnType<typeof vi.fn>;
+
+const mockStylistProfile = {
+  id: 'stylist-123',
+  user_id: 'user-123',
+};
+
+const mockService = {
+  id: '1',
+  service_name: 'Haircut',
+  description: 'Professional haircut',
+  duration_minutes: 60,
+  price: 50,
+  is_active: true,
+  require_deposit: false,
+  deposit_amount: 0,
+  deposit_type: 'fixed',
+  buffer_time_minutes: null,
+};
+
+const confirmMock = vi.fn();
+vi.stubGlobal('confirm', confirmMock);
+
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     auth: {
       getUser: vi.fn(),
-      getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
+      getSession: vi.fn().mockResolvedValue({
+        data: {
+          session: {
+            user: {
+              id: 'user-123',
+              email: 'stylist@example.com',
+            },
+          },
+        },
+        error: null,
+      }),
       onAuthStateChange: vi.fn().mockReturnValue({
         data: {
           subscription: {
-            unsubscribe: vi.fn()
-          }
-        }
-      })
+            unsubscribe: vi.fn(),
+          },
+        },
+      }),
     },
     from: vi.fn(),
   },
 }));
 
-// Mock DashboardLayout
-vi.mock('@/components/DashboardLayout', () => ({
-  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+vi.mock('@/lib/queries/serviceQueries', () => ({
+  getServicesByStylist: vi.fn(),
 }));
+
+const mockedGetServicesByStylist = getServicesByStylist as unknown as Mock;
 
 const renderServices = () => {
   const queryClient = new QueryClient({
@@ -45,202 +79,175 @@ const renderServices = () => {
   );
 };
 
-describe('Services', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    
-    // Mock successful service queries
-    (supabase.from as any).mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      order: vi.fn().mockResolvedValue({
-        data: [
-          {
-            id: '1',
-            name: 'Haircut',
-            description: 'Professional haircut',
-            duration: 60,
-            price: 50,
-            category: 'Hair'
-          }
-        ],
-        error: null
-      }),
-      insert: vi.fn().mockResolvedValue({ data: null, error: null }),
-      update: vi.fn().mockResolvedValue({ data: null, error: null }),
-      delete: vi.fn().mockResolvedValue({ data: null, error: null }),
-    });
+let insertMock: Mock;
+let updateEqMock: Mock;
+let deleteEqMock: Mock;
+
+beforeEach(() => {
+  vi.clearAllMocks();
+
+  confirmMock.mockClear();
+  confirmMock.mockReturnValue(true);
+
+  mockedGetServicesByStylist.mockReset();
+  mockedGetServicesByStylist.mockResolvedValue([mockService]);
+
+  insertMock = vi.fn().mockResolvedValue({ data: null, error: null });
+  updateEqMock = vi.fn().mockResolvedValue({ data: null, error: null });
+  deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+
+  (supabase.from as unknown as Mock).mockImplementation((table: string) => {
+    if (table === 'stylist_profiles') {
+      return {
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: mockStylistProfile,
+              error: null,
+            }),
+          }),
+        }),
+      };
+    }
+
+    if (table === 'stylist_services') {
+      return {
+        insert: insertMock,
+        update: vi.fn(() => ({
+          eq: updateEqMock,
+        })),
+        delete: vi.fn(() => ({
+          eq: deleteEqMock,
+        })),
+      };
+    }
+
+    return {};
   });
+});
+
+describe('Services', () => {
+  const waitForServiceList = async () => {
+    await waitFor(() => {
+      expect(screen.getByText('Haircut')).toBeInTheDocument();
+    });
+  };
 
   describe('Services - Delete Double Submit Prevention', () => {
     it('should prevent multiple rapid clicks on delete button', async () => {
       renderServices();
 
-      // Wait for services to load
-      await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
-      });
+      await waitForServiceList();
 
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
-      // First click
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+
       fireEvent.click(deleteButton);
-      
-      // Second click immediately
       fireEvent.click(deleteButton);
-      
-      // Should only call delete once
-      await waitFor(() => {
-        expect(supabase.from).toHaveBeenCalledTimes(2); // One for fetch, one for delete
-      });
-    });
-
-    it('should disable delete button during submission', async () => {
-      renderServices();
 
       await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
-      });
-
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
-      fireEvent.click(deleteButton);
-      
-      // Button should be disabled during submission
-      expect(deleteButton).toBeDisabled();
-    });
-
-    it('should show loading indicator during delete', async () => {
-      renderServices();
-
-      await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
-      });
-
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
-      fireEvent.click(deleteButton);
-      
-      // Should show loading state
-      expect(screen.getByText(/deleting/i)).toBeInTheDocument();
-    });
-
-    it('should re-enable form after successful delete', async () => {
-      renderServices();
-
-      await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
-      });
-
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
-      fireEvent.click(deleteButton);
-      
-      // Wait for delete to complete
-      await waitFor(() => {
-        expect(deleteButton).not.toBeDisabled();
+        expect(deleteEqMock).toHaveBeenCalledTimes(1);
       });
     });
   });
 
   describe('Services - Loading State Visibility', () => {
     it('should show loading spinner during delete', async () => {
+      let resolveDelete: ((value: { error: any }) => void) | undefined;
+      deleteEqMock.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveDelete = resolve;
+          })
+      );
+
       renderServices();
+      await waitForServiceList();
+
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+
+      fireEvent.click(deleteButton);
+
+      expect(deleteButton).toBeDisabled();
+      expect(deleteButton.querySelector('.animate-spin')).toBeTruthy();
+
+      resolveDelete?.({ error: null });
 
       await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton.querySelector('.animate-spin')).toBeNull();
       });
-
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
-      fireEvent.click(deleteButton);
-      
-      expect(screen.getByTestId('delete-loading-1')).toBeInTheDocument();
     });
 
-    it('should hide loading indicator after completion', async () => {
+    it('should hide loading spinner after completion', async () => {
       renderServices();
+      await waitForServiceList();
 
-      await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
-      });
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
 
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
       fireEvent.click(deleteButton);
-      
+
       await waitFor(() => {
-        expect(screen.queryByTestId('delete-loading-1')).not.toBeInTheDocument();
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton.querySelector('.animate-spin')).toBeNull();
       });
     });
   });
 
   describe('Services - Button Disabled States', () => {
-    it('should disable delete button during deletion', async () => {
+    it('should disable delete button while submission is in progress', async () => {
+      let resolveDelete: ((value: { error: any }) => void) | undefined;
+      deleteEqMock.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveDelete = resolve;
+          })
+      );
+
       renderServices();
+      await waitForServiceList();
+
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+
+      fireEvent.click(deleteButton);
+
+      expect(deleteButton).toBeDisabled();
+
+      resolveDelete?.({ error: null });
 
       await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /delete service/i })).not.toBeDisabled();
       });
-
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
-      fireEvent.click(deleteButton);
-      
-      expect(deleteButton).toBeDisabled();
     });
   });
 
   describe('Services - Form Re-enabling', () => {
-    it('should close dialog after successful delete', async () => {
+    it('should reset deleting state after successful delete', async () => {
       renderServices();
+      await waitForServiceList();
 
-      await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
-      });
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
 
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
       fireEvent.click(deleteButton);
-      
+
       await waitFor(() => {
-        expect(screen.queryByTestId('delete-dialog')).not.toBeInTheDocument();
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton).not.toBeDisabled();
       });
     });
 
     it('should re-enable form after delete error', async () => {
-      // Mock delete error
-      (supabase.from as any).mockReturnValue({
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        order: vi.fn().mockResolvedValue({
-          data: [
-            {
-              id: '1',
-              name: 'Haircut',
-              description: 'Professional haircut',
-              duration: 60,
-              price: 50,
-              category: 'Hair'
-            }
-          ],
-          error: null
-        }),
-        delete: vi.fn().mockResolvedValue({ data: null, error: { message: 'Delete failed' } }),
-      });
+      deleteEqMock.mockResolvedValueOnce({ error: { message: 'Delete failed' } });
 
       renderServices();
+      await waitForServiceList();
 
-      await waitFor(() => {
-        expect(screen.getByText('Haircut')).toBeInTheDocument();
-      });
+      const deleteButton = screen.getByRole('button', { name: /delete service/i });
 
-      const deleteButton = screen.getByTestId('delete-service-1');
-      
       fireEvent.click(deleteButton);
-      
+
       await waitFor(() => {
-        expect(deleteButton).not.toBeDisabled();
+        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        expect(refreshedButton).not.toBeDisabled();
       });
     });
   });
