@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+﻿import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
@@ -84,6 +84,16 @@ const renderServices = () => {
 let insertMock: Mock;
 let updateEqMock: Mock;
 let deleteEqMock: Mock;
+let serviceTypeSelectMock: Mock;
+let serviceTypeSelectEqMock: Mock;
+let serviceTypeSelectOrderMock: Mock;
+let serviceTypeUpdateMock: Mock;
+let serviceTypeUpdateEqMock: Mock;
+let serviceTypeInsertMock: Mock;
+let serviceTypeInsertSelectMock: Mock;
+let serviceTypeInsertMaybeSingleMock: Mock;
+let serviceTypeDeleteMock: Mock;
+let serviceTypeDeleteEqMock: Mock;
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -97,6 +107,36 @@ beforeEach(() => {
   insertMock = vi.fn().mockResolvedValue({ data: null, error: null });
   updateEqMock = vi.fn().mockResolvedValue({ data: null, error: null });
   deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+  serviceTypeSelectOrderMock = vi.fn().mockResolvedValue({ data: [], error: null });
+  serviceTypeSelectEqMock = vi.fn().mockReturnValue({
+    order: serviceTypeSelectOrderMock,
+  });
+  serviceTypeSelectMock = vi.fn().mockReturnValue({
+    eq: serviceTypeSelectEqMock,
+  });
+  serviceTypeUpdateEqMock = vi.fn().mockResolvedValue({ error: null });
+  serviceTypeUpdateMock = vi.fn(() => ({
+    eq: serviceTypeUpdateEqMock,
+  }));
+  serviceTypeInsertMaybeSingleMock = vi.fn().mockResolvedValue({
+    data: {
+      id: 'color-1',
+      stylist_id: mockStylistProfile.id,
+      service_type: 'Color',
+      color: 'hsl(270 85% 60%)',
+    },
+    error: null,
+  });
+  serviceTypeInsertSelectMock = vi.fn(() => ({
+    maybeSingle: serviceTypeInsertMaybeSingleMock,
+  }));
+  serviceTypeInsertMock = vi.fn(() => ({
+    select: serviceTypeInsertSelectMock,
+  }));
+  serviceTypeDeleteEqMock = vi.fn().mockResolvedValue({ error: null });
+  serviceTypeDeleteMock = vi.fn(() => ({
+    eq: serviceTypeDeleteEqMock,
+  }));
 
   (supabase.from as unknown as Mock).mockImplementation((table: string) => {
     if (table === 'stylist_profiles') {
@@ -254,3 +294,6 @@ describe('Services', () => {
     });
   });
 });
+
+
+
