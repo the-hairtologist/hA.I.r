@@ -28,6 +28,8 @@ vi.mock('@/integrations/supabase/client', () => ({
       on: vi.fn().mockReturnThis(),
       subscribe: vi.fn().mockReturnThis(),
     })),
+    removeChannel: vi.fn(() => ({
+    })),
   },
 }));
 
@@ -57,6 +59,13 @@ vi.mock('@/hooks/useFormSubmit', () => ({
   })
 }));
 
+// Mock requestDeduplicator
+vi.mock('@/lib/api/requestDeduplicator', () => ({
+  requestDeduplicator: {
+    deduplicate: vi.fn((key, fn) => fn())
+  }
+}));
+
 // Mock DashboardLayout
 vi.mock('@/components/DashboardLayout', () => ({
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -81,6 +90,18 @@ const renderMessages = () => {
   );
 };
 
+const renderMessagesWithConversation = async () => {
+  const result = renderMessages();
+  // Wait for conversations to load and click the first one
+  const conversation = await screen.findByText('Test Client');
+  await userEvent.click(conversation);
+  // Wait for message input to appear
+  await waitFor(() => {
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  }, { timeout: 5000 });
+  return result;
+};
+
 describe('Messages - Double Submit Prevention', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -93,29 +114,22 @@ describe('Messages - Double Submit Prevention', () => {
       delete: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       order: vi.fn().mockReturnThis(),
+      or: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
       throwOnError: vi.fn().mockReturnThis()
     };
 
     // Mock specific table queries for Messages component
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'messages') {
+    (supabase.from as any).mockImplementation((table: string) => {      if (table === 'profiles') {
         return {
           ...mockFromChain,
-          insert: vi.fn().mockResolvedValue({ 
-            data: { 
-              id: 'test-message-id', 
-              content: 'Test message', 
-              created_at: new Date().toISOString() 
-            }, 
-            error: null 
-          }),
           select: vi.fn().mockReturnValue({
             ...mockFromChain,
-            order: vi.fn().mockReturnValue({
+            or: vi.fn().mockReturnValue({
               ...mockFromChain,
-              throwOnError: vi.fn().mockResolvedValue({ 
+              order: vi.fn().mockResolvedValue({ 
                 data: [{ id: "msg-1", sender_id: "client-1", recipient_id: "test-user-id", message_text: "Hello", created_at: new Date().toISOString(), sender: { id: "client-1", full_name: "Test Client", email: "client@test.com" }, recipient: { id: "test-user-id", full_name: "Test User", email: "test@example.com" } }], 
                 error: null 
               })
@@ -134,7 +148,7 @@ describe('Messages - Double Submit Prevention', () => {
   });
 
   it('should prevent multiple rapid message sends', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -160,7 +174,7 @@ describe('Messages - Double Submit Prevention', () => {
   });
 
   it('should disable send button during submission', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -180,7 +194,7 @@ describe('Messages - Double Submit Prevention', () => {
   });
 
   it('should show loading indicator during message send', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -198,7 +212,7 @@ describe('Messages - Double Submit Prevention', () => {
   });
 
   it('should re-enable form after successful send', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -225,28 +239,21 @@ describe('Messages - Loading State Visibility', () => {
       delete: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       order: vi.fn().mockReturnThis(),
+      or: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
       throwOnError: vi.fn().mockReturnThis()
     };
 
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'messages') {
+    (supabase.from as any).mockImplementation((table: string) => {      if (table === 'profiles') {
         return {
           ...mockFromChain,
-          insert: vi.fn().mockResolvedValue({ 
-            data: { 
-              id: 'test-message-id', 
-              content: 'Test message', 
-              created_at: new Date().toISOString() 
-            }, 
-            error: null 
-          }),
           select: vi.fn().mockReturnValue({
             ...mockFromChain,
-            order: vi.fn().mockReturnValue({
+            or: vi.fn().mockReturnValue({
               ...mockFromChain,
-              throwOnError: vi.fn().mockResolvedValue({ 
+              order: vi.fn().mockResolvedValue({ 
                 data: [{ id: "msg-1", sender_id: "client-1", recipient_id: "test-user-id", message_text: "Hello", created_at: new Date().toISOString(), sender: { id: "client-1", full_name: "Test Client", email: "client@test.com" }, recipient: { id: "test-user-id", full_name: "Test User", email: "test@example.com" } }], 
                 error: null 
               })
@@ -264,7 +271,7 @@ describe('Messages - Loading State Visibility', () => {
   });
 
   it('should show loading spinner during message send', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -282,7 +289,7 @@ describe('Messages - Loading State Visibility', () => {
   });
 
   it('should hide loading indicator after send completes', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -312,8 +319,10 @@ describe('Messages - Button Disabled States', () => {
       delete: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       order: vi.fn().mockReturnThis(),
+      or: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
       throwOnError: vi.fn().mockReturnThis()
     };
 
@@ -340,7 +349,7 @@ describe('Messages - Button Disabled States', () => {
   });
 
   it('should disable send button when message is empty', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const sendButton = screen.getByRole('button', { name: /send/i });
     
@@ -349,7 +358,7 @@ describe('Messages - Button Disabled States', () => {
   });
 
   it('should enable send button when message has content', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -379,28 +388,21 @@ describe('Messages - Form Re-enabling', () => {
       delete: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       order: vi.fn().mockReturnThis(),
+      or: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
       throwOnError: vi.fn().mockReturnThis()
     };
 
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'messages') {
+    (supabase.from as any).mockImplementation((table: string) => {      if (table === 'profiles') {
         return {
           ...mockFromChain,
-          insert: vi.fn().mockResolvedValue({ 
-            data: { 
-              id: 'test-message-id', 
-              content: 'Test message', 
-              created_at: new Date().toISOString() 
-            }, 
-            error: null 
-          }),
           select: vi.fn().mockReturnValue({
             ...mockFromChain,
-            order: vi.fn().mockReturnValue({
+            or: vi.fn().mockReturnValue({
               ...mockFromChain,
-              throwOnError: vi.fn().mockResolvedValue({ 
+              order: vi.fn().mockResolvedValue({ 
                 data: [{ id: "msg-1", sender_id: "client-1", recipient_id: "test-user-id", message_text: "Hello", created_at: new Date().toISOString(), sender: { id: "client-1", full_name: "Test Client", email: "client@test.com" }, recipient: { id: "test-user-id", full_name: "Test User", email: "test@example.com" } }], 
                 error: null 
               })
@@ -418,7 +420,7 @@ describe('Messages - Form Re-enabling', () => {
   });
 
   it('should re-enable form and clear input after successful send', async () => {
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -445,14 +447,16 @@ describe('Messages - Form Re-enabling', () => {
       delete: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       order: vi.fn().mockReturnThis(),
+      or: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
       throwOnError: vi.fn().mockReturnThis()
     };
 
     (supabase.from as any).mockImplementation(() => mockFromChain);
     
-    renderMessages();
+    await renderMessagesWithConversation();
     
     const messageInput = screen.getByRole('textbox');
     const sendButton = screen.getByRole('button', { name: /send/i });
@@ -466,5 +470,7 @@ describe('Messages - Form Re-enabling', () => {
     }, { timeout: 3000 });
   });
 });
+
+
 
 
