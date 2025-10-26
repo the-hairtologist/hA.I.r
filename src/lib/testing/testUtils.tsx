@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Testing Utilities
  * Helper functions and setup for component testing
  */
@@ -57,9 +57,17 @@ export const createMockSupabaseClient = () => ({
     single: vi.fn().mockResolvedValue({ data: null, error: null }),
   })),
   auth: {
-    getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
-    signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
-    signOut: vi.fn().mockResolvedValue({ error: null }),
+      getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
+      getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+      signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
+      signOut: vi.fn().mockResolvedValue({ error: null }),
+      onAuthStateChange: vi.fn().mockReturnValue({
+        data: {
+          subscription: {
+            unsubscribe: vi.fn()
+          }
+        }
+      })
   },
   storage: {
     from: vi.fn(() => ({
