@@ -15,13 +15,20 @@ export const commonValidators = {
     .max(255, { message: "Email must be less than 255 characters" })
     .toLowerCase(),
   
-  phone: z.string()
-    .trim()
-    .regex(/^[\d\s\-+()]+$/, { message: "Please enter a valid phone number" })
-    .min(10, { message: "Phone number must be at least 10 digits" })
-    .max(20, { message: "Phone number must be less than 20 characters" })
-    .optional()
-    .or(z.literal('')),
+phone: z.string()
+  .trim()
+  .regex(/^[\d\s\-+()]+$/, { message: "Please enter a valid phone number" })
+  .refine((val) => {
+    // Count only digits to ensure minimum digit requirement
+    const digits = val.replace(/\D/g, '');
+    return digits.length >= 10;
+  }, { message: "Phone number must contain at least 10 digits" })
+  .refine((val) => {
+    // Ensure total length isn't excessive
+    return val.length <= 20;
+  }, { message: "Phone number must be less than 20 characters" })
+  .optional()
+  .or(z.literal('')),
   
   name: z.string()
     .trim()
@@ -297,8 +304,8 @@ export const sanitizeExternalUrl = (url: string): string | null => {
 /**
  * Deep sanitize object (removes undefined, null, empty strings)
  */
-export const sanitizeObject = <T extends Record<string, any>>(obj: T): Partial<T> => {
-  const result: any = {};
+export const sanitizeObject = <T extends Record<string, unknown>>(obj: T): Partial<T> => {
+  const result: Partial<T> = {};
   for (const key in obj) {
     const value = obj[key];
     if (value !== undefined && value !== null && value !== '') {

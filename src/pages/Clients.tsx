@@ -67,6 +67,26 @@ interface ClientProfile {
   upcoming_appointments?: number;
 }
 
+interface ClientFormula {
+  id: string;
+  stylist_id: string;
+  client_id: string;
+  formula_text: string;
+  color_line?: string | null;
+  developer_volume?: string | null;
+  processing_time_minutes?: number | null;
+  instructions?: string | null;
+  application_notes?: string | null;
+  what_worked?: string | null;
+  what_to_avoid?: string | null;
+  hair_photo_url?: string | null;
+  created_at: string;
+  formula_name?: string;
+  formula_details?: string;
+  notes?: string;
+  result_notes?: string;
+}
+
 export default function Clients() {
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -94,7 +114,7 @@ export default function Clients() {
     allergies: "",
     notes: "",
   });
-  const [clientFormulas, setClientFormulas] = useState<any[]>([]);
+  const [clientFormulas, setClientFormulas] = useState<ClientFormula[]>([]);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
