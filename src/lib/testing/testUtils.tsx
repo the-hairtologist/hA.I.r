@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Testing Utilities
  * Helper functions and setup for component testing
  */
@@ -169,11 +169,6 @@ export const mockFormula = {
   color_line: 'Test Color Line',
 };
 
-// Re-export testing library utilities - screen queries
-export const screen = {
-  getByText: (text: string | RegExp) => document.body.querySelector(`*:not(script):not(style)`) as HTMLElement,
-  getByRole: (role: string, options?: any) => document.body.querySelector(`[role="${role}"]`) as HTMLElement,
-  getByLabelText: (text: string | RegExp) => document.body.querySelector('label') as HTMLElement,
-  getByTestId: (testId: string) => document.body.querySelector(`[data-testid="${testId}"]`) as HTMLElement,
-  queryByText: (text: string | RegExp) => document.body.querySelector(`*:not(script):not(style)`) as HTMLElement | null,
-};
+
+// Re-export testing library utilities
+export { screen } from '@testing-library/react';

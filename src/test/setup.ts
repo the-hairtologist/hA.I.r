@@ -1,4 +1,24 @@
-﻿import '@testing-library/jest-dom'
+import '@testing-library/jest-dom'
+
+// Fix JSDOM layout issues for accessibility testing
+Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
+  get() {
+    return this.parentNode || document.body;
+  },
+});
+
+// Fix getComputedStyle for JSDOM
+global.getComputedStyle = (element) => {
+  return {
+    display: 'block',
+    visibility: 'visible',
+    getPropertyValue: (prop) => {
+      if (prop === 'display') return 'block';
+      if (prop === 'visibility') return 'visible';
+      return '';
+    }
+  };
+};
 import { cleanup } from '@testing-library/react'
 import { afterEach, vi } from 'vitest'
 
