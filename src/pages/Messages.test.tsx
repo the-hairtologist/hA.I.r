@@ -116,7 +116,7 @@ describe('Messages - Double Submit Prevention', () => {
             order: vi.fn().mockReturnValue({
               ...mockFromChain,
               throwOnError: vi.fn().mockResolvedValue({ 
-                data: [], 
+                data: [{ id: "msg-1", sender_id: "client-1", recipient_id: "test-user-id", message_text: "Hello", created_at: new Date().toISOString(), sender: { id: "client-1", full_name: "Test Client", email: "client@test.com" }, recipient: { id: "test-user-id", full_name: "Test User", email: "test@example.com" } }], 
                 error: null 
               })
             })
@@ -247,7 +247,7 @@ describe('Messages - Loading State Visibility', () => {
             order: vi.fn().mockReturnValue({
               ...mockFromChain,
               throwOnError: vi.fn().mockResolvedValue({ 
-                data: [], 
+                data: [{ id: "msg-1", sender_id: "client-1", recipient_id: "test-user-id", message_text: "Hello", created_at: new Date().toISOString(), sender: { id: "client-1", full_name: "Test Client", email: "client@test.com" }, recipient: { id: "test-user-id", full_name: "Test User", email: "test@example.com" } }], 
                 error: null 
               })
             })
@@ -325,7 +325,7 @@ describe('Messages - Button Disabled States', () => {
           order: vi.fn().mockReturnValue({
             ...mockFromChain,
             throwOnError: vi.fn().mockResolvedValue({ 
-              data: [], 
+              data: [{ id: "msg-1", sender_id: "client-1", recipient_id: "test-user-id", message_text: "Hello", created_at: new Date().toISOString(), sender: { id: "client-1", full_name: "Test Client", email: "client@test.com" }, recipient: { id: "test-user-id", full_name: "Test User", email: "test@example.com" } }], 
               error: null 
             })
           })
@@ -401,7 +401,7 @@ describe('Messages - Form Re-enabling', () => {
             order: vi.fn().mockReturnValue({
               ...mockFromChain,
               throwOnError: vi.fn().mockResolvedValue({ 
-                data: [], 
+                data: [{ id: "msg-1", sender_id: "client-1", recipient_id: "test-user-id", message_text: "Hello", created_at: new Date().toISOString(), sender: { id: "client-1", full_name: "Test Client", email: "client@test.com" }, recipient: { id: "test-user-id", full_name: "Test User", email: "test@example.com" } }], 
                 error: null 
               })
             })
@@ -466,3 +466,5 @@ describe('Messages - Form Re-enabling', () => {
     }, { timeout: 3000 });
   });
 });
+
+
