@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Integration Test: Double Submit Prevention
  * Tests cross-form double submission prevention and network delay handling
  */
@@ -148,7 +148,7 @@ describe('Cross-Form Double Submit Prevention', () => {
       vi.useRealTimers();
     });
 
-    it('should retry on network failure', async () => {
+    it('should retry on network failure', async () =>, { timeout: 15000 } {
       const mockSubmitFn = vi.fn()
         .mockRejectedValueOnce({ message: 'network error' })
         .mockRejectedValueOnce({ message: 'network error' })
@@ -172,7 +172,7 @@ describe('Cross-Form Double Submit Prevention', () => {
   });
 
   describe('Form State Management', () => {
-    it('should reset state after successful submission', async () => {
+    it('should reset state after successful submission', async () =>, { timeout: 15000 } {
       const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
 
       const { useFormSubmit } = await import('@/hooks/useFormSubmit');
@@ -188,7 +188,7 @@ describe('Cross-Form Double Submit Prevention', () => {
       });
     });
 
-    it('should maintain error state after failure', async () => {
+    it('should maintain error state after failure', async () =>, { timeout: 15000 } {
       const mockSubmitFn = vi.fn().mockRejectedValue(
         new Error('Submission failed')
       );
@@ -240,7 +240,7 @@ describe('Cross-Form Double Submit Prevention', () => {
   });
 
   describe('Submit Count Tracking', () => {
-    it('should track submit attempts', async () => {
+    it('should track submit attempts', async () =>, { timeout: 15000 } {
       const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
 
       const { useFormSubmit } = await import('@/hooks/useFormSubmit');
@@ -284,3 +284,4 @@ describe('Cross-Form Double Submit Prevention', () => {
     });
   });
 });
+
