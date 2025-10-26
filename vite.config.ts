@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from "vite";
+﻿import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
@@ -21,13 +21,13 @@ export default defineConfig(({ mode }) => {
   
   const missingVars = requiredEnvVars.filter(key => !env[key]);
   if (missingVars.length > 0) {
-    console.error('❌ Missing required environment variables:', missingVars.join(', '));
+    console.error('âŒ Missing required environment variables:', missingVars.join(', '));
     process.exit(1);
   }
   
-  console.log('✅ All required environment variables present');
-  console.log('📍 Supabase URL:', env.VITE_SUPABASE_URL);
-  console.log('🔑 Supabase Key:', env.VITE_SUPABASE_PUBLISHABLE_KEY ? '✓ Set' : '✗ Missing');
+  console.log('âœ… All required environment variables present');
+  console.log('ðŸ“ Supabase URL:', env.VITE_SUPABASE_URL);
+  console.log('ðŸ”‘ Supabase Key:', env.VITE_SUPABASE_PUBLISHABLE_KEY ? 'âœ“ Set' : 'âœ— Missing');
   
   return {
   server: {
@@ -106,6 +106,8 @@ export default defineConfig(({ mode }) => {
           ]
         },
       workbox: {
+        maximumFileSizeToCacheInBytes: 5000000,
+        globIgnores: ['**/stats.html'],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           // JS/CSS bundles - aggressive caching
@@ -236,3 +238,4 @@ export default defineConfig(({ mode }) => {
   },
 };
 });
+
