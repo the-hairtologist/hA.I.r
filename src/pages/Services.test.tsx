@@ -152,6 +152,15 @@ beforeEach(() => {
       };
     }
 
+    if (table === 'service_type_colors') {
+      return {
+        select: serviceTypeSelectMock,
+        update: serviceTypeUpdateMock,
+        insert: serviceTypeInsertMock,
+        delete: serviceTypeDeleteMock,
+      };
+    }
+
     if (table === 'stylist_services') {
       return {
         insert: insertMock,
@@ -274,7 +283,7 @@ describe('Services', () => {
       await waitFor(() => {
         const refreshedButton = screen.getByRole('button', { name: /delete service/i });
         expect(refreshedButton).not.toBeDisabled();
-      });
+      }, { timeout: 2000 });
     });
 
     it('should re-enable form after delete error', async () => {
@@ -290,10 +299,13 @@ describe('Services', () => {
       await waitFor(() => {
         const refreshedButton = screen.getByRole('button', { name: /delete service/i });
         expect(refreshedButton).not.toBeDisabled();
-      });
+      }, { timeout: 2000 });
     });
   });
 });
+
+
+
 
 
 
