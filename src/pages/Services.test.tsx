@@ -8,6 +8,8 @@ import { getServicesByStylist } from '@/lib/queries/serviceQueries';
 
 type Mock = ReturnType<typeof vi.fn>;
 
+type SupabaseMutationResult = { error: { message: string } | null };
+
 const mockStylistProfile = {
   id: 'stylist-123',
   user_id: 'user-123',
@@ -152,10 +154,10 @@ describe('Services', () => {
 
   describe('Services - Loading State Visibility', () => {
     it('should show loading spinner during delete', async () => {
-      let resolveDelete: ((value: { error: any }) => void) | undefined;
+      let resolveDelete: ((value: SupabaseMutationResult) => void) | undefined;
       deleteEqMock.mockImplementationOnce(
         () =>
-          new Promise((resolve) => {
+          new Promise<SupabaseMutationResult>((resolve) => {
             resolveDelete = resolve;
           })
       );
@@ -195,10 +197,10 @@ describe('Services', () => {
 
   describe('Services - Button Disabled States', () => {
     it('should disable delete button while submission is in progress', async () => {
-      let resolveDelete: ((value: { error: any }) => void) | undefined;
+      let resolveDelete: ((value: SupabaseMutationResult) => void) | undefined;
       deleteEqMock.mockImplementationOnce(
         () =>
-          new Promise((resolve) => {
+          new Promise<SupabaseMutationResult>((resolve) => {
             resolveDelete = resolve;
           })
       );
