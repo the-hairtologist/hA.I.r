@@ -14,7 +14,7 @@ interface StandardFormFieldProps {
   label: string;
   type?: 'text' | 'email' | 'tel' | 'number' | 'textarea' | 'password';
   value: string | number;
-  onChange: (value: any) => void;
+  onChange: (value: string | number) => void;
   onBlur?: () => void;
   error?: string;
   touched?: boolean;
@@ -106,3 +106,4 @@ export const StandardFormField = ({
     </div>
   );
 };
+

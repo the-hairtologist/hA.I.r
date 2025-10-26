@@ -89,6 +89,26 @@ const waitForSettingsReady = async () => {
   });
 };
 
+const getSaveButton = async () => {
+  return await screen.findByRole('button', { name: /save profile/i });
+};
+
+const changeFullName = (value: string) => {
+  fireEvent.change(screen.getByLabelText('Full Name'), { target: { value } });
+};
+
+const switchToSecurityTab = async () => {
+  const securityTab = screen.getByRole('tab', { name: /security/i });
+  fireEvent.click(securityTab);
+  await screen.findByLabelText('Current Password');
+};
+
+const setPasswordFields = () => {
+  fireEvent.change(screen.getByLabelText('Current Password'), { target: { value: 'oldPass123' } });
+  fireEvent.change(screen.getByLabelText('New Password'), { target: { value: 'newPass123' } });
+  fireEvent.change(screen.getByLabelText('Confirm New Password'), { target: { value: 'newPass123' } });
+};
+
 let profileUpdateEqMock: Mock;
 let stylistUpdateEqMock: Mock;
 let clientUpdateEqMock: Mock;
@@ -230,9 +250,9 @@ describe('Settings', () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Updated User' } });
+      changeFullName('Updated User');
 
-      const saveButton = screen.getByRole('button', { name: /save profile/i });
+      const saveButton = await getSaveButton();
 
       fireEvent.click(saveButton);
       fireEvent.click(saveButton);
@@ -263,21 +283,21 @@ describe('Settings', () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Updated User' } });
+      changeFullName('Updated User');
 
-      const saveButton = screen.getByRole('button', { name: /save profile/i });
+      const saveButton = await getSaveButton();
 
       fireEvent.click(saveButton);
 
       expect(saveButton).toBeDisabled();
+      expect(saveButton.getAttribute('aria-busy')).toBe('true');
       expect(screen.getByText(/saving\.\.\./i)).toBeInTheDocument();
 
       resolveProfile?.({ data: null, error: null });
       resolveStylist?.({ data: null, error: null });
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /save profile/i })).not.toBeDisabled();
-      });
+      await waitFor(() => expect(saveButton.getAttribute('aria-busy')).not.toBe('true'));
+      expect(screen.queryByText(/saving\.\.\./i)).not.toBeInTheDocument();
     });
 
     it('should show loading indicator during profile save', async () => {
@@ -292,9 +312,9 @@ describe('Settings', () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Updated User' } });
+      changeFullName('Updated User');
 
-      const saveButton = screen.getByRole('button', { name: /save profile/i });
+      const saveButton = await getSaveButton();
 
       fireEvent.click(saveButton);
 
@@ -302,39 +322,34 @@ describe('Settings', () => {
 
       resolveProfile?.({ data: null, error: null });
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /save profile/i })).not.toBeDisabled();
-      });
+      await waitFor(() => expect(screen.queryByText(/saving\.\.\./i)).not.toBeInTheDocument());
     });
 
-    it('should re-enable form after successful save', async () => {
+    it('should allow new changes after successful save', async () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Updated User' } });
+      changeFullName('Updated User');
 
-      const saveButton = screen.getByRole('button', { name: /save profile/i });
+      const saveButton = await getSaveButton();
 
       fireEvent.click(saveButton);
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /save profile/i })).not.toBeDisabled();
-      });
+      await waitFor(() => expect(saveButton.getAttribute('aria-busy')).not.toBe('true'));
+
+      changeFullName('Another User');
+
+      await waitFor(() => expect(saveButton).not.toBeDisabled());
     });
   });
 
   describe('Settings - Password Change Double Submit Prevention', () => {
-    const fillPasswordFields = () => {
-      fireEvent.change(screen.getByLabelText('Current Password'), { target: { value: 'oldPass123' } });
-      fireEvent.change(screen.getByLabelText('New Password'), { target: { value: 'newPass123' } });
-      fireEvent.change(screen.getByLabelText('Confirm New Password'), { target: { value: 'newPass123' } });
-    };
-
     it('should prevent multiple rapid password change submissions', async () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fillPasswordFields();
+      await switchToSecurityTab();
+      setPasswordFields();
 
       const passwordButton = screen.getByRole('button', { name: /update password/i });
 
@@ -358,7 +373,8 @@ describe('Settings', () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fillPasswordFields();
+      await switchToSecurityTab();
+      setPasswordFields();
 
       const passwordButton = screen.getByRole('button', { name: /update password/i });
 
@@ -369,9 +385,11 @@ describe('Settings', () => {
 
       resolveUpdate?.({ data: null, error: null });
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /update password/i })).not.toBeDisabled();
-      });
+      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
+      expect(screen.getByLabelText('Current Password')).toHaveValue('');
+      expect(screen.getByLabelText('New Password')).toHaveValue('');
+      expect(screen.getByLabelText('Confirm New Password')).toHaveValue('');
+      expect(passwordButton).toBeDisabled();
     });
 
     it('should show loading indicator during password update', async () => {
@@ -386,7 +404,8 @@ describe('Settings', () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fillPasswordFields();
+      await switchToSecurityTab();
+      setPasswordFields();
 
       const passwordButton = screen.getByRole('button', { name: /update password/i });
 
@@ -396,24 +415,25 @@ describe('Settings', () => {
 
       resolveUpdate?.({ data: null, error: null });
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /update password/i })).not.toBeDisabled();
-      });
+      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
     });
 
-    it('should re-enable password form after completion', async () => {
+    it('should allow another password update after completion', async () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fillPasswordFields();
+      await switchToSecurityTab();
+      setPasswordFields();
 
       const passwordButton = screen.getByRole('button', { name: /update password/i });
 
       fireEvent.click(passwordButton);
 
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: /update password/i })).not.toBeDisabled();
-      });
+      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
+
+      setPasswordFields();
+
+      await waitFor(() => expect(passwordButton).not.toBeDisabled());
     });
   });
 
@@ -424,16 +444,18 @@ describe('Settings', () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Updated User' } });
+      changeFullName('Updated User');
 
-      const saveButton = screen.getByRole('button', { name: /save profile/i });
+      const saveButton = await getSaveButton();
 
       fireEvent.click(saveButton);
 
       await waitFor(() => {
         expect(toastMock.error).toHaveBeenCalledWith('Failed to save profile');
-        expect(screen.getByRole('button', { name: /save profile/i })).not.toBeDisabled();
       });
+
+      await waitFor(() => expect(saveButton.getAttribute('aria-busy')).not.toBe('true'));
+      expect(saveButton).not.toBeDisabled();
     });
 
     it('should handle password change error gracefully', async () => {
@@ -442,9 +464,8 @@ describe('Settings', () => {
       renderSettings();
       await waitForSettingsReady();
 
-      fireEvent.change(screen.getByLabelText('Current Password'), { target: { value: 'oldPass123' } });
-      fireEvent.change(screen.getByLabelText('New Password'), { target: { value: 'newPass123' } });
-      fireEvent.change(screen.getByLabelText('Confirm New Password'), { target: { value: 'newPass123' } });
+      await switchToSecurityTab();
+      setPasswordFields();
 
       const passwordButton = screen.getByRole('button', { name: /update password/i });
 
@@ -452,8 +473,10 @@ describe('Settings', () => {
 
       await waitFor(() => {
         expect(toastMock.error).toHaveBeenCalledWith('Failed to change password');
-        expect(screen.getByRole('button', { name: /update password/i })).not.toBeDisabled();
       });
+
+      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
+      expect(passwordButton).not.toBeDisabled();
     });
   });
 });
