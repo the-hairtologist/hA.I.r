@@ -11,6 +11,10 @@ vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     auth: {
       getUser: vi.fn(),
+      getSession: vi.fn().mockResolvedValue({
+        data: { session: null },
+        error: null
+      }),
       onAuthStateChange: vi.fn().mockReturnValue({
         data: {
           subscription: {
@@ -25,6 +29,32 @@ vi.mock('@/integrations/supabase/client', () => ({
       subscribe: vi.fn().mockReturnThis(),
     })),
   },
+}));
+
+// Mock useAuth hook
+vi.mock('@/hooks/useAuth', () => ({
+  useAuth: vi.fn().mockReturnValue({
+    user: { id: 'test-user-id', email: 'test@example.com' },
+    loading: false,
+    session: { user: { id: 'test-user-id' } },
+    isAuthenticated: true
+  })
+}));
+
+// Mock useUserRole hook
+vi.mock('@/hooks/useUserRole', () => ({
+  useUserRole: vi.fn().mockReturnValue({
+    roles: ['stylist'],
+    loading: false
+  })
+}));
+
+// Mock useFormSubmit hook
+vi.mock('@/hooks/useFormSubmit', () => ({
+  useFormSubmit: vi.fn().mockReturnValue({
+    handleSubmit: vi.fn(),
+    isSubmitting: false
+  })
 }));
 
 // Mock DashboardLayout
