@@ -1,4 +1,6 @@
-import '@testing-library/jest-dom'
+﻿import '@testing-library/jest-dom'
+import { cleanup } from '@testing-library/react'
+import { afterEach, vi } from 'vitest'
 
 // Fix JSDOM layout issues for accessibility testing
 Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
@@ -17,12 +19,32 @@ global.getComputedStyle = (element) => {
       if (prop === 'visibility') return 'visible';
       return '';
     }
-  };
+  } as any;
 };
-import { cleanup } from '@testing-library/react'
-import { afterEach, vi } from 'vitest'
 
-// Mock Supabase client - using the correct path that components import from
+// Mock window.matchMedia for responsive tests
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
+// Mock channel for realtime subscriptions
+const mockChannel = {
+  on: vi.fn().mockReturnThis(),
+  subscribe: vi.fn().mockResolvedValue({ status: 'SUBSCRIBED' }),
+  unsubscribe: vi.fn().mockResolvedValue({ status: 'UNSUBSCRIBED' }),
+};
+
+// Mock Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     from: vi.fn(() => ({
@@ -52,10 +74,12 @@ vi.mock('@/integrations/supabase/client', () => ({
         download: vi.fn().mockResolvedValue({ data: null, error: null }),
       })),
     },
+    channel: vi.fn(() => mockChannel),
+    removeChannel: vi.fn().mockResolvedValue({ status: 'ok' }),
   }
 }))
 
-// Also mock @/lib/supabase for any components that use that path
+// Also mock @/lib/supabase
 vi.mock('@/lib/supabase', () => ({
   supabase: {
     from: vi.fn(() => ({
@@ -85,10 +109,11 @@ vi.mock('@/lib/supabase', () => ({
         download: vi.fn().mockResolvedValue({ data: null, error: null }),
       })),
     },
+    channel: vi.fn(() => mockChannel),
+    removeChannel: vi.fn().mockResolvedValue({ status: 'ok' }),
   }
 }))
 
-// runs a cleanup after each test case (e.g. clearing jsdom)
 afterEach(() => {
   cleanup()
 })
