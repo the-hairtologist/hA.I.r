@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+﻿import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Home, Calendar, MessageSquare, User, Users, Sparkles, Shield, Activity, CalendarCheck, Settings, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,7 @@ import { logger } from "@/lib/logging/productionLogger";
 import { prefetchOnHover } from "@/lib/performance/ResourceHints";
 
 interface NavItem {
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   path: string;
   gradient: string;
@@ -345,3 +345,4 @@ export const MobileBottomNav = () => {
     </>
   );
 };
+

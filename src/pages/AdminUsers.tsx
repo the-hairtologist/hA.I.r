@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
+﻿import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface UserRole {
+  role: string;
+}
+
+interface AdminUser {
+  id: string;
+  full_name?: string;
+  email: string;
+  created_at: string;
+  user_roles?: UserRole[];
+}
+
 export default function AdminUsers() {
   const { user, isAdmin, loading } = useEnhancedAuth();
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState<string>('all');
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
@@ -72,7 +84,7 @@ export default function AdminUsers() {
     const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === 'all' ||
-      user.user_roles?.some((ur: any) => ur.role === filterRole);
+      user.user_roles?.some((ur) => ur.role === filterRole);
     return matchesSearch && matchesRole;
   });
 
@@ -254,7 +266,7 @@ export default function AdminUsers() {
 
                         {/* Roles and date */}
                         <div className="flex flex-wrap items-center gap-2">
-                          {user.user_roles?.map((ur: any) => (
+                          {user.user_roles?.map((ur) => (
                             <Badge key={ur.role} variant="secondary" className="text-xs">
                               {ur.role}
                             </Badge>
@@ -310,7 +322,7 @@ export default function AdminUsers() {
                                   <div>
                                     <p className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Roles</p>
                                     <div className="flex flex-wrap gap-2">
-                                      {selectedUser.user_roles?.map((ur: any) => (
+                                      {selectedUser.user_roles?.map((ur) => (
                                         <Badge key={ur.role} className="text-xs">{ur.role}</Badge>
                                       ))}
                                     </div>
@@ -345,3 +357,4 @@ export default function AdminUsers() {
     </DashboardLayout>
   );
 }
+
