@@ -24,7 +24,7 @@ describe('useResponsive', () => {
       writable: true,
       configurable: true,
       value: vi.fn().mockImplementation(query => ({
-        matches: query.includes('hover'),
+        matches: query.includes('hover') || query.includes('min-width') || query.includes('1536'),
         media: query,
         onchange: null,
         addListener: vi.fn(),
@@ -79,7 +79,7 @@ describe('useResponsive', () => {
   it('should detect breakpoints correctly', () => {
     const { result } = renderHook(() => useResponsive());
     
-    expect(result.current['2xl']).toBe(true); // >= 1536px  
+    expect(result.current.is2Xl).toBe(true); // >= 1536px  
     expect(result.current.width).toBeGreaterThan(1024);
     expect(result.current.isDesktop).toBe(true);
   });

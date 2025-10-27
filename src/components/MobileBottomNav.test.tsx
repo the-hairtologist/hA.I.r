@@ -83,7 +83,7 @@ describe('MobileBottomNav', () => {
       </BrowserRouter>
     );
     
-    expect(container.textContent).toContain('Dashboard');
+    expect(container.textContent).toContain('Users');
     expect(container.textContent).toContain('Admin');
   });
 
