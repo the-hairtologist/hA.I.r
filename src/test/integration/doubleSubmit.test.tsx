@@ -172,7 +172,7 @@ describe('Cross-Form Double Submit Prevention', () => {
   });
 
   describe('Form State Management', () => {
-    it('should reset state after successful submission', async () => { {
+    it('should reset state after successful submission', async () => {
       const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
 
       const { useFormSubmit } = await import('@/hooks/useFormSubmit');
@@ -188,7 +188,7 @@ describe('Cross-Form Double Submit Prevention', () => {
       });
     });
 
-    it('should maintain error state after failure', async () => { {
+    it('should maintain error state after failure', async () => {
       const mockSubmitFn = vi.fn().mockRejectedValue(
         new Error('Submission failed')
       );
@@ -240,7 +240,7 @@ describe('Cross-Form Double Submit Prevention', () => {
   });
 
   describe('Submit Count Tracking', () => {
-    it('should track submit attempts', async () => { {
+    it('should track submit attempts', async () => {
       const mockSubmitFn = vi.fn().mockResolvedValue(undefined);
 
       const { useFormSubmit } = await import('@/hooks/useFormSubmit');
