@@ -13,53 +13,44 @@ export const commonValidators = {
     .trim()
     .email({ message: "Please enter a valid email address" })
     .max(255, { message: "Email must be less than 255 characters" })
-    .toLowerCase(),
-  
-phone: z.string()
-  .trim()
-  .regex(/^[\d\s\-+()]+$/, { message: "Please enter a valid phone number" })
-  .refine((val) => {
-    // Count only digits to ensure minimum digit requirement
-    const digits = val.replace(/\D/g, '');
-    return digits.length >= 10;
-  }, { message: "Phone number must contain at least 10 digits" })
-  .refine((val) => {
-    // Ensure total length isn't excessive
-    return val.length <= 20;
-  }, { message: "Phone number must be less than 20 characters" })
-  .optional()
-  .or(z.literal('')),
-  
+    .transform(val => val.toLowerCase()),
+
+  phone: z.string()
+    .trim()
+    .refine((val) => val === '' || /^[\d\s\-+()]+$/.test(val), { message: "Please enter a valid phone number" })
+    .refine((val) => val === '' || val.replace(/\D/g, '').length >= 10, { message: "Phone number must contain at least 10 digits" })
+    .refine((val) => val === '' || val.length <= 20, { message: "Phone number must be less than 20 characters" })
+    .or(z.literal(''))
+    .optional(),
+
   name: z.string()
     .trim()
     .min(1, { message: "Name cannot be empty" })
     .max(100, { message: "Name must be less than 100 characters" })
     .regex(/^[a-zA-Z\s\-.']+$/, { message: "Name can only contain letters, spaces, hyphens, periods, and apostrophes" }),
-  
+
   message: z.string()
     .trim()
     .min(1, { message: "Message cannot be empty" })
     .max(2000, { message: "Message must be less than 2000 characters" }),
-  
+
   url: z.string()
     .trim()
-    .url({ message: "Please enter a valid URL" })
-    .max(500, { message: "URL must be less than 500 characters" })
-    .optional()
-    .or(z.literal('')),
-  
+        .max(500, { message: "URL must be less than 500 characters" })
+    .refine(val => val === '' || /^https?:\/\/.+\..+/.test(val), { message: "Please enter a valid URL" }),
+
   password: z.string()
     .min(8, { message: "Password must be at least 8 characters" })
     .max(128, { message: "Password must be less than 128 characters" })
     .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
     .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
     .regex(/[0-9]/, { message: "Password must contain at least one number" }),
-  
+
   price: z.number()
     .min(0, { message: "Price cannot be negative" })
     .max(99999.99, { message: "Price is too large" })
     .multipleOf(0.01, { message: "Price can have at most 2 decimal places" }),
-  
+
   duration: z.number()
     .int({ message: "Duration must be a whole number" })
     .min(5, { message: "Duration must be at least 5 minutes" })
@@ -88,9 +79,9 @@ export const profileUpdateSchema = z.object({
   bio: z.string()
     .trim()
     .max(500, { message: "Bio must be less than 500 characters" })
-    .optional()
-    .or(z.literal('')),
-  website: commonValidators.url,
+    .or(z.literal(''))
+    .optional(),
+  website: commonValidators.url.or(z.literal('')).optional(),
 });
 
 export type ProfileUpdateData = z.infer<typeof profileUpdateSchema>;
@@ -106,8 +97,8 @@ export const serviceSchema = z.object({
   description: z.string()
     .trim()
     .max(1000, { message: "Description must be less than 1000 characters" })
-    .optional()
-    .or(z.literal('')),
+    .or(z.literal(''))
+    .optional(),
   price: commonValidators.price,
   duration: commonValidators.duration,
   category: z.string()
@@ -133,8 +124,8 @@ export const formulaSchema = z.object({
   notes: z.string()
     .trim()
     .max(2000, { message: "Notes must be less than 2000 characters" })
-    .optional()
-    .or(z.literal('')),
+    .or(z.literal(''))
+    .optional(),
 });
 
 export type FormulaData = z.infer<typeof formulaSchema>;
@@ -167,8 +158,8 @@ export const appointmentSchema = z.object({
   notes: z.string()
     .trim()
     .max(500, { message: "Notes must be less than 500 characters" })
-    .optional()
-    .or(z.literal('')),
+    .or(z.literal(''))
+    .optional(),
 });
 
 export type AppointmentData = z.infer<typeof appointmentSchema>;
@@ -237,12 +228,12 @@ export const clientCreateSchema = z.object({
   full_name: commonValidators.name,
   email: commonValidators.email,
   phone: commonValidators.phone,
-  hair_type: z.string().max(50).optional().or(z.literal('')),
-  allergies: z.string().max(500).optional().or(z.literal('')),
-  notes: z.string().max(2000).optional().or(z.literal('')),
-  special_requests: z.string().max(500).optional().or(z.literal('')),
-  hair_goals: z.string().max(500).optional().or(z.literal('')),
-  sensitivity_notes: z.string().max(500).optional().or(z.literal(''))
+  hair_type: z.string().max(50).or(z.literal('')).optional(),
+  allergies: z.string().max(500).or(z.literal('')).optional(),
+  notes: z.string().max(2000).or(z.literal('')).optional(),
+  special_requests: z.string().max(500).or(z.literal('')).optional(),
+  hair_goals: z.string().max(500).or(z.literal('')).optional(),
+  sensitivity_notes: z.string().max(500).or(z.literal('')).optional(),
 });
 
 export type ClientCreateData = z.infer<typeof clientCreateSchema>;
