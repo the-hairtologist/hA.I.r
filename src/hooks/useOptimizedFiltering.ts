@@ -137,3 +137,5 @@ export function useOptimizedClientFiltering(
     return filtered;
   }, [clients, searchQuery, sortBy, riskFilter]);
 }
+
+

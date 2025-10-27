@@ -1,3 +1,7 @@
+<<<<<<< HEAD:src/components/InviteClientDialog.tsx
+=======
+﻿import { useEffect } from 'react';
+>>>>>>> copilot/fix-a11y-tester-and-comments:src/components/dialogs/InviteClientDialog.tsx
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,12 +24,12 @@ interface InviteClientDialogProps {
   stylistName: string;
 }
 
-export const InviteClientDialog = ({ 
-  open, 
-  onOpenChange, 
-  clientEmail, 
+export const InviteClientDialog = ({
+  open,
+  onOpenChange,
+  clientEmail,
   clientName,
-  stylistName 
+  stylistName,
 }: InviteClientDialogProps) => {
   const {
     values,
@@ -63,6 +67,11 @@ export const InviteClientDialog = ({
     }
   );
 
+  // Keep the form in sync if the parent changes clientEmail after mount
+  useEffect(() => {
+    setFieldValue('clientEmail', clientEmail);
+  }, [clientEmail, setFieldValue]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
@@ -72,7 +81,7 @@ export const InviteClientDialog = ({
             Send Client Invitation
           </DialogTitle>
           <DialogDescription>
-            Invite {clientName || "your client"} to create their account and access their personalized formulas and appointment history.
+            Invite {clientName || 'your client'} to create their account and access their personalized formulas and appointment history.
           </DialogDescription>
         </DialogHeader>
 

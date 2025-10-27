@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Simple Query Cache
  * 
  * Prevents duplicate queries when multiple components need the same data.
@@ -147,3 +147,5 @@ export const cacheKeys = {
     `formulas:${stylistId}${clientId ? `:${clientId}` : ''}`,
   messages: (userId: string) => `messages:${userId}`,
 };
+
+

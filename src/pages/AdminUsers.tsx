@@ -48,6 +48,7 @@ export default function AdminUsers() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
+<<<<<<< HEAD
   const loadUsers = async () => {
     try {
       const { data, error } = await supabase
@@ -68,6 +69,12 @@ export default function AdminUsers() {
     if (!loading && user && isAdmin) {
       loadUsers();
     }
+=======
+  // Load users effect - must come before conditional returns
+  useEffect(() => {
+    if (loading || !user || !isAdmin) return;
+    loadUsers();
+>>>>>>> copilot/fix-a11y-tester-and-comments
   }, [loading, user, isAdmin]);
 
   // Redirect non-admins
@@ -80,6 +87,27 @@ export default function AdminUsers() {
     return <LoadingSpinner message="Verifying access..." />;
   }
 
+<<<<<<< HEAD
+=======
+  const loadUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select(`
+          *,
+          user_roles(role)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setUsers(data || []);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      toast.error('Failed to load users');
+    }
+  };
+
+>>>>>>> copilot/fix-a11y-tester-and-comments
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -357,5 +385,8 @@ export default function AdminUsers() {
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> copilot/fix-a11y-tester-and-comments

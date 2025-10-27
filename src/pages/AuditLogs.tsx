@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Audit Logs Page - Week 3 Admin Feature
  * Comprehensive audit log viewer for admins
  */
@@ -41,7 +41,29 @@ export default function AuditLogs() {
   const [tableFilter, setTableFilter] = useState("all");
   const [dateRange, setDateRange] = useState("7");
 
+<<<<<<< HEAD
   const loadLogs = useCallback(async () => {
+=======
+  // Load logs data
+  useEffect(() => {
+    if (authLoading || !user || !isAdmin) return;
+    loadLogs();
+  }, [dateRange, authLoading, user, isAdmin]);
+
+  // Redirect non-admins
+  if (!authLoading && (!user || !isAdmin)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Show loading while checking permissions
+  if (authLoading) {
+    return <LoadingSpinner message="Verifying access..." />;
+  }
+
+  // Additional useEffect removed - consolidated above
+
+  const loadLogs = async () => {
+>>>>>>> copilot/fix-a11y-tester-and-comments
     try {
       setLoadingLogs(true);
 
@@ -299,3 +321,6 @@ export default function AuditLogs() {
     </DashboardLayout>
   );
 }
+
+
+

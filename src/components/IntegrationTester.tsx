@@ -30,7 +30,11 @@ export function IntegrationTester() {
               toast.error('âŒ Email function not accessible. Check if RESEND_API_KEY is configured.');
             } else {
               setResults(prev => ({ ...prev, email: true }));
+<<<<<<< HEAD
               toast.success('âœ… Email integration is configured correctly!');
+=======
+              toast.success('… Email integration is configured correctly!');
+>>>>>>> copilot/fix-a11y-tester-and-comments
             }
           } catch (err) {
             console.error('Email test exception:', err);
@@ -38,6 +42,7 @@ export function IntegrationTester() {
             toast.error('âŒ Email function failed. Verify edge function deployment.');
           }
           break;
+        }
 
         case 'calendar': {
           // Test calendar connection
@@ -53,13 +58,21 @@ export function IntegrationTester() {
             toast.error('âŒ Calendar connection check failed');
           } else if (connection) {
             setResults(prev => ({ ...prev, calendar: true }));
+<<<<<<< HEAD
             toast.success('âœ… Calendar is connected!');
+=======
+            toast.success('… Calendar is connected!');
+>>>>>>> copilot/fix-a11y-tester-and-comments
           } else {
             setResults(prev => ({ ...prev, calendar: false }));
             toast.warning('âš ï¸ No calendar connected. Connect Google Calendar first.');
           }
           break;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> copilot/fix-a11y-tester-and-comments
         case 'stripe':
           // Check Stripe configuration (webhooks can only be tested by actual Stripe events)
           try {
@@ -74,7 +87,11 @@ export function IntegrationTester() {
               toast.error('âŒ Stripe webhook not accessible. Check STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET configuration.');
             } else {
               setResults(prev => ({ ...prev, stripe: true }));
+<<<<<<< HEAD
               toast.success('âœ… Stripe webhook endpoint is reachable! Test with a real Stripe event.');
+=======
+              toast.success('… Stripe webhook endpoint is reachable! Test with a real Stripe event.');
+>>>>>>> copilot/fix-a11y-tester-and-comments
             }
           } catch (err) {
             console.error('Stripe test exception:', err);
@@ -82,6 +99,7 @@ export function IntegrationTester() {
             toast.error('âŒ Stripe webhook failed. Verify edge function deployment.');
           }
           break;
+        }
       }
     } catch (error) {
       console.error(`Error testing ${type}:`, error);
@@ -219,3 +237,9 @@ export function IntegrationTester() {
 }
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> copilot/fix-a11y-tester-and-comments

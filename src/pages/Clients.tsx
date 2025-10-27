@@ -20,7 +20,7 @@ import { useBulkSelection } from "@/hooks/useBulkSelection";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { InviteClientDialog } from "@/components/InviteClientDialog";
+import { InviteClientDialog } from "@/components/clients";
 import { SearchInput } from "@/components/SearchInput";
 import { ClientCardSkeleton } from "@/components/LoadingSkeleton";
 import { useRealtimeUpdates } from "@/hooks/useRealtimeUpdates";
@@ -616,7 +616,7 @@ export default function Clients() {
                     }}
                     examples={[
                       "3C Curly, High Porosity",
-                      "Fine Straight, Low Porosity",
+                     
                       "Coarse Wavy, Medium Porosity",
                       "Type 4 Coily, Color-Treated"
                     ]}

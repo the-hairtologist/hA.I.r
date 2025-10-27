@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Unit Tests for useFormSubmit Hook
  * Tests double submission prevention, loading states, error handling, and success scenarios
  */
@@ -168,9 +168,18 @@ describe('useFormSubmit', () => {
       const mockFn = vi.fn().mockResolvedValue('success');
       const { result } = renderHook(() => useFormSubmit(mockFn));
       
+<<<<<<< HEAD
       // Manually set an error
       act(() => {
         result.current.setFieldValue('test', 'value');
+=======
+      await act(async () => {
+        try {
+          await result.current.handleSubmit();
+        } catch (e) {
+          // Expected error for test
+        }
+>>>>>>> copilot/fix-a11y-tester-and-comments
       });
       
       // Clear it
@@ -280,3 +289,5 @@ describe('useFormSubmit', () => {
     });
   });
 });
+
+
