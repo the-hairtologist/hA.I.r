@@ -104,19 +104,19 @@ export const QuickAppointmentDialog = ({
         await supabase.functions.invoke('send-sms-notification', {
           body: { appointmentId: newAppointment.id, notificationType: 'confirmation' },
         });
-      } catch {}
+      } catch { /* Ignore notification errors */ }
 
       try {
         await supabase.functions.invoke('send-appointment-confirmation', {
           body: { appointmentId: newAppointment.id },
         });
-      } catch {}
+      } catch { /* Ignore notification errors */ }
 
       try {
         await supabase.functions.invoke('sync-calendar-event', {
           body: { appointment_id: newAppointment.id, action: 'create' },
         });
-      } catch {}
+      } catch { /* Ignore notification errors */ }
     },
     {
       schema: quickAppointmentSchema,
