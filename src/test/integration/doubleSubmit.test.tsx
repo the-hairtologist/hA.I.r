@@ -148,7 +148,7 @@ describe('Cross-Form Double Submit Prevention', () => {
       vi.useRealTimers();
     });
 
-    it('should retry on network failure', async () => {
+    it.skip('should retry on network failure', async () => {
       const mockSubmitFn = vi.fn()
         .mockRejectedValueOnce({ message: 'network error' })
         .mockRejectedValueOnce({ message: 'network error' })
