@@ -208,7 +208,8 @@ export const CameraCapture = ({
         await haptic.success();
         toast.success(messages.success, {
           description: `Saved ${metadata.compressionRatio}% space • ${(metadata.compressedSize / 1024).toFixed(0)}KB`
-        });`n        setPreview(null);
+        });
+        setPreview(null);
       
     } catch (error: any) {
       logger.error('Camera capture error', error, { component: 'CameraCapture', context });
