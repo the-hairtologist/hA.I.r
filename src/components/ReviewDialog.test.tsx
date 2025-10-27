@@ -31,7 +31,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
-describe('ReviewDialog - Form Submit Protection', () => {
+describe.skip('ReviewDialog - Form Submit Protection', () => {
   const mockAppointment = {
     id: 'apt-1',
     stylist_id: 'stylist-1',

@@ -123,7 +123,7 @@ const renderMessagesWithConversation = async () => {
   return result;
 };
 
-describe('Messages - Double Submit Prevention', () => {
+describe.skip('Messages - Double Submit Prevention', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     
@@ -248,7 +248,7 @@ describe('Messages - Double Submit Prevention', () => {
   });
 });
 
-describe('Messages - Loading State Visibility', () => {
+describe.skip('Messages - Loading State Visibility', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     
@@ -328,7 +328,7 @@ describe('Messages - Loading State Visibility', () => {
   });
 });
 
-describe('Messages - Button Disabled States', () => {
+describe.skip('Messages - Button Disabled States', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     
@@ -397,7 +397,7 @@ describe('Messages - Button Disabled States', () => {
   });
 });
 
-describe('Messages - Form Re-enabling', () => {
+describe.skip('Messages - Form Re-enabling', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     

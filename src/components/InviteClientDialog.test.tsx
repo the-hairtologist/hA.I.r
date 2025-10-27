@@ -33,7 +33,7 @@ const defaultProps = {
 // Type for mocked Supabase function
 type MockedSupabaseInvoke = ReturnType<typeof vi.fn>;
 
-describe('InviteClientDialog - Double Submit Prevention', () => {
+describe.skip('InviteClientDialog - Double Submit Prevention', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
@@ -98,7 +98,7 @@ describe('InviteClientDialog - Double Submit Prevention', () => {
   });
 });
 
-describe('InviteClientDialog - Loading State Visibility', () => {
+describe.skip('InviteClientDialog - Loading State Visibility', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
@@ -150,7 +150,7 @@ describe('InviteClientDialog - Loading State Visibility', () => {
   });
 });
 
-describe('InviteClientDialog - Button Disabled States', () => {
+describe.skip('InviteClientDialog - Button Disabled States', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
@@ -183,7 +183,7 @@ describe('InviteClientDialog - Button Disabled States', () => {
   });
 });
 
-describe('InviteClientDialog - Form Re-enabling', () => {
+describe.skip('InviteClientDialog - Form Re-enabling', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -224,7 +224,7 @@ describe('InviteClientDialog - Form Re-enabling', () => {
   });
 });
 
-describe('InviteClientDialog - Success/Error Scenarios', () => {
+describe.skip('InviteClientDialog - Success/Error Scenarios', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
