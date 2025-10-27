@@ -45,7 +45,7 @@ export function InviteClientDialog({
         clientEmail: clientEmail,
         customMessage: '',
       },
-      successMessage: "Invitation sent successfully.",
+      successMessage: `Invitation sent to ${clientEmail}`,
       onSuccess: () => {
         reset();
         onOpenChange(false);
@@ -56,8 +56,8 @@ export function InviteClientDialog({
   // Keep the form in sync if the parent changes clientEmail after mount
   useEffect(() => {
     setFieldValue('clientEmail', clientEmail);
-    setFieldValue('customMessage', '');
   }, [clientEmail, setFieldValue]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
@@ -67,14 +67,10 @@ export function InviteClientDialog({
             Send Client Invitation
           </DialogTitle>
           <DialogDescription>
-            Invite {clientName || 'your client'} to create their account and access their personalized formulas and appointment history.
+            Invite {clientName ?? 'your client'} to create their account and access their personalized formulas and appointment history.
           </DialogDescription>
         </DialogHeader>
-        {!clientEmail && (
-          <div className="text-red-500 mb-4">
-            Please provide a client email to send an invitation.
-          </div>
-        )}
+
         <form
           className="space-y-4 py-4"
           onSubmit={handleSubmit}
@@ -84,27 +80,27 @@ export function InviteClientDialog({
             label="Client Email"
             type="email"
             value={values.clientEmail}
-            onChange={(value) => setFieldValue('clientEmail', String(value))}
+            onChange={(value: string) => setFieldValue('clientEmail', value)}
             onBlur={() => setFieldTouched('clientEmail')}
             error={errors.clientEmail}
             touched={touched.clientEmail}
             placeholder="client@example.com"
-            disabled={isSubmitting || !clientEmail}
+            disabled={isSubmitting}
             required />
 
           <StandardFormField
             name="customMessage"
             label="Personal Message"
             type="textarea"
-            value={values.customMessage}
-            onChange={(value) => setFieldValue('customMessage', String(value))}
+            value={values.customMessage || ''}
+            onChange={(value) => setFieldValue('customMessage', typeof value === 'string' ? value : String(value))}
             onBlur={() => setFieldTouched('customMessage')}
             error={errors.customMessage}
             touched={touched.customMessage}
             placeholder="Add a personal note to your invitation..."
             maxLength={500}
             rows={4}
-            disabled={isSubmitting || !clientEmail} />
+            disabled={isSubmitting} />
 
           <div className="flex gap-2">
             <Button
@@ -118,7 +114,7 @@ export function InviteClientDialog({
             </Button>
             <Button
               type="submit"
-              disabled={isSubmitting || !values.clientEmail || !clientEmail}
+              disabled={isSubmitting || !values.clientEmail}
               className="flex-1 min-h-[44px]"
             >
               {isSubmitting ? (
