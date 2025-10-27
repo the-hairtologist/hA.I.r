@@ -1,7 +1,4 @@
-<<<<<<< HEAD:src/components/InviteClientDialog.tsx
-=======
-﻿import { useEffect } from 'react';
->>>>>>> copilot/fix-a11y-tester-and-comments:src/components/dialogs/InviteClientDialog.tsx
+import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
