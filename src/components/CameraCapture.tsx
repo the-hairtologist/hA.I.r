@@ -197,8 +197,7 @@ export const CameraCapture = ({
       
       setUploadProgress(100);
       
-      try {
-        await onCapture(storageUrl, metadata);
+      await onCapture(storageUrl, metadata);
         
         userJourney.trackAction('Photo Captured', { 
           context, 
@@ -209,12 +208,7 @@ export const CameraCapture = ({
         await haptic.success();
         toast.success(messages.success, {
           description: `Saved ${metadata.compressionRatio}% space • ${(metadata.compressedSize / 1024).toFixed(0)}KB`
-        });
-        
-        setPreview(null);
-      } catch (error) {
-        throw error;
-      }
+        });`n        setPreview(null);
       
     } catch (error: any) {
       logger.error('Camera capture error', error, { component: 'CameraCapture', context });
