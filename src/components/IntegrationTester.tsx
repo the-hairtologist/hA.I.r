@@ -39,7 +39,7 @@ export function IntegrationTester() {
           }
           break;
 
-        case 'calendar':
+        case 'calendar': {
           // Test calendar connection
           const { data: connection, error: calError } = await supabase
             .from('calendar_connections')
