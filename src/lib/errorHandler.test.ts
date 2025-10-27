@@ -179,21 +179,21 @@ describe('errorHandler', () => {
   });
 
   describe('validateRequired', () => {
-    it('should not throw for valid data', () => {
+    it('should not throw for valid data', async () => {
       const data = { name: 'Test', email: 'test@example.com' };
-      expect(() => validateRequired(data, ['name', 'email'])).not.toThrow();
+      await expect(validateRequired(data, ['name', 'email'])).resolves.not.toThrow();
     });
 
-    it('should throw for missing fields', () => {
+    it('should throw for missing fields', async () => {
       const data = { name: 'Test' };
-      expect(() => validateRequired(data, ['name', 'email'])).toThrow(
+      await expect(validateRequired(data, ['name', 'email'])).rejects.toThrow(
         'Missing required fields: email'
       );
     });
 
-    it('should handle multiple missing fields', () => {
+    it('should handle multiple missing fields', async () => {
       const data = {};
-      expect(() => validateRequired(data, ['name', 'email', 'phone'])).toThrow(
+      await expect(validateRequired(data, ['name', 'email', 'phone'])).rejects.toThrow(
         'Missing required fields: name, email, phone'
       );
     });

@@ -92,13 +92,34 @@ const renderMessages = () => {
 
 const renderMessagesWithConversation = async () => {
   const result = renderMessages();
-  // Wait for conversations to load and click the first one
-  const conversation = await screen.findByText('Test Client');
-  await userEvent.click(conversation);
+  
+  // Wait for component to load
+  await waitFor(() => {
+    expect(screen.queryByText('Ready to Connect?')).toBeInTheDocument();
+  }, { timeout: 2000 });
+  
+  // Click "New Conversation" button to open the dialog
+  const newConvButton = screen.getByRole('button', { name: /new conversation/i });
+  await userEvent.click(newConvButton);
+  
+  // Wait for dialog and fill in client email
+  await waitFor(() => {
+    const emailInput = screen.getByPlaceholderText(/client.*email/i);
+    expect(emailInput).toBeInTheDocument();
+  }, { timeout: 2000 });
+  
+  const emailInput = screen.getByPlaceholderText(/client.*email/i);
+  await userEvent.type(emailInput, 'client@test.com');
+  
+  // Click start conversation
+  const startButton = screen.getByRole('button', { name: /start.*conversation/i });
+  await userEvent.click(startButton);
+  
   // Wait for message input to appear
   await waitFor(() => {
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   }, { timeout: 5000 });
+  
   return result;
 };
 
