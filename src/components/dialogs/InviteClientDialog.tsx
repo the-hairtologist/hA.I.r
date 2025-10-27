@@ -54,7 +54,7 @@ export function InviteClientDialog({
   );
 
   // Keep the form in sync if the parent changes clientEmail after mount
-  React.useEffect(() => {
+  useEffect(() => {
     setFieldValue('clientEmail', clientEmail);
   }, [clientEmail, setFieldValue]);
 
@@ -67,7 +67,7 @@ export function InviteClientDialog({
             Send Client Invitation
           </DialogTitle>
           <DialogDescription>
-            Invite {clientName || '' || 'your client'} to create their account and access their personalized formulas and appointment history.
+            Invite {clientName ?? 'your client'} to create their account and access their personalized formulas and appointment history.
           </DialogDescription>
         </DialogHeader>
 
@@ -80,7 +80,7 @@ export function InviteClientDialog({
             label="Client Email"
             type="email"
             value={values.clientEmail}
-            onChange={(value) => setFieldValue('clientEmail', String(value))}
+            onChange={(value: string) => setFieldValue('clientEmail', value)}
             onBlur={() => setFieldTouched('clientEmail')}
             error={errors.clientEmail}
             touched={touched.clientEmail}
@@ -93,7 +93,7 @@ export function InviteClientDialog({
             label="Personal Message"
             type="textarea"
             value={values.customMessage || ''}
-            onChange={(value) => setFieldValue('customMessage', String(value))}
+            onChange={(value) => setFieldValue('customMessage', typeof value === 'string' ? value : String(value))}
             onBlur={() => setFieldTouched('customMessage')}
             error={errors.customMessage}
             touched={touched.customMessage}
