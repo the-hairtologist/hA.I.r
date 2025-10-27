@@ -27,7 +27,7 @@ jobs:
         run: npx tsc --noEmit
       
       - name: Lint
-        run: npm run lint -- --max-warnings=1000
+        run: npm run lint
       
       - name: Test
         run: npm run test --if-present
