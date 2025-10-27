@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,11 +25,7 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
   const [newColor, setNewColor] = useState("hsl(270 85% 60%)");
   const [addDialogOpen, setAddDialogOpen] = useState(false);
 
-  useEffect(() => {
-    loadServiceColors();
-  }, [stylistId]);
-
-  const loadServiceColors = async () => {
+  const loadServiceColors = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("service_type_colors")
@@ -43,7 +39,10 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
       console.error("Error loading service colors:", error);
       toast.error("Failed to load service colors");
     }
-  };
+  }, [stylistId]);
+  useEffect(() => {
+    loadServiceColors();
+  }, [loadServiceColors]);
 
   const updateColor = async (id: string, newColor: string) => {
     try {
@@ -264,3 +263,6 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
     </Card>
   );
 };
+
+
+
