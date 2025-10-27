@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
+﻿import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -52,10 +52,7 @@ export default function AdminUsers() {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select(
-          *,
-          user_roles(role)
-        )
+        .select('*, user_roles(role)')
         .order('created_at', { ascending: false});
 
       if (error) throw error;
@@ -112,9 +109,7 @@ export default function AdminUsers() {
   const handleBulkDelete = async () => {
     if (selectedUsers.size === 0) return;
 
-    const confirmed = window.confirm(
-      Are you sure you want to delete  user(s)? This action cannot be undone.
-    );
+    const confirmed = window.confirm("Are you sure you want to delete " + selectedUsers.size + " user(s)? This action cannot be undone.");
 
     if (!confirmed) return;
 
@@ -144,7 +139,7 @@ export default function AdminUsers() {
 
       if (error) throw error;
 
-      toast.success(Role  assigned successfully);
+      toast.success('Role assigned successfully');
       loadUsers();
     } catch (error: any) {
       console.error("Error assigning role:", error);
@@ -248,7 +243,7 @@ export default function AdminUsers() {
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors }
+                  className="p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     <input
@@ -359,3 +354,8 @@ export default function AdminUsers() {
     </DashboardLayout>
   );
 }
+
+
+
+
+
