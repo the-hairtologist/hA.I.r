@@ -1,13 +1,25 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/useToast";
-import { Shield, Send } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/useToast';
+import { Shield, Send } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 interface AdminFeedbackActionsProps {
   feedbackId: string;
@@ -27,37 +39,39 @@ export const AdminFeedbackActions = ({
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState(currentStatus);
   const [priority, setPriority] = useState(currentPriority);
-  const [adminResponse, setAdminResponse] = useState(currentAdminResponse || "");
+  const [adminResponse, setAdminResponse] = useState(
+    currentAdminResponse || ''
+  );
 
   const updateMutation = useMutation({
     mutationFn: async () => {
       const { error } = await supabase
-        .from("product_feedback")
+        .from('product_feedback')
         .update({
           status,
           priority,
           admin_response: adminResponse.trim() || null,
         })
-        .eq("id", feedbackId);
+        .eq('id', feedbackId);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Feedback updated", "Changes saved successfully");
-      queryClient.invalidateQueries({ queryKey: ["product_feedback"] });
+      toast.success('Feedback updated', 'Changes saved successfully');
+      queryClient.invalidateQueries({ queryKey: ['product_feedback'] });
       setIsOpen(false);
     },
-    onError: (error) => {
-      toast.error("Update failed", error.message);
+    onError: error => {
+      toast.error('Update failed', error.message);
     },
   });
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm" 
+        <Button
+          variant="outline"
+          size="sm"
           className="gap-2 border-2 hover:bg-primary/5"
         >
           <Shield className="h-4 w-4" />
@@ -109,12 +123,14 @@ export const AdminFeedbackActions = ({
               id="admin-response"
               placeholder="Add a response to the user..."
               value={adminResponse}
-              onChange={(e) => setAdminResponse(e.target.value)}
+              onChange={e => setAdminResponse(e.target.value)}
               rows={4}
               maxLength={500}
               className="border-2 resize-none"
             />
-            <p className="text-xs text-muted-foreground">{adminResponse.length}/500</p>
+            <p className="text-xs text-muted-foreground">
+              {adminResponse.length}/500
+            </p>
           </div>
 
           <Button

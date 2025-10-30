@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useAuth } from "./useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from 'react';
+import { useAuth } from './useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SmartDefaults {
   defaultDuration?: number;
@@ -22,27 +22,29 @@ export const useSmartDefaults = () => {
 
   const loadDefaults = async () => {
     if (!user) return;
-    
+
     try {
       // Get recent appointments to infer defaults
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select("client_id")
-        .eq("stylist_id", user.id)
-        .order("created_at", { ascending: false })
+        .from('appointments')
+        .select('client_id')
+        .eq('stylist_id', user.id)
+        .order('created_at', { ascending: false })
         .limit(10);
 
       // Get recent unique clients
-      const recentClientIds = [...new Set(appointments?.map(a => a.client_id).filter(Boolean) || [])].slice(0, 5);
+      const recentClientIds = [
+        ...new Set(appointments?.map(a => a.client_id).filter(Boolean) || []),
+      ].slice(0, 5);
 
       setDefaults({
         defaultDuration: 60, // Default 1 hour
         recentClients: recentClientIds as string[],
         recentServices: [],
-        preferredStartTime: "09:00",
+        preferredStartTime: '09:00',
       });
     } catch (error) {
-      console.error("Error loading smart defaults:", error);
+      console.error('Error loading smart defaults:', error);
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,19 @@
-﻿import { createContext, useCallback, useContext, useEffect, useRef, useState, ReactNode } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { appleIAP, shouldUseAppleIAP, getPaymentMethod } from "@/lib/iap/appleIAP";
-import { logger } from "@/lib/logger";
+﻿import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  ReactNode,
+} from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  appleIAP,
+  shouldUseAppleIAP,
+  getPaymentMethod,
+} from '@/lib/iap/appleIAP';
+import { logger } from '@/lib/logger';
 
 interface SubscriptionContextType {
   subscribed: boolean;
@@ -27,21 +39,23 @@ interface CheckSubscriptionResponse {
   subscription_end?: string | null;
 }
 
-const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
+const SubscriptionContext = createContext<SubscriptionContextType | undefined>(
+  undefined
+);
 
-const STYLIST_PRODUCT_ID = "prod_TAdxnWWlueCL0Y";
+const STYLIST_PRODUCT_ID = 'prod_TAdxnWWlueCL0Y';
 
 const PREMIUM_FEATURES = [
-  "clients",
-  "appointments",
-  "formulas",
-  "ai-assistant",
-  "payments",
-  "commissions",
-  "services",
-  "schedule",
-  "portfolio",
-  "messages",
+  'clients',
+  'appointments',
+  'formulas',
+  'ai-assistant',
+  'payments',
+  'commissions',
+  'services',
+  'schedule',
+  'portfolio',
+  'messages',
 ] as const;
 
 type PremiumFeature = (typeof PREMIUM_FEATURES)[number];
@@ -63,9 +77,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isAppleIAP) {
-      appleIAP.initialize().catch((error) => {
-        import("@/lib/logging/productionLogger").then(({ logger }) => {
-          logger.error("[Subscription] Failed to initialize Apple IAP", error);
+      appleIAP.initialize().catch(error => {
+        import('@/lib/logging/productionLogger').then(({ logger }) => {
+          logger.error('[Subscription] Failed to initialize Apple IAP', error);
         });
       });
     }
@@ -79,7 +93,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         setSubscribed(false);
         setInTrial(false);
@@ -92,14 +108,14 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const { data: rolesData = [] } = await supabase
-        .from<UserRoleRow>("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id);
+        .from<UserRoleRow>('user_roles')
+        .select('role')
+        .eq('user_id', session.user.id);
 
-      const isStylist = rolesData.some(roleRow => roleRow.role === "stylist");
-      const adminCheck = rolesData.some(roleRow => roleRow.role === "admin");
+      const isStylist = rolesData.some(roleRow => roleRow.role === 'stylist');
+      const adminCheck = rolesData.some(roleRow => roleRow.role === 'admin');
 
-      setUserRole(isStylist ? "stylist" : "client");
+      setUserRole(isStylist ? 'stylist' : 'client');
       setIsAdmin(adminCheck);
 
       if (adminCheck) {
@@ -109,10 +125,10 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const { data: accessCodeData } = await supabase
-        .from("access_codes")
-        .select("id")
-        .eq("used_by", session.user.id)
-        .eq("is_active", true)
+        .from('access_codes')
+        .select('id')
+        .eq('used_by', session.user.id)
+        .eq('is_active', true)
         .maybeSingle();
 
       const hasValidAccessCode = Boolean(accessCodeData);
@@ -131,7 +147,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (isAppleIAP) {
-        logger.debug("[Subscription] Checking Apple IAP subscription");
+        logger.debug('[Subscription] Checking Apple IAP subscription');
         const hasActiveIAP = await appleIAP.checkActiveSubscription();
 
         if (hasActiveIAP) {
@@ -139,11 +155,15 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         }
       }
 
-      const { data, error } = await supabase.functions.invoke<CheckSubscriptionResponse>("check-subscription", {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
+      const { data, error } =
+        await supabase.functions.invoke<CheckSubscriptionResponse>(
+          'check-subscription',
+          {
+            headers: {
+              Authorization: `Bearer ${session.access_token}`,
+            },
+          }
+        );
 
       if (error) throw error;
 
@@ -157,11 +177,11 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       setSubscriptionEnd(subscriptionData.subscription_end ?? null);
 
       if (isSubscribed || isInTrial) {
-        localStorage.removeItem("subscription_prompt_dismissed");
+        localStorage.removeItem('subscription_prompt_dismissed');
       }
     } catch (error) {
-      import("@/lib/logging/productionLogger").then(({ logger }) => {
-        logger.error("Error checking subscription", error);
+      import('@/lib/logging/productionLogger').then(({ logger }) => {
+        logger.error('Error checking subscription', error);
       });
       setSubscribed(false);
       setInTrial(false);
@@ -172,25 +192,30 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [isAppleIAP]);
 
-  const isFeatureAllowed = useCallback((feature: FeatureName): boolean => {
-    if (isAdmin) return true;
-    if (hasAccessCode) return true;
-    if (userRole === "client") return true;
+  const isFeatureAllowed = useCallback(
+    (feature: FeatureName): boolean => {
+      if (isAdmin) return true;
+      if (hasAccessCode) return true;
+      if (userRole === 'client') return true;
 
-    if (userRole === "stylist") {
-      if ((PREMIUM_FEATURES as readonly string[]).includes(feature)) {
-        return subscribed || inTrial;
+      if (userRole === 'stylist') {
+        if ((PREMIUM_FEATURES as readonly string[]).includes(feature)) {
+          return subscribed || inTrial;
+        }
+        return true;
       }
-      return true;
-    }
 
-    return false;
-  }, [hasAccessCode, inTrial, isAdmin, subscribed, userRole]);
+      return false;
+    },
+    [hasAccessCode, inTrial, isAdmin, subscribed, userRole]
+  );
 
   useEffect(() => {
     void checkSubscription();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
         void checkSubscription();
       } else {
@@ -238,7 +263,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 export const useSubscription = () => {
   const context = useContext(SubscriptionContext);
   if (context === undefined) {
-    throw new Error("useSubscription must be used within a SubscriptionProvider");
+    throw new Error(
+      'useSubscription must be used within a SubscriptionProvider'
+    );
   }
   return context;
 };

@@ -12,14 +12,14 @@ export const Capacitor = {
   isNativePlatform: () => false,
   isPluginAvailable: () => false,
   convertFileSrc: (filePath: string) => filePath,
-  
+
   // Plugin registry stubs
   registerPlugin: () => ({}),
-  
-  // Web view communication stubs  
+
+  // Web view communication stubs
   nativeCallback: () => {},
   nativePromise: () => Promise.resolve(),
-  
+
   // Exception stubs
   Exception: class CapacitorException extends Error {
     constructor(message: string, code?: string) {
@@ -60,19 +60,19 @@ export const NotificationType = {
 
 // Camera stubs
 export const Camera = {
-  getPhoto: async () => ({ 
-    webPath: '', 
+  getPhoto: async () => ({
+    webPath: '',
     format: 'jpeg',
     saved: false,
   }),
   pickImages: async () => ({ photos: [] }),
-  checkPermissions: async () => ({ 
-    camera: 'granted', 
-    photos: 'granted' 
+  checkPermissions: async () => ({
+    camera: 'granted',
+    photos: 'granted',
   }),
-  requestPermissions: async () => ({ 
-    camera: 'granted', 
-    photos: 'granted' 
+  requestPermissions: async () => ({
+    camera: 'granted',
+    photos: 'granted',
   }),
 };
 

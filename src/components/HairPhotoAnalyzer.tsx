@@ -6,11 +6,23 @@
 import { useState } from 'react';
 import { useVisualAnalysis } from '@/hooks/useVisualAnalysis';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Camera, AlertCircle, CheckCircle, Sparkles } from 'lucide-react';
+import {
+  Loader2,
+  Camera,
+  AlertCircle,
+  CheckCircle,
+  Sparkles,
+} from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -19,7 +31,10 @@ interface HairPhotoAnalyzerProps {
   onAnalysisComplete?: (analysis: any) => void;
 }
 
-export const HairPhotoAnalyzer = ({ clientId, onAnalysisComplete }: HairPhotoAnalyzerProps) => {
+export const HairPhotoAnalyzer = ({
+  clientId,
+  onAnalysisComplete,
+}: HairPhotoAnalyzerProps) => {
   const { analyzing, analysis, analyzeHairPhoto } = useVisualAnalysis();
   const [photoUrl, setPhotoUrl] = useState('');
   const [additionalContext, setAdditionalContext] = useState('');
@@ -30,7 +45,11 @@ export const HairPhotoAnalyzer = ({ clientId, onAnalysisComplete }: HairPhotoAna
       return;
     }
 
-    const result = await analyzeHairPhoto(photoUrl, clientId, additionalContext || undefined);
+    const result = await analyzeHairPhoto(
+      photoUrl,
+      clientId,
+      additionalContext || undefined
+    );
 
     if (result) {
       setShowResults(true);
@@ -84,7 +103,7 @@ export const HairPhotoAnalyzer = ({ clientId, onAnalysisComplete }: HairPhotoAna
             type="url"
             placeholder="https://example.com/hair-photo.jpg"
             value={photoUrl}
-            onChange={(e) => setPhotoUrl(e.target.value)}
+            onChange={e => setPhotoUrl(e.target.value)}
           />
         </div>
 
@@ -95,7 +114,7 @@ export const HairPhotoAnalyzer = ({ clientId, onAnalysisComplete }: HairPhotoAna
             id="context"
             placeholder="e.g., After color treatment, before consultation..."
             value={additionalContext}
-            onChange={(e) => setAdditionalContext(e.target.value)}
+            onChange={e => setAdditionalContext(e.target.value)}
           />
         </div>
 
@@ -142,7 +161,9 @@ export const HairPhotoAnalyzer = ({ clientId, onAnalysisComplete }: HairPhotoAna
             {analysis.color_fade_percentage !== undefined && (
               <div className="flex items-center justify-between">
                 <Label>Color Fade</Label>
-                <span className="text-sm font-medium">{analysis.color_fade_percentage}%</span>
+                <span className="text-sm font-medium">
+                  {analysis.color_fade_percentage}%
+                </span>
               </div>
             )}
 
@@ -153,42 +174,51 @@ export const HairPhotoAnalyzer = ({ clientId, onAnalysisComplete }: HairPhotoAna
                 <p className="font-medium capitalize">{analysis.texture}</p>
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground">Porosity</Label>
-                <p className={`font-medium capitalize ${getPorosityColor(analysis.porosity)}`}>
+                <Label className="text-xs text-muted-foreground">
+                  Porosity
+                </Label>
+                <p
+                  className={`font-medium capitalize ${getPorosityColor(analysis.porosity)}`}
+                >
                   {analysis.porosity}
                 </p>
               </div>
             </div>
 
             {/* Recommendations */}
-            {analysis.recommendations && analysis.recommendations.length > 0 && (
-              <div className="space-y-3">
-                <Label>Recommendations</Label>
-                <div className="space-y-2">
-                  {analysis.recommendations.map((rec: any, idx: number) => (
-                    <Alert key={`${rec.category}-${rec.priority}-${idx}`}>
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs">
-                              {rec.category}
-                            </Badge>
-                            <Badge
-                              variant={rec.priority === 'high' ? 'destructive' : 'secondary'}
-                              className="text-xs"
-                            >
-                              {rec.priority} priority
-                            </Badge>
+            {analysis.recommendations &&
+              analysis.recommendations.length > 0 && (
+                <div className="space-y-3">
+                  <Label>Recommendations</Label>
+                  <div className="space-y-2">
+                    {analysis.recommendations.map((rec: any, idx: number) => (
+                      <Alert key={`${rec.category}-${rec.priority}-${idx}`}>
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-xs">
+                                {rec.category}
+                              </Badge>
+                              <Badge
+                                variant={
+                                  rec.priority === 'high'
+                                    ? 'destructive'
+                                    : 'secondary'
+                                }
+                                className="text-xs"
+                              >
+                                {rec.priority} priority
+                              </Badge>
+                            </div>
+                            <p className="text-sm mt-1">{rec.recommendation}</p>
                           </div>
-                          <p className="text-sm mt-1">{rec.recommendation}</p>
-                        </div>
-                      </AlertDescription>
-                    </Alert>
-                  ))}
+                        </AlertDescription>
+                      </Alert>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         )}
       </CardContent>

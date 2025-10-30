@@ -1,10 +1,10 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { PageHeader } from "@/components/PageHeader";
-import { ReferralSystem } from "@/components/ReferralSystem";
-import { useUserRole } from "@/hooks/useUserRole";
-import { useAuth } from "@/hooks/useAuth";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Gift } from "lucide-react";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { PageHeader } from '@/components/PageHeader';
+import { ReferralSystem } from '@/components/ReferralSystem';
+import { useUserRole } from '@/hooks/useUserRole';
+import { useAuth } from '@/hooks/useAuth';
+import { Card, CardContent } from '@/components/ui/card';
+import { AlertCircle, Gift } from 'lucide-react';
 
 const Referrals = () => {
   const { user } = useAuth();

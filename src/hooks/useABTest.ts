@@ -8,7 +8,7 @@ const AB_TEST_EXPERIMENT = 'landing_page_2025_q1';
 
 /**
  * A/B Testing Hook for Landing Page Variants
- * 
+ *
  * Variants:
  * - A (Control): Current design with "Stop Losing Clients" headline
  * - B (Variation 1): Social proof emphasis with "Join 5,000+ Stylists" headline
@@ -20,8 +20,10 @@ export const useABTest = () => {
 
   useEffect(() => {
     // Check if user already has a variant assigned
-    const storedVariant = localStorage.getItem(AB_TEST_KEY) as LandingVariant | null;
-    
+    const storedVariant = localStorage.getItem(
+      AB_TEST_KEY
+    ) as LandingVariant | null;
+
     if (storedVariant && ['A', 'B', 'C'].includes(storedVariant)) {
       setVariant(storedVariant);
       setIsLoading(false);
@@ -29,12 +31,14 @@ export const useABTest = () => {
     }
 
     // Randomly assign a variant (33.33% split)
-    const randomVariant: LandingVariant = ['A', 'B', 'C'][Math.floor(Math.random() * 3)] as LandingVariant;
-    
+    const randomVariant: LandingVariant = ['A', 'B', 'C'][
+      Math.floor(Math.random() * 3)
+    ] as LandingVariant;
+
     // Store the variant
     localStorage.setItem(AB_TEST_KEY, randomVariant);
     setVariant(randomVariant);
-    
+
     // Track variant assignment
     analytics.track('ab_test_assigned', {
       experiment: AB_TEST_EXPERIMENT,

@@ -1,10 +1,24 @@
-import { withMemo } from "@/lib/optimizations/withMemo";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Edit, Copy, Trash2, ThumbsUp, Clock, Beaker, Tag as TagIcon, AlertTriangle } from "lucide-react";
-import { HighlightedText } from "@/components/EnhancedSearch";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { withMemo } from '@/lib/optimizations/withMemo';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Edit,
+  Copy,
+  Trash2,
+  ThumbsUp,
+  Clock,
+  Beaker,
+  Tag as TagIcon,
+  AlertTriangle,
+} from 'lucide-react';
+import { HighlightedText } from '@/components/EnhancedSearch';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 interface FormulaCardProps {
   formula: any;
@@ -23,10 +37,10 @@ const FormulaCardComponent = ({
   onDuplicate,
   onDelete,
   onToggleSelection,
-  isSelected
+  isSelected,
 }: FormulaCardProps) => {
   return (
-    <Card className={isSelected ? "border-primary" : ""}>
+    <Card className={isSelected ? 'border-primary' : ''}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 flex-1">
@@ -41,11 +55,17 @@ const FormulaCardComponent = ({
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold">
-                  <HighlightedText text={formula.client?.full_name || "Unknown Client"} query={searchTerm} />
+                  <HighlightedText
+                    text={formula.client?.full_name || 'Unknown Client'}
+                    query={searchTerm}
+                  />
                 </h3>
                 {formula.color_line && (
                   <Badge variant="secondary">
-                    <HighlightedText text={formula.color_line} query={searchTerm} />
+                    <HighlightedText
+                      text={formula.color_line}
+                      query={searchTerm}
+                    />
                   </Badge>
                 )}
               </div>
@@ -73,7 +93,10 @@ const FormulaCardComponent = ({
           <div>
             <p className="text-sm font-medium mb-1">Formula:</p>
             <p className="text-sm">
-              <HighlightedText text={formula.formula_text || "No formula"} query={searchTerm} />
+              <HighlightedText
+                text={formula.formula_text || 'No formula'}
+                query={searchTerm}
+              />
             </p>
           </div>
 
@@ -115,13 +138,17 @@ const FormulaCardComponent = ({
                 {formula.instructions && (
                   <div>
                     <p className="text-sm font-medium mb-1">Instructions:</p>
-                    <p className="text-sm text-muted-foreground">{formula.instructions}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {formula.instructions}
+                    </p>
                   </div>
                 )}
                 {formula.result_notes && (
                   <div>
                     <p className="text-sm font-medium mb-1">Result Notes:</p>
-                    <p className="text-sm text-muted-foreground">{formula.result_notes}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {formula.result_notes}
+                    </p>
                   </div>
                 )}
                 {formula.what_worked && (
@@ -129,7 +156,9 @@ const FormulaCardComponent = ({
                     <ThumbsUp className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium">What Worked:</p>
-                      <p className="text-sm text-muted-foreground">{formula.what_worked}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {formula.what_worked}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -138,14 +167,20 @@ const FormulaCardComponent = ({
                     <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium">What to Avoid:</p>
-                      <p className="text-sm text-muted-foreground">{formula.what_to_avoid}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {formula.what_to_avoid}
+                      </p>
                     </div>
                   </div>
                 )}
                 {formula.application_notes && (
                   <div>
-                    <p className="text-sm font-medium mb-1">Application Notes:</p>
-                    <p className="text-sm text-muted-foreground">{formula.application_notes}</p>
+                    <p className="text-sm font-medium mb-1">
+                      Application Notes:
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {formula.application_notes}
+                    </p>
                   </div>
                 )}
               </AccordionContent>
@@ -157,7 +192,8 @@ const FormulaCardComponent = ({
   );
 };
 
-export const FormulaCard = withMemo(
-  FormulaCardComponent,
-  ['formula.id', 'formula.updated_at', 'searchTerm']
-);
+export const FormulaCard = withMemo(FormulaCardComponent, [
+  'formula.id',
+  'formula.updated_at',
+  'searchTerm',
+]);

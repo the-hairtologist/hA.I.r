@@ -11,35 +11,41 @@ export interface AuthContext {
   supabase: any;
 }
 
-export async function requireAuth(req: Request): Promise<AuthContext | Response> {
+export async function requireAuth(
+  req: Request
+): Promise<AuthContext | Response> {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers':
+      'authorization, x-client-info, apikey, content-type',
   };
 
   const authHeader = req.headers.get('Authorization');
   if (!authHeader) {
-    return new Response(
-      JSON.stringify({ error: 'No authorization header' }),
-      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'No authorization header' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
   const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-  
+
   const supabase = createClient(supabaseUrl, supabaseKey, {
     global: { headers: { Authorization: authHeader } },
-    auth: { persistSession: false }
+    auth: { persistSession: false },
   });
 
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
   if (userError || !user) {
-    return new Response(
-      JSON.stringify({ error: 'Unauthorized' }),
-      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   // Fetch profile from database
@@ -58,7 +64,8 @@ export async function requireRole(
 ): Promise<AuthContext | Response> {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers':
+      'authorization, x-client-info, apikey, content-type',
   };
 
   const authResult = await requireAuth(req);
@@ -78,17 +85,25 @@ export async function requireRole(
     console.error('Error fetching roles:', roleError);
     return new Response(
       JSON.stringify({ error: 'Failed to verify permissions' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
     );
   }
 
   const roles = userRoles?.map((r: any) => r.role) || [];
-  const hasPermission = roles.some((role: string) => allowedRoles.includes(role));
+  const hasPermission = roles.some((role: string) =>
+    allowedRoles.includes(role)
+  );
 
   if (!hasPermission) {
     return new Response(
       JSON.stringify({ error: 'Forbidden: Insufficient permissions' }),
-      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
     );
   }
 

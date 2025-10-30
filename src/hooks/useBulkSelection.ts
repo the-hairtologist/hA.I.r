@@ -8,9 +8,12 @@ import { useState, useCallback, useMemo } from 'react';
 export const useBulkSelection = <T extends { id: string }>(items: T[]) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
-  const isSelected = useCallback((id: string) => {
-    return selectedIds.has(id);
-  }, [selectedIds]);
+  const isSelected = useCallback(
+    (id: string) => {
+      return selectedIds.has(id);
+    },
+    [selectedIds]
+  );
 
   const toggleSelection = useCallback((id: string) => {
     setSelectedIds(prev => {

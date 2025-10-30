@@ -37,7 +37,7 @@ class PerformanceOptimizerSystem {
     await this.preloadCriticalResources();
 
     logger.info('Performance optimization complete', 'PerformanceOptimizer', {
-      optimizationsApplied: this.optimizations.filter(o => o.applied).length
+      optimizationsApplied: this.optimizations.filter(o => o.applied).length,
     });
 
     return this.optimizations;
@@ -50,19 +50,19 @@ class PerformanceOptimizerSystem {
     try {
       // QueryCache is already implemented, just ensure it's being used
       const stats = queryCache.getStats();
-      
+
       this.optimizations.push({
         action: 'Query Caching',
         impact: 'high',
         applied: true,
-        details: `QueryCache active with ${stats.size} cached items`
+        details: `QueryCache active with ${stats.size} cached items`,
       });
     } catch (error) {
       this.optimizations.push({
         action: 'Query Caching',
         impact: 'high',
         applied: false,
-        details: 'Failed to enable query caching'
+        details: 'Failed to enable query caching',
       });
     }
   }
@@ -73,21 +73,21 @@ class PerformanceOptimizerSystem {
   private async optimizeRealtimeSubscriptions(): Promise<void> {
     try {
       const stats = realtimeManager.getStats();
-      
+
       // If too many subscriptions, suggest optimization
       if (stats.activeChannels > 5) {
         this.optimizations.push({
           action: 'Realtime Optimization',
           impact: 'medium',
           applied: true,
-          details: `Optimized ${stats.activeChannels} subscriptions`
+          details: `Optimized ${stats.activeChannels} subscriptions`,
         });
       } else {
         this.optimizations.push({
           action: 'Realtime Optimization',
           impact: 'low',
           applied: true,
-          details: 'Realtime subscriptions already optimized'
+          details: 'Realtime subscriptions already optimized',
         });
       }
     } catch (error) {
@@ -95,7 +95,7 @@ class PerformanceOptimizerSystem {
         action: 'Realtime Optimization',
         impact: 'medium',
         applied: false,
-        details: 'Failed to optimize realtime'
+        details: 'Failed to optimize realtime',
       });
     }
   }
@@ -111,14 +111,14 @@ class PerformanceOptimizerSystem {
         action: 'Memory Cleanup',
         impact: 'medium',
         applied: true,
-        details: `Cleaned ${result.cleaned} entries, retained ${result.retained}`
+        details: `Cleaned ${result.cleaned} entries, retained ${result.retained}`,
       });
     } catch (error) {
       this.optimizations.push({
         action: 'Memory Cleanup',
         impact: 'medium',
         applied: false,
-        details: 'Failed to cleanup memory'
+        details: 'Failed to cleanup memory',
       });
     }
   }
@@ -131,7 +131,7 @@ class PerformanceOptimizerSystem {
       // Preload fonts and critical assets
       const resources = [
         { href: '/fonts/dm-sans-regular.woff2', as: 'font' },
-        { href: '/fonts/space-grotesk-medium.woff2', as: 'font' }
+        { href: '/fonts/space-grotesk-medium.woff2', as: 'font' },
       ];
 
       resources.forEach(resource => {
@@ -149,14 +149,14 @@ class PerformanceOptimizerSystem {
         action: 'Resource Preloading',
         impact: 'low',
         applied: true,
-        details: `Preloaded ${resources.length} critical resources`
+        details: `Preloaded ${resources.length} critical resources`,
       });
     } catch (error) {
       this.optimizations.push({
         action: 'Resource Preloading',
         impact: 'low',
         applied: false,
-        details: 'Failed to preload resources'
+        details: 'Failed to preload resources',
       });
     }
   }
@@ -184,7 +184,9 @@ class PerformanceOptimizerSystem {
     // Check realtime subscriptions
     const realtimeStats = realtimeManager.getStats();
     if (realtimeStats.activeChannels > 10) {
-      recommendations.push('Too many active subscriptions - consider consolidating');
+      recommendations.push(
+        'Too many active subscriptions - consider consolidating'
+      );
     }
 
     return recommendations;

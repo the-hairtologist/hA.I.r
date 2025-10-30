@@ -1,17 +1,21 @@
 /**
  * Data Integrity Checker
- * 
+ *
  * Validates data consistency, detects corruption, and auto-repairs issues.
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 
 interface IntegrityIssue {
   table: string;
   recordId: string;
-  issueType: 'missing_required' | 'invalid_format' | 'broken_reference' | 'duplicate';
+  issueType:
+    | 'missing_required'
+    | 'invalid_format'
+    | 'broken_reference'
+    | 'duplicate';
   field: string;
   currentValue: any;
   expectedValue?: any;
@@ -37,7 +41,11 @@ class DataIntegrityChecker {
       { field: 'stylist_id', required: true, type: 'uuid' },
       { field: 'client_id', required: true, type: 'uuid' },
       { field: 'appointment_date', required: true, type: 'timestamp' },
-      { field: 'status', required: true, enum: ['scheduled', 'completed', 'cancelled', 'no_show'] },
+      {
+        field: 'status',
+        required: true,
+        enum: ['scheduled', 'completed', 'cancelled', 'no_show'],
+      },
     ],
   };
 
@@ -46,8 +54,10 @@ class DataIntegrityChecker {
    */
   async runFullCheck(): Promise<IntegrityIssue[]> {
     // Check if user is authenticated before running checks
-    const { data: { session } } = await supabase.auth.getSession();
-    
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
     if (!session) {
       logger.debug('Skipping data integrity check - user not authenticated');
       return [];
@@ -61,12 +71,16 @@ class DataIntegrityChecker {
         const tableIssues = await this.checkTable(table, rules);
         issues.push(...tableIssues);
       } catch (error) {
-        logger.error(`Failed to check table ${table}`, 'DataIntegrityChecker', error);
+        logger.error(
+          `Failed to check table ${table}`,
+          'DataIntegrityChecker',
+          error
+        );
       }
     }
 
     logger.info(`Integrity check complete: ${issues.length} issues found`);
-    
+
     // Don't show toast to users - this is a background system check
     // Issues are logged and can be viewed in admin tools
 
@@ -76,7 +90,10 @@ class DataIntegrityChecker {
   /**
    * Check specific table
    */
-  private async checkTable(table: string, rules: any[]): Promise<IntegrityIssue[]> {
+  private async checkTable(
+    table: string,
+    rules: any[]
+  ): Promise<IntegrityIssue[]> {
     const issues: IntegrityIssue[] = [];
 
     try {
@@ -88,7 +105,10 @@ class DataIntegrityChecker {
       if (error) {
         // Permission denied errors are expected for RLS-protected tables when not authenticated
         if (error.code === '42501') {
-          logger.info(`Skipping ${table} check - RLS protected (expected)`, 'DataIntegrityChecker');
+          logger.info(
+            `Skipping ${table} check - RLS protected (expected)`,
+            'DataIntegrityChecker'
+          );
           return issues;
         }
         logger.error(`Error fetching ${table}`, 'DataIntegrityChecker', error);
@@ -106,7 +126,11 @@ class DataIntegrityChecker {
         }
       }
     } catch (error) {
-      logger.error(`Error checking table ${table}`, 'DataIntegrityChecker', error);
+      logger.error(
+        `Error checking table ${table}`,
+        'DataIntegrityChecker',
+        error
+      );
     }
 
     return issues;
@@ -115,11 +139,18 @@ class DataIntegrityChecker {
   /**
    * Validate individual field
    */
-  private validateField(table: string, record: any, rule: any): IntegrityIssue | null {
+  private validateField(
+    table: string,
+    record: any,
+    rule: any
+  ): IntegrityIssue | null {
     const value = record[rule.field];
 
     // Required check
-    if (rule.required && (value === null || value === undefined || value === '')) {
+    if (
+      rule.required &&
+      (value === null || value === undefined || value === '')
+    ) {
       return {
         table,
         recordId: record.id,
@@ -186,14 +217,18 @@ class DataIntegrityChecker {
           fixedCount++;
         }
       } catch (error) {
-        logger.error(`Failed to fix issue in ${issue.table}`, 'DataIntegrityChecker', error);
+        logger.error(
+          `Failed to fix issue in ${issue.table}`,
+          'DataIntegrityChecker',
+          error
+        );
       }
     }
 
     logger.info(`Auto-fixed ${fixedCount} issues`);
-    
+
     // Silent in production - only admins see this in System Health dashboard
-    
+
     return fixedCount;
   }
 
@@ -212,14 +247,24 @@ class DataIntegrityChecker {
         .eq('id', issue.recordId);
 
       if (error) {
-        logger.error(`Failed to fix ${issue.table}.${issue.field}`, 'DataIntegrityChecker', error);
+        logger.error(
+          `Failed to fix ${issue.table}.${issue.field}`,
+          'DataIntegrityChecker',
+          error
+        );
         return false;
       }
 
-      logger.info(`Fixed ${issue.table}.${issue.field} for record ${issue.recordId}`);
+      logger.info(
+        `Fixed ${issue.table}.${issue.field} for record ${issue.recordId}`
+      );
       return true;
     } catch (error) {
-      logger.error(`Exception fixing ${issue.table}`, 'DataIntegrityChecker', error);
+      logger.error(
+        `Exception fixing ${issue.table}`,
+        'DataIntegrityChecker',
+        error
+      );
       return false;
     }
   }
@@ -269,7 +314,11 @@ class DataIntegrityChecker {
         });
       }
     } catch (error) {
-      logger.error('Failed to check orphaned records', 'DataIntegrityChecker', error);
+      logger.error(
+        'Failed to check orphaned records',
+        'DataIntegrityChecker',
+        error
+      );
     }
 
     return issues;
@@ -278,7 +327,10 @@ class DataIntegrityChecker {
   /**
    * Check for duplicate records
    */
-  async checkDuplicates(table: string, uniqueFields: string[]): Promise<IntegrityIssue[]> {
+  async checkDuplicates(
+    table: string,
+    uniqueFields: string[]
+  ): Promise<IntegrityIssue[]> {
     const issues: IntegrityIssue[] = [];
 
     try {
@@ -290,7 +342,7 @@ class DataIntegrityChecker {
 
       for (const record of records) {
         const key = uniqueFields.map(field => record[field]).join('|');
-        
+
         if (seen.has(key)) {
           issues.push({
             table,
@@ -305,7 +357,11 @@ class DataIntegrityChecker {
         }
       }
     } catch (error) {
-      logger.error(`Failed to check duplicates in ${table}`, 'DataIntegrityChecker', error);
+      logger.error(
+        `Failed to check duplicates in ${table}`,
+        'DataIntegrityChecker',
+        error
+      );
     }
 
     return issues;
@@ -317,7 +373,7 @@ class DataIntegrityChecker {
   async generateReport(): Promise<string> {
     const issues = await this.runFullCheck();
     const orphans = await this.checkOrphanedRecords();
-    
+
     const allIssues = [...issues, ...orphans];
     const fixableCount = allIssues.filter(i => i.autoFixable).length;
 
@@ -341,10 +397,13 @@ ${this.groupByTable(allIssues)}
   }
 
   private groupByTable(issues: IntegrityIssue[]): string {
-    const grouped = issues.reduce((acc, issue) => {
-      acc[issue.table] = (acc[issue.table] || 0) + 1;
-      return acc;
-    }, {} as { [key: string]: number });
+    const grouped = issues.reduce(
+      (acc, issue) => {
+        acc[issue.table] = (acc[issue.table] || 0) + 1;
+        return acc;
+      },
+      {} as { [key: string]: number }
+    );
 
     return Object.entries(grouped)
       .map(([table, count]) => `- ${table}: ${count}`)

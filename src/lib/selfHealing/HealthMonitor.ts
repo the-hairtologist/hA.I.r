@@ -1,11 +1,11 @@
 /**
  * Automated Health Monitoring System
- * 
+ *
  * Continuously monitors app health, detects issues, and triggers alerts.
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 
 interface HealthMetrics {
@@ -69,7 +69,7 @@ class HealthMonitorSystem {
           if (perfMemory) {
             const used = perfMemory.usedJSHeapSize;
             const limit = perfMemory.jsHeapSizeLimit;
-            return (used / limit) < 0.9; // Less than 90% usage
+            return used / limit < 0.9; // Less than 90% usage
           }
           return true;
         },
@@ -102,7 +102,7 @@ class HealthMonitorSystem {
     }
 
     logger.info('Starting health monitoring');
-    
+
     // Initial check
     this.performHealthCheck();
 
@@ -144,7 +144,11 @@ class HealthMonitorSystem {
         if (check.critical) {
           criticalFailure = true;
         }
-        logger.error(`Health check error: ${check.name}`, 'HealthMonitor', error);
+        logger.error(
+          `Health check error: ${check.name}`,
+          'HealthMonitor',
+          error
+        );
       }
     }
 
@@ -213,8 +217,8 @@ class HealthMonitorSystem {
     const criticalChecks = this.checks
       .filter(check => check.critical)
       .map(check => check.name);
-    
-    const actualCriticalFailures = failedChecks.filter(name => 
+
+    const actualCriticalFailures = failedChecks.filter(name =>
       criticalChecks.includes(name)
     );
 
@@ -238,7 +242,7 @@ class HealthMonitorSystem {
     logger.warn('Performance degradation detected', 'HealthMonitor', {
       memoryUsage: metrics.memoryUsage,
       apiLatency: metrics.apiLatency,
-      timestamp: metrics.timestamp
+      timestamp: metrics.timestamp,
     });
 
     if (metrics.memoryUsage > 0.85) {
@@ -260,7 +264,11 @@ class HealthMonitorSystem {
             await supabase.auth.refreshSession();
             logger.info('Database connection recovered');
           } catch (error) {
-            logger.error('Failed to recover database connection', 'HealthMonitor', error);
+            logger.error(
+              'Failed to recover database connection',
+              'HealthMonitor',
+              error
+            );
           }
           break;
 
@@ -310,7 +318,9 @@ class HealthMonitorSystem {
     }
 
     const latest = this.metrics[this.metrics.length - 1];
-    const avgLatency = this.metrics.reduce((sum, m) => sum + m.apiLatency, 0) / this.metrics.length;
+    const avgLatency =
+      this.metrics.reduce((sum, m) => sum + m.apiLatency, 0) /
+      this.metrics.length;
 
     if (latest.errorRate > 0.3 || latest.memoryUsage > 0.9) {
       return {
@@ -321,7 +331,11 @@ class HealthMonitorSystem {
       };
     }
 
-    if (latest.errorRate > 0.1 || latest.memoryUsage > 0.75 || avgLatency > 2000) {
+    if (
+      latest.errorRate > 0.1 ||
+      latest.memoryUsage > 0.75 ||
+      avgLatency > 2000
+    ) {
       return {
         status: 'degraded',
         message: 'System performance degraded',

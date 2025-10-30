@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { typography } from "@/lib/brutalismUtils";
+import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import { typography } from '@/lib/brutalismUtils';
 
 interface BrutalTextProps {
   children: ReactNode;
-  size?: "large" | "normal" | "small";
+  size?: 'large' | 'normal' | 'small';
   className?: string;
   muted?: boolean;
 }
@@ -13,11 +13,11 @@ interface BrutalTextProps {
  * BrutalText - DM Sans readable body text
  * Use for all paragraphs, descriptions, and readable content
  */
-export const BrutalText = ({ 
-  children, 
-  size = "normal",
+export const BrutalText = ({
+  children,
+  size = 'normal',
   className,
-  muted = false
+  muted = false,
 }: BrutalTextProps) => {
   const sizeClasses = {
     large: typography.bodyLarge,
@@ -26,11 +26,13 @@ export const BrutalText = ({
   };
 
   return (
-    <p className={cn(
-      sizeClasses[size], 
-      muted && "text-muted-foreground",
-      className
-    )}>
+    <p
+      className={cn(
+        sizeClasses[size],
+        muted && 'text-muted-foreground',
+        className
+      )}
+    >
       {children}
     </p>
   );

@@ -1,48 +1,53 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 /**
  * No-Show Prevention Service
- * 
+ *
  * Runs twice daily to send appointment confirmation requests:
  * - 48 hours before appointment
  * - 24 hours before appointment (if not confirmed)
- * 
+ *
  * This reduces no-shows by prompting clients to confirm attendance
  */
 
 const handler = async (req: Request): Promise<Response> => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log("🔔 Starting no-show prevention service");
+    console.log('🔔 Starting no-show prevention service');
 
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
     let totalSent = 0;
     const now = new Date();
 
     // 1. SEND 48-HOUR CONFIRMATION REQUESTS
-    const fortyEightHoursFromNow = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+    const fortyEightHoursFromNow = new Date(
+      now.getTime() + 48 * 60 * 60 * 1000
+    );
     const fortyNineHoursFromNow = new Date(now.getTime() + 49 * 60 * 60 * 1000);
 
     const { data: appointments48h } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         *,
         client:client_profiles(
           id,
@@ -52,35 +57,44 @@ const handler = async (req: Request): Promise<Response> => {
           user:profiles(full_name),
           business_name
         )
-      `)
-      .in("status", ["scheduled", "confirmed"])
-      .gte("appointment_date", fortyEightHoursFromNow.toISOString())
-      .lt("appointment_date", fortyNineHoursFromNow.toISOString())
-      .eq("confirmation_requested_48h", false);
+      `
+      )
+      .in('status', ['scheduled', 'confirmed'])
+      .gte('appointment_date', fortyEightHoursFromNow.toISOString())
+      .lt('appointment_date', fortyNineHoursFromNow.toISOString())
+      .eq('confirmation_requested_48h', false);
 
-    console.log(`📋 Found ${appointments48h?.length || 0} appointments needing 48h confirmation`);
+    console.log(
+      `📋 Found ${appointments48h?.length || 0} appointments needing 48h confirmation`
+    );
 
     for (const appointment of appointments48h || []) {
       const clientEmail = appointment.client?.user?.email;
-      const clientName = appointment.client?.user?.full_name || "Client";
-      const stylistName = appointment.stylist?.user?.full_name || appointment.stylist?.business_name;
+      const clientName = appointment.client?.user?.full_name || 'Client';
+      const stylistName =
+        appointment.stylist?.user?.full_name ||
+        appointment.stylist?.business_name;
       const clientId = appointment.client?.id;
 
       if (!clientEmail || !clientId) continue;
 
       // Check email preferences
       const { data: prefs } = await supabase
-        .from("email_preferences")
-        .select("appointment_reminders_enabled")
-        .eq("client_id", clientId)
+        .from('email_preferences')
+        .select('appointment_reminders_enabled')
+        .eq('client_id', clientId)
         .maybeSingle();
 
       if (prefs && !prefs.appointment_reminders_enabled) {
-        console.log(`⏭️ Skipping 48h confirmation - user opted out: ${clientEmail}`);
+        console.log(
+          `⏭️ Skipping 48h confirmation - user opted out: ${clientEmail}`
+        );
         continue;
       }
 
-      const appointmentDate = new Date(appointment.appointment_date).toLocaleString('en-US', {
+      const appointmentDate = new Date(
+        appointment.appointment_date
+      ).toLocaleString('en-US', {
         weekday: 'long',
         month: 'long',
         day: 'numeric',
@@ -88,7 +102,7 @@ const handler = async (req: Request): Promise<Response> => {
         minute: '2-digit',
       });
 
-      const confirmUrl = `${Deno.env.get("SUPABASE_URL")}/confirm-appointment/${appointment.id}`;
+      const confirmUrl = `${Deno.env.get('SUPABASE_URL')}/confirm-appointment/${appointment.id}`;
 
       const emailHtml = `
         <!DOCTYPE html>
@@ -142,21 +156,26 @@ const handler = async (req: Request): Promise<Response> => {
       });
 
       await supabase
-        .from("appointments")
+        .from('appointments')
         .update({ confirmation_requested_48h: true })
-        .eq("id", appointment.id);
+        .eq('id', appointment.id);
 
       totalSent++;
       console.log(`✅ Sent 48h confirmation for appointment ${appointment.id}`);
     }
 
     // 2. SEND 24-HOUR FINAL CONFIRMATION REQUESTS (for unconfirmed appointments)
-    const twentyFourHoursFromNow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const twentyFiveHoursFromNow = new Date(now.getTime() + 25 * 60 * 60 * 1000);
+    const twentyFourHoursFromNow = new Date(
+      now.getTime() + 24 * 60 * 60 * 1000
+    );
+    const twentyFiveHoursFromNow = new Date(
+      now.getTime() + 25 * 60 * 60 * 1000
+    );
 
     const { data: appointments24h } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         *,
         client:client_profiles(
           id,
@@ -167,19 +186,24 @@ const handler = async (req: Request): Promise<Response> => {
           business_name,
           phone
         )
-      `)
-      .in("status", ["scheduled", "confirmed"])
-      .gte("appointment_date", twentyFourHoursFromNow.toISOString())
-      .lt("appointment_date", twentyFiveHoursFromNow.toISOString())
-      .eq("confirmation_requested_24h", false)
-      .eq("confirmed_by_client", false);
+      `
+      )
+      .in('status', ['scheduled', 'confirmed'])
+      .gte('appointment_date', twentyFourHoursFromNow.toISOString())
+      .lt('appointment_date', twentyFiveHoursFromNow.toISOString())
+      .eq('confirmation_requested_24h', false)
+      .eq('confirmed_by_client', false);
 
-    console.log(`📋 Found ${appointments24h?.length || 0} unconfirmed appointments needing 24h reminder`);
+    console.log(
+      `📋 Found ${appointments24h?.length || 0} unconfirmed appointments needing 24h reminder`
+    );
 
     for (const appointment of appointments24h || []) {
       const clientEmail = appointment.client?.user?.email;
-      const clientName = appointment.client?.user?.full_name || "Client";
-      const stylistName = appointment.stylist?.user?.full_name || appointment.stylist?.business_name;
+      const clientName = appointment.client?.user?.full_name || 'Client';
+      const stylistName =
+        appointment.stylist?.user?.full_name ||
+        appointment.stylist?.business_name;
       const stylistPhone = appointment.stylist?.phone;
       const clientId = appointment.client?.id;
 
@@ -187,17 +211,21 @@ const handler = async (req: Request): Promise<Response> => {
 
       // Check email preferences
       const { data: prefs } = await supabase
-        .from("email_preferences")
-        .select("appointment_reminders_enabled")
-        .eq("client_id", clientId)
+        .from('email_preferences')
+        .select('appointment_reminders_enabled')
+        .eq('client_id', clientId)
         .maybeSingle();
 
       if (prefs && !prefs.appointment_reminders_enabled) {
-        console.log(`⏭️ Skipping 24h confirmation - user opted out: ${clientEmail}`);
+        console.log(
+          `⏭️ Skipping 24h confirmation - user opted out: ${clientEmail}`
+        );
         continue;
       }
 
-      const appointmentDate = new Date(appointment.appointment_date).toLocaleString('en-US', {
+      const appointmentDate = new Date(
+        appointment.appointment_date
+      ).toLocaleString('en-US', {
         weekday: 'long',
         month: 'long',
         day: 'numeric',
@@ -205,7 +233,7 @@ const handler = async (req: Request): Promise<Response> => {
         minute: '2-digit',
       });
 
-      const confirmUrl = `${Deno.env.get("SUPABASE_URL")}/confirm-appointment/${appointment.id}`;
+      const confirmUrl = `${Deno.env.get('SUPABASE_URL')}/confirm-appointment/${appointment.id}`;
 
       const emailHtml = `
         <!DOCTYPE html>
@@ -264,40 +292,39 @@ const handler = async (req: Request): Promise<Response> => {
       });
 
       await supabase
-        .from("appointments")
+        .from('appointments')
         .update({ confirmation_requested_24h: true })
-        .eq("id", appointment.id);
+        .eq('id', appointment.id);
 
       totalSent++;
-      console.log(`✅ Sent 24h final confirmation for appointment ${appointment.id}`);
+      console.log(
+        `✅ Sent 24h final confirmation for appointment ${appointment.id}`
+      );
     }
 
     console.log(`📧 Successfully sent ${totalSent} confirmation requests`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         totalSent,
         confirmations48h: appointments48h?.length || 0,
-        confirmations24h: appointments24h?.length || 0
+        confirmations24h: appointments24h?.length || 0,
       }),
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...corsHeaders,
         },
       }
     );
   } catch (error: any) {
-    console.error("❌ Error in no-show-prevention:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    console.error('❌ Error in no-show-prevention:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    });
   }
 };
 

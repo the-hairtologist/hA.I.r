@@ -34,9 +34,10 @@ class PreventiveMaintenanceSystem {
         const cycles = dependencyValidator.detectCircularDependencies();
         return {
           passed: cycles.length === 0,
-          message: cycles.length > 0 
-            ? `Found ${cycles.length} circular dependencies`
-            : 'No circular dependencies detected',
+          message:
+            cycles.length > 0
+              ? `Found ${cycles.length} circular dependencies`
+              : 'No circular dependencies detected',
         };
       },
     });
@@ -49,7 +50,7 @@ class PreventiveMaintenanceSystem {
         const health = errorDetection.healthCheck();
         return {
           passed: health.healthy,
-          message: health.healthy 
+          message: health.healthy
             ? 'Error detection system healthy'
             : `${health.criticalErrors} critical errors detected`,
         };
@@ -65,9 +66,10 @@ class PreventiveMaintenanceSystem {
         const consoleErrors = errors.filter(e => e.type === 'runtime-error');
         return {
           passed: consoleErrors.length === 0,
-          message: consoleErrors.length > 0
-            ? `${consoleErrors.length} console errors detected`
-            : 'No console errors',
+          message:
+            consoleErrors.length > 0
+              ? `${consoleErrors.length} console errors detected`
+              : 'No console errors',
         };
       },
     });
@@ -95,7 +97,7 @@ class PreventiveMaintenanceSystem {
         const hasCriticalCSS = !!document.getElementById('critical-css');
         return {
           passed: hasCriticalCSS,
-          message: hasCriticalCSS 
+          message: hasCriticalCSS
             ? 'Critical CSS loaded'
             : 'Critical CSS not loaded',
         };
@@ -107,12 +109,12 @@ class PreventiveMaintenanceSystem {
       name: 'Content Security Policy Check',
       severity: 'high',
       check: async () => {
-        const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+        const cspMeta = document.querySelector(
+          'meta[http-equiv="Content-Security-Policy"]'
+        );
         return {
           passed: !!cspMeta,
-          message: cspMeta 
-            ? 'CSP active'
-            : 'CSP not loaded',
+          message: cspMeta ? 'CSP active' : 'CSP not loaded',
         };
       },
     });
@@ -124,14 +126,18 @@ class PreventiveMaintenanceSystem {
       check: async () => {
         // Check if advanced features are available
         const criticalCSS = !!document.getElementById('critical-css');
-        const cspActive = !!document.querySelector('meta[http-equiv="Content-Security-Policy"]');
-        const announcerActive = !!document.querySelector('[role="status"][aria-live="polite"]');
-        
+        const cspActive = !!document.querySelector(
+          'meta[http-equiv="Content-Security-Policy"]'
+        );
+        const announcerActive = !!document.querySelector(
+          '[role="status"][aria-live="polite"]'
+        );
+
         const allLoaded = criticalCSS && cspActive && announcerActive;
-        
+
         return {
           passed: allLoaded,
-          message: allLoaded 
+          message: allLoaded
             ? 'All advanced features loaded (CSS, CSP, Accessibility)'
             : `Missing: ${!criticalCSS ? 'CSS ' : ''}${!cspActive ? 'CSP ' : ''}${!announcerActive ? 'Announcer' : ''}`,
         };
@@ -153,10 +159,15 @@ class PreventiveMaintenanceSystem {
     passed: number;
     failed: number;
     total: number;
-    results: Array<{ name: string; passed: boolean; message: string; severity: string }>;
+    results: Array<{
+      name: string;
+      passed: boolean;
+      message: string;
+      severity: string;
+    }>;
   }> {
     const results = await Promise.all(
-      this.checks.map(async (check) => {
+      this.checks.map(async check => {
         const result = await check.check();
         return {
           name: check.name,
@@ -174,8 +185,8 @@ class PreventiveMaintenanceSystem {
 
     // Log results
     if (failed > 0) {
-      logger.warn('Preventive Maintenance: Some checks failed', { 
-        failedChecks: results.filter(r => !r.passed) 
+      logger.warn('Preventive Maintenance: Some checks failed', {
+        failedChecks: results.filter(r => !r.passed),
       });
     } else {
       logger.info('Preventive Maintenance: All checks passed');
@@ -216,7 +227,7 @@ class PreventiveMaintenanceSystem {
    */
   async generateReport(): Promise<string> {
     const results = await this.runChecks();
-    
+
     let report = '=== Preventive Maintenance Report ===\n\n';
     report += `Date: ${new Date().toISOString()}\n`;
     report += `Total Checks: ${results.total}\n`;

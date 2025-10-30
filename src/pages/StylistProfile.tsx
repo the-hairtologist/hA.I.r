@@ -1,34 +1,34 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, useParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ReviewsList } from "@/components/reviews/ReviewsList";
-import { ShareButtons } from "@/components/ShareButtons";
-import { SEOHead } from "@/components/SEOHead";
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { ReviewsList } from '@/components/reviews/ReviewsList';
+import { ShareButtons } from '@/components/ShareButtons';
+import { SEOHead } from '@/components/SEOHead';
 
-import { 
-  ArrowLeft, 
-  Calendar, 
-  MapPin, 
-  Star, 
+import {
+  ArrowLeft,
+  Calendar,
+  MapPin,
+  Star,
   Award,
   Sparkles,
   User,
-  Loader2 
-} from "lucide-react";
-import { toast } from "sonner";
+  Loader2,
+} from 'lucide-react';
+import { toast } from 'sonner';
 
 const StylistProfile = () => {
   const navigate = useNavigate();
   const { id: paramId, username } = useParams();
   const [searchParams] = useSearchParams();
-  const queryId = searchParams.get("id");
+  const queryId = searchParams.get('id');
   const stylistId = paramId || queryId;
-  
+
   const [loading, setLoading] = useState(true);
   const [stylist, setStylist] = useState<any>(null);
 
@@ -36,8 +36,8 @@ const StylistProfile = () => {
     if (stylistId) {
       loadStylist();
     } else {
-      toast.error("Stylist not found");
-      navigate("/stylist-discovery");
+      toast.error('Stylist not found');
+      navigate('/stylist-discovery');
     }
   }, [stylistId]);
 
@@ -45,17 +45,17 @@ const StylistProfile = () => {
     try {
       // Use public directory view to prevent exposure of sensitive business data
       const { data, error } = await supabase
-        .from("public_stylist_directory")
-        .select("*")
-        .eq("id", stylistId)
+        .from('public_stylist_directory')
+        .select('*')
+        .eq('id', stylistId)
         .maybeSingle();
 
       if (error) throw error;
       setStylist(data);
     } catch (error: any) {
-      console.error("Error loading stylist:", error);
-      toast.error("Failed to load stylist profile");
-      navigate("/stylist-discovery");
+      console.error('Error loading stylist:', error);
+      toast.error('Failed to load stylist profile');
+      navigate('/stylist-discovery');
     } finally {
       setLoading(false);
     }
@@ -81,18 +81,21 @@ const StylistProfile = () => {
 
   return (
     <DashboardLayout>
-      <SEOHead 
+      <SEOHead
         title={`${stylist.business_name} - Hair Stylist in ${stylist.location} | hA.I.r`}
-        description={stylist.bio || `Professional ${stylist.specialty} specialist with ${stylist.years_experience} years of experience. Book appointments online in ${stylist.location}.`}
+        description={
+          stylist.bio ||
+          `Professional ${stylist.specialty} specialist with ${stylist.years_experience} years of experience. Book appointments online in ${stylist.location}.`
+        }
         keywords={`${stylist.business_name}, ${stylist.specialty}, hair stylist ${stylist.location}, salon ${stylist.location}, hair color specialist, book stylist online`}
         url={`/stylist/${stylistId}`}
         type="profile"
       />
       <div className="container mx-auto p-6 max-w-5xl">
         {/* Back Button */}
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/stylist-discovery")}
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/stylist-discovery')}
           className="mb-6"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -120,20 +123,23 @@ const StylistProfile = () => {
                 {stylist.total_reviews > 0 && (
                   <div className="flex items-center gap-2 mb-4">
                     <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
+                      {[1, 2, 3, 4, 5].map(star => (
                         <Star
                           key={star}
                           className={`h-5 w-5 ${
                             star <= Math.round(stylist.average_rating)
-                              ? "fill-amber-400 text-amber-400"
-                              : "text-muted-foreground/30"
+                              ? 'fill-amber-400 text-amber-400'
+                              : 'text-muted-foreground/30'
                           }`}
                         />
                       ))}
                     </div>
-                    <span className="font-semibold">{stylist.average_rating.toFixed(1)}</span>
+                    <span className="font-semibold">
+                      {stylist.average_rating.toFixed(1)}
+                    </span>
                     <span className="text-muted-foreground">
-                      ({stylist.total_reviews} {stylist.total_reviews === 1 ? "review" : "reviews"})
+                      ({stylist.total_reviews}{' '}
+                      {stylist.total_reviews === 1 ? 'review' : 'reviews'})
                     </span>
                   </div>
                 )}
@@ -157,22 +163,31 @@ const StylistProfile = () => {
                   {stylist.years_experience && (
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Award className="h-4 w-4" />
-                      <span>{stylist.years_experience} years of experience</span>
+                      <span>
+                        {stylist.years_experience} years of experience
+                      </span>
                     </div>
                   )}
                 </div>
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-3">
-                  <Button onClick={handleBookAppointment} size="lg" className="flex-1 md:flex-initial">
+                  <Button
+                    onClick={handleBookAppointment}
+                    size="lg"
+                    className="flex-1 md:flex-initial"
+                  >
                     <Calendar className="h-4 w-4 mr-2" />
                     Book Appointment
                   </Button>
-                  
-                  <ShareButtons 
+
+                  <ShareButtons
                     url={`/stylist/${stylistId}`}
                     title={`Check out ${stylist.business_name} on hA.I.r`}
-                    description={stylist.bio || `${stylist.specialty} specialist with ${stylist.years_experience} years of experience`}
+                    description={
+                      stylist.bio ||
+                      `${stylist.specialty} specialist with ${stylist.years_experience} years of experience`
+                    }
                   />
                 </div>
               </div>
@@ -184,13 +199,14 @@ const StylistProfile = () => {
                 <Separator className="my-6" />
                 <div>
                   <h3 className="text-lg font-semibold mb-3">About</h3>
-                  <p className="text-muted-foreground leading-relaxed">{stylist.bio}</p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {stylist.bio}
+                  </p>
                 </div>
               </>
             )}
           </CardContent>
         </Card>
-
 
         {/* Reviews Section */}
         <Card>

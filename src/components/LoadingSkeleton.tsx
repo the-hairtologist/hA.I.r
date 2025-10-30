@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 
 export const AppointmentSkeleton = () => (
   <Card className="animate-fade-in shimmer">
@@ -49,7 +49,11 @@ export const PortfolioSkeleton = () => (
 export const DashboardStatsSkeleton = () => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     {[...Array(4)].map((_, i) => (
-      <Card key={i} className="animate-fade-in shimmer brutal-border brutal-shadow-xs" style={{ animationDelay: `${i * 50}ms` }}>
+      <Card
+        key={i}
+        className="animate-fade-in shimmer brutal-border brutal-shadow-xs"
+        style={{ animationDelay: `${i * 50}ms` }}
+      >
         <CardHeader>
           <Skeleton className="h-4 w-24 mb-2 shimmer" />
           <Skeleton className="h-8 w-16 shimmer" />
@@ -77,7 +81,11 @@ export const QuickActionsSkeleton = () => (
     <CardContent>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {[...Array(3)].map((_, i) => (
-          <Card key={i} className="brutal-border brutal-shadow-xs shimmer" style={{ animationDelay: `${i * 50}ms` }}>
+          <Card
+            key={i}
+            className="brutal-border brutal-shadow-xs shimmer"
+            style={{ animationDelay: `${i * 50}ms` }}
+          >
             <CardContent className="p-5">
               <Skeleton className="h-12 w-12 rounded-lg mb-3 shimmer" />
               <Skeleton className="h-5 w-32 mb-2 shimmer" />
@@ -129,7 +137,11 @@ export const DashboardFullSkeleton = () => (
 );
 
 export const ChatMessageSkeleton = () => (
-  <div className="flex flex-col gap-4 animate-fade-in" role="status" aria-label="Loading chat message">
+  <div
+    className="flex flex-col gap-4 animate-fade-in"
+    role="status"
+    aria-label="Loading chat message"
+  >
     <div className="flex justify-start">
       <div className="max-w-[80%] rounded-2xl p-4 bg-muted border-2 border-border">
         <Skeleton className="h-4 w-64 mb-2 shimmer" />
@@ -140,7 +152,11 @@ export const ChatMessageSkeleton = () => (
 );
 
 export const StylistCardSkeleton = () => (
-  <Card className="animate-fade-in shimmer" role="status" aria-label="Loading stylist profile">
+  <Card
+    className="animate-fade-in shimmer"
+    role="status"
+    aria-label="Loading stylist profile"
+  >
     <CardContent className="p-6">
       <div className="flex gap-4">
         <Skeleton className="h-16 w-16 rounded-full shimmer" />
@@ -155,7 +171,11 @@ export const StylistCardSkeleton = () => (
 );
 
 export const FormulaSkeleton = () => (
-  <Card className="animate-fade-in shimmer" role="status" aria-label="Loading formula">
+  <Card
+    className="animate-fade-in shimmer"
+    role="status"
+    aria-label="Loading formula"
+  >
     <CardHeader>
       <Skeleton className="h-6 w-40 mb-2 shimmer" />
       <Skeleton className="h-4 w-64 shimmer" />

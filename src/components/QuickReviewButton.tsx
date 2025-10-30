@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Star, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { WriteReviewDialog } from "@/components/reviews/WriteReviewDialog";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { Star, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { WriteReviewDialog } from '@/components/reviews/WriteReviewDialog';
+import { cn } from '@/lib/utils';
 
 interface QuickReviewButtonProps {
   appointmentId: string;
@@ -47,10 +47,10 @@ export const QuickReviewButton = ({
       <Button
         onClick={() => setOpen(true)}
         className={cn(
-          "fixed bottom-[88px] right-20 h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all z-30 group touch-manipulation active:scale-95",
-          "bg-amber-400 hover:bg-amber-500 text-foreground border-2 border-foreground",
-          "hover:scale-110 active:scale-95",
-          isMinimized && "opacity-50 hover:opacity-100",
+          'fixed bottom-[88px] right-20 h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all z-30 group touch-manipulation active:scale-95',
+          'bg-amber-400 hover:bg-amber-500 text-foreground border-2 border-foreground',
+          'hover:scale-110 active:scale-95',
+          isMinimized && 'opacity-50 hover:opacity-100',
           className
         )}
         size="icon"

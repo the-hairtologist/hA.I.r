@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/useToast";
-import { Mail, CheckCircle } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/useToast';
+import { Mail, CheckCircle } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 export const ClientPreferenceCenter = () => {
   const toast = useToast();
@@ -16,30 +16,32 @@ export const ClientPreferenceCenter = () => {
 
   // Fetch client's email preferences
   const { data: preferences, isLoading } = useQuery({
-    queryKey: ["client_email_preferences"],
+    queryKey: ['client_email_preferences'],
     queryFn: async () => {
       const { data: clientProfile } = await supabase
-        .from("client_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('client_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       if (!clientProfile) return null;
 
       const { data, error } = await supabase
-        .from("email_preferences")
-        .select("*")
-        .eq("client_id", clientProfile.id)
+        .from('email_preferences')
+        .select('*')
+        .eq('client_id', clientProfile.id)
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
-      
+
       // Return defaults if no preferences exist
-      return data || {
-        appointment_reminders_enabled: true,
-        rebooking_reminders_enabled: true,
-        marketing_emails_enabled: true,
-      };
+      return (
+        data || {
+          appointment_reminders_enabled: true,
+          rebooking_reminders_enabled: true,
+          marketing_emails_enabled: true,
+        }
+      );
     },
     enabled: !!user,
   });
@@ -50,29 +52,30 @@ export const ClientPreferenceCenter = () => {
   const updateMutation = useMutation({
     mutationFn: async (newPrefs: any) => {
       const { data: clientProfile } = await supabase
-        .from("client_profiles")
-        .select("id, email")
-        .eq("user_id", user?.id)
+        .from('client_profiles')
+        .select('id, email')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
-      if (!clientProfile) throw new Error("Client profile not found");
+      if (!clientProfile) throw new Error('Client profile not found');
 
-      const { error } = await supabase
-        .from("email_preferences")
-        .upsert({
-          client_id: clientProfile.id,
-          email: clientProfile.email,
-          ...newPrefs,
-        });
+      const { error } = await supabase.from('email_preferences').upsert({
+        client_id: clientProfile.id,
+        email: clientProfile.email,
+        ...newPrefs,
+      });
 
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Preferences updated", "Your email preferences have been saved");
-      queryClient.invalidateQueries({ queryKey: ["client_email_preferences"] });
+      toast.success(
+        'Preferences updated',
+        'Your email preferences have been saved'
+      );
+      queryClient.invalidateQueries({ queryKey: ['client_email_preferences'] });
     },
     onError: (error: Error) => {
-      toast.error("Failed to update preferences", error.message);
+      toast.error('Failed to update preferences', error.message);
     },
   });
 
@@ -109,7 +112,10 @@ export const ClientPreferenceCenter = () => {
             {/* Appointment Reminders */}
             <div className="flex items-start justify-between gap-4 pb-4 border-b">
               <div className="space-y-1 flex-1">
-                <Label htmlFor="appointment-reminders" className="text-base font-semibold cursor-pointer">
+                <Label
+                  htmlFor="appointment-reminders"
+                  className="text-base font-semibold cursor-pointer"
+                >
                   Appointment Reminders
                 </Label>
                 <p className="text-sm text-muted-foreground">
@@ -119,7 +125,9 @@ export const ClientPreferenceCenter = () => {
               <Switch
                 id="appointment-reminders"
                 checked={localPrefs?.appointment_reminders_enabled ?? true}
-                onCheckedChange={(checked) => handleToggle("appointment_reminders_enabled", checked)}
+                onCheckedChange={checked =>
+                  handleToggle('appointment_reminders_enabled', checked)
+                }
                 disabled={updateMutation.isPending}
               />
             </div>
@@ -127,7 +135,10 @@ export const ClientPreferenceCenter = () => {
             {/* Rebooking Reminders */}
             <div className="flex items-start justify-between gap-4 pb-4 border-b">
               <div className="space-y-1 flex-1">
-                <Label htmlFor="rebooking-reminders" className="text-base font-semibold cursor-pointer">
+                <Label
+                  htmlFor="rebooking-reminders"
+                  className="text-base font-semibold cursor-pointer"
+                >
                   Rebooking Reminders
                 </Label>
                 <p className="text-sm text-muted-foreground">
@@ -137,7 +148,9 @@ export const ClientPreferenceCenter = () => {
               <Switch
                 id="rebooking-reminders"
                 checked={localPrefs?.rebooking_reminders_enabled ?? true}
-                onCheckedChange={(checked) => handleToggle("rebooking_reminders_enabled", checked)}
+                onCheckedChange={checked =>
+                  handleToggle('rebooking_reminders_enabled', checked)
+                }
                 disabled={updateMutation.isPending}
               />
             </div>
@@ -145,7 +158,10 @@ export const ClientPreferenceCenter = () => {
             {/* Marketing Emails */}
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1 flex-1">
-                <Label htmlFor="marketing-emails" className="text-base font-semibold cursor-pointer">
+                <Label
+                  htmlFor="marketing-emails"
+                  className="text-base font-semibold cursor-pointer"
+                >
                   Promotional Emails
                 </Label>
                 <p className="text-sm text-muted-foreground">
@@ -155,7 +171,9 @@ export const ClientPreferenceCenter = () => {
               <Switch
                 id="marketing-emails"
                 checked={localPrefs?.marketing_emails_enabled ?? true}
-                onCheckedChange={(checked) => handleToggle("marketing_emails_enabled", checked)}
+                onCheckedChange={checked =>
+                  handleToggle('marketing_emails_enabled', checked)
+                }
                 disabled={updateMutation.isPending}
               />
             </div>
@@ -172,8 +190,9 @@ export const ClientPreferenceCenter = () => {
 
       <Card className="p-6 border-2 bg-muted/50">
         <p className="text-sm text-muted-foreground">
-          <strong>Note:</strong> You can always update these preferences or unsubscribe from individual email
-          sequences using the unsubscribe link at the bottom of any email.
+          <strong>Note:</strong> You can always update these preferences or
+          unsubscribe from individual email sequences using the unsubscribe link
+          at the bottom of any email.
         </p>
       </Card>
     </div>

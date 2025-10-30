@@ -15,9 +15,12 @@ interface LiveBookingToastProps {
   onNewBooking?: (appointment: any) => void;
 }
 
-export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, onNewBooking }) => {
+export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({
+  stylistId,
+  onNewBooking,
+}) => {
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!stylistId) return;
 
@@ -31,11 +34,12 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
           table: 'appointments',
           filter: `stylist_id=eq.${stylistId}`,
         },
-        async (payload) => {
+        async payload => {
           // Fetch full appointment details with client info
           const { data: appointment } = await supabase
             .from('appointments')
-            .select(`
+            .select(
+              `
               *,
               client:client_profiles(
                 id,
@@ -43,7 +47,8 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
                 email,
                 phone
               )
-            `)
+            `
+            )
             .eq('id', payload.new.id)
             .maybeSingle();
 
@@ -79,26 +84,35 @@ export const LiveBookingToast: React.FC<LiveBookingToastProps> = ({ stylistId, o
           table: 'appointments',
           filter: `stylist_id=eq.${stylistId}`,
         },
-        async (payload) => {
+        async payload => {
           // Check if status changed
           if (payload.old.status !== payload.new.status) {
             const { data: appointment } = await supabase
               .from('appointments')
-              .select(`
+              .select(
+                `
                 *,
                 client:client_profiles(full_name)
-              `)
+              `
+              )
               .eq('id', payload.new.id)
               .maybeSingle();
 
             if (appointment) {
               const clientName = appointment.client?.full_name || 'Client';
-              const statusEmoji = payload.new.status === 'confirmed' ? '✅' : 
-                                 payload.new.status === 'cancelled' ? '❌' : '📅';
+              const statusEmoji =
+                payload.new.status === 'confirmed'
+                  ? '✅'
+                  : payload.new.status === 'cancelled'
+                    ? '❌'
+                    : '📅';
 
-              toast.info(`${statusEmoji} ${clientName}'s appointment ${payload.new.status}`, {
-                duration: 4000,
-              });
+              toast.info(
+                `${statusEmoji} ${clientName}'s appointment ${payload.new.status}`,
+                {
+                  duration: 4000,
+                }
+              );
             }
           }
         }

@@ -27,21 +27,21 @@ class SecurityGuardian {
 
   async initialize() {
     logger.info('🛡️ Security Guardian initializing...');
-    
+
     // Start continuous monitoring
     this.startMonitoring();
-    
+
     // Set up real-time threat detection
     this.setupRealtimeMonitoring();
-    
+
     logger.info('✅ Security Guardian active and watching');
   }
 
   private startMonitoring() {
     if (this.checkInterval) return;
-    
+
     this.monitoringActive = true;
-    
+
     // Check for threats every 30 seconds
     this.checkInterval = setInterval(() => {
       this.performSecurityScan();
@@ -57,9 +57,9 @@ class SecurityGuardian {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'suspicious_activity'
+          table: 'suspicious_activity',
         },
-        (payload) => {
+        payload => {
           this.handleSuspiciousActivity(payload.new as any);
         }
       )
@@ -70,13 +70,12 @@ class SecurityGuardian {
     try {
       // Check for unusual login patterns
       await this.detectUnusualLogins();
-      
+
       // Check for data access anomalies
       await this.detectAnomalousAccess();
-      
+
       // Check for rate limit violations
       await this.checkRateLimits();
-      
     } catch (error) {
       logger.error('Security scan error:', error);
     }
@@ -85,17 +84,17 @@ class SecurityGuardian {
   private async detectUnusualLogins() {
     // AI-powered detection of unusual login patterns
     const recentLogins = await this.getRecentLogins();
-    
+
     for (const login of recentLogins) {
       const riskScore = this.calculateLoginRiskScore(login);
-      
+
       if (riskScore > 70) {
         await this.logSuspiciousActivity({
           userId: login.userId,
           activityType: 'unusual_login',
           riskScore,
           details: login,
-          autoBlock: riskScore > 90
+          autoBlock: riskScore > 90,
         });
       }
     }
@@ -104,17 +103,17 @@ class SecurityGuardian {
   private async detectAnomalousAccess() {
     // Detect unusual data access patterns
     const accessLogs = await this.getRecentAccessLogs();
-    
+
     for (const log of accessLogs) {
       const riskScore = this.calculateAccessRiskScore(log);
-      
+
       if (riskScore > 70) {
         await this.logSuspiciousActivity({
           userId: log.userId,
           activityType: 'anomalous_access',
           riskScore,
           details: log,
-          autoBlock: riskScore > 85
+          autoBlock: riskScore > 85,
         });
       }
     }
@@ -127,7 +126,7 @@ class SecurityGuardian {
         .select('*')
         .not('blocked_until', 'is', null)
         .gt('blocked_until', new Date().toISOString());
-      
+
       if (violations && violations.length > 0) {
         logger.warn(`⚠️ ${violations.length} rate limit violations detected`);
       }
@@ -139,34 +138,34 @@ class SecurityGuardian {
 
   private calculateLoginRiskScore(login: any): number {
     let risk = 0;
-    
+
     // Check for unusual location
     if (this.isUnusualLocation(login)) risk += 30;
-    
+
     // Check for unusual time
     if (this.isUnusualTime(login)) risk += 20;
-    
+
     // Check for multiple failed attempts
     if (login.failedAttempts > 3) risk += 40;
-    
+
     // Check for known bad IP
     if (this.isKnownBadIP(login.ipAddress)) risk += 50;
-    
+
     return Math.min(risk, 100);
   }
 
   private calculateAccessRiskScore(log: any): number {
     let risk = 0;
-    
+
     // Check for unusual data volume
     if (this.isUnusualVolume(log)) risk += 40;
-    
+
     // Check for sensitive data access
     if (this.isSensitiveData(log)) risk += 30;
-    
+
     // Check for off-hours access
     if (this.isOffHours(log)) risk += 20;
-    
+
     return Math.min(risk, 100);
   }
 
@@ -179,13 +178,15 @@ class SecurityGuardian {
           activity_type: activity.activityType,
           risk_score: activity.riskScore,
           details: activity.details,
-          auto_blocked: activity.autoBlock
+          auto_blocked: activity.autoBlock,
         });
-      
+
       if (error) {
         logger.error('Failed to log suspicious activity', error.message);
       } else {
-        logger.warn(`🚨 Suspicious activity detected: ${activity.activityType} (Risk: ${activity.riskScore})`);
+        logger.warn(
+          `🚨 Suspicious activity detected: ${activity.activityType} (Risk: ${activity.riskScore})`
+        );
       }
     } catch (error) {
       logger.debug('Suspicious activity table not yet available');
@@ -196,40 +197,38 @@ class SecurityGuardian {
     if (activity.risk_score > 90 && !activity.resolved) {
       // Auto-block high-risk activity
       await this.autoBlockUser(activity.user_id, activity.activity_type);
-      
+
       // Alert admin
       await this.alertAdmin({
         eventType: 'high_risk_activity',
         severity: 'critical',
         userId: activity.user_id,
-        eventData: activity
+        eventData: activity,
       });
     }
   }
 
   private async autoBlockUser(userId: string, reason: string) {
     logger.warn(`🔒 Auto-blocking user ${userId} for: ${reason}`);
-    
+
     // Log the security event
     await this.logSecurityEvent({
       eventType: 'user_auto_blocked',
       severity: 'critical',
       userId,
-      eventData: { reason }
+      eventData: { reason },
     });
   }
 
   async logSecurityEvent(event: SecurityEvent) {
     try {
-      const { error } = await supabase
-        .from('security_events' as any)
-        .insert({
-          event_type: event.eventType,
-          severity: event.severity,
-          user_id: event.userId,
-          event_data: event.eventData
-        });
-      
+      const { error } = await supabase.from('security_events' as any).insert({
+        event_type: event.eventType,
+        severity: event.severity,
+        user_id: event.userId,
+        event_data: event.eventData,
+      });
+
       if (error) {
         logger.error('Failed to log security event', error.message);
       }
@@ -240,11 +239,11 @@ class SecurityGuardian {
 
   private async alertAdmin(event: SecurityEvent) {
     logger.warn(`🚨 ADMIN ALERT: ${event.eventType}`);
-    
+
     // In production, this would send notifications via email, SMS, etc.
     await this.logSecurityEvent({
       ...event,
-      eventType: 'admin_alert_sent'
+      eventType: 'admin_alert_sent',
     });
   }
 
@@ -297,17 +296,17 @@ class SecurityGuardian {
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
-      
+
       const { data: suspiciousActivity } = await supabase
         .from('suspicious_activity' as any)
         .select('*')
         .eq('resolved', false);
-      
+
       return {
         monitoring: this.monitoringActive,
         recentEvents: recentEvents?.length || 0,
         unresolvedThreats: suspiciousActivity?.length || 0,
-        status: (suspiciousActivity?.length || 0) > 0 ? 'warning' : 'secure'
+        status: (suspiciousActivity?.length || 0) > 0 ? 'warning' : 'secure',
       };
     } catch (error) {
       // Tables not yet available after migration
@@ -315,7 +314,7 @@ class SecurityGuardian {
         monitoring: this.monitoringActive,
         recentEvents: 0,
         unresolvedThreats: 0,
-        status: 'secure' as const
+        status: 'secure' as const,
       };
     }
   }

@@ -24,12 +24,12 @@ export class InstagramAPI {
   async connect(accessToken: string) {
     this.accessToken = accessToken;
     analytics.track('instagram_connected');
-    
+
     // In production, you would:
     // 1. Validate the access token with Instagram API
     // 2. Store the token securely
     // 3. Fetch user's Instagram Business account info
-    
+
     return { success: true };
   }
 
@@ -47,7 +47,7 @@ export class InstagramAPI {
     // Placeholder for Instagram Graph API call
     // Real implementation would call:
     // GET https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,timestamp
-    
+
     return [];
   }
 
@@ -56,14 +56,16 @@ export class InstagramAPI {
       throw new Error('Not connected to Instagram');
     }
 
-    analytics.track('instagram_post_created', { caption_length: caption.length });
-    
+    analytics.track('instagram_post_created', {
+      caption_length: caption.length,
+    });
+
     // Placeholder for Instagram Graph API call
     // Real implementation would:
     // 1. Create media container
     // 2. Publish the container
     // 3. Return the post ID
-    
+
     return 'placeholder_post_id';
   }
 

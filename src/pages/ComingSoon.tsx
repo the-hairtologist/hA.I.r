@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Sparkles, ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { EmptyStateCard } from "@/components/ui/empty-state-card";
-import { DashboardLayout } from "@/components/DashboardLayout";
+import { Button } from '@/components/ui/button';
+import { Sparkles, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { EmptyStateCard } from '@/components/ui/empty-state-card';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const ComingSoon = () => {
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ const ComingSoon = () => {
           description="We're working on something amazing. This feature is currently under development."
           gradient="bg-gradient-purple-pink"
           action={
-            <Button 
-              onClick={() => navigate("/dashboard")}
+            <Button
+              onClick={() => navigate('/dashboard')}
               className="gap-2"
               size="lg"
             >

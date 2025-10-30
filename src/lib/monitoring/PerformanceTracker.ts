@@ -26,12 +26,16 @@ class PerformanceTracker {
   }
 
   private trackPageLoad() {
-    const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    
+    const perfData = performance.getEntriesByType(
+      'navigation'
+    )[0] as PerformanceNavigationTiming;
+
     if (perfData) {
       const loadTime = perfData.loadEventEnd - perfData.fetchStart;
-      const domContentLoaded = perfData.domContentLoadedEventEnd - perfData.fetchStart;
-      const firstPaint = performance.getEntriesByName('first-paint')[0]?.startTime || 0;
+      const domContentLoaded =
+        perfData.domContentLoadedEventEnd - perfData.fetchStart;
+      const firstPaint =
+        performance.getEntriesByName('first-paint')[0]?.startTime || 0;
 
       analytics.track('page_load_performance', {
         load_time: Math.round(loadTime),
@@ -49,10 +53,10 @@ class PerformanceTracker {
   private observeWebVitals() {
     // Largest Contentful Paint (LCP)
     try {
-      const lcpObserver = new PerformanceObserver((list) => {
+      const lcpObserver = new PerformanceObserver(list => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1] as any;
-        
+
         if (lastEntry) {
           analytics.track('web_vitals', {
             metric: 'LCP',
@@ -67,7 +71,7 @@ class PerformanceTracker {
 
     // First Input Delay (FID)
     try {
-      const fidObserver = new PerformanceObserver((list) => {
+      const fidObserver = new PerformanceObserver(list => {
         const entries = list.getEntries();
         entries.forEach((entry: any) => {
           analytics.track('web_vitals', {
@@ -84,7 +88,7 @@ class PerformanceTracker {
     // Cumulative Layout Shift (CLS)
     try {
       let clsValue = 0;
-      const clsObserver = new PerformanceObserver((list) => {
+      const clsObserver = new PerformanceObserver(list => {
         for (const entry of list.getEntries() as any[]) {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;
@@ -114,14 +118,14 @@ class PerformanceTracker {
 
   endMark(name: string) {
     performance.mark(`${name}-end`);
-    
+
     try {
       performance.measure(name, `${name}-start`, `${name}-end`);
       const measure = performance.getEntriesByName(name)[0];
-      
+
       if (measure) {
         this.metrics.set(name, measure.duration);
-        
+
         analytics.track('custom_performance', {
           metric_name: name,
           duration: Math.round(measure.duration),
@@ -144,12 +148,9 @@ class PerformanceTracker {
   /**
    * Track API call performance
    */
-  async trackAPICall<T>(
-    name: string,
-    apiCall: () => Promise<T>
-  ): Promise<T> {
+  async trackAPICall<T>(name: string, apiCall: () => Promise<T>): Promise<T> {
     this.startMark(name);
-    
+
     try {
       const result = await apiCall();
       this.endMark(name);

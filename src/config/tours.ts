@@ -20,53 +20,62 @@ export const tours: Record<string, TourConfig> = {
     steps: [
       {
         target: 'body',
-        content: '👋 Welcome to hA.I.r! Let me show you around your new hair salon management platform.',
+        content:
+          '👋 Welcome to hA.I.r! Let me show you around your new hair salon management platform.',
         placement: 'center',
         disableBeacon: true,
       },
       {
         target: '[data-tour="sidebar"]',
-        content: '📍 This is your main navigation. Access Clients, Appointments, AI Assistant, and more from here.',
+        content:
+          '📍 This is your main navigation. Access Clients, Appointments, AI Assistant, and more from here.',
         placement: 'right',
       },
       {
         target: '[data-tour="settings"]',
-        content: '⚙️ First, complete your profile in Settings. Add your business name, specialty, and location so clients can find you. (Takes 2 minutes)',
+        content:
+          '⚙️ First, complete your profile in Settings. Add your business name, specialty, and location so clients can find you. (Takes 2 minutes)',
         placement: 'left',
       },
       {
         target: '[data-tour="quick-actions"]',
-        content: '⚡ Quick Actions let you add clients, book appointments, and access AI tools with one click.',
+        content:
+          '⚡ Quick Actions let you add clients, book appointments, and access AI tools with one click.',
         placement: 'bottom',
       },
       {
         target: '[data-tour="quick-actions"]',
-        content: '👥 Next, add your first client to see how the Hair Memory Timeline works. You can import existing clients or add new ones. (Takes 2 minutes)',
+        content:
+          '👥 Next, add your first client to see how the Hair Memory Timeline works. You can import existing clients or add new ones. (Takes 2 minutes)',
         placement: 'bottom',
       },
       {
         target: '[data-tour="quick-actions"]',
-        content: '📅 Then, set up your availability so clients can book appointments. Update this anytime in Schedule Management. (Takes 3 minutes)',
+        content:
+          '📅 Then, set up your availability so clients can book appointments. Update this anytime in Schedule Management. (Takes 3 minutes)',
         placement: 'bottom',
       },
       {
         target: '[data-tour="ai-assistant"]',
-        content: '🤖 Your AI Assistant can help with formulas, client insights, and business questions. Ask anything!',
+        content:
+          '🤖 Your AI Assistant can help with formulas, client insights, and business questions. Ask anything!',
         placement: 'left',
       },
       {
         target: 'body',
-        content: '🎨 Upload portfolio photos to showcase your work and attract new clients. Build your Hair Memory Timeline!',
+        content:
+          '🎨 Upload portfolio photos to showcase your work and attract new clients. Build your Hair Memory Timeline!',
         placement: 'center',
       },
       {
         target: 'body',
-        content: '💡 Pro Tip: Use Visual Edits to customize text, colors, and fonts instantly for FREE! Click the Edit button in the chat box, then click any element to modify it without using AI credits.',
+        content:
+          '💡 Pro Tip: Use Visual Edits to customize text, colors, and fonts instantly for FREE! Click the Edit button in the chat box, then click any element to modify it without using AI credits.',
         placement: 'center',
       },
     ],
   },
-  
+
   clients: {
     id: 'clients',
     name: 'Client Management Tour',
@@ -74,28 +83,33 @@ export const tours: Record<string, TourConfig> = {
     steps: [
       {
         target: '[data-tour="add-client-btn"]',
-        content: '➕ Click here to add your first client. You can also press Ctrl+N as a shortcut!',
+        content:
+          '➕ Click here to add your first client. You can also press Ctrl+N as a shortcut!',
         placement: 'bottom',
         disableBeacon: true,
       },
       {
         target: '[data-tour="search-bar"]',
-        content: '🔍 Search clients by name, email, or phone. Results update as you type!',
+        content:
+          '🔍 Search clients by name, email, or phone. Results update as you type!',
         placement: 'bottom',
       },
       {
         target: '[data-tour="filters"]',
-        content: '🎯 Filter clients by activity status or risk level to prioritize follow-ups.',
+        content:
+          '🎯 Filter clients by activity status or risk level to prioritize follow-ups.',
         placement: 'left',
       },
       {
         target: '[data-tour="client-card"]',
-        content: '💳 Client cards show key info, risk indicators, and quick actions. Click to see full details.',
+        content:
+          '💳 Client cards show key info, risk indicators, and quick actions. Click to see full details.',
         placement: 'top',
       },
       {
         target: '[data-tour="export-btn"]',
-        content: '📤 Export your client list to CSV for reports or backups. Press Ctrl+E!',
+        content:
+          '📤 Export your client list to CSV for reports or backups. Press Ctrl+E!',
         placement: 'left',
       },
     ],
@@ -108,23 +122,27 @@ export const tours: Record<string, TourConfig> = {
     steps: [
       {
         target: '[data-tour="chat-input"]',
-        content: '💬 Type your questions here! Ask about formulas, client history, or business advice.',
+        content:
+          '💬 Type your questions here! Ask about formulas, client history, or business advice.',
         placement: 'top',
         disableBeacon: true,
       },
       {
         target: '[data-tour="client-context"]',
-        content: '👤 Select a client to get personalized insights and formula recommendations.',
+        content:
+          '👤 Select a client to get personalized insights and formula recommendations.',
         placement: 'bottom',
       },
       {
         target: '[data-tour="example-prompts"]',
-        content: '💡 Not sure what to ask? Try these example prompts to get started!',
+        content:
+          '💡 Not sure what to ask? Try these example prompts to get started!',
         placement: 'left',
       },
       {
         target: '[data-tour="chat-history"]',
-        content: '📜 Your conversation history is saved. Scroll up to review previous insights.',
+        content:
+          '📜 Your conversation history is saved. Scroll up to review previous insights.',
         placement: 'left',
       },
     ],
@@ -143,12 +161,14 @@ export const tours: Record<string, TourConfig> = {
       },
       {
         target: '[data-tour="link-client"]',
-        content: '🔗 Link formulas to clients so you can track their color history.',
+        content:
+          '🔗 Link formulas to clients so you can track their color history.',
         placement: 'bottom',
       },
       {
         target: '[data-tour="upload-photo"]',
-        content: '📸 Upload before/after photos to document results and build your portfolio.',
+        content:
+          '📸 Upload before/after photos to document results and build your portfolio.',
         placement: 'left',
       },
       {

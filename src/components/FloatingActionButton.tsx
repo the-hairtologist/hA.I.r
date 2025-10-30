@@ -1,9 +1,9 @@
-import { Plus, Calendar, Users, Scissors, Sparkles, User } from "lucide-react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { haptic } from "@/platform/haptics";
+import { Plus, Calendar, Users, Scissors, Sparkles, User } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { haptic } from '@/platform/haptics';
 
 interface FloatingAction {
   label: string;
@@ -16,90 +16,94 @@ interface FloatingActionButtonProps {
   userRole: string;
 }
 
-export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) => {
+export const FloatingActionButton = ({
+  userRole,
+}: FloatingActionButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const stylistActions: FloatingAction[] = [
     {
-      label: "AI Assistant",
+      label: 'AI Assistant',
       icon: Sparkles,
       onClick: () => {
         haptic.tap();
-        navigate("/ai-assistant");
+        navigate('/ai-assistant');
         setIsOpen(false);
       },
-      gradient: "from-purple-start to-purple-end",
+      gradient: 'from-purple-start to-purple-end',
     },
     {
-      label: "Add Client",
+      label: 'Add Client',
       icon: Users,
       onClick: () => {
         haptic.tap();
         window.dispatchEvent(new CustomEvent('open-add-client-dialog'));
         setIsOpen(false);
       },
-      gradient: "from-green-start to-green-end",
+      gradient: 'from-green-start to-green-end',
     },
     {
-      label: "Book Appointment",
+      label: 'Book Appointment',
       icon: Calendar,
       onClick: () => {
         haptic.tap();
-        navigate("/book-appointment");
+        navigate('/book-appointment');
         setIsOpen(false);
       },
-      gradient: "from-cyan-start to-blue-end",
+      gradient: 'from-cyan-start to-blue-end',
     },
     {
-      label: "New Formula",
+      label: 'New Formula',
       icon: Scissors,
       onClick: () => {
         haptic.tap();
-        navigate("/formulas");
+        navigate('/formulas');
         setIsOpen(false);
       },
-      gradient: "from-amber-start to-amber-end",
+      gradient: 'from-amber-start to-amber-end',
     },
   ];
 
   const clientActions: FloatingAction[] = [
     {
-      label: "Hair Care Tips",
+      label: 'Hair Care Tips',
       icon: Sparkles,
       onClick: () => {
         haptic.tap();
-        navigate("/knowledge");
+        navigate('/knowledge');
         setIsOpen(false);
       },
-      gradient: "from-cyan-start to-cyan-end",
+      gradient: 'from-cyan-start to-cyan-end',
     },
     {
-      label: "My Profile",
+      label: 'My Profile',
       icon: User,
       onClick: () => {
         haptic.tap();
-        navigate("/settings");
+        navigate('/settings');
         setIsOpen(false);
       },
-      gradient: "from-blue-start to-blue-end",
+      gradient: 'from-blue-start to-blue-end',
     },
   ];
 
-  const actions = userRole === "stylist" ? stylistActions : clientActions;
+  const actions = userRole === 'stylist' ? stylistActions : clientActions;
 
   return (
-    <div 
+    <div
       className="fixed right-4 sm:right-6 md:right-8 z-[60] flex flex-col-reverse items-end gap-3"
       style={{
-        bottom: 'max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 5.5rem))' // 88px + safe area
+        bottom: 'max(5.5rem, calc(env(safe-area-inset-bottom, 0px) + 5.5rem))', // 88px + safe area
       }}
     >
       {/* Action Items */}
       <div
         className={cn(
-          "flex flex-col-reverse gap-3 transition-all duration-300",
-          isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+          'flex flex-col-reverse gap-3 transition-all duration-300',
+          isOpen
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4 pointer-events-none'
         )}
       >
         {actions.map((action, index) => (
@@ -115,10 +119,10 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
               size="icon"
               onClick={action.onClick}
               className={cn(
-                "h-12 w-12 rounded-full brutal-border brutal-shadow-sm",
-                "bg-gradient-to-br",
+                'h-12 w-12 rounded-full brutal-border brutal-shadow-sm',
+                'bg-gradient-to-br',
                 action.gradient,
-                "hover:scale-110 transition-all duration-200"
+                'hover:scale-110 transition-all duration-200'
               )}
             >
               <action.icon className="h-5 w-5 text-on-surface-primary" />
@@ -130,15 +134,16 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
       {/* Main FAB */}
       <div className="relative">
         {/* Subtle glow layer */}
-        <div 
+        <div
           className={cn(
-            "absolute inset-0 blur-md opacity-40 transition-opacity duration-500",
-            "w-[clamp(3.5rem,8vw,4rem)] h-[clamp(3.5rem,8vw,4rem)]", // Responsive size
-            !isOpen && "bg-orange-400",
-            isOpen && "bg-destructive"
+            'absolute inset-0 blur-md opacity-40 transition-opacity duration-500',
+            'w-[clamp(3.5rem,8vw,4rem)] h-[clamp(3.5rem,8vw,4rem)]', // Responsive size
+            !isOpen && 'bg-orange-400',
+            isOpen && 'bg-destructive'
           )}
           style={{
-            clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)"
+            clipPath:
+              'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
           }}
           aria-hidden="true"
         />
@@ -149,22 +154,28 @@ export const FloatingActionButton = ({ userRole }: FloatingActionButtonProps) =>
             setIsOpen(!isOpen);
           }}
           className={cn(
-            "brutal-border relative",
-            "w-[clamp(3.5rem,8vw,4rem)] h-[clamp(3.5rem,8vw,4rem)]", // Responsive: 56px-64px
-            "bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600",
-            "hover:from-orange-500 hover:via-orange-600 hover:to-orange-700",
-            "brutal-shadow-sm brutal-hover",
-            "transition-all duration-200 ease-out",
-            "flex items-center justify-center",
-            isOpen && "rotate-45 from-destructive via-destructive to-destructive/90"
+            'brutal-border relative',
+            'w-[clamp(3.5rem,8vw,4rem)] h-[clamp(3.5rem,8vw,4rem)]', // Responsive: 56px-64px
+            'bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600',
+            'hover:from-orange-500 hover:via-orange-600 hover:to-orange-700',
+            'brutal-shadow-sm brutal-hover',
+            'transition-all duration-200 ease-out',
+            'flex items-center justify-center',
+            isOpen &&
+              'rotate-45 from-destructive via-destructive to-destructive/90'
           )}
           style={{
-            clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
-            boxShadow: "inset 0 1px 2px hsl(var(--primary-foreground) / 0.3), var(--tw-shadow)"
+            clipPath:
+              'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+            boxShadow:
+              'inset 0 1px 2px hsl(var(--primary-foreground) / 0.3), var(--tw-shadow)',
           }}
-          aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
+          aria-label={isOpen ? 'Close quick actions' : 'Open quick actions'}
         >
-          <Plus className="w-[clamp(1.5rem,4vw,1.75rem)] h-[clamp(1.5rem,4vw,1.75rem)] text-on-surface-primary drop-shadow-sm" strokeWidth={2.5} />
+          <Plus
+            className="w-[clamp(1.5rem,4vw,1.75rem)] h-[clamp(1.5rem,4vw,1.75rem)] text-on-surface-primary drop-shadow-sm"
+            strokeWidth={2.5}
+          />
         </Button>
       </div>
     </div>

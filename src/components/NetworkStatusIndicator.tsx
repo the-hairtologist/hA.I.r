@@ -17,13 +17,13 @@ export const NetworkStatusIndicator = () => {
   useEffect(() => {
     const handleOnline = async () => {
       setIsOnline(true);
-      
+
       // Check if there are queued operations
       const status = offlineQueue.getStatus();
       if (status.size > 0) {
         setIsSyncing(true);
         setQueueCount(status.size);
-        
+
         toast.info(`Syncing ${status.size} offline changes...`, {
           icon: <RefreshCw className="h-4 w-4 animate-spin" />,
         });

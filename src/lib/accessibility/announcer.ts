@@ -44,8 +44,9 @@ class ScreenReaderAnnouncer {
    * @param priority - 'polite' (default) or 'assertive' for urgent messages
    */
   announce(message: string, priority: Priority = 'polite'): void {
-    const region = priority === 'assertive' ? this.assertiveRegion : this.politeRegion;
-    
+    const region =
+      priority === 'assertive' ? this.assertiveRegion : this.politeRegion;
+
     if (!region) {
       safeConsole.warn('Live region not initialized');
       return;
@@ -107,7 +108,10 @@ class ScreenReaderAnnouncer {
    */
   announceDataUpdate(count: number, itemType: string): void {
     const plural = count !== 1 ? 's' : '';
-    this.announce(`${count} ${itemType}${plural} ${count === 1 ? 'is' : 'are'} now available`, 'polite');
+    this.announce(
+      `${count} ${itemType}${plural} ${count === 1 ? 'is' : 'are'} now available`,
+      'polite'
+    );
   }
 
   /**
@@ -129,6 +133,7 @@ export const announce = announcer.announce.bind(announcer);
 export const announceLoading = announcer.announceLoading.bind(announcer);
 export const announceSuccess = announcer.announceSuccess.bind(announcer);
 export const announceError = announcer.announceError.bind(announcer);
-export const announceValidationError = announcer.announceValidationError.bind(announcer);
+export const announceValidationError =
+  announcer.announceValidationError.bind(announcer);
 export const announceNavigation = announcer.announceNavigation.bind(announcer);
 export const announceDataUpdate = announcer.announceDataUpdate.bind(announcer);

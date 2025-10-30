@@ -50,25 +50,26 @@ export const registerDeviceToken = async (userId: string): Promise<boolean> => {
     // Get FCM token from Firebase Cloud Messaging
     // Note: Requires FCM_SERVER_KEY secret to be configured
     const platform = Capacitor.getPlatform();
-    
+
     // For production, this should use Firebase SDK to get real FCM token
     // import { getMessaging, getToken } from 'firebase/messaging';
     // const messaging = getMessaging();
     // const token = await getToken(messaging, { vapidKey: 'YOUR_VAPID_KEY' });
-    
+
     const mockToken = `${platform}_${userId}_${Date.now()}`;
 
     // Save to database
-    const { error } = await supabase
-      .from('device_tokens')
-      .upsert({
+    const { error } = await supabase.from('device_tokens').upsert(
+      {
         user_id: userId,
         token: mockToken,
         platform: platform,
         last_used: new Date().toISOString(),
-      }, {
-        onConflict: 'token'
-      });
+      },
+      {
+        onConflict: 'token',
+      }
+    );
 
     if (error) throw error;
 
@@ -96,9 +97,14 @@ export const getNotificationPreferences = (): NotificationPreferences => {
 /**
  * Save user's notification preferences
  */
-export const saveNotificationPreferences = (preferences: NotificationPreferences): void => {
+export const saveNotificationPreferences = (
+  preferences: NotificationPreferences
+): void => {
   try {
-    localStorage.setItem('notification_preferences', JSON.stringify(preferences));
+    localStorage.setItem(
+      'notification_preferences',
+      JSON.stringify(preferences)
+    );
   } catch {
     // Failed to save preferences - silent fail
   }
@@ -107,7 +113,9 @@ export const saveNotificationPreferences = (preferences: NotificationPreferences
 /**
  * Unregister device token
  */
-export const unregisterDeviceToken = async (userId: string): Promise<boolean> => {
+export const unregisterDeviceToken = async (
+  userId: string
+): Promise<boolean> => {
   try {
     const { error } = await supabase
       .from('device_tokens')

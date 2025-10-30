@@ -1,12 +1,12 @@
 /**
  * Self-Healing Error Recovery System
- * 
+ *
  * Automatically detects, logs, analyzes, and recovers from errors.
  * Uses AI to suggest fixes and implements smart retry strategies.
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import { safeConsole } from '@/lib/safeLogger';
 
@@ -29,7 +29,10 @@ interface RecoveryStrategy {
 
 class ErrorRecoverySystem {
   private errorPatterns: Map<string, RecoveryStrategy> = new Map();
-  private circuitBreakers: Map<string, { failures: number; lastFailure: Date; isOpen: boolean }> = new Map();
+  private circuitBreakers: Map<
+    string,
+    { failures: number; lastFailure: Date; isOpen: boolean }
+  > = new Map();
   private readonly CIRCUIT_THRESHOLD = 5;
   private readonly CIRCUIT_RESET_TIME = 60000; // 1 minute
 
@@ -94,10 +97,13 @@ class ErrorRecoverySystem {
     const message = error?.message?.toLowerCase() || '';
     const code = error?.code || '';
 
-    if (message.includes('network') || message.includes('fetch')) return 'NetworkError';
+    if (message.includes('network') || message.includes('fetch'))
+      return 'NetworkError';
     if (message.includes('auth') || code === 'PGRST301') return 'AuthError';
-    if (message.includes('rate limit') || code === '429') return 'RateLimitError';
-    if (message.includes('data') || message.includes('null')) return 'DataError';
+    if (message.includes('rate limit') || code === '429')
+      return 'RateLimitError';
+    if (message.includes('data') || message.includes('null'))
+      return 'DataError';
 
     return 'UnknownError';
   }
@@ -161,9 +167,12 @@ class ErrorRecoverySystem {
   private getUserFriendlyMessage(error: any): string {
     const message = error?.message?.toLowerCase() || '';
 
-    if (message.includes('network')) return 'Connection issue. Please check your internet.';
-    if (message.includes('auth')) return 'Session expired. Please log in again.';
-    if (message.includes('rate limit')) return 'Too many requests. Please wait a moment.';
+    if (message.includes('network'))
+      return 'Connection issue. Please check your internet.';
+    if (message.includes('auth'))
+      return 'Session expired. Please log in again.';
+    if (message.includes('rate limit'))
+      return 'Too many requests. Please wait a moment.';
 
     return 'Something went wrong. Please try again.';
   }
@@ -284,7 +293,7 @@ export async function withRecovery<T>(
       };
 
       const shouldRetry = await errorRecovery.handleError(error, fullContext);
-      
+
       if (!shouldRetry) {
         return null;
       }

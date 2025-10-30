@@ -15,7 +15,7 @@ export interface DeepLinkData {
  */
 export function generateDeepLink(data: DeepLinkData): string {
   const baseUrl = window.location.origin;
-  
+
   switch (data.type) {
     case 'appointment':
       return `${baseUrl}/appointment/${data.id}`;
@@ -40,16 +40,24 @@ export function parseDeepLink(url: string): DeepLinkData | null {
     const urlObj = new URL(url);
     const pathname = urlObj.pathname;
     const parts = pathname.split('/').filter(Boolean);
-    
+
     if (parts.length < 2) return null;
-    
+
     const type = parts[0] as DeepLinkData['type'];
     const id = parts[1];
-    
-    if (['appointment', 'formula', 'transformation', 'stylist', 'booking'].includes(type)) {
+
+    if (
+      [
+        'appointment',
+        'formula',
+        'transformation',
+        'stylist',
+        'booking',
+      ].includes(type)
+    ) {
       return { type, id };
     }
-    
+
     return null;
   } catch {
     return null;
@@ -77,7 +85,7 @@ export async function shareDeepLink(
       return false;
     }
   }
-  
+
   // Fallback to clipboard
   try {
     await navigator.clipboard.writeText(link);
@@ -100,7 +108,7 @@ export function generateTransformationShare(
   const link = generateDeepLink({ type: 'transformation', id: appointmentId });
   const title = `My Hair Transformation by ${stylistName}`;
   const text = `Check out my amazing hair transformation! 💇‍♀️✨ Book your appointment with ${stylistName}`;
-  
+
   return { link, title, text };
 }
 
@@ -115,7 +123,7 @@ export function generateBookingShare(
   const link = generateDeepLink({ type: 'booking', id: stylistId });
   const title = businessName || `Book with ${stylistName}`;
   const text = `Book your next appointment with ${stylistName} on hA.I.r 💇‍♀️`;
-  
+
   return { link, title, text };
 }
 

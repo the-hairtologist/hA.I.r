@@ -3,10 +3,10 @@
  * Floating toolbar for common actions with keyboard shortcuts
  */
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Download, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Plus, Download, Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface QuickAction {
   icon: React.ComponentType<{ className?: string }>;
@@ -21,9 +21,17 @@ interface QuickActionToolbarProps {
   className?: string;
 }
 
-export const QuickActionToolbar = ({ actions, className }: QuickActionToolbarProps) => {
+export const QuickActionToolbar = ({
+  actions,
+  className,
+}: QuickActionToolbarProps) => {
   return (
-    <Card className={cn("border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]", className)}>
+    <Card
+      className={cn(
+        'border-2 border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))]',
+        className
+      )}
+    >
       <CardContent className="p-2 flex items-center gap-2">
         {actions.map((action, idx) => (
           <Button

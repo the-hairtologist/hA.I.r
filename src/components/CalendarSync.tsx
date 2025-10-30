@@ -1,14 +1,37 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { Calendar, Link as LinkIcon, Unlink, Loader2, CheckCircle2, XCircle, RefreshCw } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
-import { trackSelect, trackDelete } from "@/lib/logging/supabaseTracker";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import {
+  Calendar,
+  Link as LinkIcon,
+  Unlink,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  RefreshCw,
+} from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { trackSelect, trackDelete } from '@/lib/logging/supabaseTracker';
 
 type CalendarProvider = 'google' | 'outlook';
 
@@ -27,7 +50,8 @@ const CalendarSync = () => {
   const [disconnecting, setDisconnecting] = useState<string | null>(null);
   const [syncing, setSyncing] = useState<string | null>(null);
   const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
-  const [selectedConnection, setSelectedConnection] = useState<CalendarConnection | null>(null);
+  const [selectedConnection, setSelectedConnection] =
+    useState<CalendarConnection | null>(null);
 
   useEffect(() => {
     loadConnections();
@@ -35,14 +59,17 @@ const CalendarSync = () => {
 
   const loadConnections = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
 
       const result = await trackSelect(
-        async () => await supabase
-          .from('calendar_connections')
-          .select('*')
-          .eq('user_id', session.user.id),
+        async () =>
+          await supabase
+            .from('calendar_connections')
+            .select('*')
+            .eq('user_id', session.user.id),
         'calendar_connections',
         'CalendarSync'
       );
@@ -50,7 +77,9 @@ const CalendarSync = () => {
       if (result.error) throw result.error;
       setConnections((result.data || []) as CalendarConnection[]);
     } catch (error) {
-      logger.error('Error loading calendar connections', error, { component: 'CalendarSync' });
+      logger.error('Error loading calendar connections', error, {
+        component: 'CalendarSync',
+      });
       userJourney.trackError(error as Error, { action: 'load-connections' });
       toast.error('Failed to load calendar connections');
     } finally {
@@ -66,16 +95,20 @@ const CalendarSync = () => {
 
     setConnecting(provider);
     try {
-      const { data, error } = await supabase.functions.invoke('google-calendar-oauth');
-      
+      const { data, error } = await supabase.functions.invoke(
+        'google-calendar-oauth'
+      );
+
       if (error) throw error;
       if (!data?.url) throw new Error('No OAuth URL returned');
-      
+
       // Redirect to Google OAuth
       window.location.href = data.url;
-      
     } catch (error: any) {
-      logger.error('Error connecting calendar', error, { component: 'CalendarSync', provider });
+      logger.error('Error connecting calendar', error, {
+        component: 'CalendarSync',
+        provider,
+      });
       userJourney.trackError(error, { action: 'connect-calendar', provider });
       toast.error(error.message || 'Failed to connect calendar');
     } finally {
@@ -90,26 +123,31 @@ const CalendarSync = () => {
 
   const confirmDisconnect = async () => {
     if (!selectedConnection) return;
-    
+
     setDisconnecting(selectedConnection.id);
     try {
       const result = await trackDelete(
-        async () => await supabase
-          .from('calendar_connections')
-          .delete()
-          .eq('id', selectedConnection.id),
+        async () =>
+          await supabase
+            .from('calendar_connections')
+            .delete()
+            .eq('id', selectedConnection.id),
         'calendar_connections',
         'CalendarSync',
         { connectionId: selectedConnection.id }
       );
 
       if (result.error) throw result.error;
-      
-      userJourney.trackAction('Calendar Disconnected', { provider: selectedConnection.provider });
+
+      userJourney.trackAction('Calendar Disconnected', {
+        provider: selectedConnection.provider,
+      });
       toast.success('Calendar disconnected successfully');
       loadConnections();
     } catch (error) {
-      logger.error('Error disconnecting calendar', error, { component: 'CalendarSync' });
+      logger.error('Error disconnecting calendar', error, {
+        component: 'CalendarSync',
+      });
       userJourney.trackError(error as Error, { action: 'disconnect-calendar' });
       toast.error('Failed to disconnect calendar');
     } finally {
@@ -134,20 +172,29 @@ const CalendarSync = () => {
       let syncedCount = 0;
       for (const apt of appointments || []) {
         try {
-          const { error } = await supabase.functions.invoke('google-calendar-sync', {
-            body: { appointmentId: apt.id }
-          });
+          const { error } = await supabase.functions.invoke(
+            'google-calendar-sync',
+            {
+              body: { appointmentId: apt.id },
+            }
+          );
           if (!error) syncedCount++;
         } catch (err) {
-          logger.error('Failed to sync appointment', err, { component: 'CalendarSync', appointmentId: apt.id });
+          logger.error('Failed to sync appointment', err, {
+            component: 'CalendarSync',
+            appointmentId: apt.id,
+          });
         }
       }
-      
+
       userJourney.trackAction('Calendar Synced', { syncedCount, connectionId });
       toast.success(`${syncedCount} appointment(s) synced successfully`);
       loadConnections();
     } catch (error: any) {
-      logger.error('Error syncing calendar', error, { component: 'CalendarSync', connectionId });
+      logger.error('Error syncing calendar', error, {
+        component: 'CalendarSync',
+        connectionId,
+      });
       userJourney.trackError(error, { action: 'sync-calendar' });
       toast.error(error.message || 'Failed to sync appointments');
     } finally {
@@ -163,19 +210,22 @@ const CalendarSync = () => {
         .eq('id', connection.id);
 
       if (error) throw error;
-      
-      userJourney.trackAction('Calendar Sync Toggled', { 
-        connectionId: connection.id, 
-        enabled: !connection.sync_enabled 
+
+      userJourney.trackAction('Calendar Sync Toggled', {
+        connectionId: connection.id,
+        enabled: !connection.sync_enabled,
       });
       toast.success(
-        connection.sync_enabled 
-          ? 'Auto-sync disabled' 
+        connection.sync_enabled
+          ? 'Auto-sync disabled'
           : 'Auto-sync enabled - future appointments will sync automatically'
       );
       loadConnections();
     } catch (error) {
-      logger.error('Error toggling sync', error, { component: 'CalendarSync', connectionId: connection.id });
+      logger.error('Error toggling sync', error, {
+        component: 'CalendarSync',
+        connectionId: connection.id,
+      });
       userJourney.trackError(error as Error, { action: 'toggle-sync' });
       toast.error('Failed to update sync settings');
     }
@@ -229,15 +279,19 @@ const CalendarSync = () => {
           {/* Connected Calendars */}
           {connections.length > 0 && (
             <div className="space-y-3">
-              {connections.map((connection) => (
+              {connections.map(connection => (
                 <div
                   key={connection.id}
                   className="flex items-center justify-between p-4 border-2 border-foreground/10 rounded-lg bg-muted/50"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{getProviderIcon(connection.provider)}</span>
+                    <span className="text-2xl">
+                      {getProviderIcon(connection.provider)}
+                    </span>
                     <div>
-                      <p className="font-medium">{getProviderName(connection.provider)}</p>
+                      <p className="font-medium">
+                        {getProviderName(connection.provider)}
+                      </p>
                       <div className="flex items-center gap-2 mt-1">
                         {connection.is_active ? (
                           <Badge variant="default" className="bg-success">
@@ -252,7 +306,8 @@ const CalendarSync = () => {
                         )}
                         {connection.last_sync_at && (
                           <span className="text-xs text-muted-foreground">
-                            Last synced: {new Date(connection.last_sync_at).toLocaleString()}
+                            Last synced:{' '}
+                            {new Date(connection.last_sync_at).toLocaleString()}
                           </span>
                         )}
                       </div>
@@ -263,7 +318,9 @@ const CalendarSync = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleSync(connection.id)}
-                      disabled={syncing === connection.id || !connection.is_active}
+                      disabled={
+                        syncing === connection.id || !connection.is_active
+                      }
                     >
                       {syncing === connection.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -340,20 +397,27 @@ const CalendarSync = () => {
             <div className="text-center py-8 text-muted-foreground">
               <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
               <p className="text-sm">No calendars connected yet</p>
-              <p className="text-xs mt-1">Connect your calendar to sync appointments automatically</p>
+              <p className="text-xs mt-1">
+                Connect your calendar to sync appointments automatically
+              </p>
             </div>
           )}
         </CardContent>
       </Card>
 
       {/* Disconnect Confirmation Dialog */}
-      <AlertDialog open={showDisconnectDialog} onOpenChange={setShowDisconnectDialog}>
+      <AlertDialog
+        open={showDisconnectDialog}
+        onOpenChange={setShowDisconnectDialog}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Disconnect Calendar?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will stop syncing appointments to {selectedConnection && getProviderName(selectedConnection.provider)}.
-              Your existing appointments will remain in your calendar.
+              This will stop syncing appointments to{' '}
+              {selectedConnection &&
+                getProviderName(selectedConnection.provider)}
+              . Your existing appointments will remain in your calendar.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

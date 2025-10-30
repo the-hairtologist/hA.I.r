@@ -1,12 +1,25 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, Loader2, TrendingUp, Target, Lightbulb, Award } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Sparkles,
+  Loader2,
+  TrendingUp,
+  Target,
+  Lightbulb,
+  Award,
+} from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface PortfolioInsightsProps {
   stylistId: string;
@@ -20,27 +33,40 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
   const analyzePortfolio = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('analyze-portfolio', {
-        body: { stylistId }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'analyze-portfolio',
+        {
+          body: { stylistId },
+        }
+      );
 
       if (error) throw error;
 
       if (data.error) {
         toast.error(data.error);
         if (data.suggestions) {
-          setAnalysis(`**Getting Started:**\n\n${data.suggestions.map((s: string) => `• ${s}`).join('\n')}`);
+          setAnalysis(
+            `**Getting Started:**\n\n${data.suggestions.map((s: string) => `• ${s}`).join('\n')}`
+          );
         }
         return;
       }
 
       setAnalysis(data.analysis);
       setPhotosAnalyzed(data.photosAnalyzed);
-      userJourney.trackAction('Portfolio analysis completed', { photosAnalyzed: data.photosAnalyzed });
+      userJourney.trackAction('Portfolio analysis completed', {
+        photosAnalyzed: data.photosAnalyzed,
+      });
       toast.success('Portfolio analysis complete!');
     } catch (error: any) {
-      logger.error('Error analyzing portfolio', error, { component: 'PortfolioInsights', stylistId });
-      userJourney.trackError(error, { operation: 'analyzePortfolio', stylistId });
+      logger.error('Error analyzing portfolio', error, {
+        component: 'PortfolioInsights',
+        stylistId,
+      });
+      userJourney.trackError(error, {
+        operation: 'analyzePortfolio',
+        stylistId,
+      });
       toast.error('Failed to analyze portfolio');
     } finally {
       setLoading(false);
@@ -56,12 +82,15 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
         const text = line.replace(/^#+\s/, '');
         const sizes = ['text-2xl', 'text-xl', 'text-lg'];
         return (
-          <h3 key={idx} className={`${sizes[level - 2] || 'text-base'} font-bold mt-4 mb-2 first:mt-0`}>
+          <h3
+            key={idx}
+            className={`${sizes[level - 2] || 'text-base'} font-bold mt-4 mb-2 first:mt-0`}
+          >
             {text}
           </h3>
         );
       }
-      
+
       // Bold text
       if (line.match(/^\*\*(.*?)\*\*/)) {
         const text = line.replace(/^\*\*(.*?)\*\*/, '$1');
@@ -71,7 +100,7 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
           </p>
         );
       }
-      
+
       // Bullet points
       if (line.match(/^[-•]\s/)) {
         const text = line.replace(/^[-•]\s/, '');
@@ -81,7 +110,7 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
           </li>
         );
       }
-      
+
       // Regular paragraphs
       if (line.trim()) {
         return (
@@ -90,7 +119,7 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
           </p>
         );
       }
-      
+
       return null;
     });
   };
@@ -127,22 +156,20 @@ export const PortfolioInsights = ({ stylistId }: PortfolioInsightsProps) => {
           </Button>
         </div>
       </CardHeader>
-      
+
       {analysis && (
         <CardContent>
           <Alert className="mb-4 border-primary/20 bg-primary/5">
             <Sparkles className="h-4 w-4" />
             <AlertDescription>
-              {photosAnalyzed > 0 
+              {photosAnalyzed > 0
                 ? `Analyzed ${photosAnalyzed} photos from your portfolio using Gemini 2.5 Pro`
                 : 'Portfolio recommendations based on your current setup'}
             </AlertDescription>
           </Alert>
 
           <div className="prose prose-sm max-w-none">
-            <div className="space-y-2">
-              {formatAnalysis(analysis)}
-            </div>
+            <div className="space-y-2">{formatAnalysis(analysis)}</div>
           </div>
 
           {photosAnalyzed > 0 && (

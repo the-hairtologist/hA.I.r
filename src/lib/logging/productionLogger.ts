@@ -19,7 +19,12 @@ interface LogContext {
 
 class ProductionLogger {
   private isDevelopment: boolean;
-  private logBuffer: Array<{ level: LogLevel; message: string; context?: LogContext; timestamp: number }> = [];
+  private logBuffer: Array<{
+    level: LogLevel;
+    message: string;
+    context?: LogContext;
+    timestamp: number;
+  }> = [];
   private maxBufferSize = 100;
 
   constructor() {
@@ -53,16 +58,23 @@ class ProductionLogger {
    * Error logs - critical issues
    */
   error(message: string, error?: Error | unknown, context?: LogContext): void {
-    const errorDetails = error instanceof Error 
-      ? { message: error.message, stack: error.stack, name: error.name }
-      : { error };
-    
-    safeConsole.error(`[ERROR] ${message}`, { ...context, error: errorDetails });
+    const errorDetails =
+      error instanceof Error
+        ? { message: error.message, stack: error.stack, name: error.name }
+        : { error };
+
+    safeConsole.error(`[ERROR] ${message}`, {
+      ...context,
+      error: errorDetails,
+    });
     this.bufferLog('error', message, { ...context, error: errorDetails });
-    
+
     // Send to monitoring service in production
     if (!this.isDevelopment) {
-      this.sendToMonitoring('error', message, { ...context, error: errorDetails });
+      this.sendToMonitoring('error', message, {
+        ...context,
+        error: errorDetails,
+      });
     }
   }
 
@@ -70,15 +82,22 @@ class ProductionLogger {
    * Fatal logs - application-breaking issues
    */
   fatal(message: string, error?: Error | unknown, context?: LogContext): void {
-    const errorDetails = error instanceof Error
-      ? { message: error.message, stack: error.stack, name: error.name }
-      : { error };
+    const errorDetails =
+      error instanceof Error
+        ? { message: error.message, stack: error.stack, name: error.name }
+        : { error };
 
-    safeConsole.error(`[FATAL] ${message}`, { ...context, error: errorDetails });
+    safeConsole.error(`[FATAL] ${message}`, {
+      ...context,
+      error: errorDetails,
+    });
     this.bufferLog('fatal', message, { ...context, error: errorDetails });
-    
+
     // Always send fatal errors to monitoring
-    this.sendToMonitoring('fatal', message, { ...context, error: errorDetails });
+    this.sendToMonitoring('fatal', message, {
+      ...context,
+      error: errorDetails,
+    });
   }
 
   /**
@@ -88,22 +107,32 @@ class ProductionLogger {
     if (duration > 100) {
       safeConsole.warn(`[PERFORMANCE] ${label} took ${duration}ms`, context);
     }
-    
+
     // Only log slow operations in production
     if (!this.isDevelopment && duration > 1000) {
-      this.bufferLog('warn', `Slow operation: ${label} (${duration}ms)`, context);
+      this.bufferLog(
+        'warn',
+        `Slow operation: ${label} (${duration}ms)`,
+        context
+      );
     }
   }
 
   /**
    * API call logging
    */
-  api(method: string, endpoint: string, status: number, duration: number, context?: LogContext): void {
+  api(
+    method: string,
+    endpoint: string,
+    status: number,
+    duration: number,
+    context?: LogContext
+  ): void {
     const level = status >= 500 ? 'error' : status >= 400 ? 'warn' : 'info';
     const message = `${method} ${endpoint} - ${status} (${duration}ms)`;
-    
+
     safeConsole.log(`[API] ${message}`, context);
-    
+
     if (level !== 'info') {
       this.bufferLog(level, message, context);
     }
@@ -120,12 +149,16 @@ class ProductionLogger {
   /**
    * Buffer logs for batched sending
    */
-  private bufferLog(level: LogLevel, message: string, context?: LogContext): void {
+  private bufferLog(
+    level: LogLevel,
+    message: string,
+    context?: LogContext
+  ): void {
     this.logBuffer.push({
       level,
       message,
       context,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     // Trim buffer if too large
@@ -137,13 +170,17 @@ class ProductionLogger {
   /**
    * Send critical logs to monitoring service
    */
-  private sendToMonitoring(level: LogLevel, message: string, context?: LogContext): void {
+  private sendToMonitoring(
+    level: LogLevel,
+    message: string,
+    context?: LogContext
+  ): void {
     try {
       // In production, send to your monitoring service (Sentry, LogRocket, etc.)
       if (window.Sentry) {
         window.Sentry.captureMessage(message, {
           level: level as any,
-          extra: context
+          extra: context,
         });
       }
     } catch (e) {

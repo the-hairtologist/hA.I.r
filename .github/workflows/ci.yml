@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: ["fix/invite-client-dialog-form-refactor"]
+    branches: ['fix/invite-client-dialog-form-refactor']
   pull_request:
-    branches: ["main"]
+    branches: ['main']
 
 jobs:
   build:

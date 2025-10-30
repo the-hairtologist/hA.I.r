@@ -17,11 +17,7 @@ export const CSP_CONFIG = {
     "'unsafe-inline'", // Required for styled-components/CSS-in-JS
     'https://fonts.googleapis.com',
   ],
-  'font-src': [
-    "'self'",
-    'https://fonts.gstatic.com',
-    'data:',
-  ],
+  'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
   'img-src': [
     "'self'",
     'data:',
@@ -55,10 +51,12 @@ export const generateCSPHeader = (): string => {
  */
 export const addCSPMetaTag = () => {
   if (typeof document === 'undefined') return;
-  
-  const existingMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+
+  const existingMeta = document.querySelector(
+    'meta[http-equiv="Content-Security-Policy"]'
+  );
   if (existingMeta) return;
-  
+
   const meta = document.createElement('meta');
   meta.httpEquiv = 'Content-Security-Policy';
   meta.content = generateCSPHeader();
@@ -108,7 +106,7 @@ export const sanitizers = {
       .trim()
       .substring(0, 10000); // Max length
   },
-  
+
   /**
    * Sanitize email
    */
@@ -119,7 +117,7 @@ export const sanitizers = {
       .replace(/[^\w@.-]/g, '') // Only allow email chars
       .substring(0, 255);
   },
-  
+
   /**
    * Sanitize URL
    */
@@ -135,45 +133,45 @@ export const sanitizers = {
       return '';
     }
   },
-  
+
   /**
    * Sanitize filename
    */
   filename: (input: string): string => {
-    return input
-      .replace(/[^a-zA-Z0-9._-]/g, '_')
-      .substring(0, 255);
+    return input.replace(/[^a-zA-Z0-9._-]/g, '_').substring(0, 255);
   },
 };
 
 /**
  * Password strength checker
  */
-export const checkPasswordStrength = (password: string): {
+export const checkPasswordStrength = (
+  password: string
+): {
   score: number; // 0-4
   feedback: string[];
 } => {
   const feedback: string[] = [];
   let score = 0;
-  
+
   if (password.length >= 8) score++;
   if (password.length >= 12) score++;
   if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
   if (/[0-9]/.test(password)) score++;
   if (/[^a-zA-Z0-9]/.test(password)) score++;
-  
+
   if (password.length < 8) feedback.push('Use at least 8 characters');
   if (!/[a-z]/.test(password)) feedback.push('Add lowercase letters');
   if (!/[A-Z]/.test(password)) feedback.push('Add uppercase letters');
   if (!/[0-9]/.test(password)) feedback.push('Add numbers');
   if (!/[^a-zA-Z0-9]/.test(password)) feedback.push('Add special characters');
-  
+
   // Check for common weak passwords
   const weakPasswords = ['password', '12345678', 'qwerty', 'abc123'];
   if (weakPasswords.some(weak => password.toLowerCase().includes(weak))) {
     score = 0;
     feedback.push('Avoid common passwords');
   }
-  
+
   return { score: Math.min(score, 4), feedback };
 };

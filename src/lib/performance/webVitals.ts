@@ -88,7 +88,10 @@ class WebVitalsMonitor {
   /**
    * Get rating based on thresholds
    */
-  private getRating(name: string, value: number): 'good' | 'needs-improvement' | 'poor' {
+  private getRating(
+    name: string,
+    value: number
+  ): 'good' | 'needs-improvement' | 'poor' {
     const thresholds: Record<string, [number, number]> = {
       CLS: [0.1, 0.25],
       INP: [200, 500], // Updated from FID
@@ -119,7 +122,9 @@ class WebVitalsMonitor {
 
     // Send to database for detailed analysis
     try {
-      const { performanceTracker } = await import('@/lib/analytics/performanceTracker');
+      const { performanceTracker } = await import(
+        '@/lib/analytics/performanceTracker'
+      );
       await performanceTracker.trackWebVital({
         name: metric.name,
         value: metric.value,

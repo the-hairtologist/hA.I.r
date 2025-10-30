@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
-import { useSidebar } from "@/components/ui/sidebar";
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export const MobileSidebarOverlay = () => {
   const { openMobile, setOpenMobile } = useSidebar();
@@ -12,14 +12,14 @@ export const MobileSidebarOverlay = () => {
   useEffect(() => {
     // Only apply scroll lock on mobile/tablet devices (< 1024px)
     const isMobile = window.innerWidth < 1024;
-    
+
     if (!isMobile) return;
 
     if (isOpen) {
       // Store previous values
       previousOverflow.current = document.body.style.overflow;
       previousTouchAction.current = document.body.style.touchAction;
-      
+
       // Prevent body scroll when sidebar is open on mobile
       document.body.style.overflow = 'hidden';
       document.body.style.touchAction = 'none';
@@ -53,15 +53,15 @@ export const MobileSidebarOverlay = () => {
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStart === null) return;
-    
+
     const touchEnd = e.changedTouches[0].clientX;
     const swipeDistance = touchStart - touchEnd;
-    
+
     // If user swipes right-to-left more than 50px, close sidebar
     if (swipeDistance > 50) {
       setOpenMobile(false);
     }
-    
+
     setTouchStart(null);
   };
 
@@ -70,8 +70,8 @@ export const MobileSidebarOverlay = () => {
   return (
     <div
       className={cn(
-        "lg:hidden fixed inset-0 z-30 bg-background/80 backdrop-blur-sm",
-        "animate-fade-in touch-manipulation"
+        'lg:hidden fixed inset-0 z-30 bg-background/80 backdrop-blur-sm',
+        'animate-fade-in touch-manipulation'
       )}
       onClick={() => setOpenMobile(false)}
       onTouchStart={handleTouchStart}
@@ -79,7 +79,7 @@ export const MobileSidebarOverlay = () => {
       aria-label="Close navigation menu"
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
+      onKeyDown={e => {
         if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
           setOpenMobile(false);
         }

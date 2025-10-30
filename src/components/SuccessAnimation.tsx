@@ -1,5 +1,5 @@
-import { CheckCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CheckCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface SuccessAnimationProps {
   message?: string;
@@ -8,7 +8,7 @@ interface SuccessAnimationProps {
 }
 
 export const SuccessAnimation = ({
-  message = "Success!",
+  message = 'Success!',
   onComplete,
   duration = 2000,
 }: SuccessAnimationProps) => {

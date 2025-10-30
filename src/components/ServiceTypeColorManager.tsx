@@ -1,12 +1,26 @@
-import { useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { Trash2, Plus, Palette } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { Trash2, Plus, Palette } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 interface ServiceTypeColor {
   id: string;
@@ -18,26 +32,28 @@ interface ServiceTypeColorManagerProps {
   stylistId: string;
 }
 
-export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerProps) => {
+export const ServiceTypeColorManager = ({
+  stylistId,
+}: ServiceTypeColorManagerProps) => {
   const [serviceColors, setServiceColors] = useState<ServiceTypeColor[]>([]);
   const [loading, setLoading] = useState(false);
-  const [newServiceType, setNewServiceType] = useState("");
-  const [newColor, setNewColor] = useState("hsl(270 85% 60%)");
+  const [newServiceType, setNewServiceType] = useState('');
+  const [newColor, setNewColor] = useState('hsl(270 85% 60%)');
   const [addDialogOpen, setAddDialogOpen] = useState(false);
 
   const loadServiceColors = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from("service_type_colors")
-        .select("*")
-        .eq("stylist_id", stylistId)
-        .order("service_type");
+        .from('service_type_colors')
+        .select('*')
+        .eq('stylist_id', stylistId)
+        .order('service_type');
 
       if (error) throw error;
       setServiceColors(data || []);
     } catch (error) {
-      console.error("Error loading service colors:", error);
-      toast.error("Failed to load service colors");
+      console.error('Error loading service colors:', error);
+      toast.error('Failed to load service colors');
     }
   }, [stylistId]);
   useEffect(() => {
@@ -47,32 +63,32 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
   const updateColor = async (id: string, newColor: string) => {
     try {
       const { error } = await supabase
-        .from("service_type_colors")
+        .from('service_type_colors')
         .update({ color: newColor })
-        .eq("id", id);
+        .eq('id', id);
 
       if (error) throw error;
-      
+
       setServiceColors(prev =>
-        prev.map(sc => sc.id === id ? { ...sc, color: newColor } : sc)
+        prev.map(sc => (sc.id === id ? { ...sc, color: newColor } : sc))
       );
-      toast.success("Color updated");
+      toast.success('Color updated');
     } catch (error) {
-      console.error("Error updating color:", error);
-      toast.error("Failed to update color");
+      console.error('Error updating color:', error);
+      toast.error('Failed to update color');
     }
   };
 
   const addServiceType = async () => {
     if (!newServiceType.trim()) {
-      toast.error("Please enter a service type name");
+      toast.error('Please enter a service type name');
       return;
     }
 
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("service_type_colors")
+        .from('service_type_colors')
         .insert({
           stylist_id: stylistId,
           service_type: newServiceType.trim(),
@@ -84,16 +100,16 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
       if (error) throw error;
 
       setServiceColors(prev => [...prev, data]);
-      setNewServiceType("");
-      setNewColor("hsl(270 85% 60%)");
+      setNewServiceType('');
+      setNewColor('hsl(270 85% 60%)');
       setAddDialogOpen(false);
-      toast.success("Service type added");
+      toast.success('Service type added');
     } catch (error: any) {
-      console.error("Error adding service type:", error);
-      if (error.code === "23505") {
-        toast.error("This service type already exists");
+      console.error('Error adding service type:', error);
+      if (error.code === '23505') {
+        toast.error('This service type already exists');
       } else {
-        toast.error("Failed to add service type");
+        toast.error('Failed to add service type');
       }
     } finally {
       setLoading(false);
@@ -108,29 +124,29 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
 
     try {
       const { error } = await supabase
-        .from("service_type_colors")
+        .from('service_type_colors')
         .delete()
-        .eq("id", id);
+        .eq('id', id);
 
       if (error) throw error;
 
       setServiceColors(prev => prev.filter(sc => sc.id !== id));
-      toast.success("Service type deleted");
+      toast.success('Service type deleted');
     } catch (error) {
-      console.error("Error deleting service type:", error);
-      toast.error("Failed to delete service type");
+      console.error('Error deleting service type:', error);
+      toast.error('Failed to delete service type');
     }
   };
 
   const presetColors = [
-    { name: "Cyan", value: "hsl(190 95% 55%)" },
-    { name: "Purple", value: "hsl(270 85% 60%)" },
-    { name: "Pink", value: "hsl(340 90% 65%)" },
-    { name: "Orange", value: "hsl(25 95% 60%)" },
-    { name: "Green", value: "hsl(142 76% 45%)" },
-    { name: "Blue", value: "hsl(217 91% 60%)" },
-    { name: "Yellow", value: "hsl(45 93% 58%)" },
-    { name: "Red", value: "hsl(0 84% 60%)" },
+    { name: 'Cyan', value: 'hsl(190 95% 55%)' },
+    { name: 'Purple', value: 'hsl(270 85% 60%)' },
+    { name: 'Pink', value: 'hsl(340 90% 65%)' },
+    { name: 'Orange', value: 'hsl(25 95% 60%)' },
+    { name: 'Green', value: 'hsl(142 76% 45%)' },
+    { name: 'Blue', value: 'hsl(217 91% 60%)' },
+    { name: 'Yellow', value: 'hsl(45 93% 58%)' },
+    { name: 'Red', value: 'hsl(0 84% 60%)' },
   ];
 
   return (
@@ -166,7 +182,7 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                   <Input
                     id="service-type"
                     value={newServiceType}
-                    onChange={(e) => setNewServiceType(e.target.value)}
+                    onChange={e => setNewServiceType(e.target.value)}
                     placeholder="e.g., Highlights, Balayage, etc."
                     maxLength={50}
                   />
@@ -174,14 +190,12 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                 <div className="space-y-2">
                   <Label>Choose Color</Label>
                   <div className="grid grid-cols-4 gap-2">
-                    {presetColors.map((preset) => (
+                    {presetColors.map(preset => (
                       <button
                         key={preset.value}
                         onClick={() => setNewColor(preset.value)}
                         className={`h-12 rounded-lg brutal-border transition-all hover:scale-105 ${
-                          newColor === preset.value
-                            ? "brutal-shadow-xs"
-                            : ""
+                          newColor === preset.value ? 'brutal-shadow-xs' : ''
                         }`}
                         style={{ backgroundColor: preset.value }}
                         title={preset.name}
@@ -191,7 +205,10 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setAddDialogOpen(false)}
+                >
                   Cancel
                 </Button>
                 <Button onClick={addServiceType} disabled={loading}>
@@ -205,11 +222,12 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
       <CardContent className="pt-6">
         {serviceColors.length === 0 ? (
           <p className="text-center text-muted-foreground py-8">
-            No service types configured. Add your first service type to get started.
+            No service types configured. Add your first service type to get
+            started.
           </p>
         ) : (
           <div className="space-y-4">
-            {serviceColors.map((sc) => (
+            {serviceColors.map(sc => (
               <div
                 key={sc.id}
                 className="flex items-center gap-4 p-4 brutal-border rounded-lg hover:bg-accent/5 transition-colors"
@@ -230,11 +248,13 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Change Color for {sc.service_type}</DialogTitle>
+                        <DialogTitle>
+                          Change Color for {sc.service_type}
+                        </DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4 py-4">
                         <div className="grid grid-cols-4 gap-2">
-                          {presetColors.map((preset) => (
+                          {presetColors.map(preset => (
                             <button
                               key={preset.value}
                               onClick={() => updateColor(sc.id, preset.value)}
@@ -263,6 +283,3 @@ export const ServiceTypeColorManager = ({ stylistId }: ServiceTypeColorManagerPr
     </Card>
   );
 };
-
-
-

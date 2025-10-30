@@ -1,7 +1,7 @@
-import { ReactNode, useState } from "react";
-import { useSwipeable } from "react-swipeable";
-import { cn } from "@/lib/utils";
-import { notification } from "@/platform/haptics";
+import { ReactNode, useState } from 'react';
+import { useSwipeable } from 'react-swipeable';
+import { cn } from '@/lib/utils';
+import { notification } from '@/platform/haptics';
 
 interface SwipeableCardProps {
   children: ReactNode;
@@ -24,13 +24,13 @@ export const SwipeableCard = ({
   const [swiping, setSwiping] = useState(false);
 
   const handlers = useSwipeable({
-    onSwiping: (eventData) => {
+    onSwiping: eventData => {
       setSwiping(true);
       setOffset(eventData.deltaX);
     },
     onSwipedLeft: () => {
       if (Math.abs(offset) > 100 && onSwipeLeft) {
-        notification("success");
+        notification('success');
         onSwipeLeft();
       }
       setSwiping(false);
@@ -38,7 +38,7 @@ export const SwipeableCard = ({
     },
     onSwipedRight: () => {
       if (Math.abs(offset) > 100 && onSwipeRight) {
-        notification("success");
+        notification('success');
         onSwipeRight();
       }
       setSwiping(false);
@@ -54,7 +54,9 @@ export const SwipeableCard = ({
   });
 
   return (
-    <div className={cn("relative overflow-hidden touch-manipulation", className)}>
+    <div
+      className={cn('relative overflow-hidden touch-manipulation', className)}
+    >
       {/* Background actions */}
       {leftAction && offset < -20 && (
         <div className="absolute right-0 top-0 bottom-0 flex items-center pr-4 bg-destructive/10">
@@ -70,10 +72,7 @@ export const SwipeableCard = ({
       {/* Card content */}
       <div
         {...handlers}
-        className={cn(
-          "transition-transform",
-          !swiping && "duration-300",
-        )}
+        className={cn('transition-transform', !swiping && 'duration-300')}
         style={{
           transform: `translateX(${offset}px)`,
         }}

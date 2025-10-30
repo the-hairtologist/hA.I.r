@@ -7,7 +7,10 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { getOptimizedImageUrl, getDeviceCapabilities } from '@/lib/performanceOptimizer';
+import {
+  getOptimizedImageUrl,
+  getDeviceCapabilities,
+} from '@/lib/performanceOptimizer';
 import { cn } from '@/lib/utils';
 
 interface ResponsiveImageProps {
@@ -42,10 +45,10 @@ export const ResponsiveImage = ({
 
   useEffect(() => {
     const { pixelRatio } = getDeviceCapabilities();
-    
+
     // For priority images, load immediately
     if (priority) {
-      const optimizedSrc = width 
+      const optimizedSrc = width
         ? getOptimizedImageUrl(src, width, height)
         : src;
       setImageSrc(optimizedSrc);
@@ -54,12 +57,12 @@ export const ResponsiveImage = ({
 
     // For non-priority images, use IntersectionObserver
     if (!imgRef.current) return;
-    
+
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
-            const optimizedSrc = width 
+            const optimizedSrc = width
               ? getOptimizedImageUrl(src, width, height)
               : src;
             setImageSrc(optimizedSrc);
@@ -108,7 +111,7 @@ export const ResponsiveImage = ({
       {!isLoaded && !hasError && (
         <div className="absolute inset-0 animate-pulse bg-muted" />
       )}
-      
+
       {imageSrc && !hasError && (
         <img
           src={imageSrc}
@@ -129,7 +132,7 @@ export const ResponsiveImage = ({
           )}
         />
       )}
-      
+
       {hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground text-xs sm:text-sm">
           Failed to load image

@@ -1,21 +1,21 @@
-import { ReactNode, useState } from "react";
-import { HelpCircle, X, ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ReactNode, useState } from 'react';
+import { HelpCircle, X, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 interface ContextualHelpProps {
   title: string;
   content: ReactNode;
   videoUrl?: string;
   docsUrl?: string;
-  position?: "inline" | "floating";
+  position?: 'inline' | 'floating';
   className?: string;
 }
 
@@ -24,7 +24,7 @@ export const ContextualHelp = ({
   content,
   videoUrl,
   docsUrl,
-  position = "inline",
+  position = 'inline',
   className,
 }: ContextualHelpProps) => {
   const [open, setOpen] = useState(false);
@@ -36,16 +36,19 @@ export const ContextualHelp = ({
           variant="ghost"
           size="icon"
           className={cn(
-            "h-6 w-6 rounded-full",
-            position === "floating" && "fixed bottom-20 right-6 h-12 w-12 brutal-shadow-sm z-40",
+            'h-6 w-6 rounded-full',
+            position === 'floating' &&
+              'fixed bottom-20 right-6 h-12 w-12 brutal-shadow-sm z-40',
             className
           )}
           aria-label={`Help: ${title}`}
         >
-          <HelpCircle className={cn(
-            "text-muted-foreground hover:text-primary transition-colors",
-            position === "floating" ? "h-6 w-6" : "h-4 w-4"
-          )} />
+          <HelpCircle
+            className={cn(
+              'text-muted-foreground hover:text-primary transition-colors',
+              position === 'floating' ? 'h-6 w-6' : 'h-4 w-4'
+            )}
+          />
         </Button>
       </DialogTrigger>
       <DialogContent className="brutal-border max-w-lg">
@@ -56,9 +59,7 @@ export const ContextualHelp = ({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="text-sm text-muted-foreground">
-            {content}
-          </div>
+          <div className="text-sm text-muted-foreground">{content}</div>
 
           {videoUrl && (
             <div className="aspect-video rounded-lg overflow-hidden brutal-border">
@@ -75,7 +76,7 @@ export const ContextualHelp = ({
             <Button
               variant="outline"
               className="w-full brutal-border"
-              onClick={() => window.open(docsUrl, "_blank")}
+              onClick={() => window.open(docsUrl, '_blank')}
             >
               <ExternalLink className="h-4 w-4 mr-2" />
               View Documentation

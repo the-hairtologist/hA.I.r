@@ -59,7 +59,10 @@ export function useUserRole(userId?: string): UseUserRoleReturn {
       const userRoles = (data || []).map(r => r.role as UserRole);
       setRoles(userRoles);
 
-      log.info('User roles loaded', 'useUserRole', { userId, roles: userRoles });
+      log.info('User roles loaded', 'useUserRole', {
+        userId,
+        roles: userRoles,
+      });
     } catch (error) {
       log.error('Failed to fetch roles', 'useUserRole', { error });
       setRoles([]);

@@ -22,11 +22,7 @@ interface CaptureImageOptions {
 export const captureImage = async (
   options: CaptureImageOptions = {}
 ): Promise<string | null> => {
-  const {
-    allowEditing = true,
-    quality = 90,
-    source = 'prompt',
-  } = options;
+  const { allowEditing = true, quality = 90, source = 'prompt' } = options;
 
   if (Platform.isMobile) {
     try {
@@ -50,17 +46,17 @@ export const captureImage = async (
     }
   } else {
     // Web fallback
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = 'image/*';
-      
+
       // Add capture attribute if camera is requested
       if (source === 'camera') {
         input.setAttribute('capture', 'environment');
       }
 
-      input.onchange = (e) => {
+      input.onchange = e => {
         const file = (e.target as HTMLInputElement).files?.[0];
         if (file) {
           const reader = new FileReader();
@@ -89,13 +85,13 @@ export const selectMultipleImages = async (): Promise<string[]> => {
     return image ? [image] : [];
   } else {
     // Web supports multiple selection
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = 'image/*';
       input.multiple = true;
 
-      input.onchange = async (e) => {
+      input.onchange = async e => {
         const files = Array.from((e.target as HTMLInputElement).files || []);
         const results: string[] = [];
 

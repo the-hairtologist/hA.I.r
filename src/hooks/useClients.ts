@@ -3,20 +3,24 @@
  * React Query hook for managing client data with caching and optimistic updates
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { 
-  fetchClientsByStylist, 
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import {
+  fetchClientsByStylist,
   fetchClientById,
-  createClient, 
-  updateClient, 
+  createClient,
+  updateClient,
   deleteClient,
-  bulkDeleteClients 
-} from "@/lib/api/clients";
-import type { ClientProfile, CreateClientData, UpdateClientData } from "@/types/client";
-import { handleApiError } from "@/lib/api/errorHandler";
-import { cacheManager } from "@/lib/cache/CacheManager";
-import { useCachedQuery } from "@/hooks/useCachedQuery";
+  bulkDeleteClients,
+} from '@/lib/api/clients';
+import type {
+  ClientProfile,
+  CreateClientData,
+  UpdateClientData,
+} from '@/types/client';
+import { handleApiError } from '@/lib/api/errorHandler';
+import { cacheManager } from '@/lib/cache/CacheManager';
+import { useCachedQuery } from '@/hooks/useCachedQuery';
 
 /**
  * Query key factory for clients
@@ -24,8 +28,10 @@ import { useCachedQuery } from "@/hooks/useCachedQuery";
 export const clientKeys = {
   all: ['clients'] as const,
   lists: () => [...clientKeys.all, 'list'] as const,
-  list: (stylistId: string, page?: number) => 
-    page ? [...clientKeys.lists(), stylistId, 'page', page] as const : [...clientKeys.lists(), stylistId] as const,
+  list: (stylistId: string, page?: number) =>
+    page
+      ? ([...clientKeys.lists(), stylistId, 'page', page] as const)
+      : ([...clientKeys.lists(), stylistId] as const),
   details: () => [...clientKeys.all, 'detail'] as const,
   detail: (id: string) => [...clientKeys.details(), id] as const,
 };
@@ -33,7 +39,11 @@ export const clientKeys = {
 /**
  * Fetch all clients for a stylist (with pagination support)
  */
-export const useClients = (stylistId: string | null, page: number = 1, limit: number = 50) => {
+export const useClients = (
+  stylistId: string | null,
+  page: number = 1,
+  limit: number = 50
+) => {
   return useCachedQuery({
     queryKey: clientKeys.list(stylistId || '', page),
     queryFn: () => fetchClientsByStylist(stylistId!, page, limit),
@@ -62,22 +72,22 @@ export const useCreateClient = (stylistId: string) => {
 
   return useMutation({
     mutationFn: (data: CreateClientData) => createClient(data),
-    onSuccess: (newClient) => {
+    onSuccess: newClient => {
       // Smart cache invalidation - auto-invalidates clients, clientDetails, analytics
       cacheManager.invalidateAfterMutation('client', stylistId);
-      
+
       // Optimistically add to cache
       queryClient.setQueryData<ClientProfile[]>(
         clientKeys.list(stylistId),
-        (old) => [newClient, ...(old || [])]
+        old => [newClient, ...(old || [])]
       );
-      
-      toast.success("Client added successfully");
+
+      toast.success('Client added successfully');
     },
-    onError: (error) => {
+    onError: error => {
       handleApiError(error, {
-        userMessage: "Failed to add client",
-        logContext: { stylistId, operation: "createClient" },
+        userMessage: 'Failed to add client',
+        logContext: { stylistId, operation: 'createClient' },
       });
     },
   });
@@ -91,30 +101,31 @@ export const useUpdateClient = (stylistId: string) => {
 
   return useMutation({
     mutationFn: (data: UpdateClientData) => updateClient(data),
-    onSuccess: (updatedClient) => {
+    onSuccess: updatedClient => {
       // Smart cache invalidation
       cacheManager.invalidateAfterMutation('client', stylistId);
-      
+
       // Update in list cache
       queryClient.setQueryData<ClientProfile[]>(
         clientKeys.list(stylistId),
-        (old) => old?.map((client) => 
-          client.id === updatedClient.id ? updatedClient : client
-        ) || []
+        old =>
+          old?.map(client =>
+            client.id === updatedClient.id ? updatedClient : client
+          ) || []
       );
-      
+
       // Update in detail cache
       queryClient.setQueryData(
         clientKeys.detail(updatedClient.id),
         updatedClient
       );
-      
-      toast.success("Client updated successfully");
+
+      toast.success('Client updated successfully');
     },
-    onError: (error) => {
+    onError: error => {
       handleApiError(error, {
-        userMessage: "Failed to update client",
-        logContext: { stylistId, operation: "updateClient" },
+        userMessage: 'Failed to update client',
+        logContext: { stylistId, operation: 'updateClient' },
       });
     },
   });
@@ -131,22 +142,22 @@ export const useDeleteClient = (stylistId: string) => {
     onSuccess: (_, clientId) => {
       // Smart cache invalidation
       cacheManager.invalidateAfterMutation('client', stylistId);
-      
+
       // Remove from list cache
       queryClient.setQueryData<ClientProfile[]>(
         clientKeys.list(stylistId),
-        (old) => old?.filter((client) => client.id !== clientId) || []
+        old => old?.filter(client => client.id !== clientId) || []
       );
-      
+
       // Remove from detail cache
       queryClient.removeQueries({ queryKey: clientKeys.detail(clientId) });
-      
-      toast.success("Client deleted");
+
+      toast.success('Client deleted');
     },
-    onError: (error) => {
+    onError: error => {
       handleApiError(error, {
-        userMessage: "Failed to delete client",
-        logContext: { stylistId, operation: "deleteClient" },
+        userMessage: 'Failed to delete client',
+        logContext: { stylistId, operation: 'deleteClient' },
       });
     },
   });
@@ -163,19 +174,19 @@ export const useBulkDeleteClients = (stylistId: string) => {
     onSuccess: (_, clientIds) => {
       // Smart cache invalidation
       cacheManager.invalidateAfterMutation('client', stylistId);
-      
+
       // Remove from list cache
       queryClient.setQueryData<ClientProfile[]>(
         clientKeys.list(stylistId),
-        (old) => old?.filter((client) => !clientIds.includes(client.id)) || []
+        old => old?.filter(client => !clientIds.includes(client.id)) || []
       );
-      
+
       toast.success(`${clientIds.length} clients deleted`);
     },
-    onError: (error) => {
+    onError: error => {
       handleApiError(error, {
-        userMessage: "Failed to delete clients",
-        logContext: { stylistId, operation: "bulkDeleteClients" },
+        userMessage: 'Failed to delete clients',
+        logContext: { stylistId, operation: 'bulkDeleteClients' },
       });
     },
   });

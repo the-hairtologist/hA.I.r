@@ -3,8 +3,8 @@
  * Provides visual feedback for multi-step processes
  */
 
-import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Step {
   id: string;
@@ -18,12 +18,13 @@ interface ProgressIndicatorProps {
   className?: string;
 }
 
-export const ProgressIndicator = ({ steps, currentStep, className }: ProgressIndicatorProps) => {
+export const ProgressIndicator = ({
+  steps,
+  currentStep,
+  className,
+}: ProgressIndicatorProps) => {
   return (
-    <nav 
-      aria-label="Progress" 
-      className={cn("w-full", className)}
-    >
+    <nav aria-label="Progress" className={cn('w-full', className)}>
       <ol role="list" className="flex items-center justify-between">
         {steps.map((step, index) => {
           const stepNumber = index + 1;
@@ -37,12 +38,15 @@ export const ProgressIndicator = ({ steps, currentStep, className }: ProgressInd
                 {/* Step Circle */}
                 <div
                   className={cn(
-                    "relative flex h-12 w-12 items-center justify-center rounded-full brutal-border transition-all",
-                    isCompleted && "bg-primary border-primary text-primary-foreground brutal-shadow-sm",
-                    isCurrent && "bg-card border-primary text-primary scale-110 brutal-shadow-xs animate-pulse-glow",
-                    isUpcoming && "bg-muted border-muted-foreground/30 text-muted-foreground"
+                    'relative flex h-12 w-12 items-center justify-center rounded-full brutal-border transition-all',
+                    isCompleted &&
+                      'bg-primary border-primary text-primary-foreground brutal-shadow-sm',
+                    isCurrent &&
+                      'bg-card border-primary text-primary scale-110 brutal-shadow-xs animate-pulse-glow',
+                    isUpcoming &&
+                      'bg-muted border-muted-foreground/30 text-muted-foreground'
                   )}
-                  aria-current={isCurrent ? "step" : undefined}
+                  aria-current={isCurrent ? 'step' : undefined}
                 >
                   {isCompleted ? (
                     <Check className="h-6 w-6" aria-hidden="true" />
@@ -57,9 +61,9 @@ export const ProgressIndicator = ({ steps, currentStep, className }: ProgressInd
                 <div className="mt-2 text-center">
                   <p
                     className={cn(
-                      "text-sm font-semibold",
-                      (isCompleted || isCurrent) && "text-foreground",
-                      isUpcoming && "text-muted-foreground"
+                      'text-sm font-semibold',
+                      (isCompleted || isCurrent) && 'text-foreground',
+                      isUpcoming && 'text-muted-foreground'
                     )}
                   >
                     {step.label}
@@ -76,9 +80,9 @@ export const ProgressIndicator = ({ steps, currentStep, className }: ProgressInd
               {index < steps.length - 1 && (
                 <div
                   className={cn(
-                    "absolute top-6 left-1/2 h-[3px] w-full transition-all",
-                    isCompleted && "bg-primary",
-                    !isCompleted && "bg-muted"
+                    'absolute top-6 left-1/2 h-[3px] w-full transition-all',
+                    isCompleted && 'bg-primary',
+                    !isCompleted && 'bg-muted'
                   )}
                   aria-hidden="true"
                 />

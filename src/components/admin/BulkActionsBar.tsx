@@ -3,16 +3,16 @@
  * Select multiple items for batch operations (Admin only)
  */
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,16 +22,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { X, Trash2, Mail, CheckCircle, XCircle, Download } from "lucide-react";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+} from '@/components/ui/alert-dialog';
+import { X, Trash2, Mail, CheckCircle, XCircle, Download } from 'lucide-react';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface BulkActionsBarProps {
   selectedIds: string[];
   onClearSelection: () => void;
   onRefresh?: () => void;
-  type: "appointments" | "clients" | "users";
+  type: 'appointments' | 'clients' | 'users';
 }
 
 export function BulkActionsBar({
@@ -41,14 +41,14 @@ export function BulkActionsBar({
   type,
 }: BulkActionsBarProps) {
   const [loading, setLoading] = useState(false);
-  const [action, setAction] = useState<string>("");
+  const [action, setAction] = useState<string>('');
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const handleBulkAction = async (actionType: string) => {
     setAction(actionType);
-    
+
     // Show confirmation for destructive actions
-    if (["delete", "cancel"].includes(actionType)) {
+    if (['delete', 'cancel'].includes(actionType)) {
       setShowConfirmDialog(true);
       return;
     }
@@ -60,68 +60,69 @@ export function BulkActionsBar({
     setLoading(true);
     try {
       switch (actionType) {
-        case "delete":
+        case 'delete':
           await handleBulkDelete();
           break;
-        case "complete":
+        case 'complete':
           await handleBulkComplete();
           break;
-        case "cancel":
+        case 'cancel':
           await handleBulkCancel();
           break;
-        case "email":
+        case 'email':
           await handleBulkEmail();
           break;
-        case "export":
+        case 'export':
           await handleBulkExport();
           break;
         default:
-          toast.error("Unknown action");
+          toast.error('Unknown action');
       }
-      
+
       onClearSelection();
       onRefresh?.();
       setShowConfirmDialog(false);
     } catch (error: any) {
-      console.error("Bulk action error:", error);
-      toast.error(error.message || "Failed to perform bulk action");
+      console.error('Bulk action error:', error);
+      toast.error(error.message || 'Failed to perform bulk action');
     } finally {
       setLoading(false);
     }
   };
 
   const handleBulkDelete = async () => {
-    const table = type === "appointments" ? "appointments" : 
-                  type === "clients" ? "client_profiles" : "profiles";
-    
-    const { error } = await supabase
-      .from(table)
-      .delete()
-      .in("id", selectedIds);
+    const table =
+      type === 'appointments'
+        ? 'appointments'
+        : type === 'clients'
+          ? 'client_profiles'
+          : 'profiles';
+
+    const { error } = await supabase.from(table).delete().in('id', selectedIds);
 
     if (error) throw error;
     toast.success(`Deleted ${selectedIds.length} ${type}`);
   };
 
   const handleBulkComplete = async () => {
-    if (type !== "appointments") return;
+    if (type !== 'appointments') return;
 
     const { error } = await supabase
-      .from("appointments")
-      .update({ status: "completed" })
-      .in("id", selectedIds);
+      .from('appointments')
+      .update({ status: 'completed' })
+      .in('id', selectedIds);
 
     if (error) throw error;
     toast.success(`Marked ${selectedIds.length} appointments as completed`);
   };
 
   const handleBulkCancel = async () => {
-    if (type !== "appointments") return;
+    if (type !== 'appointments') return;
 
     const { error } = await supabase
-      .from("appointments")
-      .update({ status: "cancelled" })
-      .in("id", selectedIds);
+      .from('appointments')
+      .update({ status: 'cancelled' })
+      .in('id', selectedIds);
 
     if (error) throw error;
     toast.success(`Cancelled ${selectedIds.length} appointments`);
@@ -129,56 +130,60 @@ export function BulkActionsBar({
 
   const handleBulkEmail = async () => {
     // Get email addresses
-    const table = type === "clients" ? "client_profiles" : "profiles";
+    const table = type === 'clients' ? 'client_profiles' : 'profiles';
     const { data, error } = await supabase
       .from(table)
-      .select("email")
-      .in("id", selectedIds);
+      .select('email')
+      .in('id', selectedIds);
 
     if (error) throw error;
 
     const emails = data.map((item: any) => item.email).filter(Boolean);
-    
+
     // Open email client with BCC
-    window.location.href = `mailto:?bcc=${emails.join(",")}`;
+    window.location.href = `mailto:?bcc=${emails.join(',')}`;
     toast.success(`Opening email client with ${emails.length} recipients`);
   };
 
   const handleBulkExport = async () => {
     // Get data
-    const table = type === "appointments" ? "appointments" : 
-                  type === "clients" ? "client_profiles" : "profiles";
-    
+    const table =
+      type === 'appointments'
+        ? 'appointments'
+        : type === 'clients'
+          ? 'client_profiles'
+          : 'profiles';
+
     const { data, error } = await supabase
       .from(table)
-      .select("*")
-      .in("id", selectedIds);
+      .select('*')
+      .in('id', selectedIds);
 
     if (error) throw error;
 
     // Convert to CSV
     const csv = convertToCSV(data);
-    
+
     // Download
-    const blob = new Blob([csv], { type: "text/csv" });
+    const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `${type}_export_${new Date().toISOString().split("T")[0]}.csv`;
+    a.download = `${type}_export_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
-    
+
     toast.success(`Exported ${selectedIds.length} ${type}`);
   };
 
   const convertToCSV = (data: any[]) => {
-    if (data.length === 0) return "";
-    
+    if (data.length === 0) return '';
+
     const headers = Object.keys(data[0]);
-    const rows = data.map(item => 
-      headers.map(header => JSON.stringify(item[header] ?? "")).join(",")
+    const rows = data.map(item =>
+      headers.map(header => JSON.stringify(item[header] ?? '')).join(',')
     );
-    
-    return [headers.join(","), ...rows].join("\n");
+
+    return [headers.join(','), ...rows].join('\n');
   };
 
   if (selectedIds.length === 0) return null;
@@ -198,7 +203,7 @@ export function BulkActionsBar({
               <SelectValue placeholder="Bulk actions..." />
             </SelectTrigger>
             <SelectContent>
-              {type === "appointments" && (
+              {type === 'appointments' && (
                 <>
                   <SelectItem value="complete">
                     <div className="flex items-center gap-2">
@@ -214,7 +219,7 @@ export function BulkActionsBar({
                   </SelectItem>
                 </>
               )}
-              {(type === "clients" || type === "users") && (
+              {(type === 'clients' || type === 'users') && (
                 <SelectItem value="email">
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4" />
@@ -254,7 +259,7 @@ export function BulkActionsBar({
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will {action === "delete" ? "permanently delete" : "cancel"}{" "}
+              This will {action === 'delete' ? 'permanently delete' : 'cancel'}{' '}
               {selectedIds.length} {type}. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -265,7 +270,7 @@ export function BulkActionsBar({
               disabled={loading}
               className="bg-destructive hover:bg-destructive/90"
             >
-              {loading ? "Processing..." : "Confirm"}
+              {loading ? 'Processing...' : 'Confirm'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

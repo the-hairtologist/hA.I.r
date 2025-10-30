@@ -6,11 +6,24 @@
 import { useState } from 'react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Zap, Check, ArrowLeft, ExternalLink, Loader2, Sparkles } from 'lucide-react';
+import {
+  Zap,
+  Check,
+  ArrowLeft,
+  ExternalLink,
+  Loader2,
+  Sparkles,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { logger } from '@/lib/logging/productionLogger';
@@ -52,7 +65,7 @@ const ZapierIntegration = () => {
       // no-cors mode doesn't return proper response, so we assume success
       setTestSuccess(true);
       toast.success('Test sent!', {
-        description: 'Check your Zap\'s history to confirm it was triggered',
+        description: "Check your Zap's history to confirm it was triggered",
       });
     } catch (error) {
       console.error('[Zapier] Test failed:', error);
@@ -92,7 +105,7 @@ const ZapierIntegration = () => {
     },
     {
       title: 'Daily Summary → Email',
-      description: 'Morning report with today\'s schedule',
+      description: "Morning report with today's schedule",
       icon: '📧',
     },
   ];
@@ -158,11 +171,12 @@ const ZapierIntegration = () => {
                 type="url"
                 placeholder="https://hooks.zapier.com/hooks/catch/..."
                 value={webhookUrl}
-                onChange={(e) => setWebhookUrl(e.target.value)}
+                onChange={e => setWebhookUrl(e.target.value)}
                 className="font-mono text-sm"
               />
               <p className="text-xs text-muted-foreground">
-                Your webhook URL should start with "https://hooks.zapier.com/hooks/catch/"
+                Your webhook URL should start with
+                "https://hooks.zapier.com/hooks/catch/"
               </p>
             </div>
 
@@ -205,16 +219,23 @@ const ZapierIntegration = () => {
 
         {/* Use Cases */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4 font-pixel">Popular Use Cases</h2>
+          <h2 className="text-2xl font-bold mb-4 font-pixel">
+            Popular Use Cases
+          </h2>
           <div className="grid md:grid-cols-2 gap-4">
-            {useCases.map((useCase) => (
-              <Card key={useCase.title} className="border-2 hover:border-primary transition-colors">
+            {useCases.map(useCase => (
+              <Card
+                key={useCase.title}
+                className="border-2 hover:border-primary transition-colors"
+              >
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-3">
                     <span className="text-3xl">{useCase.icon}</span>
                     <div>
                       <h3 className="font-semibold mb-1">{useCase.title}</h3>
-                      <p className="text-sm text-muted-foreground">{useCase.description}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {useCase.description}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -271,7 +292,8 @@ const ZapierIntegration = () => {
                 <div>
                   <p className="font-medium">Connect Your Apps</p>
                   <p className="text-sm text-muted-foreground">
-                    Choose what happens next (e.g., add to calendar, send email, etc.)
+                    Choose what happens next (e.g., add to calendar, send email,
+                    etc.)
                   </p>
                 </div>
               </div>

@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { CheckCircle2, Sparkles } from "lucide-react";
-import confetti from "canvas-confetti";
-import { cn } from "@/lib/utils";
-import { notification } from "@/platform/haptics";
+import { useEffect, useState } from 'react';
+import { CheckCircle2, Sparkles } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { cn } from '@/lib/utils';
+import { notification } from '@/platform/haptics';
 
 interface SuccessAnimationProps {
   show: boolean;
   message?: string;
   onComplete?: () => void;
-  variant?: "confetti" | "simple";
+  variant?: 'confetti' | 'simple';
   duration?: number;
 }
 
 export const SuccessAnimation = ({
   show,
-  message = "Success!",
+  message = 'Success!',
   onComplete,
-  variant = "simple",
+  variant = 'simple',
   duration = 2000,
 }: SuccessAnimationProps) => {
   const [visible, setVisible] = useState(false);
@@ -24,9 +24,9 @@ export const SuccessAnimation = ({
   useEffect(() => {
     if (show) {
       setVisible(true);
-      notification("success");
+      notification('success');
 
-      if (variant === "confetti") {
+      if (variant === 'confetti') {
         confetti({
           particleCount: 100,
           spread: 70,
@@ -54,7 +54,7 @@ export const SuccessAnimation = ({
         <div className="relative brutal-border brutal-shadow-lg bg-background p-8 rounded-lg text-center space-y-4 animate-scale-in">
           <div className="relative">
             <CheckCircle2 className="h-16 w-16 text-success mx-auto animate-scale-in" />
-            {variant === "confetti" && (
+            {variant === 'confetti' && (
               <Sparkles className="absolute -top-2 -right-2 h-6 w-6 text-primary animate-spin" />
             )}
           </div>

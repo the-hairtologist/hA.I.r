@@ -1,13 +1,19 @@
-import { ReactNode, useEffect, useState } from "react";
-import { useSubscription } from "@/contexts/SubscriptionContext";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Lock, Sparkles, Key } from "lucide-react";
-import { LoadingSpinner } from "./LoadingSpinner";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { AccessCodeDialog } from "./AccessCodeDialog";
-import { AppleIAPSubscription } from "./AppleIAPSubscription";
+import { ReactNode, useEffect, useState } from 'react';
+import { useSubscription } from '@/contexts/SubscriptionContext';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Lock, Sparkles, Key } from 'lucide-react';
+import { LoadingSpinner } from './LoadingSpinner';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { AccessCodeDialog } from './AccessCodeDialog';
+import { AppleIAPSubscription } from './AppleIAPSubscription';
 
 interface SubscriptionGateProps {
   children: ReactNode;
@@ -15,8 +21,20 @@ interface SubscriptionGateProps {
   fallback?: ReactNode;
 }
 
-export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGateProps) => {
-  const { isFeatureAllowed, loading, inTrial, subscribed, hasAccessCode, checkSubscription, isAppleIAP } = useSubscription();
+export const SubscriptionGate = ({
+  children,
+  feature,
+  fallback,
+}: SubscriptionGateProps) => {
+  const {
+    isFeatureAllowed,
+    loading,
+    inTrial,
+    subscribed,
+    hasAccessCode,
+    checkSubscription,
+    isAppleIAP,
+  } = useSubscription();
   const [subscribing, setSubscribing] = useState(false);
   const [showAccessCodeDialog, setShowAccessCodeDialog] = useState(false);
   const [showIAPPlans, setShowIAPPlans] = useState(false);
@@ -40,27 +58,32 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
       // On web/Android, use Stripe
       setSubscribing(true);
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (!session) {
-          toast.error("Please sign in to subscribe");
+          toast.error('Please sign in to subscribe');
           return;
         }
 
-        const { data, error } = await supabase.functions.invoke("create-checkout", {
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-          },
-        });
+        const { data, error } = await supabase.functions.invoke(
+          'create-checkout',
+          {
+            headers: {
+              Authorization: `Bearer ${session.access_token}`,
+            },
+          }
+        );
 
         if (error) throw error;
 
         if (data?.url) {
           window.open(data.url, '_blank');
-          toast.success("Redirecting to checkout...");
+          toast.success('Redirecting to checkout...');
         }
       } catch (error: any) {
-        console.error("Subscription error:", error);
-        toast.error("Failed to start subscription process");
+        console.error('Subscription error:', error);
+        toast.error('Failed to start subscription process');
       } finally {
         setSubscribing(false);
       }
@@ -79,8 +102,8 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
     if (isAppleIAP && showIAPPlans) {
       return (
         <div className="container mx-auto p-6 max-w-4xl">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="sm"
             onClick={() => setShowIAPPlans(false)}
             className="mb-4"
@@ -112,26 +135,33 @@ export const SubscriptionGate = ({ children, feature, fallback }: SubscriptionGa
                   <span className="font-semibold">Stylist Pro - $15/month</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Start your 7-day free trial and unlock all professional features
+                  Start your 7-day free trial and unlock all professional
+                  features
                 </p>
               </div>
-              <Button 
-                onClick={handleSubscribe} 
+              <Button
+                onClick={handleSubscribe}
                 disabled={subscribing}
                 className="w-full"
                 size="lg"
               >
-                {subscribing ? "Starting trial..." : isAppleIAP ? "View Subscription Plans" : "Start 7-Day Free Trial"}
+                {subscribing
+                  ? 'Starting trial...'
+                  : isAppleIAP
+                    ? 'View Subscription Plans'
+                    : 'Start 7-Day Free Trial'}
               </Button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">Or</span>
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or
+                  </span>
                 </div>
               </div>
-              <Button 
+              <Button
                 variant="outline"
                 onClick={() => setShowAccessCodeDialog(true)}
                 className="w-full"

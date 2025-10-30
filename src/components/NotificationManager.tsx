@@ -1,21 +1,24 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { format, isToday, startOfDay, endOfDay } from "date-fns";
-import { Calendar, DollarSign, TrendingUp } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { format, isToday, startOfDay, endOfDay } from 'date-fns';
+import { Calendar, DollarSign, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface NotificationManagerProps {
   userId: string;
-  userRole: "stylist" | "client";
+  userRole: 'stylist' | 'client';
 }
 
-export const NotificationManager = ({ userId, userRole }: NotificationManagerProps) => {
+export const NotificationManager = ({
+  userId,
+  userRole,
+}: NotificationManagerProps) => {
   const [lastCheck, setLastCheck] = useState<Date>(new Date());
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userRole !== "stylist") return;
+    if (userRole !== 'stylist') return;
 
     // Initial check
     checkForNotifications();
@@ -29,9 +32,9 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
   const checkForNotifications = async () => {
     try {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", userId)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', userId)
         .maybeSingle();
 
       if (!stylistProfile) return;
@@ -44,46 +47,54 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
 
       setLastCheck(new Date());
     } catch (error) {
-      console.error("Error checking notifications:", error);
+      console.error('Error checking notifications:', error);
     }
   };
 
   const checkTodayAppointments = async (stylistId: string) => {
     const today = new Date();
     const { data: appointments } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         *,
         client:client_profiles(full_name)
-      `)
-      .eq("stylist_id", stylistId)
-      .gte("appointment_date", format(startOfDay(today), "yyyy-MM-dd'T'HH:mm:ss"))
-      .lte("appointment_date", format(endOfDay(today), "yyyy-MM-dd'T'HH:mm:ss"))
-      .in("status", ["scheduled", "confirmed"])
-      .order("appointment_date");
+      `
+      )
+      .eq('stylist_id', stylistId)
+      .gte(
+        'appointment_date',
+        format(startOfDay(today), "yyyy-MM-dd'T'HH:mm:ss")
+      )
+      .lte('appointment_date', format(endOfDay(today), "yyyy-MM-dd'T'HH:mm:ss"))
+      .in('status', ['scheduled', 'confirmed'])
+      .order('appointment_date');
 
     if (appointments && appointments.length > 0) {
       const count = appointments.length;
       const nextAppt = appointments[0];
-      
+
       // Only show if it's morning and we haven't shown today
-      const lastShown = localStorage.getItem("last_daily_notification");
-      const today = format(new Date(), "yyyy-MM-dd");
-      
+      const lastShown = localStorage.getItem('last_daily_notification');
+      const today = format(new Date(), 'yyyy-MM-dd');
+
       if (lastShown !== today) {
         toast.info(
           <div className="flex items-center gap-3">
             <Calendar className="h-5 w-5 text-primary" />
             <div>
-              <p className="font-semibold">You have {count} appointment{count > 1 ? "s" : ""} today</p>
+              <p className="font-semibold">
+                You have {count} appointment{count > 1 ? 's' : ''} today
+              </p>
               <p className="text-[11px] sm:text-xs text-muted-foreground">
-                Next: {nextAppt.client?.full_name} at {format(new Date(nextAppt.appointment_date), "h:mm a")}
+                Next: {nextAppt.client?.full_name} at{' '}
+                {format(new Date(nextAppt.appointment_date), 'h:mm a')}
               </p>
             </div>
           </div>,
           { duration: 5000 }
         );
-        localStorage.setItem("last_daily_notification", today);
+        localStorage.setItem('last_daily_notification', today);
       }
     }
   };
@@ -94,8 +105,9 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
     twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
 
     const { data: colorAppts } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         client_id,
         appointment_date,
@@ -103,21 +115,22 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
           id,
           full_name
         )
-      `)
-      .eq("stylist_id", stylistId)
-      .eq("status", "completed")
-      .ilike("service_type", "%color%")
-      .gte("appointment_date", format(twoDaysAgo, "yyyy-MM-dd"));
+      `
+      )
+      .eq('stylist_id', stylistId)
+      .eq('status', 'completed')
+      .ilike('service_type', '%color%')
+      .gte('appointment_date', format(twoDaysAgo, 'yyyy-MM-dd'));
 
     if (colorAppts && colorAppts.length > 0) {
       // Check which ones don't have formulas yet
       for (const appt of colorAppts) {
         const { data: formula } = await supabase
-          .from("formulas")
-          .select("id")
-          .eq("client_id", appt.client_id)
-          .eq("stylist_id", stylistId)
-          .gte("created_at", appt.appointment_date)
+          .from('formulas')
+          .select('id')
+          .eq('client_id', appt.client_id)
+          .eq('stylist_id', stylistId)
+          .gte('created_at', appt.appointment_date)
           .maybeSingle();
 
         if (!formula) {
@@ -130,7 +143,9 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
                   <DollarSign className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold">Don't forget to save {appt.client?.full_name}'s formula! 💅</p>
+                  <p className="font-semibold">
+                    Don't forget to save {appt.client?.full_name}'s formula! 💅
+                  </p>
                   <p className="text-[11px] sm:text-xs text-muted-foreground">
                     Archive the perfect mix while it's fresh in your mind
                   </p>
@@ -139,12 +154,12 @@ export const NotificationManager = ({ userId, userRole }: NotificationManagerPro
               {
                 duration: 8000,
                 action: {
-                  label: "Save Now",
-                  onClick: () => navigate("/formulas"),
+                  label: 'Save Now',
+                  onClick: () => navigate('/formulas'),
                 },
               }
             );
-            localStorage.setItem(notifKey, "shown");
+            localStorage.setItem(notifKey, 'shown');
           }
         }
       }

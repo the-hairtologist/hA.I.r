@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 import { haptic } from '@/platform/haptics';
 import { Platform } from '@/platform/detector';
 
-type HapticEvent = 
+type HapticEvent =
   | 'button_tap'
   | 'success_action'
   | 'error_action'
@@ -97,12 +97,12 @@ export const useRichHaptics = () => {
      */
     notification: useCallback(() => {
       haptic.tap();
-    }, [])
+    }, []),
   };
 
   return {
     trigger,
     patterns,
-    isAvailable: Platform.isMobile
+    isAvailable: Platform.isMobile,
   };
 };

@@ -26,7 +26,7 @@ export const useKeyboardShortcut = (
     alt = false,
     meta = false,
     preventDefault = true,
-    enabled = true
+    enabled = true,
   } = options;
 
   const handleKeyDown = useCallback(
@@ -34,12 +34,22 @@ export const useKeyboardShortcut = (
       if (!enabled) return;
 
       const matchesKey = event.key.toLowerCase() === key.toLowerCase();
-      const matchesCtrl = ctrl ? event.ctrlKey || event.metaKey : !event.ctrlKey && !event.metaKey;
+      const matchesCtrl = ctrl
+        ? event.ctrlKey || event.metaKey
+        : !event.ctrlKey && !event.metaKey;
       const matchesShift = shift ? event.shiftKey : !event.shiftKey;
       const matchesAlt = alt ? event.altKey : !event.altKey;
-      const matchesMeta = meta ? event.metaKey : !event.metaKey && !event.ctrlKey;
+      const matchesMeta = meta
+        ? event.metaKey
+        : !event.metaKey && !event.ctrlKey;
 
-      if (matchesKey && matchesCtrl && matchesShift && matchesAlt && matchesMeta) {
+      if (
+        matchesKey &&
+        matchesCtrl &&
+        matchesShift &&
+        matchesAlt &&
+        matchesMeta
+      ) {
         if (preventDefault) {
           event.preventDefault();
         }

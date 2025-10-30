@@ -1,21 +1,21 @@
-import { useState, useRef, useEffect } from "react";
-import { Mic, MicOff, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { haptic } from "@/platform/haptics";
+import { useState, useRef, useEffect } from 'react';
+import { Mic, MicOff, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { haptic } from '@/platform/haptics';
 
 interface VoiceInputProps {
   onTranscription: (text: string) => void;
   className?: string;
-  variant?: "icon" | "full";
+  variant?: 'icon' | 'full';
 }
 
-export const VoiceInput = ({ 
-  onTranscription, 
+export const VoiceInput = ({
+  onTranscription,
   className,
-  variant = "icon" 
+  variant = 'icon',
 }: VoiceInputProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -32,21 +32,21 @@ export const VoiceInput = ({
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
           sampleRate: 16000,
-        } 
+        },
       });
 
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
+        mimeType: 'audio/webm;codecs=opus',
       });
-      
+
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (event) => {
+      mediaRecorder.ondataavailable = event => {
         if (event.data.size > 0) {
           chunksRef.current.push(event.data);
         }
@@ -61,30 +61,32 @@ export const VoiceInput = ({
       mediaRecorder.start();
       setIsRecording(true);
       haptic.tap();
-      
-      toast.info("Recording... Tap to stop", {
+
+      toast.info('Recording... Tap to stop', {
         duration: Infinity,
-        id: "recording-toast"
+        id: 'recording-toast',
       });
     } catch (error) {
       console.error('Error starting recording:', error);
-      
-      const errorMessage = "Could not access microphone";
-      let errorDescription = "Check microphone permissions in browser settings";
-      
+
+      const errorMessage = 'Could not access microphone';
+      let errorDescription = 'Check microphone permissions in browser settings';
+
       if (error instanceof Error) {
         if (error.name === 'NotAllowedError') {
-          errorDescription = "Please allow microphone access to use voice input";
+          errorDescription =
+            'Please allow microphone access to use voice input';
         } else if (error.name === 'NotFoundError') {
-          errorDescription = "No microphone detected. Please connect a microphone.";
+          errorDescription =
+            'No microphone detected. Please connect a microphone.';
         } else if (error.name === 'NotReadableError') {
-          errorDescription = "Microphone is being used by another app";
+          errorDescription = 'Microphone is being used by another app';
         }
       }
-      
+
       toast.error(errorMessage, {
         description: errorDescription,
-        duration: 5000
+        duration: 5000,
       });
     }
   };
@@ -93,18 +95,18 @@ export const VoiceInput = ({
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      toast.dismiss("recording-toast");
+      toast.dismiss('recording-toast');
       haptic.tap();
     }
   };
 
   const processAudio = async (audioBlob: Blob) => {
     setIsProcessing(true);
-    
+
     try {
       // Convert blob to base64
       const reader = new FileReader();
-      
+
       const base64Audio = await new Promise<string>((resolve, reject) => {
         reader.onloadend = () => {
           const base64 = (reader.result as string).split(',')[1];
@@ -116,7 +118,7 @@ export const VoiceInput = ({
 
       // Send to edge function
       const { data, error } = await supabase.functions.invoke('voice-to-text', {
-        body: { audio: base64Audio }
+        body: { audio: base64Audio },
       });
 
       if (error) throw error;
@@ -124,14 +126,14 @@ export const VoiceInput = ({
       if (data?.text) {
         onTranscription(data.text);
         haptic.success();
-        toast.success("Transcription complete!");
+        toast.success('Transcription complete!');
       } else {
-        throw new Error("No transcription received");
+        throw new Error('No transcription received');
       }
     } catch (error) {
       console.error('Error processing audio:', error);
       haptic.error();
-      toast.error("Failed to transcribe audio");
+      toast.error('Failed to transcribe audio');
     } finally {
       setIsProcessing(false);
     }
@@ -145,7 +147,7 @@ export const VoiceInput = ({
     }
   };
 
-  if (variant === "icon") {
+  if (variant === 'icon') {
     return (
       <Button
         type="button"
@@ -154,8 +156,9 @@ export const VoiceInput = ({
         onClick={handleClick}
         disabled={isProcessing}
         className={cn(
-          "relative transition-all duration-200",
-          isRecording && "bg-destructive text-destructive-foreground animate-pulse",
+          'relative transition-all duration-200',
+          isRecording &&
+            'bg-destructive text-destructive-foreground animate-pulse',
           className
         )}
       >
@@ -176,12 +179,12 @@ export const VoiceInput = ({
   return (
     <Button
       type="button"
-      variant={isRecording ? "destructive" : "outline"}
+      variant={isRecording ? 'destructive' : 'outline'}
       onClick={handleClick}
       disabled={isProcessing}
       className={cn(
-        "gap-2 transition-all duration-200",
-        isRecording && "animate-pulse",
+        'gap-2 transition-all duration-200',
+        isRecording && 'animate-pulse',
         className
       )}
     >

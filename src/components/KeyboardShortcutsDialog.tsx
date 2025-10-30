@@ -3,9 +3,15 @@
  * Shows available keyboard shortcuts to users
  */
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { KeyboardShortcut } from "./KeyboardShortcut";
-import { Command } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { KeyboardShortcut } from './KeyboardShortcut';
+import { Command } from 'lucide-react';
 
 interface KeyboardShortcutsDialogProps {
   open: boolean;
@@ -13,7 +19,11 @@ interface KeyboardShortcutsDialogProps {
   userRole?: string;
 }
 
-export const KeyboardShortcutsDialog = ({ open, onOpenChange, userRole }: KeyboardShortcutsDialogProps) => {
+export const KeyboardShortcutsDialog = ({
+  open,
+  onOpenChange,
+  userRole,
+}: KeyboardShortcutsDialogProps) => {
   const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
   const modKey = isMac ? '⌘' : 'Ctrl';
 
@@ -35,7 +45,9 @@ export const KeyboardShortcutsDialog = ({ open, onOpenChange, userRole }: Keyboa
 
         <div className="space-y-4 py-4">
           <div>
-            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Quick Navigation</h3>
+            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
+              Quick Navigation
+            </h3>
             <div className="space-y-2">
               <KeyboardShortcut keys={['G', 'D']} action="Go to Dashboard" />
               <KeyboardShortcut keys={['G', 'C']} action="Go to Clients" />
@@ -45,16 +57,27 @@ export const KeyboardShortcutsDialog = ({ open, onOpenChange, userRole }: Keyboa
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">Quick Actions</h3>
+            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
+              Quick Actions
+            </h3>
             <div className="space-y-2">
               <KeyboardShortcut keys={[modKey, 'K']} action="Search anything" />
               <KeyboardShortcut keys={[modKey, 'N']} action="New appointment" />
-              <KeyboardShortcut keys={[modKey, 'Shift', 'C']} action="Add new client" />
+              <KeyboardShortcut
+                keys={[modKey, 'Shift', 'C']}
+                action="Add new client"
+              />
             </div>
           </div>
 
           <div className="pt-4 border-t text-xs text-muted-foreground">
-            <p>Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs border">?</kbd> to show this help anytime</p>
+            <p>
+              Press{' '}
+              <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs border">
+                ?
+              </kbd>{' '}
+              to show this help anytime
+            </p>
           </div>
         </div>
       </DialogContent>

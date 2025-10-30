@@ -53,9 +53,7 @@ export async function compressImage(
  * Generate srcset for responsive images
  */
 export function generateSrcSet(baseUrl: string, widths: number[]): string {
-  return widths
-    .map((width) => `${baseUrl}?width=${width} ${width}w`)
-    .join(', ');
+  return widths.map(width => `${baseUrl}?width=${width} ${width}w`).join(', ');
 }
 
 /**
@@ -97,6 +95,6 @@ export function createBlurPlaceholder(width: number, height: number): string {
       <rect width="100%" height="100%" fill="#e5e7eb" filter="url(#blur)" />
     </svg>
   `;
-  
+
   return `data:image/svg+xml;base64,${btoa(svg)}`;
 }

@@ -3,7 +3,7 @@
  * Traps focus within a container for modals and dialogs
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 interface FocusTrapProps {
   children: React.ReactNode;
@@ -11,7 +11,11 @@ interface FocusTrapProps {
   onEscape?: () => void;
 }
 
-export function FocusTrap({ children, active = true, onEscape }: FocusTrapProps) {
+export function FocusTrap({
+  children,
+  active = true,
+  onEscape,
+}: FocusTrapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
@@ -39,7 +43,7 @@ export function FocusTrap({ children, active = true, onEscape }: FocusTrapProps)
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
 
-      if (e.key === "Tab") {
+      if (e.key === 'Tab') {
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
             e.preventDefault();
@@ -53,16 +57,16 @@ export function FocusTrap({ children, active = true, onEscape }: FocusTrapProps)
         }
       }
 
-      if (e.key === "Escape" && onEscape) {
+      if (e.key === 'Escape' && onEscape) {
         e.preventDefault();
         onEscape();
       }
     };
 
-    document.addEventListener("keydown", handleTab);
+    document.addEventListener('keydown', handleTab);
 
     return () => {
-      document.removeEventListener("keydown", handleTab);
+      document.removeEventListener('keydown', handleTab);
       if (previousActiveElement.current) {
         previousActiveElement.current.focus();
       }

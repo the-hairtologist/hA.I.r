@@ -1,6 +1,6 @@
 /**
  * Self-Healing System - Main Entry Point
- * 
+ *
  * Orchestrates all self-healing and maintenance systems.
  */
 
@@ -41,13 +41,15 @@ class SelfHealingSystem {
 
       // Run initial integrity check (silent for production)
       const issues = await dataIntegrity.runFullCheck();
-      
+
       if (issues.length > 0) {
         // Only log in development mode to avoid console noise in production
         if (import.meta.env.DEV) {
-          logger.debug(`Found ${issues.length} data integrity issues on startup`);
+          logger.debug(
+            `Found ${issues.length} data integrity issues on startup`
+          );
         }
-        
+
         // Auto-fix what we can
         const fixed = await dataIntegrity.autoFix(issues);
         if (fixed > 0) {
@@ -58,7 +60,11 @@ class SelfHealingSystem {
       this.initialized = true;
       logger.info('Self-healing system initialized successfully');
     } catch (error) {
-      logger.error('Failed to initialize self-healing system', 'SelfHealingSystem', error);
+      logger.error(
+        'Failed to initialize self-healing system',
+        'SelfHealingSystem',
+        error
+      );
     }
   }
 
@@ -107,7 +113,7 @@ class SelfHealingSystem {
     // Check data integrity
     const issues = await dataIntegrity.runFullCheck();
     const orphans = await dataIntegrity.checkOrphanedRecords();
-    
+
     const allIssues = [...issues, ...orphans];
 
     // Auto-fix what we can
@@ -122,7 +128,7 @@ class SelfHealingSystem {
     logger.info('Maintenance complete', 'SelfHealingSystem', {
       codeIssues: codeIssues.length,
       dataIssues: allIssues.length,
-      optimizations: optimizations.length
+      optimizations: optimizations.length,
     });
 
     return {
@@ -131,11 +137,11 @@ class SelfHealingSystem {
       codeHealth: {
         score: codeReport.score,
         issues: codeReport.issues,
-        recommendations: codeReport.recommendations
+        recommendations: codeReport.recommendations,
       },
       performance: {
         optimizations: optimizations.filter(o => o.applied),
-        recommendations: performanceOptimizer.getRecommendations()
+        recommendations: performanceOptimizer.getRecommendations(),
       },
       dataReport,
     };
@@ -170,17 +176,18 @@ class SelfHealingSystem {
    * Get client retention insights
    */
   async getClientRetentionInsights(stylistId: string) {
-    const riskScores = await clientRetentionAI.analyzeClientRetention(stylistId);
+    const riskScores =
+      await clientRetentionAI.analyzeClientRetention(stylistId);
     const insights = await clientRetentionAI.getAIRetentionInsights(riskScores);
-    
+
     return {
       riskScores,
       insights,
       summary: {
         total: riskScores.length,
         atRisk: riskScores.filter(s => s.riskLevel !== 'low').length,
-        critical: riskScores.filter(s => s.riskLevel === 'critical').length
-      }
+        critical: riskScores.filter(s => s.riskLevel === 'critical').length,
+      },
     };
   }
 

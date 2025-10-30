@@ -37,7 +37,10 @@ export const useErrorTracking = () => {
 
     return () => {
       window.removeEventListener('error', handleError);
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener(
+        'unhandledrejection',
+        handleUnhandledRejection
+      );
     };
   }, [user?.id]);
 };
@@ -52,7 +55,7 @@ const logError = async (errorData: {
   try {
     // Send to Sentry
     const { captureError, captureMessage } = await import('@/lib/monitoring');
-    
+
     if (errorData.level === 'error' && errorData.stack) {
       const error = new Error(errorData.message);
       error.stack = errorData.stack;
@@ -60,7 +63,7 @@ const logError = async (errorData: {
     } else {
       captureMessage(errorData.message, errorData.level);
     }
-    
+
     // Also log to edge function for custom tracking
     await supabase.functions.invoke('sentry-error-tracking', {
       body: errorData,

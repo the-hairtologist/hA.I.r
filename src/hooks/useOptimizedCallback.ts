@@ -10,11 +10,11 @@ type CallbackFunction = (...args: unknown[]) => unknown;
 /**
  * Creates an optimized callback that updates only when dependencies change
  * Unlike useCallback, this ensures the latest values are used without re-creating the function
- * 
+ *
  * @param callback - Function to optimize
  * @param deps - Dependency array
  * @returns Memoized callback
- * 
+ *
  * @example
  * ```tsx
  * const handleSearch = useOptimizedCallback(
@@ -96,7 +96,7 @@ export function useThrottledCallback<T extends CallbackFunction>(
   return useCallback(
     ((...args: unknown[]) => {
       const now = Date.now();
-      
+
       if (now - lastRan.current >= limit) {
         callbackRef.current(...args);
         lastRan.current = now;

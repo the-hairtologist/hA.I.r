@@ -3,11 +3,11 @@
  * 60-second value demonstration showing immediate benefits
  */
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import {
   Sparkles,
   Clock,
@@ -15,9 +15,9 @@ import {
   CheckCircle2,
   TrendingUp,
   Zap,
-  Calendar
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+  Calendar,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface QuickWin {
   icon: any;
@@ -31,35 +31,35 @@ interface QuickWin {
 const quickWins: QuickWin[] = [
   {
     icon: Sparkles,
-    title: "Generate Formula",
-    before: "2-5 minutes guessing",
-    after: "10 seconds AI-perfect",
-    savings: "2-5 min saved",
-    color: "from-purple-500 to-pink-500",
+    title: 'Generate Formula',
+    before: '2-5 minutes guessing',
+    after: '10 seconds AI-perfect',
+    savings: '2-5 min saved',
+    color: 'from-purple-500 to-pink-500',
   },
   {
     icon: Calendar,
-    title: "Book Appointment",
-    before: "Phone tag, voicemail",
-    after: "30 seconds, instant",
-    savings: "10+ min saved",
-    color: "from-cyan-500 to-blue-500",
+    title: 'Book Appointment',
+    before: 'Phone tag, voicemail',
+    after: '30 seconds, instant',
+    savings: '10+ min saved',
+    color: 'from-cyan-500 to-blue-500',
   },
   {
     icon: Clock,
-    title: "Check Schedule",
-    before: "Open book, flip pages",
-    after: "Glance at phone",
-    savings: "30 sec saved",
-    color: "from-green-500 to-emerald-500",
+    title: 'Check Schedule',
+    before: 'Open book, flip pages',
+    after: 'Glance at phone',
+    savings: '30 sec saved',
+    color: 'from-green-500 to-emerald-500',
   },
   {
     icon: DollarSign,
-    title: "Track Revenue",
-    before: "Spreadsheets, calculator",
-    after: "Real-time dashboard",
-    savings: "15+ min saved",
-    color: "from-amber-500 to-orange-500",
+    title: 'Track Revenue',
+    before: 'Spreadsheets, calculator',
+    after: 'Real-time dashboard',
+    savings: '15+ min saved',
+    color: 'from-amber-500 to-orange-500',
   },
 ];
 
@@ -73,8 +73,8 @@ export function QuickWinDemo() {
     if (progress < 100) {
       setProgress(100);
     } else {
-      setCompleted((c) => [...c, currentWin]);
-      setCurrentWin((w) => (w + 1) % quickWins.length);
+      setCompleted(c => [...c, currentWin]);
+      setCurrentWin(w => (w + 1) % quickWins.length);
       setProgress(0);
     }
   };
@@ -98,18 +98,22 @@ export function QuickWinDemo() {
 
       {/* Main Demo Card */}
       <Card className="mb-6 overflow-hidden">
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-br opacity-5",
-          win.color
-        )} />
-        
+        <div
+          className={cn(
+            'absolute inset-0 bg-gradient-to-br opacity-5',
+            win.color
+          )}
+        />
+
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className={cn(
-                "w-12 h-12 rounded-lg bg-gradient-to-br flex items-center justify-center",
-                win.color
-              )}>
+              <div
+                className={cn(
+                  'w-12 h-12 rounded-lg bg-gradient-to-br flex items-center justify-center',
+                  win.color
+                )}
+              >
                 <Icon className="h-6 w-6 text-on-surface-primary" />
               </div>
               <div>
@@ -129,13 +133,13 @@ export function QuickWinDemo() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Progress value={progress} className="h-2" />
-            <Button 
-              onClick={handleNext} 
-              size="sm" 
-              variant="outline" 
+            <Button
+              onClick={handleNext}
+              size="sm"
+              variant="outline"
               className="w-full"
             >
-              {progress < 100 ? "Complete Demo" : "Next Feature"}
+              {progress < 100 ? 'Complete Demo' : 'Next Feature'}
             </Button>
           </div>
 
@@ -159,7 +163,7 @@ export function QuickWinDemo() {
           {/* Completed Wins */}
           {completed.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {completed.map((winIndex) => {
+              {completed.map(winIndex => {
                 const completedWin = quickWins[winIndex];
                 const CompletedIcon = completedWin.icon;
                 return (
@@ -190,7 +194,8 @@ export function QuickWinDemo() {
               <TrendingUp className="h-12 w-12 text-green-500" />
             </div>
             <p className="text-sm text-muted-foreground mt-3">
-              Imagine this across 10-20 clients per day. That's 2-3 hours saved daily.
+              Imagine this across 10-20 clients per day. That's 2-3 hours saved
+              daily.
             </p>
           </CardContent>
         </Card>

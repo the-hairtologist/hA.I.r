@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { Users, Repeat } from "lucide-react";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { Users, Repeat } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ClientRetentionProps {
   stylistId: string;
@@ -23,10 +23,10 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
   const loadRetentionStats = async () => {
     try {
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select("client_id")
-        .eq("stylist_id", stylistId)
-        .eq("status", "completed");
+        .from('appointments')
+        .select('client_id')
+        .eq('stylist_id', stylistId)
+        .eq('status', 'completed');
 
       if (appointments && appointments.length > 0) {
         const clientCounts = new Map<string, number>();
@@ -36,14 +36,19 @@ export function ClientRetention({ stylistId }: ClientRetentionProps) {
         });
 
         const totalClients = clientCounts.size;
-        const returningClients = Array.from(clientCounts.values()).filter(count => count > 1).length;
-        const retentionRate = totalClients > 0 ? Math.round((returningClients / totalClients) * 100) : 0;
+        const returningClients = Array.from(clientCounts.values()).filter(
+          count => count > 1
+        ).length;
+        const retentionRate =
+          totalClients > 0
+            ? Math.round((returningClients / totalClients) * 100)
+            : 0;
 
         setStats({ totalClients, returningClients, retentionRate });
       }
     } catch (error) {
-      console.error("Error loading retention stats:", error);
-      toast.error("Failed to load retention data");
+      console.error('Error loading retention stats:', error);
+      toast.error('Failed to load retention data');
     } finally {
       setLoading(false);
     }

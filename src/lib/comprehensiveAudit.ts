@@ -55,14 +55,15 @@ class ComprehensiveAuditSystem {
       checks: [
         {
           name: 'Component Structure',
-          description: 'Check if components are properly organized and not too large',
+          description:
+            'Check if components are properly organized and not too large',
           check: async () => {
             // Check for overly large components
             const checks = [
               'Components follow single responsibility principle',
               'No components over 500 lines',
               'Proper separation of concerns',
-              'Consistent naming conventions'
+              'Consistent naming conventions',
             ];
             return {
               passed: true,
@@ -84,7 +85,7 @@ class ComprehensiveAuditSystem {
                 '✅ Strict mode enabled',
                 '✅ No any types in critical code',
                 '✅ Proper interface definitions',
-                '✅ Type guards where needed'
+                '✅ Type guards where needed',
               ],
             };
           },
@@ -101,10 +102,10 @@ class ComprehensiveAuditSystem {
                 '✅ Shared hooks extracted',
                 '✅ Common utilities in lib/',
                 '✅ Reusable components',
-                '⚠️ Minor: Some form validation could be more DRY'
+                '⚠️ Minor: Some form validation could be more DRY',
               ],
               recommendations: [
-                'Consider creating a useFormValidation hook for common patterns'
+                'Consider creating a useFormValidation hook for common patterns',
               ],
             };
           },
@@ -145,7 +146,7 @@ class ComprehensiveAuditSystem {
                 '✅ Main bundle: ~465KB (excellent)',
                 '✅ Code splitting active',
                 '✅ Lazy loading for routes',
-                '✅ Tree shaking enabled'
+                '✅ Tree shaking enabled',
               ],
             };
           },
@@ -162,7 +163,7 @@ class ComprehensiveAuditSystem {
                 '✅ All routes lazy-loaded',
                 '✅ Heavy components lazy-loaded',
                 '✅ Error boundaries for lazy components',
-                '✅ Loading states handled'
+                '✅ Loading states handled',
               ],
             };
           },
@@ -179,11 +180,11 @@ class ComprehensiveAuditSystem {
                 '✅ WebP format used where possible',
                 '✅ Lazy loading for images',
                 '✅ Proper aspect ratios',
-                '⚠️ Minor: Some images could use srcset for responsive sizes'
+                '⚠️ Minor: Some images could use srcset for responsive sizes',
               ],
               recommendations: [
                 'Add srcset attributes for responsive images',
-                'Consider adding image compression in build pipeline'
+                'Consider adding image compression in build pipeline',
               ],
             };
           },
@@ -200,7 +201,7 @@ class ComprehensiveAuditSystem {
                 '✅ React Query for data caching',
                 '✅ Service worker for offline',
                 '✅ localStorage for user preferences',
-                '✅ Proper cache invalidation'
+                '✅ Proper cache invalidation',
               ],
             };
           },
@@ -227,7 +228,7 @@ class ComprehensiveAuditSystem {
                 '✅ Protected routes',
                 '✅ Role-based access control',
                 '✅ Session management',
-                '✅ Auto-logout on inactivity'
+                '✅ Auto-logout on inactivity',
               ],
             };
           },
@@ -246,7 +247,7 @@ class ComprehensiveAuditSystem {
                 '✅ XSS prevention',
                 '✅ CSRF protection',
                 '✅ Secure storage',
-                '✅ No secrets in code'
+                '✅ No secrets in code',
               ],
             };
           },
@@ -263,8 +264,8 @@ class ComprehensiveAuditSystem {
                 '✅ Rate limiting active',
                 '✅ CORS configured',
                 '✅ Request validation',
-                '✅ Error messages don\'t leak info',
-                '✅ API keys protected'
+                "✅ Error messages don't leak info",
+                '✅ API keys protected',
               ],
             };
           },
@@ -291,7 +292,7 @@ class ComprehensiveAuditSystem {
                 '✅ Keyboard navigation',
                 '✅ Screen reader support',
                 '✅ Focus management',
-                '✅ Color contrast ratios met'
+                '✅ Color contrast ratios met',
               ],
             };
           },
@@ -308,7 +309,7 @@ class ComprehensiveAuditSystem {
                 '✅ Buttons: 44px+ height',
                 '✅ Navigation items: 48px+',
                 '✅ FAB: 56-64px',
-                '✅ Proper spacing between targets'
+                '✅ Proper spacing between targets',
               ],
             };
           },
@@ -324,7 +325,7 @@ class ComprehensiveAuditSystem {
               details: [
                 '✅ Most images have descriptive alt text',
                 '✅ Decorative images use empty alt',
-                '⚠️ Minor: Few icons could use aria-label'
+                '⚠️ Minor: Few icons could use aria-label',
               ],
             };
           },
@@ -350,7 +351,7 @@ class ComprehensiveAuditSystem {
                 '✅ Proper breakpoints',
                 '✅ Fluid typography',
                 '✅ Flexible layouts',
-                '✅ Safe area support (iOS notch)'
+                '✅ Safe area support (iOS notch)',
               ],
             };
           },
@@ -367,7 +368,7 @@ class ComprehensiveAuditSystem {
                 '✅ Fast on mobile networks',
                 '✅ Touch optimizations',
                 '✅ Reduced motion support',
-                '✅ Adaptive loading based on connection'
+                '✅ Adaptive loading based on connection',
               ],
             };
           },
@@ -385,7 +386,7 @@ class ComprehensiveAuditSystem {
                 '✅ Swipe gestures',
                 '✅ Pull to refresh',
                 '✅ Haptic feedback',
-                '✅ Native-like feel'
+                '✅ Native-like feel',
               ],
             };
           },
@@ -411,7 +412,7 @@ class ComprehensiveAuditSystem {
                 '✅ RouteErrorBoundary for route-level errors',
                 '✅ ErrorBoundary for component-level errors',
                 '✅ Graceful error UI',
-                '✅ Error reporting active'
+                '✅ Error reporting active',
               ],
             };
           },
@@ -429,7 +430,7 @@ class ComprehensiveAuditSystem {
                 '✅ Inline form validation',
                 '✅ Clear error messages',
                 '✅ Action suggestions',
-                '✅ No technical jargon'
+                '✅ No technical jargon',
               ],
             };
           },
@@ -447,7 +448,7 @@ class ComprehensiveAuditSystem {
                 '✅ Stack traces captured',
                 '✅ Context included',
                 '✅ Sentry integration ready',
-                '✅ Preventive maintenance system'
+                '✅ Preventive maintenance system',
               ],
             };
           },
@@ -473,7 +474,7 @@ class ComprehensiveAuditSystem {
                 '✅ Proper indexes',
                 '✅ Foreign key constraints',
                 '✅ Triggers for timestamps',
-                '✅ Clear naming conventions'
+                '✅ Clear naming conventions',
               ],
             };
           },
@@ -491,7 +492,7 @@ class ComprehensiveAuditSystem {
                 '✅ Proper user isolation',
                 '✅ Role-based policies',
                 '✅ No policy bypasses',
-                '✅ Secure data access'
+                '✅ Secure data access',
               ],
             };
           },
@@ -509,7 +510,7 @@ class ComprehensiveAuditSystem {
                 '✅ Consistent error responses',
                 '✅ Proper HTTP methods',
                 '✅ Request/response validation',
-                '✅ Edge functions optimized'
+                '✅ Edge functions optimized',
               ],
             };
           },
@@ -534,12 +535,12 @@ class ComprehensiveAuditSystem {
                 '✅ Critical hooks tested',
                 '✅ Utility functions tested',
                 '⚠️ Component testing could be expanded',
-                '⚠️ Integration tests limited'
+                '⚠️ Integration tests limited',
               ],
               recommendations: [
                 'Add more component tests using Testing Library',
                 'Add E2E tests for critical user flows',
-                'Increase coverage to 80%+ for critical paths'
+                'Increase coverage to 80%+ for critical paths',
               ],
             };
           },
@@ -556,7 +557,7 @@ class ComprehensiveAuditSystem {
                 '✅ Tests are clear and readable',
                 '✅ Good assertions',
                 '✅ Mocking done properly',
-                '✅ Tests are maintainable'
+                '✅ Tests are maintainable',
               ],
             };
           },
@@ -581,7 +582,7 @@ class ComprehensiveAuditSystem {
                 '✅ JSDoc for complex functions',
                 '✅ Clear function descriptions',
                 '✅ Type documentation',
-                '✅ Usage examples included'
+                '✅ Usage examples included',
               ],
             };
           },
@@ -599,7 +600,7 @@ class ComprehensiveAuditSystem {
                 '✅ Setup guides',
                 '✅ Architecture documentation',
                 '✅ Security reports',
-                '✅ Audit reports'
+                '✅ Audit reports',
               ],
             };
           },
@@ -625,7 +626,7 @@ class ComprehensiveAuditSystem {
                 '✅ Suspense boundaries',
                 '✅ Progress indicators',
                 '✅ Loading messages',
-                '✅ No layout shifts'
+                '✅ No layout shifts',
               ],
             };
           },
@@ -642,7 +643,7 @@ class ComprehensiveAuditSystem {
                 '✅ Clear empty state messages',
                 '✅ Helpful call-to-actions',
                 '✅ Illustrations/icons',
-                '✅ Guidance for next steps'
+                '✅ Guidance for next steps',
               ],
             };
           },
@@ -660,7 +661,7 @@ class ComprehensiveAuditSystem {
                 '✅ Button loading states',
                 '✅ Form validation feedback',
                 '✅ Success confirmations',
-                '✅ Haptic feedback on mobile'
+                '✅ Haptic feedback on mobile',
               ],
             };
           },
@@ -674,9 +675,9 @@ class ComprehensiveAuditSystem {
    */
   async runCompleteAudit(): Promise<ComprehensiveAuditReport> {
     const categoryResults = await Promise.all(
-      this.categories.map(async (category) => {
+      this.categories.map(async category => {
         const results = await Promise.all(
-          category.checks.map((check) => check.check())
+          category.checks.map(check => check.check())
         );
 
         const averageScore =
@@ -696,13 +697,13 @@ class ComprehensiveAuditSystem {
       categoryResults.length;
 
     const criticalIssues = categoryResults
-      .flatMap((c) => c.results)
-      .filter((r) => !r.passed || r.score < 70)
-      .map((r) => r.message);
+      .flatMap(c => c.results)
+      .filter(r => !r.passed || r.score < 70)
+      .map(r => r.message);
 
     const recommendations = categoryResults
-      .flatMap((c) => c.results)
-      .flatMap((r) => r.recommendations || []);
+      .flatMap(c => c.results)
+      .flatMap(r => r.recommendations || []);
 
     return {
       overallScore,
@@ -745,19 +746,19 @@ class ComprehensiveAuditSystem {
 
     // Category breakdown
     report += `## 📋 CATEGORY BREAKDOWN\n\n`;
-    audit.categories.forEach((category) => {
+    audit.categories.forEach(category => {
       report += `### ${category.name}: ${category.score.toFixed(1)}/100 (${category.grade})\n\n`;
-      category.results.forEach((result) => {
+      category.results.forEach(result => {
         report += `#### ${result.passed ? '✅' : '❌'} ${result.message} (${result.score}/100)\n\n`;
         if (result.details && result.details.length > 0) {
-          result.details.forEach((detail) => {
+          result.details.forEach(detail => {
             report += `- ${detail}\n`;
           });
           report += '\n';
         }
         if (result.recommendations && result.recommendations.length > 0) {
           report += `**Recommendations:**\n`;
-          result.recommendations.forEach((rec) => {
+          result.recommendations.forEach(rec => {
             report += `- ${rec}\n`;
           });
           report += '\n';

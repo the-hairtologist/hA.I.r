@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { Star } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { Star } from 'lucide-react';
 
 interface FormulaOutcomeFeedbackProps {
   formulaId: string;
@@ -17,52 +17,70 @@ export const FormulaOutcomeFeedback = ({
   formulaId,
   conversationMessageId,
   clientId,
-  onComplete
+  onComplete,
 }: FormulaOutcomeFeedbackProps) => {
   const [rating, setRating] = useState<string | null>(null);
-  const [notes, setNotes] = useState("");
-  const [whatWorked, setWhatWorked] = useState("");
-  const [whatDidnt, setWhatDidnt] = useState("");
+  const [notes, setNotes] = useState('');
+  const [whatWorked, setWhatWorked] = useState('');
+  const [whatDidnt, setWhatDidnt] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async () => {
     if (!rating) {
-      toast({ title: "Please select a rating", variant: "destructive" });
+      toast({ title: 'Please select a rating', variant: 'destructive' });
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.functions.invoke('track-formula-outcome', {
-        body: {
-          formulaId,
-          conversationMessageId,
-          clientId,
-          outcomeRating: rating,
-          outcomeNotes: notes,
-          whatWorked,
-          whatDidntWork: whatDidnt,
-          wouldUseAgain: rating === 'perfect' || rating === 'good'
+      const { error } = await supabase.functions.invoke(
+        'track-formula-outcome',
+        {
+          body: {
+            formulaId,
+            conversationMessageId,
+            clientId,
+            outcomeRating: rating,
+            outcomeNotes: notes,
+            whatWorked,
+            whatDidntWork: whatDidnt,
+            wouldUseAgain: rating === 'perfect' || rating === 'good',
+          },
         }
-      });
+      );
 
       if (error) throw error;
 
-      toast({ title: "Feedback submitted!", description: "Thank you for helping improve our AI" });
+      toast({
+        title: 'Feedback submitted!',
+        description: 'Thank you for helping improve our AI',
+      });
       onComplete?.();
     } catch (error) {
-      toast({ title: "Failed to submit feedback", variant: "destructive" });
+      toast({ title: 'Failed to submit feedback', variant: 'destructive' });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const ratings = [
-    { value: 'perfect', label: '✅ Perfect', color: 'bg-success text-success-foreground' },
+    {
+      value: 'perfect',
+      label: '✅ Perfect',
+      color: 'bg-success text-success-foreground',
+    },
     { value: 'good', label: '👍 Good', color: 'bg-info text-info-foreground' },
-    { value: 'okay', label: '😐 Okay', color: 'bg-warning text-warning-foreground' },
-    { value: 'poor', label: '👎 Poor', color: 'bg-destructive text-destructive-foreground' }
+    {
+      value: 'okay',
+      label: '😐 Okay',
+      color: 'bg-warning text-warning-foreground',
+    },
+    {
+      value: 'poor',
+      label: '👎 Poor',
+      color: 'bg-destructive text-destructive-foreground',
+    },
   ];
 
   return (
@@ -92,19 +110,23 @@ export const FormulaOutcomeFeedback = ({
             <Textarea
               placeholder="What worked well?"
               value={whatWorked}
-              onChange={(e) => setWhatWorked(e.target.value)}
+              onChange={e => setWhatWorked(e.target.value)}
             />
             <Textarea
               placeholder="What could be improved?"
               value={whatDidnt}
-              onChange={(e) => setWhatDidnt(e.target.value)}
+              onChange={e => setWhatDidnt(e.target.value)}
             />
             <Textarea
               placeholder="Additional notes (optional)"
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={e => setNotes(e.target.value)}
             />
-            <Button onClick={handleSubmit} disabled={isSubmitting} className="w-full">
+            <Button
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="w-full"
+            >
               {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
             </Button>
           </>

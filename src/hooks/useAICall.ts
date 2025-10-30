@@ -5,7 +5,11 @@
 
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { wrapAICall, type AICallContext, type EnrichedAIError } from '@/lib/aiErrorContext';
+import {
+  wrapAICall,
+  type AICallContext,
+  type EnrichedAIError,
+} from '@/lib/aiErrorContext';
 import { log } from '@/lib/logger';
 
 interface UseAICallOptions<T> {
@@ -26,14 +30,14 @@ interface UseAICallReturn<T> {
 
 /**
  * Hook for making AI edge function calls with automatic error handling
- * 
+ *
  * @example
  * ```typescript
  * const { invoke, loading, error } = useAICall('ai-formula-analyzer', {
  *   model: 'gemini-2.5-flash',
  *   onSuccess: (data) => console.log('Success:', data)
  * });
- * 
+ *
  * await invoke({ formulas: [...] });
  * ```
  */
@@ -44,14 +48,14 @@ export function useAICall<T = any>(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<EnrichedAIError | null>(null);
   const [data, setData] = useState<T | null>(null);
-  
+
   const invoke = useCallback(
     async (body: any): Promise<T | null> => {
       setLoading(true);
       setError(null);
-      
+
       log.info(`AI call invoked: ${functionName}`, 'useAICall', { body });
-      
+
       try {
         const context: AICallContext = {
           feature: functionName,
@@ -60,24 +64,24 @@ export function useAICall<T = any>(
           maxRetries: options?.maxRetries,
           timeout: options?.timeout,
         };
-        
+
         const result = await wrapAICall<T>(
           () => supabase.functions.invoke(functionName, { body }),
           context
         );
-        
+
         if (result.error) {
           setError(result.error);
           options?.onError?.(result.error);
           return null;
         }
-        
+
         if (result.data) {
           setData(result.data);
           options?.onSuccess?.(result.data);
           return result.data;
         }
-        
+
         return null;
       } catch (err: any) {
         const enrichedError: EnrichedAIError = {
@@ -93,7 +97,7 @@ export function useAICall<T = any>(
             suggestedAction: 'Try again or contact support',
           },
         };
-        
+
         setError(enrichedError);
         options?.onError?.(enrichedError);
         return null;
@@ -103,7 +107,7 @@ export function useAICall<T = any>(
     },
     [functionName, options]
   );
-  
+
   return {
     invoke,
     loading,

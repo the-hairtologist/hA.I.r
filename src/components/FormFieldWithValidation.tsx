@@ -3,17 +3,17 @@
  * Provides consistent form field styling with real-time validation
  */
 
-import { forwardRef, ReactNode } from "react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { forwardRef, ReactNode } from 'react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface FormFieldWithValidationProps {
   label: string;
   name: string;
-  type?: "text" | "email" | "password" | "number" | "tel" | "url" | "textarea";
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'textarea';
   value: string | number;
   onChange: (value: any) => void;
   onBlur?: () => void;
@@ -41,7 +41,7 @@ export const FormFieldWithValidation = forwardRef<
     {
       label,
       name,
-      type = "text",
+      type = 'text',
       value,
       onChange,
       onBlur,
@@ -73,8 +73,12 @@ export const FormFieldWithValidation = forwardRef<
       id: fieldId,
       name,
       value,
-      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-        onChange(type === "number" ? parseFloat(e.target.value) || 0 : e.target.value),
+      onChange: (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) =>
+        onChange(
+          type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value
+        ),
       onBlur,
       placeholder,
       required,
@@ -83,15 +87,12 @@ export const FormFieldWithValidation = forwardRef<
       minLength,
       pattern,
       autoComplete,
-      "aria-invalid": hasError ? true : false,
-      "aria-describedby": cn(
-        description && descriptionId,
-        hasError && errorId
-      ),
+      'aria-invalid': hasError ? true : false,
+      'aria-describedby': cn(description && descriptionId, hasError && errorId),
       className: cn(
-        "transition-all",
-        hasError && "border-destructive focus-visible:ring-destructive",
-        isValid && "border-success focus-visible:ring-success",
+        'transition-all',
+        hasError && 'border-destructive focus-visible:ring-destructive',
+        isValid && 'border-success focus-visible:ring-success',
         className
       ),
     };
@@ -116,14 +117,14 @@ export const FormFieldWithValidation = forwardRef<
             </div>
           )}
 
-          {type === "textarea" ? (
+          {type === 'textarea' ? (
             <Textarea
               {...commonProps}
               rows={rows}
               className={cn(
                 commonProps.className,
-                prefix && "pl-10",
-                suffix && "pr-10"
+                prefix && 'pl-10',
+                suffix && 'pr-10'
               )}
               ref={ref as React.Ref<HTMLTextAreaElement>}
             />
@@ -133,8 +134,8 @@ export const FormFieldWithValidation = forwardRef<
               type={type}
               className={cn(
                 commonProps.className,
-                prefix && "pl-10",
-                suffix && "pr-10"
+                prefix && 'pl-10',
+                suffix && 'pr-10'
               )}
               ref={ref as React.Ref<HTMLInputElement>}
             />
@@ -159,14 +160,14 @@ export const FormFieldWithValidation = forwardRef<
         </div>
 
         {/* Character count for text fields with maxLength */}
-        {maxLength && type === "textarea" && (
+        {maxLength && type === 'textarea' && (
           <div className="flex justify-end">
             <span
               className={cn(
-                "text-xs",
+                'text-xs',
                 String(value).length > maxLength * 0.9
-                  ? "text-destructive"
-                  : "text-muted-foreground"
+                  ? 'text-destructive'
+                  : 'text-muted-foreground'
               )}
             >
               {String(value).length} / {maxLength}
@@ -190,4 +191,4 @@ export const FormFieldWithValidation = forwardRef<
   }
 );
 
-FormFieldWithValidation.displayName = "FormFieldWithValidation";
+FormFieldWithValidation.displayName = 'FormFieldWithValidation';

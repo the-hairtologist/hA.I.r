@@ -1,6 +1,6 @@
 /**
  * Storage Helper - Direct Upload to Supabase Storage
- * 
+ *
  * Replaces base64 encoding pattern with direct CDN uploads
  * Benefits:
  * - 40% faster upload times
@@ -50,7 +50,10 @@ export const uploadImage = async (
     onProgress?.(10);
 
     // Convert blob to file if needed
-    const imageFile = file instanceof File ? file : new File([file], 'image.jpg', { type: 'image/jpeg' });
+    const imageFile =
+      file instanceof File
+        ? file
+        : new File([file], 'image.jpg', { type: 'image/jpeg' });
 
     // Compress image
     onProgress?.(30);
@@ -88,9 +91,9 @@ export const uploadImage = async (
     onProgress?.(90);
 
     // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(data.path);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from(bucket).getPublicUrl(data.path);
 
     onProgress?.(100);
 
@@ -124,7 +127,10 @@ export const uploadVideo = async (
     onProgress?.(10);
 
     // Convert blob to file if needed
-    const videoFile = file instanceof File ? file : new File([file], 'video.mp4', { type: 'video/mp4' });
+    const videoFile =
+      file instanceof File
+        ? file
+        : new File([file], 'video.mp4', { type: 'video/mp4' });
 
     // Generate unique filename
     const timestamp = Date.now();
@@ -151,9 +157,9 @@ export const uploadVideo = async (
     onProgress?.(70);
 
     // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(data.path);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from(bucket).getPublicUrl(data.path);
 
     onProgress?.(100);
 
@@ -177,11 +183,12 @@ export const uploadVideo = async (
 /**
  * Delete file from storage
  */
-export const deleteFile = async (bucket: string, path: string): Promise<void> => {
+export const deleteFile = async (
+  bucket: string,
+  path: string
+): Promise<void> => {
   try {
-    const { error } = await supabase.storage
-      .from(bucket)
-      .remove([path]);
+    const { error } = await supabase.storage.from(bucket).remove([path]);
 
     if (error) {
       throw new Error(`Delete failed: ${error.message}`);

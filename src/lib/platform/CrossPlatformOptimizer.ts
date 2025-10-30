@@ -31,7 +31,7 @@ class CrossPlatformOptimizer {
       supportsNotch: this.detectNotch(),
       supportsSafeArea: this.detectSafeArea(),
       supportsHDR: this.detectHDR(),
-      performanceLevel: this.detectPerformance()
+      performanceLevel: this.detectPerformance(),
     };
 
     logger.info('[Platform] Device capabilities detected');
@@ -52,7 +52,7 @@ class CrossPlatformOptimizer {
         (screenHeight === 812 && screenWidth === 375) || // iPhone X, XS, 11 Pro
         (screenHeight === 896 && screenWidth === 414) || // iPhone XR, XS Max, 11, 11 Pro Max
         (screenHeight === 844 && screenWidth === 390) || // iPhone 12, 12 Pro, 13, 13 Pro
-        (screenHeight === 926 && screenWidth === 428)    // iPhone 12 Pro Max, 13 Pro Max
+        (screenHeight === 926 && screenWidth === 428) // iPhone 12 Pro Max, 13 Pro Max
       );
     }
     return false;
@@ -126,7 +126,7 @@ class CrossPlatformOptimizer {
 
   private optimizeAnimations(level: 'high' | 'medium' | 'low') {
     const style = document.createElement('style');
-    
+
     if (level === 'low') {
       // Reduce animations for low-end devices
       style.textContent = `
@@ -144,7 +144,7 @@ class CrossPlatformOptimizer {
         }
       `;
     }
-    
+
     if (style.textContent) {
       document.head.appendChild(style);
       logger.info(`[Platform] Animations optimized for ${level} performance`);
@@ -153,7 +153,7 @@ class CrossPlatformOptimizer {
 
   private optimizeTouchTargets() {
     const minTouchSize = Platform.isMobile ? 48 : 44; // iOS: 44px, Android: 48px
-    
+
     const style = document.createElement('style');
     style.textContent = `
       button, a, [role="button"] {
@@ -196,19 +196,22 @@ class CrossPlatformOptimizer {
     // Cap at reasonable limits to save bandwidth
     return {
       width: Math.min(width, 2048),
-      height: Math.min(height, 2048)
+      height: Math.min(height, 2048),
     };
   }
 
   shouldPreloadImages(): boolean {
     // Don't preload on low-end devices or slow connections
     if (this.capabilities?.performanceLevel === 'low') return false;
-    
+
     const connection = (navigator as any).connection;
-    if (connection?.effectiveType === 'slow-2g' || connection?.effectiveType === '2g') {
+    if (
+      connection?.effectiveType === 'slow-2g' ||
+      connection?.effectiveType === '2g'
+    ) {
       return false;
     }
-    
+
     return true;
   }
 

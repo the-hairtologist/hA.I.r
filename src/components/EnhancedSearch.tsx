@@ -2,13 +2,17 @@
  * Enhanced Search Component with Recent Searches, Highlighting, and Better UX
  */
 
-import { useState, useEffect, useRef } from "react";
-import { Search, X, Clock, TrendingUp } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { useState, useEffect, useRef } from 'react';
+import { Search, X, Clock, TrendingUp } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface EnhancedSearchProps {
   value: string;
@@ -24,8 +28,8 @@ interface EnhancedSearchProps {
 export const EnhancedSearch = ({
   value,
   onChange,
-  placeholder = "Search...",
-  storageKey = "recent_searches",
+  placeholder = 'Search...',
+  storageKey = 'recent_searches',
   showRecentSearches = true,
   maxRecentSearches = 5,
   className,
@@ -39,14 +43,14 @@ export const EnhancedSearch = ({
   // Load recent searches from localStorage
   useEffect(() => {
     if (!showRecentSearches) return;
-    
+
     try {
       const stored = localStorage.getItem(storageKey);
       if (stored) {
         setRecentSearches(JSON.parse(stored));
       }
     } catch (error) {
-      console.error("Error loading recent searches:", error);
+      console.error('Error loading recent searches:', error);
     }
   }, [storageKey, showRecentSearches]);
 
@@ -55,19 +59,19 @@ export const EnhancedSearch = ({
     if (!showRecentSearches || !query.trim()) return;
 
     const trimmedQuery = query.trim().toLowerCase();
-    
+
     // Remove if already exists and add to front
     const updated = [
       trimmedQuery,
-      ...recentSearches.filter(s => s !== trimmedQuery)
+      ...recentSearches.filter(s => s !== trimmedQuery),
     ].slice(0, maxRecentSearches);
 
     setRecentSearches(updated);
-    
+
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch (error) {
-      console.error("Error saving recent searches:", error);
+      console.error('Error saving recent searches:', error);
     }
   };
 
@@ -91,11 +95,11 @@ export const EnhancedSearch = ({
     e.stopPropagation();
     const updated = recentSearches.filter(s => s !== search);
     setRecentSearches(updated);
-    
+
     try {
       localStorage.setItem(storageKey, JSON.stringify(updated));
     } catch (error) {
-      console.error("Error clearing recent search:", error);
+      console.error('Error clearing recent search:', error);
     }
   };
 
@@ -104,23 +108,26 @@ export const EnhancedSearch = ({
     try {
       localStorage.removeItem(storageKey);
     } catch (error) {
-      console.error("Error clearing all recent searches:", error);
+      console.error('Error clearing all recent searches:', error);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSearchSubmit();
-    } else if (e.key === "Escape") {
+    } else if (e.key === 'Escape') {
       setShowRecent(false);
       inputRef.current?.blur();
     }
   };
 
-  const shouldShowRecent = showRecentSearches && recentSearches.length > 0 && (isFocused || showRecent);
+  const shouldShowRecent =
+    showRecentSearches &&
+    recentSearches.length > 0 &&
+    (isFocused || showRecent);
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn('relative', className)}>
       <Popover open={shouldShowRecent} onOpenChange={setShowRecent}>
         <PopoverTrigger asChild>
           <div className="relative">
@@ -129,7 +136,7 @@ export const EnhancedSearch = ({
               ref={inputRef}
               placeholder={placeholder}
               value={value}
-              onChange={(e) => onChange(e.target.value)}
+              onChange={e => onChange(e.target.value)}
               onFocus={() => {
                 setIsFocused(true);
                 if (recentSearches.length > 0) {
@@ -150,7 +157,7 @@ export const EnhancedSearch = ({
                 size="sm"
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
                 onClick={() => {
-                  onChange("");
+                  onChange('');
                   inputRef.current?.focus();
                 }}
               >
@@ -159,11 +166,11 @@ export const EnhancedSearch = ({
             )}
           </div>
         </PopoverTrigger>
-        
-        <PopoverContent 
-          className="w-[var(--radix-popover-trigger-width)] p-2" 
+
+        <PopoverContent
+          className="w-[var(--radix-popover-trigger-width)] p-2"
           align="start"
-          onOpenAutoFocus={(e) => e.preventDefault()}
+          onOpenAutoFocus={e => e.preventDefault()}
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between px-2 py-1">
@@ -180,9 +187,9 @@ export const EnhancedSearch = ({
                 Clear all
               </Button>
             </div>
-            
+
             <div className="space-y-1">
-              {recentSearches.map((search) => (
+              {recentSearches.map(search => (
                 <div
                   key={search}
                   onClick={() => handleRecentSearchClick(search)}
@@ -195,7 +202,7 @@ export const EnhancedSearch = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={(e) => clearRecentSearch(search, e)}
+                    onClick={e => clearRecentSearch(search, e)}
                     className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="h-3 w-3" />
@@ -219,18 +226,25 @@ interface HighlightedTextProps {
   className?: string;
 }
 
-export const HighlightedText = ({ text, query, className }: HighlightedTextProps) => {
+export const HighlightedText = ({
+  text,
+  query,
+  className,
+}: HighlightedTextProps) => {
   if (!query.trim()) {
     return <span className={className}>{text}</span>;
   }
 
   const parts = text.split(new RegExp(`(${query})`, 'gi'));
-  
+
   return (
     <span className={className}>
       {parts.map((part, index) =>
         part.toLowerCase() === query.toLowerCase() ? (
-          <mark key={`${part}-${index}`} className="bg-primary/20 text-foreground font-medium">
+          <mark
+            key={`${part}-${index}`}
+            className="bg-primary/20 text-foreground font-medium"
+          >
             {part}
           </mark>
         ) : (
@@ -245,7 +259,11 @@ export const HighlightedText = ({ text, query, className }: HighlightedTextProps
  * Fuzzy search utility - checks if query matches text with tolerance for typos
  * Uses simple Levenshtein distance algorithm
  */
-export const fuzzyMatch = (text: string, query: string, threshold: number = 2): boolean => {
+export const fuzzyMatch = (
+  text: string,
+  query: string,
+  threshold: number = 2
+): boolean => {
   const textLower = text.toLowerCase();
   const queryLower = query.toLowerCase();
 
@@ -254,7 +272,7 @@ export const fuzzyMatch = (text: string, query: string, threshold: number = 2): 
 
   // Split into words and check each
   const words = textLower.split(/\s+/);
-  
+
   for (const word of words) {
     if (levenshteinDistance(word, queryLower) <= threshold) {
       return true;

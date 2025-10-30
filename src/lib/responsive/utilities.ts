@@ -2,7 +2,12 @@
  * Responsive Utility Functions
  */
 
-import { fluidText, containerWidths, touchTargets, aspectRatios } from './constants';
+import {
+  fluidText,
+  containerWidths,
+  touchTargets,
+  aspectRatios,
+} from './constants';
 
 /**
  * Get responsive padding for containers
@@ -43,14 +48,19 @@ export const getResponsiveGap = (size: 'sm' | 'md' | 'lg' = 'md') => {
 /**
  * Get responsive grid columns
  */
-export const getResponsiveGrid = (cols: { sm?: number; md?: number; lg?: number; xl?: number }) => {
+export const getResponsiveGrid = (cols: {
+  sm?: number;
+  md?: number;
+  lg?: number;
+  xl?: number;
+}) => {
   const classes: string[] = ['grid'];
-  
+
   if (cols.sm) classes.push(`grid-cols-${cols.sm}`);
   if (cols.md) classes.push(`sm:grid-cols-${cols.md}`);
   if (cols.lg) classes.push(`md:grid-cols-${cols.lg}`);
   if (cols.xl) classes.push(`lg:grid-cols-${cols.xl}`);
-  
+
   return classes.join(' ');
 };
 
@@ -73,7 +83,9 @@ export const stackToRow = {
 /**
  * Safely combine class names, filtering falsy values
  */
-export const safeClasses = (...classes: (string | undefined | null | false)[]): string => {
+export const safeClasses = (
+  ...classes: (string | undefined | null | false)[]
+): string => {
   return classes.filter(Boolean).join(' ');
 };
 

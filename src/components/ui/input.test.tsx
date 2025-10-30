@@ -15,26 +15,30 @@ describe('Input', () => {
   });
 
   it('should apply validation state styling for valid input', () => {
-    const { container } = render(<Input validationState="valid" showValidationIcon={true} />);
+    const { container } = render(
+      <Input validationState="valid" showValidationIcon={true} />
+    );
     const input = container.querySelector('input');
     expect(input).toHaveClass('border-green-600');
   });
 
   it('should apply validation state styling for invalid input', () => {
-    const { container } = render(<Input validationState="invalid" showValidationIcon={true} />);
+    const { container } = render(
+      <Input validationState="invalid" showValidationIcon={true} />
+    );
     const input = container.querySelector('input');
     expect(input).toHaveClass('border-destructive');
   });
 
   it('should show validation icon when enabled', () => {
     const { container } = render(
-      <Input 
-        validationState="valid" 
-        showValidationIcon={true} 
+      <Input
+        validationState="valid"
+        showValidationIcon={true}
         data-testid="input-with-icon"
       />
     );
-    
+
     const icon = container.querySelector('svg');
     expect(icon).toBeInTheDocument();
   });
@@ -43,7 +47,7 @@ describe('Input', () => {
     const { container } = render(
       <Input validationState="valid" data-testid="input-without-icon" />
     );
-    
+
     const icon = container.querySelector('svg');
     expect(icon).not.toBeInTheDocument();
   });
@@ -56,7 +60,9 @@ describe('Input', () => {
   });
 
   it('should pass through standard input props', () => {
-    const { container } = render(<Input type="email" required disabled value="test@example.com" readOnly />);
+    const { container } = render(
+      <Input type="email" required disabled value="test@example.com" readOnly />
+    );
     const input = container.querySelector('input') as HTMLInputElement;
     expect(input.type).toBe('email');
     expect(input.required).toBe(true);

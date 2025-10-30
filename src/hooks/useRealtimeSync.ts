@@ -1,9 +1,9 @@
 /**
  * Enhanced Realtime Sync Hook
- * 
+ *
  * Now that realtime is enabled on appointments, messages, and client_profiles,
  * this hook provides easy integration for components.
- * 
+ *
  * Benefits:
  * - Automatic reconnection on network issues
  * - Optimistic updates (instant UI feedback)
@@ -45,36 +45,54 @@ export const useRealtimeSync = <T = any>(options: RealtimeSyncOptions<T>) => {
   const reconnectAttemptsRef = useRef(0);
   const maxReconnectAttempts = 5;
 
-  const handleInsert = useCallback((payload: any) => {
-    logger.debug(`[Realtime] INSERT on ${table}`, 'realtime', payload);
-    onInsert?.(payload.new as T);
-  }, [table, onInsert]);
+  const handleInsert = useCallback(
+    (payload: any) => {
+      logger.debug(`[Realtime] INSERT on ${table}`, 'realtime', payload);
+      onInsert?.(payload.new as T);
+    },
+    [table, onInsert]
+  );
 
-  const handleUpdate = useCallback((payload: any) => {
-    logger.debug(`[Realtime] UPDATE on ${table}`, 'realtime', payload);
-    onUpdate?.(payload.new as T, payload.old as T);
-  }, [table, onUpdate]);
+  const handleUpdate = useCallback(
+    (payload: any) => {
+      logger.debug(`[Realtime] UPDATE on ${table}`, 'realtime', payload);
+      onUpdate?.(payload.new as T, payload.old as T);
+    },
+    [table, onUpdate]
+  );
 
-  const handleDelete = useCallback((payload: any) => {
-    logger.debug(`[Realtime] DELETE on ${table}`, 'realtime', payload);
-    onDelete?.(payload.old as T);
-  }, [table, onDelete]);
+  const handleDelete = useCallback(
+    (payload: any) => {
+      logger.debug(`[Realtime] DELETE on ${table}`, 'realtime', payload);
+      onDelete?.(payload.old as T);
+    },
+    [table, onDelete]
+  );
 
-  const handleError = useCallback((error: any) => {
-    logger.error(`[Realtime] Error on ${table}`, 'realtime', error);
-    onError?.(error);
+  const handleError = useCallback(
+    (error: any) => {
+      logger.error(`[Realtime] Error on ${table}`, 'realtime', error);
+      onError?.(error);
 
-    // Auto-reconnect with exponential backoff
-    if (reconnectAttemptsRef.current < maxReconnectAttempts) {
-      const delay = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 30000);
-      reconnectAttemptsRef.current++;
-      
-      setTimeout(() => {
-        logger.info(`[Realtime] Attempting reconnect ${reconnectAttemptsRef.current}/${maxReconnectAttempts}`, 'realtime');
-        channelRef.current?.subscribe();
-      }, delay);
-    }
-  }, [table, onError]);
+      // Auto-reconnect with exponential backoff
+      if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+        const delay = Math.min(
+          1000 * Math.pow(2, reconnectAttemptsRef.current),
+          30000
+        );
+        reconnectAttemptsRef.current++;
+
+        setTimeout(() => {
+          logger.info(
+            `[Realtime] Attempting reconnect ${reconnectAttemptsRef.current}/${maxReconnectAttempts}`,
+            'realtime'
+          );
+          channelRef.current?.subscribe();
+        }, delay);
+      }
+    },
+    [table, onError]
+  );
 
   useEffect(() => {
     if (!enabled) {
@@ -83,7 +101,7 @@ export const useRealtimeSync = <T = any>(options: RealtimeSyncOptions<T>) => {
 
     // Create unique channel name
     const channelName = `${table}_${filter || 'all'}_${Date.now()}`;
-    
+
     logger.info(`[Realtime] Subscribing to ${table}`, 'realtime', { filter });
 
     // Create channel with postgres changes listener
@@ -97,7 +115,7 @@ export const useRealtimeSync = <T = any>(options: RealtimeSyncOptions<T>) => {
           table,
           filter: filter || undefined,
         },
-        (payload) => {
+        payload => {
           // Reset reconnect attempts on successful message
           reconnectAttemptsRef.current = 0;
 
@@ -133,7 +151,15 @@ export const useRealtimeSync = <T = any>(options: RealtimeSyncOptions<T>) => {
       supabase.removeChannel(channel);
       channelRef.current = null;
     };
-  }, [table, filter, enabled, handleInsert, handleUpdate, handleDelete, handleError]);
+  }, [
+    table,
+    filter,
+    enabled,
+    handleInsert,
+    handleUpdate,
+    handleDelete,
+    handleError,
+  ]);
 
   return {
     isConnected: channelRef.current !== null,
@@ -197,7 +223,7 @@ export const useRealtimeClientProfile = (
     table: 'client_profiles',
     filter: clientId ? `id=eq.${clientId}` : undefined,
     enabled: !!clientId,
-    onUpdate: (newProfile) => {
+    onUpdate: newProfile => {
       onProfileUpdate(newProfile);
     },
   });

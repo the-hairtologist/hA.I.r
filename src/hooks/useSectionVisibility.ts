@@ -23,7 +23,7 @@ export const useSectionVisibility = ({
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          
+
           // Track section visibility only once
           if (!hasTracked.current) {
             hasTracked.current = true;

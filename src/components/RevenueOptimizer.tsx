@@ -1,7 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DollarSign, TrendingUp, Calendar, Users, AlertCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  DollarSign,
+  TrendingUp,
+  Calendar,
+  Users,
+  AlertCircle,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface RevenueOptimizerProps {
   appointments: Array<{
@@ -22,12 +28,18 @@ interface RevenueOptimizerProps {
   }>;
 }
 
-export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptimizerProps) => {
+export const RevenueOptimizer = ({
+  appointments,
+  clientData = [],
+}: RevenueOptimizerProps) => {
   const analyzeRevenue = () => {
     const now = new Date();
     const thisWeek = appointments.filter(apt => {
       const aptDate = new Date(apt.appointment_date);
-      return aptDate >= now && aptDate <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+      return (
+        aptDate >= now &&
+        aptDate <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+      );
     });
 
     // Calculate potential revenue from current appointments
@@ -37,13 +49,14 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
     const rebookOpportunities = clientData.filter(client => {
       if (!client.last_appointment_date) return false;
       const daysSinceVisit = Math.floor(
-        (now.getTime() - new Date(client.last_appointment_date).getTime()) / (1000 * 60 * 60 * 24)
+        (now.getTime() - new Date(client.last_appointment_date).getTime()) /
+          (1000 * 60 * 60 * 24)
       );
       return daysSinceVisit >= 45 && daysSinceVisit <= 90;
     });
 
     const potentialRebookRevenue = rebookOpportunities.reduce(
-      (sum, client) => sum + (client.average_revenue || 100), 
+      (sum, client) => sum + (client.average_revenue || 100),
       0
     );
 
@@ -60,13 +73,16 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
       potentialRebookRevenue,
       emptySlots,
       potentialEmptySlotRevenue,
-      totalPotential: currentRevenue + potentialRebookRevenue + potentialEmptySlotRevenue
+      totalPotential:
+        currentRevenue + potentialRebookRevenue + potentialEmptySlotRevenue,
     };
   };
 
   const analysis = analyzeRevenue();
   const upliftPercentage = Math.round(
-    ((analysis.totalPotential - analysis.currentRevenue) / analysis.currentRevenue) * 100
+    ((analysis.totalPotential - analysis.currentRevenue) /
+      analysis.currentRevenue) *
+      100
   );
 
   return (
@@ -81,7 +97,9 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
         {/* Current Week Status */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2 p-3 rounded-lg bg-success/10 border border-success/20">
-            <div className="text-sm text-muted-foreground font-medium">This Week</div>
+            <div className="text-sm text-muted-foreground font-medium">
+              This Week
+            </div>
             <div className="text-2xl sm:text-3xl font-bold text-success">
               ${analysis.currentRevenue.toLocaleString()}
             </div>
@@ -91,11 +109,16 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
           </div>
 
           <div className="space-y-2 p-3 rounded-lg bg-info/10 border border-info/20">
-            <div className="text-sm text-muted-foreground font-medium">Potential</div>
+            <div className="text-sm text-muted-foreground font-medium">
+              Potential
+            </div>
             <div className="text-2xl sm:text-3xl font-bold text-info">
               ${analysis.totalPotential.toLocaleString()}
             </div>
-            <Badge variant={upliftPercentage > 30 ? "default" : "secondary"} className="text-xs">
+            <Badge
+              variant={upliftPercentage > 30 ? 'default' : 'secondary'}
+              className="text-xs"
+            >
               +{upliftPercentage}% possible uplift
             </Badge>
           </div>
@@ -103,7 +126,9 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
 
         {/* Opportunities */}
         <div className="space-y-3 border-t border-border/50 pt-4">
-          <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Growth Opportunities</div>
+          <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Growth Opportunities
+          </div>
 
           {analysis.rebookOpportunities > 0 && (
             <div className="flex items-start gap-3 p-3 sm:p-4 bg-info/10 border border-info/20 rounded-lg">
@@ -113,7 +138,8 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
                   {analysis.rebookOpportunities} Rebook Opportunities
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  Potential revenue: ${analysis.potentialRebookRevenue.toLocaleString()}
+                  Potential revenue: $
+                  {analysis.potentialRebookRevenue.toLocaleString()}
                 </div>
                 <button className="min-h-[44px] px-3 py-2 text-sm font-medium text-info bg-info/10 hover:bg-info/20 rounded-md transition-colors">
                   Send rebook reminders
@@ -130,7 +156,8 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
                   {analysis.emptySlots} Empty Time Slots
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  Potential revenue: ${analysis.potentialEmptySlotRevenue.toLocaleString()}
+                  Potential revenue: $
+                  {analysis.potentialEmptySlotRevenue.toLocaleString()}
                 </div>
                 <button className="min-h-[44px] px-3 py-2 text-sm font-medium text-warning bg-warning/10 hover:bg-warning/20 rounded-md transition-colors">
                   Fill with waitlist clients
@@ -149,7 +176,9 @@ export const RevenueOptimizer = ({ appointments, clientData = [] }: RevenueOptim
 
         {/* Quick Actions */}
         <div className="border-t pt-4 space-y-2">
-          <div className="text-xs font-semibold text-muted-foreground">Quick Actions</div>
+          <div className="text-xs font-semibold text-muted-foreground">
+            Quick Actions
+          </div>
           <div className="flex flex-wrap gap-2">
             <Badge variant="outline" className="cursor-pointer hover:bg-accent">
               🔍 View At-Risk Clients

@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { brutalist, spacing } from "@/lib/brutalismUtils";
+import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import { brutalist, spacing } from '@/lib/brutalismUtils';
 
 interface BrutalCardProps {
   children: ReactNode;
@@ -14,12 +14,12 @@ interface BrutalCardProps {
  * BrutalCard - Adaptive Brutalism card component
  * Combines brutalist aesthetics with readable content
  */
-export const BrutalCard = ({ 
-  children, 
+export const BrutalCard = ({
+  children,
   className,
   hover = false,
   gradient = false,
-  onClick 
+  onClick,
 }: BrutalCardProps) => {
   return (
     <div
@@ -28,11 +28,11 @@ export const BrutalCard = ({
         hover && brutalist.cardHover,
         gradient && brutalist.gradientBg,
         spacing.cardPadding,
-        onClick && "cursor-pointer",
+        onClick && 'cursor-pointer',
         className
       )}
       onClick={onClick}
-      role={onClick ? "button" : undefined}
+      role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
       {children}

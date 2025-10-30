@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { LucideIcon } from 'lucide-react';
 
 interface HelpfulEmptyStateProps {
   icon: LucideIcon;
@@ -28,13 +28,22 @@ export const HelpfulEmptyState = ({
           <Icon className="h-8 w-8 text-primary" />
         </div>
         <h3 className="text-xl font-pixel mb-2">{title}</h3>
-        <p className="font-sans text-sm text-muted-foreground mb-6 max-w-md mx-auto">{description}</p>
+        <p className="font-sans text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+          {description}
+        </p>
         <div className="flex gap-3 justify-center">
-          <Button onClick={onAction} className="gap-2 font-bold uppercase tracking-wide">
+          <Button
+            onClick={onAction}
+            className="gap-2 font-bold uppercase tracking-wide"
+          >
             {actionLabel}
           </Button>
           {secondaryActionLabel && onSecondaryAction && (
-            <Button variant="outline" onClick={onSecondaryAction} className="gap-2 font-bold uppercase tracking-wide">
+            <Button
+              variant="outline"
+              onClick={onSecondaryAction}
+              className="gap-2 font-bold uppercase tracking-wide"
+            >
               {secondaryActionLabel}
             </Button>
           )}

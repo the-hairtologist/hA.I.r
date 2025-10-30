@@ -1,17 +1,29 @@
-import { useState, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/useToast";
-import { Plus, Trash2, GripVertical, Save, Eye } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { useAuth } from "@/hooks/useAuth";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState, useEffect } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useToast } from '@/hooks/useToast';
+import { Plus, Trash2, GripVertical, Save, Eye } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 interface Step {
   id?: string;
@@ -29,28 +41,31 @@ interface SequenceBuilderProps {
   onSuccess: () => void;
 }
 
-export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) => {
+export const SequenceBuilder = ({
+  sequence,
+  onSuccess,
+}: SequenceBuilderProps) => {
   const toast = useToast();
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    trigger_type: "manual",
-    category: "onboarding",
+    name: '',
+    description: '',
+    trigger_type: 'manual',
+    category: 'onboarding',
     is_active: true,
   });
 
   const [steps, setSteps] = useState<Step[]>([
     {
       step_order: 1,
-      name: "Email 1",
-      subject: "",
-      body_html: "",
+      name: 'Email 1',
+      subject: '',
+      body_html: '',
       delay_amount: 0,
-      delay_unit: "days",
-      send_time_preference: "any_time",
+      delay_unit: 'days',
+      send_time_preference: 'any_time',
     },
   ]);
 
@@ -59,9 +74,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
     if (sequence) {
       setFormData({
         name: sequence.name,
-        description: sequence.description || "",
+        description: sequence.description || '',
         trigger_type: sequence.trigger_type,
-        category: sequence.category || "onboarding",
+        category: sequence.category || 'onboarding',
         is_active: sequence.is_active,
       });
 
@@ -72,10 +87,10 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
 
   const loadSteps = async (sequenceId: string) => {
     const { data } = await supabase
-      .from("email_sequence_steps")
-      .select("*")
-      .eq("sequence_id", sequenceId)
-      .order("step_order");
+      .from('email_sequence_steps')
+      .select('*')
+      .eq('sequence_id', sequenceId)
+      .order('step_order');
 
     if (data && data.length > 0) {
       setSteps(data);
@@ -86,34 +101,34 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
     mutationFn: async () => {
       // Get stylist profile
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
-      if (!stylistProfile) throw new Error("Stylist profile not found");
+      if (!stylistProfile) throw new Error('Stylist profile not found');
 
       let sequenceId: string;
 
       if (sequence) {
         // Update existing
         const { error } = await supabase
-          .from("email_sequences")
+          .from('email_sequences')
           .update(formData)
-          .eq("id", sequence.id);
+          .eq('id', sequence.id);
 
         if (error) throw error;
         sequenceId = sequence.id;
 
         // Delete old steps
         await supabase
-          .from("email_sequence_steps")
+          .from('email_sequence_steps')
           .delete()
-          .eq("sequence_id", sequenceId);
+          .eq('sequence_id', sequenceId);
       } else {
         // Create new
         const { data, error } = await supabase
-          .from("email_sequences")
+          .from('email_sequences')
           .insert({
             ...formData,
             stylist_id: stylistProfile.id,
@@ -126,24 +141,24 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
       }
 
       // Insert steps
-      const stepsToInsert = steps.map((step) => ({
+      const stepsToInsert = steps.map(step => ({
         sequence_id: sequenceId,
         ...step,
       }));
 
       const { error: stepsError } = await supabase
-        .from("email_sequence_steps")
+        .from('email_sequence_steps')
         .insert(stepsToInsert);
 
       if (stepsError) throw stepsError;
     },
     onSuccess: () => {
-      toast.success("Sequence saved successfully!");
-      queryClient.invalidateQueries({ queryKey: ["email_sequences"] });
+      toast.success('Sequence saved successfully!');
+      queryClient.invalidateQueries({ queryKey: ['email_sequences'] });
       onSuccess();
     },
     onError: (error: Error) => {
-      toast.error("Failed to save sequence", error.message);
+      toast.error('Failed to save sequence', error.message);
     },
   });
 
@@ -153,11 +168,11 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
       {
         step_order: steps.length + 1,
         name: `Email ${steps.length + 1}`,
-        subject: "",
-        body_html: "",
+        subject: '',
+        body_html: '',
         delay_amount: 1,
-        delay_unit: "days",
-        send_time_preference: "any_time",
+        delay_unit: 'days',
+        send_time_preference: 'any_time',
       },
     ]);
   };
@@ -181,14 +196,17 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
   // Preview email with sample data
   const generatePreviewHtml = (step: Step) => {
     let preview = step.body_html;
-    
+
     // Replace variables with sample data
-    preview = preview.replace(/\{\{client_name\}\}/g, "Sarah Johnson");
-    preview = preview.replace(/\{\{stylist_name\}\}/g, "Emily Smith");
-    preview = preview.replace(/\{\{business_name\}\}/g, "Glamour Hair Studio");
-    preview = preview.replace(/\{\{appointment_date\}\}/g, "Tuesday, October 15, 2025 at 2:00 PM");
-    preview = preview.replace(/\{\{appointment_time\}\}/g, "2:00 PM");
-    
+    preview = preview.replace(/\{\{client_name\}\}/g, 'Sarah Johnson');
+    preview = preview.replace(/\{\{stylist_name\}\}/g, 'Emily Smith');
+    preview = preview.replace(/\{\{business_name\}\}/g, 'Glamour Hair Studio');
+    preview = preview.replace(
+      /\{\{appointment_date\}\}/g,
+      'Tuesday, October 15, 2025 at 2:00 PM'
+    );
+    preview = preview.replace(/\{\{appointment_time\}\}/g, '2:00 PM');
+
     return `
       <!DOCTYPE html>
       <html>
@@ -214,7 +232,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={e => {
         e.preventDefault();
         saveMutation.mutate();
       }}
@@ -230,7 +248,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={e => setFormData({ ...formData, name: e.target.value })}
               placeholder="e.g., New Client Welcome Series"
               required
               maxLength={100}
@@ -241,7 +259,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
             <Label htmlFor="trigger">Trigger Type *</Label>
             <Select
               value={formData.trigger_type}
-              onValueChange={(value) => setFormData({ ...formData, trigger_type: value })}
+              onValueChange={value =>
+                setFormData({ ...formData, trigger_type: value })
+              }
             >
               <SelectTrigger id="trigger">
                 <SelectValue />
@@ -249,11 +269,17 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
               <SelectContent>
                 <SelectItem value="manual">📝 Manual</SelectItem>
                 <SelectItem value="new_client">🆕 New Client</SelectItem>
-                <SelectItem value="post_appointment">✅ Post-Appointment</SelectItem>
-                <SelectItem value="inactive_client">💤 Inactive Client</SelectItem>
+                <SelectItem value="post_appointment">
+                  ✅ Post-Appointment
+                </SelectItem>
+                <SelectItem value="inactive_client">
+                  💤 Inactive Client
+                </SelectItem>
                 <SelectItem value="birthday">🎂 Birthday</SelectItem>
                 <SelectItem value="anniversary">🎉 Anniversary</SelectItem>
-                <SelectItem value="pre_appointment">⏰ Pre-Appointment</SelectItem>
+                <SelectItem value="pre_appointment">
+                  ⏰ Pre-Appointment
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -264,7 +290,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
             <Label htmlFor="category">Category</Label>
             <Select
               value={formData.category}
-              onValueChange={(value) => setFormData({ ...formData, category: value })}
+              onValueChange={value =>
+                setFormData({ ...formData, category: value })
+              }
             >
               <SelectTrigger id="category">
                 <SelectValue />
@@ -283,7 +311,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
             <Switch
               id="active"
               checked={formData.is_active}
-              onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
+              onCheckedChange={checked =>
+                setFormData({ ...formData, is_active: checked })
+              }
             />
           </div>
         </div>
@@ -293,7 +323,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
           <Textarea
             id="description"
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            onChange={e =>
+              setFormData({ ...formData, description: e.target.value })
+            }
             placeholder="Describe the purpose of this sequence..."
             rows={3}
             maxLength={500}
@@ -305,14 +337,23 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-bold text-lg">Email Steps</h3>
-          <Button type="button" variant="outline" size="sm" onClick={addStep} className="gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={addStep}
+            className="gap-2"
+          >
             <Plus className="h-4 w-4" />
             Add Step
           </Button>
         </div>
 
         {steps.map((step, index) => (
-          <Card key={`step-${step.step_order}-${index}`} className="p-6 border-2 space-y-4">
+          <Card
+            key={`step-${step.step_order}-${index}`}
+            className="p-6 border-2 space-y-4"
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <GripVertical className="h-5 w-5 text-muted-foreground" />
@@ -336,13 +377,15 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
                 <Label>Email Subject *</Label>
                 <Input
                   value={step.subject}
-                  onChange={(e) => updateStep(index, "subject", e.target.value)}
+                  onChange={e => updateStep(index, 'subject', e.target.value)}
                   placeholder="e.g., Welcome to {{stylist_name}}'s salon!"
                   required
                   maxLength={200}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Use variables: &#123;&#123;client_name&#125;&#125;, &#123;&#123;stylist_name&#125;&#125;, &#123;&#123;appointment_date&#125;&#125;
+                  Use variables: &#123;&#123;client_name&#125;&#125;,
+                  &#123;&#123;stylist_name&#125;&#125;,
+                  &#123;&#123;appointment_date&#125;&#125;
                 </p>
               </div>
 
@@ -364,7 +407,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[80vh] w-[95vw] sm:w-full">
                       <DialogHeader>
-                        <DialogTitle>Email Preview - {step.subject || "Untitled"}</DialogTitle>
+                        <DialogTitle>
+                          Email Preview - {step.subject || 'Untitled'}
+                        </DialogTitle>
                       </DialogHeader>
                       <div className="border rounded-lg overflow-auto max-h-[60vh]">
                         <iframe
@@ -379,7 +424,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
                 </div>
                 <Textarea
                   value={step.body_html}
-                  onChange={(e) => updateStep(index, "body_html", e.target.value)}
+                  onChange={e => updateStep(index, 'body_html', e.target.value)}
                   placeholder="Enter your email content here..."
                   rows={8}
                   required
@@ -388,18 +433,29 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
               </div>
 
               <div className="space-y-2">
-                <Label>Delay {index === 0 ? "Before Sending" : "After Previous Email"}</Label>
+                <Label>
+                  Delay{' '}
+                  {index === 0 ? 'Before Sending' : 'After Previous Email'}
+                </Label>
                 <div className="flex gap-2">
                   <Input
                     type="number"
                     value={step.delay_amount}
-                    onChange={(e) => updateStep(index, "delay_amount", parseInt(e.target.value) || 0)}
+                    onChange={e =>
+                      updateStep(
+                        index,
+                        'delay_amount',
+                        parseInt(e.target.value) || 0
+                      )
+                    }
                     min="0"
                     className="w-24"
                   />
                   <Select
                     value={step.delay_unit}
-                    onValueChange={(value) => updateStep(index, "delay_unit", value)}
+                    onValueChange={value =>
+                      updateStep(index, 'delay_unit', value)
+                    }
                   >
                     <SelectTrigger className="flex-1">
                       <SelectValue />
@@ -418,7 +474,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
                 <Label>Send Time Preference</Label>
                 <Select
                   value={step.send_time_preference}
-                  onValueChange={(value) => updateStep(index, "send_time_preference", value)}
+                  onValueChange={value =>
+                    updateStep(index, 'send_time_preference', value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -426,7 +484,9 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
                   <SelectContent>
                     <SelectItem value="any_time">Any Time</SelectItem>
                     <SelectItem value="morning">Morning (8-11 AM)</SelectItem>
-                    <SelectItem value="afternoon">Afternoon (12-4 PM)</SelectItem>
+                    <SelectItem value="afternoon">
+                      Afternoon (12-4 PM)
+                    </SelectItem>
                     <SelectItem value="evening">Evening (5-8 PM)</SelectItem>
                   </SelectContent>
                 </Select>
@@ -452,7 +512,7 @@ export const SequenceBuilder = ({ sequence, onSuccess }: SequenceBuilderProps) =
           ) : (
             <>
               <Save className="h-4 w-4" />
-              {sequence ? "Update Sequence" : "Create Sequence"}
+              {sequence ? 'Update Sequence' : 'Create Sequence'}
             </>
           )}
         </Button>

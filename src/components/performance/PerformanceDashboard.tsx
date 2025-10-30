@@ -12,7 +12,9 @@ import { customMetrics } from '@/lib/performance/customMetrics';
 
 export const PerformanceDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState(webVitalsMonitor.getMetrics());
-  const [customMeasures, setCustomMeasures] = useState(customMetrics.getMeasures());
+  const [customMeasures, setCustomMeasures] = useState(
+    customMetrics.getMeasures()
+  );
 
   useEffect(() => {
     // Update metrics every 2 seconds
@@ -26,10 +28,14 @@ export const PerformanceDashboard: React.FC = () => {
 
   const getRatingColor = (rating: string) => {
     switch (rating) {
-      case 'good': return 'bg-green-500';
-      case 'needs-improvement': return 'bg-yellow-500';
-      case 'poor': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'good':
+        return 'bg-green-500';
+      case 'needs-improvement':
+        return 'bg-yellow-500';
+      case 'poor':
+        return 'bg-red-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
@@ -55,11 +61,19 @@ export const PerformanceDashboard: React.FC = () => {
             </h4>
             <div className="space-y-2">
               {metrics.map(metric => (
-                <div key={metric.name} className="flex items-center justify-between text-sm">
+                <div
+                  key={metric.name}
+                  className="flex items-center justify-between text-sm"
+                >
                   <span className="font-mono">{metric.name}</span>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono">{Math.round(metric.value)}ms</span>
-                    <Badge className={getRatingColor(metric.rating)} variant="secondary">
+                    <span className="font-mono">
+                      {Math.round(metric.value)}ms
+                    </span>
+                    <Badge
+                      className={getRatingColor(metric.rating)}
+                      variant="secondary"
+                    >
                       {metric.rating}
                     </Badge>
                   </div>
@@ -73,12 +87,20 @@ export const PerformanceDashboard: React.FC = () => {
             <div>
               <h4 className="text-sm font-medium mb-2">Recent Operations</h4>
               <div className="space-y-1 max-h-32 overflow-y-auto">
-                {customMeasures.slice(-5).reverse().map((measure, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-xs">
-                    <span className="truncate">{measure.name}</span>
-                    <span className="font-mono">{Math.round(measure.duration)}ms</span>
-                  </div>
-                ))}
+                {customMeasures
+                  .slice(-5)
+                  .reverse()
+                  .map((measure, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between text-xs"
+                    >
+                      <span className="truncate">{measure.name}</span>
+                      <span className="font-mono">
+                        {Math.round(measure.duration)}ms
+                      </span>
+                    </div>
+                  ))}
               </div>
             </div>
           )}

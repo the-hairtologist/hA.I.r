@@ -1,12 +1,18 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, Clock, Users, TrendingUp, X } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useState } from "react";
-import { analytics } from "@/lib/analytics";
-import type { NudgeTrigger } from "@/hooks/useSubscriptionNudges";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles, Clock, Users, TrendingUp, X } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import { analytics } from '@/lib/analytics';
+import type { NudgeTrigger } from '@/hooks/useSubscriptionNudges';
 
 interface SubscriptionNudgeProps {
   trigger: NudgeTrigger;
@@ -23,62 +29,62 @@ interface SubscriptionNudgeProps {
 const NUDGE_CONTENT = {
   trial_day_5: {
     icon: Sparkles,
-    iconColor: "text-primary",
+    iconColor: 'text-primary',
     title: "You're halfway through your trial! 🎉",
     body: "You've already added {clientCount} clients and completed {appointmentCount} appointments. Unlock unlimited access to keep growing your business.",
-    cta: "Upgrade Now - Save 20%",
-    ctaVariant: "default" as const,
+    cta: 'Upgrade Now - Save 20%',
+    ctaVariant: 'default' as const,
     badge: null,
-    urgency: false
+    urgency: false,
   },
   trial_day_13: {
     icon: Clock,
-    iconColor: "text-warning",
-    title: "⏰ Only {daysLeft} days left in your trial",
+    iconColor: 'text-warning',
+    title: '⏰ Only {daysLeft} days left in your trial',
     body: "Don't lose access to your client profiles, formulas, and scheduling tools. Continue building your business seamlessly.",
-    cta: "Keep Growing - Subscribe Now",
-    ctaVariant: "default" as const,
-    badge: "LAST CHANCE",
-    urgency: true
+    cta: 'Keep Growing - Subscribe Now',
+    ctaVariant: 'default' as const,
+    badge: 'LAST CHANCE',
+    urgency: true,
   },
   client_limit: {
     icon: Users,
-    iconColor: "text-success",
+    iconColor: 'text-success',
     title: "You've hit your 10 client limit! 🎊",
     body: "Upgrade to Pro for unlimited clients, advanced scheduling, and AI-powered formulas. Don't turn away new business.",
-    cta: "Unlock Unlimited Clients",
-    ctaVariant: "default" as const,
-    badge: "UPGRADE NEEDED",
-    urgency: true
+    cta: 'Unlock Unlimited Clients',
+    ctaVariant: 'default' as const,
+    badge: 'UPGRADE NEEDED',
+    urgency: true,
   },
   value_proven: {
     icon: TrendingUp,
-    iconColor: "text-success",
+    iconColor: 'text-success',
     title: "You're crushing it! 💪",
     body: "You've completed {appointmentCount} successful appointments—that's real value! Keep the momentum going with unlimited access.",
-    cta: "Subscribe & Save 20%",
-    ctaVariant: "default" as const,
-    badge: "SPECIAL OFFER",
-    urgency: false
+    cta: 'Subscribe & Save 20%',
+    ctaVariant: 'default' as const,
+    badge: 'SPECIAL OFFER',
+    urgency: false,
   },
   appointments_limit: {
     icon: Clock,
-    iconColor: "text-warning",
-    title: "Appointment limit reached",
+    iconColor: 'text-warning',
+    title: 'Appointment limit reached',
     body: "You've used all 10 free appointments this month. Upgrade to Pro for unlimited bookings and never miss an opportunity.",
-    cta: "Upgrade to Unlimited",
-    ctaVariant: "default" as const,
-    badge: "LIMIT REACHED",
-    urgency: true
-  }
+    cta: 'Upgrade to Unlimited',
+    ctaVariant: 'default' as const,
+    badge: 'LIMIT REACHED',
+    urgency: true,
+  },
 };
 
-export const SubscriptionNudge = ({ 
-  trigger, 
-  open, 
-  onOpenChange, 
+export const SubscriptionNudge = ({
+  trigger,
+  open,
+  onOpenChange,
   onDismiss,
-  stats = {}
+  stats = {},
 }: SubscriptionNudgeProps) => {
   const [loading, setLoading] = useState(false);
 
@@ -100,30 +106,35 @@ export const SubscriptionNudge = ({
   const handleSubscribe = async () => {
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        toast.error("Please sign in to subscribe");
+        toast.error('Please sign in to subscribe');
         return;
       }
 
       // Track conversion attempt
       analytics.subscriptionTrialStarted(trigger);
 
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'create-checkout',
+        {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        }
+      );
 
       if (error) throw error;
 
       if (data?.url) {
         window.location.href = data.url; // Full redirect for Stripe checkout
-        toast.success("Redirecting to checkout...");
+        toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      console.error("Subscription error:", error);
-      toast.error("Failed to start subscription process");
+      console.error('Subscription error:', error);
+      toast.error('Failed to start subscription process');
     } finally {
       setLoading(false);
     }
@@ -149,13 +160,15 @@ export const SubscriptionNudge = ({
         </Button>
 
         <DialogHeader>
-          <div className={`mx-auto mb-4 p-4 rounded-xl brutal-border ${content.urgency ? 'bg-warning/10 border-warning' : 'bg-primary/10 border-primary'}`}>
+          <div
+            className={`mx-auto mb-4 p-4 rounded-xl brutal-border ${content.urgency ? 'bg-warning/10 border-warning' : 'bg-primary/10 border-primary'}`}
+          >
             <Icon className={`h-12 w-12 ${content.iconColor}`} />
           </div>
-          
+
           {content.badge && (
-            <Badge 
-              variant={content.urgency ? "destructive" : "default"}
+            <Badge
+              variant={content.urgency ? 'destructive' : 'default'}
               className="mx-auto mb-2"
             >
               {content.badge}
@@ -165,7 +178,7 @@ export const SubscriptionNudge = ({
           <DialogTitle className="text-2xl font-bold text-center">
             {replaceStats(content.title)}
           </DialogTitle>
-          
+
           <DialogDescription className="text-center text-base pt-2">
             {replaceStats(content.body)}
           </DialogDescription>
@@ -216,9 +229,9 @@ export const SubscriptionNudge = ({
               variant={content.ctaVariant}
               className="w-full"
             >
-              {loading ? "Processing..." : content.cta}
+              {loading ? 'Processing...' : content.cta}
             </Button>
-            
+
             <Button
               onClick={handleDismiss}
               variant="ghost"

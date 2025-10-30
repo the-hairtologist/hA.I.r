@@ -1,11 +1,17 @@
 /**
  * System Monitor Component
- * 
+ *
  * Displays system health and metrics directly from database
  */
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -32,7 +38,7 @@ export const SelfHealingMonitor = () => {
       setMetrics({
         healthy: dbHealthy,
         errorRate: 0,
-        openCircuits: 0
+        openCircuits: 0,
       });
       setLastCheck(new Date());
     } catch (error) {
@@ -42,7 +48,7 @@ export const SelfHealingMonitor = () => {
 
   const checkDataIntegrity = async () => {
     toast.info('Checking data integrity...');
-    
+
     try {
       // Run basic health checks
       const { data: session } = await supabase.auth.getSession();
@@ -80,11 +86,12 @@ export const SelfHealingMonitor = () => {
                 <Activity className="h-5 w-5 text-primary" />
                 System Monitor
               </CardTitle>
-              <CardDescription>
-                Real-time system health metrics
-              </CardDescription>
+              <CardDescription>Real-time system health metrics</CardDescription>
             </div>
-            <Badge variant={metrics.healthy ? 'default' : 'destructive'} className="text-sm">
+            <Badge
+              variant={metrics.healthy ? 'default' : 'destructive'}
+              className="text-sm"
+            >
               {metrics.healthy ? (
                 <>
                   <CheckCircle className="h-4 w-4 mr-1" />
@@ -103,7 +110,9 @@ export const SelfHealingMonitor = () => {
                 <div className="text-center">
                   <Activity className="h-8 w-8 mx-auto mb-2 text-info" />
                   <div className="text-2xl font-bold">Active</div>
-                  <div className="text-sm text-muted-foreground">System Status</div>
+                  <div className="text-sm text-muted-foreground">
+                    System Status
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -113,7 +122,9 @@ export const SelfHealingMonitor = () => {
                 <div className="text-center">
                   <Database className="h-8 w-8 mx-auto mb-2 text-success" />
                   <div className="text-2xl font-bold">0%</div>
-                  <div className="text-sm text-muted-foreground">Error Rate</div>
+                  <div className="text-sm text-muted-foreground">
+                    Error Rate
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -123,7 +134,9 @@ export const SelfHealingMonitor = () => {
                 <div className="text-center">
                   <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
                   <div className="text-2xl font-bold">0</div>
-                  <div className="text-sm text-muted-foreground">Open Circuits</div>
+                  <div className="text-sm text-muted-foreground">
+                    Open Circuits
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -179,7 +192,7 @@ export const SelfHealingMonitor = () => {
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Check Data Integrity
                 </Button>
-                
+
                 <Button
                   onClick={loadMetrics}
                   variant="outline"

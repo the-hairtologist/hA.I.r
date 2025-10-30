@@ -4,7 +4,10 @@
  */
 
 import { useEffect } from 'react';
-import { getPerformanceMetrics, requestIdleCallback } from '@/lib/performanceOptimizer';
+import {
+  getPerformanceMetrics,
+  requestIdleCallback,
+} from '@/lib/performanceOptimizer';
 import { logger } from '@/lib/logger';
 
 export const PerformanceMonitor = () => {
@@ -21,7 +24,7 @@ export const PerformanceMonitor = () => {
   const reportPerformance = () => {
     requestIdleCallback(() => {
       const metrics = getPerformanceMetrics();
-      
+
       // ✨ ENHANCEMENT: Proactive performance monitoring with auto-alerts
       if (metrics) {
         // Log in development
@@ -39,30 +42,40 @@ export const PerformanceMonitor = () => {
         const slowThresholds = {
           ttfb: 600,
           domContentLoaded: 1500,
-          firstContentfulPaint: 1800
+          firstContentfulPaint: 1800,
         };
 
         const issues: string[] = [];
         if (metrics.ttfb && metrics.ttfb > slowThresholds.ttfb) {
           issues.push('Slow server response');
         }
-        if (metrics.domContentLoaded && metrics.domContentLoaded > slowThresholds.domContentLoaded) {
+        if (
+          metrics.domContentLoaded &&
+          metrics.domContentLoaded > slowThresholds.domContentLoaded
+        ) {
           issues.push('Slow page load');
         }
-        if (metrics.firstContentfulPaint && metrics.firstContentfulPaint > slowThresholds.firstContentfulPaint) {
+        if (
+          metrics.firstContentfulPaint &&
+          metrics.firstContentfulPaint > slowThresholds.firstContentfulPaint
+        ) {
           issues.push('Slow initial render');
         }
 
         // Auto-report performance issues to analytics
         if (issues.length > 0 && !import.meta.env.DEV) {
-          logger.warn('Performance degradation detected', 'performanceMonitor', {
-            issues,
-            metrics: {
-              ttfb: metrics.ttfb,
-              fcp: metrics.firstContentfulPaint,
-              dcl: metrics.domContentLoaded
+          logger.warn(
+            'Performance degradation detected',
+            'performanceMonitor',
+            {
+              issues,
+              metrics: {
+                ttfb: metrics.ttfb,
+                fcp: metrics.firstContentfulPaint,
+                dcl: metrics.domContentLoaded,
+              },
             }
-          });
+          );
         }
       }
     });

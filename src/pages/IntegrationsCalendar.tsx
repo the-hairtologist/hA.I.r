@@ -59,7 +59,9 @@ export default function IntegrationsCalendar() {
                 1
               </div>
               <div>
-                <p className="font-medium text-foreground">Connect your calendar</p>
+                <p className="font-medium text-foreground">
+                  Connect your calendar
+                </p>
                 <p>Sign in with Google and grant calendar access</p>
               </div>
             </div>
@@ -69,7 +71,9 @@ export default function IntegrationsCalendar() {
               </div>
               <div>
                 <p className="font-medium text-foreground">Automatic syncing</p>
-                <p>New appointments are instantly added to your Google Calendar</p>
+                <p>
+                  New appointments are instantly added to your Google Calendar
+                </p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -78,7 +82,9 @@ export default function IntegrationsCalendar() {
               </div>
               <div>
                 <p className="font-medium text-foreground">Stay organized</p>
-                <p>View all appointments in one place with calendar reminders</p>
+                <p>
+                  View all appointments in one place with calendar reminders
+                </p>
               </div>
             </div>
           </div>

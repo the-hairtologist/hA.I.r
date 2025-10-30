@@ -1,7 +1,7 @@
 /**
  * Send Push Notification Edge Function
  * Sends push notifications via FCM (Firebase Cloud Messaging)
- * 
+ *
  * Supported notification types:
  * - appointment_reminder_24h
  * - appointment_reminder_1h
@@ -10,12 +10,13 @@
  * - formula_used
  */
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.2';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface NotificationPayload {
@@ -26,20 +27,25 @@ interface NotificationPayload {
   data?: Record<string, any>;
 }
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { userId, title, body, type, data }: NotificationPayload = await req.json();
+    const { userId, title, body, type, data }: NotificationPayload =
+      await req.json();
 
-    console.log('[Push Notification] Sending notification:', { userId, title, type });
+    console.log('[Push Notification] Sending notification:', {
+      userId,
+      title,
+      type,
+    });
 
     // Get device tokens for this user
     const { data: tokens, error: tokensError } = await supabaseClient
@@ -53,10 +59,19 @@ serve(async (req) => {
     }
 
     if (!tokens || tokens.length === 0) {
-      console.warn('[Push Notification] No device tokens found for user:', userId);
+      console.warn(
+        '[Push Notification] No device tokens found for user:',
+        userId
+      );
       return new Response(
-        JSON.stringify({ success: false, message: 'No device tokens registered' }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+        JSON.stringify({
+          success: false,
+          message: 'No device tokens registered',
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        }
       );
     }
 
@@ -101,13 +116,21 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ success: true, sent: tokens.length }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      }
     );
   } catch (error) {
     console.error('[Push Notification] Error:', error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+      JSON.stringify({
+        error: error instanceof Error ? error.message : 'Unknown error',
+      }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500,
+      }
     );
   }
 });

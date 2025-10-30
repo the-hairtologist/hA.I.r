@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const useFormPersistence = <T extends Record<string, any>>(
   key: string,
@@ -15,7 +15,7 @@ export const useFormPersistence = <T extends Record<string, any>>(
         const parsed = JSON.parse(stored);
         setValues({ ...initialValues, ...parsed });
       } catch (e) {
-        console.error("Failed to parse stored form data:", e);
+        console.error('Failed to parse stored form data:', e);
       }
     }
     setLoaded(true);

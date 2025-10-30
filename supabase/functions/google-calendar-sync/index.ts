@@ -1,9 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 const logStep = (step: string, details?: any) => {
@@ -11,7 +12,7 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CALENDAR-SYNC] ${step}${detailsStr}`);
 };
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -30,17 +31,18 @@ serve(async (req) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: userData, error: userError } = await supabase.auth.getUser(token);
-    
+    const { data: userData, error: userError } =
+      await supabase.auth.getUser(token);
+
     if (userError || !userData.user) {
       throw new Error('User not authenticated');
     }
-    
+
     const user = userData.user;
     logStep('User authenticated', { userId: user.id });
 
     const { appointmentId } = await req.json();
-    
+
     if (!appointmentId) {
       throw new Error('Appointment ID is required');
     }
@@ -48,16 +50,20 @@ serve(async (req) => {
     // Get appointment with related data
     const { data: appointment, error: appointmentError } = await supabase
       .from('appointments')
-      .select(`
+      .select(
+        `
         *,
         client:client_profiles!appointments_client_id_fkey(full_name, email),
         stylist:stylist_profiles!appointments_stylist_id_fkey(business_name)
-      `)
+      `
+      )
       .eq('id', appointmentId)
       .single();
 
     if (appointmentError) {
-      throw new Error(`Failed to fetch appointment: ${appointmentError.message}`);
+      throw new Error(
+        `Failed to fetch appointment: ${appointmentError.message}`
+      );
     }
 
     logStep('Appointment fetched', { appointmentId });
@@ -90,7 +96,9 @@ serve(async (req) => {
 
     // Create calendar event
     const startTime = new Date(appointment.appointment_date);
-    const endTime = new Date(startTime.getTime() + (appointment.duration_minutes || 60) * 60000);
+    const endTime = new Date(
+      startTime.getTime() + (appointment.duration_minutes || 60) * 60000
+    );
 
     const calendarEvent = {
       summary: `${appointment.service_type} - ${appointment.client?.full_name || 'Client'}`,
@@ -103,7 +111,9 @@ serve(async (req) => {
         dateTime: endTime.toISOString(),
         timeZone: 'America/New_York',
       },
-      attendees: appointment.client?.email ? [{ email: appointment.client.email }] : [],
+      attendees: appointment.client?.email
+        ? [{ email: appointment.client.email }]
+        : [],
       reminders: {
         useDefault: false,
         overrides: [
@@ -118,7 +128,7 @@ serve(async (req) => {
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(calendarEvent),
@@ -134,15 +144,13 @@ serve(async (req) => {
     logStep('Event created in Google Calendar', { eventId: googleEvent.id });
 
     // Store event mapping
-    await supabase
-      .from('appointment_calendar_events')
-      .upsert({
-        appointment_id: appointmentId,
-        calendar_connection_id: connection.id,
-        external_event_id: googleEvent.id,
-        provider: 'google',
-        sync_status: 'synced',
-      });
+    await supabase.from('appointment_calendar_events').upsert({
+      appointment_id: appointmentId,
+      calendar_connection_id: connection.id,
+      external_event_id: googleEvent.id,
+      provider: 'google',
+      sync_status: 'synced',
+    });
 
     // Update last sync time
     await supabase
@@ -151,7 +159,7 @@ serve(async (req) => {
       .eq('id', connection.id);
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: true,
         eventId: googleEvent.id,
         eventLink: googleEvent.htmlLink,
@@ -163,9 +171,11 @@ serve(async (req) => {
     );
   } catch (error: any) {
     logStep('ERROR in calendar-sync', { message: error.message });
-    
+
     return new Response(
-      JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
+      JSON.stringify({
+        error: error.message || 'An unexpected error occurred',
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,

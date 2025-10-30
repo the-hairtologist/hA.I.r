@@ -44,7 +44,7 @@ describe('MobileBottomNav', () => {
         <MobileBottomNav />
       </BrowserRouter>
     );
-    
+
     const nav = container.querySelector('nav');
     expect(nav).toBeTruthy();
     expect(container.textContent).toContain('Appointments');
@@ -58,13 +58,13 @@ describe('MobileBottomNav', () => {
       isStylist: false,
       isClient: true,
     });
-    
+
     const { container } = render(
       <BrowserRouter>
         <MobileBottomNav />
       </BrowserRouter>
     );
-    
+
     expect(container.textContent).toContain('Book Now');
     expect(container.textContent).toContain('Home');
   });
@@ -76,13 +76,13 @@ describe('MobileBottomNav', () => {
       isStylist: false,
       isClient: false,
     });
-    
+
     const { container } = render(
       <BrowserRouter>
         <MobileBottomNav />
       </BrowserRouter>
     );
-    
+
     expect(container.textContent).toContain('Users');
     expect(container.textContent).toContain('Admin');
   });
@@ -93,10 +93,12 @@ describe('MobileBottomNav', () => {
         <MobileBottomNav />
       </BrowserRouter>
     );
-    
-    const clientsButton = container.querySelector('[aria-label="Navigate to Clients"]') as HTMLButtonElement;
+
+    const clientsButton = container.querySelector(
+      '[aria-label="Navigate to Clients"]'
+    ) as HTMLButtonElement;
     clientsButton?.click();
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/clients');
   });
 
@@ -106,7 +108,7 @@ describe('MobileBottomNav', () => {
         <MobileBottomNav />
       </BrowserRouter>
     );
-    
+
     const activeButton = container.querySelector('[aria-current="page"]');
     expect(activeButton).toBeTruthy();
   });

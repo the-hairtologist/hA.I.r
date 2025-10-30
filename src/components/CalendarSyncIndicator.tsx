@@ -3,14 +3,20 @@
  * Shows calendar connection status for stylists
  */
 
-import { useState, useEffect } from "react";
-import { Calendar, CheckCircle, AlertCircle, RefreshCw, Settings } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import {
+  Calendar,
+  CheckCircle,
+  AlertCircle,
+  RefreshCw,
+  Settings,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface CalendarConnection {
   id: string;
@@ -36,16 +42,16 @@ export function CalendarSyncIndicator() {
 
     try {
       const { data, error } = await supabase
-        .from("calendar_connections")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("is_active", true)
+        .from('calendar_connections')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('is_active', true)
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
       setConnection(data);
     } catch (error) {
-      console.error("Error loading calendar connection:", error);
+      console.error('Error loading calendar connection:', error);
     } finally {
       setLoading(false);
     }
@@ -57,19 +63,19 @@ export function CalendarSyncIndicator() {
     setSyncing(true);
     try {
       // Trigger sync (this would call your calendar sync edge function)
-      toast.info("Syncing calendar...");
-      
+      toast.info('Syncing calendar...');
+
       // Update last sync time
       await supabase
-        .from("calendar_connections")
+        .from('calendar_connections')
         .update({ last_sync_at: new Date().toISOString() })
-        .eq("id", connection.id);
-      
+        .eq('id', connection.id);
+
       await loadConnectionStatus();
-      toast.success("Calendar synced successfully!");
+      toast.success('Calendar synced successfully!');
     } catch (error: any) {
-      console.error("Error syncing calendar:", error);
-      toast.error("Failed to sync calendar");
+      console.error('Error syncing calendar:', error);
+      toast.error('Failed to sync calendar');
     } finally {
       setSyncing(false);
     }
@@ -89,7 +95,7 @@ export function CalendarSyncIndicator() {
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => navigate("/integrations")}
+        onClick={() => navigate('/integrations')}
         className="w-full justify-start h-auto px-3 py-2 text-xs"
       >
         <AlertCircle className="h-3 w-3 mr-2 text-amber-500" />
@@ -100,7 +106,7 @@ export function CalendarSyncIndicator() {
 
   const lastSyncText = connection.last_sync_at
     ? new Date(connection.last_sync_at).toLocaleString()
-    : "Never";
+    : 'Never';
 
   return (
     <div className="px-3 py-2 border-t">
@@ -110,7 +116,9 @@ export function CalendarSyncIndicator() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
               <span className="text-xs font-medium truncate">
-                {connection.provider === 'google' ? 'Google Calendar' : 'Calendar'}
+                {connection.provider === 'google'
+                  ? 'Google Calendar'
+                  : 'Calendar'}
               </span>
               {connection.sync_enabled && (
                 <CheckCircle className="h-3 w-3 text-success flex-shrink-0" />
@@ -130,12 +138,12 @@ export function CalendarSyncIndicator() {
             className="h-6 w-6 p-0"
             title="Sync now"
           >
-            <RefreshCw className={cn("h-3 w-3", syncing && "animate-spin")} />
+            <RefreshCw className={cn('h-3 w-3', syncing && 'animate-spin')} />
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate("/integrations")}
+            onClick={() => navigate('/integrations')}
             className="h-6 w-6 p-0"
             title="Calendar settings"
           >

@@ -1,96 +1,110 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 // Input validation schemas
 const messageSchema = z.object({
-  role: z.enum(["user", "assistant", "system"]),
+  role: z.enum(['user', 'assistant', 'system']),
   content: z.union([
     z.string().max(10000),
-    z.array(z.object({
-      type: z.enum(["text", "image_url"]),
-      text: z.string().max(10000).optional(),
-      image_url: z.object({ url: z.string().url() }).optional()
-    }))
-  ])
+    z.array(
+      z.object({
+        type: z.enum(['text', 'image_url']),
+        text: z.string().max(10000).optional(),
+        image_url: z.object({ url: z.string().url() }).optional(),
+      })
+    ),
+  ]),
 });
 
 const requestSchema = z.object({
   type: z.enum([
-    "smart-scheduling",
-    "formula-recommendation", 
-    "client-insights",
-    "automated-followup",
-    "chat",
-    "correction-formula"
+    'smart-scheduling',
+    'formula-recommendation',
+    'client-insights',
+    'automated-followup',
+    'chat',
+    'correction-formula',
   ]),
   data: z.record(z.any()).optional(),
-  messages: z.array(messageSchema).max(100)
+  messages: z.array(messageSchema).max(100),
 });
 
 // Smart model selection for cost optimization
-function selectOptimalModel(type: string, hasImages: boolean, queryLength: number): string {
+function selectOptimalModel(
+  type: string,
+  hasImages: boolean,
+  queryLength: number
+): string {
   // Vision required
   if (hasImages) return 'google/gemini-2.5-pro';
-  
+
   // Simple/short queries
-  if (queryLength < 50 || type === 'automated-followup') return 'google/gemini-2.5-flash-lite';
-  
+  if (queryLength < 50 || type === 'automated-followup')
+    return 'google/gemini-2.5-flash-lite';
+
   // Complex corrections need reasoning
-  if (type === 'correction-formula' || type === 'formula-recommendation') return 'google/gemini-2.5-pro';
-  
+  if (type === 'correction-formula' || type === 'formula-recommendation')
+    return 'google/gemini-2.5-pro';
+
   // Default balanced model
   return 'google/gemini-2.5-flash';
 }
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const requestBody = await req.json();
-    
+
     // Validate input
     const validationResult = requestSchema.safeParse(requestBody);
     if (!validationResult.success) {
       return new Response(
-        JSON.stringify({ 
-          error: "Invalid input",
-          details: validationResult.error.issues.map(i => i.message).join(", ")
+        JSON.stringify({
+          error: 'Invalid input',
+          details: validationResult.error.issues.map(i => i.message).join(', '),
         }),
-        { 
+        {
           status: 400,
-          headers: { ...corsHeaders, "Content-Type": "application/json" }
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );
     }
-    
+
     const { type, data, messages } = validationResult.data;
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    let systemPrompt = "";
+    let systemPrompt = '';
     let body: any = {};
-    
+
     // Determine optimal model based on request type
     const queryText = messages?.[messages.length - 1]?.content || '';
     const queryLength = typeof queryText === 'string' ? queryText.length : 100;
-    const hasImages = messages?.some((m: any) => Array.isArray(m.content) && 
-      m.content.some((c: any) => c.type === 'image_url'));
+    const hasImages = messages?.some(
+      (m: any) =>
+        Array.isArray(m.content) &&
+        m.content.some((c: any) => c.type === 'image_url')
+    );
     const selectedModel = selectOptimalModel(type, hasImages, queryLength);
-    
-    console.log(`Smart routing: ${type} -> ${selectedModel} (query: ${queryLength}chars, images: ${hasImages})`);
+
+    console.log(
+      `Smart routing: ${type} -> ${selectedModel} (query: ${queryLength}chars, images: ${hasImages})`
+    );
 
     switch (type) {
-      case "smart-scheduling":
+      case 'smart-scheduling':
         systemPrompt = `You are an AI scheduling assistant for hair salons. Analyze the stylist's calendar, client preferences, and service durations to suggest optimal appointment times. Consider factors like:
 - Peak hours and quiet periods
 - Client travel time and preferences
@@ -99,33 +113,30 @@ serve(async (req) => {
 - Break times and lunch periods
 
 Provide actionable, specific scheduling recommendations.`;
-        
+
         body = {
           model: selectedModel,
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...messages
-          ],
-          stream: false
+          messages: [{ role: 'system', content: systemPrompt }, ...messages],
+          stream: false,
         };
         break;
 
-      case "formula-recommendation":
+      case 'formula-recommendation':
         systemPrompt = `You are a cautious, professional hair-color assistant for licensed stylists.
 
 Client Profile Context:
-- Natural level: ${data?.natural_level || "not specified"}
-- Current color: ${data?.current_color || "not specified"}  
-- Hair history: ${data?.hair_history || "not specified"}
-- Porosity: ${data?.porosity || "medium"}
-- Texture: ${data?.texture || "medium"}
+- Natural level: ${data?.natural_level || 'not specified'}
+- Current color: ${data?.current_color || 'not specified'}  
+- Hair history: ${data?.hair_history || 'not specified'}
+- Porosity: ${data?.porosity || 'medium'}
+- Texture: ${data?.texture || 'medium'}
 - Gray %: ${data?.gray_percent || 0}%
-- Sensitivity: ${data?.sensitivity || "none"}
+- Sensitivity: ${data?.sensitivity || 'none'}
 
 Goal:
-- Target look: ${data?.target_look || "not specified"}
-- Time available (min): ${data?.time_minutes || "not specified"}
-- Budget band: ${data?.budget_band || "moderate"}
+- Target look: ${data?.target_look || 'not specified'}
+- Time available (min): ${data?.time_minutes || 'not specified'}
+- Budget band: ${data?.budget_band || 'moderate'}
 
 Output STRICT JSON with this schema:
 {
@@ -147,20 +158,17 @@ RULES:
 - If natural_level, current_color, or target_look missing → set ready=false, list them
 - Use common, realistic products and times
 - If hair is compromised → suggest gentler approach
-- Return ONLY JSON, no extra text`
-        
+- Return ONLY JSON, no extra text`;
+
         body = {
           model: selectedModel,
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...messages
-          ],
-          response_format: { type: "json_object" },
-          stream: false
+          messages: [{ role: 'system', content: systemPrompt }, ...messages],
+          response_format: { type: 'json_object' },
+          stream: false,
         };
         break;
 
-      case "client-insights":
+      case 'client-insights':
         systemPrompt = `You are an AI analyst for salon client relationships. Analyze client data to provide insights on:
 - Visit frequency patterns and trends
 - Service preferences and evolution
@@ -170,18 +178,21 @@ RULES:
 - Personalized engagement recommendations
 
 Provide actionable insights to improve client retention and satisfaction.`;
-        
+
         body = {
           model: selectedModel,
           messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `Analyze this client data: ${JSON.stringify(data)}` }
+            { role: 'system', content: systemPrompt },
+            {
+              role: 'user',
+              content: `Analyze this client data: ${JSON.stringify(data)}`,
+            },
           ],
-          stream: false
+          stream: false,
         };
         break;
 
-      case "automated-followup":
+      case 'automated-followup':
         systemPrompt = `You are an AI assistant that drafts personalized follow-up messages for salon clients. Create warm, professional messages that:
 - Reference specific services from their last visit
 - Show genuine care and interest
@@ -190,18 +201,21 @@ Provide actionable insights to improve client retention and satisfaction.`;
 - Match the salon's tone and style
 
 Keep messages concise, personal, and engaging.`;
-        
+
         body = {
           model: selectedModel,
           messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `Draft a follow-up message for: ${JSON.stringify(data)}` }
+            { role: 'system', content: systemPrompt },
+            {
+              role: 'user',
+              content: `Draft a follow-up message for: ${JSON.stringify(data)}`,
+            },
           ],
-          stream: false
+          stream: false,
         };
         break;
 
-      case "chat":
+      case 'chat':
         systemPrompt = `You are a helpful AI assistant for hair salon professionals. You help stylists with:
 
 **For Color Formulas:**
@@ -235,26 +249,23 @@ Keep messages concise, personal, and engaging.`;
 - Remind: "These are professional recommendations - always verify with strand tests"
 
 Be specific, actionable, and conversational. When giving formulas, use realistic brands (Wella, Redken, Schwarzkopf, Matrix, etc.).`;
-        
+
         body = {
           model: selectedModel,
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...messages
-          ],
-          stream: false
+          messages: [{ role: 'system', content: systemPrompt }, ...messages],
+          stream: false,
         };
         break;
 
-      case "correction-formula":
+      case 'correction-formula':
         systemPrompt = `You are a color correction specialist AI for licensed stylists.
 
 Current Situation:
-- Hair problem: ${data?.problem || "not specified"}
-- Current color/level: ${data?.current_state || "not specified"}
-- Previous services: ${data?.history || "none"}
-- Hair condition: ${data?.condition || "healthy"}
-- Desired outcome: ${data?.goal || "not specified"}
+- Hair problem: ${data?.problem || 'not specified'}
+- Current color/level: ${data?.current_state || 'not specified'}
+- Previous services: ${data?.history || 'none'}
+- Hair condition: ${data?.condition || 'healthy'}
+- Desired outcome: ${data?.goal || 'not specified'}
 
 Output STRICT JSON:
 {
@@ -278,16 +289,13 @@ RULES:
 - Multi-session corrections safer than single aggressive treatments
 - Always mention strand testing
 - Consider hair health first, speed second
-- Be realistic about achievable results`
-        
+- Be realistic about achievable results`;
+
         body = {
           model: selectedModel,
-          messages: [
-            { role: "system", content: systemPrompt },
-            ...messages
-          ],
-          response_format: { type: "json_object" },
-          stream: false
+          messages: [{ role: 'system', content: systemPrompt }, ...messages],
+          response_format: { type: 'json_object' },
+          stream: false,
         };
         break;
 
@@ -295,83 +303,86 @@ RULES:
         throw new Error(`Unknown AI feature type: ${type}`);
     }
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(
+      'https://ai.gateway.lovable.dev/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    );
 
     if (!response.ok) {
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ 
-            error: "Rate limit exceeded. Please try again in a moment." 
-          }), 
+          JSON.stringify({
+            error: 'Rate limit exceeded. Please try again in a moment.',
+          }),
           {
             status: 429,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ 
-            error: "AI credits exhausted. Please add credits to continue." 
-          }), 
+          JSON.stringify({
+            error: 'AI credits exhausted. Please add credits to continue.',
+          }),
           {
             status: 402,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
       }
-      
+
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      throw new Error("AI gateway error");
+      console.error('AI gateway error:', response.status, errorText);
+      throw new Error('AI gateway error');
     }
 
     const aiResponse = await response.json();
     const content = aiResponse.choices[0].message.content;
-    
+
     // Return model used for frontend tracking
-    const responseData = { 
+    const responseData = {
       response: content,
-      model_used: selectedModel 
+      model_used: selectedModel,
     };
 
     // Log structured outputs for debugging (formula types only)
-    if (type === "formula-recommendation" || type === "correction-formula") {
+    if (type === 'formula-recommendation' || type === 'correction-formula') {
       try {
         const parsed = JSON.parse(content);
         console.log(`${type} response structure:`, {
           ready: parsed.ready,
           has_formula: !!parsed.formula,
           has_steps: !!parsed.steps,
-          cautions_count: parsed.cautions?.length || 0
+          cautions_count: parsed.cautions?.length || 0,
         });
       } catch (e) {
-        console.warn(`${type} did not return valid JSON:`, content.substring(0, 100));
+        console.warn(
+          `${type} did not return valid JSON:`,
+          content.substring(0, 100)
+        );
       }
     }
 
-    return new Response(
-      JSON.stringify(responseData),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify(responseData), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    console.error("AI assistant error:", error);
+    console.error('AI assistant error:', error);
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : "Unknown error" 
+      JSON.stringify({
+        error: error instanceof Error ? error.message : 'Unknown error',
       }),
       {
         status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   }

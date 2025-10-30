@@ -1,17 +1,17 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Phone, MapPin, Camera } from "lucide-react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useUserRole } from "@/hooks/useUserRole";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User, Mail, Phone, MapPin, Camera } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+import { useState } from 'react';
+import { useUserRole } from '@/hooks/useUserRole';
 
 const Profile = () => {
   const { session } = useAuth();
@@ -46,12 +46,12 @@ const Profile = () => {
   });
 
   const [formData, setFormData] = useState({
-    full_name: profile?.full_name || "",
-    email: profile?.email || "",
-    phone: profile?.phone || "",
-    bio: stylistProfile?.bio || "",
-    business_name: stylistProfile?.business_name || "",
-    location: stylistProfile?.location || "",
+    full_name: profile?.full_name || '',
+    email: profile?.email || '',
+    phone: profile?.phone || '',
+    bio: stylistProfile?.bio || '',
+    business_name: stylistProfile?.business_name || '',
+    location: stylistProfile?.location || '',
   });
 
   const updateProfile = useMutation({
@@ -84,10 +84,10 @@ const Profile = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       queryClient.invalidateQueries({ queryKey: ['stylist-profile'] });
-      toast.success("Profile updated successfully");
+      toast.success('Profile updated successfully');
     },
     onError: () => {
-      toast.error("Failed to update profile");
+      toast.error('Failed to update profile');
     },
   });
 
@@ -100,8 +100,12 @@ const Profile = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-3xl">
         <div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">My Profile</h1>
-          <p className="text-muted-foreground font-sans">Manage your personal information</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">
+            My Profile
+          </h1>
+          <p className="text-muted-foreground font-sans">
+            Manage your personal information
+          </p>
         </div>
 
         <Card>
@@ -110,9 +114,9 @@ const Profile = () => {
           </CardHeader>
           <CardContent className="flex items-center gap-6">
             <Avatar className="h-24 w-24">
-              <AvatarImage src={profile?.avatar_url || ""} />
+              <AvatarImage src={profile?.avatar_url || ''} />
               <AvatarFallback className="text-xl sm:text-2xl md:text-3xl font-pixel">
-                {profile?.full_name?.[0] || "U"}
+                {profile?.full_name?.[0] || 'U'}
               </AvatarFallback>
             </Avatar>
             <div>
@@ -140,7 +144,9 @@ const Profile = () => {
                   <Input
                     id="full_name"
                     value={formData.full_name}
-                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                    onChange={e =>
+                      setFormData({ ...formData, full_name: e.target.value })
+                    }
                     className="pl-9"
                   />
                 </div>
@@ -171,7 +177,9 @@ const Profile = () => {
                     id="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={e =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
                     className="pl-9"
                   />
                 </div>
@@ -184,7 +192,12 @@ const Profile = () => {
                     <Input
                       id="business_name"
                       value={formData.business_name}
-                      onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
+                      onChange={e =>
+                        setFormData({
+                          ...formData,
+                          business_name: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -195,7 +208,9 @@ const Profile = () => {
                       <Input
                         id="location"
                         value={formData.location}
-                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                        onChange={e =>
+                          setFormData({ ...formData, location: e.target.value })
+                        }
                         className="pl-9"
                       />
                     </div>
@@ -206,7 +221,9 @@ const Profile = () => {
                     <Textarea
                       id="bio"
                       value={formData.bio}
-                      onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                      onChange={e =>
+                        setFormData({ ...formData, bio: e.target.value })
+                      }
                       rows={4}
                       placeholder="Tell clients about yourself and your expertise..."
                     />
@@ -215,7 +232,7 @@ const Profile = () => {
               )}
 
               <Button type="submit" disabled={updateProfile.isPending}>
-                {updateProfile.isPending ? "Saving..." : "Save Changes"}
+                {updateProfile.isPending ? 'Saving...' : 'Save Changes'}
               </Button>
             </CardContent>
           </Card>

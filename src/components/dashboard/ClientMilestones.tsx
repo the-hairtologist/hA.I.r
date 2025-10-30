@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Trophy, Gift, Calendar } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Trophy, Gift, Calendar } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 interface ClientMilestonesProps {
   clientId: string;
@@ -27,32 +27,35 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
-    toast.success("Discount code copied!");
+    toast.success('Discount code copied!');
   };
 
   const getMilestoneIcon = (type: string) => {
-    if (type === "anniversary") return Calendar;
+    if (type === 'anniversary') return Calendar;
     return Trophy;
   };
 
   if (isLoading) {
-  return (
-    <Card variant="glass" className="backdrop-blur-xl">
-      <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
-        <CardTitle className="text-base sm:text-lg font-pixel flex items-center gap-2">
-          <Trophy className="h-5 w-5 text-primary" />
-          Your Rewards & Milestones
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-4 sm:p-5 md:p-6">
-        <div className="space-y-3 sm:space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-20 bg-muted/20 rounded-lg animate-pulse" />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
+    return (
+      <Card variant="glass" className="backdrop-blur-xl">
+        <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
+          <CardTitle className="text-base sm:text-lg font-pixel flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-primary" />
+            Your Rewards & Milestones
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 sm:p-5 md:p-6">
+          <div className="space-y-3 sm:space-y-4">
+            {[1, 2, 3].map(i => (
+              <div
+                key={i}
+                className="h-20 bg-muted/20 rounded-lg animate-pulse"
+              />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   if (!milestones || milestones.length === 0) {
@@ -77,7 +80,10 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
   }
 
   return (
-    <Card variant="glass" className="backdrop-blur-xl border-primary/10 hover:border-primary/20 transition-all duration-300">
+    <Card
+      variant="glass"
+      className="backdrop-blur-xl border-primary/10 hover:border-primary/20 transition-all duration-300"
+    >
       <CardHeader className="p-4 sm:p-5 md:p-6 pb-3 sm:pb-4">
         <CardTitle className="text-base sm:text-lg font-pixel flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
@@ -94,8 +100,8 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
               <div
                 key={milestone.id}
                 className="group relative rounded-xl border border-border/50 bg-gradient-to-br from-background to-muted/20 p-3 sm:p-4 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
-                style={{ 
-                  animation: `fadeInUp 0.4s ease-out ${index * 0.1}s both`
+                style={{
+                  animation: `fadeInUp 0.4s ease-out ${index * 0.1}s both`,
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
@@ -106,8 +112,8 @@ export const ClientMilestones = ({ clientId }: ClientMilestonesProps) => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-xs sm:text-sm">
-                        {milestone.milestone_type === "anniversary"
-                          ? `${milestone.milestone_value} Year${milestone.milestone_value > 1 ? "s" : ""} Anniversary! 🎂`
+                        {milestone.milestone_type === 'anniversary'
+                          ? `${milestone.milestone_value} Year${milestone.milestone_value > 1 ? 's' : ''} Anniversary! 🎂`
                           : `${milestone.milestone_value} Appointments Complete! ⭐`}
                       </p>
                       <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">

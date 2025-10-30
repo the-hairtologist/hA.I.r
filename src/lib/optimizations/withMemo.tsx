@@ -10,11 +10,11 @@ type CompareKeys = string[];
 
 /**
  * Wraps a component with React.memo and custom comparison
- * 
+ *
  * @param Component - Component to memoize
  * @param compareKeys - Array of prop paths to compare (e.g., ['client.id', 'client.updated_at'])
  * @returns Memoized component
- * 
+ *
  * @example
  * ```tsx
  * export const ClientCard = withMemo(
@@ -39,7 +39,7 @@ export function withMemo<P extends object>(
     for (const key of compareKeys) {
       const prevValue = getNestedValue(prevProps, key);
       const nextValue = getNestedValue(nextProps, key);
-      
+
       if (!isEqual(prevValue, nextValue)) {
         return false; // Props changed, re-render needed
       }
@@ -54,7 +54,7 @@ export function withMemo<P extends object>(
  */
 function getNestedValue(obj: unknown, path: string): unknown {
   if (typeof obj !== 'object' || obj === null) return undefined;
-  
+
   return path.split('.').reduce((current, key) => {
     if (current && typeof current === 'object' && key in current) {
       return (current as Record<string, unknown>)[key];

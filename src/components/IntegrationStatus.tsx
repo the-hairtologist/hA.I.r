@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Check, AlertCircle, Loader2, ExternalLink } from 'lucide-react';
@@ -10,7 +16,9 @@ interface IntegrationStatusProps {
   compact?: boolean;
 }
 
-export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) => {
+export const IntegrationStatus = ({
+  compact = false,
+}: IntegrationStatusProps) => {
   const [statuses, setStatuses] = useState({
     lovableAI: 'checking',
     calendar: 'checking',
@@ -40,14 +48,21 @@ export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) =
   };
 
   if (compact) {
-    const activeCount = Object.values(statuses).filter(s => s === 'active').length;
+    const activeCount = Object.values(statuses).filter(
+      s => s === 'active'
+    ).length;
     return (
-      <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => navigate('/integrations')}>
+      <Card
+        className="cursor-pointer hover:border-primary/50 transition-colors"
+        onClick={() => navigate('/integrations')}
+      >
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium">Integrations</p>
-              <p className="text-xs text-muted-foreground">{activeCount} active</p>
+              <p className="text-xs text-muted-foreground">
+                {activeCount} active
+              </p>
             </div>
             <Badge variant="secondary" className="gap-1">
               <Check className="h-3 w-3" />
@@ -74,7 +89,11 @@ export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) =
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Integration Status
-          <Button variant="ghost" size="sm" onClick={() => navigate('/integrations')}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/integrations')}
+          >
             <ExternalLink className="h-4 w-4" />
           </Button>
         </CardTitle>
@@ -106,13 +125,13 @@ export const IntegrationStatus = ({ compact = false }: IntegrationStatusProps) =
   );
 };
 
-const StatusItem = ({ 
-  name, 
-  status, 
-  description 
-}: { 
-  name: string; 
-  status: string; 
+const StatusItem = ({
+  name,
+  status,
+  description,
+}: {
+  name: string;
+  status: string;
   description: string;
 }) => {
   const getStatusConfig = () => {
@@ -120,7 +139,11 @@ const StatusItem = ({
       case 'active':
         return {
           icon: <Check className="h-4 w-4 text-success" />,
-          badge: <Badge variant="default" className="bg-success hover:bg-success">Active</Badge>,
+          badge: (
+            <Badge variant="default" className="bg-success hover:bg-success">
+              Active
+            </Badge>
+          ),
         };
       case 'error':
         return {
@@ -129,7 +152,9 @@ const StatusItem = ({
         };
       case 'checking':
         return {
-          icon: <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />,
+          icon: (
+            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+          ),
           badge: <Badge variant="outline">Checking</Badge>,
         };
       default:
