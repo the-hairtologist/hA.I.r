@@ -24,7 +24,9 @@ export function useDevMode() {
     try {
       localStorage.setItem(DEV_MODE_KEY, String(newValue));
     } catch (error) {
-      logger.error('Failed to save dev mode preference', error, { context: 'useDevMode' });
+      logger.error('Failed to save dev mode preference', error, {
+        context: 'useDevMode',
+      });
     }
   };
 

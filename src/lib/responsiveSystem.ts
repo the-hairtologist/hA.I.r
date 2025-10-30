@@ -1,6 +1,6 @@
 /**
  * Responsive System - Ensures consistent scaling across all devices
- * 
+ *
  * This utility enforces responsive best practices and prevents fixed sizing issues.
  * Use these utilities in all components to maintain device consistency.
  */
@@ -14,15 +14,15 @@
  * Use instead of fixed font sizes
  */
 export const fluidText = {
-  xs: 'text-[clamp(0.75rem,2vw,0.875rem)]',      // 12px-14px
-  sm: 'text-[clamp(0.875rem,2.5vw,1rem)]',       // 14px-16px
-  base: 'text-[clamp(1rem,3vw,1.125rem)]',       // 16px-18px
-  lg: 'text-[clamp(1.125rem,3.5vw,1.25rem)]',    // 18px-20px
-  xl: 'text-[clamp(1.25rem,4vw,1.5rem)]',        // 20px-24px
-  '2xl': 'text-[clamp(1.5rem,5vw,2rem)]',        // 24px-32px
-  '3xl': 'text-[clamp(1.875rem,6vw,2.5rem)]',    // 30px-40px
-  '4xl': 'text-[clamp(2.25rem,7vw,3rem)]',       // 36px-48px
-  '5xl': 'text-[clamp(3rem,8vw,4rem)]',          // 48px-64px
+  xs: 'text-[clamp(0.75rem,2vw,0.875rem)]', // 12px-14px
+  sm: 'text-[clamp(0.875rem,2.5vw,1rem)]', // 14px-16px
+  base: 'text-[clamp(1rem,3vw,1.125rem)]', // 16px-18px
+  lg: 'text-[clamp(1.125rem,3.5vw,1.25rem)]', // 18px-20px
+  xl: 'text-[clamp(1.25rem,4vw,1.5rem)]', // 20px-24px
+  '2xl': 'text-[clamp(1.5rem,5vw,2rem)]', // 24px-32px
+  '3xl': 'text-[clamp(1.875rem,6vw,2.5rem)]', // 30px-40px
+  '4xl': 'text-[clamp(2.25rem,7vw,3rem)]', // 36px-48px
+  '5xl': 'text-[clamp(3rem,8vw,4rem)]', // 48px-64px
 } as const;
 
 /**
@@ -30,13 +30,13 @@ export const fluidText = {
  * Use instead of fixed spacing values
  */
 export const fluidSpace = {
-  xs: 'clamp(0.25rem,1vw,0.5rem)',      // 4px-8px
-  sm: 'clamp(0.5rem,1.5vw,0.75rem)',    // 8px-12px
-  md: 'clamp(0.75rem,2vw,1rem)',        // 12px-16px
-  lg: 'clamp(1rem,2.5vw,1.5rem)',       // 16px-24px
-  xl: 'clamp(1.5rem,3vw,2rem)',         // 24px-32px
-  '2xl': 'clamp(2rem,4vw,3rem)',        // 32px-48px
-  '3xl': 'clamp(3rem,5vw,4rem)',        // 48px-64px
+  xs: 'clamp(0.25rem,1vw,0.5rem)', // 4px-8px
+  sm: 'clamp(0.5rem,1.5vw,0.75rem)', // 8px-12px
+  md: 'clamp(0.75rem,2vw,1rem)', // 12px-16px
+  lg: 'clamp(1rem,2.5vw,1.5rem)', // 16px-24px
+  xl: 'clamp(1.5rem,3vw,2rem)', // 24px-32px
+  '2xl': 'clamp(2rem,4vw,3rem)', // 32px-48px
+  '3xl': 'clamp(3rem,5vw,4rem)', // 48px-64px
 } as const;
 
 /**
@@ -95,14 +95,19 @@ export const getResponsiveGap = (size: 'sm' | 'md' | 'lg' = 'md') => {
 /**
  * Get responsive grid columns
  */
-export const getResponsiveGrid = (cols: { sm?: number; md?: number; lg?: number; xl?: number }) => {
+export const getResponsiveGrid = (cols: {
+  sm?: number;
+  md?: number;
+  lg?: number;
+  xl?: number;
+}) => {
   const classes: string[] = ['grid'];
-  
+
   if (cols.sm) classes.push(`grid-cols-${cols.sm}`);
   if (cols.md) classes.push(`sm:grid-cols-${cols.md}`);
   if (cols.lg) classes.push(`md:grid-cols-${cols.lg}`);
   if (cols.xl) classes.push(`lg:grid-cols-${cols.xl}`);
-  
+
   return classes.join(' ');
 };
 
@@ -115,19 +120,19 @@ export const getResponsiveGrid = (cols: { sm?: number; md?: number; lg?: number;
  * WCAG 2.5.5 requires minimum 44x44px touch targets
  */
 export const touchTargets = {
-  minimum: 'min-h-[44px] min-w-[44px]',        // WCAG minimum
-  comfortable: 'min-h-[48px] min-w-[48px]',    // Recommended
-  large: 'min-h-[56px] min-w-[56px]',          // Large devices
+  minimum: 'min-h-[44px] min-w-[44px]', // WCAG minimum
+  comfortable: 'min-h-[48px] min-w-[48px]', // Recommended
+  large: 'min-h-[56px] min-w-[56px]', // Large devices
 } as const;
 
 /**
  * Button sizing with proper touch targets
  */
 export const buttonSizes = {
-  sm: 'h-10 min-h-[40px] px-3 text-sm',         // 40px minimum for small
-  md: 'h-11 min-h-[44px] px-4 text-base',       // 44px WCAG compliant
-  lg: 'h-12 min-h-[48px] px-6 text-lg',         // 48px comfortable
-  xl: 'h-14 min-h-[56px] px-8 text-xl',         // 56px large
+  sm: 'h-10 min-h-[40px] px-3 text-sm', // 40px minimum for small
+  md: 'h-11 min-h-[44px] px-4 text-base', // 44px WCAG compliant
+  lg: 'h-12 min-h-[48px] px-6 text-lg', // 48px comfortable
+  xl: 'h-14 min-h-[56px] px-8 text-xl', // 56px large
 } as const;
 
 // ============================================
@@ -206,21 +211,37 @@ export const stackToRow = {
  * Check if a value is using fixed pixels (anti-pattern)
  */
 export const hasFixedPixels = (value: string): boolean => {
-  return /\d+px/.test(value) && !value.includes('clamp') && !value.includes('calc');
+  return (
+    /\d+px/.test(value) && !value.includes('clamp') && !value.includes('calc')
+  );
 };
 
 /**
  * Validate if component uses responsive units
  */
 export const isResponsiveValue = (value: string): boolean => {
-  const responsiveUnits = ['rem', 'em', '%', 'vw', 'vh', 'clamp', 'calc', 'min', 'max'];
+  const responsiveUnits = [
+    'rem',
+    'em',
+    '%',
+    'vw',
+    'vh',
+    'clamp',
+    'calc',
+    'min',
+    'max',
+  ];
   return responsiveUnits.some(unit => value.includes(unit));
 };
 
 /**
  * Development mode warning for fixed sizing
  */
-export const warnFixedSizing = (componentName: string, property: string, value: string) => {
+export const warnFixedSizing = (
+  componentName: string,
+  property: string,
+  value: string
+) => {
   if (import.meta.env.DEV && hasFixedPixels(value)) {
     console.warn(
       `⚠️ [Responsive System] ${componentName}: "${property}: ${value}" uses fixed pixels. Consider using responsive units (rem, %, clamp, etc.) for better device consistency.`
@@ -235,29 +256,29 @@ export const warnFixedSizing = (componentName: string, property: string, value: 
 export const responsiveBestPractices = {
   // Typography
   typography: fluidText,
-  
+
   // Spacing
   spacing: fluidSpace,
   padding: getResponsivePadding,
   margin: getResponsiveMargin,
   gap: getResponsiveGap,
-  
+
   // Layout
   containers: containerWidths,
   grid: getResponsiveGrid,
   sidebar: sidebarLayout,
   cards: cardGrid,
   stack: stackToRow,
-  
+
   // Touch targets
   touch: touchTargets,
   buttons: buttonSizes,
-  
+
   // Device-specific
   safeArea: safeAreaInsets,
   image: responsiveImage,
   aspect: aspectRatios,
-  
+
   // Validation
   validate: {
     hasFixedPixels,

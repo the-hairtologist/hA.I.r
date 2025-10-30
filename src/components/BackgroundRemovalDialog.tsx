@@ -16,7 +16,11 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Sparkles, Download, Loader2, AlertCircle, Zap } from 'lucide-react';
-import { removeBackground, loadImage, isWebGPUAvailable } from '@/utils/backgroundRemoval';
+import {
+  removeBackground,
+  loadImage,
+  isWebGPUAvailable,
+} from '@/utils/backgroundRemoval';
 import { toast } from 'sonner';
 
 interface BackgroundRemovalDialogProps {
@@ -65,7 +69,7 @@ export const BackgroundRemovalDialog = ({
       // Create preview URL
       const previewUrl = URL.createObjectURL(resultBlob);
       setProcessedImage(previewUrl);
-      
+
       // Store blob for use
       if (onProcessed) {
         onProcessed(resultBlob);
@@ -76,7 +80,9 @@ export const BackgroundRemovalDialog = ({
       });
     } catch (err) {
       console.error('Background removal failed:', err);
-      setError(err instanceof Error ? err.message : 'Failed to remove background');
+      setError(
+        err instanceof Error ? err.message : 'Failed to remove background'
+      );
       toast.error('Background removal failed', {
         description: 'Please try again or use a different image',
       });
@@ -183,7 +189,9 @@ export const BackgroundRemovalDialog = ({
           {processing && (
             <div className="space-y-2">
               <Progress value={progress} className="h-2" />
-              <p className="text-sm text-muted-foreground text-center">{progressText}</p>
+              <p className="text-sm text-muted-foreground text-center">
+                {progressText}
+              </p>
             </div>
           )}
 
@@ -199,8 +207,8 @@ export const BackgroundRemovalDialog = ({
                 >
                   Cancel
                 </Button>
-                <Button 
-                  onClick={handleProcess} 
+                <Button
+                  onClick={handleProcess}
                   disabled={processing}
                   className="w-full sm:w-auto"
                 >
@@ -219,22 +227,22 @@ export const BackgroundRemovalDialog = ({
               </>
             ) : (
               <>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={handleReset}
                   className="w-full sm:w-auto"
                 >
                   Try Again
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={handleDownload}
                   className="w-full sm:w-auto"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
-                <Button 
+                <Button
                   onClick={() => onOpenChange(false)}
                   className="w-full sm:w-auto"
                 >
@@ -247,8 +255,8 @@ export const BackgroundRemovalDialog = ({
           {/* Privacy Notice */}
           <Alert>
             <AlertDescription className="text-xs">
-              🔒 <strong>Privacy First:</strong> All processing happens in your browser. Your photos
-              never leave your device.
+              🔒 <strong>Privacy First:</strong> All processing happens in your
+              browser. Your photos never leave your device.
             </AlertDescription>
           </Alert>
         </div>

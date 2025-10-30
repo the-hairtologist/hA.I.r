@@ -15,7 +15,9 @@ describe('Example Component Tests', () => {
 
     it('renders a basic button', () => {
       renderWithProviders(<button>Click Me</button>);
-      expect(screen.getByRole('button', { name: 'Click Me' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Click Me' })
+      ).toBeInTheDocument();
     });
   });
 

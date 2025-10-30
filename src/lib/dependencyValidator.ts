@@ -16,7 +16,11 @@ class DependencyValidator {
   /**
    * Register a module and its dependencies
    */
-  registerModule(path: string, imports: string[], exports: string[] = []): void {
+  registerModule(
+    path: string,
+    imports: string[],
+    exports: string[] = []
+  ): void {
     this.dependencyGraph.set(path, { path, imports, exports });
   }
 
@@ -69,7 +73,7 @@ class DependencyValidator {
     // Check for circular dependencies
     const cycles = this.detectCircularDependencies();
     if (cycles.length > 0) {
-      cycles.forEach((cycle) => {
+      cycles.forEach(cycle => {
         errors.push(`Circular dependency: ${cycle.join(' → ')}`);
       });
     }
@@ -79,7 +83,9 @@ class DependencyValidator {
       for (const imported of node.imports) {
         const importedNode = this.dependencyGraph.get(imported);
         if (!importedNode) {
-          errors.push(`Module ${modulePath} imports ${imported} which doesn't exist`);
+          errors.push(
+            `Module ${modulePath} imports ${imported} which doesn't exist`
+          );
         }
       }
     }
@@ -94,24 +100,30 @@ class DependencyValidator {
   /**
    * Get dependency tree for a module
    */
-  getDependencyTree(modulePath: string, depth: number = 0, visited: Set<string> = new Set()): string {
+  getDependencyTree(
+    modulePath: string,
+    depth: number = 0,
+    visited: Set<string> = new Set()
+  ): string {
     if (visited.has(modulePath) || depth > 10) {
       return `${'  '.repeat(depth)}${modulePath} (circular or max depth)`;
     }
 
     visited.add(modulePath);
     const node = this.dependencyGraph.get(modulePath);
-    
+
     if (!node) {
       return `${'  '.repeat(depth)}${modulePath} (not found)`;
     }
 
     let tree = `${'  '.repeat(depth)}${modulePath}`;
-    
+
     if (node.imports.length > 0) {
-      tree += '\n' + node.imports
-        .map(imp => this.getDependencyTree(imp, depth + 1, new Set(visited)))
-        .join('\n');
+      tree +=
+        '\n' +
+        node.imports
+          .map(imp => this.getDependencyTree(imp, depth + 1, new Set(visited)))
+          .join('\n');
     }
 
     return tree;
@@ -123,7 +135,7 @@ class DependencyValidator {
   getReport(): string {
     const validation = this.validate();
     const totalModules = this.dependencyGraph.size;
-    
+
     let report = '=== Dependency Validation Report ===\n\n';
     report += `Total Modules: ${totalModules}\n`;
     report += `Status: ${validation.valid ? '✅ VALID' : '❌ INVALID'}\n\n`;

@@ -4,16 +4,33 @@
  * Accessible without authentication
  */
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Search, MapPin, Star, Calendar, Scissors, Loader2, User, Award, Sparkles } from "lucide-react";
-import { SEOHead } from "@/components/SEOHead";
-import { TrustBadge } from "@/components/TrustBadge";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Search,
+  MapPin,
+  Star,
+  Calendar,
+  Scissors,
+  Loader2,
+  User,
+  Award,
+  Sparkles,
+} from 'lucide-react';
+import { SEOHead } from '@/components/SEOHead';
+import { TrustBadge } from '@/components/TrustBadge';
 
 interface StylistProfile {
   id: string;
@@ -32,7 +49,7 @@ const PublicStylistDirectory = () => {
   const navigate = useNavigate();
   const [stylists, setStylists] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchStylists();
@@ -42,22 +59,22 @@ const PublicStylistDirectory = () => {
     try {
       // Use the public directory view
       const { data, error } = await supabase
-        .from("public_stylist_directory")
-        .select("*")
-        .order("average_rating", { ascending: false, nullsFirst: false })
-        .order("total_reviews", { ascending: false, nullsFirst: false })
+        .from('public_stylist_directory')
+        .select('*')
+        .order('average_rating', { ascending: false, nullsFirst: false })
+        .order('total_reviews', { ascending: false, nullsFirst: false })
         .limit(50); // Top 50 stylists for public discovery
 
       if (error) throw error;
       setStylists(data || []);
     } catch (error: any) {
-      console.error("Error fetching stylists:", error);
+      console.error('Error fetching stylists:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredStylists = stylists.filter((stylist) => {
+  const filteredStylists = stylists.filter(stylist => {
     if (!searchTerm) return true;
     const term = searchTerm.toLowerCase();
     return (
@@ -70,13 +87,13 @@ const PublicStylistDirectory = () => {
 
   return (
     <>
-      <SEOHead 
+      <SEOHead
         title="Find Professional Hair Stylists Near You | hA.I.r Directory"
         description="Browse our directory of certified hair stylists and color specialists. Read reviews, view portfolios, and book appointments with top-rated professionals in your area."
         keywords="hair stylist directory, find hair colorist, salon near me, hair color specialist, certified stylist, balayage expert, book hair appointment"
         url="/stylists"
       />
-      
+
       <div className="min-h-screen bg-background">
         {/* Public Header */}
         <header className="border-b-4 border-foreground bg-gradient-to-r from-primary/10 to-accent/10">
@@ -86,16 +103,14 @@ const PublicStylistDirectory = () => {
               <h1 className="text-xl sm:text-2xl font-pixel">hA.I.r</h1>
             </div>
             <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                onClick={() => navigate("/auth")}
+              <Button
+                variant="outline"
+                onClick={() => navigate('/auth')}
                 className="hidden sm:inline-flex"
               >
                 Sign In
               </Button>
-              <Button onClick={() => navigate("/auth")}>
-                Join Free
-              </Button>
+              <Button onClick={() => navigate('/auth')}>Join Free</Button>
             </div>
           </div>
         </header>
@@ -118,7 +133,7 @@ const PublicStylistDirectory = () => {
               <Input
                 placeholder="Search by name, specialty, or location..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-12 h-14 text-lg"
               />
             </div>
@@ -128,13 +143,14 @@ const PublicStylistDirectory = () => {
           {!loading && (
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold">
-                {filteredStylists.length} Professional{filteredStylists.length !== 1 ? 's' : ''} Found
+                {filteredStylists.length} Professional
+                {filteredStylists.length !== 1 ? 's' : ''} Found
               </h2>
               {searchTerm && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setSearchTerm("")}
+                  onClick={() => setSearchTerm('')}
                 >
                   Clear Search
                 </Button>
@@ -156,9 +172,11 @@ const PublicStylistDirectory = () => {
                 <Search className="h-16 w-16 mx-auto mb-4 text-foreground/60" />
                 <h3 className="text-2xl font-bold mb-2">No stylists found</h3>
                 <p className="text-foreground/80 mb-4">
-                  {searchTerm ? "Try a different search term" : "Be the first to join hA.I.r!"}
+                  {searchTerm
+                    ? 'Try a different search term'
+                    : 'Be the first to join hA.I.r!'}
                 </p>
-                <Button onClick={() => navigate("/auth")}>
+                <Button onClick={() => navigate('/auth')}>
                   Join as Stylist
                 </Button>
               </CardContent>
@@ -168,19 +186,25 @@ const PublicStylistDirectory = () => {
           {!loading && filteredStylists.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredStylists.map((stylist, idx) => (
-                <Card 
-                  key={stylist.id} 
+                <Card
+                  key={stylist.id}
                   className={`border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all cursor-pointer ${
-                    idx % 4 === 0 ? 'bg-blue-400' :
-                    idx % 4 === 1 ? 'bg-green-400' :
-                    idx % 4 === 2 ? 'bg-yellow-300' : 'bg-purple-400'
+                    idx % 4 === 0
+                      ? 'bg-blue-400'
+                      : idx % 4 === 1
+                        ? 'bg-green-400'
+                        : idx % 4 === 2
+                          ? 'bg-yellow-300'
+                          : 'bg-purple-400'
                   }`}
                   onClick={() => navigate(`/stylist/${stylist.id}`)}
                 >
                   <CardHeader>
                     <div className="flex items-start gap-4">
                       <div className="w-16 h-16 rounded-full bg-card border-2 border-foreground flex items-center justify-center text-2xl font-bold overflow-hidden shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
-                        {stylist.business_name?.charAt(0).toUpperCase() || <User className="h-8 w-8" />}
+                        {stylist.business_name?.charAt(0).toUpperCase() || (
+                          <User className="h-8 w-8" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <CardTitle className="font-pixel text-foreground">
@@ -199,9 +223,10 @@ const PublicStylistDirectory = () => {
                         )}
                         <div className="flex flex-wrap gap-1 mt-2">
                           <TrustBadge type="verified" />
-                          {stylist.average_rating >= 4.5 && stylist.total_reviews >= 5 && (
-                            <TrustBadge type="top-rated" />
-                          )}
+                          {stylist.average_rating >= 4.5 &&
+                            stylist.total_reviews >= 5 && (
+                              <TrustBadge type="top-rated" />
+                            )}
                           {stylist.years_experience >= 5 && (
                             <TrustBadge type="experienced" />
                           )}
@@ -212,7 +237,10 @@ const PublicStylistDirectory = () => {
 
                   <CardContent className="space-y-3">
                     {stylist.specialty && (
-                      <Badge variant="secondary" className="bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]">
+                      <Badge
+                        variant="secondary"
+                        className="bg-card border-2 border-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))]"
+                      >
                         {stylist.specialty}
                       </Badge>
                     )}
@@ -233,26 +261,28 @@ const PublicStylistDirectory = () => {
                       {stylist.years_experience && (
                         <div className="flex items-center gap-2 text-foreground/80 font-medium">
                           <Award className="h-4 w-4" />
-                          <span>{stylist.years_experience} years experience</span>
+                          <span>
+                            {stylist.years_experience} years experience
+                          </span>
                         </div>
                       )}
                     </div>
                   </CardContent>
 
                   <CardFooter className="flex gap-2">
-                    <Button 
+                    <Button
                       variant="outline"
-                      className="flex-1" 
-                      onClick={(e) => {
+                      className="flex-1"
+                      onClick={e => {
                         e.stopPropagation();
                         navigate(`/stylist/${stylist.id}`);
                       }}
                     >
                       View Profile
                     </Button>
-                    <Button 
-                      className="flex-1" 
-                      onClick={(e) => {
+                    <Button
+                      className="flex-1"
+                      onClick={e => {
                         e.stopPropagation();
                         navigate(`/book-appointment?stylist=${stylist.id}`);
                       }}
@@ -273,9 +303,10 @@ const PublicStylistDirectory = () => {
                 <Sparkles className="h-16 w-16 mx-auto mb-4 text-primary" />
                 <h2 className="text-3xl font-bold mb-2">Are You a Stylist?</h2>
                 <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                  Join hA.I.r and get discovered by clients looking for your talent.
+                  Join hA.I.r and get discovered by clients looking for your
+                  talent.
                 </p>
-                <Button size="lg" onClick={() => navigate("/auth")}>
+                <Button size="lg" onClick={() => navigate('/auth')}>
                   Join Free Today
                 </Button>
               </CardContent>
@@ -290,10 +321,10 @@ const PublicStylistDirectory = () => {
               © 2025 hA.I.r - AI-Powered Salon Assistant
             </p>
             <div className="flex justify-center gap-4">
-              <Button variant="link" onClick={() => navigate("/privacy")}>
+              <Button variant="link" onClick={() => navigate('/privacy')}>
                 Privacy
               </Button>
-              <Button variant="link" onClick={() => navigate("/terms")}>
+              <Button variant="link" onClick={() => navigate('/terms')}>
                 Terms
               </Button>
             </div>

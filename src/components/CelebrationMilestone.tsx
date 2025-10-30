@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Gift, Copy, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import Confetti from "react-confetti";
+import { useEffect, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { Sparkles, Gift, Copy, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import Confetti from 'react-confetti';
 
 interface CelebrationMilestoneProps {
   clientId: string;
   onClose?: () => void;
 }
 
-export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestoneProps) => {
+export const CelebrationMilestone = ({
+  clientId,
+  onClose,
+}: CelebrationMilestoneProps) => {
   const { toast } = useToast();
   const [milestone, setMilestone] = useState<any>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -26,23 +29,23 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
   const checkForMilestone = async () => {
     try {
       const { data } = await supabase
-        .from("client_milestones")
-        .select("*")
-        .eq("client_id", clientId)
-        .eq("celebrated", false)
-        .order("created_at", { ascending: false })
+        .from('client_milestones')
+        .select('*')
+        .eq('client_id', clientId)
+        .eq('celebrated', false)
+        .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
 
       if (data) {
         setMilestone(data);
         setShowConfetti(true);
-        
+
         // Auto-hide confetti after 5 seconds
         setTimeout(() => setShowConfetti(false), 5000);
       }
     } catch (error) {
-      console.error("Error checking milestones:", error);
+      console.error('Error checking milestones:', error);
     }
   };
 
@@ -51,18 +54,18 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
 
     try {
       await supabase
-        .from("client_milestones")
+        .from('client_milestones')
         .update({ celebrated: true })
-        .eq("id", milestone.id);
+        .eq('id', milestone.id);
 
       toast({
-        title: "Milestone Celebrated! 🎉",
-        description: "Your discount code has been saved",
+        title: 'Milestone Celebrated! 🎉',
+        description: 'Your discount code has been saved',
       });
 
       if (onClose) onClose();
     } catch (error) {
-      console.error("Error marking milestone:", error);
+      console.error('Error marking milestone:', error);
     }
   };
 
@@ -70,8 +73,8 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
     if (milestone?.discount_code) {
       navigator.clipboard.writeText(milestone.discount_code);
       toast({
-        title: "Code Copied!",
-        description: "Discount code copied to clipboard",
+        title: 'Code Copied!',
+        description: 'Discount code copied to clipboard',
       });
     }
   };
@@ -79,16 +82,16 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
   if (!milestone) return null;
 
   const getMilestoneEmoji = () => {
-    if (milestone.milestone_type === "anniversary") return "🎂";
-    if (milestone.milestone_value === 5) return "⭐";
-    if (milestone.milestone_value === 10) return "💎";
-    if (milestone.milestone_value >= 25) return "👑";
-    return "🎉";
+    if (milestone.milestone_type === 'anniversary') return '🎂';
+    if (milestone.milestone_value === 5) return '⭐';
+    if (milestone.milestone_value === 10) return '💎';
+    if (milestone.milestone_value >= 25) return '👑';
+    return '🎉';
   };
 
   const getMilestoneMessage = () => {
-    if (milestone.milestone_type === "anniversary") {
-      return `${milestone.milestone_value} Year${milestone.milestone_value > 1 ? "s" : ""} Together!`;
+    if (milestone.milestone_type === 'anniversary') {
+      return `${milestone.milestone_value} Year${milestone.milestone_value > 1 ? 's' : ''} Together!`;
     }
     return `${milestone.milestone_value} Appointments Complete!`;
   };
@@ -120,7 +123,9 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
 
             {/* Animated emoji */}
             <div className="relative">
-              <div className="text-8xl animate-bounce mb-4">{getMilestoneEmoji()}</div>
+              <div className="text-8xl animate-bounce mb-4">
+                {getMilestoneEmoji()}
+              </div>
               <Sparkles className="absolute top-0 left-1/2 -translate-x-1/2 h-8 w-8 text-primary animate-pulse" />
             </div>
 
@@ -146,16 +151,25 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
                 <div className="text-3xl font-bold text-primary">
                   ${milestone.discount_amount} OFF
                 </div>
-                <p className="text-sm text-muted-foreground">Your next appointment</p>
+                <p className="text-sm text-muted-foreground">
+                  Your next appointment
+                </p>
 
                 {/* Discount Code */}
                 <div className="bg-background p-4 rounded-lg space-y-2">
-                  <p className="text-xs text-muted-foreground">Your discount code:</p>
+                  <p className="text-xs text-muted-foreground">
+                    Your discount code:
+                  </p>
                   <div className="flex items-center gap-2">
                     <code className="flex-1 font-mono text-lg font-bold px-3 py-2 bg-muted rounded">
                       {milestone.discount_code}
                     </code>
-                    <Button size="icon" variant="outline" onClick={copyDiscountCode} aria-label="Copy discount code">
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={copyDiscountCode}
+                      aria-label="Copy discount code"
+                    >
                       <Copy className="h-4 w-4" />
                     </Button>
                   </div>
@@ -176,7 +190,7 @@ export const CelebrationMilestone = ({ clientId, onClose }: CelebrationMilestone
 
             {/* Powered by */}
             <p className="text-xs text-muted-foreground pt-4">
-              Powered by{" "}
+              Powered by{' '}
               <span className="font-semibold text-primary">hA.I.r</span>
             </p>
           </CardContent>

@@ -20,11 +20,15 @@ interface TapTarget {
 export const validateTapTarget = (element: HTMLElement): TapTarget => {
   const rect = element.getBoundingClientRect();
   const computedStyle = window.getComputedStyle(element);
-  
+
   // Account for padding in tap target
-  const paddingX = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
-  const paddingY = parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
-  
+  const paddingX =
+    parseFloat(computedStyle.paddingLeft) +
+    parseFloat(computedStyle.paddingRight);
+  const paddingY =
+    parseFloat(computedStyle.paddingTop) +
+    parseFloat(computedStyle.paddingBottom);
+
   const effectiveWidth = rect.width + paddingX;
   const effectiveHeight = rect.height + paddingY;
 
@@ -32,7 +36,9 @@ export const validateTapTarget = (element: HTMLElement): TapTarget => {
     element,
     width: effectiveWidth,
     height: effectiveHeight,
-    isTooSmall: effectiveWidth < MIN_TAP_TARGET_SIZE || effectiveHeight < MIN_TAP_TARGET_SIZE,
+    isTooSmall:
+      effectiveWidth < MIN_TAP_TARGET_SIZE ||
+      effectiveHeight < MIN_TAP_TARGET_SIZE,
   };
 };
 
@@ -66,8 +72,10 @@ export const logTapTargetViolations = () => {
   const violations = targets.filter(t => t.isTooSmall);
 
   if (violations.length > 0) {
-    safeConsole.log(`Found ${violations.length} elements smaller than ${MIN_TAP_TARGET_SIZE}x${MIN_TAP_TARGET_SIZE}px:`);
-    violations.forEach((violation) => {
+    safeConsole.log(
+      `Found ${violations.length} elements smaller than ${MIN_TAP_TARGET_SIZE}x${MIN_TAP_TARGET_SIZE}px:`
+    );
+    violations.forEach(violation => {
       safeConsole.log(
         `${violation.element.tagName.toLowerCase()}: ${Math.round(violation.width)}x${Math.round(violation.height)}px`,
         violation.element
@@ -81,11 +89,12 @@ export const logTapTargetViolations = () => {
  */
 export const fixTapTarget = (element: HTMLElement) => {
   const validation = validateTapTarget(element);
-  
+
   if (validation.isTooSmall) {
     const neededWidth = Math.max(0, MIN_TAP_TARGET_SIZE - validation.width) / 2;
-    const neededHeight = Math.max(0, MIN_TAP_TARGET_SIZE - validation.height) / 2;
-    
+    const neededHeight =
+      Math.max(0, MIN_TAP_TARGET_SIZE - validation.height) / 2;
+
     element.style.paddingLeft = `${neededWidth}px`;
     element.style.paddingRight = `${neededWidth}px`;
     element.style.paddingTop = `${neededHeight}px`;

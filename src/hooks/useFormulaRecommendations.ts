@@ -23,20 +23,30 @@ interface RecommendationResult {
 
 export const useFormulaRecommendations = () => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [recommendations, setRecommendations] = useState<RecommendationResult | null>(null);
+  const [recommendations, setRecommendations] =
+    useState<RecommendationResult | null>(null);
   const { toast } = useToast();
 
-  const generateRecommendations = async (clientId: string, stylistId: string) => {
+  const generateRecommendations = async (
+    clientId: string,
+    stylistId: string
+  ) => {
     setIsGenerating(true);
     setRecommendations(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-formula-recommendations', {
-        body: { clientId, stylistId }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'generate-formula-recommendations',
+        {
+          body: { clientId, stylistId },
+        }
+      );
 
       if (error) {
-        logger.error('Recommendation error', error, { context: 'useFormulaRecommendations', data: { clientId, stylistId } });
+        logger.error('Recommendation error', error, {
+          context: 'useFormulaRecommendations',
+          data: { clientId, stylistId },
+        });
         throw error;
       }
 
@@ -51,29 +61,34 @@ export const useFormulaRecommendations = () => {
       setRecommendations(data.recommendations);
 
       toast({
-        title: "Recommendations Ready",
+        title: 'Recommendations Ready',
         description: `Generated ${data.recommendations?.recommendations?.length || 0} formula suggestions`,
       });
 
       return data.recommendations;
-
     } catch (error: any) {
-      logger.error('Formula recommendations error', error, { context: 'useFormulaRecommendations', data: { clientId, stylistId } });
-      
+      logger.error('Formula recommendations error', error, {
+        context: 'useFormulaRecommendations',
+        data: { clientId, stylistId },
+      });
+
       let errorMessage = 'Failed to generate recommendations';
-      
+
       if (error.message?.includes('Rate limit')) {
         errorMessage = 'Too many requests. Please wait a moment and try again.';
-      } else if (error.message?.includes('credits exhausted') || error.message?.includes('402')) {
+      } else if (
+        error.message?.includes('credits exhausted') ||
+        error.message?.includes('402')
+      ) {
         errorMessage = 'AI credits exhausted. Please add credits to continue.';
       } else if (error.message) {
         errorMessage = error.message;
       }
 
       toast({
-        title: "Generation Failed",
+        title: 'Generation Failed',
         description: errorMessage,
-        variant: "destructive",
+        variant: 'destructive',
       });
 
       throw error;
@@ -101,11 +116,14 @@ export const useFormulaRecommendations = () => {
 
       return data || [];
     } catch (error) {
-      logger.error('Error fetching insights', error, { context: 'useFormulaRecommendations', data: { stylistId, clientId } });
+      logger.error('Error fetching insights', error, {
+        context: 'useFormulaRecommendations',
+        data: { stylistId, clientId },
+      });
       toast({
-        title: "Error",
-        description: "Failed to load insights",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to load insights',
+        variant: 'destructive',
       });
       return [];
     }
@@ -115,24 +133,27 @@ export const useFormulaRecommendations = () => {
     try {
       const { error } = await supabase
         .from('ai_insights')
-        .update({ 
+        .update({
           is_dismissed: true,
-          dismissed_at: new Date().toISOString()
+          dismissed_at: new Date().toISOString(),
         })
         .eq('id', insightId);
 
       if (error) throw error;
 
       toast({
-        title: "Insight Dismissed",
-        description: "The recommendation has been dismissed",
+        title: 'Insight Dismissed',
+        description: 'The recommendation has been dismissed',
       });
     } catch (error) {
-      logger.error('Error dismissing insight', error, { context: 'useFormulaRecommendations', data: { insightId } });
+      logger.error('Error dismissing insight', error, {
+        context: 'useFormulaRecommendations',
+        data: { insightId },
+      });
       toast({
-        title: "Error",
-        description: "Failed to dismiss insight",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to dismiss insight',
+        variant: 'destructive',
       });
     }
   };
@@ -142,6 +163,6 @@ export const useFormulaRecommendations = () => {
     fetchInsights,
     dismissInsight,
     isGenerating,
-    recommendations
+    recommendations,
   };
 };

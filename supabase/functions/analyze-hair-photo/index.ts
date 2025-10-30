@@ -1,20 +1,29 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders, compressedJsonResponse } from '../_shared/compression.ts';
 import { authenticateRequest } from '../_shared/auth.ts';
-import { handleError, validateRequestBody, checkRateLimit } from '../_shared/error-handler.ts';
+import {
+  handleError,
+  validateRequestBody,
+  checkRateLimit,
+} from '../_shared/error-handler.ts';
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     // SECURITY: Require stylist or admin role
-    const { user, supabase } = await authenticateRequest(req, { allowStylistOrAdmin: true });
-    
+    const { user, supabase } = await authenticateRequest(req, {
+      allowStylistOrAdmin: true,
+    });
+
     // Rate limiting (10 analyses per minute)
     if (!checkRateLimit(user.id, 10, 60000)) {
-      return await compressedJsonResponse({ error: 'Rate limit exceeded. Please slow down.' }, 429);
+      return await compressedJsonResponse(
+        { error: 'Rate limit exceeded. Please slow down.' },
+        429
+      );
     }
 
     const body = await req.json();
@@ -27,18 +36,20 @@ serve(async (req) => {
     console.log('Analyzing hair photo with Gemini Pro (vision model)...');
 
     // Use Flash for vision (Pro only if complex damage analysis needed)
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-pro', // Best accuracy for professional color analysis
-        messages: [
-          {
-            role: 'system',
-            content: `You are a professional hair colorist analyzing hair photos. Provide detailed, accurate analysis in JSON format.
+    const aiResponse = await fetch(
+      'https://ai.gateway.lovable.dev/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-pro', // Best accuracy for professional color analysis
+          messages: [
+            {
+              role: 'system',
+              content: `You are a professional hair colorist analyzing hair photos. Provide detailed, accurate analysis in JSON format.
 
 CRITICAL: Return ONLY valid JSON, no markdown, no explanations outside the JSON structure.
 
@@ -59,41 +70,46 @@ Required JSON structure:
     "string array of specific warnings"
   ],
   "professional_notes": "Brief notes for stylist"
-}`
-          },
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: 'Analyze this hair photo and provide detailed assessment for color planning:'
-              },
-              {
-                type: 'image_url',
-                image_url: { url: imageUrl }
-              }
-            ]
-          }
-        ]
-      }),
-    });
+}`,
+            },
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'text',
+                  text: 'Analyze this hair photo and provide detailed assessment for color planning:',
+                },
+                {
+                  type: 'image_url',
+                  image_url: { url: imageUrl },
+                },
+              ],
+            },
+          ],
+        }),
+      }
+    );
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
       console.error('AI API error:', aiResponse.status, errorText);
-      
+
       if (aiResponse.status === 429) {
-        throw new Error('AI service rate limit reached. Please try again in a moment.');
+        throw new Error(
+          'AI service rate limit reached. Please try again in a moment.'
+        );
       }
       if (aiResponse.status === 402) {
-        throw new Error('AI service credits exhausted. Please contact support.');
+        throw new Error(
+          'AI service credits exhausted. Please contact support.'
+        );
       }
       throw new Error(`AI analysis failed: ${aiResponse.status}`);
     }
 
     const aiData = await aiResponse.json();
     const analysisText = aiData.choices?.[0]?.message?.content;
-    
+
     if (!analysisText) {
       throw new Error('No analysis returned from AI');
     }
@@ -115,10 +131,10 @@ Required JSON structure:
     const confidenceScores = {
       overall: analysisResult.level_confidence || 0.92, // Higher baseline with Pro
       level: analysisResult.level_confidence || 0.92,
-      undertones: 0.90, // Pro model better at undertones
+      undertones: 0.9, // Pro model better at undertones
       damage: 0.88,
     };
-    
+
     const needsReview = confidenceScores.overall < 0.7;
 
     // Store analysis result
@@ -140,13 +156,13 @@ Required JSON structure:
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-
   } catch (error) {
     console.error('Hair analysis error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

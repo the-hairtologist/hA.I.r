@@ -33,7 +33,7 @@ describe('useMobileDetection', () => {
 
   it('should detect desktop by default', () => {
     const { result } = renderHook(() => useMobileDetection());
-    
+
     expect(result.current.isMobile).toBe(false);
     expect(result.current.isTablet).toBe(false);
     expect(result.current.screenWidth).toBe(1024);
@@ -46,9 +46,9 @@ describe('useMobileDetection', () => {
       configurable: true,
       value: 375,
     });
-    
+
     const { result } = renderHook(() => useMobileDetection());
-    
+
     expect(result.current.isMobile).toBe(true);
     expect(result.current.screenWidth).toBe(375);
   });
@@ -59,9 +59,9 @@ describe('useMobileDetection', () => {
       configurable: true,
       value: 768,
     });
-    
+
     const { result } = renderHook(() => useMobileDetection());
-    
+
     expect(result.current.isTablet).toBe(true);
   });
 
@@ -76,9 +76,9 @@ describe('useMobileDetection', () => {
       configurable: true,
       value: 812,
     });
-    
+
     const { result } = renderHook(() => useMobileDetection());
-    
+
     expect(result.current.orientation).toBe('portrait');
   });
 
@@ -93,9 +93,9 @@ describe('useMobileDetection', () => {
       configurable: true,
       value: 375,
     });
-    
+
     const { result } = renderHook(() => useMobileDetection());
-    
+
     expect(result.current.orientation).toBe('landscape');
   });
 });
@@ -107,9 +107,9 @@ describe('useBreakpoint', () => {
       configurable: true,
       value: 600,
     });
-    
+
     const { result } = renderHook(() => useBreakpoint(768));
-    
+
     expect(result.current).toBe(true);
   });
 
@@ -119,9 +119,9 @@ describe('useBreakpoint', () => {
       configurable: true,
       value: 1024,
     });
-    
+
     const { result } = renderHook(() => useBreakpoint(768));
-    
+
     expect(result.current).toBe(false);
   });
 });

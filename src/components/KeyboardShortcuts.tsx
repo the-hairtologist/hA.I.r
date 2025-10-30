@@ -3,17 +3,17 @@
  * Press ? to open
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Keyboard, Search, Plus, Calendar, Users, Home } from "lucide-react";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Keyboard, Search, Plus, Calendar, Users, Home } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Shortcut {
   keys: string[];
@@ -28,37 +28,59 @@ interface ShortcutGroup {
 
 const shortcuts: ShortcutGroup[] = [
   {
-    title: "Navigation",
+    title: 'Navigation',
     shortcuts: [
-      { keys: ["G", "H"], description: "Go to Dashboard", icon: <Home className="h-3 w-3" /> },
-      { keys: ["G", "A"], description: "Go to Appointments", icon: <Calendar className="h-3 w-3" /> },
-      { keys: ["G", "C"], description: "Go to Clients", icon: <Users className="h-3 w-3" /> },
-      { keys: ["G", "F"], description: "Go to Formulas" },
-      { keys: ["G", "P"], description: "Go to Products" },
+      {
+        keys: ['G', 'H'],
+        description: 'Go to Dashboard',
+        icon: <Home className="h-3 w-3" />,
+      },
+      {
+        keys: ['G', 'A'],
+        description: 'Go to Appointments',
+        icon: <Calendar className="h-3 w-3" />,
+      },
+      {
+        keys: ['G', 'C'],
+        description: 'Go to Clients',
+        icon: <Users className="h-3 w-3" />,
+      },
+      { keys: ['G', 'F'], description: 'Go to Formulas' },
+      { keys: ['G', 'P'], description: 'Go to Products' },
     ],
   },
   {
-    title: "Actions",
+    title: 'Actions',
     shortcuts: [
-      { keys: ["/"], description: "Focus search", icon: <Search className="h-3 w-3" /> },
-      { keys: ["N"], description: "New appointment", icon: <Plus className="h-3 w-3" /> },
-      { keys: ["C"], description: "Add client", icon: <Plus className="h-3 w-3" /> },
-      { keys: ["Esc"], description: "Close dialog" },
+      {
+        keys: ['/'],
+        description: 'Focus search',
+        icon: <Search className="h-3 w-3" />,
+      },
+      {
+        keys: ['N'],
+        description: 'New appointment',
+        icon: <Plus className="h-3 w-3" />,
+      },
+      {
+        keys: ['C'],
+        description: 'Add client',
+        icon: <Plus className="h-3 w-3" />,
+      },
+      { keys: ['Esc'], description: 'Close dialog' },
     ],
   },
   {
-    title: "Forms",
+    title: 'Forms',
     shortcuts: [
-      { keys: ["Tab"], description: "Next field" },
-      { keys: ["Shift", "Tab"], description: "Previous field" },
-      { keys: ["Ctrl", "Enter"], description: "Submit form" },
+      { keys: ['Tab'], description: 'Next field' },
+      { keys: ['Shift', 'Tab'], description: 'Previous field' },
+      { keys: ['Ctrl', 'Enter'], description: 'Submit form' },
     ],
   },
   {
-    title: "Help",
-    shortcuts: [
-      { keys: ["?"], description: "Show keyboard shortcuts" },
-    ],
+    title: 'Help',
+    shortcuts: [{ keys: ['?'], description: 'Show keyboard shortcuts' }],
   },
 ];
 
@@ -68,19 +90,19 @@ export function KeyboardShortcuts() {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       // Only trigger on ? key when not in an input
-      if (e.key === "?" && !isInputFocused()) {
+      if (e.key === '?' && !isInputFocused()) {
         e.preventDefault();
         setOpen(true);
       }
 
       // Close on Escape
-      if (e.key === "Escape" && open) {
+      if (e.key === 'Escape' && open) {
         setOpen(false);
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [open]);
 
   return (
@@ -89,7 +111,9 @@ export function KeyboardShortcuts() {
         <DialogHeader>
           <div className="flex items-center gap-2">
             <Keyboard className="h-5 w-5 text-primary" />
-            <DialogTitle className="font-pixel uppercase">Keyboard Shortcuts</DialogTitle>
+            <DialogTitle className="font-pixel uppercase">
+              Keyboard Shortcuts
+            </DialogTitle>
           </div>
           <DialogDescription>
             Master these shortcuts to work faster
@@ -97,20 +121,22 @@ export function KeyboardShortcuts() {
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {shortcuts.map((group) => (
+          {shortcuts.map(group => (
             <div key={group.title} className="space-y-3">
               <h3 className="text-sm font-bold font-pixel uppercase text-muted-foreground">
                 {group.title}
               </h3>
               <div className="space-y-2">
-                {group.shortcuts.map((shortcut) => (
+                {group.shortcuts.map(shortcut => (
                   <div
                     key={shortcut.description}
                     className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-2">
                       {shortcut.icon && (
-                        <span className="text-muted-foreground">{shortcut.icon}</span>
+                        <span className="text-muted-foreground">
+                          {shortcut.icon}
+                        </span>
                       )}
                       <span className="text-sm">{shortcut.description}</span>
                     </div>
@@ -119,7 +145,9 @@ export function KeyboardShortcuts() {
                         <span key={j} className="flex items-center gap-1">
                           <KeyBadge>{key}</KeyBadge>
                           {j < shortcut.keys.length - 1 && (
-                            <span className="text-xs text-muted-foreground">+</span>
+                            <span className="text-xs text-muted-foreground">
+                              +
+                            </span>
                           )}
                         </span>
                       ))}
@@ -144,9 +172,9 @@ function KeyBadge({ children }: { children: React.ReactNode }) {
     <Badge
       variant="outline"
       className={cn(
-        "px-2 py-0.5 font-mono text-xs font-bold",
-        "brutal-border bg-muted hover:bg-muted",
-        "min-w-[24px] justify-center"
+        'px-2 py-0.5 font-mono text-xs font-bold',
+        'brutal-border bg-muted hover:bg-muted',
+        'min-w-[24px] justify-center'
       )}
     >
       {children}
@@ -157,8 +185,8 @@ function KeyBadge({ children }: { children: React.ReactNode }) {
 function isInputFocused(): boolean {
   const activeElement = document.activeElement;
   return (
-    activeElement?.tagName === "INPUT" ||
-    activeElement?.tagName === "TEXTAREA" ||
-    activeElement?.getAttribute("contenteditable") === "true"
+    activeElement?.tagName === 'INPUT' ||
+    activeElement?.tagName === 'TEXTAREA' ||
+    activeElement?.getAttribute('contenteditable') === 'true'
   );
 }

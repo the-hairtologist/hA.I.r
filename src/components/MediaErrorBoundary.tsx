@@ -1,5 +1,11 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Camera, Mic, RefreshCw, Upload } from 'lucide-react';
 
@@ -31,10 +37,10 @@ export class MediaErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('MediaErrorBoundary caught error:', error, errorInfo);
-    
+
     this.setState({
       error,
-      errorInfo
+      errorInfo,
     });
   }
 
@@ -48,40 +54,47 @@ export class MediaErrorBoundary extends Component<Props, State> {
     const { error } = this.state;
 
     // Check for permission errors
-    if (error?.message?.includes('permission') || error?.message?.includes('NotAllowedError')) {
+    if (
+      error?.message?.includes('permission') ||
+      error?.message?.includes('NotAllowedError')
+    ) {
       return {
         icon: fallbackType === 'camera' ? Camera : Mic,
         title: `${fallbackType === 'camera' ? 'Camera' : 'Microphone'} Permission Denied`,
         description: `We need ${fallbackType} access to use this feature. Please enable it in your browser settings.`,
         actions: [
           { label: 'Try Again', action: this.handleReset },
-          { label: 'Use File Upload', action: () => {} }
-        ]
+          { label: 'Use File Upload', action: () => {} },
+        ],
       };
     }
 
     // Check for device not found
-    if (error?.message?.includes('NotFoundError') || error?.message?.includes('not found')) {
+    if (
+      error?.message?.includes('NotFoundError') ||
+      error?.message?.includes('not found')
+    ) {
       return {
         icon: AlertTriangle,
         title: `No ${fallbackType === 'camera' ? 'Camera' : 'Microphone'} Found`,
         description: `Your device doesn't have a ${fallbackType} or it's being used by another app.`,
         actions: [
           { label: 'Try Again', action: this.handleReset },
-          { label: 'Use File Upload', action: () => {} }
-        ]
+          { label: 'Use File Upload', action: () => {} },
+        ],
       };
     }
 
     // Check for device busy
-    if (error?.message?.includes('NotReadableError') || error?.message?.includes('in use')) {
+    if (
+      error?.message?.includes('NotReadableError') ||
+      error?.message?.includes('in use')
+    ) {
       return {
         icon: AlertTriangle,
         title: `${fallbackType === 'camera' ? 'Camera' : 'Microphone'} Unavailable`,
         description: `Another app is using your ${fallbackType}. Please close it and try again.`,
-        actions: [
-          { label: 'Try Again', action: this.handleReset }
-        ]
+        actions: [{ label: 'Try Again', action: this.handleReset }],
       };
     }
 
@@ -89,10 +102,10 @@ export class MediaErrorBoundary extends Component<Props, State> {
     return {
       icon: AlertTriangle,
       title: 'Media Feature Error',
-      description: error?.message || 'An unexpected error occurred with the media feature.',
-      actions: [
-        { label: 'Try Again', action: this.handleReset }
-      ]
+      description:
+        error?.message ||
+        'An unexpected error occurred with the media feature.',
+      actions: [{ label: 'Try Again', action: this.handleReset }],
     };
   }
 
@@ -136,7 +149,7 @@ export class MediaErrorBoundary extends Component<Props, State> {
                 {details.actions.map((action, i) => (
                   <Button
                     key={i}
-                    variant={i === 0 ? "default" : "outline"}
+                    variant={i === 0 ? 'default' : 'outline'}
                     onClick={action.action}
                     size="sm"
                   >
@@ -151,13 +164,13 @@ export class MediaErrorBoundary extends Component<Props, State> {
               <p className="text-xs text-muted-foreground border-t pt-3">
                 💡 <strong>Troubleshooting Tips:</strong>
                 <br />
-                • Check your browser permissions (look for the 🔒 icon in the address bar)
-                <br />
-                • Make sure no other apps are using your {this.props.fallbackType}
+                • Check your browser permissions (look for the 🔒 icon in the
+                address bar)
+                <br />• Make sure no other apps are using your{' '}
+                {this.props.fallbackType}
                 <br />
                 • Try refreshing the page
-                <br />
-                • Use a different browser if the problem persists
+                <br />• Use a different browser if the problem persists
               </p>
             </div>
           </CardContent>

@@ -3,8 +3,8 @@
  * Save and manage common service combinations
  */
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -13,21 +13,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Bookmark,
-  Plus,
-  Trash2,
-  Check,
-  Package,
-} from "lucide-react";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Bookmark, Plus, Trash2, Check, Package } from 'lucide-react';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ServiceTemplate {
   id: string;
@@ -42,15 +36,17 @@ interface ServiceTemplatesDialogProps {
   onSelectTemplate?: (template: ServiceTemplate) => void;
 }
 
-export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDialogProps) {
+export function ServiceTemplatesDialog({
+  onSelectTemplate,
+}: ServiceTemplatesDialogProps) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [templates, setTemplates] = useState<ServiceTemplate[]>([]);
   const [loading, setLoading] = useState(false);
   const [creating, setCreating] = useState(false);
-  
+
   // New template form
-  const [newTemplateName, setNewTemplateName] = useState("");
+  const [newTemplateName, setNewTemplateName] = useState('');
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [availableServices, setAvailableServices] = useState<any[]>([]);
 
@@ -66,24 +62,24 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
     try {
       // Get stylist profile
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
 
       // Load service templates
       const { data, error } = await supabase
-        .from("service_templates")
-        .select("*")
-        .eq("stylist_id", stylistProfile.id)
-        .order("created_at", { ascending: false });
+        .from('service_templates')
+        .select('*')
+        .eq('stylist_id', stylistProfile.id)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       setTemplates(data || []);
     } catch (error) {
-      console.error("Error loading templates:", error);
+      console.error('Error loading templates:', error);
     } finally {
       setLoading(false);
     }
@@ -92,44 +88,44 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
   const loadAvailableServices = async () => {
     try {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
 
       const { data, error } = await supabase
-        .from("stylist_services")
-        .select("*")
-        .eq("stylist_id", stylistProfile.id)
-        .eq("is_active", true);
+        .from('stylist_services')
+        .select('*')
+        .eq('stylist_id', stylistProfile.id)
+        .eq('is_active', true);
 
       if (error) throw error;
       setAvailableServices(data || []);
     } catch (error) {
-      console.error("Error loading services:", error);
+      console.error('Error loading services:', error);
     }
   };
 
   const handleCreateTemplate = async () => {
     if (!newTemplateName.trim() || selectedServices.length === 0) {
-      toast.error("Please provide a name and select at least one service");
+      toast.error('Please provide a name and select at least one service');
       return;
     }
 
     setCreating(true);
     try {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
-      if (!stylistProfile) throw new Error("Stylist profile not found");
+      if (!stylistProfile) throw new Error('Stylist profile not found');
 
       // Calculate totals
-      const selectedServiceData = availableServices.filter((s) =>
+      const selectedServiceData = availableServices.filter(s =>
         selectedServices.includes(s.id)
       );
       const totalDuration = selectedServiceData.reduce(
@@ -141,7 +137,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
         0
       );
 
-      const { error } = await supabase.from("service_templates").insert({
+      const { error } = await supabase.from('service_templates').insert({
         stylist_id: stylistProfile.id,
         name: newTemplateName,
         services: selectedServices,
@@ -151,13 +147,13 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
 
       if (error) throw error;
 
-      toast.success("Template created successfully!");
-      setNewTemplateName("");
+      toast.success('Template created successfully!');
+      setNewTemplateName('');
       setSelectedServices([]);
       loadTemplates();
     } catch (error: any) {
-      console.error("Error creating template:", error);
-      toast.error(error.message || "Failed to create template");
+      console.error('Error creating template:', error);
+      toast.error(error.message || 'Failed to create template');
     } finally {
       setCreating(false);
     }
@@ -166,23 +162,23 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
   const handleDeleteTemplate = async (id: string) => {
     try {
       const { error } = await supabase
-        .from("service_templates")
+        .from('service_templates')
         .delete()
-        .eq("id", id);
+        .eq('id', id);
 
       if (error) throw error;
-      toast.success("Template deleted");
+      toast.success('Template deleted');
       loadTemplates();
     } catch (error: any) {
-      console.error("Error deleting template:", error);
-      toast.error("Failed to delete template");
+      console.error('Error deleting template:', error);
+      toast.error('Failed to delete template');
     }
   };
 
   const handleSelectService = (serviceId: string) => {
-    setSelectedServices((prev) =>
+    setSelectedServices(prev =>
       prev.includes(serviceId)
-        ? prev.filter((id) => id !== serviceId)
+        ? prev.filter(id => id !== serviceId)
         : [...prev, serviceId]
     );
   };
@@ -214,14 +210,14 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
                   id="templateName"
                   placeholder="e.g., Full Color Package"
                   value={newTemplateName}
-                  onChange={(e) => setNewTemplateName(e.target.value)}
+                  onChange={e => setNewTemplateName(e.target.value)}
                 />
               </div>
 
               <div>
                 <Label>Select Services</Label>
                 <div className="mt-2 space-y-2">
-                  {availableServices.map((service) => (
+                  {availableServices.map(service => (
                     <button
                       key={service.id}
                       onClick={() => handleSelectService(service.id)}
@@ -230,8 +226,8 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
                       <div
                         className={`flex-shrink-0 h-4 w-4 rounded border flex items-center justify-center ${
                           selectedServices.includes(service.id)
-                            ? "bg-primary border-primary"
-                            : "border-muted-foreground"
+                            ? 'bg-primary border-primary'
+                            : 'border-muted-foreground'
                         }`}
                       >
                         {selectedServices.includes(service.id) && (
@@ -256,7 +252,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
                 className="w-full"
               >
                 <Plus className="mr-2 h-4 w-4" />
-                {creating ? "Creating..." : "Create Template"}
+                {creating ? 'Creating...' : 'Create Template'}
               </Button>
             </div>
           </div>
@@ -271,7 +267,7 @@ export function ServiceTemplatesDialog({ onSelectTemplate }: ServiceTemplatesDia
                     No templates yet. Create one above!
                   </p>
                 ) : (
-                  templates.map((template) => (
+                  templates.map(template => (
                     <div
                       key={template.id}
                       className="flex items-center gap-2 p-3 border rounded-lg hover:bg-muted/50 transition-colors"

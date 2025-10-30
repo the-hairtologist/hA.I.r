@@ -1,31 +1,31 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { logger } from "@/lib/logger";
-import { 
-  Share2, 
-  Copy, 
-  Facebook, 
-  Twitter, 
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logger';
+import {
+  Share2,
+  Copy,
+  Facebook,
+  Twitter,
   Linkedin,
   Mail,
   QrCode,
-  Check
-} from "lucide-react";
-import { toast } from "sonner";
+  Check,
+} from 'lucide-react';
+import { toast } from 'sonner';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 interface ShareButtonsProps {
   url: string;
@@ -33,11 +33,17 @@ interface ShareButtonsProps {
   description?: string;
 }
 
-export const ShareButtons = ({ url, title, description }: ShareButtonsProps) => {
+export const ShareButtons = ({
+  url,
+  title,
+  description,
+}: ShareButtonsProps) => {
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
 
-  const fullUrl = url.startsWith('http') ? url : `${window.location.origin}${url}`;
+  const fullUrl = url.startsWith('http')
+    ? url
+    : `${window.location.origin}${url}`;
   const encodedUrl = encodeURIComponent(fullUrl);
   const encodedTitle = encodeURIComponent(title);
   const encodedDescription = encodeURIComponent(description || '');
@@ -46,10 +52,10 @@ export const ShareButtons = ({ url, title, description }: ShareButtonsProps) => 
     try {
       await navigator.clipboard.writeText(fullUrl);
       setCopied(true);
-      toast.success("Link copied to clipboard!");
+      toast.success('Link copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      toast.error("Failed to copy link");
+      toast.error('Failed to copy link');
     }
   };
 
@@ -100,7 +106,7 @@ export const ShareButtons = ({ url, title, description }: ShareButtonsProps) => 
             ) : (
               <Copy className="h-4 w-4 mr-2" />
             )}
-            {copied ? "Copied!" : "Copy Link"}
+            {copied ? 'Copied!' : 'Copy Link'}
           </DropdownMenuItem>
 
           {navigator.share && (
@@ -151,17 +157,25 @@ export const ShareButtons = ({ url, title, description }: ShareButtonsProps) => 
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center gap-4 py-4">
-            <img 
-              src={generateQRCode()} 
+            <img
+              src={generateQRCode()}
               alt="QR Code"
               className="w-64 h-64 border-4 border-foreground rounded-lg"
             />
             <p className="text-sm text-muted-foreground text-center">
               {fullUrl}
             </p>
-            <Button onClick={copyToClipboard} variant="outline" className="w-full">
-              {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-              {copied ? "Copied!" : "Copy Link"}
+            <Button
+              onClick={copyToClipboard}
+              variant="outline"
+              className="w-full"
+            >
+              {copied ? (
+                <Check className="h-4 w-4 mr-2" />
+              ) : (
+                <Copy className="h-4 w-4 mr-2" />
+              )}
+              {copied ? 'Copied!' : 'Copy Link'}
             </Button>
           </div>
         </DialogContent>

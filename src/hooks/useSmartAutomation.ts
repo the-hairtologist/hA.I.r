@@ -25,7 +25,9 @@ interface SmartReminder {
 }
 
 export const useSmartAutomation = (stylistId?: string) => {
-  const [timingProfiles, setTimingProfiles] = useState<Record<string, AutomationTiming>>({});
+  const [timingProfiles, setTimingProfiles] = useState<
+    Record<string, AutomationTiming>
+  >({});
   const [smartReminders, setSmartReminders] = useState<SmartReminder[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -51,7 +53,7 @@ export const useSmartAutomation = (stylistId?: string) => {
         .select('timezone')
         .eq('id', stylistId)
         .maybeSingle();
-      
+
       const stylistTimezone = stylist?.timezone || 'America/New_York';
 
       // Get all client appointments to detect timing patterns
@@ -67,11 +69,14 @@ export const useSmartAutomation = (stylistId?: string) => {
       // Group by client and analyze booking patterns
       const clientPatterns: Record<string, AutomationTiming> = {};
 
-      const clientGroups = appointments.reduce((acc, apt) => {
-        if (!acc[apt.client_id]) acc[apt.client_id] = [];
-        acc[apt.client_id].push(apt);
-        return acc;
-      }, {} as Record<string, any[]>);
+      const clientGroups = appointments.reduce(
+        (acc, apt) => {
+          if (!acc[apt.client_id]) acc[apt.client_id] = [];
+          acc[apt.client_id].push(apt);
+          return acc;
+        },
+        {} as Record<string, any[]>
+      );
 
       Object.entries(clientGroups).forEach(([clientId, apts]) => {
         if (apts.length < 2) return; // Need multiple data points
@@ -91,13 +96,13 @@ export const useSmartAutomation = (stylistId?: string) => {
           optimalHour,
           optimalDay,
           timezone: stylistTimezone,
-          confidence
+          confidence,
         };
       });
 
       setTimingProfiles(clientPatterns);
-      logger.info('Learned timing patterns', 'SmartAutomation', { 
-        clientCount: Object.keys(clientPatterns).length 
+      logger.info('Learned timing patterns', 'SmartAutomation', {
+        clientCount: Object.keys(clientPatterns).length,
       });
     } catch (error) {
       console.error('Error learning timing patterns:', error);
@@ -116,13 +121,15 @@ export const useSmartAutomation = (stylistId?: string) => {
     try {
       const { data: clients } = await supabase
         .from('client_retention_scores')
-        .select(`
+        .select(
+          `
           *,
           client:client_profiles(
             id,
             user:profiles(full_name)
           )
-        `)
+        `
+        )
         .eq('stylist_id', stylistId)
         .order('churn_probability', { ascending: false })
         .limit(20);
@@ -133,8 +140,12 @@ export const useSmartAutomation = (stylistId?: string) => {
 
       clients.forEach(score => {
         const timing = timingProfiles[score.client_id];
-        const urgency = score.churn_probability >= 0.7 ? 'high' : 
-                       score.churn_probability >= 0.4 ? 'medium' : 'low';
+        const urgency =
+          score.churn_probability >= 0.7
+            ? 'high'
+            : score.churn_probability >= 0.4
+              ? 'medium'
+              : 'low';
 
         // Calculate optimal send time
         const now = new Date();
@@ -142,7 +153,11 @@ export const useSmartAutomation = (stylistId?: string) => {
 
         if (timing && timing.confidence >= 50) {
           // Use learned timing
-          suggestedTime = findNextOccurrence(now, timing.optimalDay, timing.optimalHour);
+          suggestedTime = findNextOccurrence(
+            now,
+            timing.optimalDay,
+            timing.optimalHour
+          );
         } else {
           // Default to Tuesday at 2pm (statistically best for salon bookings)
           suggestedTime = findNextOccurrence(now, 2, 14);
@@ -156,7 +171,7 @@ export const useSmartAutomation = (stylistId?: string) => {
           type: urgency === 'high' ? 'retention' : 'rebook',
           suggestedTime,
           message: generatePersonalizedMessage(clientName, score, urgency),
-          urgency
+          urgency,
         });
       });
 
@@ -171,34 +186,46 @@ export const useSmartAutomation = (stylistId?: string) => {
    */
   const mode = (arr: number[]): number => {
     const freq: Record<number, number> = {};
-    arr.forEach(val => freq[val] = (freq[val] || 0) + 1);
-    return parseInt(Object.keys(freq).reduce((a, b) => freq[parseInt(a)] > freq[parseInt(b)] ? a : b));
+    arr.forEach(val => (freq[val] = (freq[val] || 0) + 1));
+    return parseInt(
+      Object.keys(freq).reduce((a, b) =>
+        freq[parseInt(a)] > freq[parseInt(b)] ? a : b
+      )
+    );
   };
 
   /**
    * ✨ Helper: Find next occurrence of specific day/hour
    */
-  const findNextOccurrence = (from: Date, targetDay: number, targetHour: number): Date => {
+  const findNextOccurrence = (
+    from: Date,
+    targetDay: number,
+    targetHour: number
+  ): Date => {
     const result = new Date(from);
-    
+
     // Move to target day
     const currentDay = result.getDay();
     let daysToAdd = targetDay - currentDay;
     if (daysToAdd <= 0) daysToAdd += 7;
     result.setDate(result.getDate() + daysToAdd);
-    
+
     // Set target hour
     result.setHours(targetHour, 0, 0, 0);
-    
+
     return result;
   };
 
   /**
    * ✨ Helper: Generate personalized message based on client state
    */
-  const generatePersonalizedMessage = (clientName: string, score: any, urgency: string): string => {
+  const generatePersonalizedMessage = (
+    clientName: string,
+    score: any,
+    urgency: string
+  ): string => {
     const daysSince = score.days_since_last_visit || 0;
-    
+
     if (urgency === 'high') {
       return `Hi ${clientName}! It's been ${daysSince} days - we miss you! Your usual time slot is available this week. Book now for 10% off! 💇`;
     } else if (urgency === 'medium') {
@@ -213,6 +240,6 @@ export const useSmartAutomation = (stylistId?: string) => {
     smartReminders,
     loading,
     refreshTimingProfiles: learnClientTimingPatterns,
-    refreshReminders: generateSmartReminders
+    refreshReminders: generateSmartReminders,
   };
 };

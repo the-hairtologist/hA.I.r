@@ -1,14 +1,23 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { Loader2, Key } from "lucide-react";
-import { sanitizeInput, detectSQLInjection } from "@/lib/security/inputSanitization";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { Loader2, Key } from 'lucide-react';
+import {
+  sanitizeInput,
+  detectSQLInjection,
+} from '@/lib/security/inputSanitization';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface AccessCodeDialogProps {
   open: boolean;
@@ -16,8 +25,12 @@ interface AccessCodeDialogProps {
   onSuccess: () => void;
 }
 
-export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDialogProps) => {
-  const [code, setCode] = useState("");
+export const AccessCodeDialog = ({
+  open,
+  onOpenChange,
+  onSuccess,
+}: AccessCodeDialogProps) => {
+  const [code, setCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const retryRequest = async <T,>(
@@ -32,7 +45,7 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
         if (i === maxRetries - 1 || !error?.message?.includes('Load failed')) {
           throw error;
         }
-        
+
         // Exponential backoff
         const delay = Math.min(1000 * Math.pow(2, i), 5000);
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -43,28 +56,30 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!code.trim()) {
-      toast.error("Please enter an access code");
+      toast.error('Please enter an access code');
       return;
     }
 
     // Enhanced input validation for defense-in-depth
     const sanitizedCode = sanitizeInput(code);
-    
+
     if (!sanitizedCode) {
-      toast.error("Invalid access code format");
+      toast.error('Invalid access code format');
       return;
     }
 
     if (detectSQLInjection(sanitizedCode)) {
-      toast.error("Invalid access code format");
+      toast.error('Invalid access code format');
       return;
     }
 
     // Validate code format (alphanumeric, hyphens, max 50 chars)
     if (!/^[A-Za-z0-9\-_]{4,50}$/.test(sanitizedCode)) {
-      toast.error("Access code must be 4-50 characters (letters, numbers, hyphens)");
+      toast.error(
+        'Access code must be 4-50 characters (letters, numbers, hyphens)'
+      );
       return;
     }
 
@@ -72,33 +87,41 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
 
     try {
       const session = await retryRequest(async () => {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         return session;
       });
 
       if (!session) {
-        toast.error("Please sign in to redeem an access code");
+        toast.error('Please sign in to redeem an access code');
         return;
       }
 
       const result = await retryRequest(async () => {
         const { data, error } = await supabase.rpc('redeem_access_code', {
           _code: sanitizedCode,
-          _user_id: session.user.id
+          _user_id: session.user.id,
         });
         if (error) throw error;
         return data;
       });
 
-      userJourney.trackAction('Access Code Redeemed', { code: sanitizedCode.substring(0, 4) + '***' });
-      toast.success("Access code redeemed! You now have full access to all features.");
-      setCode("");
+      userJourney.trackAction('Access Code Redeemed', {
+        code: sanitizedCode.substring(0, 4) + '***',
+      });
+      toast.success(
+        'Access code redeemed! You now have full access to all features.'
+      );
+      setCode('');
       onOpenChange(false);
       onSuccess();
     } catch (error: any) {
-      logger.error('Error redeeming access code', error, { context: 'AccessCodeDialog' });
+      logger.error('Error redeeming access code', error, {
+        context: 'AccessCodeDialog',
+      });
       userJourney.trackError(error, { action: 'redeem-access-code' });
-      toast.error(error.message || "Invalid or already used access code");
+      toast.error(error.message || 'Invalid or already used access code');
     } finally {
       setIsSubmitting(false);
     }
@@ -113,10 +136,11 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
           </div>
           <DialogTitle className="text-center">Enter Access Code</DialogTitle>
           <DialogDescription className="text-center">
-            Have an access code? Enter it below to unlock full access to all stylist features.
+            Have an access code? Enter it below to unlock full access to all
+            stylist features.
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="access-code">Access Code</Label>
@@ -124,7 +148,7 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
               id="access-code"
               placeholder="Enter your code"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={e => setCode(e.target.value)}
               disabled={isSubmitting}
               className="font-mono"
             />
@@ -147,7 +171,7 @@ export const AccessCodeDialog = ({ open, onOpenChange, onSuccess }: AccessCodeDi
                   Redeeming...
                 </>
               ) : (
-                "Redeem Code"
+                'Redeem Code'
               )}
             </Button>
           </div>

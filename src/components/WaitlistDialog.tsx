@@ -3,8 +3,8 @@
  * Manage appointment waitlist
  */
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -12,16 +12,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Clock, Mail, Phone, X, UserPlus } from "lucide-react";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { format } from "date-fns";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Clock, Mail, Phone, X, UserPlus } from 'lucide-react';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { format } from 'date-fns';
 
 interface WaitlistEntry {
   id: string;
@@ -41,14 +41,14 @@ export function WaitlistDialog() {
   const [open, setOpen] = useState(false);
   const [entries, setEntries] = useState<WaitlistEntry[]>([]);
   const [loading, setLoading] = useState(false);
-  
+
   // New entry form
   const [formData, setFormData] = useState({
-    clientName: "",
-    clientEmail: "",
-    clientPhone: "",
-    serviceType: "",
-    notes: "",
+    clientName: '',
+    clientEmail: '',
+    clientPhone: '',
+    serviceType: '',
+    notes: '',
   });
 
   useEffect(() => {
@@ -61,24 +61,24 @@ export function WaitlistDialog() {
     setLoading(true);
     try {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
 
       const { data, error } = await supabase
-        .from("waitlist")
-        .select("*")
-        .eq("stylist_id", stylistProfile.id)
-        .eq("status", "active")
-        .order("created_at", { ascending: true });
+        .from('waitlist')
+        .select('*')
+        .eq('stylist_id', stylistProfile.id)
+        .eq('status', 'active')
+        .order('created_at', { ascending: true });
 
       if (error) throw error;
       setEntries((data || []) as WaitlistEntry[]);
     } catch (error) {
-      console.error("Error loading waitlist:", error);
+      console.error('Error loading waitlist:', error);
     } finally {
       setLoading(false);
     }
@@ -86,44 +86,44 @@ export function WaitlistDialog() {
 
   const handleAddToWaitlist = async () => {
     if (!formData.clientName || !formData.serviceType) {
-      toast.error("Name and service type are required");
+      toast.error('Name and service type are required');
       return;
     }
 
     setLoading(true);
     try {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
-      if (!stylistProfile) throw new Error("Stylist profile not found");
+      if (!stylistProfile) throw new Error('Stylist profile not found');
 
-      const { error } = await supabase.from("waitlist").insert({
+      const { error } = await supabase.from('waitlist').insert({
         stylist_id: stylistProfile.id,
         client_name: formData.clientName,
         client_email: formData.clientEmail || null,
         client_phone: formData.clientPhone || null,
         service_type: formData.serviceType,
         notes: formData.notes || null,
-        status: "active",
+        status: 'active',
       });
 
       if (error) throw error;
 
-      toast.success("Added to waitlist!");
+      toast.success('Added to waitlist!');
       setFormData({
-        clientName: "",
-        clientEmail: "",
-        clientPhone: "",
-        serviceType: "",
-        notes: "",
+        clientName: '',
+        clientEmail: '',
+        clientPhone: '',
+        serviceType: '',
+        notes: '',
       });
       loadWaitlist();
     } catch (error: any) {
-      console.error("Error adding to waitlist:", error);
-      toast.error(error.message || "Failed to add to waitlist");
+      console.error('Error adding to waitlist:', error);
+      toast.error(error.message || 'Failed to add to waitlist');
     } finally {
       setLoading(false);
     }
@@ -132,23 +132,23 @@ export function WaitlistDialog() {
   const handleRemoveFromWaitlist = async (id: string) => {
     try {
       const { error } = await supabase
-        .from("waitlist")
-        .update({ status: "removed" })
-        .eq("id", id);
+        .from('waitlist')
+        .update({ status: 'removed' })
+        .eq('id', id);
 
       if (error) throw error;
-      toast.success("Removed from waitlist");
+      toast.success('Removed from waitlist');
       loadWaitlist();
     } catch (error: any) {
-      console.error("Error removing from waitlist:", error);
-      toast.error("Failed to remove from waitlist");
+      console.error('Error removing from waitlist:', error);
+      toast.error('Failed to remove from waitlist');
     }
   };
 
-  const notifyClient = (entry: WaitlistEntry, method: "email" | "phone") => {
-    if (method === "email" && entry.client_email) {
+  const notifyClient = (entry: WaitlistEntry, method: 'email' | 'phone') => {
+    if (method === 'email' && entry.client_email) {
       window.location.href = `mailto:${entry.client_email}?subject=Slot Available - ${entry.service_type}`;
-    } else if (method === "phone" && entry.client_phone) {
+    } else if (method === 'phone' && entry.client_phone) {
       window.location.href = `sms:${entry.client_phone}`;
     } else {
       toast.error(`No ${method} available`);
@@ -184,7 +184,7 @@ export function WaitlistDialog() {
                 <Input
                   id="clientName"
                   value={formData.clientName}
-                  onChange={(e) =>
+                  onChange={e =>
                     setFormData({ ...formData, clientName: e.target.value })
                   }
                   placeholder="John Doe"
@@ -195,7 +195,7 @@ export function WaitlistDialog() {
                 <Input
                   id="serviceType"
                   value={formData.serviceType}
-                  onChange={(e) =>
+                  onChange={e =>
                     setFormData({ ...formData, serviceType: e.target.value })
                   }
                   placeholder="Haircut"
@@ -207,7 +207,7 @@ export function WaitlistDialog() {
                   id="clientEmail"
                   type="email"
                   value={formData.clientEmail}
-                  onChange={(e) =>
+                  onChange={e =>
                     setFormData({ ...formData, clientEmail: e.target.value })
                   }
                   placeholder="john@example.com"
@@ -219,7 +219,7 @@ export function WaitlistDialog() {
                   id="clientPhone"
                   type="tel"
                   value={formData.clientPhone}
-                  onChange={(e) =>
+                  onChange={e =>
                     setFormData({ ...formData, clientPhone: e.target.value })
                   }
                   placeholder="(555) 123-4567"
@@ -231,7 +231,7 @@ export function WaitlistDialog() {
               <Input
                 id="notes"
                 value={formData.notes}
-                onChange={(e) =>
+                onChange={e =>
                   setFormData({ ...formData, notes: e.target.value })
                 }
                 placeholder="Any special requests or preferences"
@@ -260,7 +260,8 @@ export function WaitlistDialog() {
                 <Clock className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p className="font-medium">Waitlist is empty</p>
                 <p className="text-xs">
-                  Add clients who want to be notified when slots become available
+                  Add clients who want to be notified when slots become
+                  available
                 </p>
               </div>
             ) : (
@@ -275,12 +276,15 @@ export function WaitlistDialog() {
                         #{index + 1}
                       </Badge>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm">{entry.client_name}</p>
+                        <p className="font-medium text-sm">
+                          {entry.client_name}
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           {entry.service_type}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Added {format(new Date(entry.created_at), "MMM d, h:mm a")}
+                          Added{' '}
+                          {format(new Date(entry.created_at), 'MMM d, h:mm a')}
                         </p>
                       </div>
                       <div className="flex items-center gap-1 flex-shrink-0">
@@ -288,7 +292,7 @@ export function WaitlistDialog() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => notifyClient(entry, "email")}
+                            onClick={() => notifyClient(entry, 'email')}
                             className="h-7 w-7 p-0"
                             title="Notify via email"
                           >
@@ -299,7 +303,7 @@ export function WaitlistDialog() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => notifyClient(entry, "phone")}
+                            onClick={() => notifyClient(entry, 'phone')}
                             className="h-7 w-7 p-0"
                             title="Notify via SMS"
                           >

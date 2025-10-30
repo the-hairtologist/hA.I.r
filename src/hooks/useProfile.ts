@@ -57,8 +57,12 @@ interface UseProfileReturn {
 
 export function useProfile(userId?: string): UseProfileReturn {
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [stylistProfile, setStylistProfile] = useState<StylistProfile | null>(null);
-  const [clientProfile, setClientProfile] = useState<ClientProfile | null>(null);
+  const [stylistProfile, setStylistProfile] = useState<StylistProfile | null>(
+    null
+  );
+  const [clientProfile, setClientProfile] = useState<ClientProfile | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -106,7 +110,7 @@ export function useProfile(userId?: string): UseProfileReturn {
         }
         setStylistProfile(stylistData);
       }
-      
+
       // Check for client role
       if (roles.includes('client')) {
         const { data: clientData, error: clientError } = await supabase
@@ -135,74 +139,83 @@ export function useProfile(userId?: string): UseProfileReturn {
     fetchProfile();
   }, [fetchProfile]);
 
-  const updateProfile = useCallback(async (data: Partial<ProfileData>) => {
-    if (!userId) throw new Error('No user ID provided');
+  const updateProfile = useCallback(
+    async (data: Partial<ProfileData>) => {
+      if (!userId) throw new Error('No user ID provided');
 
-    try {
-      log.debug('Updating profile', 'useProfile', { userId, data });
+      try {
+        log.debug('Updating profile', 'useProfile', { userId, data });
 
-      const { error } = await supabase
-        .from('profiles')
-        .update(data)
-        .eq('id', userId);
+        const { error } = await supabase
+          .from('profiles')
+          .update(data)
+          .eq('id', userId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Optimistically update local state
-      setProfile(prev => prev ? { ...prev, ...data } : null);
+        // Optimistically update local state
+        setProfile(prev => (prev ? { ...prev, ...data } : null));
 
-      log.info('Profile updated successfully', 'useProfile', { userId });
-    } catch (error) {
-      handleError(error, 'Update Profile');
-      throw error;
-    }
-  }, [userId]);
+        log.info('Profile updated successfully', 'useProfile', { userId });
+      } catch (error) {
+        handleError(error, 'Update Profile');
+        throw error;
+      }
+    },
+    [userId]
+  );
 
-  const updateStylistProfile = useCallback(async (data: Partial<StylistProfile>) => {
-    if (!stylistProfile?.id) throw new Error('No stylist profile found');
+  const updateStylistProfile = useCallback(
+    async (data: Partial<StylistProfile>) => {
+      if (!stylistProfile?.id) throw new Error('No stylist profile found');
 
-    try {
-      log.debug('Updating stylist profile', 'useProfile', { data });
+      try {
+        log.debug('Updating stylist profile', 'useProfile', { data });
 
-      const { error } = await supabase
-        .from('stylist_profiles')
-        .update(data)
-        .eq('id', stylistProfile.id);
+        const { error } = await supabase
+          .from('stylist_profiles')
+          .update(data)
+          .eq('id', stylistProfile.id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Optimistically update local state
-      setStylistProfile(prev => prev ? { ...prev, ...data } : null);
+        // Optimistically update local state
+        setStylistProfile(prev => (prev ? { ...prev, ...data } : null));
 
-      log.info('Stylist profile updated successfully', 'useProfile');
-    } catch (error) {
-      handleError(error, 'Update Stylist Profile');
-      throw error;
-    }
-  }, [stylistProfile?.id]);
+        log.info('Stylist profile updated successfully', 'useProfile');
+      } catch (error) {
+        handleError(error, 'Update Stylist Profile');
+        throw error;
+      }
+    },
+    [stylistProfile?.id]
+  );
 
-  const updateClientProfile = useCallback(async (data: Partial<ClientProfile>) => {
-    if (!clientProfile?.id) throw new Error('No client profile found');
+  const updateClientProfile = useCallback(
+    async (data: Partial<ClientProfile>) => {
+      if (!clientProfile?.id) throw new Error('No client profile found');
 
-    try {
-      log.debug('Updating client profile', 'useProfile', { data });
+      try {
+        log.debug('Updating client profile', 'useProfile', { data });
 
-      const { error } = await supabase
-        .from('client_profiles')
-        .update(data)
-        .eq('id', clientProfile.id);
+        const { error } = await supabase
+          .from('client_profiles')
+          .update(data)
+          .eq('id', clientProfile.id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Optimistically update local state
-      setClientProfile(prev => prev ? { ...prev, ...data } : null);
+        // Optimistically update local state
+        setClientProfile(prev => (prev ? { ...prev, ...data } : null));
 
-      log.info('Client profile updated successfully', 'useProfile');
-    } catch (error) {
-      handleError(error, 'Update Client Profile');
-      throw error;
-    }
-  }, [clientProfile?.id]);
+        log.info('Client profile updated successfully', 'useProfile');
+      } catch (error) {
+        handleError(error, 'Update Client Profile');
+        throw error;
+      }
+    },
+    [clientProfile?.id]
+  );
 
   return {
     profile,

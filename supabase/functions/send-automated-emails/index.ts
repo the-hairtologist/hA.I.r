@@ -1,26 +1,28 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    console.log("🎂 Processing automated emails...");
+    console.log('🎂 Processing automated emails...');
 
     const results = {
       birthdays: 0,
@@ -35,56 +37,66 @@ serve(async (req) => {
     nextWeek.setDate(today.getDate() + 7);
 
     const { data: upcomingBirthdays } = await supabase
-      .from("client_profiles")
-      .select(`
+      .from('client_profiles')
+      .select(
+        `
         id,
         full_name,
         email,
         birthday,
         preferred_stylist_id,
         stylist_profiles!preferred_stylist_id(user_id, full_name)
-      `)
-      .not("birthday", "is", null)
-      .not("email", "is", null);
+      `
+      )
+      .not('birthday', 'is', null)
+      .not('email', 'is', null);
 
     if (upcomingBirthdays) {
       for (const client of upcomingBirthdays) {
         if (!client.birthday || !client.email) continue;
 
         const birthDate = new Date(client.birthday);
-        const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
-        
+        const nextBirthday = new Date(
+          today.getFullYear(),
+          birthDate.getMonth(),
+          birthDate.getDate()
+        );
+
         if (nextBirthday < today) {
           nextBirthday.setFullYear(today.getFullYear() + 1);
         }
 
-        const daysUntil = Math.floor((nextBirthday.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        const daysUntil = Math.floor(
+          (nextBirthday.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+        );
 
         // Send email 7 days before birthday
         if (daysUntil === 7) {
           // Check for milestone discount
           const { data: milestones } = await supabase
-            .from("client_milestones")
-            .select("*")
-            .eq("client_id", client.id)
-            .eq("celebrated", false)
-            .order("created_at", { ascending: false })
+            .from('client_milestones')
+            .select('*')
+            .eq('client_id', client.id)
+            .eq('celebrated', false)
+            .order('created_at', { ascending: false })
             .limit(1);
 
           const milestone = milestones?.[0];
           const discountAmount = milestone?.discount_amount || 20;
-          const discountCode = milestone?.discount_code || "BIRTHDAY20";
+          const discountCode = milestone?.discount_code || 'BIRTHDAY20';
 
           try {
             // Check email preferences
             const { data: prefs } = await supabase
-              .from("email_preferences")
-              .select("*")
-              .eq("email", client.email)
+              .from('email_preferences')
+              .select('*')
+              .eq('email', client.email)
               .maybeSingle();
 
             if (prefs && !prefs.marketing_emails_enabled) {
-              console.log(`⏭️ Skipping birthday email - user unsubscribed: ${client.email}`);
+              console.log(
+                `⏭️ Skipping birthday email - user unsubscribed: ${client.email}`
+              );
               continue;
             }
 
@@ -98,14 +110,14 @@ serve(async (req) => {
               subject: `Happy Birthday ${client.full_name}! 🎂 Special Gift Inside`,
               html: generateBirthdayEmail(
                 client.full_name,
-                stylistProfile?.full_name || "Your Stylist",
+                stylistProfile?.full_name || 'Your Stylist',
                 discountAmount.toString(),
                 discountCode
               ),
             });
 
             // Log to email_sequence_logs
-            await supabase.from("email_sequence_logs").insert({
+            await supabase.from('email_sequence_logs').insert({
               client_id: client.id,
               stylist_id: client.preferred_stylist_id,
               enrollment_id: null,
@@ -118,16 +130,18 @@ serve(async (req) => {
             // Mark milestone as celebrated if exists
             if (milestone) {
               await supabase
-                .from("client_milestones")
+                .from('client_milestones')
                 .update({ celebrated: true })
-                .eq("id", milestone.id);
+                .eq('id', milestone.id);
             }
 
             results.birthdays++;
             console.log(`✅ Birthday email sent to ${client.full_name}`);
           } catch (error) {
             console.error(`❌ Failed to send birthday email:`, error);
-            results.errors.push(`Birthday email failed for ${client.full_name}`);
+            results.errors.push(
+              `Birthday email failed for ${client.full_name}`
+            );
           }
         }
       }
@@ -141,17 +155,19 @@ serve(async (req) => {
     yesterdayEnd.setHours(23, 59, 59, 999);
 
     const { data: recentAppointments } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         client_id,
         stylist_id,
         client_profiles!client_id(full_name, email),
         stylist_profiles!stylist_id(full_name)
-      `)
-      .eq("status", "completed")
-      .gte("appointment_date", yesterday.toISOString())
-      .lte("appointment_date", yesterdayEnd.toISOString());
+      `
+      )
+      .eq('status', 'completed')
+      .gte('appointment_date', yesterday.toISOString())
+      .lte('appointment_date', yesterdayEnd.toISOString());
 
     if (recentAppointments) {
       for (const apt of recentAppointments) {
@@ -167,13 +183,15 @@ serve(async (req) => {
         try {
           // Check email preferences
           const { data: prefs } = await supabase
-            .from("email_preferences")
-            .select("*")
-            .eq("email", clientProfile.email)
+            .from('email_preferences')
+            .select('*')
+            .eq('email', clientProfile.email)
             .maybeSingle();
 
           if (prefs && !prefs.appointment_reminders_enabled) {
-            console.log(`⏭️ Skipping review email - user opted out: ${clientProfile.email}`);
+            console.log(
+              `⏭️ Skipping review email - user opted out: ${clientProfile.email}`
+            );
             continue;
           }
 
@@ -183,12 +201,12 @@ serve(async (req) => {
             subject: `How was your visit with ${stylistProfile?.full_name}? ⭐`,
             html: generateReviewEmail(
               clientProfile.full_name,
-              stylistProfile?.full_name || "your stylist"
+              stylistProfile?.full_name || 'your stylist'
             ),
           });
 
           // Log to email_sequence_logs
-          await supabase.from("email_sequence_logs").insert({
+          await supabase.from('email_sequence_logs').insert({
             client_id: apt.client_id,
             stylist_id: apt.stylist_id,
             enrollment_id: null,
@@ -202,7 +220,9 @@ serve(async (req) => {
           console.log(`✅ Review request sent to ${clientProfile.full_name}`);
         } catch (error) {
           console.error(`❌ Failed to send review email:`, error);
-          results.errors.push(`Review email failed for ${clientProfile?.full_name || 'unknown'}`);
+          results.errors.push(
+            `Review email failed for ${clientProfile?.full_name || 'unknown'}`
+          );
         }
       }
     }
@@ -215,17 +235,19 @@ serve(async (req) => {
     threeDaysAgoEnd.setHours(23, 59, 59, 999);
 
     const { data: cancelledAppointments } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         client_id,
         stylist_id,
         client_profiles!client_id(full_name, email),
         stylist_profiles!stylist_id(full_name)
-      `)
-      .eq("status", "cancelled")
-      .gte("cancelled_at", threeDaysAgo.toISOString())
-      .lte("cancelled_at", threeDaysAgoEnd.toISOString());
+      `
+      )
+      .eq('status', 'cancelled')
+      .gte('cancelled_at', threeDaysAgo.toISOString())
+      .lte('cancelled_at', threeDaysAgoEnd.toISOString());
 
     if (cancelledAppointments) {
       for (const apt of cancelledAppointments) {
@@ -241,13 +263,15 @@ serve(async (req) => {
         try {
           // Check email preferences
           const { data: prefs } = await supabase
-            .from("email_preferences")
-            .select("*")
-            .eq("email", clientProfile.email)
+            .from('email_preferences')
+            .select('*')
+            .eq('email', clientProfile.email)
             .maybeSingle();
 
           if (prefs && !prefs.marketing_emails_enabled) {
-            console.log(`⏭️ Skipping cancellation email - user unsubscribed: ${clientProfile.email}`);
+            console.log(
+              `⏭️ Skipping cancellation email - user unsubscribed: ${clientProfile.email}`
+            );
             continue;
           }
 
@@ -257,12 +281,12 @@ serve(async (req) => {
             subject: `We missed you, ${clientProfile.full_name} - Let's reschedule! 💇`,
             html: generateCancellationEmail(
               clientProfile.full_name,
-              stylistProfile?.full_name || "Your Stylist"
+              stylistProfile?.full_name || 'Your Stylist'
             ),
           });
 
           // Log to email_sequence_logs
-          await supabase.from("email_sequence_logs").insert({
+          await supabase.from('email_sequence_logs').insert({
             client_id: apt.client_id,
             stylist_id: apt.stylist_id,
             enrollment_id: null,
@@ -273,15 +297,19 @@ serve(async (req) => {
           });
 
           results.cancellations++;
-          console.log(`✅ Cancellation follow-up sent to ${clientProfile.full_name}`);
+          console.log(
+            `✅ Cancellation follow-up sent to ${clientProfile.full_name}`
+          );
         } catch (error) {
           console.error(`❌ Failed to send cancellation email:`, error);
-          results.errors.push(`Cancellation email failed for ${clientProfile?.full_name || 'unknown'}`);
+          results.errors.push(
+            `Cancellation email failed for ${clientProfile?.full_name || 'unknown'}`
+          );
         }
       }
     }
 
-    console.log("✅ Email processing complete:", results);
+    console.log('✅ Email processing complete:', results);
 
     return new Response(
       JSON.stringify({
@@ -290,25 +318,30 @@ serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   } catch (error) {
-    console.error("Error in automated emails function:", error);
+    console.error('Error in automated emails function:', error);
     return new Response(
       JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : 'Unknown error',
       }),
       {
         status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   }
 });
 
-function generateBirthdayEmail(clientName: string, stylistName: string, discountAmount: string, discountCode: string): string {
+function generateBirthdayEmail(
+  clientName: string,
+  stylistName: string,
+  discountAmount: string,
+  discountCode: string
+): string {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="text-align: center; margin-bottom: 30px;">
@@ -361,7 +394,10 @@ function generateReviewEmail(clientName: string, stylistName: string): string {
   `;
 }
 
-function generateCancellationEmail(clientName: string, stylistName: string): string {
+function generateCancellationEmail(
+  clientName: string,
+  stylistName: string
+): string {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="text-align: center; margin-bottom: 30px;">

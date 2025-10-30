@@ -3,37 +3,41 @@
  * Copyright © 2025 hA.I.r. All Rights Reserved.
  */
 
-import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
 
 // Safe initialization wrapper
 const initializeApp = () => {
   try {
     console.log('[Main] Starting app initialization...');
-    
+
     // Initialize Sentry with error handling
-    import("@/lib/monitoring").then(({ initSentry }) => {
-      try {
-        initSentry();
-        console.log('[Main] Sentry initialized');
-      } catch (error) {
-        console.warn('[Main] Sentry initialization failed (non-critical):', error);
-      }
-    }).catch((error) => {
-      console.warn('[Main] Failed to load monitoring module:', error);
-    });
+    import('@/lib/monitoring')
+      .then(({ initSentry }) => {
+        try {
+          initSentry();
+          console.log('[Main] Sentry initialized');
+        } catch (error) {
+          console.warn(
+            '[Main] Sentry initialization failed (non-critical):',
+            error
+          );
+        }
+      })
+      .catch(error => {
+        console.warn('[Main] Failed to load monitoring module:', error);
+      });
 
     // Render app immediately - don't wait for monitoring
-    const rootElement = document.getElementById("root");
+    const rootElement = document.getElementById('root');
     if (!rootElement) {
-      throw new Error("Root element not found");
+      throw new Error('Root element not found');
     }
-    
+
     console.log('[Main] Rendering app...');
     createRoot(rootElement).render(<App />);
     console.log('[Main] App rendered successfully');
-    
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
     // Show error to user

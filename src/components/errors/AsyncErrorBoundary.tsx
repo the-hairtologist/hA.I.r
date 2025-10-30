@@ -18,15 +18,13 @@ const DefaultLoadingFallback = () => (
   </div>
 );
 
-export const AsyncErrorBoundary: React.FC<Props> = ({ 
-  children, 
-  loadingFallback = <DefaultLoadingFallback /> 
+export const AsyncErrorBoundary: React.FC<Props> = ({
+  children,
+  loadingFallback = <DefaultLoadingFallback />,
 }) => {
   return (
     <RouteErrorBoundary>
-      <Suspense fallback={loadingFallback}>
-        {children}
-      </Suspense>
+      <Suspense fallback={loadingFallback}>{children}</Suspense>
     </RouteErrorBoundary>
   );
 };

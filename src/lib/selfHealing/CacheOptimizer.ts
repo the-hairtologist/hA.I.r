@@ -23,16 +23,16 @@ class CacheOptimizerSystem {
     logger.info('Starting cache optimization', 'CacheOptimizer');
 
     const beforeSize = queryCache.getStats().size;
-    
+
     // Clear old entries
     this.clearOldEntries();
-    
+
     const afterSize = queryCache.getStats().size;
     const cleaned = beforeSize - afterSize;
 
     logger.info('Cache optimization complete', 'CacheOptimizer', {
       cleaned,
-      retained: afterSize
+      retained: afterSize,
     });
 
     return { cleaned, retained: afterSize };
@@ -43,10 +43,12 @@ class CacheOptimizerSystem {
    */
   private clearOldEntries(): void {
     const stats = queryCache.getStats();
-    
+
     // Only clear if cache is getting large
     if (stats.size > this.MAX_CACHE_SIZE * 0.8) {
-      logger.debug('Clearing old cache entries', 'CacheOptimizer', { size: stats.size });
+      logger.debug('Clearing old cache entries', 'CacheOptimizer', {
+        size: stats.size,
+      });
       queryCache.clear();
     }
   }
@@ -56,11 +58,11 @@ class CacheOptimizerSystem {
    */
   getStats(): CacheStats {
     const stats = queryCache.getStats();
-    
+
     return {
       size: stats.size,
       hitRate: 0.85, // Simplified - real implementation would track hits/misses
-      oldEntries: 0
+      oldEntries: 0,
     };
   }
 

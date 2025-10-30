@@ -7,7 +7,12 @@ interface UseCounterOptions {
   isActive?: boolean;
 }
 
-export const useCounter = ({ start = 0, end, duration = 1500, isActive = false }: UseCounterOptions) => {
+export const useCounter = ({
+  start = 0,
+  end,
+  duration = 1500,
+  isActive = false,
+}: UseCounterOptions) => {
   const [count, setCount] = useState(start);
 
   useEffect(() => {

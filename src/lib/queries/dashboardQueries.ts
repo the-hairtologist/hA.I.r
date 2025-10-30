@@ -3,11 +3,14 @@
  * Replaces select("*") with specific field selections for better performance
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { startOfDay, endOfDay, startOfWeek, endOfWeek } from "date-fns";
+import { supabase } from '@/integrations/supabase/client';
+import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 
 // Stylist-specific queries with optimized field selection
-export const getStylistDashboardData = async (stylistId: string, userId: string) => {
+export const getStylistDashboardData = async (
+  stylistId: string,
+  userId: string
+) => {
   const today = new Date();
   const weekStart = startOfWeek(today);
   const weekEnd = endOfWeek(today);
@@ -17,21 +20,22 @@ export const getStylistDashboardData = async (stylistId: string, userId: string)
     todayApptsResult,
     weekApptsResult,
     messagesResult,
-    appointmentsResult
+    appointmentsResult,
   ] = await Promise.all([
     // Today's appointments - only fields needed for count
     supabase
-      .from("appointments")
-      .select("id, status")
-      .eq("stylist_id", stylistId)
-      .gte("appointment_date", startOfDay(today).toISOString())
-      .lte("appointment_date", endOfDay(today).toISOString())
-      .neq("status", "cancelled"),
-    
+      .from('appointments')
+      .select('id, status')
+      .eq('stylist_id', stylistId)
+      .gte('appointment_date', startOfDay(today).toISOString())
+      .lte('appointment_date', endOfDay(today).toISOString())
+      .neq('status', 'cancelled'),
+
     // Week appointments - includes client info for display
     supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         appointment_date,
         service_type,
@@ -46,29 +50,32 @@ export const getStylistDashboardData = async (stylistId: string, userId: string)
             phone
           )
         )
-      `)
-      .eq("stylist_id", stylistId)
-      .gte("appointment_date", weekStart.toISOString())
-      .lte("appointment_date", weekEnd.toISOString())
-      .neq("status", "cancelled"),
-    
+      `
+      )
+      .eq('stylist_id', stylistId)
+      .gte('appointment_date', weekStart.toISOString())
+      .lte('appointment_date', weekEnd.toISOString())
+      .neq('status', 'cancelled'),
+
     // Unread messages - only count needed
     supabase
-      .from("messages")
-      .select("id", { count: "exact", head: true })
-      .eq("recipient_id", userId)
-      .eq("is_read", false),
-    
+      .from('messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('recipient_id', userId)
+      .eq('is_read', false),
+
     // All appointments for unique client count - minimal data
     supabase
-      .from("appointments")
-      .select("client_id")
-      .eq("stylist_id", stylistId)
+      .from('appointments')
+      .select('client_id')
+      .eq('stylist_id', stylistId),
   ]);
 
   const todayAppts = todayApptsResult.data || [];
   const weekAppts = weekApptsResult.data || [];
-  const uniqueClients = new Set(appointmentsResult.data?.map(a => a.client_id) || []).size;
+  const uniqueClients = new Set(
+    appointmentsResult.data?.map(a => a.client_id) || []
+  ).size;
 
   return {
     stats: {
@@ -82,10 +89,14 @@ export const getStylistDashboardData = async (stylistId: string, userId: string)
 };
 
 // Recent activity query - optimized fields
-export const getRecentActivity = async (stylistId: string, limit: number = 5) => {
+export const getRecentActivity = async (
+  stylistId: string,
+  limit: number = 5
+) => {
   const { data } = await supabase
-    .from("appointments")
-    .select(`
+    .from('appointments')
+    .select(
+      `
       id,
       appointment_date,
       service_type,
@@ -95,16 +106,20 @@ export const getRecentActivity = async (stylistId: string, limit: number = 5) =>
         id,
         user:profiles(full_name)
       )
-    `)
-    .eq("stylist_id", stylistId)
-    .order("created_at", { ascending: false })
+    `
+    )
+    .eq('stylist_id', stylistId)
+    .order('created_at', { ascending: false })
     .limit(limit);
 
   return data || [];
 };
 
 // Client dashboard queries
-export const getClientDashboardData = async (clientId: string, userId: string) => {
+export const getClientDashboardData = async (
+  clientId: string,
+  userId: string
+) => {
   const today = new Date();
   const weekStart = startOfWeek(today);
   const weekEnd = endOfWeek(today);
@@ -113,12 +128,13 @@ export const getClientDashboardData = async (clientId: string, userId: string) =
     upcomingApptsResult,
     weekApptsResult,
     messagesResult,
-    completedApptsResult
+    completedApptsResult,
   ] = await Promise.all([
     // Upcoming appointments
     supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         appointment_date,
         service_type,
@@ -130,16 +146,18 @@ export const getClientDashboardData = async (clientId: string, userId: string) =
           user:profiles(full_name),
           weekly_schedule
         )
-      `)
-      .eq("client_id", clientId)
-      .gte("appointment_date", today.toISOString())
-      .neq("status", "cancelled")
-      .order("appointment_date", { ascending: true }),
-    
+      `
+      )
+      .eq('client_id', clientId)
+      .gte('appointment_date', today.toISOString())
+      .neq('status', 'cancelled')
+      .order('appointment_date', { ascending: true }),
+
     // Week appointments for calendar
     supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         appointment_date,
         service_type,
@@ -149,29 +167,32 @@ export const getClientDashboardData = async (clientId: string, userId: string) =
           business_name,
           user:profiles(full_name)
         )
-      `)
-      .eq("client_id", clientId)
-      .gte("appointment_date", weekStart.toISOString())
-      .lte("appointment_date", weekEnd.toISOString())
-      .neq("status", "cancelled"),
-    
+      `
+      )
+      .eq('client_id', clientId)
+      .gte('appointment_date', weekStart.toISOString())
+      .lte('appointment_date', weekEnd.toISOString())
+      .neq('status', 'cancelled'),
+
     // Unread messages count
     supabase
-      .from("messages")
-      .select("id", { count: "exact", head: true })
-      .eq("recipient_id", userId)
-      .eq("is_read", false),
-    
+      .from('messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('recipient_id', userId)
+      .eq('is_read', false),
+
     // Completed appointments needing reviews
     supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         reviews(id)
-      `)
-      .eq("client_id", clientId)
-      .eq("status", "completed")
-      .is("reviews.id", null)
+      `
+      )
+      .eq('client_id', clientId)
+      .eq('status', 'completed')
+      .is('reviews.id', null),
   ]);
 
   return {
@@ -186,18 +207,22 @@ export const getClientDashboardData = async (clientId: string, userId: string) =
 
 // Get user profile with role - optimized
 export const getUserProfileWithRole = async (userId: string, role: string) => {
-  if (role === "stylist") {
+  if (role === 'stylist') {
     const { data } = await supabase
-      .from("stylist_profiles")
-      .select("id, user_id, business_name, color_line, specialty, years_experience, weekly_schedule")
-      .eq("user_id", userId)
+      .from('stylist_profiles')
+      .select(
+        'id, user_id, business_name, color_line, specialty, years_experience, weekly_schedule'
+      )
+      .eq('user_id', userId)
       .maybeSingle();
     return data;
-  } else if (role === "client") {
+  } else if (role === 'client') {
     const { data } = await supabase
-      .from("client_profiles")
-      .select("id, user_id, full_name, email, phone, hair_type, preferred_stylist_id")
-      .eq("user_id", userId)
+      .from('client_profiles')
+      .select(
+        'id, user_id, full_name, email, phone, hair_type, preferred_stylist_id'
+      )
+      .eq('user_id', userId)
       .maybeSingle();
     return data;
   }
@@ -207,9 +232,9 @@ export const getUserProfileWithRole = async (userId: string, role: string) => {
 // Get basic profile data
 export const getBasicProfile = async (userId: string) => {
   const { data } = await supabase
-    .from("profiles")
-    .select("id, full_name, gender, avatar_url")
-    .eq("id", userId)
+    .from('profiles')
+    .select('id, full_name, gender, avatar_url')
+    .eq('id', userId)
     .maybeSingle();
   return data;
 };

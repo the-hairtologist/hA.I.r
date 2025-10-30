@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, Loader2, AlertCircle, ThumbsUp, Copy } from 'lucide-react';
@@ -12,18 +18,18 @@ interface FormulaSuggestionsProps {
   onUseRecommendation?: (recommendation: any) => void;
 }
 
-export const FormulaSuggestions = ({ 
-  clientId, 
+export const FormulaSuggestions = ({
+  clientId,
   stylistId,
-  onUseRecommendation 
+  onUseRecommendation,
 }: FormulaSuggestionsProps) => {
   const [existingInsights, setExistingInsights] = useState<any[]>([]);
-  const { 
-    generateRecommendations, 
+  const {
+    generateRecommendations,
     fetchInsights,
     dismissInsight,
-    isGenerating, 
-    recommendations 
+    isGenerating,
+    recommendations,
   } = useFormulaRecommendations();
   const { toast } = useToast();
 
@@ -33,7 +39,9 @@ export const FormulaSuggestions = ({
 
   const loadExistingInsights = async () => {
     const insights = await fetchInsights(stylistId, clientId);
-    setExistingInsights(insights.filter(i => i.insight_type === 'formula_recommendation'));
+    setExistingInsights(
+      insights.filter(i => i.insight_type === 'formula_recommendation')
+    );
   };
 
   const handleGenerate = async () => {
@@ -53,17 +61,21 @@ export const FormulaSuggestions = ({
   const handleCopyFormula = (formula: string) => {
     navigator.clipboard.writeText(formula);
     toast({
-      title: "Copied",
-      description: "Formula copied to clipboard",
+      title: 'Copied',
+      description: 'Formula copied to clipboard',
     });
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'destructive';
-      case 'medium': return 'default';
-      case 'low': return 'secondary';
-      default: return 'default';
+      case 'high':
+        return 'destructive';
+      case 'medium':
+        return 'default';
+      case 'low':
+        return 'secondary';
+      default:
+        return 'default';
     }
   };
 
@@ -80,12 +92,8 @@ export const FormulaSuggestions = ({
               Smart suggestions based on client history
             </CardDescription>
           </div>
-          
-          <Button
-            onClick={handleGenerate}
-            disabled={isGenerating}
-            size="sm"
-          >
+
+          <Button onClick={handleGenerate} disabled={isGenerating} size="sm">
             {isGenerating ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -105,12 +113,16 @@ export const FormulaSuggestions = ({
         {/* Show existing insights first */}
         {existingInsights.length > 0 && !recommendations && (
           <div className="space-y-3">
-            {existingInsights.map((insight) => (
-              <div key={insight.id} className="bg-primary/5 rounded-lg p-4 space-y-3">
+            {existingInsights.map(insight => (
+              <div
+                key={insight.id}
+                className="bg-primary/5 rounded-lg p-4 space-y-3"
+              >
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">
-                      Generated {new Date(insight.created_at).toLocaleDateString()}
+                      Generated{' '}
+                      {new Date(insight.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   <Button
@@ -123,12 +135,20 @@ export const FormulaSuggestions = ({
                 </div>
 
                 {insight.action_items?.map((rec: any, idx: number) => (
-                  <div key={idx} className="border rounded-lg p-3 bg-background">
+                  <div
+                    key={idx}
+                    className="border rounded-lg p-3 bg-background"
+                  >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
-                        <h5 className="font-medium">{rec.title || 'Recommendation'}</h5>
+                        <h5 className="font-medium">
+                          {rec.title || 'Recommendation'}
+                        </h5>
                         {rec.priority && (
-                          <Badge variant={getPriorityColor(rec.priority)} className="mt-1">
+                          <Badge
+                            variant={getPriorityColor(rec.priority)}
+                            className="mt-1"
+                          >
                             {rec.priority}
                           </Badge>
                         )}
@@ -202,16 +222,19 @@ export const FormulaSuggestions = ({
               Fresh Recommendations
             </h4>
 
-            {recommendations.insights && recommendations.insights.length > 0 && (
-              <div className="bg-secondary/50 rounded p-3 mb-3">
-                <p className="text-sm font-medium mb-2">Key Insights:</p>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {recommendations.insights.map((insight: string, i: number) => (
-                    <li key={i}>• {insight}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {recommendations.insights &&
+              recommendations.insights.length > 0 && (
+                <div className="bg-secondary/50 rounded p-3 mb-3">
+                  <p className="text-sm font-medium mb-2">Key Insights:</p>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    {recommendations.insights.map(
+                      (insight: string, i: number) => (
+                        <li key={i}>• {insight}</li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
 
             {recommendations.recommendations?.map((rec: any, idx: number) => (
               <div key={idx} className="border rounded-lg p-3 bg-background">
@@ -219,7 +242,10 @@ export const FormulaSuggestions = ({
                   <div className="flex-1">
                     <h5 className="font-medium">{rec.title}</h5>
                     {rec.priority && (
-                      <Badge variant={getPriorityColor(rec.priority)} className="mt-1">
+                      <Badge
+                        variant={getPriorityColor(rec.priority)}
+                        className="mt-1"
+                      >
                         {rec.priority}
                       </Badge>
                     )}
@@ -248,12 +274,8 @@ export const FormulaSuggestions = ({
                 )}
 
                 <div className="flex gap-4 text-xs text-muted-foreground">
-                  {rec.processingTime && (
-                    <span>⏱️ {rec.processingTime}</span>
-                  )}
-                  {rec.developVolume && (
-                    <span>💧 {rec.developVolume}</span>
-                  )}
+                  {rec.processingTime && <span>⏱️ {rec.processingTime}</span>}
+                  {rec.developVolume && <span>💧 {rec.developVolume}</span>}
                 </div>
 
                 {rec.concerns && rec.concerns.length > 0 && (
@@ -297,7 +319,8 @@ export const FormulaSuggestions = ({
           <div className="text-center py-8 text-muted-foreground">
             <Sparkles className="h-12 w-12 mx-auto mb-3 opacity-50" />
             <p className="text-sm">
-              No recommendations yet. Generate AI-powered formula suggestions based on client history.
+              No recommendations yet. Generate AI-powered formula suggestions
+              based on client history.
             </p>
           </div>
         )}

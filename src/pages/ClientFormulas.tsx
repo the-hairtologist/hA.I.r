@@ -2,15 +2,21 @@
  * Client Hair History Page
  * Simple, clean view for clients to see their hair formulas and history
  */
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, Clock, Palette, FileText } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { SkeletonList } from "@/components/ui/skeleton-list";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Clock, Palette, FileText } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { SkeletonList } from '@/components/ui/skeleton-list';
 
 const ClientFormulas = () => {
   const navigate = useNavigate();
@@ -24,17 +30,19 @@ const ClientFormulas = () => {
 
   const loadData = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        navigate("/auth");
+        navigate('/auth');
         return;
       }
 
       // Get client profile
       const { data: client } = await supabase
-        .from("client_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
+        .from('client_profiles')
+        .select('*')
+        .eq('user_id', session.user.id)
         .maybeSingle();
 
       if (!client) {
@@ -46,20 +54,22 @@ const ClientFormulas = () => {
 
       // Get formulas for this client
       const { data: formulasData } = await supabase
-        .from("formulas")
-        .select(`
+        .from('formulas')
+        .select(
+          `
           *,
           stylist:stylist_profiles(
             business_name,
             user:profiles(full_name)
           )
-        `)
-        .eq("client_id", client.id)
-        .order("created_at", { ascending: false });
+        `
+        )
+        .eq('client_id', client.id)
+        .order('created_at', { ascending: false });
 
       setFormulas(formulasData || []);
     } catch (error) {
-      console.error("Error loading formulas:", error);
+      console.error('Error loading formulas:', error);
     } finally {
       setLoading(false);
     }
@@ -71,7 +81,9 @@ const ClientFormulas = () => {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-pixel">My Hair History</h1>
-            <p className="font-sans text-muted-foreground">Your hair formulas and color history</p>
+            <p className="font-sans text-muted-foreground">
+              Your hair formulas and color history
+            </p>
           </div>
           <SkeletonList count={3} />
         </div>
@@ -114,7 +126,9 @@ const ClientFormulas = () => {
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold">No Hair History Yet</h3>
                   <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                    Your hair formulas will appear here after your stylist creates them. This helps you keep track of what products and techniques work best for your hair.
+                    Your hair formulas will appear here after your stylist
+                    creates them. This helps you keep track of what products and
+                    techniques work best for your hair.
                   </p>
                 </div>
               </div>
@@ -122,33 +136,47 @@ const ClientFormulas = () => {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {formulas.map((formula) => (
-              <Card key={formula.id} className="hover:shadow-lg transition-shadow">
+            {formulas.map(formula => (
+              <Card
+                key={formula.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="space-y-1 flex-1">
                       <div className="flex items-center gap-2">
                         <CardTitle className="text-xl">
-                          {formula.color_line || "Hair Formula"}
+                          {formula.color_line || 'Hair Formula'}
                         </CardTitle>
                         {formula.tags && formula.tags.length > 0 && (
                           <div className="flex gap-1 flex-wrap">
-                            {formula.tags.slice(0, 2).map((tag: string, i: number) => (
-                              <Badge key={i} variant="secondary" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
+                            {formula.tags
+                              .slice(0, 2)
+                              .map((tag: string, i: number) => (
+                                <Badge
+                                  key={i}
+                                  variant="secondary"
+                                  className="text-xs"
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
                           </div>
                         )}
                       </div>
                       <CardDescription className="flex items-center gap-4 text-sm">
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          {formatDistanceToNow(new Date(formula.created_at), { addSuffix: true })}
+                          {formatDistanceToNow(new Date(formula.created_at), {
+                            addSuffix: true,
+                          })}
                         </span>
                         {formula.stylist && (
                           <span>
-                            by {formula.stylist.business_name || formula.stylist.user?.full_name || "Your Stylist"}
+                            by{' '}
+                            {formula.stylist.business_name ||
+                              formula.stylist.user?.full_name ||
+                              'Your Stylist'}
                           </span>
                         )}
                       </CardDescription>
@@ -167,7 +195,7 @@ const ClientFormulas = () => {
                       </p>
                     </div>
                   )}
-                  
+
                   {formula.instructions && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm font-medium">
@@ -184,14 +212,22 @@ const ClientFormulas = () => {
                     <div className="grid grid-cols-2 gap-4 pt-2 border-t">
                       {formula.processing_time && (
                         <div className="space-y-1">
-                          <p className="text-xs text-muted-foreground">Processing Time</p>
-                          <p className="text-sm font-medium">{formula.processing_time} min</p>
+                          <p className="text-xs text-muted-foreground">
+                            Processing Time
+                          </p>
+                          <p className="text-sm font-medium">
+                            {formula.processing_time} min
+                          </p>
                         </div>
                       )}
                       {formula.developer_volume && (
                         <div className="space-y-1">
-                          <p className="text-xs text-muted-foreground">Developer Volume</p>
-                          <p className="text-sm font-medium">{formula.developer_volume}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Developer Volume
+                          </p>
+                          <p className="text-sm font-medium">
+                            {formula.developer_volume}
+                          </p>
                         </div>
                       )}
                     </div>

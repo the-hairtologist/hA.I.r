@@ -27,24 +27,31 @@ export const isSafeRedirectUrl = (
 ): boolean => {
   try {
     const urlObj = new URL(url);
-    
+
     // Only allow https protocol (except localhost for dev)
-    if (urlObj.protocol !== 'https:' && !urlObj.hostname.includes('localhost')) {
+    if (
+      urlObj.protocol !== 'https:' &&
+      !urlObj.hostname.includes('localhost')
+    ) {
       safeConsole.warn('[Security] Rejected non-HTTPS URL:', url);
       return false;
     }
-    
+
     // Check against allowed domains
     const allAllowedDomains = [...ALLOWED_REDIRECT_DOMAINS, ...allowedDomains];
-    const isAllowed = allAllowedDomains.some(domain => 
-      urlObj.hostname === domain || urlObj.hostname.endsWith(`.${domain}`)
+    const isAllowed = allAllowedDomains.some(
+      domain =>
+        urlObj.hostname === domain || urlObj.hostname.endsWith(`.${domain}`)
     );
-    
+
     if (!isAllowed) {
-      safeConsole.warn('[Security] Rejected URL from untrusted domain:', urlObj.hostname);
+      safeConsole.warn(
+        '[Security] Rejected URL from untrusted domain:',
+        urlObj.hostname
+      );
       return false;
     }
-    
+
     return true;
   } catch (error) {
     safeConsole.error('[Security] Invalid URL format:', url);
@@ -87,12 +94,12 @@ export const isValidGA4MeasurementId = (measurementId: string): boolean => {
 export const isSafeExternalLink = (href: string): boolean => {
   try {
     const url = new URL(href);
-    
+
     // Block javascript: and data: protocols
     if (['javascript:', 'data:', 'vbscript:'].includes(url.protocol)) {
       return false;
     }
-    
+
     // Only allow http and https
     return ['http:', 'https:'].includes(url.protocol);
   } catch {

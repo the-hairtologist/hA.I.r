@@ -4,17 +4,23 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Bell, BellOff, Loader2 } from 'lucide-react';
-import { 
-  getNotificationPreferences, 
-  saveNotificationPreferences, 
+import {
+  getNotificationPreferences,
+  saveNotificationPreferences,
   requestNotificationPermission,
   registerDeviceToken,
-  areNotificationsEnabled 
+  areNotificationsEnabled,
 } from '@/utils/pushNotifications';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
@@ -27,7 +33,7 @@ export const NotificationSettings = () => {
 
   const handleEnableNotifications = async () => {
     if (!user) return;
-    
+
     setRegistering(true);
     try {
       const success = await registerDeviceToken(user.id);
@@ -56,7 +62,11 @@ export const NotificationSettings = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          {enabled ? <Bell className="h-5 w-5" /> : <BellOff className="h-5 w-5" />}
+          {enabled ? (
+            <Bell className="h-5 w-5" />
+          ) : (
+            <BellOff className="h-5 w-5" />
+          )}
           Push Notifications
         </CardTitle>
         <CardDescription>
@@ -69,8 +79,8 @@ export const NotificationSettings = () => {
             <p className="text-sm text-muted-foreground">
               Enable push notifications to receive timely alerts and reminders
             </p>
-            <Button 
-              onClick={handleEnableNotifications} 
+            <Button
+              onClick={handleEnableNotifications}
               disabled={registering}
               className="w-full"
             >
@@ -94,43 +104,53 @@ export const NotificationSettings = () => {
               <Switch
                 id="appt-24h"
                 checked={preferences.appointment_reminders_24h}
-                onCheckedChange={() => handlePreferenceChange('appointment_reminders_24h')}
+                onCheckedChange={() =>
+                  handlePreferenceChange('appointment_reminders_24h')
+                }
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Label htmlFor="appt-1h">Appointment Reminders (1h)</Label>
               <Switch
                 id="appt-1h"
                 checked={preferences.appointment_reminders_1h}
-                onCheckedChange={() => handlePreferenceChange('appointment_reminders_1h')}
+                onCheckedChange={() =>
+                  handlePreferenceChange('appointment_reminders_1h')
+                }
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Label htmlFor="at-risk">Client At-Risk Alerts</Label>
               <Switch
                 id="at-risk"
                 checked={preferences.client_at_risk_alerts}
-                onCheckedChange={() => handlePreferenceChange('client_at_risk_alerts')}
+                onCheckedChange={() =>
+                  handlePreferenceChange('client_at_risk_alerts')
+                }
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Label htmlFor="new-booking">New Booking Notifications</Label>
               <Switch
                 id="new-booking"
                 checked={preferences.new_booking_notifications}
-                onCheckedChange={() => handlePreferenceChange('new_booking_notifications')}
+                onCheckedChange={() =>
+                  handlePreferenceChange('new_booking_notifications')
+                }
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Label htmlFor="formula">Formula Usage Notifications</Label>
               <Switch
                 id="formula"
                 checked={preferences.formula_usage_notifications}
-                onCheckedChange={() => handlePreferenceChange('formula_usage_notifications')}
+                onCheckedChange={() =>
+                  handlePreferenceChange('formula_usage_notifications')
+                }
               />
             </div>
           </div>

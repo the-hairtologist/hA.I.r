@@ -8,7 +8,7 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
   }
-  
+
   html {
     /* Prevent text size adjustment on iOS */
     -webkit-text-size-adjust: 100%;
@@ -21,7 +21,7 @@
     max-width: 100vw;
     width: 100%;
   }
-  
+
   body {
     /* Prevent overscroll bounce on iOS */
     overscroll-behavior-y: none;
@@ -36,49 +36,52 @@
     max-width: 100vw;
     width: 100%;
   }
-  
+
   /* Improve button and input touch interactions */
-  button, input, select, textarea {
+  button,
+  input,
+  select,
+  textarea {
     touch-action: manipulation;
   }
-  
+
   /* Fix iOS Safari bottom bar issue */
   @supports (-webkit-touch-callout: none) {
     .min-h-screen {
       min-height: -webkit-fill-available;
     }
   }
-  
+
   /* Support for dynamic viewport units (mobile browser address bars) */
   .h-screen-safe {
     height: 100vh;
     height: 100dvh;
   }
-  
+
   .min-h-screen-safe {
     min-height: 100vh;
     min-height: 100dvh;
   }
-  
+
   /* Responsive text sizing based on device */
   @media (max-width: 640px) {
     html {
       font-size: 14px; /* Slightly smaller base for mobile */
     }
   }
-  
+
   @media (min-width: 641px) and (max-width: 1024px) {
     html {
       font-size: 15px; /* Medium for tablets */
     }
   }
-  
+
   @media (min-width: 1025px) {
     html {
       font-size: 16px; /* Full size for desktop */
     }
   }
-  
+
   /* High DPI display optimization */
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     body {
@@ -86,7 +89,7 @@
       -moz-osx-font-smoothing: grayscale;
     }
   }
-  
+
   /* WCAG 2.2 AA - Reduce Motion Support */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -98,38 +101,37 @@
       scroll-behavior: auto !important;
     }
   }
-  
+
   /* Touch-friendly minimum sizes */
   .touch-target {
     min-width: 44px;
     min-height: 44px;
   }
-  
+
   /* Responsive container with safe overflow */
   .responsive-container {
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
   }
-  
+
   /* Mobile-first spacing utilities */
   .mobile-spacing {
     padding: 1rem;
   }
-  
+
   @media (min-width: 640px) {
     .mobile-spacing {
       padding: 1.5rem;
     }
   }
-  
+
   @media (min-width: 1024px) {
     .mobile-spacing {
       padding: 2rem;
     }
   }
 
-  
   /* CRITICAL: Root container constraints */
   #root {
     min-height: 100vh;
@@ -139,7 +141,7 @@
     overflow-x: hidden;
     position: relative;
   }
-  
+
   /* Safe area insets for iOS notch and home indicator */
   body {
     padding-top: env(safe-area-inset-top);
@@ -147,13 +149,13 @@
     padding-right: env(safe-area-inset-right);
     /* Note: padding-bottom removed - footer handles it with pb-safe class */
   }
-  
+
   /* CRITICAL: Prevent any container from breaking layout */
   * {
     /* Ensure box-sizing includes padding and border */
     box-sizing: border-box;
   }
-  
+
   /* Prevent overflow on all containers */
   .container,
   main,
@@ -161,7 +163,7 @@
   article {
     max-width: 100%;
   }
-  
+
   /* Accessibility - Screen reader only content */
   .sr-only {
     position: absolute;
@@ -188,36 +190,38 @@
   .skip-to-main:focus {
     @apply translate-y-0;
   }
-  
+
   /* Prevent zoom on input focus (iOS Safari) while keeping accessibility */
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="password"],
-  input[type="number"],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='password'],
+  input[type='number'],
   select,
   textarea {
     font-size: 16px; /* iOS won't zoom if font-size is 16px or larger */
   }
-  
+
   /* Improve form input appearance on mobile */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     /* Prevent iOS from adding default styling */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
   }
-  
+
   /* Focus-visible polyfill for better keyboard navigation */
   :focus:not(:focus-visible) {
     outline: none;
   }
-  
+
   :focus-visible {
     outline: 2px solid hsl(var(--primary));
     outline-offset: 2px;
   }
-  
+
   /* GPU Acceleration for Smooth Mobile Animations */
   .animate-fade-in,
   .animate-fade-out,
@@ -227,13 +231,13 @@
   .transition-all,
   .transition-transform,
   .transition-opacity,
-  [class*="animate-"],
-  [class*="transition-"] {
+  [class*='animate-'],
+  [class*='transition-'] {
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0); /* Force GPU layer */
     backface-visibility: hidden; /* Prevent flickering */
   }
-  
+
   /* Remove will-change after animation completes to free resources */
   .animate-fade-in.animation-complete,
   .animate-fade-out.animation-complete,
@@ -242,14 +246,15 @@
   .animate-scale-in.animation-complete {
     will-change: auto;
   }
-  
+
   /* Optimize hover/active states for mobile */
   @media (hover: none) and (pointer: coarse) {
     .hover\:scale-105:active,
     .hover\:scale-110:active,
     .active\:scale-95:active {
       will-change: transform;
-      transform: translate3d(0, 0, 0) scale(var(--tw-scale-x), var(--tw-scale-y));
+      transform: translate3d(0, 0, 0)
+        scale(var(--tw-scale-x), var(--tw-scale-y));
     }
   }
 }
@@ -276,28 +281,28 @@ All colors MUST be HSL.
     --popover-foreground: 20 14% 10%;
 
     /* Pixelated LEGO-inspired color palette */
-    --primary: 8 100% 55%;          /* Vibrant red/orange */
-    --primary-foreground: 0 0% 100%;   /* White text on red */
+    --primary: 8 100% 55%; /* Vibrant red/orange */
+    --primary-foreground: 0 0% 100%; /* White text on red */
     --primary-glow: 8 100% 65%;
 
-    --secondary: 45 100% 50%;        /* Bold yellow */
+    --secondary: 45 100% 50%; /* Bold yellow */
     --secondary-foreground: 0 0% 0%; /* Black text on yellow */
 
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 30%;
 
-    --accent: 215 100% 50%;          /* Bright blue */
+    --accent: 215 100% 50%; /* Bright blue */
     --accent-foreground: 0 0% 100%; /* White text on blue */
 
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 100%;
-    
+
     --success: 142 76% 28%; /* Darker green for better depth and contrast */
     --success-foreground: 0 0% 100%;
-    
+
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
-    
+
     --info: 217 91% 60%;
     --info-foreground: 0 0% 100%;
 
@@ -306,33 +311,33 @@ All colors MUST be HSL.
     --ring: 270 85% 60%;
 
     --radius: 1rem;
-    
+
     /* Typography Scale - Base 16px */
-    --text-xs: 0.75rem;      /* 12px */
-    --text-sm: 0.875rem;     /* 14px */
-    --text-base: 1rem;       /* 16px */
-    --text-lg: 1.25rem;      /* 20px */
-    --text-xl: 1.5rem;       /* 24px */
-    --text-2xl: 2rem;        /* 32px */
-    --text-3xl: 2.5rem;      /* 40px */
-    
+    --text-xs: 0.75rem; /* 12px */
+    --text-sm: 0.875rem; /* 14px */
+    --text-base: 1rem; /* 16px */
+    --text-lg: 1.25rem; /* 20px */
+    --text-xl: 1.5rem; /* 24px */
+    --text-2xl: 2rem; /* 32px */
+    --text-3xl: 2.5rem; /* 40px */
+
     /* Line Heights */
-    --leading-body: 1.5;     /* 1.4-1.6 for body text */
-    --leading-heading: 1.2;  /* Tighter for headings */
-    
+    --leading-body: 1.5; /* 1.4-1.6 for body text */
+    --leading-heading: 1.2; /* Tighter for headings */
+
     /* Spacing Scale - 4px grid */
-    --space-1: 0.25rem;  /* 4px */
-    --space-2: 0.5rem;   /* 8px */
-    --space-3: 0.75rem;  /* 12px */
-    --space-4: 1rem;     /* 16px */
-    --space-5: 1.25rem;  /* 20px */
-    --space-6: 1.5rem;   /* 24px */
-    
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem; /* 8px */
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem; /* 16px */
+    --space-5: 1.25rem; /* 20px */
+    --space-6: 1.5rem; /* 24px */
+
     /* Animation Durations */
     --duration-fast: 150ms;
     --duration-base: 200ms;
     --duration-slow: 250ms;
-    
+
     /* Spacing scale */
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
@@ -346,44 +351,108 @@ All colors MUST be HSL.
     --glass-bg: hsla(var(--background), 0.7);
     --glass-border: hsla(var(--foreground), 0.1);
     --glass-blur: 12px;
-    
+
     /* Elevation System */
     --elevation-1: 0 1px 3px hsla(var(--foreground), 0.12);
     --elevation-2: 0 4px 12px hsla(var(--foreground), 0.15);
     --elevation-3: 0 8px 24px hsla(var(--foreground), 0.18);
     --elevation-4: 0 16px 48px hsla(var(--foreground), 0.2);
-    
+
     /* Glow Effects */
     --glow-primary: 0 0 20px hsla(var(--primary), 0.3);
     --glow-accent: 0 0 20px hsla(var(--accent), 0.3);
     --glow-success: 0 0 20px hsla(var(--success), 0.3);
-    
+
     /* Focus Ring */
     --focus-ring: 0 0 0 4px hsla(var(--primary), 0.3);
     --focus-ring-offset: 0 0 0 2px hsl(var(--background));
-    
+
     /* Pixelated gradients - LEGO brick colors */
-    --gradient-primary: linear-gradient(135deg, hsl(8 100% 55%) 0%, hsl(45 100% 50%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(45 100% 50%) 0%, hsl(215 100% 50%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(8 100% 55%) 0%, hsl(45 100% 50%) 50%, hsl(215 100% 50%) 100%);
-    --gradient-bg-main: linear-gradient(135deg, hsl(8 100% 55%) 0%, hsl(45 100% 50%) 50%, hsl(215 100% 50%) 100%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(8 100% 55%) 0%,
+      hsl(45 100% 50%) 100%
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(45 100% 50%) 0%,
+      hsl(215 100% 50%) 100%
+    );
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(8 100% 55%) 0%,
+      hsl(45 100% 50%) 50%,
+      hsl(215 100% 50%) 100%
+    );
+    --gradient-bg-main: linear-gradient(
+      135deg,
+      hsl(8 100% 55%) 0%,
+      hsl(45 100% 50%) 50%,
+      hsl(215 100% 50%) 100%
+    );
+
     /* Icon background gradients for sidebar - darkened for white text */
-    --gradient-purple-pink: linear-gradient(135deg, hsl(270 85% 48%) 0%, hsl(330 85% 52%) 100%);
-    --gradient-cyan-blue: linear-gradient(135deg, hsl(190 95% 42%) 0%, hsl(210 95% 42%) 100%);
-    --gradient-green-emerald: linear-gradient(135deg, hsl(142 76% 38%) 0%, hsl(160 84% 35%) 100%);
-    --gradient-pink-rose: linear-gradient(135deg, hsl(330 85% 52%) 0%, hsl(350 85% 48%) 100%);
-    --gradient-blue-indigo: linear-gradient(135deg, hsl(210 95% 42%) 0%, hsl(240 85% 48%) 100%);
-    --gradient-emerald-teal: linear-gradient(135deg, hsl(160 84% 35%) 0%, hsl(180 84% 32%) 100%);
-    --gradient-amber-orange: linear-gradient(135deg, hsl(38 92% 42%) 0%, hsl(25 90% 45%) 100%);
-    --gradient-orange-red: linear-gradient(135deg, hsl(25 90% 45%) 0%, hsl(0 85% 50%) 100%);
-    --gradient-violet-purple: linear-gradient(135deg, hsl(258 90% 52%) 0%, hsl(270 85% 48%) 100%);
-    --gradient-gray-slate: linear-gradient(135deg, hsl(220 9% 38%) 0%, hsl(215 16% 40%) 100%);
-    
+    --gradient-purple-pink: linear-gradient(
+      135deg,
+      hsl(270 85% 48%) 0%,
+      hsl(330 85% 52%) 100%
+    );
+    --gradient-cyan-blue: linear-gradient(
+      135deg,
+      hsl(190 95% 42%) 0%,
+      hsl(210 95% 42%) 100%
+    );
+    --gradient-green-emerald: linear-gradient(
+      135deg,
+      hsl(142 76% 38%) 0%,
+      hsl(160 84% 35%) 100%
+    );
+    --gradient-pink-rose: linear-gradient(
+      135deg,
+      hsl(330 85% 52%) 0%,
+      hsl(350 85% 48%) 100%
+    );
+    --gradient-blue-indigo: linear-gradient(
+      135deg,
+      hsl(210 95% 42%) 0%,
+      hsl(240 85% 48%) 100%
+    );
+    --gradient-emerald-teal: linear-gradient(
+      135deg,
+      hsl(160 84% 35%) 0%,
+      hsl(180 84% 32%) 100%
+    );
+    --gradient-amber-orange: linear-gradient(
+      135deg,
+      hsl(38 92% 42%) 0%,
+      hsl(25 90% 45%) 100%
+    );
+    --gradient-orange-red: linear-gradient(
+      135deg,
+      hsl(25 90% 45%) 0%,
+      hsl(0 85% 50%) 100%
+    );
+    --gradient-violet-purple: linear-gradient(
+      135deg,
+      hsl(258 90% 52%) 0%,
+      hsl(270 85% 48%) 100%
+    );
+    --gradient-gray-slate: linear-gradient(
+      135deg,
+      hsl(220 9% 38%) 0%,
+      hsl(215 16% 40%) 100%
+    );
+
     /* Shadows - Softer, more subtle */
-    --shadow-soft: 0 1px 3px 0 hsl(270 85% 60% / 0.05), 0 1px 2px -1px hsl(270 85% 60% / 0.05);
-    --shadow-medium: 0 4px 6px -1px hsl(270 85% 60% / 0.08), 0 2px 4px -2px hsl(270 85% 60% / 0.08);
-    --shadow-large: 0 10px 15px -3px hsl(270 85% 60% / 0.1), 0 4px 6px -4px hsl(270 85% 60% / 0.1);
+    --shadow-soft:
+      0 1px 3px 0 hsl(270 85% 60% / 0.05),
+      0 1px 2px -1px hsl(270 85% 60% / 0.05);
+    --shadow-medium:
+      0 4px 6px -1px hsl(270 85% 60% / 0.08),
+      0 2px 4px -2px hsl(270 85% 60% / 0.08);
+    --shadow-large:
+      0 10px 15px -3px hsl(270 85% 60% / 0.1),
+      0 4px 6px -4px hsl(270 85% 60% / 0.1);
     --shadow-glow: 0 0 20px hsl(270 85% 60% / 0.15);
 
     --sidebar-background: 0 0% 100%;
@@ -394,17 +463,17 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 5%;
     --sidebar-border: 0 0% 85%;
     --sidebar-ring: 210 100% 50%;
-    
+
     /* ============================================ */
     /* ADAPTIVE BRUTALISM DESIGN SYSTEM */
     /* Visual Language + Typography Tokens */
     /* ============================================ */
-    
+
     /* Brutal Border Widths */
     --brutal-border-subtle: 2px;
     --brutal-border-standard: 3px;
     --brutal-border-bold: 4px;
-    
+
     /* Brutal Shadow System - Consistent offsets */
     --brutal-shadow-xs: 1px 1px 0px 0px hsl(var(--foreground));
     --brutal-shadow-sm: 2px 2px 0px 0px hsl(var(--foreground));
@@ -412,13 +481,13 @@ All colors MUST be HSL.
     --brutal-shadow-lg: 5px 5px 0px 0px hsl(var(--foreground));
     --brutal-shadow-xl: 6px 6px 0px 0px hsl(var(--foreground));
     --brutal-shadow-2xl: 8px 8px 0px 0px hsl(var(--foreground));
-    
+
     /* Brutal Shadows with Opacity (for subtle variants) */
     --brutal-shadow-sm-soft: 2px 2px 0px 0px hsl(var(--foreground) / 0.2);
     --brutal-shadow-md-soft: 3px 3px 0px 0px hsl(var(--foreground) / 0.2);
     --brutal-shadow-lg-soft: 4px 4px 0px 0px hsl(var(--foreground) / 0.2);
     --brutal-shadow-xl-soft: 6px 6px 0px 0px hsl(var(--foreground) / 0.3);
-    
+
     /* On-Surface Colors (for icons on colored backgrounds) */
     --on-surface-primary: 0 0% 100%;
     --on-surface-secondary: 0 0% 100%;
@@ -427,45 +496,65 @@ All colors MUST be HSL.
     --on-surface-warning: 0 0% 100%;
     --on-surface-destructive: 0 0% 100%;
     --on-surface-muted: 0 0% 20%;
-    
+
     /* Brutal Overlay (for modals/dialogs) */
     --brutal-overlay: hsl(var(--foreground) / 0.5);
-    
+
     /* Enhanced Animation Timings */
     --timing-instant: 100ms;
     --timing-fast: 200ms;
     --timing-base: 300ms;
     --timing-slow: 500ms;
     --timing-slower: 700ms;
-    
+
     /* Micro-interaction Effects */
     --scale-hover: 1.02;
     --scale-press: 0.98;
     --lift-subtle: -2px;
     --lift-hover: -4px;
-    
+
     /* Security Dashboard Colors (semantic, HSL-based) */
     --security-critical: 0 85% 60%;
     --security-high: 25 95% 53%;
     --security-medium: 45 93% 47%;
     --security-low: 217 91% 60%;
     --security-success: 142 76% 36%;
-    
+
     /* ============================================ */
     /* HYBRID BRUTALISM SYSTEM */
     /* Combining Glass Aesthetics with Brutal Accents */
     /* ============================================ */
-    
+
     /* Grid Textures (subtle for backgrounds) */
-    --grid-texture-sm: 
-      linear-gradient(90deg, transparent 0%, hsl(var(--foreground) / 0.02) 50%, transparent 100%),
-      linear-gradient(0deg, transparent 0%, hsl(var(--foreground) / 0.02) 50%, transparent 100%);
-    --grid-texture-md: 
-      linear-gradient(90deg, transparent 0%, hsl(var(--foreground) / 0.03) 50%, transparent 100%),
-      linear-gradient(0deg, transparent 0%, hsl(var(--foreground) / 0.03) 50%, transparent 100%);
+    --grid-texture-sm:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        hsl(var(--foreground) / 0.02) 50%,
+        transparent 100%
+      ),
+      linear-gradient(
+        0deg,
+        transparent 0%,
+        hsl(var(--foreground) / 0.02) 50%,
+        transparent 100%
+      );
+    --grid-texture-md:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        hsl(var(--foreground) / 0.03) 50%,
+        transparent 100%
+      ),
+      linear-gradient(
+        0deg,
+        transparent 0%,
+        hsl(var(--foreground) / 0.03) 50%,
+        transparent 100%
+      );
     --grid-size-sm: 6px 6px;
     --grid-size-md: 8px 8px;
-    
+
     /* Hybrid Brutal Card (glass + borders) */
     --brutal-glass-bg: hsl(var(--card) / 0.8);
     --brutal-glass-border: var(--brutal-border-standard);
@@ -480,7 +569,9 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "liga" 1, "calt" 1;
+    font-feature-settings:
+      'liga' 1,
+      'calt' 1;
     font-size: 16px; /* Base 16px */
     line-height: 1.5; /* Body line-height 1.4-1.6 */
     text-rendering: optimizeLegibility;
@@ -493,13 +584,13 @@ All colors MUST be HSL.
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
-  
+
   /* Smooth scrolling for all browsers */
   html {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   /* Respect user's motion preferences */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -510,7 +601,7 @@ All colors MUST be HSL.
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
-    
+
     .animate-bounce-slow,
     .hover-scale {
       animation: none !important;
@@ -540,54 +631,64 @@ All colors MUST be HSL.
     }
   }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
-}
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
 
   .animate-fade-in-fast {
     animation: fade-in-fast 0.2s ease-out;
   }
 
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
   }
-  100% {
-    background-position: 1000px 0;
-  }
-}
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: var(--glow-primary); }
-  50% { box-shadow: 0 0 30px hsla(var(--primary), 0.5); }
-}
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      box-shadow: var(--glow-primary);
+    }
+    50% {
+      box-shadow: 0 0 30px hsla(var(--primary), 0.5);
+    }
+  }
 
-@keyframes slide-up-fade {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+  @keyframes slide-up-fade {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
   .shimmer {
     background: linear-gradient(
@@ -608,17 +709,17 @@ All colors MUST be HSL.
     transform: scale(1.03) translateY(-4px) rotate(-1deg);
     box-shadow: var(--shadow-large);
   }
-  
+
   /* Smooth transitions - 150-250ms range */
   .smooth-transition {
     transition: all var(--duration-base) cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   /* Remove bounce from critical flows (login, payments, forms) */
   .critical-flow .animate-bounce-slow {
     animation: none;
   }
-  
+
   /* Gradient text */
   .gradient-text {
     background: var(--gradient-primary);
@@ -626,7 +727,7 @@ All colors MUST be HSL.
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   /* Glass effect */
   .glass-effect {
     background: hsl(var(--background) / 0.8);
@@ -730,15 +831,15 @@ All colors MUST be HSL.
   .retro-nav-icon-container {
     /* Blocky borders - visible on all screen sizes */
     border: 2px solid rgba(0, 0, 0, 0.15);
-    
+
     /* Hard drop shadows - retro aesthetic */
-    box-shadow: 
+    box-shadow:
       2px 2px 0px rgba(0, 0, 0, 0.2),
       inset -1px -1px 0px rgba(255, 255, 255, 0.1);
-    
+
     /* Smooth transitions - 60fps on all devices */
     transition: all 0.15s ease-out;
-    
+
     /* Prevent touch delay on mobile */
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -747,7 +848,7 @@ All colors MUST be HSL.
   /* Hover state - works on desktop, ignored on touch devices */
   .retro-nav-icon-container:hover {
     transform: translate(-1px, -1px);
-    box-shadow: 
+    box-shadow:
       3px 3px 0px rgba(0, 0, 0, 0.25),
       inset -1px -1px 0px rgba(255, 255, 255, 0.1);
     border-color: rgba(0, 0, 0, 0.25);
@@ -756,17 +857,17 @@ All colors MUST be HSL.
   /* Active/pressed state - critical for touch feedback */
   .retro-nav-icon-container:active {
     transform: translate(1px, 1px);
-    box-shadow: 
+    box-shadow:
       1px 1px 0px rgba(0, 0, 0, 0.2),
       inset -1px -1px 0px rgba(255, 255, 255, 0.05);
   }
 
   /* Chunky icon strokes - retro pixel art style */
-  .retro-nav-icon-container svg[class*="lucide"] {
+  .retro-nav-icon-container svg[class*='lucide'] {
     stroke-width: 2.8px;
     stroke-linecap: square;
     stroke-linejoin: miter;
-    
+
     /* Crisp rendering on all devices */
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
@@ -778,7 +879,7 @@ All colors MUST be HSL.
     border-color: currentColor;
   }
 
-  .retro-nav-icon-container.active svg[class*="lucide"] {
+  .retro-nav-icon-container.active svg[class*='lucide'] {
     stroke-width: 3.2px;
   }
 
@@ -786,14 +887,14 @@ All colors MUST be HSL.
   @media (prefers-color-scheme: dark) {
     .retro-nav-icon-container {
       border-color: rgba(255, 255, 255, 0.15);
-      box-shadow: 
+      box-shadow:
         2px 2px 0px rgba(0, 0, 0, 0.4),
         inset -1px -1px 0px rgba(255, 255, 255, 0.05);
     }
-    
+
     .retro-nav-icon-container:hover {
       border-color: rgba(255, 255, 255, 0.25);
-      box-shadow: 
+      box-shadow:
         3px 3px 0px rgba(0, 0, 0, 0.5),
         inset -1px -1px 0px rgba(255, 255, 255, 0.05);
     }
@@ -873,30 +974,30 @@ All colors MUST be HSL.
   /* Mobile touch-friendly sizing - Apple HIG minimum 44x44px */
   @media (max-width: 640px) {
     button:not(.no-touch-size),
-    a[role="button"]:not(.no-touch-size),
-    [role="tab"]:not(.no-touch-size),
-    [role="menuitem"]:not(.no-touch-size) {
+    a[role='button']:not(.no-touch-size),
+    [role='tab']:not(.no-touch-size),
+    [role='menuitem']:not(.no-touch-size) {
       min-height: 44px;
       min-width: 44px;
       padding: 0.625rem 1rem; /* 10px 16px */
     }
-    
+
     /* Ensure clickable areas for small icons */
     button svg:only-child,
     a svg:only-child {
       padding: 0.5rem;
     }
   }
-  
+
   /* Tablet touch targets - slightly smaller but still comfortable */
   @media (min-width: 641px) and (max-width: 1024px) {
     button:not(.no-touch-size),
-    a[role="button"]:not(.no-touch-size) {
+    a[role='button']:not(.no-touch-size) {
       min-height: 40px;
       min-width: 40px;
     }
   }
-  
+
   /* Better touch handling for all interactive elements */
   button,
   a,
@@ -906,32 +1007,32 @@ All colors MUST be HSL.
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
-  
+
   /* Prevent text selection on buttons and interactive elements */
   button,
-  [role="button"],
-  [role="tab"],
-  [role="menuitem"] {
+  [role='button'],
+  [role='tab'],
+  [role='menuitem'] {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
   }
-  
+
   /* Optimize scrolling performance */
   .scroll-container {
     -webkit-overflow-scrolling: touch;
     overflow-y: auto;
     overscroll-behavior-y: contain;
   }
-  
+
   /* GPU acceleration for animations */
   .gpu-accelerated {
     transform: translateZ(0);
     will-change: transform;
     backface-visibility: hidden;
   }
-  
+
   /* Optimize for different connection speeds */
   @media (prefers-reduced-data: reduce) {
     * {
@@ -941,24 +1042,24 @@ All colors MUST be HSL.
       background-image: none !important;
     }
   }
-  
+
   /* Safe area support for all devices */
   .safe-top {
     padding-top: max(1rem, env(safe-area-inset-top));
   }
-  
+
   .safe-bottom {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
-  
+
   .safe-left {
     padding-left: max(1rem, env(safe-area-inset-left));
   }
-  
+
   .safe-right {
     padding-right: max(1rem, env(safe-area-inset-right));
   }
-  
+
   /* Container queries for component-level responsiveness */
   @supports (container-type: inline-size) {
     .container-responsive {
@@ -966,18 +1067,18 @@ All colors MUST be HSL.
       container-name: responsive-container;
     }
   }
-  
+
   /* Landscape mode optimizations for mobile */
   @media (max-width: 1024px) and (orientation: landscape) {
     body {
       font-size: 14px; /* Slightly smaller for landscape mobile */
     }
-    
+
     .hide-landscape {
       display: none !important;
     }
   }
-  
+
   /* High contrast mode support */
   @media (prefers-contrast: high) {
     button,
@@ -986,7 +1087,7 @@ All colors MUST be HSL.
       border-width: 2px;
     }
   }
-  
+
   /* Performance optimization for animations */
   .animate-fade-in,
   .hover-scale,
@@ -994,7 +1095,7 @@ All colors MUST be HSL.
   .retro-button {
     will-change: transform, opacity;
   }
-  
+
   /* Better scrolling on mobile */
   * {
     -webkit-overflow-scrolling: touch;
@@ -1052,13 +1153,13 @@ All colors MUST be HSL.
     border-style: solid;
     border-color: hsl(var(--foreground));
   }
-  
+
   .brutal-border {
     border-width: var(--brutal-border-standard);
     border-style: solid;
     border-color: hsl(var(--foreground));
   }
-  
+
   .brutal-border-bold {
     border-width: var(--brutal-border-bold);
     border-style: solid;
@@ -1071,44 +1172,44 @@ All colors MUST be HSL.
   .brutal-shadow-xs {
     box-shadow: var(--brutal-shadow-xs);
   }
-  
+
   .brutal-shadow-sm {
     box-shadow: var(--brutal-shadow-sm);
   }
-  
+
   .brutal-shadow {
     box-shadow: var(--brutal-shadow-md);
   }
-  
+
   .brutal-shadow-md {
     box-shadow: var(--brutal-shadow-md);
   }
-  
+
   .brutal-shadow-lg {
     box-shadow: var(--brutal-shadow-lg);
   }
-  
+
   .brutal-shadow-xl {
     box-shadow: var(--brutal-shadow-xl);
   }
-  
+
   .brutal-shadow-2xl {
     box-shadow: var(--brutal-shadow-2xl);
   }
-  
+
   /* Soft variants */
   .brutal-shadow-sm-soft {
     box-shadow: var(--brutal-shadow-sm-soft);
   }
-  
+
   .brutal-shadow-md-soft {
     box-shadow: var(--brutal-shadow-md-soft);
   }
-  
+
   .brutal-shadow-lg-soft {
     box-shadow: var(--brutal-shadow-lg-soft);
   }
-  
+
   .brutal-shadow-xl-soft {
     box-shadow: var(--brutal-shadow-xl-soft);
   }
@@ -1119,7 +1220,7 @@ All colors MUST be HSL.
   .brutal-hover {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .brutal-hover:hover {
     box-shadow: var(--brutal-shadow-xl);
     transform: translateY(-2px);
@@ -1158,34 +1259,34 @@ All colors MUST be HSL.
     box-shadow: var(--brutal-shadow-xs);
     transform: translate(2px, 2px);
   }
-  
+
   /* ============================================ */
   /* ON-SURFACE TEXT COLORS */
   /* ============================================ */
   .text-on-surface-primary {
     color: hsl(var(--on-surface-primary));
   }
-  
+
   .text-on-surface-secondary {
     color: hsl(var(--on-surface-secondary));
   }
-  
+
   .text-on-surface-accent {
     color: hsl(var(--on-surface-accent));
   }
-  
+
   .text-on-surface-success {
     color: hsl(var(--on-surface-success));
   }
-  
+
   .text-on-surface-warning {
     color: hsl(var(--on-surface-warning));
   }
-  
+
   .text-on-surface-destructive {
     color: hsl(var(--on-surface-destructive));
   }
-  
+
   .text-on-surface-muted {
     color: hsl(var(--on-surface-muted));
   }
@@ -1224,37 +1325,65 @@ All colors MUST be HSL.
   }
 
   /* Elevation Utilities */
-  .elevation-1 { box-shadow: var(--elevation-1); }
-  .elevation-2 { box-shadow: var(--elevation-2); }
-  .elevation-3 { box-shadow: var(--elevation-3); }
-  .elevation-4 { box-shadow: var(--elevation-4); }
+  .elevation-1 {
+    box-shadow: var(--elevation-1);
+  }
+  .elevation-2 {
+    box-shadow: var(--elevation-2);
+  }
+  .elevation-3 {
+    box-shadow: var(--elevation-3);
+  }
+  .elevation-4 {
+    box-shadow: var(--elevation-4);
+  }
 
   /* Glow Utilities */
-  .glow-primary { box-shadow: var(--glow-primary); }
-  .glow-accent { box-shadow: var(--glow-accent); }
-  .glow-success { box-shadow: var(--glow-success); }
-  .glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+  .glow-accent {
+    box-shadow: var(--glow-accent);
+  }
+  .glow-success {
+    box-shadow: var(--glow-success);
+  }
+  .glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
 
   /* Modern Animations */
-  .float { animation: float 3s ease-in-out infinite; }
-  .slide-up-fade { animation: slide-up-fade 0.4s ease-out; }
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+  .slide-up-fade {
+    animation: slide-up-fade 0.4s ease-out;
+  }
 
   /* Focus States */
   .focus-ring-brutal:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring-offset), var(--focus-ring);
   }
-  
+
   /* ============================================ */
   /* Mobile-Specific Utilities */
   /* ============================================ */
-  
+
   /* Safe area spacing for iOS notch/home indicator */
-  .safe-top { padding-top: env(safe-area-inset-top); }
-  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-  .safe-left { padding-left: env(safe-area-inset-left); }
-  .safe-right { padding-right: env(safe-area-inset-right); }
-  .safe-x { 
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+  .safe-x {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
@@ -1262,7 +1391,7 @@ All colors MUST be HSL.
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
+
   /* Touch-friendly tap targets (minimum 44x44px for WCAG) */
   .tap-target {
     min-width: 44px;
@@ -1271,7 +1400,7 @@ All colors MUST be HSL.
     align-items: center;
     justify-content: center;
   }
-  
+
   /* Larger tap targets for primary actions */
   .tap-target-lg {
     min-width: 56px;
@@ -1280,7 +1409,7 @@ All colors MUST be HSL.
     align-items: center;
     justify-content: center;
   }
-  
+
   /* Sticky header with safe area support */
   .sticky-header-mobile {
     position: sticky;
@@ -1290,59 +1419,72 @@ All colors MUST be HSL.
     backdrop-filter: blur(8px);
     background-color: hsl(var(--background) / 0.95);
   }
-  
+
   /* Mobile-optimized modal/dialog */
   .mobile-modal {
     position: fixed;
     inset: 0;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+      env(safe-area-inset-bottom) env(safe-area-inset-left);
     z-index: 100;
   }
-  
+
   /* Prevent text selection during touch interactions */
   .touch-none-select {
     -webkit-user-select: none;
     user-select: none;
     -webkit-touch-callout: none;
   }
-  
+
   /* Smooth momentum scrolling for mobile */
   .scroll-smooth-mobile {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     overscroll-behavior: contain;
   }
-  
+
   /* Mobile-optimized card spacing */
   .mobile-card-spacing {
     @apply p-4 md:p-6 space-y-3 md:space-y-4;
   }
-  
+
   /* Responsive tap feedback */
   @media (hover: none) and (pointer: coarse) {
     .tap-feedback {
-      transition: transform 0.1s ease, opacity 0.1s ease;
+      transition:
+        transform 0.1s ease,
+        opacity 0.1s ease;
     }
-    
+
     .tap-feedback:active {
       transform: scale(0.97);
       opacity: 0.8;
     }
   }
-  
+
   /* Hide on mobile utility */
   @media (max-width: 640px) {
-    .hide-mobile { display: none !important; }
+    .hide-mobile {
+      display: none !important;
+    }
   }
-  
+
   /* Show only on mobile */
-  .show-mobile { display: none; }
-  @media (max-width: 640px) {
-    .show-mobile { display: block; }
+  .show-mobile {
+    display: none;
   }
-  .show-mobile-flex { display: none; }
   @media (max-width: 640px) {
-    .show-mobile-flex { display: flex; }
+    .show-mobile {
+      display: block;
+    }
+  }
+  .show-mobile-flex {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    .show-mobile-flex {
+      display: flex;
+    }
   }
 
   /* ============================================
@@ -1359,7 +1501,7 @@ All colors MUST be HSL.
     .fab,
     .floating-action-button,
     [data-sidebar],
-    [role="navigation"],
+    [role='navigation'],
     .offline-indicator,
     .performance-overlay,
     .cookie-consent,
@@ -1403,10 +1545,21 @@ All colors MUST be HSL.
     }
 
     /* Typography optimization */
-    h1 { font-size: 24pt !important; }
-    h2 { font-size: 18pt !important; }
-    h3 { font-size: 14pt !important; }
-    p, li, td { font-size: 11pt !important; line-height: 1.5 !important; }
+    h1 {
+      font-size: 24pt !important;
+    }
+    h2 {
+      font-size: 18pt !important;
+    }
+    h3 {
+      font-size: 14pt !important;
+    }
+    p,
+    li,
+    td {
+      font-size: 11pt !important;
+      line-height: 1.5 !important;
+    }
 
     /* Table optimization */
     table {
@@ -1415,7 +1568,8 @@ All colors MUST be HSL.
       page-break-inside: avoid;
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid #333 !important;
       padding: 8px !important;
       text-align: left !important;
@@ -1456,7 +1610,7 @@ All colors MUST be HSL.
     }
 
     a[href]:after {
-      content: " (" attr(href) ")";
+      content: ' (' attr(href) ')';
       font-size: 9pt;
       font-style: italic;
     }
@@ -1539,33 +1693,53 @@ All colors MUST be HSL.
     border: 4px solid black;
     box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
   }
-  
+
   .pixel-shadow-sm {
     box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1);
   }
-  
+
   .pixel-shadow-md {
     box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
   }
-  
+
   .pixel-shadow-lg {
     box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
   }
-  
+
   .pixel-texture {
-    background-image: 
-      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%),
-      linear-gradient(0deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
+    background-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.05) 50%,
+        transparent 100%
+      ),
+      linear-gradient(
+        0deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.05) 50%,
+        transparent 100%
+      );
     background-size: 8px 8px;
   }
-  
+
   .pixel-texture-light {
-    background-image: 
-      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%),
-      linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    background-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%
+      ),
+      linear-gradient(
+        0deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%
+      );
     background-size: 8px 8px;
   }
-  
+
   /* Prevent font smoothing for pixel font to keep it crisp */
   .font-pixel {
     -webkit-font-smoothing: none;
@@ -1573,152 +1747,152 @@ All colors MUST be HSL.
     image-rendering: pixelated;
     image-rendering: crisp-edges;
   }
-  
+
   /* ============================================ */
   /* ADAPTIVE BRUTALISM TYPOGRAPHY UTILITIES */
   /* ============================================ */
-  
+
   /* Brutalist Headers - Press Start 2P */
   .brutal-header-xl {
     @apply font-pixel text-2xl sm:text-3xl lg:text-4xl;
   }
-  
+
   .brutal-header-lg {
     @apply font-pixel text-xl sm:text-2xl lg:text-3xl;
   }
-  
+
   .brutal-header-md {
     @apply font-pixel text-lg sm:text-xl lg:text-2xl;
   }
-  
+
   .brutal-header-sm {
     @apply font-pixel text-base sm:text-lg;
   }
-  
+
   /* Brutalist CTA Text - Bold Sans */
   .brutal-cta-text {
     @apply font-bold uppercase tracking-wide;
   }
-  
+
   /* Readable Body Text - DM Sans */
   .brutal-body-lg {
     @apply font-sans text-sm sm:text-base;
   }
-  
+
   .brutal-body {
     @apply font-sans text-xs sm:text-sm;
   }
-  
+
   .brutal-body-sm {
     @apply font-sans text-[11px] sm:text-xs;
   }
-  
+
   /* Brutalist Card - Complete pattern */
   .brutal-card {
     @apply border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl bg-card;
   }
-  
+
   /* ============================================ */
   /* HYBRID BRUTALISM UTILITIES */
   /* Glass Morphism + Brutal Accents */
   /* ============================================ */
-  
+
   /* Grid Textures for Backgrounds */
   .brutal-grid-subtle {
     background-image: var(--grid-texture-sm);
     background-size: var(--grid-size-sm);
   }
-  
+
   .brutal-grid {
     background-image: var(--grid-texture-md);
     background-size: var(--grid-size-md);
   }
-  
+
   /* Hybrid Glass Cards - Backdrop blur + brutal borders */
   .brutal-glass-card {
     @apply bg-card/80 backdrop-blur-xl border-[2px] sm:border-[3px] border-border/50;
   }
-  
+
   .brutal-glass-card-interactive {
     @apply brutal-glass-card transition-all duration-300;
     box-shadow: var(--brutal-shadow-sm);
   }
-  
+
   .brutal-glass-card-interactive:hover {
     @apply border-primary/50;
     box-shadow: var(--brutal-shadow-md);
     transform: translateY(-2px);
   }
-  
+
   .brutal-glass-card-interactive:active {
     box-shadow: var(--brutal-shadow-xs);
     transform: translateY(0);
   }
-  
+
   /* Brutal Headers with Grid Background */
   .brutal-header-section {
     @apply brutal-grid-subtle border-b-[3px] sm:border-b-[4px] border-foreground;
     box-shadow: 0 var(--brutal-border-standard) 0px 0px hsl(var(--foreground));
   }
-  
+
   /* Hybrid Buttons - Glass with brutal shadow */
   .brutal-button-hybrid {
     @apply bg-card/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-foreground;
     box-shadow: var(--brutal-shadow-sm);
     transition: all 200ms ease;
   }
-  
+
   .brutal-button-hybrid:hover {
     box-shadow: var(--brutal-shadow-md);
     transform: translateY(-2px);
   }
-  
+
   .brutal-button-hybrid:active {
     box-shadow: var(--brutal-shadow-xs);
     transform: translateY(0);
   }
-  
+
   /* Stat Cards - Hybrid style */
   .brutal-stat-card {
     @apply brutal-glass-card p-4 sm:p-5 transition-all duration-300;
     box-shadow: var(--brutal-shadow-sm);
   }
-  
+
   .brutal-stat-card:hover {
     box-shadow: var(--brutal-shadow-lg);
     transform: translateY(-3px) scale(1.02);
   }
-  
+
   /* Quick Action Cards */
   .brutal-action-card {
     @apply brutal-glass-card rounded-xl overflow-hidden transition-all duration-300;
     box-shadow: var(--brutal-shadow-xs);
   }
-  
+
   .brutal-action-card:hover {
     @apply border-primary/50;
     box-shadow: var(--brutal-shadow-xl);
     transform: translateY(-4px) scale(1.03);
   }
-  
+
   .brutal-action-card:active {
     box-shadow: var(--brutal-shadow-sm);
     transform: translateY(0) scale(1);
   }
-  
+
   .brutal-card-hover {
     @apply hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all;
   }
-  
+
   /* Brutalist Button Effects */
   .brutal-button {
     @apply border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))];
   }
-  
+
   .brutal-button-hover {
     @apply hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] active:shadow-none active:translate-x-[4px] active:translate-y-[4px];
   }
-  
+
   /* Glass Brutal (modern + brutalist fusion) */
   .glass-brutal {
     @apply backdrop-blur-xl bg-background/80 border-[3px] border-foreground/20;

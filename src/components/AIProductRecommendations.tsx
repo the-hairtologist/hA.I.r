@@ -1,15 +1,21 @@
-import { useState, useEffect } from "react";
-import { withMemo } from "@/lib/optimizations/withMemo";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, ExternalLink, TrendingUp, Tag } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { analytics } from "@/lib/analytics";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
-import { trackSelect } from "@/lib/logging/supabaseTracker";
+import { useState, useEffect } from 'react';
+import { withMemo } from '@/lib/optimizations/withMemo';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, ExternalLink, TrendingUp, Tag } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { analytics } from '@/lib/analytics';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
+import { trackSelect } from '@/lib/logging/supabaseTracker';
 
 interface ProductRecommendation {
   id: string;
@@ -35,9 +41,11 @@ const AIProductRecommendationsComponent = ({
   formula,
   hairType,
   desiredResult,
-  stylistId
+  stylistId,
 }: AIProductRecommendationsProps) => {
-  const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<
+    ProductRecommendation[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
 
@@ -55,13 +63,14 @@ const AIProductRecommendationsComponent = ({
       // Get stylist's affiliate codes
       if (stylistId) {
         const result = await trackSelect(
-          async () => await supabase
-            .from('stylist_affiliate_codes')
-            .select('referral_code')
-            .eq('stylist_id', stylistId)
-            .eq('is_active', true)
-            .limit(1)
-            .maybeSingle(),
+          async () =>
+            await supabase
+              .from('stylist_affiliate_codes')
+              .select('referral_code')
+              .eq('stylist_id', stylistId)
+              .eq('is_active', true)
+              .limit(1)
+              .maybeSingle(),
           'stylist_affiliate_codes',
           'AIProductRecommendations'
         );
@@ -79,40 +88,45 @@ const AIProductRecommendationsComponent = ({
           name: 'Olaplex No. 3 Hair Perfector',
           brand: 'Olaplex',
           description: 'Bond-building treatment to repair damaged hair',
-          price: 28.00,
+          price: 28.0,
           affiliateUrl: 'https://example.com/olaplex',
           commissionRate: 0.15,
           category: 'Treatment',
-          matchReason: 'Perfect for color-treated hair repair'
+          matchReason: 'Perfect for color-treated hair repair',
         },
         {
           id: '2',
           name: 'Redken Color Extend Shampoo',
           brand: 'Redken',
           description: 'Color-safe shampoo with pH-balanced formula',
-          price: 24.00,
+          price: 24.0,
           affiliateUrl: 'https://example.com/redken',
           commissionRate: 0.12,
           category: 'Shampoo',
-          matchReason: 'Extends color vibrancy'
+          matchReason: 'Extends color vibrancy',
         },
         {
           id: '3',
           name: 'Matrix Total Results Blonde Care',
           brand: 'Matrix',
           description: 'Purple toning conditioner for blonde hair',
-          price: 18.00,
+          price: 18.0,
           affiliateUrl: 'https://example.com/matrix',
-          commissionRate: 0.10,
+          commissionRate: 0.1,
           category: 'Conditioner',
-          matchReason: 'Maintains cool blonde tones'
-        }
+          matchReason: 'Maintains cool blonde tones',
+        },
       ];
 
       setRecommendations(mockRecommendations);
     } catch (error) {
-      logger.error('Error loading AI product recommendations', error, { context: 'AIProductRecommendations', data: { stylistId } });
-      userJourney.trackError(error as Error, { action: 'load-product-recommendations' });
+      logger.error('Error loading AI product recommendations', error, {
+        context: 'AIProductRecommendations',
+        data: { stylistId },
+      });
+      userJourney.trackError(error as Error, {
+        action: 'load-product-recommendations',
+      });
       toast.error('Failed to load product recommendations');
     } finally {
       setLoading(false);
@@ -121,20 +135,20 @@ const AIProductRecommendationsComponent = ({
 
   const handleProductClick = (product: ProductRecommendation) => {
     // Track click
-    userJourney.trackAction('Product Recommendation Clicked', { 
-      product: product.name, 
+    userJourney.trackAction('Product Recommendation Clicked', {
+      product: product.name,
       brand: product.brand,
-      affiliateCode: affiliateCode || 'none'
+      affiliateCode: affiliateCode || 'none',
     });
     analytics.affiliateCodeUsed(product.brand, affiliateCode || 'none');
-    
+
     // Open affiliate link with code if available
-    const url = affiliateCode 
+    const url = affiliateCode
       ? `${product.affiliateUrl}?ref=${affiliateCode}`
       : product.affiliateUrl;
-    
+
     window.open(url, '_blank');
-    
+
     toast.success(`Opening ${product.brand} product page`);
   };
 
@@ -153,7 +167,7 @@ const AIProductRecommendationsComponent = ({
   }
 
   const totalCommissionPotential = recommendations.reduce(
-    (sum, product) => sum + (product.price * product.commissionRate),
+    (sum, product) => sum + product.price * product.commissionRate,
     0
   );
 
@@ -178,9 +192,9 @@ const AIProductRecommendationsComponent = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {recommendations.map((rec) => {
+          {recommendations.map(rec => {
             const commission = (rec.price * rec.commissionRate).toFixed(2);
-            
+
             return (
               <div
                 key={rec.name}
@@ -195,8 +209,12 @@ const AIProductRecommendationsComponent = ({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h4 className="font-semibold text-xs sm:text-sm">{rec.name}</h4>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground">{rec.brand}</p>
+                      <h4 className="font-semibold text-xs sm:text-sm">
+                        {rec.name}
+                      </h4>
+                      <p className="text-[11px] sm:text-xs text-muted-foreground">
+                        {rec.brand}
+                      </p>
                     </div>
                     <Badge variant="outline" className="text-[11px] sm:text-xs">
                       {rec.category}
@@ -244,8 +262,10 @@ const AIProductRecommendationsComponent = ({
         {/* Footer Info */}
         <div className="mt-6 p-4 bg-muted/50 rounded-lg border-2 border-foreground/10">
           <p className="text-[11px] sm:text-xs text-muted-foreground">
-            💰 <strong>Commissions are automatic:</strong> When your client purchases through your link,
-            you earn {affiliateCode ? 'with your code' : 'a commission'}. Track all earnings in the Finance tab.
+            💰 <strong>Commissions are automatic:</strong> When your client
+            purchases through your link, you earn{' '}
+            {affiliateCode ? 'with your code' : 'a commission'}. Track all
+            earnings in the Finance tab.
           </p>
         </div>
       </CardContent>

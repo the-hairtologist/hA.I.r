@@ -1,8 +1,8 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { IntakeFormBuilder } from "@/components/intake-forms/IntakeFormBuilder";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { FileText } from "lucide-react";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { IntakeFormBuilder } from '@/components/intake-forms/IntakeFormBuilder';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
+import { FileText } from 'lucide-react';
 
 const ClientIntakeForms = () => {
   const { user } = useAuth();

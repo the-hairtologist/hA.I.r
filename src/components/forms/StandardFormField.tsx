@@ -61,8 +61,11 @@ export const StandardFormField = ({
         name={name}
         type={type !== 'textarea' ? type : undefined}
         value={value}
-        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-          const val = type === 'number' ? parseFloat(e.target.value) : e.target.value;
+        onChange={(
+          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+          const val =
+            type === 'number' ? parseFloat(e.target.value) : e.target.value;
           onChange(val);
         }}
         onBlur={onBlur}
@@ -76,11 +79,15 @@ export const StandardFormField = ({
         step={step}
         aria-invalid={showError ? true : undefined}
         aria-describedby={
-          showError ? `${name}-error` : description ? `${name}-description` : undefined
+          showError
+            ? `${name}-error`
+            : description
+              ? `${name}-description`
+              : undefined
         }
         className={cn(
-          showError && "border-destructive focus-visible:ring-destructive",
-          type === 'textarea' && "resize-none"
+          showError && 'border-destructive focus-visible:ring-destructive',
+          type === 'textarea' && 'resize-none'
         )}
       />
       {description && !showError && (
@@ -89,8 +96,8 @@ export const StandardFormField = ({
         </p>
       )}
       {showError && (
-        <div 
-          id={`${name}-error`} 
+        <div
+          id={`${name}-error`}
           className="flex items-center gap-2 text-sm text-destructive"
           role="alert"
         >
@@ -106,4 +113,3 @@ export const StandardFormField = ({
     </div>
   );
 };
-

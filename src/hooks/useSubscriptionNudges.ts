@@ -1,10 +1,10 @@
-import { useMemo, useEffect, useState } from "react";
-import { useSubscription } from "@/contexts/SubscriptionContext";
-import { supabase } from "@/integrations/supabase/client";
+import { useMemo, useEffect, useState } from 'react';
+import { useSubscription } from '@/contexts/SubscriptionContext';
+import { supabase } from '@/integrations/supabase/client';
 
-export type NudgeTrigger = 
+export type NudgeTrigger =
   | 'trial_day_5'
-  | 'trial_day_13' 
+  | 'trial_day_13'
   | 'client_limit'
   | 'value_proven'
   | 'appointments_limit'
@@ -15,7 +15,9 @@ export const useSubscriptionNudges = () => {
   const [clientCount, setClientCount] = useState(0);
   const [appointmentCount, setAppointmentCount] = useState(0);
   const [trialDaysRemaining, setTrialDaysRemaining] = useState(10);
-  const [dismissedNudges, setDismissedNudges] = useState<Set<string>>(new Set());
+  const [dismissedNudges, setDismissedNudges] = useState<Set<string>>(
+    new Set()
+  );
 
   useEffect(() => {
     loadDismissedNudges();
@@ -24,14 +26,16 @@ export const useSubscriptionNudges = () => {
 
   const loadRealData = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
 
       // Get stylist profile
       const { data: stylistData } = await supabase
-        .from("stylist_profiles")
-        .select("id, trial_end_date")
-        .eq("user_id", session.user.id)
+        .from('stylist_profiles')
+        .select('id, trial_end_date')
+        .eq('user_id', session.user.id)
         .maybeSingle();
 
       if (!stylistData) return;
@@ -40,24 +44,29 @@ export const useSubscriptionNudges = () => {
       if (stylistData.trial_end_date) {
         const trialEnd = new Date(stylistData.trial_end_date);
         const now = new Date();
-        const daysLeft = Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+        const daysLeft = Math.max(
+          0,
+          Math.ceil(
+            (trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+          )
+        );
         setTrialDaysRemaining(daysLeft);
       }
 
       // Get client count
       const { count: clients } = await supabase
-        .from("client_profiles")
-        .select("*", { count: 'exact', head: true })
-        .eq("preferred_stylist_id", stylistData.id);
+        .from('client_profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('preferred_stylist_id', stylistData.id);
 
       setClientCount(clients || 0);
 
       // Get appointment count
       const { count: appointments } = await supabase
-        .from("appointments")
-        .select("*", { count: 'exact', head: true })
-        .eq("stylist_id", stylistData.id)
-        .eq("status", "completed");
+        .from('appointments')
+        .select('*', { count: 'exact', head: true })
+        .eq('stylist_id', stylistData.id)
+        .eq('status', 'completed');
 
       setAppointmentCount(appointments || 0);
     } catch (error) {
@@ -98,25 +107,40 @@ export const useSubscriptionNudges = () => {
     }
 
     // 3. Value proven (3+ appointments, still in trial)
-    if (appointmentCount >= 3 && trialDaysRemaining >= 3 && !checkDismissed('value_proven')) {
+    if (
+      appointmentCount >= 3 &&
+      trialDaysRemaining >= 3 &&
+      !checkDismissed('value_proven')
+    ) {
       return 'value_proven';
     }
 
     // 4. Mid-trial nudge (day 5-6)
-    if ((trialDaysRemaining === 9 || trialDaysRemaining === 8) && !checkDismissed('trial_day_5')) {
+    if (
+      (trialDaysRemaining === 9 || trialDaysRemaining === 8) &&
+      !checkDismissed('trial_day_5')
+    ) {
       return 'trial_day_5';
     }
 
     return null;
-  }, [inTrial, subscribed, loading, trialDaysRemaining, clientCount, appointmentCount, dismissedNudges]);
+  }, [
+    inTrial,
+    subscribed,
+    loading,
+    trialDaysRemaining,
+    clientCount,
+    appointmentCount,
+    dismissedNudges,
+  ]);
 
   const dismissNudge = (trigger: NudgeTrigger) => {
     if (!trigger) return;
-    
+
     const newDismissed = new Set(dismissedNudges);
     newDismissed.add(trigger);
     setDismissedNudges(newDismissed);
-    
+
     localStorage.setItem('dismissed_nudges', JSON.stringify([...newDismissed]));
   };
 
@@ -131,6 +155,6 @@ export const useSubscriptionNudges = () => {
     resetDismissals,
     trialDaysRemaining,
     clientCount,
-    appointmentCount
+    appointmentCount,
   };
 };

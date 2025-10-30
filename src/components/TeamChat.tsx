@@ -33,16 +33,20 @@ export function TeamChat({ stylistId }: TeamChatProps) {
 
     const channel = supabase
       .channel('team-messages')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'team_messages'
-      }, (payload) => {
-        if (payload.eventType === 'INSERT') {
-          setMessages(prev => [...prev, payload.new as TeamMessage]);
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'team_messages',
+        },
+        payload => {
+          if (payload.eventType === 'INSERT') {
+            setMessages(prev => [...prev, payload.new as TeamMessage]);
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }
         }
-      })
+      )
       .subscribe();
 
     return () => {
@@ -56,7 +60,7 @@ export function TeamChat({ stylistId }: TeamChatProps) {
       .select('*, stylist_profiles(business_name)')
       .order('created_at', { ascending: true })
       .limit(100);
-    
+
     if (data) setMessages(data);
   };
 
@@ -65,12 +69,10 @@ export function TeamChat({ stylistId }: TeamChatProps) {
 
     setSending(true);
     try {
-      const { error } = await supabase
-        .from('team_messages')
-        .insert({
-          stylist_id: stylistId,
-          message: newMessage.trim()
-        });
+      const { error } = await supabase.from('team_messages').insert({
+        stylist_id: stylistId,
+        message: newMessage.trim(),
+      });
 
       if (error) throw error;
 
@@ -78,7 +80,7 @@ export function TeamChat({ stylistId }: TeamChatProps) {
     } catch (error) {
       toast({
         title: 'Failed to send message',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     } finally {
       setSending(false);
@@ -92,7 +94,7 @@ export function TeamChat({ stylistId }: TeamChatProps) {
       </CardHeader>
       <CardContent className="flex-1 flex flex-col p-0">
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {messages.map((msg) => (
+          {messages.map(msg => (
             <div key={msg.id} className="space-y-1">
               <div className="flex items-baseline gap-2">
                 <span className="font-semibold text-sm">
@@ -107,13 +109,13 @@ export function TeamChat({ stylistId }: TeamChatProps) {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        
+
         <div className="p-4 border-t flex gap-2">
           <Input
             placeholder="Type a message..."
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onChange={e => setNewMessage(e.target.value)}
+            onKeyPress={e => e.key === 'Enter' && handleSend()}
           />
           <Button onClick={handleSend} disabled={sending || !newMessage.trim()}>
             <Send className="w-4 h-4" />

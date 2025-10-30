@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertTriangle, TrendingDown, CheckCircle, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertTriangle, TrendingDown, CheckCircle, Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ClientRiskIndicatorProps {
   lastAppointmentDate: string | null;
@@ -14,7 +14,7 @@ export const ClientRiskIndicator = ({
   lastAppointmentDate,
   totalAppointments,
   missedAppointments = 0,
-  onActionClick
+  onActionClick,
 }: ClientRiskIndicatorProps) => {
   const calculateRisk = () => {
     if (!lastAppointmentDate) {
@@ -22,10 +22,12 @@ export const ClientRiskIndicator = ({
     }
 
     const daysSinceLastVisit = Math.floor(
-      (new Date().getTime() - new Date(lastAppointmentDate).getTime()) / (1000 * 60 * 60 * 24)
+      (new Date().getTime() - new Date(lastAppointmentDate).getTime()) /
+        (1000 * 60 * 60 * 24)
     );
 
-    const missedRate = totalAppointments > 0 ? missedAppointments / totalAppointments : 0;
+    const missedRate =
+      totalAppointments > 0 ? missedAppointments / totalAppointments : 0;
 
     let score = 0;
     if (daysSinceLastVisit > 120) score += 60;
@@ -55,7 +57,7 @@ export const ClientRiskIndicator = ({
           badgeVariant: 'destructive' as const,
           title: '⚠️ High Churn Risk',
           message: `${risk.days} days since last visit. Immediate action recommended.`,
-          action: 'Send Re-engagement Message'
+          action: 'Send Re-engagement Message',
         };
       case 'high':
         return {
@@ -64,7 +66,7 @@ export const ClientRiskIndicator = ({
           badgeVariant: 'default' as const,
           title: '⚡ At Risk',
           message: `${risk.days} days since last visit. Consider reaching out.`,
-          action: 'Schedule Follow-up'
+          action: 'Schedule Follow-up',
         };
       case 'medium':
         return {
@@ -73,7 +75,7 @@ export const ClientRiskIndicator = ({
           badgeVariant: 'secondary' as const,
           title: '👀 Watch List',
           message: `${risk.days} days since last visit. Monitor engagement.`,
-          action: 'Send Reminder'
+          action: 'Send Reminder',
         };
       case 'new':
         return {
@@ -82,7 +84,7 @@ export const ClientRiskIndicator = ({
           badgeVariant: 'outline' as const,
           title: '🎉 New Client',
           message: 'No appointment history yet. Great opportunity!',
-          action: 'Book First Appointment'
+          action: 'Book First Appointment',
         };
       default:
         return {
@@ -91,7 +93,7 @@ export const ClientRiskIndicator = ({
           badgeVariant: 'outline' as const,
           title: '✅ Healthy',
           message: 'Client is engaged and active.',
-          action: null
+          action: null,
         };
     }
   };
@@ -109,7 +111,7 @@ export const ClientRiskIndicator = ({
   }
 
   return (
-    <Alert className={cn("border-l-4", config.color)}>
+    <Alert className={cn('border-l-4', config.color)}>
       <Icon className="h-4 w-4" />
       <AlertDescription className="space-y-2">
         <div>

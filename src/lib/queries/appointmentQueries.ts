@@ -3,8 +3,8 @@
  * Reduces select("*") calls with specific field selection
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { requestDeduplicator } from "@/lib/api/requestDeduplicator";
+import { supabase } from '@/integrations/supabase/client';
+import { requestDeduplicator } from '@/lib/api/requestDeduplicator';
 
 /**
  * Get appointments by stylist with specific fields
@@ -14,8 +14,9 @@ export const getAppointmentsByStylist = async (stylistId: string) => {
     `appointments-stylist-${stylistId}`,
     async () => {
       const { data, error } = await supabase
-        .from("appointments")
-        .select(`
+        .from('appointments')
+        .select(
+          `
           id,
           appointment_date,
           service_type,
@@ -25,9 +26,10 @@ export const getAppointmentsByStylist = async (stylistId: string) => {
           client_id,
           stylist_id,
           client_profiles!inner(id, full_name, phone, email)
-        `)
-        .eq("stylist_id", stylistId)
-        .order("appointment_date", { ascending: false });
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .order('appointment_date', { ascending: false });
 
       if (error) throw error;
       return data;
@@ -43,8 +45,9 @@ export const getAppointmentsByClient = async (clientId: string) => {
     `appointments-client-${clientId}`,
     async () => {
       const { data, error } = await supabase
-        .from("appointments")
-        .select(`
+        .from('appointments')
+        .select(
+          `
           id,
           appointment_date,
           service_type,
@@ -53,9 +56,10 @@ export const getAppointmentsByClient = async (clientId: string) => {
           created_at,
           stylist_id,
           stylist_profiles!inner(id, business_name, phone)
-        `)
-        .eq("client_id", clientId)
-        .order("appointment_date", { ascending: false });
+        `
+        )
+        .eq('client_id', clientId)
+        .order('appointment_date', { ascending: false });
 
       if (error) throw error;
       return data;
@@ -66,23 +70,28 @@ export const getAppointmentsByClient = async (clientId: string) => {
 /**
  * Get upcoming appointments (uses idx_appointments_stylist_date)
  */
-export const getUpcomingAppointmentsByStylist = async (stylistId: string, limit = 10) => {
+export const getUpcomingAppointmentsByStylist = async (
+  stylistId: string,
+  limit = 10
+) => {
   return requestDeduplicator.deduplicate(
     `upcoming-appointments-${stylistId}`,
     async () => {
       const { data, error } = await supabase
-        .from("appointments")
-        .select(`
+        .from('appointments')
+        .select(
+          `
           id,
           appointment_date,
           service_type,
           status,
           client_id,
           client_profiles!inner(id, full_name, phone)
-        `)
-        .eq("stylist_id", stylistId)
-        .gte("appointment_date", new Date().toISOString())
-        .order("appointment_date", { ascending: true })
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .gte('appointment_date', new Date().toISOString())
+        .order('appointment_date', { ascending: true })
         .limit(limit);
 
       if (error) throw error;

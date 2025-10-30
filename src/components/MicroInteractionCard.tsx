@@ -1,6 +1,12 @@
-import { ReactNode, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { ReactNode, useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface MicroInteractionCardProps {
   title?: string;
@@ -26,11 +32,12 @@ export const MicroInteractionCard = ({
   return (
     <Card
       className={cn(
-        "transition-all duration-200",
-        hoverable && "hover:brutal-shadow-md hover:-translate-y-0.5",
-        clickable && "cursor-pointer active:translate-y-0.5 active:brutal-shadow-xs",
-        isPressed && "scale-[0.99]",
-        "animate-fade-in",
+        'transition-all duration-200',
+        hoverable && 'hover:brutal-shadow-md hover:-translate-y-0.5',
+        clickable &&
+          'cursor-pointer active:translate-y-0.5 active:brutal-shadow-xs',
+        isPressed && 'scale-[0.99]',
+        'animate-fade-in',
         className
       )}
       onClick={onClick}
@@ -44,7 +51,7 @@ export const MicroInteractionCard = ({
           {description && <CardDescription>{description}</CardDescription>}
         </CardHeader>
       )}
-      <CardContent className={!title && !description ? "p-6" : undefined}>
+      <CardContent className={!title && !description ? 'p-6' : undefined}>
         {children}
       </CardContent>
     </Card>

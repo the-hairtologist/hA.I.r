@@ -19,12 +19,16 @@ interface ExitIntentModalProps {
 
 const content = {
   title: 'Wait! Get Your First Month Free',
-  description: 'Stop losing clients. Try hA.I.r risk-free for 30 days—no credit card required.',
+  description:
+    'Stop losing clients. Try hA.I.r risk-free for 30 days—no credit card required.',
   primaryCta: 'Start Free Trial',
   secondaryCta: 'Just browsing',
 };
 
-export const ExitIntentModal = ({ open, onOpenChange }: ExitIntentModalProps) => {
+export const ExitIntentModal = ({
+  open,
+  onOpenChange,
+}: ExitIntentModalProps) => {
   const navigate = useNavigate();
   const [isConverting, setIsConverting] = useState(false);
 

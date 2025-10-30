@@ -45,33 +45,39 @@ describe('MobileHeader', () => {
 
   it('renders header with logo', () => {
     const { container } = renderHeader();
-    
+
     expect(container.textContent).toContain('hA.I.r');
   });
 
   it('opens sidebar when menu button clicked', () => {
     const { container } = renderHeader();
-    
-    const menuButton = container.querySelector('[aria-label*="navigation menu"]') as HTMLButtonElement;
+
+    const menuButton = container.querySelector(
+      '[aria-label*="navigation menu"]'
+    ) as HTMLButtonElement;
     menuButton?.click();
-    
+
     expect(mockToggleSidebar).toHaveBeenCalled();
   });
 
   it('navigates to dashboard when logo clicked', () => {
     const { container } = renderHeader();
-    
-    const logoButton = container.querySelector('[aria-label="Go to dashboard"]') as HTMLButtonElement;
+
+    const logoButton = container.querySelector(
+      '[aria-label="Go to dashboard"]'
+    ) as HTMLButtonElement;
     logoButton?.click();
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
   });
 
   it.skip('opens search when search button clicked', () => {
     const { container } = renderHeader();
-    
-    const searchButton = container.querySelector('[aria-label=""Open search""]') as HTMLButtonElement;
-    
+
+    const searchButton = container.querySelector(
+      '[aria-label=""Open search""]'
+    ) as HTMLButtonElement;
+
     // If button exists, clicking it should work
     if (searchButton) {
       const dispatchEventSpy = vi.spyOn(window, 'dispatchEvent');
@@ -85,17 +91,21 @@ describe('MobileHeader', () => {
 
   it('navigates to notifications when bell clicked', () => {
     const { container } = renderHeader();
-    
-    const notificationButton = container.querySelector('[aria-label*="Notifications"]') as HTMLButtonElement;
+
+    const notificationButton = container.querySelector(
+      '[aria-label*="Notifications"]'
+    ) as HTMLButtonElement;
     notificationButton?.click();
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/notifications');
   });
 
   it('displays notification count in aria-label', () => {
     const { container } = renderHeader(5);
-    
-    const notificationButton = container.querySelector('[aria-label*="5 unread"]');
+
+    const notificationButton = container.querySelector(
+      '[aria-label*="5 unread"]'
+    );
     expect(notificationButton).toBeTruthy();
   });
 });

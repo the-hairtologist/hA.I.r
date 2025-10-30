@@ -122,8 +122,11 @@
   --muted-bg: 0 0% 96%;
 
   /* Typography */
-  --font-family-ui: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --font-family-display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-family-ui:
+    'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-family-display:
+    'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, Arial,
+    sans-serif;
   --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -183,7 +186,7 @@
   --elevation-none: none;
   --elevation-1: 0 1px 2px 0 hsl(var(--color-neutral-900) / 0.12);
   --elevation-2: 0 3px 6px -1px hsl(var(--color-neutral-900) / 0.16);
-  --elevation-3: 0 8px 24px -4px hsl(var(--color-neutral-900) / 0.20);
+  --elevation-3: 0 8px 24px -4px hsl(var(--color-neutral-900) / 0.2);
 
   /* Motion */
   --duration-instant: 0ms;
@@ -203,7 +206,7 @@
 }
 
 /* ===== DARK MODE ===== */
-[data-theme="dark"],
+[data-theme='dark'],
 .dark {
   /* Semantic Colors - Dark Mode */
   --background-default: 222 47% 8%;
@@ -228,7 +231,7 @@
 }
 
 /* ===== HIGH CONTRAST MODE ===== */
-[data-theme="highContrast"] {
+[data-theme='highContrast'] {
   /* Semantic Colors - High Contrast Mode */
   --background-default: 0 0% 100%;
   --background-subtle: 0 0% 98%;
@@ -251,7 +254,7 @@
 }
 
 /* ===== AMOLED MODE (Pure Black) ===== */
-[data-theme="amoled"] {
+[data-theme='amoled'] {
   /* Semantic Colors - AMOLED Mode */
   --background-default: 0 0% 0%;
   --background-subtle: 0 0% 2%;
@@ -310,17 +313,41 @@
 }
 
 /* ===== UTILITY CLASSES ===== */
-.token-primary { color: hsl(var(--color-primary-500)); }
-.token-secondary { color: hsl(var(--color-secondary-500)); }
-.token-accent { color: hsl(var(--color-accent-500)); }
-.token-success { color: hsl(var(--color-success-500)); }
-.token-warning { color: hsl(var(--color-warning-500)); }
-.token-danger { color: hsl(var(--color-danger-500)); }
+.token-primary {
+  color: hsl(var(--color-primary-500));
+}
+.token-secondary {
+  color: hsl(var(--color-secondary-500));
+}
+.token-accent {
+  color: hsl(var(--color-accent-500));
+}
+.token-success {
+  color: hsl(var(--color-success-500));
+}
+.token-warning {
+  color: hsl(var(--color-warning-500));
+}
+.token-danger {
+  color: hsl(var(--color-danger-500));
+}
 
-.bg-token-primary { background-color: hsl(var(--color-primary-500)); }
-.bg-token-secondary { background-color: hsl(var(--color-secondary-500)); }
-.bg-token-accent { background-color: hsl(var(--color-accent-500)); }
+.bg-token-primary {
+  background-color: hsl(var(--color-primary-500));
+}
+.bg-token-secondary {
+  background-color: hsl(var(--color-secondary-500));
+}
+.bg-token-accent {
+  background-color: hsl(var(--color-accent-500));
+}
 
-.elevation-1 { box-shadow: var(--elevation-1); }
-.elevation-2 { box-shadow: var(--elevation-2); }
-.elevation-3 { box-shadow: var(--elevation-3); }
+.elevation-1 {
+  box-shadow: var(--elevation-1);
+}
+.elevation-2 {
+  box-shadow: var(--elevation-2);
+}
+.elevation-3 {
+  box-shadow: var(--elevation-3);
+}

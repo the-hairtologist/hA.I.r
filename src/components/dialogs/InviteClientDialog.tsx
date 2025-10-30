@@ -20,12 +20,12 @@ interface InviteClientDialogProps {
   stylistName: string;
 }
 
-export const InviteClientDialog = ({ 
-  open, 
-  onOpenChange, 
-  clientEmail, 
+export const InviteClientDialog = ({
+  open,
+  onOpenChange,
+  clientEmail,
   clientName,
-  stylistName 
+  stylistName,
 }: InviteClientDialogProps) => {
   const {
     values,
@@ -37,7 +37,7 @@ export const InviteClientDialog = ({
     handleSubmit,
     reset,
   } = useFormSubmit<InvitationInput>(
-    async (data) => {
+    async data => {
       const { error } = await supabase.functions.invoke('send-client-invite', {
         body: {
           clientEmail: data.clientEmail,
@@ -70,7 +70,8 @@ export const InviteClientDialog = ({
             Send Client Invitation
           </DialogTitle>
           <DialogDescription>
-            Invite {clientName || "your client"} to create their account and access their personalized formulas and appointment history.
+            Invite {clientName || 'your client'} to create their account and
+            access their personalized formulas and appointment history.
           </DialogDescription>
         </DialogHeader>
 
@@ -80,7 +81,7 @@ export const InviteClientDialog = ({
             label="Client Email"
             type="email"
             value={values.clientEmail}
-            onChange={(value) => setFieldValue('clientEmail', value)}
+            onChange={value => setFieldValue('clientEmail', value)}
             onBlur={() => setFieldTouched('clientEmail')}
             error={errors.clientEmail}
             touched={touched.clientEmail}
@@ -94,7 +95,7 @@ export const InviteClientDialog = ({
             label="Personal Message"
             type="textarea"
             value={values.customMessage || ''}
-            onChange={(value) => setFieldValue('customMessage', value)}
+            onChange={value => setFieldValue('customMessage', value)}
             onBlur={() => setFieldTouched('customMessage')}
             error={errors.customMessage}
             touched={touched.customMessage}

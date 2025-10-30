@@ -1,44 +1,58 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/useToast";
-import { UserPlus, StopCircle, Play, Mail } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/hooks/useAuth";
-import { format } from "date-fns";
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/useToast';
+import { UserPlus, StopCircle, Play, Mail } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/useAuth';
+import { format } from 'date-fns';
 
 export const ClientEnrollments = () => {
   const toast = useToast();
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const [isEnrollDialogOpen, setIsEnrollDialogOpen] = useState(false);
-  const [selectedClient, setSelectedClient] = useState("");
-  const [selectedSequence, setSelectedSequence] = useState("");
+  const [selectedClient, setSelectedClient] = useState('');
+  const [selectedSequence, setSelectedSequence] = useState('');
 
   // Fetch enrollments
   const { data: enrollments, isLoading } = useQuery({
-    queryKey: ["email_enrollments"],
+    queryKey: ['email_enrollments'],
     queryFn: async () => {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       const { data, error } = await supabase
-        .from("email_sequence_enrollments")
-        .select(`
+        .from('email_sequence_enrollments')
+        .select(
+          `
           *,
           client:client_profiles!email_sequence_enrollments_client_id_fkey(full_name, email),
           sequence:email_sequences!email_sequence_enrollments_sequence_id_fkey(name, trigger_type)
-        `)
-        .eq("stylist_id", stylistProfile?.id)
-        .order("enrolled_at", { ascending: false });
+        `
+        )
+        .eq('stylist_id', stylistProfile?.id)
+        .order('enrolled_at', { ascending: false });
 
       if (error) throw error;
       return data;
@@ -48,19 +62,19 @@ export const ClientEnrollments = () => {
 
   // Fetch stylist's clients
   const { data: clients } = useQuery({
-    queryKey: ["stylist_clients"],
+    queryKey: ['stylist_clients'],
     queryFn: async () => {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       const { data, error } = await supabase
-        .from("client_profiles")
-        .select("id, full_name, email")
-        .eq("preferred_stylist_id", stylistProfile?.id)
-        .order("full_name");
+        .from('client_profiles')
+        .select('id, full_name, email')
+        .eq('preferred_stylist_id', stylistProfile?.id)
+        .order('full_name');
 
       if (error) throw error;
       return data;
@@ -70,20 +84,20 @@ export const ClientEnrollments = () => {
 
   // Fetch active sequences
   const { data: sequences } = useQuery({
-    queryKey: ["active_sequences"],
+    queryKey: ['active_sequences'],
     queryFn: async () => {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       const { data, error } = await supabase
-        .from("email_sequences")
-        .select("id, name, trigger_type")
-        .eq("stylist_id", stylistProfile?.id)
-        .eq("is_active", true)
-        .order("name");
+        .from('email_sequences')
+        .select('id, name, trigger_type')
+        .eq('stylist_id', stylistProfile?.id)
+        .eq('is_active', true)
+        .order('name');
 
       if (error) throw error;
       return data;
@@ -96,10 +110,10 @@ export const ClientEnrollments = () => {
     if (!selectedClient || !selectedSequence) return null;
 
     const { data } = await supabase
-      .from("email_sequence_enrollments")
-      .select("id, status")
-      .eq("client_id", selectedClient)
-      .eq("sequence_id", selectedSequence)
+      .from('email_sequence_enrollments')
+      .select('id, status')
+      .eq('client_id', selectedClient)
+      .eq('sequence_id', selectedSequence)
       .maybeSingle();
 
     return data;
@@ -115,32 +129,38 @@ export const ClientEnrollments = () => {
       }
 
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
-      const { data, error } = await supabase.functions.invoke('enroll-in-sequence', {
-        body: {
-          client_id: selectedClient,
-          sequence_id: selectedSequence,
-          stylist_id: stylistProfile?.id,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'enroll-in-sequence',
+        {
+          body: {
+            client_id: selectedClient,
+            sequence_id: selectedSequence,
+            stylist_id: stylistProfile?.id,
+          },
+        }
+      );
 
       if (error) throw error;
       if (data.error) throw new Error(data.error);
       return data;
     },
     onSuccess: () => {
-      toast.success("Client enrolled", "They'll receive the first email based on the sequence timing");
-      queryClient.invalidateQueries({ queryKey: ["email_enrollments"] });
+      toast.success(
+        'Client enrolled',
+        "They'll receive the first email based on the sequence timing"
+      );
+      queryClient.invalidateQueries({ queryKey: ['email_enrollments'] });
       setIsEnrollDialogOpen(false);
-      setSelectedClient("");
-      setSelectedSequence("");
+      setSelectedClient('');
+      setSelectedSequence('');
     },
     onError: (error: Error) => {
-      toast.error("Failed to enroll client", error.message);
+      toast.error('Failed to enroll client', error.message);
     },
   });
 
@@ -148,31 +168,31 @@ export const ClientEnrollments = () => {
   const unenrollMutation = useMutation({
     mutationFn: async (enrollmentId: string) => {
       const { error } = await supabase
-        .from("email_sequence_enrollments")
+        .from('email_sequence_enrollments')
         .update({
-          status: "stopped",
+          status: 'stopped',
           unenrolled_at: new Date().toISOString(),
-          unenrolled_reason: "Manually stopped by stylist",
+          unenrolled_reason: 'Manually stopped by stylist',
         })
-        .eq("id", enrollmentId);
+        .eq('id', enrollmentId);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Client unenrolled");
-      queryClient.invalidateQueries({ queryKey: ["email_enrollments"] });
+      toast.success('Client unenrolled');
+      queryClient.invalidateQueries({ queryKey: ['email_enrollments'] });
     },
   });
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      active: "bg-success/10 text-success border-success/20",
-      paused: "bg-warning/10 text-warning-foreground border-warning/20",
-      completed: "bg-info/10 text-info border-info/20",
-      unsubscribed: "bg-destructive/10 text-destructive border-destructive/20",
-      stopped: "bg-muted text-muted-foreground border-border",
+      active: 'bg-success/10 text-success border-success/20',
+      paused: 'bg-warning/10 text-warning-foreground border-warning/20',
+      completed: 'bg-info/10 text-info border-info/20',
+      unsubscribed: 'bg-destructive/10 text-destructive border-destructive/20',
+      stopped: 'bg-muted text-muted-foreground border-border',
     };
-    return colors[status] || "";
+    return colors[status] || '';
   };
 
   return (
@@ -199,12 +219,15 @@ export const ClientEnrollments = () => {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="client">Select Client *</Label>
-                <Select value={selectedClient} onValueChange={setSelectedClient}>
+                <Select
+                  value={selectedClient}
+                  onValueChange={setSelectedClient}
+                >
                   <SelectTrigger id="client">
                     <SelectValue placeholder="Choose a client" />
                   </SelectTrigger>
                   <SelectContent>
-                    {clients?.map((client) => (
+                    {clients?.map(client => (
                       <SelectItem key={client.id} value={client.id}>
                         {client.full_name} - {client.email}
                       </SelectItem>
@@ -215,12 +238,15 @@ export const ClientEnrollments = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="sequence">Select Sequence *</Label>
-                <Select value={selectedSequence} onValueChange={setSelectedSequence}>
+                <Select
+                  value={selectedSequence}
+                  onValueChange={setSelectedSequence}
+                >
                   <SelectTrigger id="sequence">
                     <SelectValue placeholder="Choose a sequence" />
                   </SelectTrigger>
                   <SelectContent>
-                    {sequences?.map((seq) => (
+                    {sequences?.map(seq => (
                       <SelectItem key={seq.id} value={seq.id}>
                         {seq.name}
                       </SelectItem>
@@ -231,10 +257,14 @@ export const ClientEnrollments = () => {
 
               <Button
                 onClick={() => enrollMutation.mutate()}
-                disabled={!selectedClient || !selectedSequence || enrollMutation.isPending}
+                disabled={
+                  !selectedClient ||
+                  !selectedSequence ||
+                  enrollMutation.isPending
+                }
                 className="w-full"
               >
-                {enrollMutation.isPending ? "Enrolling..." : "Enroll Client"}
+                {enrollMutation.isPending ? 'Enrolling...' : 'Enroll Client'}
               </Button>
             </div>
           </DialogContent>
@@ -269,38 +299,48 @@ export const ClientEnrollments = () => {
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="font-semibold text-lg">
-                      {enrollment.client?.full_name || "Unknown Client"}
+                      {enrollment.client?.full_name || 'Unknown Client'}
                     </h3>
-                    <Badge className={getStatusColor(enrollment.status)} variant="outline">
+                    <Badge
+                      className={getStatusColor(enrollment.status)}
+                      variant="outline"
+                    >
                       {enrollment.status}
                     </Badge>
                   </div>
 
                   <div className="space-y-1 text-sm">
                     <p className="text-muted-foreground">
-                      <span className="font-medium">Sequence:</span> {enrollment.sequence?.name}
+                      <span className="font-medium">Sequence:</span>{' '}
+                      {enrollment.sequence?.name}
                     </p>
                     <p className="text-muted-foreground">
-                      <span className="font-medium">Email:</span> {enrollment.client?.email}
+                      <span className="font-medium">Email:</span>{' '}
+                      {enrollment.client?.email}
                     </p>
                     <p className="text-muted-foreground">
-                      <span className="font-medium">Enrolled:</span>{" "}
-                      {format(new Date(enrollment.enrolled_at), "MMM d, yyyy")}
+                      <span className="font-medium">Enrolled:</span>{' '}
+                      {format(new Date(enrollment.enrolled_at), 'MMM d, yyyy')}
                     </p>
-                    {enrollment.status === "active" && enrollment.next_send_at && (
-                      <p className="text-muted-foreground">
-                        <span className="font-medium">Next Email:</span>{" "}
-                        {format(new Date(enrollment.next_send_at), "MMM d, yyyy 'at' h:mm a")}
-                      </p>
-                    )}
+                    {enrollment.status === 'active' &&
+                      enrollment.next_send_at && (
+                        <p className="text-muted-foreground">
+                          <span className="font-medium">Next Email:</span>{' '}
+                          {format(
+                            new Date(enrollment.next_send_at),
+                            "MMM d, yyyy 'at' h:mm a"
+                          )}
+                        </p>
+                      )}
                     <p className="text-muted-foreground">
-                      <span className="font-medium">Current Step:</span> {enrollment.current_step}
+                      <span className="font-medium">Current Step:</span>{' '}
+                      {enrollment.current_step}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-2">
-                  {enrollment.status === "active" && (
+                  {enrollment.status === 'active' && (
                     <Button
                       variant="outline"
                       size="sm"

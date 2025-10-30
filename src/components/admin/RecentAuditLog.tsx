@@ -1,30 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
-import { Card } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { formatDistanceToNow } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Eye } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
+import { Card } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { formatDistanceToNow } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { FileText, Eye } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 export function RecentAuditLog() {
   const [selectedLog, setSelectedLog] = useState<any>(null);
 
   const { data: logs, isLoading } = useQuery({
-    queryKey: ["recent-audit-logs"],
+    queryKey: ['recent-audit-logs'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("audit_logs")
-        .select("*")
-        .order("created_at", { ascending: false })
+        .from('audit_logs')
+        .select('*')
+        .order('created_at', { ascending: false })
         .limit(50);
 
       if (error) throw error;
@@ -35,17 +35,17 @@ export function RecentAuditLog() {
 
   const getActionColor = (action: string) => {
     switch (action) {
-      case "INSERT":
-        return "default";
-      case "UPDATE":
-        return "secondary";
-      case "DELETE":
-        return "destructive";
-      case "ADMIN_GRANT":
-      case "ADMIN_REVOKE":
-        return "secondary";
+      case 'INSERT':
+        return 'default';
+      case 'UPDATE':
+        return 'secondary';
+      case 'DELETE':
+        return 'destructive';
+      case 'ADMIN_GRANT':
+      case 'ADMIN_REVOKE':
+        return 'secondary';
       default:
-        return "outline";
+        return 'outline';
     }
   };
 
@@ -74,7 +74,7 @@ export function RecentAuditLog() {
 
         <ScrollArea className="h-[500px] pr-4">
           <div className="space-y-3">
-            {logs?.map((log) => (
+            {logs?.map(log => (
               <div
                 key={log.id}
                 className="p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
@@ -82,7 +82,10 @@ export function RecentAuditLog() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Badge variant={getActionColor(log.action)} className="text-xs">
+                      <Badge
+                        variant={getActionColor(log.action)}
+                        className="text-xs"
+                      >
                         {log.action}
                       </Badge>
                       <span className="text-sm font-medium truncate">
@@ -124,17 +127,23 @@ export function RecentAuditLog() {
           {selectedLog && (
             <div className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Action</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Action
+                </p>
                 <Badge variant={getActionColor(selectedLog.action)}>
                   {selectedLog.action}
                 </Badge>
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Table</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Table
+                </p>
                 <p className="text-sm">{selectedLog.table_name}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Timestamp</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Timestamp
+                </p>
                 <p className="text-sm">
                   {new Date(selectedLog.created_at).toLocaleString()}
                 </p>

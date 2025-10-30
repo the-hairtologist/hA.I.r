@@ -3,8 +3,8 @@
  * Loading state for lists with configurable items
  */
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface SkeletonListProps {
   count?: number;
@@ -12,10 +12,10 @@ interface SkeletonListProps {
   showHeader?: boolean;
 }
 
-export const SkeletonList = ({ 
-  count = 5, 
+export const SkeletonList = ({
+  count = 5,
   variant = 'card',
-  showHeader = false 
+  showHeader = false,
 }: SkeletonListProps) => {
   if (variant === 'grid') {
     return (
@@ -44,7 +44,10 @@ export const SkeletonList = ({
     return (
       <div className="space-y-2">
         {Array.from({ length: count }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 p-4 border rounded-lg animate-pulse">
+          <div
+            key={i}
+            className="flex items-center gap-4 p-4 border rounded-lg animate-pulse"
+          >
             <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
             <div className="flex-1 space-y-2">
               <Skeleton className="h-4 w-1/3" />

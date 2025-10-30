@@ -3,11 +3,11 @@
  * Native iOS/Android-style modal for mobile devices
  */
 
-import { ReactNode, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { ReactNode, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface BottomSheetProps {
   open: boolean;
@@ -29,9 +29,9 @@ export function BottomSheet({
   // Lock body scroll when open
   useEffect(() => {
     if (open) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
       return () => {
-        document.body.style.overflow = "";
+        document.body.style.overflow = '';
       };
     }
   }, [open]);
@@ -39,13 +39,13 @@ export function BottomSheet({
   // Close on Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && open) {
+      if (e.key === 'Escape' && open) {
         onOpenChange(false);
       }
     };
 
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
   }, [open, onOpenChange]);
 
   if (!open) return null;
@@ -62,20 +62,23 @@ export function BottomSheet({
       {/* Sheet */}
       <div
         className={cn(
-          "absolute bottom-0 left-0 right-0 max-h-[90vh] overflow-hidden",
-          "bg-background border-t-4 border-foreground rounded-t-2xl",
-          "shadow-[0_-8px_24px_rgba(0,0,0,0.15)]",
-          "animate-slide-in-bottom",
+          'absolute bottom-0 left-0 right-0 max-h-[90vh] overflow-hidden',
+          'bg-background border-t-4 border-foreground rounded-t-2xl',
+          'shadow-[0_-8px_24px_rgba(0,0,0,0.15)]',
+          'animate-slide-in-bottom',
           className
         )}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={title ? "bottom-sheet-title" : undefined}
-        aria-describedby={description ? "bottom-sheet-description" : undefined}
+        aria-labelledby={title ? 'bottom-sheet-title' : undefined}
+        aria-describedby={description ? 'bottom-sheet-description' : undefined}
       >
         {/* Handle */}
         <div className="flex justify-center py-3 border-b">
-          <div className="w-12 h-1 bg-muted-foreground/30 rounded-full" aria-hidden="true" />
+          <div
+            className="w-12 h-1 bg-muted-foreground/30 rounded-full"
+            aria-hidden="true"
+          />
         </div>
 
         {/* Header */}
@@ -114,10 +117,11 @@ export function BottomSheet({
         )}
 
         {/* Content */}
-        <div className="overflow-y-auto overscroll-contain" style={{ maxHeight: "calc(90vh - 120px)" }}>
-          <div className="p-4">
-            {children}
-          </div>
+        <div
+          className="overflow-y-auto overscroll-contain"
+          style={{ maxHeight: 'calc(90vh - 120px)' }}
+        >
+          <div className="p-4">{children}</div>
         </div>
       </div>
     </div>,

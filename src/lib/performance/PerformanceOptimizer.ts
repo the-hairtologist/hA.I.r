@@ -54,7 +54,7 @@ class PerformanceOptimizerService {
       requestIdleCallback(() => {
         // Add loading="lazy" to images without it
         const images = document.querySelectorAll('img:not([loading])');
-        images.forEach((img) => {
+        images.forEach(img => {
           img.setAttribute('loading', 'lazy');
           img.setAttribute('decoding', 'async');
         });
@@ -97,7 +97,7 @@ class PerformanceOptimizerService {
     // Monitor long tasks
     if ('PerformanceObserver' in window) {
       try {
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver(list => {
           for (const entry of list.getEntries()) {
             if (entry.duration > 50) {
               safeConsole.warn('⚠️ Long task detected:', {
@@ -115,7 +115,7 @@ class PerformanceOptimizerService {
 
       // Monitor layout shifts
       try {
-        const clsObserver = new PerformanceObserver((list) => {
+        const clsObserver = new PerformanceObserver(list => {
           let clsScore = 0;
           for (const entry of list.getEntries()) {
             if (!(entry as any).hadRecentInput) {
@@ -152,7 +152,7 @@ class PerformanceOptimizerService {
   enableCompression() {
     // Check if compression is supported
     const supportsCompression = 'CompressionStream' in window;
-    
+
     if (supportsCompression) {
       logger.info('✅ Compression API available');
     } else {
@@ -178,13 +178,17 @@ class PerformanceOptimizerService {
 
     if ('PerformanceObserver' in window) {
       // Get FCP
-      const fcpEntry = performance.getEntriesByName('first-contentful-paint')[0];
+      const fcpEntry = performance.getEntriesByName(
+        'first-contentful-paint'
+      )[0];
       if (fcpEntry) {
         metrics.fcp = fcpEntry.startTime;
       }
 
       // Get LCP
-      const lcpEntries = performance.getEntriesByType('largest-contentful-paint');
+      const lcpEntries = performance.getEntriesByType(
+        'largest-contentful-paint'
+      );
       if (lcpEntries.length > 0) {
         metrics.lcp = lcpEntries[lcpEntries.length - 1].startTime;
       }

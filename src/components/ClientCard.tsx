@@ -1,27 +1,27 @@
 /**
  * Client Card Component
- * 
+ *
  * Displays a client's profile information in a card format with selection,
  * contact details, appointment history, and action buttons.
- * 
+ *
  * Features:
  * - Selectable via checkbox for bulk operations
  * - Risk and activity indicators
  * - Quick action buttons (Edit, History, Notes)
  * - Responsive layout with truncated text
- * 
+ *
  * @component
  * @memoized - Optimized with React.memo to prevent unnecessary re-renders
  */
 
-import { memo } from "react";
-import { withMemo } from "@/lib/optimizations/withMemo";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Mail, Phone, User, Edit, FileText, Calendar } from "lucide-react";
-import { ClientRiskIndicator } from "@/components/ClientRiskIndicator";
-import { ClientActivityIndicator } from "@/components/ClientActivityIndicator";
+import { memo } from 'react';
+import { withMemo } from '@/lib/optimizations/withMemo';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Mail, Phone, User, Edit, FileText, Calendar } from 'lucide-react';
+import { ClientRiskIndicator } from '@/components/ClientRiskIndicator';
+import { ClientActivityIndicator } from '@/components/ClientActivityIndicator';
 
 /**
  * Client data structure for the card display
@@ -66,11 +66,11 @@ const formatAppointmentInfo = (
   lastAppointmentDate: string | null | undefined
 ): string => {
   const baseText = `${totalAppointments} appointments`;
-  
+
   if (lastAppointmentDate) {
     return `${baseText} • Last: ${formatLastAppointmentDate(lastAppointmentDate)}`;
   }
-  
+
   return baseText;
 };
 
@@ -81,12 +81,12 @@ const ClientCardComponent = ({
   onEdit,
   onViewHistory,
   onViewNotes,
-  missedAppointments = 0
+  missedAppointments = 0,
 }: ClientCardProps) => {
   // Derived values
-  const clientName = client.full_name || "Unnamed Client";
+  const clientName = client.full_name || 'Unnamed Client';
   const appointmentCount = client.total_appointments || 0;
-  const cardClassName = isSelected ? "border-primary" : "";
+  const cardClassName = isSelected ? 'border-primary' : '';
 
   return (
     <Card className={cardClassName}>
@@ -102,14 +102,14 @@ const ClientCardComponent = ({
               className="h-4 w-4"
               aria-label={`Select ${clientName}`}
             />
-            
+
             {/* Client name and badges */}
             <div className="flex-1">
               <CardTitle className="text-base flex items-center gap-2">
                 <User className="h-4 w-4" aria-hidden="true" />
                 {clientName}
               </CardTitle>
-              
+
               {/* Hair type and activity badges */}
               <div className="flex gap-2 mt-2">
                 {client.hair_type && (
@@ -121,7 +121,7 @@ const ClientCardComponent = ({
               </div>
             </div>
           </div>
-          
+
           {/* Risk indicator (churn risk based on appointment history) */}
           <ClientRiskIndicator
             lastAppointmentDate={client.last_appointment_date}
@@ -142,7 +142,7 @@ const ClientCardComponent = ({
               <span className="truncate">{client.email}</span>
             </div>
           )}
-          
+
           {/* Phone */}
           {client.phone && (
             <div className="flex items-center gap-2 text-muted-foreground">
@@ -150,12 +150,15 @@ const ClientCardComponent = ({
               <span>{client.phone}</span>
             </div>
           )}
-          
+
           {/* Appointment count and last visit */}
           <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4" aria-hidden="true" />
             <span>
-              {formatAppointmentInfo(appointmentCount, client.last_appointment_date)}
+              {formatAppointmentInfo(
+                appointmentCount,
+                client.last_appointment_date
+              )}
             </span>
           </div>
         </div>
@@ -196,7 +199,9 @@ const ClientCardComponent = ({
   );
 };
 
-export const ClientCard = withMemo(
-  ClientCardComponent,
-  ['client.id', 'client.updated_at', 'isSelected', 'client.last_appointment_date']
-);
+export const ClientCard = withMemo(ClientCardComponent, [
+  'client.id',
+  'client.updated_at',
+  'isSelected',
+  'client.last_appointment_date',
+]);

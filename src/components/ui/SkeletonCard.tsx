@@ -11,7 +11,10 @@ interface SkeletonCardProps {
   showActions?: boolean;
 }
 
-export const SkeletonCard = ({ showImage = true, showActions = false }: SkeletonCardProps) => {
+export const SkeletonCard = ({
+  showImage = true,
+  showActions = false,
+}: SkeletonCardProps) => {
   return (
     <Card>
       <CardHeader>

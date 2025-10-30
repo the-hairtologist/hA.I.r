@@ -8,13 +8,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 
 export function GoogleCalendarConnect() {
-  const { 
+  const {
     connecting,
     connectGoogleCalendar,
     disconnectCalendar,
-    checkConnection 
+    checkConnection,
   } = useCalendarSync();
-  
+
   const [connection, setConnection] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -89,7 +89,10 @@ export function GoogleCalendarConnect() {
             </p>
             {connection?.sync_enabled && (
               <div className="mt-2 text-xs text-muted-foreground">
-                Last synced: {new Date(connection.last_sync_at || connection.created_at).toLocaleString()}
+                Last synced:{' '}
+                {new Date(
+                  connection.last_sync_at || connection.created_at
+                ).toLocaleString()}
               </div>
             )}
           </div>

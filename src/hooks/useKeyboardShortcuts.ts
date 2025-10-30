@@ -18,9 +18,11 @@ export interface KeyboardShortcut {
 export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      shortcuts.forEach((shortcut) => {
+      shortcuts.forEach(shortcut => {
         const keyMatch = e.key.toLowerCase() === shortcut.key.toLowerCase();
-        const ctrlMatch = shortcut.ctrlKey ? (e.ctrlKey || e.metaKey) : !e.ctrlKey && !e.metaKey;
+        const ctrlMatch = shortcut.ctrlKey
+          ? e.ctrlKey || e.metaKey
+          : !e.ctrlKey && !e.metaKey;
         const shiftMatch = shortcut.shiftKey ? e.shiftKey : !e.shiftKey;
         const altMatch = shortcut.altKey ? e.altKey : !e.altKey;
 

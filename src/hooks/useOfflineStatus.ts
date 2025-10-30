@@ -16,18 +16,21 @@ export const useOfflineStatus = () => {
     pendingActions: 0,
     failedActions: 0,
     lastSyncTime: null,
-    effectiveConnection: null
+    effectiveConnection: null,
   });
 
   const updateStatus = () => {
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-    
+    const connection =
+      (navigator as any).connection ||
+      (navigator as any).mozConnection ||
+      (navigator as any).webkitConnection;
+
     setStatus({
       isOnline: navigator.onLine,
       pendingActions: offlineQueue.getPendingCount(),
       failedActions: offlineQueue.getFailedCount(),
       lastSyncTime: new Date(),
-      effectiveConnection: connection?.effectiveType || null
+      effectiveConnection: connection?.effectiveType || null,
     });
   };
 
@@ -36,16 +39,16 @@ export const useOfflineStatus = () => {
       updateStatus();
       toast.success('Back online!', {
         description: 'Syncing your changes...',
-        duration: 3000
+        duration: 3000,
       });
       offlineQueue.processQueue();
     };
 
     const handleOffline = () => {
       updateStatus();
-      toast.warning('You\'re offline', {
+      toast.warning("You're offline", {
         description: 'Changes will sync when you reconnect',
-        duration: 5000
+        duration: 5000,
       });
     };
 
@@ -72,14 +75,14 @@ export const useOfflineStatus = () => {
   const retryFailed = () => {
     offlineQueue.retryFailed();
     toast.info('Retrying failed actions...', {
-      description: 'Please wait while we sync your data'
+      description: 'Please wait while we sync your data',
     });
   };
 
   const clearQueue = () => {
     offlineQueue.clearAll();
     toast.success('Queue cleared', {
-      description: 'All pending actions removed'
+      description: 'All pending actions removed',
     });
   };
 
@@ -87,6 +90,6 @@ export const useOfflineStatus = () => {
     ...status,
     retryFailed,
     clearQueue,
-    refresh: updateStatus
+    refresh: updateStatus,
   };
 };

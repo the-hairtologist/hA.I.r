@@ -3,16 +3,16 @@
  * Shows upcoming client birthdays
  */
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Cake, Gift, Mail, MessageCircle } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { format, isSameDay, addDays } from "date-fns";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Cake, Gift, Mail, MessageCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { format, isSameDay, addDays } from 'date-fns';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 interface BirthdayClient {
   id: string;
@@ -26,7 +26,9 @@ interface BirthdayClient {
 export function BirthdayAlertsWidget() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [upcomingBirthdays, setUpcomingBirthdays] = useState<BirthdayClient[]>([]);
+  const [upcomingBirthdays, setUpcomingBirthdays] = useState<BirthdayClient[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,9 +39,9 @@ export function BirthdayAlertsWidget() {
     try {
       // Get stylist profile
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
       if (!stylistProfile) {
@@ -49,10 +51,10 @@ export function BirthdayAlertsWidget() {
 
       // Get clients with birthdays
       const { data, error } = await supabase
-        .from("client_profiles")
-        .select("id, full_name, birthday, email, phone")
-        .eq("preferred_stylist_id", stylistProfile.id)
-        .not("birthday", "is", null);
+        .from('client_profiles')
+        .select('id, full_name, birthday, email, phone')
+        .eq('preferred_stylist_id', stylistProfile.id)
+        .not('birthday', 'is', null);
 
       if (error) throw error;
 
@@ -61,7 +63,7 @@ export function BirthdayAlertsWidget() {
       const thirtyDaysFromNow = addDays(today, 30);
 
       const upcoming = data
-        .map((client) => {
+        .map(client => {
           const birthday = new Date(client.birthday);
           const thisYearBirthday = new Date(
             today.getFullYear(),
@@ -88,22 +90,25 @@ export function BirthdayAlertsWidget() {
             days_until: daysUntil,
           };
         })
-        .filter((client) => client.days_until >= 0 && client.days_until <= 30)
+        .filter(client => client.days_until >= 0 && client.days_until <= 30)
         .sort((a, b) => a.days_until - b.days_until)
         .slice(0, 5);
 
       setUpcomingBirthdays(upcoming as BirthdayClient[]);
     } catch (error) {
-      console.error("Error loading birthdays:", error);
+      console.error('Error loading birthdays:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const sendBirthdayMessage = (client: BirthdayClient, method: "email" | "sms") => {
-    if (method === "email" && client.email) {
+  const sendBirthdayMessage = (
+    client: BirthdayClient,
+    method: 'email' | 'sms'
+  ) => {
+    if (method === 'email' && client.email) {
       window.location.href = `mailto:${client.email}?subject=Happy Birthday ${client.full_name}! 🎉`;
-    } else if (method === "sms" && client.phone) {
+    } else if (method === 'sms' && client.phone) {
       window.location.href = `sms:${client.phone}`;
     } else {
       toast.error(`No ${method} available for this client`);
@@ -122,11 +127,7 @@ export function BirthdayAlertsWidget() {
     } else if (daysUntil <= 7) {
       return <Badge variant="secondary">This week</Badge>;
     } else {
-      return (
-        <Badge variant="outline">
-          {daysUntil} days
-        </Badge>
-      );
+      return <Badge variant="outline">{daysUntil} days</Badge>;
     }
   };
 
@@ -156,11 +157,13 @@ export function BirthdayAlertsWidget() {
           <div className="text-center py-8 text-xs sm:text-sm text-muted-foreground space-y-2">
             <Gift className="h-8 w-8 mx-auto mb-2 opacity-50" />
             <p className="font-medium">No upcoming birthdays</p>
-            <p className="text-[11px] sm:text-xs">Add birthdays to client profiles to see alerts here</p>
+            <p className="text-[11px] sm:text-xs">
+              Add birthdays to client profiles to see alerts here
+            </p>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigate("/clients")}
+              onClick={() => navigate('/clients')}
               className="mt-2"
             >
               Manage Clients
@@ -168,7 +171,7 @@ export function BirthdayAlertsWidget() {
           </div>
         ) : (
           <div className="space-y-3">
-            {upcomingBirthdays.map((client) => (
+            {upcomingBirthdays.map(client => (
               <div
                 key={client.id}
                 className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
@@ -178,7 +181,7 @@ export function BirthdayAlertsWidget() {
                     {client.full_name}
                   </p>
                   <p className="text-[11px] sm:text-xs text-muted-foreground">
-                    {format(new Date(client.birthday), "MMMM d")}
+                    {format(new Date(client.birthday), 'MMMM d')}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0 ml-2">
@@ -188,7 +191,7 @@ export function BirthdayAlertsWidget() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => sendBirthdayMessage(client, "email")}
+                        onClick={() => sendBirthdayMessage(client, 'email')}
                         className="h-7 w-7 p-0"
                         title="Send birthday email"
                       >
@@ -199,7 +202,7 @@ export function BirthdayAlertsWidget() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => sendBirthdayMessage(client, "sms")}
+                        onClick={() => sendBirthdayMessage(client, 'sms')}
                         className="h-7 w-7 p-0"
                         title="Send birthday SMS"
                       >

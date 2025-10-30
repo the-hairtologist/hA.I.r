@@ -1,25 +1,49 @@
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
-import { MessageSquare, Send, Loader2, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { toast } from 'sonner';
+import {
+  MessageSquare,
+  Send,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  ArrowLeft,
+} from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useNavigate } from 'react-router-dom';
 
 const TestSMS = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [appointmentId, setAppointmentId] = useState("");
-  const [notificationType, setNotificationType] = useState<"confirmation" | "reminder" | "cancellation" | "reschedule">("confirmation");
-  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [appointmentId, setAppointmentId] = useState('');
+  const [notificationType, setNotificationType] = useState<
+    'confirmation' | 'reminder' | 'cancellation' | 'reschedule'
+  >('confirmation');
+  const [testResult, setTestResult] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
 
   const handleTest = async () => {
     if (!appointmentId) {
-      toast.error("Please enter an appointment ID");
+      toast.error('Please enter an appointment ID');
       return;
     }
 
@@ -27,12 +51,15 @@ const TestSMS = () => {
     setTestResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('send-sms-notification', {
-        body: {
-          appointmentId,
-          notificationType,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'send-sms-notification',
+        {
+          body: {
+            appointmentId,
+            notificationType,
+          },
+        }
+      );
 
       if (error) throw error;
 
@@ -40,14 +67,14 @@ const TestSMS = () => {
         success: true,
         message: `SMS sent successfully! Message SID: ${data?.messageSid || 'N/A'}`,
       });
-      toast.success("SMS notification sent!");
+      toast.success('SMS notification sent!');
     } catch (error: any) {
-      console.error("Error sending SMS:", error);
+      console.error('Error sending SMS:', error);
       setTestResult({
         success: false,
-        message: error.message || "Failed to send SMS",
+        message: error.message || 'Failed to send SMS',
       });
-      toast.error("Failed to send SMS notification");
+      toast.error('Failed to send SMS notification');
     } finally {
       setLoading(false);
     }
@@ -58,10 +85,10 @@ const TestSMS = () => {
       <header className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => navigate("/dashboard")}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/dashboard')}
               className="border-2 border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-brutal"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
@@ -87,7 +114,8 @@ const TestSMS = () => {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                <strong>Note:</strong> Make sure the appointment has a client with a valid phone number in their profile.
+                <strong>Note:</strong> Make sure the appointment has a client
+                with a valid phone number in their profile.
               </AlertDescription>
             </Alert>
 
@@ -97,7 +125,7 @@ const TestSMS = () => {
                 <Input
                   id="appointmentId"
                   value={appointmentId}
-                  onChange={(e) => setAppointmentId(e.target.value)}
+                  onChange={e => setAppointmentId(e.target.value)}
                   placeholder="Enter appointment UUID"
                 />
                 <p className="text-xs text-muted-foreground">
@@ -107,7 +135,10 @@ const TestSMS = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="notificationType">Notification Type</Label>
-                <Select value={notificationType} onValueChange={(value: any) => setNotificationType(value)}>
+                <Select
+                  value={notificationType}
+                  onValueChange={(value: any) => setNotificationType(value)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -140,14 +171,15 @@ const TestSMS = () => {
               </Button>
 
               {testResult && (
-                <Alert variant={testResult.success ? "default" : "destructive"}>
+                <Alert variant={testResult.success ? 'default' : 'destructive'}>
                   {testResult.success ? (
                     <CheckCircle className="h-4 w-4" />
                   ) : (
                     <AlertCircle className="h-4 w-4" />
                   )}
                   <AlertDescription>
-                    <strong>{testResult.success ? "Success" : "Error"}:</strong> {testResult.message}
+                    <strong>{testResult.success ? 'Success' : 'Error'}:</strong>{' '}
+                    {testResult.message}
                   </AlertDescription>
                 </Alert>
               )}

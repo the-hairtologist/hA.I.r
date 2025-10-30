@@ -30,7 +30,9 @@ export default function AdminRevenue() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center space-y-3">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-            <p className="text-muted-foreground">Loading revenue analytics...</p>
+            <p className="text-muted-foreground">
+              Loading revenue analytics...
+            </p>
           </div>
         </div>
       </DashboardLayout>
@@ -65,7 +67,7 @@ export default function AdminRevenue() {
               </p>
             </div>
           </div>
-          
+
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
             Export Report
@@ -82,7 +84,8 @@ export default function AdminRevenue() {
               <div>
                 <p className="font-semibold">Admin Financial Dashboard</p>
                 <p className="text-sm text-muted-foreground">
-                  You have full access to platform revenue data, commission tracking, and business metrics
+                  You have full access to platform revenue data, commission
+                  tracking, and business metrics
                 </p>
               </div>
             </div>
@@ -102,8 +105,8 @@ export default function AdminRevenue() {
               <p className="text-sm text-muted-foreground mb-4">
                 Track and manage stylist commissions
               </p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full"
                 onClick={() => navigate('/commissions')}
               >
@@ -120,8 +123,8 @@ export default function AdminRevenue() {
               <p className="text-sm text-muted-foreground mb-4">
                 Detailed platform growth metrics
               </p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full"
                 onClick={() => navigate('/analytics')}
               >

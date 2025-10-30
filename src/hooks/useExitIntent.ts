@@ -11,7 +11,10 @@ interface UseExitIntentOptions {
   enabled?: boolean;
 }
 
-export const useExitIntent = ({ onExitIntent, enabled = true }: UseExitIntentOptions) => {
+export const useExitIntent = ({
+  onExitIntent,
+  enabled = true,
+}: UseExitIntentOptions) => {
   const [pageStartTime] = useState(Date.now());
   const [hasShown, setHasShown] = useState(false);
 

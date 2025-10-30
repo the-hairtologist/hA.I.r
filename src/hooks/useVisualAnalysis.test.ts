@@ -87,7 +87,10 @@ describe('useVisualAnalysis', () => {
   it('should not analyze without photoUrl', async () => {
     const { result } = renderHook(() => useVisualAnalysis());
 
-    const analysisResult = await result.current.analyzeHairPhoto('', 'client-123');
+    const analysisResult = await result.current.analyzeHairPhoto(
+      '',
+      'client-123'
+    );
 
     expect(analysisResult).toBeNull();
   });
@@ -95,7 +98,10 @@ describe('useVisualAnalysis', () => {
   it('should not analyze without clientId', async () => {
     const { result } = renderHook(() => useVisualAnalysis());
 
-    const analysisResult = await result.current.analyzeHairPhoto('https://example.com/photo.jpg', '');
+    const analysisResult = await result.current.analyzeHairPhoto(
+      'https://example.com/photo.jpg',
+      ''
+    );
 
     expect(analysisResult).toBeNull();
   });

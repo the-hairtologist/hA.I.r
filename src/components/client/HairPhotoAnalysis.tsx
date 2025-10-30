@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Upload, Loader2, Sparkles, Camera } from 'lucide-react';
 import { useHairAnalysis } from '@/hooks/useHairAnalysis';
@@ -12,7 +18,10 @@ interface HairPhotoAnalysisProps {
   onAnalysisComplete?: (result: any) => void;
 }
 
-export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAnalysisProps) => {
+export const HairPhotoAnalysis = ({
+  clientId,
+  onAnalysisComplete,
+}: HairPhotoAnalysisProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -26,9 +35,9 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
     // Validate file type
     if (!file.type.startsWith('image/')) {
       toast({
-        title: "Invalid File",
-        description: "Please select an image file (JPG, PNG, etc.)",
-        variant: "destructive",
+        title: 'Invalid File',
+        description: 'Please select an image file (JPG, PNG, etc.)',
+        variant: 'destructive',
       });
       return;
     }
@@ -36,15 +45,15 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
     // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast({
-        title: "File Too Large",
-        description: "Please select an image under 10MB",
-        variant: "destructive",
+        title: 'File Too Large',
+        description: 'Please select an image under 10MB',
+        variant: 'destructive',
       });
       return;
     }
 
     setSelectedFile(file);
-    
+
     // Create preview
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -62,13 +71,15 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
       // Upload to Supabase Storage
       const fileExt = selectedFile.name.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = clientId ? `${clientId}/${fileName}` : `analysis/${fileName}`;
+      const filePath = clientId
+        ? `${clientId}/${fileName}`
+        : `analysis/${fileName}`;
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('hair-photos')
         .upload(filePath, selectedFile, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
         });
 
       if (uploadError) {
@@ -77,9 +88,9 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
       }
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('hair-photos')
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('hair-photos').getPublicUrl(filePath);
 
       // Analyze the photo
       const analysisResult = await analyzePhoto(publicUrl, clientId);
@@ -87,7 +98,6 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
       if (onAnalysisComplete) {
         onAnalysisComplete(analysisResult);
       }
-
     } catch (error) {
       console.error('Analysis process error:', error);
       // Error toast already shown by useHairAnalysis hook
@@ -148,14 +158,14 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
                 className="w-full h-auto max-h-[400px] object-cover"
               />
             </div>
-            
+
             <div className="flex gap-2">
               <Button
                 onClick={handleAnalyze}
                 disabled={isUploading || isAnalyzing}
                 className="flex-1"
               >
-                {(isUploading || isAnalyzing) ? (
+                {isUploading || isAnalyzing ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     {isUploading ? 'Uploading...' : 'Analyzing...'}
@@ -167,7 +177,7 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
                   </>
                 )}
               </Button>
-              
+
               <Button
                 onClick={handleClear}
                 variant="outline"
@@ -197,19 +207,22 @@ export const HairPhotoAnalysis = ({ clientId, onAnalysisComplete }: HairPhotoAna
                 <Sparkles className="h-4 w-4 text-primary" />
                 Professional Analysis
               </h4>
-              
-              {result.analysis.sections && Object.keys(result.analysis.sections).length > 0 ? (
+
+              {result.analysis.sections &&
+              Object.keys(result.analysis.sections).length > 0 ? (
                 <div className="space-y-3">
-                  {Object.entries(result.analysis.sections).map(([key, value]) => (
-                    <div key={key}>
-                      <h5 className="font-medium text-sm capitalize mb-1">
-                        {key.replace(/_/g, ' ')}
-                      </h5>
-                      <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                        {value}
-                      </p>
-                    </div>
-                  ))}
+                  {Object.entries(result.analysis.sections).map(
+                    ([key, value]) => (
+                      <div key={key}>
+                        <h5 className="font-medium text-sm capitalize mb-1">
+                          {key.replace(/_/g, ' ')}
+                        </h5>
+                        <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                          {value}
+                        </p>
+                      </div>
+                    )
+                  )}
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground whitespace-pre-wrap">

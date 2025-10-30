@@ -4,19 +4,25 @@
  */
 
 import { useProactiveInsights } from '@/hooks/useProactiveInsights';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  Sparkles, 
-  TrendingUp, 
-  DollarSign, 
-  Clock, 
-  Users, 
+import {
+  Sparkles,
+  TrendingUp,
+  DollarSign,
+  Clock,
+  Users,
   Loader2,
   CheckCircle,
   AlertTriangle,
-  Info
+  Info,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -24,24 +30,35 @@ interface ProactiveInsightsPanelProps {
   stylistId: string;
 }
 
-export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ stylistId }) => {
-  const { insights, loading, lastGenerated, regenerate } = useProactiveInsights(stylistId);
+export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({
+  stylistId,
+}) => {
+  const { insights, loading, lastGenerated, regenerate } =
+    useProactiveInsights(stylistId);
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case 'critical': return AlertTriangle;
-      case 'high': return TrendingUp;
-      case 'medium': return Info;
-      default: return CheckCircle;
+      case 'critical':
+        return AlertTriangle;
+      case 'high':
+        return TrendingUp;
+      case 'medium':
+        return Info;
+      default:
+        return CheckCircle;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'destructive';
-      case 'high': return 'warning';
-      case 'medium': return 'secondary';
-      default: return 'outline';
+      case 'critical':
+        return 'destructive';
+      case 'high':
+        return 'warning';
+      case 'medium':
+        return 'secondary';
+      default:
+        return 'outline';
     }
   };
 
@@ -59,18 +76,25 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
         <CardContent className="flex flex-col items-center justify-center p-12">
           <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
           <p className="text-lg font-medium">Analyzing your business...</p>
-          <p className="text-sm text-muted-foreground">AI is discovering opportunities</p>
+          <p className="text-sm text-muted-foreground">
+            AI is discovering opportunities
+          </p>
         </CardContent>
       </Card>
     );
   }
 
   const churnInsights = insights.filter(i => i.type === 'churn_risk');
-  const revenueInsights = insights.filter(i => i.type === 'revenue_opportunity');
+  const revenueInsights = insights.filter(
+    i => i.type === 'revenue_opportunity'
+  );
   const efficiencyInsights = insights.filter(i => i.type === 'efficiency');
   const retentionInsights = insights.filter(i => i.type === 'retention');
 
-  const totalPotentialRevenue = revenueInsights.reduce((sum, i) => sum + (i.potentialRevenue || 0), 0);
+  const totalPotentialRevenue = revenueInsights.reduce(
+    (sum, i) => sum + (i.potentialRevenue || 0),
+    0
+  );
 
   return (
     <Card className="border-primary/20">
@@ -81,7 +105,9 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
             <div>
               <CardTitle>AI Insights</CardTitle>
               <CardDescription>
-                {lastGenerated ? `Updated ${new Date(lastGenerated).toLocaleTimeString()}` : 'Real-time analysis'}
+                {lastGenerated
+                  ? `Updated ${new Date(lastGenerated).toLocaleTimeString()}`
+                  : 'Real-time analysis'}
               </CardDescription>
             </div>
           </div>
@@ -93,9 +119,7 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
       <CardContent>
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="all">
-              All ({insights.length})
-            </TabsTrigger>
+            <TabsTrigger value="all">All ({insights.length})</TabsTrigger>
             <TabsTrigger value="churn">
               <AlertTriangle className="h-4 w-4 mr-1" />
               Risk
@@ -128,7 +152,9 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-muted-foreground">Potential Revenue Opportunity</p>
+                          <p className="text-sm text-muted-foreground">
+                            Potential Revenue Opportunity
+                          </p>
                           <p className="text-2xl font-bold text-primary">
                             ${totalPotentialRevenue.toFixed(0)}
                           </p>
@@ -141,7 +167,7 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                 {insights.map((insight, idx) => {
                   const Icon = getCategoryIcon(insight.type);
                   const PriorityIcon = getPriorityIcon(insight.priority);
-                  
+
                   return (
                     <Card key={idx} className="border-l-4 border-l-primary">
                       <CardContent className="p-4">
@@ -152,8 +178,16 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-semibold">{insight.title}</h4>
-                                <Badge variant={insight.priority === 'urgent' ? 'destructive' : 'secondary'}>
+                                <h4 className="font-semibold">
+                                  {insight.title}
+                                </h4>
+                                <Badge
+                                  variant={
+                                    insight.priority === 'urgent'
+                                      ? 'destructive'
+                                      : 'secondary'
+                                  }
+                                >
                                   <PriorityIcon className="h-3 w-3 mr-1" />
                                   {insight.priority}
                                 </Badge>
@@ -165,26 +199,30 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                                 <div className="flex items-center gap-2 mb-3 text-sm">
                                   <DollarSign className="h-4 w-4 text-primary" />
                                   <span className="font-semibold text-primary">
-                                    ${insight.potentialRevenue.toFixed(0)} opportunity
+                                    ${insight.potentialRevenue.toFixed(0)}{' '}
+                                    opportunity
                                   </span>
                                 </div>
                               )}
-                              {insight.actionItems && insight.actionItems.length > 0 && (
-                                <div className="space-y-2">
-                                  <p className="text-xs font-medium text-muted-foreground uppercase">
-                                    Recommended Actions:
-                                  </p>
-                                  {insight.actionItems.map((action, idx) => (
-                                    <div 
-                                      key={idx}
-                                      className="flex items-start gap-2 p-2 bg-muted/50 rounded-md"
-                                    >
-                                      <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                                      <span className="text-sm">{action.title}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
+                              {insight.actionItems &&
+                                insight.actionItems.length > 0 && (
+                                  <div className="space-y-2">
+                                    <p className="text-xs font-medium text-muted-foreground uppercase">
+                                      Recommended Actions:
+                                    </p>
+                                    {insight.actionItems.map((action, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="flex items-start gap-2 p-2 bg-muted/50 rounded-md"
+                                      >
+                                        <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                                        <span className="text-sm">
+                                          {action.title}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
                             </div>
                           </div>
                         </div>
@@ -207,7 +245,9 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                 <Card key={idx} className="border-l-4 border-l-destructive">
                   <CardContent className="p-4">
                     <h4 className="font-semibold mb-2">{insight.title}</h4>
-                    <p className="text-sm text-muted-foreground">{insight.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {insight.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))
@@ -218,7 +258,9 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
             {revenueInsights.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <DollarSign className="h-16 w-16 mx-auto mb-4 opacity-30" />
-                <p className="font-medium text-lg">No revenue opportunities right now</p>
+                <p className="font-medium text-lg">
+                  No revenue opportunities right now
+                </p>
               </div>
             ) : (
               revenueInsights.map((insight, idx) => (
@@ -232,7 +274,9 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground">{insight.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {insight.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))
@@ -243,14 +287,18 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
             {efficiencyInsights.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <Clock className="h-16 w-16 mx-auto mb-4 opacity-30" />
-                <p className="font-medium text-lg">Operating at peak efficiency</p>
+                <p className="font-medium text-lg">
+                  Operating at peak efficiency
+                </p>
               </div>
             ) : (
               efficiencyInsights.map((insight, idx) => (
                 <Card key={idx} className="border-l-4 border-l-blue-500">
                   <CardContent className="p-4">
                     <h4 className="font-semibold mb-2">{insight.title}</h4>
-                    <p className="text-sm text-muted-foreground">{insight.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {insight.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))
@@ -268,7 +316,9 @@ export const ProactiveInsightsPanel: React.FC<ProactiveInsightsPanelProps> = ({ 
                 <Card key={idx} className="border-l-4 border-l-green-500">
                   <CardContent className="p-4">
                     <h4 className="font-semibold mb-2">{insight.title}</h4>
-                    <p className="text-sm text-muted-foreground">{insight.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {insight.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))

@@ -1,6 +1,6 @@
-import { useState, useCallback, ReactNode } from "react";
-import { Loader2, CheckCircle2, XCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useState, useCallback, ReactNode } from 'react';
+import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface OptimisticUpdateProps<T> {
   onUpdate: () => Promise<T>;
@@ -45,7 +45,7 @@ export function OptimisticUpdate<T>({
 export const OptimisticButton = ({
   onUpdate,
   children,
-  successMessage = "Saved!",
+  successMessage = 'Saved!',
   className,
 }: {
   onUpdate: () => Promise<void>;
@@ -60,13 +60,15 @@ export const OptimisticButton = ({
           onClick={trigger}
           disabled={isPending}
           className={cn(
-            "relative px-4 py-2 rounded-md transition-all min-h-[44px]",
-            isSuccess && "bg-success text-on-surface-primary",
-            isError && "bg-destructive text-on-surface-primary",
+            'relative px-4 py-2 rounded-md transition-all min-h-[44px]',
+            isSuccess && 'bg-success text-on-surface-primary',
+            isError && 'bg-destructive text-on-surface-primary',
             className
           )}
         >
-          {isPending && <Loader2 className="h-4 w-4 animate-spin mr-2 inline" />}
+          {isPending && (
+            <Loader2 className="h-4 w-4 animate-spin mr-2 inline" />
+          )}
           {isSuccess && <CheckCircle2 className="h-4 w-4 mr-2 inline" />}
           {isError && <XCircle className="h-4 w-4 mr-2 inline" />}
           {isSuccess ? successMessage : children}

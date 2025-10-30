@@ -3,8 +3,8 @@
  * Displays a skeleton UI while card content is loading
  */
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 
 interface CardSkeletonProps {
   count?: number;
@@ -12,10 +12,10 @@ interface CardSkeletonProps {
   showHeader?: boolean;
 }
 
-export const CardSkeleton = ({ 
+export const CardSkeleton = ({
   count = 3,
   showImage = false,
-  showHeader = true
+  showHeader = true,
 }: CardSkeletonProps) => {
   return (
     <>
@@ -28,9 +28,7 @@ export const CardSkeleton = ({
             </CardHeader>
           )}
           <CardContent>
-            {showImage && (
-              <Skeleton className="h-48 w-full mb-4 rounded-lg" />
-            )}
+            {showImage && <Skeleton className="h-48 w-full mb-4 rounded-lg" />}
             <div className="space-y-2">
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-5/6" />

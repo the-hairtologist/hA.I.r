@@ -45,12 +45,12 @@ export const capturePhoto = async (
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    
+
     if (source === 'camera') {
       input.capture = 'environment';
     }
 
-    input.onchange = async (e) => {
+    input.onchange = async e => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) {
         reject(new Error('No file selected'));
@@ -94,7 +94,9 @@ export const requestCameraPermission = async (): Promise<boolean> => {
     }
 
     const requestResult = await Camera.requestPermissions();
-    return requestResult.camera === 'granted' && requestResult.photos === 'granted';
+    return (
+      requestResult.camera === 'granted' && requestResult.photos === 'granted'
+    );
   } catch (error) {
     console.error('Permission request error:', error);
     return false;

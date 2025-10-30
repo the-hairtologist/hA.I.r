@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ShoppingCart, Package } from 'lucide-react';
@@ -34,7 +40,7 @@ export default function Marketplace() {
       .select('*')
       .eq('is_active', true)
       .order('created_at', { ascending: false });
-    
+
     if (data) setProducts(data);
     setLoading(false);
   };
@@ -45,22 +51,25 @@ export default function Marketplace() {
     setCart(newCart);
     toast({
       title: 'Added to cart',
-      description: '1 item added'
+      description: '1 item added',
     });
   };
 
-  const cartTotal = Array.from(cart.entries()).reduce((total, [productId, qty]) => {
-    const product = products.find(p => p.id === productId);
-    return total + (product?.price || 0) * qty;
-  }, 0);
+  const cartTotal = Array.from(cart.entries()).reduce(
+    (total, [productId, qty]) => {
+      const product = products.find(p => p.id === productId);
+      return total + (product?.price || 0) * qty;
+    },
+    0
+  );
 
   return (
     <>
-      <MetaTags 
+      <MetaTags
         title="Product Marketplace"
         description="Shop professional hair care products"
       />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex items-center justify-between">
@@ -69,9 +78,11 @@ export default function Marketplace() {
                 <Package className="w-8 h-8" />
                 Marketplace
               </h1>
-              <p className="text-muted-foreground">Professional hair care products</p>
+              <p className="text-muted-foreground">
+                Professional hair care products
+              </p>
             </div>
-            
+
             {cart.size > 0 && (
               <Button>
                 <ShoppingCart className="w-4 h-4 mr-2" />
@@ -104,7 +115,7 @@ export default function Marketplace() {
             </Card>
           ) : (
             <div className="grid md:grid-cols-3 gap-4">
-              {products.map((product) => (
+              {products.map(product => (
                 <Card key={product.id}>
                   {product.image_url && (
                     <OptimizedImage
@@ -131,7 +142,7 @@ export default function Marketplace() {
                       </Badge>
                     )}
                     <p className="text-xs text-muted-foreground mt-2">
-                      {product.stock_quantity > 0 
+                      {product.stock_quantity > 0
                         ? `${product.stock_quantity} in stock`
                         : 'Out of stock'}
                     </p>

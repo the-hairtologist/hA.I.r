@@ -63,13 +63,13 @@ export function usePagination<T = any>({
 
   const nextPage = useCallback(() => {
     if (canGoNext) {
-      setCurrentPage((prev) => prev + 1);
+      setCurrentPage(prev => prev + 1);
     }
   }, [canGoNext]);
 
   const previousPage = useCallback(() => {
     if (canGoPrevious) {
-      setCurrentPage((prev) => prev - 1);
+      setCurrentPage(prev => prev - 1);
     }
   }, [canGoPrevious]);
 
@@ -86,7 +86,8 @@ export function usePagination<T = any>({
   );
 
   const paginationInfo = useMemo(
-    () => `Showing ${totalItems === 0 ? 0 : startIndex + 1}-${endIndex} of ${totalItems}`,
+    () =>
+      `Showing ${totalItems === 0 ? 0 : startIndex + 1}-${endIndex} of ${totalItems}`,
     [startIndex, endIndex, totalItems]
   );
 

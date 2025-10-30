@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Star } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { ReviewCard } from "./ReviewCard";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect, useState } from 'react';
+import { Star } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { ReviewCard } from './ReviewCard';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Review {
   id: string;
@@ -33,9 +33,9 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
 
       // Get stylist profile for rating stats
       const { data: stylistData } = await supabase
-        .from("stylist_profiles")
-        .select("average_rating, total_reviews")
-        .eq("id", stylistId)
+        .from('stylist_profiles')
+        .select('average_rating, total_reviews')
+        .eq('id', stylistId)
         .maybeSingle();
 
       if (stylistData) {
@@ -45,15 +45,17 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
 
       // Get reviews
       let query = supabase
-        .from("reviews")
-        .select(`
+        .from('reviews')
+        .select(
+          `
           *,
           client_profiles!inner(
             user_id
           )
-        `)
-        .eq("stylist_id", stylistId)
-        .order("created_at", { ascending: false });
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .order('created_at', { ascending: false });
 
       if (limit) {
         query = query.limit(limit);
@@ -66,16 +68,16 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
       if (reviewsData) {
         // Get client profile info
         const reviewsWithProfiles = await Promise.all(
-          reviewsData.map(async (review) => {
+          reviewsData.map(async review => {
             const { data: profile } = await supabase
-              .from("profiles")
-              .select("full_name, avatar_url")
-              .eq("id", review.client_profiles.user_id)
+              .from('profiles')
+              .select('full_name, avatar_url')
+              .eq('id', review.client_profiles.user_id)
               .maybeSingle();
 
             return {
               ...review,
-              clientName: profile?.full_name || "Anonymous",
+              clientName: profile?.full_name || 'Anonymous',
               clientAvatar: profile?.avatar_url,
             };
           })
@@ -84,7 +86,7 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
         setReviews(reviewsWithProfiles as any);
       }
     } catch (error) {
-      console.error("Error loading reviews:", error);
+      console.error('Error loading reviews:', error);
     } finally {
       setLoading(false);
     }
@@ -93,7 +95,7 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
   if (loading) {
     return (
       <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
+        {[1, 2, 3].map(i => (
           <Skeleton key={i} className="h-32 w-full" />
         ))}
       </div>
@@ -106,15 +108,17 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
       {totalReviews > 0 && (
         <div className="flex items-center gap-6 p-6 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl border animate-fade-in">
           <div className="text-center">
-            <div className="text-4xl font-bold text-primary">{averageRating.toFixed(1)}</div>
+            <div className="text-4xl font-bold text-primary">
+              {averageRating.toFixed(1)}
+            </div>
             <div className="flex items-center gap-1 mt-2">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map(star => (
                 <Star
                   key={star}
                   className={`h-4 w-4 ${
                     star <= Math.round(averageRating)
-                      ? "fill-amber-400 text-amber-400"
-                      : "text-muted-foreground/30"
+                      ? 'fill-amber-400 text-amber-400'
+                      : 'text-muted-foreground/30'
                   }`}
                 />
               ))}
@@ -123,7 +127,7 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
           <div className="border-l pl-6">
             <p className="text-2xl font-semibold">{totalReviews}</p>
             <p className="text-sm text-muted-foreground">
-              {totalReviews === 1 ? "Review" : "Reviews"}
+              {totalReviews === 1 ? 'Review' : 'Reviews'}
             </p>
           </div>
         </div>

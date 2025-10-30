@@ -1,17 +1,31 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { withMemo } from "@/lib/optimizations/withMemo";
-import { Button } from "@/components/ui/button";
-import { TrendingUp, Calendar, Loader2, MessageSquare, Sparkles } from "lucide-react";
-import { usePredictiveInsights } from "@/hooks/usePredictiveInsights";
-import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { withMemo } from '@/lib/optimizations/withMemo';
+import { Button } from '@/components/ui/button';
+import {
+  TrendingUp,
+  Calendar,
+  Loader2,
+  MessageSquare,
+  Sparkles,
+} from 'lucide-react';
+import { usePredictiveInsights } from '@/hooks/usePredictiveInsights';
+import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
 
 interface PredictiveClientInsightsProps {
   stylistId?: string;
 }
 
-const PredictiveClientInsightsComponent = ({ stylistId }: PredictiveClientInsightsProps) => {
+const PredictiveClientInsightsComponent = ({
+  stylistId,
+}: PredictiveClientInsightsProps) => {
   const navigate = useNavigate();
   const { clientInsights, loading } = usePredictiveInsights(stylistId);
 
@@ -29,9 +43,9 @@ const PredictiveClientInsightsComponent = ({ stylistId }: PredictiveClientInsigh
 
   const getConfidenceBadge = (confidence: string) => {
     const colors = {
-      high: "bg-success/10 text-success border-success",
-      medium: "bg-warning/10 text-warning border-warning",
-      low: "bg-destructive/10 text-destructive border-destructive"
+      high: 'bg-success/10 text-success border-success',
+      medium: 'bg-warning/10 text-warning border-warning',
+      low: 'bg-destructive/10 text-destructive border-destructive',
     };
     return colors[confidence as keyof typeof colors] || colors.medium;
   };
@@ -44,13 +58,17 @@ const PredictiveClientInsightsComponent = ({ stylistId }: PredictiveClientInsigh
             <TrendingUp className="h-4 w-4 text-on-surface-primary" />
           </div>
           <div>
-            <CardTitle className="text-base font-pixel">Client Insights</CardTitle>
-            <CardDescription className="font-sans text-xs">AI predicts who's due for a visit</CardDescription>
+            <CardTitle className="text-base font-pixel">
+              Client Insights
+            </CardTitle>
+            <CardDescription className="font-sans text-xs">
+              AI predicts who's due for a visit
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        {clientInsights.map((insight) => (
+        {clientInsights.map(insight => (
           <div
             key={insight.clientId}
             className="p-3 rounded-lg border-2 border-border bg-background hover:border-primary/30 transition-all group"
@@ -58,9 +76,11 @@ const PredictiveClientInsightsComponent = ({ stylistId }: PredictiveClientInsigh
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="text-sm font-medium truncate">{insight.clientName}</p>
-                  <Badge 
-                    variant="outline" 
+                  <p className="text-sm font-medium truncate">
+                    {insight.clientName}
+                  </p>
+                  <Badge
+                    variant="outline"
                     className={`text-[11px] px-1.5 py-0.5 min-h-[20px] flex items-center ${getConfidenceBadge(insight.confidence)}`}
                   >
                     {insight.confidence}
@@ -79,7 +99,9 @@ const PredictiveClientInsightsComponent = ({ stylistId }: PredictiveClientInsigh
                   size="sm"
                   variant="outline"
                   className="h-7 text-xs whitespace-nowrap"
-                  onClick={() => navigate(`/messages?client=${insight.clientId}`)}
+                  onClick={() =>
+                    navigate(`/messages?client=${insight.clientId}`)
+                  }
                 >
                   <MessageSquare className="h-3 w-3 mr-1" />
                   Message
@@ -88,7 +110,9 @@ const PredictiveClientInsightsComponent = ({ stylistId }: PredictiveClientInsigh
                   size="sm"
                   variant="default"
                   className="h-7 text-xs whitespace-nowrap"
-                  onClick={() => navigate(`/book-appointment?client=${insight.clientId}`)}
+                  onClick={() =>
+                    navigate(`/book-appointment?client=${insight.clientId}`)
+                  }
                 >
                   <Calendar className="h-3 w-3 mr-1" />
                   Book

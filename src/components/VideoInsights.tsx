@@ -1,12 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface VideoAnalysis {
   texture: string;
   movement: string;
   condition: string;
-  damage_level: "minimal" | "moderate" | "severe";
+  damage_level: 'minimal' | 'moderate' | 'severe';
   recommendations: string[];
   detailed_notes?: string;
 }
@@ -18,23 +18,23 @@ interface VideoInsightsProps {
 export const VideoInsights = ({ analysis }: VideoInsightsProps) => {
   const getDamageLevelColor = (level: string) => {
     switch (level) {
-      case "minimal":
-        return "bg-success/10 text-success";
-      case "moderate":
-        return "bg-warning/10 text-warning";
-      case "severe":
-        return "bg-destructive/10 text-destructive";
+      case 'minimal':
+        return 'bg-success/10 text-success';
+      case 'moderate':
+        return 'bg-warning/10 text-warning';
+      case 'severe':
+        return 'bg-destructive/10 text-destructive';
       default:
-        return "bg-muted/20 text-muted-foreground";
+        return 'bg-muted/20 text-muted-foreground';
     }
   };
 
   const getDamageLevelIcon = (level: string) => {
     switch (level) {
-      case "minimal":
+      case 'minimal':
         return <CheckCircle2 className="h-4 w-4" />;
-      case "moderate":
-      case "severe":
+      case 'moderate':
+      case 'severe':
         return <AlertCircle className="h-4 w-4" />;
       default:
         return null;
@@ -77,7 +77,9 @@ export const VideoInsights = ({ analysis }: VideoInsightsProps) => {
           </div>
           <div>
             <p className="text-sm font-medium mb-1">Overall Condition</p>
-            <p className="text-sm text-muted-foreground">{analysis.condition}</p>
+            <p className="text-sm text-muted-foreground">
+              {analysis.condition}
+            </p>
           </div>
         </div>
 

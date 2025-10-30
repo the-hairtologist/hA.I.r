@@ -22,9 +22,12 @@ export const useHairAnalysis = () => {
     setResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke('analyze-hair-photo', {
-        body: { imageUrl, clientId }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'analyze-hair-photo',
+        {
+          body: { imageUrl, clientId },
+        }
+      );
 
       if (error) {
         console.error('Analysis error:', error);
@@ -42,33 +45,35 @@ export const useHairAnalysis = () => {
       setResult({
         analysisId: data.analysisId,
         analysis: data.analysis,
-        rawAnalysis: data.rawAnalysis
+        rawAnalysis: data.rawAnalysis,
       });
 
       toast({
-        title: "Analysis Complete",
-        description: "AI has analyzed the hair photo successfully.",
+        title: 'Analysis Complete',
+        description: 'AI has analyzed the hair photo successfully.',
       });
 
       return data;
-
     } catch (error: any) {
       console.error('Hair analysis error:', error);
-      
+
       let errorMessage = 'Failed to analyze photo';
-      
+
       if (error.message?.includes('Rate limit')) {
         errorMessage = 'Too many requests. Please wait a moment and try again.';
-      } else if (error.message?.includes('credits exhausted') || error.message?.includes('402')) {
+      } else if (
+        error.message?.includes('credits exhausted') ||
+        error.message?.includes('402')
+      ) {
         errorMessage = 'AI credits exhausted. Please add credits to continue.';
       } else if (error.message) {
         errorMessage = error.message;
       }
 
       toast({
-        title: "Analysis Failed",
+        title: 'Analysis Failed',
         description: errorMessage,
-        variant: "destructive",
+        variant: 'destructive',
       });
 
       throw error;
@@ -91,9 +96,9 @@ export const useHairAnalysis = () => {
     } catch (error) {
       console.error('Error fetching analysis history:', error);
       toast({
-        title: "Error",
-        description: "Failed to load analysis history",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to load analysis history',
+        variant: 'destructive',
       });
       return [];
     }
@@ -103,6 +108,6 @@ export const useHairAnalysis = () => {
     analyzePhoto,
     fetchAnalysisHistory,
     isAnalyzing,
-    result
+    result,
   };
 };

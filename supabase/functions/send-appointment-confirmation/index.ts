@@ -1,13 +1,15 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "https://esm.sh/resend@2.0.0";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0';
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface AppointmentConfirmationRequest {
@@ -15,22 +17,23 @@ interface AppointmentConfirmationRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { appointmentId }: AppointmentConfirmationRequest = await req.json();
-    console.log("Processing confirmation for appointment:", appointmentId);
+    console.log('Processing confirmation for appointment:', appointmentId);
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Get appointment details with related data
     const { data: appointment, error: appointmentError } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         *,
         stylist:stylist_profiles(
           user:profiles(full_name, email),
@@ -41,34 +44,38 @@ const handler = async (req: Request): Promise<Response> => {
           user:profiles(full_name, email)
         ),
         service:stylist_services(service_name, price, duration_minutes)
-      `)
-      .eq("id", appointmentId)
+      `
+      )
+      .eq('id', appointmentId)
       .single();
 
     if (appointmentError || !appointment) {
-      console.error("Error fetching appointment:", appointmentError);
-      throw new Error("Appointment not found");
+      console.error('Error fetching appointment:', appointmentError);
+      throw new Error('Appointment not found');
     }
 
     const appointmentDate = new Date(appointment.appointment_date);
-    const formattedDate = appointmentDate.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    const formattedDate = appointmentDate.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
-    const formattedTime = appointmentDate.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
+    const formattedTime = appointmentDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
       hour12: true,
     });
 
-    const stylistName = appointment.stylist.user.full_name || appointment.stylist.business_name;
+    const stylistName =
+      appointment.stylist.user.full_name || appointment.stylist.business_name;
     const clientName = appointment.client.user.full_name;
     const clientEmail = appointment.client.user.email;
-    const serviceName = appointment.service?.service_name || appointment.service_type;
+    const serviceName =
+      appointment.service?.service_name || appointment.service_type;
     const servicePrice = appointment.service?.price || 0;
-    const serviceDuration = appointment.service?.duration_minutes || appointment.duration_minutes;
+    const serviceDuration =
+      appointment.service?.duration_minutes || appointment.duration_minutes;
 
     // Send confirmation email to client
     const emailHtml = `
@@ -122,20 +129,28 @@ const handler = async (req: Request): Promise<Response> => {
                   <span class="detail-label">💵 Price:</span>
                   <span class="detail-value">$${servicePrice}</span>
                 </div>
-                ${appointment.stylist.location ? `
+                ${
+                  appointment.stylist.location
+                    ? `
                 <div class="detail-row">
                   <span class="detail-label">📍 Location:</span>
                   <span class="detail-value">${appointment.stylist.location}</span>
                 </div>
-                ` : ''}
+                `
+                    : ''
+                }
               </div>
 
-              ${appointment.notes ? `
+              ${
+                appointment.notes
+                  ? `
               <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 6px; margin: 20px 0;">
                 <strong>📝 Your Notes:</strong>
                 <p style="margin: 8px 0 0 0;">${appointment.notes}</p>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
 
               <p style="margin-top: 25px;"><strong>What to expect:</strong></p>
               <ul style="color: #495057;">
@@ -162,31 +177,28 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (emailError) {
-      console.error("Error sending email:", emailError);
+      console.error('Error sending email:', emailError);
       throw emailError;
     }
 
-    console.log("Confirmation email sent successfully to:", clientEmail);
+    console.log('Confirmation email sent successfully to:', clientEmail);
 
     return new Response(
-      JSON.stringify({ success: true, message: "Confirmation email sent" }),
+      JSON.stringify({ success: true, message: 'Confirmation email sent' }),
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...corsHeaders,
         },
       }
     );
   } catch (error: any) {
-    console.error("Error in send-appointment-confirmation function:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    console.error('Error in send-appointment-confirmation function:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    });
   }
 };
 

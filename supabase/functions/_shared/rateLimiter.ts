@@ -37,10 +37,10 @@ export function checkRateLimit(
 ): { allowed: boolean; remaining: number; resetAt: number } {
   const now = Date.now();
   const key = `ratelimit:${identifier}`;
-  
+
   // Get or create entry
   let entry = rateLimitStore.get(key);
-  
+
   // Reset if window expired
   if (!entry || now >= entry.resetAt) {
     entry = {
@@ -49,14 +49,14 @@ export function checkRateLimit(
     };
     rateLimitStore.set(key, entry);
   }
-  
+
   // Check limit
   const allowed = entry.count < config.maxRequests;
-  
+
   if (allowed) {
     entry.count++;
   }
-  
+
   return {
     allowed,
     remaining: Math.max(0, config.maxRequests - entry.count),
@@ -96,7 +96,7 @@ export function getRateLimitHeaders(
  */
 export function rateLimitErrorResponse(resetAt: number): Response {
   const retryAfter = Math.ceil((resetAt - Date.now()) / 1000);
-  
+
   return new Response(
     JSON.stringify({
       error: 'Too Many Requests',

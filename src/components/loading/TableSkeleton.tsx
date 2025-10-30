@@ -3,8 +3,8 @@
  * Displays a skeleton UI while table data is loading
  */
 
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card } from "@/components/ui/card";
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card } from '@/components/ui/card';
 
 interface TableSkeletonProps {
   rows?: number;
@@ -12,10 +12,10 @@ interface TableSkeletonProps {
   showHeader?: boolean;
 }
 
-export const TableSkeleton = ({ 
-  rows = 5, 
+export const TableSkeleton = ({
+  rows = 5,
   columns = 4,
-  showHeader = true 
+  showHeader = true,
 }: TableSkeletonProps) => {
   return (
     <Card className="w-full">
@@ -27,14 +27,14 @@ export const TableSkeleton = ({
             ))}
           </div>
         )}
-        
+
         <div className="space-y-3">
           {Array.from({ length: rows }).map((_, rowIndex) => (
             <div key={`row-${rowIndex}`} className="flex gap-4">
               {Array.from({ length: columns }).map((_, colIndex) => (
-                <Skeleton 
-                  key={`cell-${rowIndex}-${colIndex}`} 
-                  className="h-12 flex-1" 
+                <Skeleton
+                  key={`cell-${rowIndex}-${colIndex}`}
+                  className="h-12 flex-1"
                 />
               ))}
             </div>

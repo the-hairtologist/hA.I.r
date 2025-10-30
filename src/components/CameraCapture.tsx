@@ -1,26 +1,36 @@
-﻿import { useState, useRef } from "react";
-import { Camera, Loader2, CheckCircle2, AlertCircle, Sparkles, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { toast } from "sonner";
-import { captureImage } from "@/platform/camera";
-import { haptic } from "@/platform/haptics";
-import { cn } from "@/lib/utils";
+﻿import { useState, useRef } from 'react';
+import {
+  Camera,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  X,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { toast } from 'sonner';
+import { captureImage } from '@/platform/camera';
+import { haptic } from '@/platform/haptics';
+import { cn } from '@/lib/utils';
 import imageCompression from 'browser-image-compression';
-import { PrivacyConsentDialog, getStoredConsent } from "./PrivacyConsentDialog";
-import { z } from "zod";
-import { MediaErrorBoundary } from "./MediaErrorBoundary";
+import { PrivacyConsentDialog, getStoredConsent } from './PrivacyConsentDialog';
+import { z } from 'zod';
+import { MediaErrorBoundary } from './MediaErrorBoundary';
 import { OptimizedImage } from '@/components/OptimizedImage';
-import { uploadToStorage } from "@/utils/supabaseStorageHelper";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { uploadToStorage } from '@/utils/supabaseStorageHelper';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface CameraCaptureProps {
-  onCapture: (imageUrl: string, metadata?: CaptureMetadata) => void | Promise<void>;
+  onCapture: (
+    imageUrl: string,
+    metadata?: CaptureMetadata
+  ) => void | Promise<void>;
   context?: 'portfolio' | 'profile' | 'analysis' | 'client_post';
   className?: string;
-  variant?: "default" | "compact" | "fab";
+  variant?: 'default' | 'compact' | 'fab';
   disabled?: boolean;
   maxSizeMB?: number;
   quality?: number;
@@ -36,21 +46,24 @@ export interface CaptureMetadata {
 
 // Validation schema for metadata
 const metadataSchema = z.object({
-  originalSize: z.number().positive("Original size must be positive"),
-  compressedSize: z.number().positive("Compressed size must be positive"),
-  compressionRatio: z.number().min(0).max(100, "Compression ratio must be 0-100%"),
-  capturedAt: z.string().datetime("Invalid capture timestamp"),
-  context: z.enum(['portfolio', 'profile', 'analysis', 'client_post'])
+  originalSize: z.number().positive('Original size must be positive'),
+  compressedSize: z.number().positive('Compressed size must be positive'),
+  compressionRatio: z
+    .number()
+    .min(0)
+    .max(100, 'Compression ratio must be 0-100%'),
+  capturedAt: z.string().datetime('Invalid capture timestamp'),
+  context: z.enum(['portfolio', 'profile', 'analysis', 'client_post']),
 });
 
-export const CameraCapture = ({ 
-  onCapture, 
+export const CameraCapture = ({
+  onCapture,
   context = 'portfolio',
   className,
-  variant = "default",
+  variant = 'default',
   disabled = false,
   maxSizeMB = 2,
-  quality = 0.9
+  quality = 0.9,
 }: CameraCaptureProps) => {
   const [capturing, setCapturing] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -62,37 +75,39 @@ export const CameraCapture = ({
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const contextMessages = {
-    portfolio: { 
-      capture: "Capture professional work",
-      processing: "Optimizing image...",
-      success: "Photo ready!",
-      tip: "ðŸ’¡ Use good lighting for best results"
+    portfolio: {
+      capture: 'Capture professional work',
+      processing: 'Optimizing image...',
+      success: 'Photo ready!',
+      tip: 'ðŸ’¡ Use good lighting for best results',
     },
-    profile: { 
-      capture: "Take profile photo",
-      processing: "Processing portrait...",
-      success: "Looking great!",
-      tip: "ðŸ’¡ Center your face in frame"
+    profile: {
+      capture: 'Take profile photo',
+      processing: 'Processing portrait...',
+      success: 'Looking great!',
+      tip: 'ðŸ’¡ Center your face in frame',
     },
-    analysis: { 
-      capture: "Analyze hair photo",
-      processing: "Preparing for AI analysis...",
-      success: "Ready for analysis!",
-      tip: "ðŸ’¡ Capture in natural light"
+    analysis: {
+      capture: 'Analyze hair photo',
+      processing: 'Preparing for AI analysis...',
+      success: 'Ready for analysis!',
+      tip: 'ðŸ’¡ Capture in natural light',
     },
-    client_post: { 
-      capture: "Share hair inspiration",
-      processing: "Preparing image...",
-      success: "Image ready to post!",
-      tip: "ðŸ’¡ Show desired style clearly"
-    }
+    client_post: {
+      capture: 'Share hair inspiration',
+      processing: 'Preparing image...',
+      success: 'Image ready to post!',
+      tip: 'ðŸ’¡ Show desired style clearly',
+    },
   };
 
   const messages = contextMessages[context];
 
-  const compressImage = async (file: Blob): Promise<{ blob: Blob; metadata: CaptureMetadata }> => {
+  const compressImage = async (
+    file: Blob
+  ): Promise<{ blob: Blob; metadata: CaptureMetadata }> => {
     const originalSize = file.size;
-    
+
     const options = {
       maxSizeMB,
       maxWidthOrHeight: context === 'profile' ? 800 : 1920,
@@ -100,19 +115,19 @@ export const CameraCapture = ({
       quality,
       onProgress: (progress: number) => {
         setUploadProgress(progress);
-      }
+      },
     };
 
     try {
       const compressedBlob = await imageCompression(file as File, options);
       const compressedSize = compressedBlob.size;
-      
+
       const metadata: CaptureMetadata = {
         originalSize,
         compressedSize,
         compressionRatio: Math.round((1 - compressedSize / originalSize) * 100),
         capturedAt: new Date().toISOString(),
-        context
+        context,
       };
 
       // Validate metadata before returning
@@ -120,7 +135,10 @@ export const CameraCapture = ({
 
       return { blob: compressedBlob, metadata };
     } catch (error) {
-      logger.error('Image compression error', error, { component: 'CameraCapture', context });
+      logger.error('Image compression error', error, {
+        component: 'CameraCapture',
+        context,
+      });
       if (error instanceof z.ZodError) {
         throw new Error('Invalid image metadata: ' + error.errors[0].message);
       }
@@ -147,8 +165,8 @@ export const CameraCapture = ({
     if (granted) {
       await executeCapture();
     } else {
-      toast.error("Camera permission denied", {
-        description: "You can grant permission later in Settings"
+      toast.error('Camera permission denied', {
+        description: 'You can grant permission later in Settings',
       });
     }
   };
@@ -161,12 +179,12 @@ export const CameraCapture = ({
 
     try {
       await haptic.tap();
-      
+
       // Capture with native camera
-      const photoDataUrl = await captureImage({ 
+      const photoDataUrl = await captureImage({
         source: 'camera',
         quality: 95,
-        allowEditing: context === 'profile'
+        allowEditing: context === 'profile',
       });
 
       if (!photoDataUrl) {
@@ -175,14 +193,14 @@ export const CameraCapture = ({
 
       setPreview(photoDataUrl);
       setProcessing(true);
-      
+
       // Convert data URL to blob
       const response = await fetch(photoDataUrl);
       const blob = await response.blob();
 
       // Compress and optimize
       const { blob: optimizedBlob, metadata } = await compressImage(blob);
-      
+
       // Upload directly to Supabase storage
       setUploadProgress(70);
       const bucketName = context === 'profile' ? 'avatars' : 'hair-photos';
@@ -190,36 +208,38 @@ export const CameraCapture = ({
         optimizedBlob,
         bucketName,
         undefined,
-        (progress) => {
-          setUploadProgress(70 + (progress.progress * 0.3));
+        progress => {
+          setUploadProgress(70 + progress.progress * 0.3);
         }
       );
-      
+
       setUploadProgress(100);
-      
+
       await onCapture(storageUrl, metadata);
-        
-        userJourney.trackAction('Photo Captured', { 
-          context, 
-          compressionRatio: metadata.compressionRatio,
-          size: metadata.compressedSize 
-        });
-        
-        await haptic.success();
-        toast.success(messages.success, {
-          description: `Saved ${metadata.compressionRatio}% space â€¢ ${(metadata.compressedSize / 1024).toFixed(0)}KB`
-        });
-        setPreview(null);
-      
+
+      userJourney.trackAction('Photo Captured', {
+        context,
+        compressionRatio: metadata.compressionRatio,
+        size: metadata.compressedSize,
+      });
+
+      await haptic.success();
+      toast.success(messages.success, {
+        description: `Saved ${metadata.compressionRatio}% space â€¢ ${(metadata.compressedSize / 1024).toFixed(0)}KB`,
+      });
+      setPreview(null);
     } catch (error: any) {
-      logger.error('Camera capture error', error, { component: 'CameraCapture', context });
+      logger.error('Camera capture error', error, {
+        component: 'CameraCapture',
+        context,
+      });
       userJourney.trackError(error, { action: 'camera-capture', context });
       await haptic.error();
-      
+
       const errorMessage = error.message || 'Failed to capture photo';
       setError(errorMessage);
-      
-      toast.error("Camera Error", {
+
+      toast.error('Camera Error', {
         description: errorMessage,
       });
     } finally {
@@ -239,19 +259,19 @@ export const CameraCapture = ({
   };
 
   // FAB variant (floating action button)
-  if (variant === "fab") {
+  if (variant === 'fab') {
     return (
       <Button
         size="lg"
         onClick={handleCapture}
         disabled={disabled || capturing || processing}
         className={cn(
-          "fixed bottom-[104px] right-20 h-14 w-14 rounded-full shadow-2xl z-50 touch-manipulation active:scale-95",
-          "bg-gradient-to-br from-primary to-secondary",
-          "hover:opacity-90",
-          "transform transition-all duration-300 hover:scale-110",
-          "ring-4 ring-primary/20",
-          "text-primary-foreground",
+          'fixed bottom-[104px] right-20 h-14 w-14 rounded-full shadow-2xl z-50 touch-manipulation active:scale-95',
+          'bg-gradient-to-br from-primary to-secondary',
+          'hover:opacity-90',
+          'transform transition-all duration-300 hover:scale-110',
+          'ring-4 ring-primary/20',
+          'text-primary-foreground',
           className
         )}
       >
@@ -265,19 +285,19 @@ export const CameraCapture = ({
   }
 
   // Compact variant
-  if (variant === "compact") {
+  if (variant === 'compact') {
     return (
       <Button
         variant="outline"
         size="sm"
         onClick={handleCapture}
         disabled={disabled || capturing || processing}
-        className={cn("gap-2", className)}
+        className={cn('gap-2', className)}
       >
         {capturing || processing ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            {processing ? "Processing..." : "Capturing..."}
+            {processing ? 'Processing...' : 'Capturing...'}
           </>
         ) : (
           <>
@@ -291,12 +311,15 @@ export const CameraCapture = ({
 
   // Default full-featured variant
   return (
-    <MediaErrorBoundary fallbackType="camera" onReset={() => {
-      setPreview(null);
-      setError(null);
-      setCapturing(false);
-      setProcessing(false);
-    }}>
+    <MediaErrorBoundary
+      fallbackType="camera"
+      onReset={() => {
+        setPreview(null);
+        setError(null);
+        setCapturing(false);
+        setProcessing(false);
+      }}
+    >
       <PrivacyConsentDialog
         open={showConsentDialog}
         onOpenChange={setShowConsentDialog}
@@ -304,81 +327,82 @@ export const CameraCapture = ({
         onConsent={handleConsentResponse}
         context={context}
       />
-      <Card className={cn("p-6 space-y-4", className)}>
+      <Card className={cn('p-6 space-y-4', className)}>
         {preview && processing ? (
-        <div className="space-y-4 animate-in fade-in-50">
-          <div className="relative rounded-lg overflow-hidden">
-            <OptimizedImage 
-              src={preview} 
-              alt="Camera preview" 
-              priority={true}
-              className="w-full h-48 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-              <div className="flex-1">
-                <p className="text-primary-foreground font-medium">{messages.processing}</p>
-                <Progress value={uploadProgress} className="h-2 mt-2" />
+          <div className="space-y-4 animate-in fade-in-50">
+            <div className="relative rounded-lg overflow-hidden">
+              <OptimizedImage
+                src={preview}
+                alt="Camera preview"
+                priority={true}
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                <div className="flex-1">
+                  <p className="text-primary-foreground font-medium">
+                    {messages.processing}
+                  </p>
+                  <Progress value={uploadProgress} className="h-2 mt-2" />
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleCancel}
+                  className="text-primary-foreground hover:bg-primary-foreground/20"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleCancel}
-                className="text-primary-foreground hover:bg-primary-foreground/20"
-              >
-                <X className="h-4 w-4" />
-              </Button>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-gradient-to-br from-primary to-secondary">
-                <Camera className="h-5 w-5 text-primary-foreground" />
+        ) : (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-full bg-gradient-to-br from-primary to-secondary">
+                  <Camera className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-semibold">{messages.capture}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {messages.tip}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold">{messages.capture}</h3>
-                <p className="text-sm text-muted-foreground">{messages.tip}</p>
-              </div>
+              {context === 'analysis' && (
+                <Sparkles className="h-5 w-5 text-primary" />
+              )}
             </div>
-            {context === 'analysis' && (
-              <Sparkles className="h-5 w-5 text-primary" />
+
+            {error && (
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <p className="text-sm">{error}</p>
+              </div>
             )}
+
+            <Button
+              onClick={handleCapture}
+              disabled={disabled || capturing || processing}
+              className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground"
+              aria-label={messages.capture}
+              aria-live="polite"
+            >
+              {capturing || processing ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  {processing ? messages.processing : 'Opening camera...'}
+                </>
+              ) : (
+                <>
+                  <Camera className="mr-2 h-5 w-5" />
+                  {messages.capture}
+                </>
+              )}
+            </Button>
           </div>
-
-          {error && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive">
-              <AlertCircle className="h-4 w-4" />
-              <p className="text-sm">{error}</p>
-            </div>
-          )}
-
-          <Button
-            onClick={handleCapture}
-            disabled={disabled || capturing || processing}
-            className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-primary-foreground"
-            aria-label={messages.capture}
-            aria-live="polite"
-          >
-            {capturing || processing ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                {processing ? messages.processing : "Opening camera..."}
-              </>
-            ) : (
-              <>
-                <Camera className="mr-2 h-5 w-5" />
-                {messages.capture}
-              </>
-            )}
-          </Button>
-        </div>
-      )}
+        )}
       </Card>
     </MediaErrorBoundary>
   );
 };
-
-
-

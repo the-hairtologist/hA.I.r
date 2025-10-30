@@ -3,7 +3,7 @@
  * Improves keyboard navigation and accessibility
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 const FOCUSABLE_ELEMENTS = [
   'a[href]',

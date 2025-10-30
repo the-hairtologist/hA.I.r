@@ -11,7 +11,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Mail, MessageSquare, Loader2, AlertTriangle, Send } from 'lucide-react';
+import {
+  Mail,
+  MessageSquare,
+  Loader2,
+  AlertTriangle,
+  Send,
+} from 'lucide-react';
 import { useSmartAutomation } from '@/hooks/useSmartAutomation';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,7 +41,11 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState(false);
   const [customMessage, setCustomMessage] = useState('');
-  const { smartReminders, loading: loadingReminders, refreshReminders } = useSmartAutomation(stylistId);
+  const {
+    smartReminders,
+    loading: loadingReminders,
+    refreshReminders,
+  } = useSmartAutomation(stylistId);
 
   useEffect(() => {
     if (open && stylistId) {
@@ -61,7 +71,10 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
 
       for (const client of selectedClients) {
         const reminder = relevantReminders.find(r => r.clientId === client.id);
-        const message = customMessage || reminder?.message || `Hi ${client.full_name || 'there'}! We'd love to see you again. Book your next appointment today!`;
+        const message =
+          customMessage ||
+          reminder?.message ||
+          `Hi ${client.full_name || 'there'}! We'd love to see you again. Book your next appointment today!`;
 
         try {
           // Send via SMS/Email based on what's available
@@ -91,16 +104,23 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
             errorCount++;
           }
         } catch (error) {
-          console.error(`Failed to send message to ${client.full_name}:`, error);
+          console.error(
+            `Failed to send message to ${client.full_name}:`,
+            error
+          );
           errorCount++;
         }
       }
 
       if (successCount > 0) {
-        toast.success(`Successfully sent ${successCount} message${successCount > 1 ? 's' : ''}!`);
+        toast.success(
+          `Successfully sent ${successCount} message${successCount > 1 ? 's' : ''}!`
+        );
       }
       if (errorCount > 0) {
-        toast.error(`Failed to send ${errorCount} message${errorCount > 1 ? 's' : ''}`);
+        toast.error(
+          `Failed to send ${errorCount} message${errorCount > 1 ? 's' : ''}`
+        );
       }
 
       setOpen(false);
@@ -120,8 +140,8 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="default" 
+        <Button
+          variant="default"
           className="gap-2"
           disabled={selectedClients.length === 0}
         >
@@ -139,7 +159,8 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
             Re-Engagement Campaign
           </DialogTitle>
           <DialogDescription>
-            Send personalized messages to {selectedClients.length} selected client{selectedClients.length > 1 ? 's' : ''}
+            Send personalized messages to {selectedClients.length} selected
+            client{selectedClients.length > 1 ? 's' : ''}
           </DialogDescription>
         </DialogHeader>
 
@@ -153,8 +174,9 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
                   <div className="text-sm">
                     <p className="font-medium">Missing Contact Information</p>
                     <p className="text-muted-foreground">
-                      {selectedClients.filter(c => !c.email && !c.phone).length} client(s) don't have email or phone. 
-                      They won't receive messages.
+                      {selectedClients.filter(c => !c.email && !c.phone).length}{' '}
+                      client(s) don't have email or phone. They won't receive
+                      messages.
                     </p>
                   </div>
                 </div>
@@ -166,31 +188,54 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
           {loadingReminders ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="h-6 w-6 animate-spin text-primary" />
-              <span className="ml-2 text-sm text-muted-foreground">Generating personalized messages...</span>
+              <span className="ml-2 text-sm text-muted-foreground">
+                Generating personalized messages...
+              </span>
             </div>
           ) : (
             <div className="space-y-3">
-              <label className="text-sm font-medium">AI-Generated Message Previews</label>
+              <label className="text-sm font-medium">
+                AI-Generated Message Previews
+              </label>
               <div className="space-y-2 max-h-60 overflow-y-auto">
-                {relevantReminders.slice(0, 3).map((reminder) => (
-                  <Card key={`${reminder.clientId}-${reminder.suggestedTime}`} className="border">
+                {relevantReminders.slice(0, 3).map(reminder => (
+                  <Card
+                    key={`${reminder.clientId}-${reminder.suggestedTime}`}
+                    className="border"
+                  >
                     <CardContent className="p-3">
                       <div className="flex items-start justify-between gap-2 mb-2">
-                        <p className="text-sm font-medium">{reminder.clientName}</p>
-                        <Badge variant={reminder.urgency === 'high' ? 'destructive' : 'secondary'} className="text-xs">
+                        <p className="text-sm font-medium">
+                          {reminder.clientName}
+                        </p>
+                        <Badge
+                          variant={
+                            reminder.urgency === 'high'
+                              ? 'destructive'
+                              : 'secondary'
+                          }
+                          className="text-xs"
+                        >
                           {reminder.urgency} priority
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground mb-1">
-                        Optimal send time: {format(new Date(reminder.suggestedTime), 'EEE, MMM d @ h:mm a')}
+                        Optimal send time:{' '}
+                        {format(
+                          new Date(reminder.suggestedTime),
+                          'EEE, MMM d @ h:mm a'
+                        )}
                       </p>
-                      <p className="text-sm bg-muted p-2 rounded">{reminder.message}</p>
+                      <p className="text-sm bg-muted p-2 rounded">
+                        {reminder.message}
+                      </p>
                     </CardContent>
                   </Card>
                 ))}
                 {relevantReminders.length > 3 && (
                   <p className="text-xs text-center text-muted-foreground">
-                    + {relevantReminders.length - 3} more personalized message{relevantReminders.length - 3 > 1 ? 's' : ''}
+                    + {relevantReminders.length - 3} more personalized message
+                    {relevantReminders.length - 3 > 1 ? 's' : ''}
                   </p>
                 )}
               </div>
@@ -199,10 +244,12 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
 
           {/* Custom Message Override */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Custom Message (Optional)</label>
+            <label className="text-sm font-medium">
+              Custom Message (Optional)
+            </label>
             <Textarea
               value={customMessage}
-              onChange={(e) => setCustomMessage(e.target.value)}
+              onChange={e => setCustomMessage(e.target.value)}
               placeholder="Override AI messages with your own text..."
               rows={4}
               className="resize-none"
@@ -214,10 +261,15 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
 
           {/* Selected Clients List */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Recipients ({selectedClients.length})</label>
+            <label className="text-sm font-medium">
+              Recipients ({selectedClients.length})
+            </label>
             <div className="max-h-40 overflow-y-auto space-y-1 p-2 border rounded-lg bg-muted/20">
-              {selectedClients.map((client) => (
-                <div key={client.id} className="flex items-center justify-between text-sm p-2 bg-background rounded">
+              {selectedClients.map(client => (
+                <div
+                  key={client.id}
+                  className="flex items-center justify-between text-sm p-2 bg-background rounded"
+                >
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-primary" />
                     <span>{client.full_name || 'Unnamed Client'}</span>

@@ -37,7 +37,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
     stylist_id: 'stylist-1',
     stylist: {
       user: { full_name: 'Jane Stylist' },
-      business_name: 'Jane\'s Salon',
+      business_name: "Jane's Salon",
     },
   };
 
@@ -47,8 +47,10 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
 
   it('should prevent double submission with rapid clicks', async () => {
     const user = userEvent.setup();
-    const mockInsert = vi.fn().mockResolvedValue({ data: [{ id: 'review-1' }], error: null });
-    
+    const mockInsert = vi
+      .fn()
+      .mockResolvedValue({ data: [{ id: 'review-1' }], error: null });
+
     (supabase.from as any).mockReturnValue({
       insert: vi.fn().mockReturnValue({
         select: mockInsert,
@@ -88,7 +90,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
   it('should disable button and show loading state during submission', async () => {
     const user = userEvent.setup();
     let resolveInsert: any;
-    const insertPromise = new Promise((resolve) => {
+    const insertPromise = new Promise(resolve => {
       resolveInsert = resolve;
     });
 
@@ -130,7 +132,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
   it('should prevent Enter key submission during loading', async () => {
     const user = userEvent.setup();
     let resolveInsert: any;
-    const insertPromise = new Promise((resolve) => {
+    const insertPromise = new Promise(resolve => {
       resolveInsert = resolve;
     });
 
@@ -173,7 +175,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
   it('should announce loading state to screen readers', async () => {
     const user = userEvent.setup();
     let resolveInsert: any;
-    const insertPromise = new Promise((resolve) => {
+    const insertPromise = new Promise(resolve => {
       resolveInsert = resolve;
     });
 
@@ -223,16 +225,16 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
     );
 
     const submitButton = screen.getByRole('button', { name: /submit review/i });
-    
+
     // Should have min-height class applied
     expect(submitButton.className).toContain('min-h-[44px]');
   });
 
   it('should re-enable form after error', async () => {
     const user = userEvent.setup();
-    const mockInsert = vi.fn().mockResolvedValue({ 
-      data: null, 
-      error: { message: 'Network error' } 
+    const mockInsert = vi.fn().mockResolvedValue({
+      data: null,
+      error: { message: 'Network error' },
     });
 
     (supabase.from as any).mockReturnValue({

@@ -1,5 +1,5 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { AftercareManager } from "@/components/aftercare/AftercareManager";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { AftercareManager } from '@/components/aftercare/AftercareManager';
 
 const AftercareGuides = () => {
   return (

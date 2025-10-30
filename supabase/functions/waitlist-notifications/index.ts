@@ -3,18 +3,20 @@
  * Automated notifications for waitlist updates
  */
 
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 interface WaitlistNotification {
-  type: "new_waitlist" | "waitlist_available" | "waitlist_cancelled";
+  type: 'new_waitlist' | 'waitlist_available' | 'waitlist_cancelled';
   waitlistId: string;
   clientName?: string;
   stylistName?: string;
@@ -25,35 +27,44 @@ interface WaitlistNotification {
 
 serve(async (req: Request) => {
   // Handle CORS preflight
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const resend = new Resend(Deno.env.get("RESEND_API_KEY") ?? "");
+    const resend = new Resend(Deno.env.get('RESEND_API_KEY') ?? '');
 
-    const { type, waitlistId, clientName, stylistName, stylistEmail, serviceType, preferredDate }: WaitlistNotification = await req.json();
+    const {
+      type,
+      waitlistId,
+      clientName,
+      stylistName,
+      stylistEmail,
+      serviceType,
+      preferredDate,
+    }: WaitlistNotification = await req.json();
 
-    console.log("Processing waitlist notification:", { type, waitlistId });
+    console.log('Processing waitlist notification:', { type, waitlistId });
 
     // Get waitlist entry details if not provided
     let notificationData = {
-      clientName: clientName || "",
-      stylistName: stylistName || "",
-      stylistEmail: stylistEmail || "",
-      serviceType: serviceType || "",
-      preferredDate: preferredDate || "",
+      clientName: clientName || '',
+      stylistName: stylistName || '',
+      stylistEmail: stylistEmail || '',
+      serviceType: serviceType || '',
+      preferredDate: preferredDate || '',
     };
 
     if (!clientName || !stylistEmail) {
       const { data: waitlistEntry, error } = await supabase
-        .from("waitlist")
-        .select(`
+        .from('waitlist')
+        .select(
+          `
           *,
           client:client_profiles(
             full_name,
@@ -63,29 +74,35 @@ serve(async (req: Request) => {
             business_name,
             user:profiles(full_name, email)
           )
-        `)
-        .eq("id", waitlistId)
+        `
+        )
+        .eq('id', waitlistId)
         .single();
 
       if (error) {
-        console.error("Error fetching waitlist:", error);
+        console.error('Error fetching waitlist:', error);
         throw error;
       }
 
       notificationData = {
-        clientName: waitlistEntry.client?.full_name || "Client",
-        stylistName: waitlistEntry.stylist?.business_name || waitlistEntry.stylist?.user?.full_name || "Stylist",
-        stylistEmail: waitlistEntry.stylist?.user?.email || "",
-        serviceType: waitlistEntry.service_type || "Service",
-        preferredDate: waitlistEntry.preferred_date || "",
+        clientName: waitlistEntry.client?.full_name || 'Client',
+        stylistName:
+          waitlistEntry.stylist?.business_name ||
+          waitlistEntry.stylist?.user?.full_name ||
+          'Stylist',
+        stylistEmail: waitlistEntry.stylist?.user?.email || '',
+        serviceType: waitlistEntry.service_type || 'Service',
+        preferredDate: waitlistEntry.preferred_date || '',
       };
     }
 
     // Send appropriate notification based on type
-    if (type === "new_waitlist") {
+    if (type === 'new_waitlist') {
       // Notify stylist of new waitlist entry
       if (!notificationData.stylistEmail) {
-        throw new Error("Stylist email is required for new waitlist notifications");
+        throw new Error(
+          'Stylist email is required for new waitlist notifications'
+        );
       }
 
       await resend.emails.send({
@@ -100,7 +117,7 @@ serve(async (req: Request) => {
             <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <p style="margin: 5px 0;"><strong>Client:</strong> ${notificationData.clientName}</p>
               <p style="margin: 5px 0;"><strong>Service:</strong> ${notificationData.serviceType}</p>
-              ${notificationData.preferredDate ? `<p style="margin: 5px 0;"><strong>Preferred Date:</strong> ${notificationData.preferredDate}</p>` : ""}
+              ${notificationData.preferredDate ? `<p style="margin: 5px 0;"><strong>Preferred Date:</strong> ${notificationData.preferredDate}</p>` : ''}
             </div>
             
             <p>Log in to your dashboard to review this request and contact the client.</p>
@@ -114,15 +131,23 @@ serve(async (req: Request) => {
         `,
       });
 
-      console.log("New waitlist notification sent to:", notificationData.stylistEmail);
-    } else if (type === "waitlist_available") {
+      console.log(
+        'New waitlist notification sent to:',
+        notificationData.stylistEmail
+      );
+    } else if (type === 'waitlist_available') {
       // Notify client that a slot is available
       // This would be triggered manually by stylist or automatically when slot opens
-      console.log("Waitlist available notification (manual trigger):", waitlistId);
-    } else if (type === "waitlist_cancelled") {
+      console.log(
+        'Waitlist available notification (manual trigger):',
+        waitlistId
+      );
+    } else if (type === 'waitlist_cancelled') {
       // Notify stylist of cancelled waitlist entry
       if (!notificationData.stylistEmail) {
-        throw new Error("Stylist email is required for cancellation notifications");
+        throw new Error(
+          'Stylist email is required for cancellation notifications'
+        );
       }
 
       await resend.emails.send({
@@ -146,35 +171,38 @@ serve(async (req: Request) => {
         `,
       });
 
-      console.log("Cancellation notification sent to:", notificationData.stylistEmail);
+      console.log(
+        'Cancellation notification sent to:',
+        notificationData.stylistEmail
+      );
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: `Waitlist notification sent: ${type}`,
-        data: notificationData 
+        data: notificationData,
       }),
       {
         status: 200,
-        headers: { 
-          "Content-Type": "application/json",
-          ...corsHeaders 
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders,
         },
       }
     );
   } catch (error: any) {
-    console.error("Error in waitlist-notifications:", error);
+    console.error('Error in waitlist-notifications:', error);
     return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: error.message 
+      JSON.stringify({
+        success: false,
+        error: error.message,
       }),
       {
         status: 500,
-        headers: { 
-          "Content-Type": "application/json",
-          ...corsHeaders 
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders,
         },
       }
     );

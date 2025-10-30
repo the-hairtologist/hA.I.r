@@ -42,11 +42,14 @@ class AdaptiveLearningAISystem {
       userId,
       action,
       frequency: existing.length + 1,
-      avgTimeOfDay: existing.length > 0
-        ? (existing[existing.length - 1].avgTimeOfDay * existing.length + timeOfDay) / (existing.length + 1)
-        : timeOfDay,
+      avgTimeOfDay:
+        existing.length > 0
+          ? (existing[existing.length - 1].avgTimeOfDay * existing.length +
+              timeOfDay) /
+            (existing.length + 1)
+          : timeOfDay,
       preferredDayOfWeek: dayOfWeek,
-      context
+      context,
     };
 
     existing.push(pattern);
@@ -70,18 +73,21 @@ class AdaptiveLearningAISystem {
         type: 'preload',
         action: `Preload ${pattern.action} data`,
         confidence: Math.min(pattern.frequency / 10, 0.9),
-        description: `User frequently ${pattern.action}s - preload this data`
+        description: `User frequently ${pattern.action}s - preload this data`,
       });
     }
 
     // Suggest actions based on time patterns
     const now = new Date();
-    if (Math.abs(now.getHours() - pattern.avgTimeOfDay) <= 1 && pattern.frequency > 3) {
+    if (
+      Math.abs(now.getHours() - pattern.avgTimeOfDay) <= 1 &&
+      pattern.frequency > 3
+    ) {
       adaptations.push({
         type: 'suggest',
         action: `Suggest ${pattern.action}`,
         confidence: 0.7,
-        description: `User typically ${pattern.action}s around this time`
+        description: `User typically ${pattern.action}s around this time`,
       });
     }
 
@@ -91,7 +97,7 @@ class AdaptiveLearningAISystem {
         type: 'automate',
         action: `Auto-${pattern.action}`,
         confidence: 0.8,
-        description: `Automate this frequent action to save time`
+        description: `Automate this frequent action to save time`,
       });
     }
 
@@ -101,12 +107,15 @@ class AdaptiveLearningAISystem {
         type: 'optimize',
         action: `Optimize ${pattern.action} flow`,
         confidence: 0.85,
-        description: `High usage detected - optimize this workflow`
+        description: `High usage detected - optimize this workflow`,
       });
     }
 
     this.adaptations.set(userId, adaptations);
-    logger.info('Learned new adaptation', 'AdaptiveLearningAI', { userId, adaptations: adaptations.length });
+    logger.info('Learned new adaptation', 'AdaptiveLearningAI', {
+      userId,
+      adaptations: adaptations.length,
+    });
   }
 
   /**
@@ -114,7 +123,7 @@ class AdaptiveLearningAISystem {
    */
   getPersonalizedSuggestions(userId: string): string[] {
     const userAdaptations = this.adaptations.get(userId) || [];
-    
+
     return userAdaptations
       .filter(a => a.type === 'suggest' && a.confidence > 0.6)
       .map(a => a.description)
@@ -130,25 +139,33 @@ class AdaptiveLearningAISystem {
         .filter(([key]) => key.startsWith(userId))
         .map(([, patterns]) => patterns[patterns.length - 1]);
 
-      const { data, error } = await supabase.functions.invoke('hair-assistant-chat', {
-        body: {
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a workflow optimization expert. Analyze user behavior and suggest improvements.'
-            },
-            {
-              role: 'user',
-              content: `Analyze these behavior patterns and suggest workflow optimizations:\n${JSON.stringify(patterns, null, 2)}`
-            }
-          ]
+      const { data, error } = await supabase.functions.invoke(
+        'hair-assistant-chat',
+        {
+          body: {
+            messages: [
+              {
+                role: 'system',
+                content:
+                  'You are a workflow optimization expert. Analyze user behavior and suggest improvements.',
+              },
+              {
+                role: 'user',
+                content: `Analyze these behavior patterns and suggest workflow optimizations:\n${JSON.stringify(patterns, null, 2)}`,
+              },
+            ],
+          },
         }
-      });
+      );
 
       if (error) throw error;
       return data.response || 'No optimizations available';
     } catch (error) {
-      logger.error('Failed to get workflow optimizations', 'AdaptiveLearningAI', error);
+      logger.error(
+        'Failed to get workflow optimizations',
+        'AdaptiveLearningAI',
+        error
+      );
       return 'Unable to generate optimizations';
     }
   }
@@ -194,7 +211,10 @@ class AdaptiveLearningAISystem {
       .filter(([key]) => key.startsWith(userId))
       .map(([, patterns]) => patterns);
 
-    const totalActions = userPatterns.reduce((sum, patterns) => sum + patterns.length, 0);
+    const totalActions = userPatterns.reduce(
+      (sum, patterns) => sum + patterns.length,
+      0
+    );
     const uniqueActions = userPatterns.length;
     const adaptations = this.adaptations.get(userId)?.length || 0;
 
@@ -202,7 +222,7 @@ class AdaptiveLearningAISystem {
       totalActions,
       uniqueActions,
       adaptations,
-      confidence: adaptations > 0 ? 0.8 : 0.3
+      confidence: adaptations > 0 ? 0.8 : 0.3,
     };
   }
 }

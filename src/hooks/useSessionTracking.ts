@@ -21,36 +21,44 @@ export function useSessionTracking() {
 
     const startSession = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
         if (!user) return;
 
-        const { error } = await supabase
-          .from('user_sessions')
-          .insert({
-            user_id: user.id,
-            session_id: sessionIdRef.current,
-            started_at: new Date().toISOString(),
-            entry_page: window.location.pathname,
-            device_type: getDeviceType(),
-            platform: navigator.platform,
-          });
+        const { error } = await supabase.from('user_sessions').insert({
+          user_id: user.id,
+          session_id: sessionIdRef.current,
+          started_at: new Date().toISOString(),
+          entry_page: window.location.pathname,
+          device_type: getDeviceType(),
+          platform: navigator.platform,
+        });
 
         if (error) throw error;
 
         logger.debug('[SessionTracker] Session started', 'sessionTracker');
       } catch (error) {
-        logger.error('[SessionTracker] Failed to start session', 'sessionTracker', error);
+        logger.error(
+          '[SessionTracker] Failed to start session',
+          'sessionTracker',
+          error
+        );
       }
     };
 
     const endSession = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
         if (!user) return;
 
-        const duration = Math.floor((Date.now() - sessionStartRef.current) / 1000);
+        const duration = Math.floor(
+          (Date.now() - sessionStartRef.current) / 1000
+        );
 
         const { error } = await supabase
           .from('user_sessions')
@@ -66,7 +74,11 @@ export function useSessionTracking() {
 
         logger.debug('[SessionTracker] Session ended', 'sessionTracker');
       } catch (error) {
-        logger.error('[SessionTracker] Failed to end session', 'sessionTracker', error);
+        logger.error(
+          '[SessionTracker] Failed to end session',
+          'sessionTracker',
+          error
+        );
       }
     };
 
@@ -87,8 +99,10 @@ export function useSessionTracking() {
 
     const updatePageViews = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
         if (!user) return;
 
         await supabase
@@ -98,7 +112,11 @@ export function useSessionTracking() {
           })
           .eq('session_id', sessionIdRef.current);
       } catch (error) {
-        logger.error('[SessionTracker] Failed to update page views', 'sessionTracker', error);
+        logger.error(
+          '[SessionTracker] Failed to update page views',
+          'sessionTracker',
+          error
+        );
       }
     };
 
@@ -115,7 +133,11 @@ function getDeviceType(): string {
   if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
     return 'tablet';
   }
-  if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+  if (
+    /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+      ua
+    )
+  ) {
     return 'mobile';
   }
   return 'desktop';

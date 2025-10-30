@@ -1,8 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Sparkles, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { MessageSquare, Sparkles, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export function SupportChatWidget() {
   const navigate = useNavigate();
@@ -17,7 +23,9 @@ export function SupportChatWidget() {
             </div>
             <div>
               <CardTitle className="text-base font-pixel">Need Help?</CardTitle>
-              <CardDescription className="text-xs">AI Support is available 24/7</CardDescription>
+              <CardDescription className="text-xs">
+                AI Support is available 24/7
+              </CardDescription>
             </div>
           </div>
           <Badge variant="secondary" className="gap-1">
@@ -28,10 +36,11 @@ export function SupportChatWidget() {
       </CardHeader>
       <CardContent className="space-y-3">
         <p className="text-sm text-muted-foreground">
-          Get instant answers about appointments, services, pricing, and more from our AI assistant.
+          Get instant answers about appointments, services, pricing, and more
+          from our AI assistant.
         </p>
-        <Button 
-          onClick={() => navigate("/support-chat")}
+        <Button
+          onClick={() => navigate('/support-chat')}
           className="w-full gap-2 group"
         >
           <MessageSquare className="h-4 w-4" />

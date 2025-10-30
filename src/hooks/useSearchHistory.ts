@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-const STORAGE_KEY = "search_history";
+const STORAGE_KEY = 'search_history';
 const MAX_HISTORY = 5;
 
 export const useSearchHistory = () => {
@@ -12,19 +12,19 @@ export const useSearchHistory = () => {
       try {
         setHistory(JSON.parse(stored));
       } catch (e) {
-        console.error("Failed to parse search history:", e);
+        console.error('Failed to parse search history:', e);
       }
     }
   }, []);
 
   const addToHistory = (query: string) => {
     if (!query.trim()) return;
-    
-    const newHistory = [
-      query,
-      ...history.filter(h => h !== query)
-    ].slice(0, MAX_HISTORY);
-    
+
+    const newHistory = [query, ...history.filter(h => h !== query)].slice(
+      0,
+      MAX_HISTORY
+    );
+
     setHistory(newHistory);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newHistory));
   };

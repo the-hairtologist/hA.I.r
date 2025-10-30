@@ -67,7 +67,8 @@ describe('useSchedulePredictor', () => {
 
     const { result } = renderHook(() => useSchedulePredictor());
 
-    const predictionPromise = result.current.predictNextAppointment(mockContext);
+    const predictionPromise =
+      result.current.predictNextAppointment(mockContext);
 
     expect(result.current.predicting).toBe(true);
 
@@ -87,7 +88,8 @@ describe('useSchedulePredictor', () => {
 
     const { result } = renderHook(() => useSchedulePredictor());
 
-    const predictionResult = await result.current.predictNextAppointment(mockContext);
+    const predictionResult =
+      await result.current.predictNextAppointment(mockContext);
 
     expect(result.current.predicting).toBe(false);
     expect(predictionResult).toBeNull();

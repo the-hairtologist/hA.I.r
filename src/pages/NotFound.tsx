@@ -1,23 +1,27 @@
-import { useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
-import { Scissors, Home, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SEOHead } from "@/components/SEOHead";
-import { logger } from "@/lib/logging/productionLogger";
+import { useLocation, Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Scissors, Home, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { SEOHead } from '@/components/SEOHead';
+import { logger } from '@/lib/logging/productionLogger';
 
 const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
-    logger.error("404 Error: User attempted to access non-existent route", null, { 
-      context: 'NotFound',
-      data: { pathname: location.pathname } 
-    });
+    logger.error(
+      '404 Error: User attempted to access non-existent route',
+      null,
+      {
+        context: 'NotFound',
+        data: { pathname: location.pathname },
+      }
+    );
   }, [location.pathname]);
 
   return (
     <>
-      <SEOHead 
+      <SEOHead
         title="Page Not Found - hA.I.r"
         description="The page you're looking for doesn't exist."
       />
@@ -31,17 +35,18 @@ const NotFound = () => {
               </div>
             </div>
           </div>
-          
+
           <h1 className="mb-4 text-4xl font-bold font-pixel text-foreground">
             Oops! Page Not Found
           </h1>
-          
+
           <p className="mb-8 text-lg font-sans text-muted-foreground">
-            Looks like this page got a bad haircut and disappeared. Let's get you back on track!
+            Looks like this page got a bad haircut and disappeared. Let's get
+            you back on track!
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button 
+            <Button
               onClick={() => window.history.back()}
               variant="outline"
               className="gap-2"
@@ -49,18 +54,15 @@ const NotFound = () => {
               <ArrowLeft className="h-4 w-4" />
               Go Back
             </Button>
-            
-            <Button 
-              asChild
-              className="gap-2"
-            >
+
+            <Button asChild className="gap-2">
               <Link to="/">
                 <Home className="h-4 w-4" />
                 Return Home
               </Link>
             </Button>
           </div>
-          
+
           <p className="mt-6 text-sm text-muted-foreground">
             If you think this is an error, please contact support.
           </p>

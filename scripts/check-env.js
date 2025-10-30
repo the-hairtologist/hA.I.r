@@ -4,7 +4,7 @@
 const requiredVars = [
   'VITE_SUPABASE_URL',
   'VITE_SUPABASE_PUBLISHABLE_KEY',
-  'VITE_SUPABASE_PROJECT_ID'
+  'VITE_SUPABASE_PROJECT_ID',
 ];
 
 console.log('🔍 Checking environment variables...\n');

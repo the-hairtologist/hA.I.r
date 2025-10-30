@@ -4,7 +4,13 @@
  */
 
 import { toast } from 'sonner';
-import type { AppError, RecoveryStrategy, ErrorRecoveryContext, RecoveryResult, QueuedRequest } from '@/types/errors';
+import type {
+  AppError,
+  RecoveryStrategy,
+  ErrorRecoveryContext,
+  RecoveryResult,
+  QueuedRequest,
+} from '@/types/errors';
 import { log } from './logger';
 
 /**
@@ -52,48 +58,58 @@ class RequestQueue {
   enqueue(request: QueuedRequest): void {
     this.queue.push(request);
     const position = this.queue.length;
-    
+
     log.info(`Request queued (position ${position})`, 'errorRecovery');
     toast.info(`Request queued (position ${position})`, {
       description: 'Will process when rate limit clears',
     });
-    
+
     this.processQueue();
   }
 
   private async processQueue(): Promise<void> {
     if (this.processing || this.queue.length === 0) return;
-    
+
     this.processing = true;
-    
+
     try {
       while (this.queue.length > 0) {
         const now = Date.now();
-        
+
         // Check if we need to wait for rate limit reset
         if (this.rateLimitResetTime && now < this.rateLimitResetTime) {
           const waitTime = this.rateLimitResetTime - now;
-          log.info(`Waiting ${waitTime}ms for rate limit reset`, 'errorRecovery');
+          log.info(
+            `Waiting ${waitTime}ms for rate limit reset`,
+            'errorRecovery'
+          );
           await this.delay(Math.min(waitTime, 5000)); // Check every 5s max
           continue;
         }
-        
+
         // Process next request
         const request = this.queue.shift();
         if (!request) continue;
-        
+
         try {
           log.info(`Processing queued request ${request.id}`, 'errorRecovery');
           const result = await request.operation();
           request.onSuccess?.(result);
-          
+
           // Reset rate limit time after successful execution
           this.rateLimitResetTime = null;
         } catch (error: any) {
-          log.error(`Queued request ${request.id} failed`, 'errorRecovery', error);
-          
+          log.error(
+            `Queued request ${request.id} failed`,
+            'errorRecovery',
+            error
+          );
+
           // Check if it's another rate limit error
-          if (error.code === 'rate_limit_exceeded' || error.statusCode === 429) {
+          if (
+            error.code === 'rate_limit_exceeded' ||
+            error.statusCode === 429
+          ) {
             // Re-queue the request
             this.queue.unshift(request);
             // Set rate limit reset time (60 seconds from now)
@@ -103,7 +119,7 @@ class RequestQueue {
             request.onFailure?.(error);
           }
         }
-        
+
         // Small delay between requests to avoid hammering
         await this.delay(500);
       }
@@ -145,7 +161,7 @@ export const requestQueue = new RequestQueue();
  */
 class OfflineBuffer {
   private readonly STORAGE_KEY = 'offline_requests';
-  
+
   save(request: QueuedRequest): void {
     try {
       const stored = this.getAll();
@@ -153,10 +169,14 @@ class OfflineBuffer {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(stored));
       log.info('Request buffered for offline replay', 'errorRecovery');
     } catch (error) {
-      log.error('Failed to buffer offline request', 'errorRecovery', error as Error);
+      log.error(
+        'Failed to buffer offline request',
+        'errorRecovery',
+        error as Error
+      );
     }
   }
-  
+
   getAll(): QueuedRequest[] {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
@@ -165,22 +185,22 @@ class OfflineBuffer {
       return [];
     }
   }
-  
+
   clear(): void {
     localStorage.removeItem(this.STORAGE_KEY);
   }
-  
+
   async replayAll(): Promise<void> {
     const buffered = this.getAll();
     if (buffered.length === 0) return;
-    
+
     log.info(`Replaying ${buffered.length} offline requests`, 'errorRecovery');
     toast.info(`Syncing ${buffered.length} offline actions...`);
-    
+
     for (const request of buffered) {
       requestQueue.enqueue(request);
     }
-    
+
     this.clear();
   }
 }
@@ -191,7 +211,8 @@ export const offlineBuffer = new OfflineBuffer();
  * RLS Error Detection Patterns
  */
 export const RLS_ERROR_PATTERNS = {
-  policy_violation: /new row violates row-level security policy|RLS policy|permission denied/i,
+  policy_violation:
+    /new row violates row-level security policy|RLS policy|permission denied/i,
   missing_policy: /no policy exists|relation.*does not exist/i,
   auth_required: /JWT expired|invalid JWT|not authenticated/i,
 };
@@ -201,7 +222,9 @@ export const RLS_ERROR_PATTERNS = {
  */
 export function isRLSError(error: AppError): boolean {
   const message = error.message || '';
-  return Object.values(RLS_ERROR_PATTERNS).some(pattern => pattern.test(message));
+  return Object.values(RLS_ERROR_PATTERNS).some(pattern =>
+    pattern.test(message)
+  );
 }
 
 /**
@@ -214,19 +237,19 @@ export function shouldRetryError(error: AppError): boolean {
     toast.info('No connection. Will sync when online.');
     return false;
   }
-  
+
   // Don't retry RLS errors (they won't fix themselves)
   if (isRLSError(error)) {
     return false;
   }
-  
+
   return isRetryableError(error);
 }
 
 function isRetryableError(error: AppError): boolean {
   const retryableCodes = ['network_error', 'timeout', 'rate_limit'];
   const retryableStatuses = [408, 429, 500, 502, 503, 504];
-  
+
   return (
     retryableCodes.includes(error.code || '') ||
     retryableStatuses.includes(error.statusCode || 0)
@@ -247,10 +270,13 @@ function createQueuedRequest(error: AppError): QueuedRequest {
 /**
  * Determine if an error should attempt automatic recovery
  */
-export function shouldAttemptRecovery(error: AppError, context?: ErrorRecoveryContext): boolean {
+export function shouldAttemptRecovery(
+  error: AppError,
+  context?: ErrorRecoveryContext
+): boolean {
   // Don't auto-recover if explicitly disabled
   if (context?.allowAutoRecovery === false) return false;
-  
+
   // Check if we have a recovery strategy for this error
   const strategy = getRecoveryStrategy(error);
   return strategy !== null;
@@ -264,10 +290,10 @@ export function getRecoveryStrategy(error: AppError): RecoveryStrategy | null {
   if (isRLSError(error)) {
     return {
       action: 'show_permission_error',
-      config: { 
-        message: 'You don\'t have permission to access this data',
-        showSupport: true 
-      }
+      config: {
+        message: "You don't have permission to access this data",
+        showSupport: true,
+      },
     } as any;
   }
 
@@ -275,7 +301,7 @@ export function getRecoveryStrategy(error: AppError): RecoveryStrategy | null {
   if (error.code && RECOVERY_STRATEGIES[error.code]) {
     return RECOVERY_STRATEGIES[error.code];
   }
-  
+
   // Try to match by status code
   if (error.statusCode === 401) {
     return RECOVERY_STRATEGIES.unauthorized;
@@ -286,10 +312,13 @@ export function getRecoveryStrategy(error: AppError): RecoveryStrategy | null {
   if (error.statusCode === 402) {
     return RECOVERY_STRATEGIES.payment_required;
   }
-  
+
   // Try to match by message patterns
   const message = error.message.toLowerCase();
-  if (message.includes('unauthorized') || message.includes('not authenticated')) {
+  if (
+    message.includes('unauthorized') ||
+    message.includes('not authenticated')
+  ) {
     return RECOVERY_STRATEGIES.unauthorized;
   }
   if (message.includes('rate limit')) {
@@ -301,7 +330,7 @@ export function getRecoveryStrategy(error: AppError): RecoveryStrategy | null {
   if (message.includes('timeout')) {
     return RECOVERY_STRATEGIES.timeout;
   }
-  
+
   return null;
 }
 
@@ -313,7 +342,7 @@ export async function recoverFromError(
   context: ErrorRecoveryContext
 ): Promise<RecoveryResult> {
   const strategy = getRecoveryStrategy(error);
-  
+
   if (!strategy) {
     return {
       recovered: false,
@@ -321,29 +350,32 @@ export async function recoverFromError(
       message: 'No recovery strategy available',
     };
   }
-  
-  log.info(`Attempting recovery with strategy: ${strategy.action}`, 'errorRecovery');
-  
+
+  log.info(
+    `Attempting recovery with strategy: ${strategy.action}`,
+    'errorRecovery'
+  );
+
   try {
     switch (strategy.action) {
       case 'redirect_login':
         return await handleRedirectLogin(error, strategy, context);
-      
+
       case 'queue_retry':
         return await handleQueueRetry(error, strategy, context);
-      
+
       case 'retry_backoff':
         return await handleRetryBackoff(error, strategy, context);
-      
+
       case 'show_upgrade_prompt':
         return handleUpgradePrompt(error, strategy);
-      
+
       case 'cache_bust':
         return handleCacheBust(error, strategy);
-      
+
       case 'retry_shorter_timeout':
         return await handleRetryTimeout(error, strategy, context);
-      
+
       default:
         return {
           recovered: false,
@@ -352,7 +384,11 @@ export async function recoverFromError(
         };
     }
   } catch (recoveryError) {
-    log.error('Recovery attempt failed', 'errorRecovery', recoveryError as Error);
+    log.error(
+      'Recovery attempt failed',
+      'errorRecovery',
+      recoveryError as Error
+    );
     return {
       recovered: false,
       strategy: strategy.action,
@@ -366,15 +402,19 @@ async function handleRedirectLogin(
   strategy: RecoveryStrategy,
   context: ErrorRecoveryContext
 ): Promise<RecoveryResult> {
-  const returnUrl = strategy.config?.returnUrl ? window.location.pathname : undefined;
-  const redirectPath = returnUrl ? `/auth?returnUrl=${encodeURIComponent(returnUrl)}` : '/auth';
-  
+  const returnUrl = strategy.config?.returnUrl
+    ? window.location.pathname
+    : undefined;
+  const redirectPath = returnUrl
+    ? `/auth?returnUrl=${encodeURIComponent(returnUrl)}`
+    : '/auth';
+
   toast.info('Session expired. Redirecting to login...', { duration: 2000 });
-  
+
   setTimeout(() => {
     window.location.href = redirectPath;
   }, 2000);
-  
+
   return {
     recovered: true,
     strategy: 'redirect_login',
@@ -394,16 +434,17 @@ async function handleQueueRetry(
       message: 'No operation to queue',
     };
   }
-  
+
   const queuedRequest: QueuedRequest = {
     id: `retry_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     operation: context.originalOperation,
-    priority: context.priority === 'high' ? 1 : context.priority === 'medium' ? 2 : 3,
+    priority:
+      context.priority === 'high' ? 1 : context.priority === 'medium' ? 2 : 3,
     enqueuedAt: Date.now(),
   };
-  
+
   requestQueue.enqueue(queuedRequest);
-  
+
   return {
     recovered: true,
     strategy: 'queue_retry',
@@ -423,16 +464,19 @@ async function handleRetryBackoff(
       message: 'No operation to retry',
     };
   }
-  
+
   const maxAttempts = strategy.config?.maxAttempts || 3;
   const baseDelay = strategy.config?.delay || 1000;
-  
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const delay = baseDelay * Math.pow(2, attempt - 1); // Exponential backoff
-    
-    log.info(`Retry attempt ${attempt}/${maxAttempts} after ${delay}ms`, 'errorRecovery');
+
+    log.info(
+      `Retry attempt ${attempt}/${maxAttempts} after ${delay}ms`,
+      'errorRecovery'
+    );
     await new Promise(resolve => setTimeout(resolve, delay));
-    
+
     try {
       const result = await context.originalOperation();
       return {
@@ -447,7 +491,7 @@ async function handleRetryBackoff(
       }
     }
   }
-  
+
   return {
     recovered: false,
     strategy: 'retry_backoff',
@@ -455,9 +499,12 @@ async function handleRetryBackoff(
   };
 }
 
-function handleUpgradePrompt(error: AppError, strategy: RecoveryStrategy): RecoveryResult {
+function handleUpgradePrompt(
+  error: AppError,
+  strategy: RecoveryStrategy
+): RecoveryResult {
   const feature = strategy.config?.feature || 'this feature';
-  
+
   toast.error(`AI credits used up`, {
     description: 'Add more credits to continue using AI features',
     duration: 10000,
@@ -469,7 +516,7 @@ function handleUpgradePrompt(error: AppError, strategy: RecoveryStrategy): Recov
       },
     },
   });
-  
+
   return {
     recovered: false,
     strategy: 'show_upgrade_prompt',
@@ -477,9 +524,12 @@ function handleUpgradePrompt(error: AppError, strategy: RecoveryStrategy): Recov
   };
 }
 
-function handleCacheBust(error: AppError, strategy: RecoveryStrategy): RecoveryResult {
+function handleCacheBust(
+  error: AppError,
+  strategy: RecoveryStrategy
+): RecoveryResult {
   toast.info('Refreshing application...', { duration: 2000 });
-  
+
   setTimeout(() => {
     // Clear all caches and reload
     if ('caches' in window) {
@@ -489,7 +539,7 @@ function handleCacheBust(error: AppError, strategy: RecoveryStrategy): RecoveryR
     }
     window.location.reload();
   }, 2000);
-  
+
   return {
     recovered: true,
     strategy: 'cache_bust',
@@ -509,9 +559,11 @@ async function handleRetryTimeout(
       message: 'No operation to retry',
     };
   }
-  
-  toast.info('Request timeout. Retrying with shorter timeout...', { duration: 2000 });
-  
+
+  toast.info('Request timeout. Retrying with shorter timeout...', {
+    duration: 2000,
+  });
+
   try {
     // Note: Actual timeout implementation would need to be in the operation itself
     const result = await context.originalOperation();

@@ -3,9 +3,14 @@
  * Centralized formula data operations
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { trackSelect, trackInsert, trackUpdate, trackDelete } from "@/lib/logging/supabaseTracker";
-import { logger } from "@/lib/logging/productionLogger";
+import { supabase } from '@/integrations/supabase/client';
+import {
+  trackSelect,
+  trackInsert,
+  trackUpdate,
+  trackDelete,
+} from '@/lib/logging/supabaseTracker';
+import { logger } from '@/lib/logging/productionLogger';
 
 export interface Formula {
   id: string;
@@ -44,121 +49,133 @@ export interface UpdateFormulaData extends Partial<CreateFormulaData> {
 /**
  * Fetch formulas for a stylist
  */
-export const fetchFormulasByStylist = async (stylistId: string): Promise<Formula[]> => {
+export const fetchFormulasByStylist = async (
+  stylistId: string
+): Promise<Formula[]> => {
   return trackSelect(
     async () => {
       const { data, error } = await supabase
-        .from("formulas")
-        .select(`
+        .from('formulas')
+        .select(
+          `
           *,
           client_profiles!client_id (
             id,
             full_name
           )
-        `)
-        .eq("stylist_id", stylistId)
-        .order("created_at", { ascending: false });
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data || [];
     },
-    "formulas",
-    "FormulaAPI.fetchByStylist"
+    'formulas',
+    'FormulaAPI.fetchByStylist'
   );
 };
 
 /**
  * Fetch formulas for a client
  */
-export const fetchFormulasByClient = async (clientId: string): Promise<Formula[]> => {
+export const fetchFormulasByClient = async (
+  clientId: string
+): Promise<Formula[]> => {
   return trackSelect(
     async () => {
       const { data, error } = await supabase
-        .from("formulas")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("created_at", { ascending: false });
+        .from('formulas')
+        .select('*')
+        .eq('client_id', clientId)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data || [];
     },
-    "formulas",
-    "FormulaAPI.fetchByClient"
+    'formulas',
+    'FormulaAPI.fetchByClient'
   );
 };
 
 /**
  * Fetch a single formula
  */
-export const fetchFormulaById = async (formulaId: string): Promise<Formula | null> => {
+export const fetchFormulaById = async (
+  formulaId: string
+): Promise<Formula | null> => {
   return trackSelect(
     async () => {
       const { data, error } = await supabase
-        .from("formulas")
-        .select("*")
-        .eq("id", formulaId)
+        .from('formulas')
+        .select('*')
+        .eq('id', formulaId)
         .single();
 
       if (error) throw error;
       return data;
     },
-    "formulas",
-    "FormulaAPI.fetchById"
+    'formulas',
+    'FormulaAPI.fetchById'
   );
 };
 
 /**
  * Create a new formula
  */
-export const createFormula = async (formulaData: CreateFormulaData): Promise<Formula> => {
+export const createFormula = async (
+  formulaData: CreateFormulaData
+): Promise<Formula> => {
   return trackInsert(
     async () => {
       const { data, error } = await supabase
-        .from("formulas")
+        .from('formulas')
         .insert([formulaData])
         .select()
         .single();
 
       if (error) throw error;
-      
-      logger.info("Formula created", { 
-        context: "FormulaAPI.create",
-        formulaId: data.id 
+
+      logger.info('Formula created', {
+        context: 'FormulaAPI.create',
+        formulaId: data.id,
       });
-      
+
       return data;
     },
-    "formulas",
-    "FormulaAPI.create"
+    'formulas',
+    'FormulaAPI.create'
   );
 };
 
 /**
  * Update a formula
  */
-export const updateFormula = async (updateData: UpdateFormulaData): Promise<Formula> => {
+export const updateFormula = async (
+  updateData: UpdateFormulaData
+): Promise<Formula> => {
   const { id, ...updates } = updateData;
-  
+
   return trackUpdate(
     async () => {
       const { data, error } = await supabase
-        .from("formulas")
+        .from('formulas')
         .update(updates)
-        .eq("id", id)
+        .eq('id', id)
         .select()
         .single();
 
       if (error) throw error;
-      
-      logger.info("Formula updated", { 
-        context: "FormulaAPI.update",
-        formulaId: id 
+
+      logger.info('Formula updated', {
+        context: 'FormulaAPI.update',
+        formulaId: id,
       });
-      
+
       return data;
     },
-    "formulas",
-    "FormulaAPI.update"
+    'formulas',
+    'FormulaAPI.update'
   );
 };
 
@@ -169,19 +186,19 @@ export const deleteFormula = async (formulaId: string): Promise<void> => {
   return trackDelete(
     async () => {
       const { error } = await supabase
-        .from("formulas")
+        .from('formulas')
         .delete()
-        .eq("id", formulaId);
+        .eq('id', formulaId);
 
       if (error) throw error;
-      
-      logger.info("Formula deleted", { 
-        context: "FormulaAPI.delete",
-        formulaId 
+
+      logger.info('Formula deleted', {
+        context: 'FormulaAPI.delete',
+        formulaId,
       });
     },
-    "formulas",
-    "FormulaAPI.delete"
+    'formulas',
+    'FormulaAPI.delete'
   );
 };
 
@@ -195,23 +212,23 @@ export const updateFormulaText = async (
   return trackUpdate(
     async () => {
       const { data, error } = await supabase
-        .from("formulas")
+        .from('formulas')
         .update({ formula_text: formulaText })
-        .eq("id", formulaId)
+        .eq('id', formulaId)
         .select()
         .single();
 
       if (error) throw error;
-      
-      logger.info("Formula text updated", { 
-        context: "FormulaAPI.updateText",
-        formulaId 
+
+      logger.info('Formula text updated', {
+        context: 'FormulaAPI.updateText',
+        formulaId,
       });
-      
+
       return data;
     },
-    "formulas",
-    "FormulaAPI.updateText"
+    'formulas',
+    'FormulaAPI.updateText'
   );
 };
 
@@ -225,15 +242,17 @@ export const searchFormulas = async (
   return trackSelect(
     async () => {
       const { data, error } = await supabase
-        .from("formulas")
-        .select("*")
-        .eq("stylist_id", stylistId)
-        .or(`formula_text.ilike.%${searchTerm}%,instructions.ilike.%${searchTerm}%`);
+        .from('formulas')
+        .select('*')
+        .eq('stylist_id', stylistId)
+        .or(
+          `formula_text.ilike.%${searchTerm}%,instructions.ilike.%${searchTerm}%`
+        );
 
       if (error) throw error;
       return data || [];
     },
-    "formulas",
-    "FormulaAPI.search"
+    'formulas',
+    'FormulaAPI.search'
   );
 };

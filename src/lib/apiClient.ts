@@ -26,8 +26,11 @@ export async function withQueryRetry<T>(
     maxRetries,
     delay: 1000,
     backoff: true,
-    onRetry: (attempt) => {
-      log.warn(`Retrying API call (attempt ${attempt}/${maxRetries})`, 'apiClient');
+    onRetry: attempt => {
+      log.warn(
+        `Retrying API call (attempt ${attempt}/${maxRetries})`,
+        'apiClient'
+      );
       if (showToast) {
         toast.info(`Retrying... (Attempt ${attempt}/${maxRetries})`);
       }
@@ -42,15 +45,18 @@ export const apiClient = {
   /**
    * Execute a Supabase query with automatic retry on network errors
    */
-  async query<T>(queryFn: () => Promise<{ data: T | null; error: any }>, config?: RetryConfig) {
+  async query<T>(
+    queryFn: () => Promise<{ data: T | null; error: any }>,
+    config?: RetryConfig
+  ) {
     try {
       const result = await withQueryRetry(queryFn, config);
-      
+
       if (result.error) {
         // Don't retry on non-network errors (auth, validation, etc.)
         throw result.error;
       }
-      
+
       return result;
     } catch (error) {
       log.error('API query failed', 'apiClient', error as Error);
@@ -66,7 +72,7 @@ export const apiClient = {
     config?: RetryConfig
   ): Promise<T> {
     const results = await Promise.all(
-      queries.map((query) => withQueryRetry(query, config))
+      queries.map(query => withQueryRetry(query, config))
     );
     return results as T;
   },

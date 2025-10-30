@@ -1,14 +1,27 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { SEOHead } from "@/components/SEOHead";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, TrendingUp, Star, AlertTriangle, DollarSign, UserPlus } from "lucide-react";
-import { ClientSegmentation } from "@/components/crm/ClientSegmentation";
-import { LeadScoring } from "@/components/crm/LeadScoring";
-import { FollowUpTracker } from "@/components/crm/FollowUpTracker";
-import { ClientLifetimeValue } from "@/components/crm/ClientLifetimeValue";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { SEOHead } from '@/components/SEOHead';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Users,
+  TrendingUp,
+  Star,
+  AlertTriangle,
+  DollarSign,
+  UserPlus,
+} from 'lucide-react';
+import { ClientSegmentation } from '@/components/crm/ClientSegmentation';
+import { LeadScoring } from '@/components/crm/LeadScoring';
+import { FollowUpTracker } from '@/components/crm/FollowUpTracker';
+import { ClientLifetimeValue } from '@/components/crm/ClientLifetimeValue';
 
 const CRMDashboard = () => {
   const { user } = useAuth();
@@ -30,11 +43,11 @@ const CRMDashboard = () => {
 
   return (
     <DashboardLayout>
-      <SEOHead 
+      <SEOHead
         title="CRM Dashboard | hA.I.r"
         description="Enhanced client relationship management with segmentation, lead scoring, and lifetime value tracking"
       />
-      
+
       <div className="container mx-auto p-4 sm:p-6 max-w-7xl">
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-pixel mb-2">
@@ -49,7 +62,9 @@ const CRMDashboard = () => {
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-6">
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Clients</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Clients
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">0</div>
@@ -62,7 +77,9 @@ const CRMDashboard = () => {
 
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">VIP Clients</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                VIP Clients
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">0</div>
@@ -75,7 +92,9 @@ const CRMDashboard = () => {
 
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">At Risk</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                At Risk
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-destructive">0</div>
@@ -88,7 +107,9 @@ const CRMDashboard = () => {
 
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Avg LTV</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Avg LTV
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">$0</div>

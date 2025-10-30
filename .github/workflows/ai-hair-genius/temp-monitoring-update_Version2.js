@@ -31,19 +31,19 @@ const replacements = [
     newText: `import * as Sentry from '@sentry/react';
 import type { ComponentType } from 'react';
 import type { Event as SentryEvent, EventHint, Transaction } from '@sentry/types';
-import { logger } from '@/lib/logger';`
+import { logger } from '@/lib/logger';`,
   },
 
   {
     // update beforeSend signature to use Sentry types
     old: /beforeSend\s*\(\s*event\s*:\s*any\s*,\s*hint\s*:\s*any\s*\)/,
-    newText: 'beforeSend(event: SentryEvent, hint?: EventHint)'
+    newText: 'beforeSend(event: SentryEvent, hint?: EventHint)',
   },
 
   {
     // change Record<string, any> -> Record<string, unknown> globally
     old: /Record<string,\s*any>/g,
-    newText: 'Record<string, unknown>'
+    newText: 'Record<string, unknown>',
   },
 
   {
@@ -55,7 +55,7 @@ import { logger } from '@/lib/logger';`
   }
 
   return (Sentry.withSentryRouting(component) as unknown) as T;
-};`
+};`,
   },
 
   {
@@ -68,8 +68,8 @@ import { logger } from '@/lib/logger';`
 
   const transaction = Sentry.getCurrentHub().startTransaction({ name, op: operation });
   return transaction ?? null;
-};`
-  }
+};`,
+  },
 ];
 
 // create backup

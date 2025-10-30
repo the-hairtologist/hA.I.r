@@ -1,10 +1,16 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Loader2, Apple } from "lucide-react";
-import { appleIAP, IAP_PRODUCTS } from "@/lib/iap/appleIAP";
-import { toast } from "sonner";
-import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Check, Loader2, Apple } from 'lucide-react';
+import { appleIAP, IAP_PRODUCTS } from '@/lib/iap/appleIAP';
+import { toast } from 'sonner';
+import { useSubscription } from '@/contexts/SubscriptionContext';
 
 interface IAPProduct {
   id: string;
@@ -40,9 +46,9 @@ export const AppleIAPSubscription = () => {
   const handlePurchase = async (productId: string) => {
     try {
       setPurchasing(productId);
-      
+
       const result = await appleIAP.purchaseProduct(productId);
-      
+
       if (result.success) {
         toast.success('Subscription activated successfully!');
         // Refresh subscription status
@@ -62,9 +68,9 @@ export const AppleIAPSubscription = () => {
     try {
       setLoading(true);
       toast.loading('Restoring purchases...');
-      
+
       const result = await appleIAP.restorePurchases();
-      
+
       if (result.success) {
         toast.success('Purchases restored successfully!');
         await checkSubscription();
@@ -81,20 +87,16 @@ export const AppleIAPSubscription = () => {
 
   const getProductFeatures = (productId: string) => {
     const baseFeatures = [
-      "Unlimited clients",
-      "AI Formula Generator",
-      "Appointment booking",
-      "Client messaging",
-      "Portfolio showcase",
-      "Business analytics",
+      'Unlimited clients',
+      'AI Formula Generator',
+      'Appointment booking',
+      'Client messaging',
+      'Portfolio showcase',
+      'Business analytics',
     ];
 
     if (productId === IAP_PRODUCTS.STYLIST_PRO_YEARLY) {
-      return [
-        ...baseFeatures,
-        "Save 20% vs monthly",
-        "Priority support",
-      ];
+      return [...baseFeatures, 'Save 20% vs monthly', 'Priority support'];
     }
 
     return baseFeatures;
@@ -140,11 +142,8 @@ export const AppleIAPSubscription = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {products.map((product) => (
-          <Card 
-            key={product.id}
-            className={subscribed ? "border-primary" : ""}
-          >
+        {products.map(product => (
+          <Card key={product.id} className={subscribed ? 'border-primary' : ''}>
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div>
@@ -167,14 +166,17 @@ export const AppleIAPSubscription = () => {
             <CardContent>
               <div className="space-y-4">
                 <ul className="space-y-2">
-                  {getProductFeatures(product.id).map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
+                  {getProductFeatures(product.id).map(feature => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-2 text-sm"
+                    >
                       <Check className="h-4 w-4 text-primary flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                
+
                 <Button
                   className="w-full"
                   onClick={() => handlePurchase(product.id)}
@@ -198,7 +200,7 @@ export const AppleIAPSubscription = () => {
             <div className="space-y-1 text-sm">
               <p className="font-medium">Managed by Apple</p>
               <p className="text-muted-foreground">
-                Your subscription will be charged to your Apple ID account. 
+                Your subscription will be charged to your Apple ID account.
                 Manage or cancel anytime in your App Store subscriptions.
               </p>
             </div>

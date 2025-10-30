@@ -43,7 +43,8 @@ export function calculatePaginationRange(params: Required<PaginationParams>): {
  * Query cache for reducing redundant database calls
  */
 class QueryCache {
-  private cache: Map<string, { data: any; timestamp: number; ttl: number }> = new Map();
+  private cache: Map<string, { data: any; timestamp: number; ttl: number }> =
+    new Map();
   private defaultTTL = 5 * 60 * 1000; // 5 minutes
 
   set(key: string, data: any, ttl?: number): void {
@@ -59,7 +60,7 @@ class QueryCache {
 
   get<T>(key: string): T | null {
     const cached = this.cache.get(key);
-    
+
     if (!cached) {
       return null;
     }
@@ -138,7 +139,7 @@ export function createCacheKey(
 ): string {
   const sortedParams = Object.keys(params)
     .sort()
-    .map((key) => `${key}:${JSON.stringify(params[key])}`)
+    .map(key => `${key}:${JSON.stringify(params[key])}`)
     .join('|');
   return `${table}|${sortedParams}`;
 }
@@ -152,7 +153,7 @@ export async function batchFetch<T>(
   batchSize: number = 50
 ): Promise<T[]> {
   const results: T[] = [];
-  
+
   for (let i = 0; i < ids.length; i += batchSize) {
     const batch = ids.slice(i, i + batchSize);
     const batchResults = await fetchFn(batch);
@@ -167,10 +168,16 @@ export async function batchFetch<T>(
  */
 export const RECOMMENDED_INDEXES = {
   appointments: [
-    { columns: ['stylist_id', 'appointment_date'], desc: 'Stylist calendar view' },
+    {
+      columns: ['stylist_id', 'appointment_date'],
+      desc: 'Stylist calendar view',
+    },
     { columns: ['client_id', 'appointment_date'], desc: 'Client history' },
     { columns: ['status', 'appointment_date'], desc: 'Status filtering' },
-    { columns: ['reminder_sent', 'appointment_date'], desc: 'Reminder scheduling' },
+    {
+      columns: ['reminder_sent', 'appointment_date'],
+      desc: 'Reminder scheduling',
+    },
   ],
   client_profiles: [
     { columns: ['user_id'], desc: 'User lookup' },

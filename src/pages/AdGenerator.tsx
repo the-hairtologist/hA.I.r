@@ -3,24 +3,37 @@
  * Create professional ads for hA.I.r using AI
  */
 
-import { useState } from "react";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { Sparkles, Copy, Download, Share2, Wand2, CheckCircle } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { useState } from 'react';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import {
+  Sparkles,
+  Copy,
+  Download,
+  Share2,
+  Wand2,
+  CheckCircle,
+} from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
-type AdType = "social-media" | "landing-page" | "email" | "banner";
+type AdType = 'social-media' | 'landing-page' | 'email' | 'banner';
 
 export default function AdGenerator() {
-  const [prompt, setPrompt] = useState("");
-  const [adType, setAdType] = useState<AdType>("social-media");
+  const [prompt, setPrompt] = useState('');
+  const [adType, setAdType] = useState<AdType>('social-media');
   const [generating, setGenerating] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [generatedAd, setGeneratedAd] = useState<{
@@ -30,17 +43,17 @@ export default function AdGenerator() {
 
   const handleGenerate = async (includeImage: boolean = false) => {
     if (!prompt.trim()) {
-      toast.error("Please describe what you want to promote");
+      toast.error('Please describe what you want to promote');
       return;
     }
 
     setGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-ad", {
-        body: { 
-          prompt: prompt.trim(), 
+      const { data, error } = await supabase.functions.invoke('generate-ad', {
+        body: {
+          prompt: prompt.trim(),
           adType,
-          generateImage: includeImage 
+          generateImage: includeImage,
         },
       });
 
@@ -48,10 +61,15 @@ export default function AdGenerator() {
 
       setGeneratedAd(data);
       userJourney.trackAction('Generated ad', { adType, includeImage });
-      toast.success(includeImage ? "Ad with image generated!" : "Ad copy generated!");
+      toast.success(
+        includeImage ? 'Ad with image generated!' : 'Ad copy generated!'
+      );
     } catch (error: any) {
-      logger.error("Ad generation error", error, { context: 'AdGenerator', data: { adType, includeImage } });
-      toast.error(error.message || "Failed to generate ad");
+      logger.error('Ad generation error', error, {
+        context: 'AdGenerator',
+        data: { adType, includeImage },
+      });
+      toast.error(error.message || 'Failed to generate ad');
     } finally {
       setGenerating(false);
     }
@@ -60,15 +78,15 @@ export default function AdGenerator() {
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
     setCopied(type);
-    toast.success("Copied to clipboard!");
+    toast.success('Copied to clipboard!');
     setTimeout(() => setCopied(null), 2000);
   };
 
   const adTypeExamples = {
-    "social-media": "Perfect for Instagram, Facebook, TikTok",
-    "landing-page": "Hero sections for your website",
-    "email": "Email campaigns to your clients",
-    "banner": "Display ads for web advertising",
+    'social-media': 'Perfect for Instagram, Facebook, TikTok',
+    'landing-page': 'Hero sections for your website',
+    email: 'Email campaigns to your clients',
+    banner: 'Display ads for web advertising',
   };
 
   return (
@@ -96,7 +114,8 @@ export default function AdGenerator() {
               Generate Ad Content
             </CardTitle>
             <CardDescription>
-              Describe what you want to promote and let AI create compelling ad copy
+              Describe what you want to promote and let AI create compelling ad
+              copy
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -104,15 +123,15 @@ export default function AdGenerator() {
             <div className="space-y-2">
               <Label>Ad Type</Label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {(Object.keys(adTypeExamples) as AdType[]).map((type) => (
+                {(Object.keys(adTypeExamples) as AdType[]).map(type => (
                   <Button
                     key={type}
-                    variant={adType === type ? "default" : "outline"}
+                    variant={adType === type ? 'default' : 'outline'}
                     onClick={() => setAdType(type)}
                     className="h-auto py-3 flex flex-col items-start"
                   >
                     <span className="font-semibold capitalize">
-                      {type.replace("-", " ")}
+                      {type.replace('-', ' ')}
                     </span>
                     <span className="text-[10px] xs:text-xs opacity-70 text-left">
                       {adTypeExamples[type]}
@@ -129,7 +148,7 @@ export default function AdGenerator() {
                 id="prompt"
                 placeholder="Example: A special offer for new clients - 20% off their first color service. Highlight that we use premium products and have experienced stylists."
                 value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
+                onChange={e => setPrompt(e.target.value)}
                 rows={4}
                 className="resize-none"
               />
@@ -210,14 +229,22 @@ export default function AdGenerator() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => copyToClipboard(generatedAd.copy.headline, "headline")}
-                      className={copied === "headline" ? "text-green-500" : ""}
+                      onClick={() =>
+                        copyToClipboard(generatedAd.copy.headline, 'headline')
+                      }
+                      className={copied === 'headline' ? 'text-green-500' : ''}
                     >
-                      {copied === "headline" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      {copied === 'headline' ? (
+                        <CheckCircle className="h-4 w-4" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                   <div className="p-4 bg-muted rounded-lg">
-                    <p className="font-bold text-base sm:text-lg md:text-xl">{generatedAd.copy.headline}</p>
+                    <p className="font-bold text-base sm:text-lg md:text-xl">
+                      {generatedAd.copy.headline}
+                    </p>
                   </div>
                 </div>
 
@@ -228,10 +255,16 @@ export default function AdGenerator() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => copyToClipboard(generatedAd.copy.bodyCopy, "body")}
-                      className={copied === "body" ? "text-green-500" : ""}
+                      onClick={() =>
+                        copyToClipboard(generatedAd.copy.bodyCopy, 'body')
+                      }
+                      className={copied === 'body' ? 'text-green-500' : ''}
                     >
-                      {copied === "body" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      {copied === 'body' ? (
+                        <CheckCircle className="h-4 w-4" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                   <div className="p-4 bg-muted rounded-lg">
@@ -246,14 +279,22 @@ export default function AdGenerator() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => copyToClipboard(generatedAd.copy.cta, "cta")}
-                      className={copied === "cta" ? "text-green-500" : ""}
+                      onClick={() =>
+                        copyToClipboard(generatedAd.copy.cta, 'cta')
+                      }
+                      className={copied === 'cta' ? 'text-green-500' : ''}
                     >
-                      {copied === "cta" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      {copied === 'cta' ? (
+                        <CheckCircle className="h-4 w-4" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                   <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary/20">
-                    <p className="font-bold text-primary">{generatedAd.copy.cta}</p>
+                    <p className="font-bold text-primary">
+                      {generatedAd.copy.cta}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -263,11 +304,15 @@ export default function AdGenerator() {
                 className="w-full gap-2 hover-scale"
                 onClick={() => {
                   const allText = `${generatedAd.copy.headline}\n\n${generatedAd.copy.bodyCopy}\n\n${generatedAd.copy.cta}`;
-                  copyToClipboard(allText, "all");
+                  copyToClipboard(allText, 'all');
                 }}
               >
-                {copied === "all" ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                {copied === "all" ? "Copied!" : "Copy All Text"}
+                {copied === 'all' ? (
+                  <CheckCircle className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+                {copied === 'all' ? 'Copied!' : 'Copy All Text'}
               </Button>
             </CardContent>
           </Card>
@@ -286,10 +331,10 @@ export default function AdGenerator() {
           </CardHeader>
           <CardContent className="space-y-3">
             {[
-              "New client special: 20% off first visit. Premium salon experience with expert stylists.",
-              "Holiday promotion: Book now and get a free deep conditioning treatment. Limited spots available.",
-              "Referral program: Bring a friend and both get $25 off your next service.",
-              "Spring refresh: Transform your look with our color specialists. Free consultation included.",
+              'New client special: 20% off first visit. Premium salon experience with expert stylists.',
+              'Holiday promotion: Book now and get a free deep conditioning treatment. Limited spots available.',
+              'Referral program: Bring a friend and both get $25 off your next service.',
+              'Spring refresh: Transform your look with our color specialists. Free consultation included.',
             ].map((template, i) => (
               <div
                 key={i}

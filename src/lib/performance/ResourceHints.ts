@@ -9,7 +9,7 @@ import { logger } from '../logging/productionLogger';
  * Add DNS prefetch for external domains
  */
 export const dnsPrefetch = (domains: string[]) => {
-  domains.forEach((domain) => {
+  domains.forEach(domain => {
     const link = document.createElement('link');
     link.rel = 'dns-prefetch';
     link.href = domain;
@@ -21,7 +21,7 @@ export const dnsPrefetch = (domains: string[]) => {
  * Preconnect to critical third-party origins
  */
 export const preconnect = (origins: string[]) => {
-  origins.forEach((origin) => {
+  origins.forEach(origin => {
     const link = document.createElement('link');
     link.rel = 'preconnect';
     link.href = origin;
@@ -37,7 +37,7 @@ export const prefetchRoutes = (routes: string[]) => {
   if ('requestIdleCallback' in window) {
     requestIdleCallback(
       () => {
-        routes.forEach((route) => {
+        routes.forEach(route => {
           const link = document.createElement('link');
           link.rel = 'prefetch';
           link.href = route;
@@ -52,7 +52,9 @@ export const prefetchRoutes = (routes: string[]) => {
 /**
  * Preload critical resources
  */
-export const preloadCritical = (resources: Array<{ href: string; as: string; type?: string }>) => {
+export const preloadCritical = (
+  resources: Array<{ href: string; as: string; type?: string }>
+) => {
   resources.forEach(({ href, as, type }) => {
     const link = document.createElement('link');
     link.rel = 'preload';
@@ -78,10 +80,7 @@ export const initResourceHints = () => {
   ]);
 
   // Preconnect to critical origins
-  preconnect([
-    'https://fonts.googleapis.com',
-    'https://fonts.gstatic.com',
-  ]);
+  preconnect(['https://fonts.googleapis.com', 'https://fonts.gstatic.com']);
 
   // Preload critical fonts
   preloadCritical([
@@ -131,9 +130,9 @@ export const prefetchOnHover = (element: HTMLElement, url: string) => {
 export const smartPrefetch = (urls: string[]) => {
   // Check if user is on slow connection
   const connection = (navigator as any).connection;
-  
+
   if (connection) {
-    const slowConnection = 
+    const slowConnection =
       connection.effectiveType === 'slow-2g' ||
       connection.effectiveType === '2g' ||
       connection.saveData;
@@ -147,7 +146,7 @@ export const smartPrefetch = (urls: string[]) => {
   // Prefetch during idle time
   if ('requestIdleCallback' in window) {
     requestIdleCallback(() => {
-      urls.forEach((url) => {
+      urls.forEach(url => {
         const link = document.createElement('link');
         link.rel = 'prefetch';
         link.href = url;

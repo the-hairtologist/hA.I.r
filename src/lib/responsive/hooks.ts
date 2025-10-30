@@ -14,7 +14,7 @@ export const useBreakpoint = (): Breakpoint => {
   useEffect(() => {
     const updateBreakpoint = () => {
       const width = window.innerWidth;
-      
+
       if (width >= BREAKPOINTS['2xl']) setBreakpoint('2xl');
       else if (width >= BREAKPOINTS.xl) setBreakpoint('xl');
       else if (width >= BREAKPOINTS.lg) setBreakpoint('lg');
@@ -66,7 +66,7 @@ export const useResponsiveGrid = (config: {
   xl?: number;
 }): number => {
   const breakpoint = useBreakpoint();
-  
+
   const defaultConfig = {
     xs: 1,
     sm: 2,
@@ -78,13 +78,19 @@ export const useResponsiveGrid = (config: {
   const merged = { ...defaultConfig, ...config };
 
   switch (breakpoint) {
-    case 'xs': return merged.xs;
-    case 'sm': return merged.sm;
-    case 'md': return merged.md;
-    case 'lg': return merged.lg;
+    case 'xs':
+      return merged.xs;
+    case 'sm':
+      return merged.sm;
+    case 'md':
+      return merged.md;
+    case 'lg':
+      return merged.lg;
     case 'xl':
-    case '2xl': return merged.xl;
-    default: return merged.lg;
+    case '2xl':
+      return merged.xl;
+    default:
+      return merged.lg;
   }
 };
 
@@ -93,7 +99,7 @@ export const useResponsiveGrid = (config: {
  */
 export const useResponsiveSpacing = () => {
   const isMobile = useIsMobile();
-  
+
   return {
     padding: isMobile ? 'p-4' : 'p-6',
     gap: isMobile ? 'gap-4' : 'gap-6',
@@ -108,8 +114,10 @@ export const useMatchBreakpoint = (breakpoint: Breakpoint): boolean => {
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(`(min-width: ${BREAKPOINTS[breakpoint]}px)`);
-    
+    const mediaQuery = window.matchMedia(
+      `(min-width: ${BREAKPOINTS[breakpoint]}px)`
+    );
+
     const handleChange = () => setMatches(mediaQuery.matches);
     handleChange();
 
@@ -130,7 +138,9 @@ export const useOrientation = (): 'portrait' | 'landscape' => {
 
   useEffect(() => {
     const handleOrientationChange = () => {
-      setOrientation(window.innerHeight > window.innerWidth ? 'portrait' : 'landscape');
+      setOrientation(
+        window.innerHeight > window.innerWidth ? 'portrait' : 'landscape'
+      );
     };
 
     window.addEventListener('resize', handleOrientationChange);

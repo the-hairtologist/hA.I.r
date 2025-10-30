@@ -47,7 +47,9 @@ class CodeAnalyzerSystem {
     this.analysisCache.set('latest', issues);
     this.lastAnalysis = now;
 
-    logger.info('Code analysis complete', 'CodeAnalyzer', { issuesFound: issues.length });
+    logger.info('Code analysis complete', 'CodeAnalyzer', {
+      issuesFound: issues.length,
+    });
 
     return issues;
   }
@@ -66,7 +68,8 @@ class CodeAnalyzerSystem {
         category: 'performance',
         description: 'Realtime subscriptions polling detected every 30 seconds',
         autoFixable: true,
-        recommendation: 'Implement proper Supabase realtime channels instead of polling'
+        recommendation:
+          'Implement proper Supabase realtime channels instead of polling',
       });
     }
 
@@ -78,7 +81,7 @@ class CodeAnalyzerSystem {
         category: 'performance',
         description: `${duplicateQueries.length} duplicate queries detected on page load`,
         autoFixable: true,
-        recommendation: 'Implement request deduplication and caching layer'
+        recommendation: 'Implement request deduplication and caching layer',
       });
     }
 
@@ -96,7 +99,7 @@ class CodeAnalyzerSystem {
       { name: 'Dashboard.tsx', lines: 835 },
       { name: 'BookAppointment.tsx', lines: 600 }, // estimated
       { name: 'Messages.tsx', lines: 500 }, // estimated
-      { name: 'Clients.tsx', lines: 500 } // estimated
+      { name: 'Clients.tsx', lines: 500 }, // estimated
     ];
 
     largeFiles.forEach(file => {
@@ -107,7 +110,7 @@ class CodeAnalyzerSystem {
           file: file.name,
           description: `${file.name} is ${file.lines} lines - should be split into smaller components`,
           autoFixable: false,
-          recommendation: `Break down ${file.name} into smaller, focused components (aim for <200 lines each)`
+          recommendation: `Break down ${file.name} into smaller, focused components (aim for <200 lines each)`,
         });
       }
     });
@@ -123,14 +126,17 @@ class CodeAnalyzerSystem {
 
     // Check memory usage
     if ((performance as any).memory) {
-      const memoryUsage = (performance as any).memory.usedJSHeapSize / (performance as any).memory.jsHeapSizeLimit;
+      const memoryUsage =
+        (performance as any).memory.usedJSHeapSize /
+        (performance as any).memory.jsHeapSizeLimit;
       if (memoryUsage > 0.7) {
         issues.push({
           severity: 'warning',
           category: 'performance',
           description: 'High memory usage detected',
           autoFixable: true,
-          recommendation: 'Implement memoization and cleanup unused subscriptions'
+          recommendation:
+            'Implement memoization and cleanup unused subscriptions',
         });
       }
     }
@@ -141,7 +147,7 @@ class CodeAnalyzerSystem {
       category: 'performance',
       description: 'No query caching detected',
       autoFixable: true,
-      recommendation: 'Implement QueryCache for frequently accessed data'
+      recommendation: 'Implement QueryCache for frequently accessed data',
     });
 
     return issues;
@@ -158,7 +164,8 @@ class CodeAnalyzerSystem {
       category: 'architecture',
       description: 'Multiple useState hooks in large components detected',
       autoFixable: false,
-      recommendation: 'Consider using Zustand or Jotai for global state management'
+      recommendation:
+        'Consider using Zustand or Jotai for global state management',
     });
 
     return issues;
@@ -174,7 +181,10 @@ class CodeAnalyzerSystem {
       if (!issue.autoFixable) continue;
 
       try {
-        if (issue.category === 'performance' && issue.description.includes('polling')) {
+        if (
+          issue.category === 'performance' &&
+          issue.description.includes('polling')
+        ) {
           await this.fixRealtimePolling();
           fixedCount++;
         }
@@ -189,7 +199,10 @@ class CodeAnalyzerSystem {
           fixedCount++;
         }
       } catch (error) {
-        logger.error('Failed to auto-fix issue', 'CodeAnalyzer', { issue, error });
+        logger.error('Failed to auto-fix issue', 'CodeAnalyzer', {
+          issue,
+          error,
+        });
       }
     }
 
@@ -202,20 +215,24 @@ class CodeAnalyzerSystem {
    */
   async getAIRecommendations(issues: CodeIssue[]): Promise<string> {
     try {
-      const { data, error } = await supabase.functions.invoke('hair-assistant-chat', {
-        body: {
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a code optimization expert. Analyze issues and provide actionable recommendations.'
-            },
-            {
-              role: 'user',
-              content: `Analyze these code issues and provide prioritized recommendations:\n\n${JSON.stringify(issues, null, 2)}`
-            }
-          ]
+      const { data, error } = await supabase.functions.invoke(
+        'hair-assistant-chat',
+        {
+          body: {
+            messages: [
+              {
+                role: 'system',
+                content:
+                  'You are a code optimization expert. Analyze issues and provide actionable recommendations.',
+              },
+              {
+                role: 'user',
+                content: `Analyze these code issues and provide prioritized recommendations:\n\n${JSON.stringify(issues, null, 2)}`,
+              },
+            ],
+          },
         }
-      });
+      );
 
       if (error) throw error;
       return data.response || 'Unable to generate recommendations';
@@ -267,12 +284,12 @@ class CodeAnalyzerSystem {
     // Calculate health score
     const criticalIssues = issues.filter(i => i.severity === 'critical').length;
     const warningIssues = issues.filter(i => i.severity === 'warning').length;
-    const score = Math.max(0, 100 - (criticalIssues * 20) - (warningIssues * 5));
+    const score = Math.max(0, 100 - criticalIssues * 20 - warningIssues * 5);
 
     return {
       issues,
       recommendations,
-      score
+      score,
     };
   }
 }
