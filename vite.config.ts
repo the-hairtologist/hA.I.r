@@ -42,14 +42,13 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       mode === 'development' && componentTagger(),
-      mode === 'production' &&
-        visualizer({
-          open: false,
-          filename: 'dist/stats.html',
-          gzipSize: true,
-          brotliSize: true,
-          template: 'treemap',
-        }),
+      visualizer({
+        open: mode === 'production', // Auto-open in production, available in dev
+        filename: 'dist/stats.html',
+        gzipSize: true,
+        brotliSize: true,
+        template: 'treemap',
+      }),
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: [
