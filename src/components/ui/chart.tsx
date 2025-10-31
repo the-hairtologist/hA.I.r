@@ -65,11 +65,11 @@ const ChartContainer = React.forwardRef<
 });
 ChartContainer.displayName = 'Chart';
 
-// Validate CSS color values to prevent XSS
+// Strict CSS color validation - only allows safe color formats
 const isValidColor = (color: string): boolean => {
   if (!color || typeof color !== 'string') return false;
 
-  // Allow HSL, RGB, hex colors, and CSS color keywords
+  // Whitelist only safe CSS color formats (no url(), @import, etc.)
   const validColorPatterns = [
     /^#[0-9A-Fa-f]{3,8}$/, // hex colors
     /^hsl\(\s*\d+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*\)$/, // hsl
@@ -79,7 +79,19 @@ const isValidColor = (color: string): boolean => {
     /^[a-z]+$/, // color keywords like 'red', 'blue'
   ];
 
-  return validColorPatterns.some(pattern => pattern.test(color.trim()));
+  const trimmed = color.trim().toLowerCase();
+  
+  // Block dangerous CSS functions and keywords
+  const dangerousPatterns = [
+    'url(', 'import', '@import', 'expression', 'javascript:',
+    'behavior', 'binding', '-moz-binding', 'data:', 'vbscript:',
+  ];
+  
+  if (dangerousPatterns.some(pattern => trimmed.includes(pattern))) {
+    return false;
+  }
+
+  return validColorPatterns.some(pattern => pattern.test(trimmed));
 };
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
@@ -91,7 +103,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null;
   }
 
-  // Build CSS using style object instead of dangerouslySetInnerHTML
+  // Build CSS variables safely - only color values, no arbitrary CSS
   const cssText = Object.entries(THEMES)
     .map(([theme, prefix]) => {
       const variables = colorConfig
@@ -99,9 +111,12 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
           const color =
             itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
             itemConfig.color;
-          // Only include valid colors
+          
+          // Strict validation - only safe color formats allowed
           if (color && isValidColor(color)) {
-            return `  --color-${key}: ${color};`;
+            // Sanitize key to prevent CSS injection via variable names
+            const safeKey = key.replace(/[^a-zA-Z0-9-_]/g, '');
+            return `  --color-${safeKey}: ${color};`;
           }
           return null;
         })
@@ -115,21 +130,19 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     .filter(Boolean)
     .join('\n');
 
-  // Sanitize CSS to prevent XSS (defense-in-depth)
-  const sanitizedCSS = cssText
-    ? cssText
-        .replace(/javascript:/gi, '')
-        .replace(/<script/gi, '')
-        .replace(/<\/script>/gi, '')
-        .replace(/expression\(/gi, '')
-        .replace(/import\s+/gi, '')
-        .replace(/@import/gi, '')
-        .replace(/behavior:/gi, '')
-    : '';
+  if (!cssText) return null;
 
-  return sanitizedCSS ? (
-    <style dangerouslySetInnerHTML={{ __html: sanitizedCSS }} />
-  ) : null;
+  // Use textContent instead of dangerouslySetInnerHTML for safer rendering
+  // This prevents any potential script execution
+  const styleRef = React.useRef<HTMLStyleElement>(null);
+  
+  React.useEffect(() => {
+    if (styleRef.current && cssText) {
+      styleRef.current.textContent = cssText;
+    }
+  }, [cssText]);
+
+  return <style ref={styleRef} />;
 };
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
