@@ -78,21 +78,7 @@ export default function AdminUsers() {
   if (loading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
-        .select(`
-          *,
-          user_roles(role)
-        `)
-        .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setUsers(data || []);
-    } catch (error) {
-      console.error('Error loading users:', error);
-      toast.error('Failed to load users');
-    }
-  };
-
->>>>>>> copilot/fix-a11y-tester-and-comments
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -367,11 +353,3 @@ export default function AdminUsers() {
     </DashboardLayout>
   );
 }
-
-
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> copilot/fix-a11y-tester-and-comments

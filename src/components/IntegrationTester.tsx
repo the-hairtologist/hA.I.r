@@ -38,7 +38,6 @@ export function IntegrationTester() {
             toast.error('âŒ Email function failed. Verify edge function deployment.');
           }
           break;
-        }
 
         case 'calendar': {
           // Test calendar connection
@@ -84,7 +83,6 @@ export function IntegrationTester() {
             toast.error('âŒ Stripe webhook failed. Verify edge function deployment.');
           }
           break;
-        }
       }
     } catch (error) {
       console.error(`Error testing ${type}:`, error);

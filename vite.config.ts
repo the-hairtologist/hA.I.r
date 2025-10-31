@@ -7,7 +7,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import compression from 'vite-plugin-compression';
 
 // https://vitejs.dev/config/
-// @ts-expect-error Plugin type compatibility issue with conditional plugins
 export default defineConfig(({ mode }) => {
   // Load and validate environment variables
   const env = loadEnv(mode, process.cwd(), '');
