@@ -4,5533 +4,5541 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '13.0.5';
-  };
+    PostgrestVersion: "13.0.5"
+  }
   public: {
     Tables: {
       ab_assignments: {
         Row: {
-          assigned_at: string | null;
-          experiment_id: string | null;
-          id: string;
-          variant_id: string | null;
-          visitor_id: string;
-        };
+          assigned_at: string | null
+          experiment_id: string | null
+          id: string
+          variant_id: string | null
+          visitor_id: string
+        }
         Insert: {
-          assigned_at?: string | null;
-          experiment_id?: string | null;
-          id?: string;
-          variant_id?: string | null;
-          visitor_id: string;
-        };
+          assigned_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id: string
+        }
         Update: {
-          assigned_at?: string | null;
-          experiment_id?: string | null;
-          id?: string;
-          variant_id?: string | null;
-          visitor_id?: string;
-        };
+          assigned_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'ab_assignments_experiment_id_fkey';
-            columns: ['experiment_id'];
-            isOneToOne: false;
-            referencedRelation: 'ab_experiments';
-            referencedColumns: ['id'];
+            foreignKeyName: "ab_assignments_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'ab_assignments_variant_id_fkey';
-            columns: ['variant_id'];
-            isOneToOne: false;
-            referencedRelation: 'ab_variants';
-            referencedColumns: ['id'];
+            foreignKeyName: "ab_assignments_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "ab_variants"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       ab_events: {
         Row: {
-          created_at: string | null;
-          event_data: Json | null;
-          event_type: string;
-          experiment_id: string | null;
-          id: string;
-          variant_id: string | null;
-          visitor_id: string;
-        };
+          created_at: string | null
+          event_data: Json | null
+          event_type: string
+          experiment_id: string | null
+          id: string
+          variant_id: string | null
+          visitor_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          event_data?: Json | null;
-          event_type: string;
-          experiment_id?: string | null;
-          id?: string;
-          variant_id?: string | null;
-          visitor_id: string;
-        };
+          created_at?: string | null
+          event_data?: Json | null
+          event_type: string
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id: string
+        }
         Update: {
-          created_at?: string | null;
-          event_data?: Json | null;
-          event_type?: string;
-          experiment_id?: string | null;
-          id?: string;
-          variant_id?: string | null;
-          visitor_id?: string;
-        };
+          created_at?: string | null
+          event_data?: Json | null
+          event_type?: string
+          experiment_id?: string | null
+          id?: string
+          variant_id?: string | null
+          visitor_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'ab_events_experiment_id_fkey';
-            columns: ['experiment_id'];
-            isOneToOne: false;
-            referencedRelation: 'ab_experiments';
-            referencedColumns: ['id'];
+            foreignKeyName: "ab_events_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'ab_events_variant_id_fkey';
-            columns: ['variant_id'];
-            isOneToOne: false;
-            referencedRelation: 'ab_variants';
-            referencedColumns: ['id'];
+            foreignKeyName: "ab_events_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "ab_variants"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       ab_experiments: {
         Row: {
-          created_at: string | null;
-          description: string | null;
-          ended_at: string | null;
-          id: string;
-          is_active: boolean | null;
-          name: string;
-        };
+          created_at: string | null
+          description: string | null
+          ended_at: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+        }
         Insert: {
-          created_at?: string | null;
-          description?: string | null;
-          ended_at?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          name: string;
-        };
+          created_at?: string | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+        }
         Update: {
-          created_at?: string | null;
-          description?: string | null;
-          ended_at?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          name?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+        }
+        Relationships: []
+      }
       ab_test_results: {
         Row: {
-          converted: boolean | null;
-          created_at: string | null;
-          engagement_score: string | null;
-          experiment_id: string | null;
-          faq_expansions: number | null;
-          feature_hovers: number | null;
-          id: string;
-          scroll_depth_max: number | null;
-          sections_viewed: Json | null;
-          time_on_page_seconds: number | null;
-          updated_at: string | null;
-          variant_id: string | null;
-          visitor_id: string;
-        };
+          converted: boolean | null
+          created_at: string | null
+          engagement_score: string | null
+          experiment_id: string | null
+          faq_expansions: number | null
+          feature_hovers: number | null
+          id: string
+          scroll_depth_max: number | null
+          sections_viewed: Json | null
+          time_on_page_seconds: number | null
+          updated_at: string | null
+          variant_id: string | null
+          visitor_id: string
+        }
         Insert: {
-          converted?: boolean | null;
-          created_at?: string | null;
-          engagement_score?: string | null;
-          experiment_id?: string | null;
-          faq_expansions?: number | null;
-          feature_hovers?: number | null;
-          id?: string;
-          scroll_depth_max?: number | null;
-          sections_viewed?: Json | null;
-          time_on_page_seconds?: number | null;
-          updated_at?: string | null;
-          variant_id?: string | null;
-          visitor_id: string;
-        };
+          converted?: boolean | null
+          created_at?: string | null
+          engagement_score?: string | null
+          experiment_id?: string | null
+          faq_expansions?: number | null
+          feature_hovers?: number | null
+          id?: string
+          scroll_depth_max?: number | null
+          sections_viewed?: Json | null
+          time_on_page_seconds?: number | null
+          updated_at?: string | null
+          variant_id?: string | null
+          visitor_id: string
+        }
         Update: {
-          converted?: boolean | null;
-          created_at?: string | null;
-          engagement_score?: string | null;
-          experiment_id?: string | null;
-          faq_expansions?: number | null;
-          feature_hovers?: number | null;
-          id?: string;
-          scroll_depth_max?: number | null;
-          sections_viewed?: Json | null;
-          time_on_page_seconds?: number | null;
-          updated_at?: string | null;
-          variant_id?: string | null;
-          visitor_id?: string;
-        };
+          converted?: boolean | null
+          created_at?: string | null
+          engagement_score?: string | null
+          experiment_id?: string | null
+          faq_expansions?: number | null
+          feature_hovers?: number | null
+          id?: string
+          scroll_depth_max?: number | null
+          sections_viewed?: Json | null
+          time_on_page_seconds?: number | null
+          updated_at?: string | null
+          variant_id?: string | null
+          visitor_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'ab_test_results_experiment_id_fkey';
-            columns: ['experiment_id'];
-            isOneToOne: false;
-            referencedRelation: 'ab_experiments';
-            referencedColumns: ['id'];
+            foreignKeyName: "ab_test_results_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'ab_test_results_variant_id_fkey';
-            columns: ['variant_id'];
-            isOneToOne: false;
-            referencedRelation: 'ab_variants';
-            referencedColumns: ['id'];
+            foreignKeyName: "ab_test_results_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "ab_variants"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       ab_variants: {
         Row: {
-          config: Json;
-          created_at: string | null;
-          experiment_id: string | null;
-          id: string;
-          variant_key: string;
-        };
+          config: Json
+          created_at: string | null
+          experiment_id: string | null
+          id: string
+          variant_key: string
+        }
         Insert: {
-          config: Json;
-          created_at?: string | null;
-          experiment_id?: string | null;
-          id?: string;
-          variant_key: string;
-        };
+          config: Json
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_key: string
+        }
         Update: {
-          config?: Json;
-          created_at?: string | null;
-          experiment_id?: string | null;
-          id?: string;
-          variant_key?: string;
-        };
+          config?: Json
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          variant_key?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'ab_variants_experiment_id_fkey';
-            columns: ['experiment_id'];
-            isOneToOne: false;
-            referencedRelation: 'ab_experiments';
-            referencedColumns: ['id'];
+            foreignKeyName: "ab_variants_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       access_codes: {
         Row: {
-          code: string;
-          created_at: string;
-          id: string;
-          is_active: boolean;
-          notes: string | null;
-          used_at: string | null;
-          used_by: string | null;
-        };
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          notes: string | null
+          used_at: string | null
+          used_by: string | null
+        }
         Insert: {
-          code: string;
-          created_at?: string;
-          id?: string;
-          is_active?: boolean;
-          notes?: string | null;
-          used_at?: string | null;
-          used_by?: string | null;
-        };
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          used_at?: string | null
+          used_by?: string | null
+        }
         Update: {
-          code?: string;
-          created_at?: string;
-          id?: string;
-          is_active?: boolean;
-          notes?: string | null;
-          used_at?: string | null;
-          used_by?: string | null;
-        };
-        Relationships: [];
-      };
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: []
+      }
       aftercare_templates: {
         Row: {
-          content: string;
-          created_at: string;
-          id: string;
-          is_global: boolean | null;
-          products: Json | null;
-          service_type: string;
-          stylist_id: string | null;
-          tips: Json | null;
-          title: string;
-          updated_at: string;
-        };
+          content: string
+          created_at: string
+          id: string
+          is_global: boolean | null
+          products: Json | null
+          service_type: string
+          stylist_id: string | null
+          tips: Json | null
+          title: string
+          updated_at: string
+        }
         Insert: {
-          content: string;
-          created_at?: string;
-          id?: string;
-          is_global?: boolean | null;
-          products?: Json | null;
-          service_type: string;
-          stylist_id?: string | null;
-          tips?: Json | null;
-          title: string;
-          updated_at?: string;
-        };
+          content: string
+          created_at?: string
+          id?: string
+          is_global?: boolean | null
+          products?: Json | null
+          service_type: string
+          stylist_id?: string | null
+          tips?: Json | null
+          title: string
+          updated_at?: string
+        }
         Update: {
-          content?: string;
-          created_at?: string;
-          id?: string;
-          is_global?: boolean | null;
-          products?: Json | null;
-          service_type?: string;
-          stylist_id?: string | null;
-          tips?: Json | null;
-          title?: string;
-          updated_at?: string;
-        };
+          content?: string
+          created_at?: string
+          id?: string
+          is_global?: boolean | null
+          products?: Json | null
+          service_type?: string
+          stylist_id?: string | null
+          tips?: Json | null
+          title?: string
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'aftercare_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "aftercare_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'aftercare_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "aftercare_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       ai_analytics_events: {
         Row: {
-          created_at: string | null;
-          event_type: string;
-          feature: string;
-          id: string;
-          metadata: Json | null;
-          performance_ms: number | null;
-          user_id: string;
-        };
+          created_at: string | null
+          event_type: string
+          feature: string
+          id: string
+          metadata: Json | null
+          performance_ms: number | null
+          user_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          event_type: string;
-          feature: string;
-          id?: string;
-          metadata?: Json | null;
-          performance_ms?: number | null;
-          user_id: string;
-        };
+          created_at?: string | null
+          event_type: string
+          feature: string
+          id?: string
+          metadata?: Json | null
+          performance_ms?: number | null
+          user_id: string
+        }
         Update: {
-          created_at?: string | null;
-          event_type?: string;
-          feature?: string;
-          id?: string;
-          metadata?: Json | null;
-          performance_ms?: number | null;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          event_type?: string
+          feature?: string
+          id?: string
+          metadata?: Json | null
+          performance_ms?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_chat_messages: {
         Row: {
-          content: string;
-          created_at: string;
-          id: string;
-          role: string;
-          user_id: string;
-        };
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
         Insert: {
-          content: string;
-          created_at?: string;
-          id?: string;
-          role: string;
-          user_id: string;
-        };
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
         Update: {
-          content?: string;
-          created_at?: string;
-          id?: string;
-          role?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_conversation_messages: {
         Row: {
-          content: string;
-          conversation_id: string;
-          created_at: string;
-          id: string;
-          image_urls: string[] | null;
-          metadata: Json | null;
-          role: string;
-        };
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          image_urls: string[] | null
+          metadata: Json | null
+          role: string
+        }
         Insert: {
-          content: string;
-          conversation_id: string;
-          created_at?: string;
-          id?: string;
-          image_urls?: string[] | null;
-          metadata?: Json | null;
-          role: string;
-        };
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          image_urls?: string[] | null
+          metadata?: Json | null
+          role: string
+        }
         Update: {
-          content?: string;
-          conversation_id?: string;
-          created_at?: string;
-          id?: string;
-          image_urls?: string[] | null;
-          metadata?: Json | null;
-          role?: string;
-        };
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          image_urls?: string[] | null
+          metadata?: Json | null
+          role?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'ai_conversation_messages_conversation_id_fkey';
-            columns: ['conversation_id'];
-            isOneToOne: false;
-            referencedRelation: 'ai_conversations';
-            referencedColumns: ['id'];
+            foreignKeyName: "ai_conversation_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conversations"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       ai_conversations: {
         Row: {
-          context_id: string | null;
-          context_type: string | null;
-          created_at: string;
-          id: string;
-          title: string | null;
-          updated_at: string;
-          user_id: string;
-        };
+          context_id: string | null
+          context_type: string | null
+          created_at: string
+          id: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          context_id?: string | null;
-          context_type?: string | null;
-          created_at?: string;
-          id?: string;
-          title?: string | null;
-          updated_at?: string;
-          user_id: string;
-        };
+          context_id?: string | null
+          context_type?: string | null
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          context_id?: string | null;
-          context_type?: string | null;
-          created_at?: string;
-          id?: string;
-          title?: string | null;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          context_id?: string | null
+          context_type?: string | null
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_corrections: {
         Row: {
-          correction_steps: Json;
-          created_at: string;
-          id: string;
-          notes: string | null;
-          problem_description: string;
-          status: string | null;
-          updated_at: string;
-          user_id: string;
-        };
+          correction_steps: Json
+          created_at: string
+          id: string
+          notes: string | null
+          problem_description: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          correction_steps: Json;
-          created_at?: string;
-          id?: string;
-          notes?: string | null;
-          problem_description: string;
-          status?: string | null;
-          updated_at?: string;
-          user_id: string;
-        };
+          correction_steps: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          problem_description: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          correction_steps?: Json;
-          created_at?: string;
-          id?: string;
-          notes?: string | null;
-          problem_description?: string;
-          status?: string | null;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          correction_steps?: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          problem_description?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_feedback: {
         Row: {
-          comment: string | null;
-          context_id: string | null;
-          context_type: string;
-          created_at: string;
-          feedback_type: string;
-          id: string;
-          updated_at: string;
-          user_id: string;
-        };
+          comment: string | null
+          context_id: string | null
+          context_type: string
+          created_at: string
+          feedback_type: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          comment?: string | null;
-          context_id?: string | null;
-          context_type: string;
-          created_at?: string;
-          feedback_type: string;
-          id?: string;
-          updated_at?: string;
-          user_id: string;
-        };
+          comment?: string | null
+          context_id?: string | null
+          context_type: string
+          created_at?: string
+          feedback_type: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          comment?: string | null;
-          context_id?: string | null;
-          context_type?: string;
-          created_at?: string;
-          feedback_type?: string;
-          id?: string;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          comment?: string | null
+          context_id?: string | null
+          context_type?: string
+          created_at?: string
+          feedback_type?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_formulas: {
         Row: {
-          created_at: string;
-          formula_content: string;
-          formula_name: string;
-          id: string;
-          is_favorite: boolean | null;
-          prompt: string;
-          tags: string[] | null;
-          user_id: string;
-        };
+          created_at: string
+          formula_content: string
+          formula_name: string
+          id: string
+          is_favorite: boolean | null
+          prompt: string
+          tags: string[] | null
+          user_id: string
+        }
         Insert: {
-          created_at?: string;
-          formula_content: string;
-          formula_name: string;
-          id?: string;
-          is_favorite?: boolean | null;
-          prompt: string;
-          tags?: string[] | null;
-          user_id: string;
-        };
+          created_at?: string
+          formula_content: string
+          formula_name: string
+          id?: string
+          is_favorite?: boolean | null
+          prompt: string
+          tags?: string[] | null
+          user_id: string
+        }
         Update: {
-          created_at?: string;
-          formula_content?: string;
-          formula_name?: string;
-          id?: string;
-          is_favorite?: boolean | null;
-          prompt?: string;
-          tags?: string[] | null;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string
+          formula_content?: string
+          formula_name?: string
+          id?: string
+          is_favorite?: boolean | null
+          prompt?: string
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_insights: {
         Row: {
-          action_items: Json | null;
-          affected_clients: string[] | null;
-          confidence_score: number | null;
-          created_at: string;
-          description: string;
-          dismissed_at: string | null;
-          expires_at: string | null;
-          id: string;
-          insight_type: string;
-          is_dismissed: boolean | null;
-          metadata: Json | null;
-          potential_revenue: number | null;
-          priority: string;
-          stylist_id: string;
-          title: string;
-        };
+          action_items: Json | null
+          affected_clients: string[] | null
+          confidence_score: number | null
+          created_at: string
+          description: string
+          dismissed_at: string | null
+          expires_at: string | null
+          id: string
+          insight_type: string
+          is_dismissed: boolean | null
+          metadata: Json | null
+          potential_revenue: number | null
+          priority: string
+          stylist_id: string
+          title: string
+        }
         Insert: {
-          action_items?: Json | null;
-          affected_clients?: string[] | null;
-          confidence_score?: number | null;
-          created_at?: string;
-          description: string;
-          dismissed_at?: string | null;
-          expires_at?: string | null;
-          id?: string;
-          insight_type: string;
-          is_dismissed?: boolean | null;
-          metadata?: Json | null;
-          potential_revenue?: number | null;
-          priority: string;
-          stylist_id: string;
-          title: string;
-        };
+          action_items?: Json | null
+          affected_clients?: string[] | null
+          confidence_score?: number | null
+          created_at?: string
+          description: string
+          dismissed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          insight_type: string
+          is_dismissed?: boolean | null
+          metadata?: Json | null
+          potential_revenue?: number | null
+          priority: string
+          stylist_id: string
+          title: string
+        }
         Update: {
-          action_items?: Json | null;
-          affected_clients?: string[] | null;
-          confidence_score?: number | null;
-          created_at?: string;
-          description?: string;
-          dismissed_at?: string | null;
-          expires_at?: string | null;
-          id?: string;
-          insight_type?: string;
-          is_dismissed?: boolean | null;
-          metadata?: Json | null;
-          potential_revenue?: number | null;
-          priority?: string;
-          stylist_id?: string;
-          title?: string;
-        };
+          action_items?: Json | null
+          affected_clients?: string[] | null
+          confidence_score?: number | null
+          created_at?: string
+          description?: string
+          dismissed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          insight_type?: string
+          is_dismissed?: boolean | null
+          metadata?: Json | null
+          potential_revenue?: number | null
+          priority?: string
+          stylist_id?: string
+          title?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'ai_insights_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "ai_insights_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'ai_insights_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "ai_insights_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       ai_model_performance: {
         Row: {
-          created_at: string | null;
-          id: string;
-          model_used: string;
-          query_text: string;
-          query_type: string | null;
-          response_time_ms: number | null;
-          tokens_used: number | null;
-          user_id: string | null;
-          user_satisfaction: number | null;
-        };
+          created_at: string | null
+          id: string
+          model_used: string
+          query_text: string
+          query_type: string | null
+          response_time_ms: number | null
+          tokens_used: number | null
+          user_id: string | null
+          user_satisfaction: number | null
+        }
         Insert: {
-          created_at?: string | null;
-          id?: string;
-          model_used: string;
-          query_text: string;
-          query_type?: string | null;
-          response_time_ms?: number | null;
-          tokens_used?: number | null;
-          user_id?: string | null;
-          user_satisfaction?: number | null;
-        };
+          created_at?: string | null
+          id?: string
+          model_used: string
+          query_text: string
+          query_type?: string | null
+          response_time_ms?: number | null
+          tokens_used?: number | null
+          user_id?: string | null
+          user_satisfaction?: number | null
+        }
         Update: {
-          created_at?: string | null;
-          id?: string;
-          model_used?: string;
-          query_text?: string;
-          query_type?: string | null;
-          response_time_ms?: number | null;
-          tokens_used?: number | null;
-          user_id?: string | null;
-          user_satisfaction?: number | null;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          id?: string
+          model_used?: string
+          query_text?: string
+          query_type?: string | null
+          response_time_ms?: number | null
+          tokens_used?: number | null
+          user_id?: string | null
+          user_satisfaction?: number | null
+        }
+        Relationships: []
+      }
       appointment_calendar_events: {
         Row: {
-          appointment_id: string;
-          calendar_connection_id: string;
-          error_message: string | null;
-          external_event_id: string;
-          id: string;
-          last_updated_at: string | null;
-          provider: string;
-          sync_status: string | null;
-          synced_at: string | null;
-        };
+          appointment_id: string
+          calendar_connection_id: string
+          error_message: string | null
+          external_event_id: string
+          id: string
+          last_updated_at: string | null
+          provider: string
+          sync_status: string | null
+          synced_at: string | null
+        }
         Insert: {
-          appointment_id: string;
-          calendar_connection_id: string;
-          error_message?: string | null;
-          external_event_id: string;
-          id?: string;
-          last_updated_at?: string | null;
-          provider: string;
-          sync_status?: string | null;
-          synced_at?: string | null;
-        };
+          appointment_id: string
+          calendar_connection_id: string
+          error_message?: string | null
+          external_event_id: string
+          id?: string
+          last_updated_at?: string | null
+          provider: string
+          sync_status?: string | null
+          synced_at?: string | null
+        }
         Update: {
-          appointment_id?: string;
-          calendar_connection_id?: string;
-          error_message?: string | null;
-          external_event_id?: string;
-          id?: string;
-          last_updated_at?: string | null;
-          provider?: string;
-          sync_status?: string | null;
-          synced_at?: string | null;
-        };
+          appointment_id?: string
+          calendar_connection_id?: string
+          error_message?: string | null
+          external_event_id?: string
+          id?: string
+          last_updated_at?: string | null
+          provider?: string
+          sync_status?: string | null
+          synced_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'appointment_calendar_events_appointment_id_fkey';
-            columns: ['appointment_id'];
-            isOneToOne: false;
-            referencedRelation: 'appointments';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointment_calendar_events_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'appointment_calendar_events_calendar_connection_id_fkey';
-            columns: ['calendar_connection_id'];
-            isOneToOne: false;
-            referencedRelation: 'calendar_connections';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointment_calendar_events_calendar_connection_id_fkey"
+            columns: ["calendar_connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       appointment_timers: {
         Row: {
-          appointment_id: string;
-          created_at: string | null;
-          duration_seconds: number;
-          end_time: string | null;
-          id: string;
-          notes: string | null;
-          start_time: string;
-          updated_at: string | null;
-        };
+          appointment_id: string
+          created_at: string | null
+          duration_seconds: number
+          end_time: string | null
+          id: string
+          notes: string | null
+          start_time: string
+          updated_at: string | null
+        }
         Insert: {
-          appointment_id: string;
-          created_at?: string | null;
-          duration_seconds?: number;
-          end_time?: string | null;
-          id?: string;
-          notes?: string | null;
-          start_time?: string;
-          updated_at?: string | null;
-        };
+          appointment_id: string
+          created_at?: string | null
+          duration_seconds?: number
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time?: string
+          updated_at?: string | null
+        }
         Update: {
-          appointment_id?: string;
-          created_at?: string | null;
-          duration_seconds?: number;
-          end_time?: string | null;
-          id?: string;
-          notes?: string | null;
-          start_time?: string;
-          updated_at?: string | null;
-        };
+          appointment_id?: string
+          created_at?: string | null
+          duration_seconds?: number
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time?: string
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'appointment_timers_appointment_id_fkey';
-            columns: ['appointment_id'];
-            isOneToOne: false;
-            referencedRelation: 'appointments';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointment_timers_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       appointments: {
         Row: {
-          appointment_date: string;
-          cancellation_reason: string | null;
-          cancelled_at: string | null;
-          client_id: string;
-          confirmation_requested_24h: boolean | null;
-          confirmation_requested_48h: boolean | null;
-          confirmed_at: string | null;
-          confirmed_by_client: boolean | null;
-          created_at: string;
-          duration_minutes: number | null;
-          followup_sent: boolean | null;
-          id: string;
-          notes: string | null;
-          rebook_reminder_sent: boolean | null;
-          reminder_sent: boolean | null;
-          service_id: string | null;
-          service_type: string;
-          status: string | null;
-          stylist_id: string;
-          updated_at: string;
-        };
+          appointment_date: string
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          client_id: string
+          confirmation_requested_24h: boolean | null
+          confirmation_requested_48h: boolean | null
+          confirmed_at: string | null
+          confirmed_by_client: boolean | null
+          created_at: string
+          duration_minutes: number | null
+          followup_sent: boolean | null
+          id: string
+          notes: string | null
+          rebook_reminder_sent: boolean | null
+          reminder_sent: boolean | null
+          service_id: string | null
+          service_type: string
+          status: string | null
+          stylist_id: string
+          updated_at: string
+        }
         Insert: {
-          appointment_date: string;
-          cancellation_reason?: string | null;
-          cancelled_at?: string | null;
-          client_id: string;
-          confirmation_requested_24h?: boolean | null;
-          confirmation_requested_48h?: boolean | null;
-          confirmed_at?: string | null;
-          confirmed_by_client?: boolean | null;
-          created_at?: string;
-          duration_minutes?: number | null;
-          followup_sent?: boolean | null;
-          id?: string;
-          notes?: string | null;
-          rebook_reminder_sent?: boolean | null;
-          reminder_sent?: boolean | null;
-          service_id?: string | null;
-          service_type: string;
-          status?: string | null;
-          stylist_id: string;
-          updated_at?: string;
-        };
+          appointment_date: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          client_id: string
+          confirmation_requested_24h?: boolean | null
+          confirmation_requested_48h?: boolean | null
+          confirmed_at?: string | null
+          confirmed_by_client?: boolean | null
+          created_at?: string
+          duration_minutes?: number | null
+          followup_sent?: boolean | null
+          id?: string
+          notes?: string | null
+          rebook_reminder_sent?: boolean | null
+          reminder_sent?: boolean | null
+          service_id?: string | null
+          service_type: string
+          status?: string | null
+          stylist_id: string
+          updated_at?: string
+        }
         Update: {
-          appointment_date?: string;
-          cancellation_reason?: string | null;
-          cancelled_at?: string | null;
-          client_id?: string;
-          confirmation_requested_24h?: boolean | null;
-          confirmation_requested_48h?: boolean | null;
-          confirmed_at?: string | null;
-          confirmed_by_client?: boolean | null;
-          created_at?: string;
-          duration_minutes?: number | null;
-          followup_sent?: boolean | null;
-          id?: string;
-          notes?: string | null;
-          rebook_reminder_sent?: boolean | null;
-          reminder_sent?: boolean | null;
-          service_id?: string | null;
-          service_type?: string;
-          status?: string | null;
-          stylist_id?: string;
-          updated_at?: string;
-        };
+          appointment_date?: string
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          client_id?: string
+          confirmation_requested_24h?: boolean | null
+          confirmation_requested_48h?: boolean | null
+          confirmed_at?: string | null
+          confirmed_by_client?: boolean | null
+          created_at?: string
+          duration_minutes?: number | null
+          followup_sent?: boolean | null
+          id?: string
+          notes?: string | null
+          rebook_reminder_sent?: boolean | null
+          reminder_sent?: boolean | null
+          service_id?: string | null
+          service_type?: string
+          status?: string | null
+          stylist_id?: string
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'appointments_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'appointments_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'appointments_service_id_fkey';
-            columns: ['service_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_services';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointments_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_services"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'appointments_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'appointments_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "appointments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       audit_logs: {
         Row: {
-          action: string;
-          created_at: string;
-          id: string;
-          new_data: Json | null;
-          old_data: Json | null;
-          record_id: string | null;
-          table_name: string;
-          user_id: string | null;
-        };
+          action: string
+          created_at: string
+          id: string
+          new_data: Json | null
+          old_data: Json | null
+          record_id: string | null
+          table_name: string
+          user_id: string | null
+        }
         Insert: {
-          action: string;
-          created_at?: string;
-          id?: string;
-          new_data?: Json | null;
-          old_data?: Json | null;
-          record_id?: string | null;
-          table_name: string;
-          user_id?: string | null;
-        };
+          action: string
+          created_at?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: string | null
+          table_name: string
+          user_id?: string | null
+        }
         Update: {
-          action?: string;
-          created_at?: string;
-          id?: string;
-          new_data?: Json | null;
-          old_data?: Json | null;
-          record_id?: string | null;
-          table_name?: string;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
+          action?: string
+          created_at?: string
+          id?: string
+          new_data?: Json | null
+          old_data?: Json | null
+          record_id?: string | null
+          table_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       automated_followups: {
         Row: {
-          client_id: string;
-          created_at: string;
-          followup_type: string;
-          id: string;
-          is_scheduled: boolean | null;
-          is_sent: boolean | null;
-          metadata: Json | null;
-          priority: number | null;
-          response_at: string | null;
-          response_received: boolean | null;
-          scheduled_at: string | null;
-          send_after: string;
-          sent_at: string | null;
-          stylist_id: string;
-          suggested_message: string;
-        };
+          client_id: string
+          created_at: string
+          followup_type: string
+          id: string
+          is_scheduled: boolean | null
+          is_sent: boolean | null
+          metadata: Json | null
+          priority: number | null
+          response_at: string | null
+          response_received: boolean | null
+          scheduled_at: string | null
+          send_after: string
+          sent_at: string | null
+          stylist_id: string
+          suggested_message: string
+        }
         Insert: {
-          client_id: string;
-          created_at?: string;
-          followup_type: string;
-          id?: string;
-          is_scheduled?: boolean | null;
-          is_sent?: boolean | null;
-          metadata?: Json | null;
-          priority?: number | null;
-          response_at?: string | null;
-          response_received?: boolean | null;
-          scheduled_at?: string | null;
-          send_after: string;
-          sent_at?: string | null;
-          stylist_id: string;
-          suggested_message: string;
-        };
+          client_id: string
+          created_at?: string
+          followup_type: string
+          id?: string
+          is_scheduled?: boolean | null
+          is_sent?: boolean | null
+          metadata?: Json | null
+          priority?: number | null
+          response_at?: string | null
+          response_received?: boolean | null
+          scheduled_at?: string | null
+          send_after: string
+          sent_at?: string | null
+          stylist_id: string
+          suggested_message: string
+        }
         Update: {
-          client_id?: string;
-          created_at?: string;
-          followup_type?: string;
-          id?: string;
-          is_scheduled?: boolean | null;
-          is_sent?: boolean | null;
-          metadata?: Json | null;
-          priority?: number | null;
-          response_at?: string | null;
-          response_received?: boolean | null;
-          scheduled_at?: string | null;
-          send_after?: string;
-          sent_at?: string | null;
-          stylist_id?: string;
-          suggested_message?: string;
-        };
+          client_id?: string
+          created_at?: string
+          followup_type?: string
+          id?: string
+          is_scheduled?: boolean | null
+          is_sent?: boolean | null
+          metadata?: Json | null
+          priority?: number | null
+          response_at?: string | null
+          response_received?: boolean | null
+          scheduled_at?: string | null
+          send_after?: string
+          sent_at?: string | null
+          stylist_id?: string
+          suggested_message?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'automated_followups_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "automated_followups_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'automated_followups_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "automated_followups_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'automated_followups_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "automated_followups_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'automated_followups_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "automated_followups_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       cached_formulas: {
         Row: {
-          condition: string;
-          created_at: string | null;
-          current_level: number;
-          formula_json: Json;
-          id: string;
-          last_used_at: string | null;
-          target_level: number;
-          tone: string;
-          usage_count: number | null;
-        };
+          condition: string
+          created_at: string | null
+          current_level: number
+          formula_json: Json
+          id: string
+          last_used_at: string | null
+          target_level: number
+          tone: string
+          usage_count: number | null
+        }
         Insert: {
-          condition: string;
-          created_at?: string | null;
-          current_level: number;
-          formula_json: Json;
-          id?: string;
-          last_used_at?: string | null;
-          target_level: number;
-          tone: string;
-          usage_count?: number | null;
-        };
+          condition: string
+          created_at?: string | null
+          current_level: number
+          formula_json: Json
+          id?: string
+          last_used_at?: string | null
+          target_level: number
+          tone: string
+          usage_count?: number | null
+        }
         Update: {
-          condition?: string;
-          created_at?: string | null;
-          current_level?: number;
-          formula_json?: Json;
-          id?: string;
-          last_used_at?: string | null;
-          target_level?: number;
-          tone?: string;
-          usage_count?: number | null;
-        };
-        Relationships: [];
-      };
+          condition?: string
+          created_at?: string | null
+          current_level?: number
+          formula_json?: Json
+          id?: string
+          last_used_at?: string | null
+          target_level?: number
+          tone?: string
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
       calendar_connections: {
         Row: {
-          access_token_vault_id: string;
-          calendar_id: string | null;
-          created_at: string | null;
-          id: string;
-          is_active: boolean | null;
-          last_sync_at: string | null;
-          last_token_refresh: string | null;
-          provider: string;
-          refresh_token_vault_id: string | null;
-          suspicious_activity_detected: boolean | null;
-          sync_enabled: boolean | null;
-          token_expires_at: string | null;
-          token_refresh_count: number | null;
-          updated_at: string | null;
-          user_id: string;
-        };
+          access_token_vault_id: string
+          calendar_id: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          last_token_refresh: string | null
+          provider: string
+          refresh_token_vault_id: string | null
+          suspicious_activity_detected: boolean | null
+          sync_enabled: boolean | null
+          token_expires_at: string | null
+          token_refresh_count: number | null
+          updated_at: string | null
+          user_id: string
+        }
         Insert: {
-          access_token_vault_id: string;
-          calendar_id?: string | null;
-          created_at?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          last_sync_at?: string | null;
-          last_token_refresh?: string | null;
-          provider: string;
-          refresh_token_vault_id?: string | null;
-          suspicious_activity_detected?: boolean | null;
-          sync_enabled?: boolean | null;
-          token_expires_at?: string | null;
-          token_refresh_count?: number | null;
-          updated_at?: string | null;
-          user_id: string;
-        };
+          access_token_vault_id: string
+          calendar_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          last_token_refresh?: string | null
+          provider: string
+          refresh_token_vault_id?: string | null
+          suspicious_activity_detected?: boolean | null
+          sync_enabled?: boolean | null
+          token_expires_at?: string | null
+          token_refresh_count?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
         Update: {
-          access_token_vault_id?: string;
-          calendar_id?: string | null;
-          created_at?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          last_sync_at?: string | null;
-          last_token_refresh?: string | null;
-          provider?: string;
-          refresh_token_vault_id?: string | null;
-          suspicious_activity_detected?: boolean | null;
-          sync_enabled?: boolean | null;
-          token_expires_at?: string | null;
-          token_refresh_count?: number | null;
-          updated_at?: string | null;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          access_token_vault_id?: string
+          calendar_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          last_token_refresh?: string | null
+          provider?: string
+          refresh_token_vault_id?: string | null
+          suspicious_activity_detected?: boolean | null
+          sync_enabled?: boolean | null
+          token_expires_at?: string | null
+          token_refresh_count?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       calendar_token_access_log: {
         Row: {
-          access_type: string;
-          accessed_at: string;
-          connection_id: string;
-          error_message: string | null;
-          id: string;
-          ip_address: unknown;
-          success: boolean;
-          user_agent: string | null;
-          user_id: string;
-        };
+          access_type: string
+          accessed_at: string
+          connection_id: string
+          error_message: string | null
+          id: string
+          ip_address: unknown
+          success: boolean
+          user_agent: string | null
+          user_id: string
+        }
         Insert: {
-          access_type: string;
-          accessed_at?: string;
-          connection_id: string;
-          error_message?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          success?: boolean;
-          user_agent?: string | null;
-          user_id: string;
-        };
+          access_type: string
+          accessed_at?: string
+          connection_id: string
+          error_message?: string | null
+          id?: string
+          ip_address?: unknown
+          success?: boolean
+          user_agent?: string | null
+          user_id: string
+        }
         Update: {
-          access_type?: string;
-          accessed_at?: string;
-          connection_id?: string;
-          error_message?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          success?: boolean;
-          user_agent?: string | null;
-          user_id?: string;
-        };
+          access_type?: string
+          accessed_at?: string
+          connection_id?: string
+          error_message?: string | null
+          id?: string
+          ip_address?: unknown
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'calendar_token_access_log_connection_id_fkey';
-            columns: ['connection_id'];
-            isOneToOne: false;
-            referencedRelation: 'calendar_connections';
-            referencedColumns: ['id'];
+            foreignKeyName: "calendar_token_access_log_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_connections"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       client_hair_posts: {
         Row: {
-          budget_range: string | null;
-          claimed_at: string | null;
-          claimed_by_stylist_id: string | null;
-          client_id: string;
-          created_at: string;
-          description: string;
-          id: string;
-          location: string | null;
-          photo_urls: string[] | null;
-          preferred_date: string | null;
-          service_type: string;
-          status: string;
-          title: string;
-          updated_at: string;
-          video_analysis: Json | null;
-          video_url: string | null;
-        };
+          budget_range: string | null
+          claimed_at: string | null
+          claimed_by_stylist_id: string | null
+          client_id: string
+          created_at: string
+          description: string
+          id: string
+          location: string | null
+          photo_urls: string[] | null
+          preferred_date: string | null
+          service_type: string
+          status: string
+          title: string
+          updated_at: string
+          video_analysis: Json | null
+          video_url: string | null
+        }
         Insert: {
-          budget_range?: string | null;
-          claimed_at?: string | null;
-          claimed_by_stylist_id?: string | null;
-          client_id: string;
-          created_at?: string;
-          description: string;
-          id?: string;
-          location?: string | null;
-          photo_urls?: string[] | null;
-          preferred_date?: string | null;
-          service_type: string;
-          status?: string;
-          title: string;
-          updated_at?: string;
-          video_analysis?: Json | null;
-          video_url?: string | null;
-        };
+          budget_range?: string | null
+          claimed_at?: string | null
+          claimed_by_stylist_id?: string | null
+          client_id: string
+          created_at?: string
+          description: string
+          id?: string
+          location?: string | null
+          photo_urls?: string[] | null
+          preferred_date?: string | null
+          service_type: string
+          status?: string
+          title: string
+          updated_at?: string
+          video_analysis?: Json | null
+          video_url?: string | null
+        }
         Update: {
-          budget_range?: string | null;
-          claimed_at?: string | null;
-          claimed_by_stylist_id?: string | null;
-          client_id?: string;
-          created_at?: string;
-          description?: string;
-          id?: string;
-          location?: string | null;
-          photo_urls?: string[] | null;
-          preferred_date?: string | null;
-          service_type?: string;
-          status?: string;
-          title?: string;
-          updated_at?: string;
-          video_analysis?: Json | null;
-          video_url?: string | null;
-        };
+          budget_range?: string | null
+          claimed_at?: string | null
+          claimed_by_stylist_id?: string | null
+          client_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          location?: string | null
+          photo_urls?: string[] | null
+          preferred_date?: string | null
+          service_type?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          video_analysis?: Json | null
+          video_url?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'client_hair_posts_claimed_by_stylist_id_fkey';
-            columns: ['claimed_by_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_hair_posts_claimed_by_stylist_id_fkey"
+            columns: ["claimed_by_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_hair_posts_claimed_by_stylist_id_fkey';
-            columns: ['claimed_by_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_hair_posts_claimed_by_stylist_id_fkey"
+            columns: ["claimed_by_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_hair_posts_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_hair_posts_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_hair_posts_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_hair_posts_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       client_invitations: {
         Row: {
-          accepted: boolean | null;
-          accepted_at: string | null;
-          created_at: string;
-          email: string;
-          expires_at: string;
-          id: string;
-          stylist_id: string;
-          token: string;
-        };
+          accepted: boolean | null
+          accepted_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          stylist_id: string
+          token: string
+        }
         Insert: {
-          accepted?: boolean | null;
-          accepted_at?: string | null;
-          created_at?: string;
-          email: string;
-          expires_at?: string;
-          id?: string;
-          stylist_id: string;
-          token?: string;
-        };
+          accepted?: boolean | null
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          stylist_id: string
+          token?: string
+        }
         Update: {
-          accepted?: boolean | null;
-          accepted_at?: string | null;
-          created_at?: string;
-          email?: string;
-          expires_at?: string;
-          id?: string;
-          stylist_id?: string;
-          token?: string;
-        };
+          accepted?: boolean | null
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          stylist_id?: string
+          token?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'client_invitations_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_invitations_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_invitations_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_invitations_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       client_milestones: {
         Row: {
-          celebrated: boolean | null;
-          client_id: string;
-          created_at: string;
-          discount_amount: number | null;
-          discount_code: string | null;
-          id: string;
-          milestone_type: string;
-          milestone_value: number;
-          stylist_id: string;
-        };
+          celebrated: boolean | null
+          client_id: string
+          created_at: string
+          discount_amount: number | null
+          discount_code: string | null
+          id: string
+          milestone_type: string
+          milestone_value: number
+          stylist_id: string
+        }
         Insert: {
-          celebrated?: boolean | null;
-          client_id: string;
-          created_at?: string;
-          discount_amount?: number | null;
-          discount_code?: string | null;
-          id?: string;
-          milestone_type: string;
-          milestone_value: number;
-          stylist_id: string;
-        };
+          celebrated?: boolean | null
+          client_id: string
+          created_at?: string
+          discount_amount?: number | null
+          discount_code?: string | null
+          id?: string
+          milestone_type: string
+          milestone_value: number
+          stylist_id: string
+        }
         Update: {
-          celebrated?: boolean | null;
-          client_id?: string;
-          created_at?: string;
-          discount_amount?: number | null;
-          discount_code?: string | null;
-          id?: string;
-          milestone_type?: string;
-          milestone_value?: number;
-          stylist_id?: string;
-        };
+          celebrated?: boolean | null
+          client_id?: string
+          created_at?: string
+          discount_amount?: number | null
+          discount_code?: string | null
+          id?: string
+          milestone_type?: string
+          milestone_value?: number
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'client_milestones_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_milestones_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_milestones_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_milestones_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_milestones_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_milestones_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_milestones_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_milestones_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       client_profiles: {
         Row: {
-          allergies: string | null;
-          appointment_reminders_enabled: boolean | null;
-          birthday: string | null;
-          client_since: string | null;
-          communication_preference: string | null;
-          created_at: string;
-          email: string | null;
-          full_name: string | null;
-          hair_goals: string | null;
-          hair_type: string | null;
-          id: string;
-          medical_info_consent: boolean | null;
-          notes: string | null;
-          phone: string | null;
-          preferred_stylist_id: string | null;
-          preferred_stylist_notes: string | null;
-          preferred_time_of_day: string | null;
-          referral_source: string | null;
-          sensitivity_notes: string | null;
-          special_requests: string | null;
-          updated_at: string;
-          user_id: string | null;
-        };
+          allergies: string | null
+          appointment_reminders_enabled: boolean | null
+          birthday: string | null
+          client_since: string | null
+          communication_preference: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          hair_goals: string | null
+          hair_type: string | null
+          id: string
+          medical_info_consent: boolean | null
+          notes: string | null
+          phone: string | null
+          preferred_stylist_id: string | null
+          preferred_stylist_notes: string | null
+          preferred_time_of_day: string | null
+          referral_source: string | null
+          sensitivity_notes: string | null
+          special_requests: string | null
+          updated_at: string
+          user_id: string | null
+        }
         Insert: {
-          allergies?: string | null;
-          appointment_reminders_enabled?: boolean | null;
-          birthday?: string | null;
-          client_since?: string | null;
-          communication_preference?: string | null;
-          created_at?: string;
-          email?: string | null;
-          full_name?: string | null;
-          hair_goals?: string | null;
-          hair_type?: string | null;
-          id?: string;
-          medical_info_consent?: boolean | null;
-          notes?: string | null;
-          phone?: string | null;
-          preferred_stylist_id?: string | null;
-          preferred_stylist_notes?: string | null;
-          preferred_time_of_day?: string | null;
-          referral_source?: string | null;
-          sensitivity_notes?: string | null;
-          special_requests?: string | null;
-          updated_at?: string;
-          user_id?: string | null;
-        };
+          allergies?: string | null
+          appointment_reminders_enabled?: boolean | null
+          birthday?: string | null
+          client_since?: string | null
+          communication_preference?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          hair_goals?: string | null
+          hair_type?: string | null
+          id?: string
+          medical_info_consent?: boolean | null
+          notes?: string | null
+          phone?: string | null
+          preferred_stylist_id?: string | null
+          preferred_stylist_notes?: string | null
+          preferred_time_of_day?: string | null
+          referral_source?: string | null
+          sensitivity_notes?: string | null
+          special_requests?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
         Update: {
-          allergies?: string | null;
-          appointment_reminders_enabled?: boolean | null;
-          birthday?: string | null;
-          client_since?: string | null;
-          communication_preference?: string | null;
-          created_at?: string;
-          email?: string | null;
-          full_name?: string | null;
-          hair_goals?: string | null;
-          hair_type?: string | null;
-          id?: string;
-          medical_info_consent?: boolean | null;
-          notes?: string | null;
-          phone?: string | null;
-          preferred_stylist_id?: string | null;
-          preferred_stylist_notes?: string | null;
-          preferred_time_of_day?: string | null;
-          referral_source?: string | null;
-          sensitivity_notes?: string | null;
-          special_requests?: string | null;
-          updated_at?: string;
-          user_id?: string | null;
-        };
+          allergies?: string | null
+          appointment_reminders_enabled?: boolean | null
+          birthday?: string | null
+          client_since?: string | null
+          communication_preference?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          hair_goals?: string | null
+          hair_type?: string | null
+          id?: string
+          medical_info_consent?: boolean | null
+          notes?: string | null
+          phone?: string | null
+          preferred_stylist_id?: string | null
+          preferred_stylist_notes?: string | null
+          preferred_time_of_day?: string | null
+          referral_source?: string | null
+          sensitivity_notes?: string | null
+          special_requests?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'client_profiles_preferred_stylist_id_fkey';
-            columns: ['preferred_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
+            columns: ["preferred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_profiles_preferred_stylist_id_fkey';
-            columns: ['preferred_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
+            columns: ["preferred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_profiles_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: true;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       client_retention_scores: {
         Row: {
-          average_visit_frequency: number | null;
-          calculated_at: string;
-          churn_probability: number | null;
-          client_id: string;
-          created_at: string;
-          days_since_last_visit: number | null;
-          engagement_score: number | null;
-          id: string;
-          last_purchase_amount: number | null;
-          predicted_next_visit: string | null;
-          recommended_actions: Json | null;
-          retention_score: number;
-          risk_level: string;
-          stylist_id: string;
-          total_visits: number | null;
-        };
+          average_visit_frequency: number | null
+          calculated_at: string
+          churn_probability: number | null
+          client_id: string
+          created_at: string
+          days_since_last_visit: number | null
+          engagement_score: number | null
+          id: string
+          last_purchase_amount: number | null
+          predicted_next_visit: string | null
+          recommended_actions: Json | null
+          retention_score: number
+          risk_level: string
+          stylist_id: string
+          total_visits: number | null
+        }
         Insert: {
-          average_visit_frequency?: number | null;
-          calculated_at?: string;
-          churn_probability?: number | null;
-          client_id: string;
-          created_at?: string;
-          days_since_last_visit?: number | null;
-          engagement_score?: number | null;
-          id?: string;
-          last_purchase_amount?: number | null;
-          predicted_next_visit?: string | null;
-          recommended_actions?: Json | null;
-          retention_score: number;
-          risk_level: string;
-          stylist_id: string;
-          total_visits?: number | null;
-        };
+          average_visit_frequency?: number | null
+          calculated_at?: string
+          churn_probability?: number | null
+          client_id: string
+          created_at?: string
+          days_since_last_visit?: number | null
+          engagement_score?: number | null
+          id?: string
+          last_purchase_amount?: number | null
+          predicted_next_visit?: string | null
+          recommended_actions?: Json | null
+          retention_score: number
+          risk_level: string
+          stylist_id: string
+          total_visits?: number | null
+        }
         Update: {
-          average_visit_frequency?: number | null;
-          calculated_at?: string;
-          churn_probability?: number | null;
-          client_id?: string;
-          created_at?: string;
-          days_since_last_visit?: number | null;
-          engagement_score?: number | null;
-          id?: string;
-          last_purchase_amount?: number | null;
-          predicted_next_visit?: string | null;
-          recommended_actions?: Json | null;
-          retention_score?: number;
-          risk_level?: string;
-          stylist_id?: string;
-          total_visits?: number | null;
-        };
+          average_visit_frequency?: number | null
+          calculated_at?: string
+          churn_probability?: number | null
+          client_id?: string
+          created_at?: string
+          days_since_last_visit?: number | null
+          engagement_score?: number | null
+          id?: string
+          last_purchase_amount?: number | null
+          predicted_next_visit?: string | null
+          recommended_actions?: Json | null
+          retention_score?: number
+          risk_level?: string
+          stylist_id?: string
+          total_visits?: number | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'client_retention_scores_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_retention_scores_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_retention_scores_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_retention_scores_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_retention_scores_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_retention_scores_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_retention_scores_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_retention_scores_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       client_sentiment_analysis: {
         Row: {
-          analyzed_at: string | null;
-          client_id: string | null;
-          confidence: number | null;
-          created_at: string | null;
-          id: string;
-          insights: Json | null;
-          recommendations: Json | null;
-          risk_level: string | null;
-          score: number;
-          sentiment: string;
-          stylist_id: string | null;
-        };
+          analyzed_at: string | null
+          client_id: string | null
+          confidence: number | null
+          created_at: string | null
+          id: string
+          insights: Json | null
+          recommendations: Json | null
+          risk_level: string | null
+          score: number
+          sentiment: string
+          stylist_id: string | null
+        }
         Insert: {
-          analyzed_at?: string | null;
-          client_id?: string | null;
-          confidence?: number | null;
-          created_at?: string | null;
-          id?: string;
-          insights?: Json | null;
-          recommendations?: Json | null;
-          risk_level?: string | null;
-          score: number;
-          sentiment: string;
-          stylist_id?: string | null;
-        };
+          analyzed_at?: string | null
+          client_id?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          insights?: Json | null
+          recommendations?: Json | null
+          risk_level?: string | null
+          score: number
+          sentiment: string
+          stylist_id?: string | null
+        }
         Update: {
-          analyzed_at?: string | null;
-          client_id?: string | null;
-          confidence?: number | null;
-          created_at?: string | null;
-          id?: string;
-          insights?: Json | null;
-          recommendations?: Json | null;
-          risk_level?: string | null;
-          score?: number;
-          sentiment?: string;
-          stylist_id?: string | null;
-        };
+          analyzed_at?: string | null
+          client_id?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          insights?: Json | null
+          recommendations?: Json | null
+          risk_level?: string | null
+          score?: number
+          sentiment?: string
+          stylist_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'client_sentiment_analysis_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_sentiment_analysis_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_sentiment_analysis_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_sentiment_analysis_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_sentiment_analysis_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_sentiment_analysis_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_sentiment_analysis_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_sentiment_analysis_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       commissions: {
         Row: {
-          brand_id: string | null;
-          commission_amount: number;
-          created_at: string;
-          id: string;
-          product_name: string;
-          product_url: string | null;
-          purchase_date: string | null;
-          referral_code_used: string | null;
-          status: string | null;
-          stylist_id: string;
-        };
+          brand_id: string | null
+          commission_amount: number
+          created_at: string
+          id: string
+          product_name: string
+          product_url: string | null
+          purchase_date: string | null
+          referral_code_used: string | null
+          status: string | null
+          stylist_id: string
+        }
         Insert: {
-          brand_id?: string | null;
-          commission_amount: number;
-          created_at?: string;
-          id?: string;
-          product_name: string;
-          product_url?: string | null;
-          purchase_date?: string | null;
-          referral_code_used?: string | null;
-          status?: string | null;
-          stylist_id: string;
-        };
+          brand_id?: string | null
+          commission_amount: number
+          created_at?: string
+          id?: string
+          product_name: string
+          product_url?: string | null
+          purchase_date?: string | null
+          referral_code_used?: string | null
+          status?: string | null
+          stylist_id: string
+        }
         Update: {
-          brand_id?: string | null;
-          commission_amount?: number;
-          created_at?: string;
-          id?: string;
-          product_name?: string;
-          product_url?: string | null;
-          purchase_date?: string | null;
-          referral_code_used?: string | null;
-          status?: string | null;
-          stylist_id?: string;
-        };
+          brand_id?: string | null
+          commission_amount?: number
+          created_at?: string
+          id?: string
+          product_name?: string
+          product_url?: string | null
+          purchase_date?: string | null
+          referral_code_used?: string | null
+          status?: string | null
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'commissions_brand_id_fkey';
-            columns: ['brand_id'];
-            isOneToOne: false;
-            referencedRelation: 'hair_brands';
-            referencedColumns: ['id'];
+            foreignKeyName: "commissions_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "hair_brands"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'commissions_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "commissions_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'commissions_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "commissions_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       conversion_funnel_events: {
         Row: {
-          abandoned: boolean | null;
-          completed: boolean | null;
-          created_at: string | null;
-          funnel_name: string;
-          id: string;
-          metadata: Json | null;
-          step_name: string;
-          step_order: number;
-          time_to_complete_ms: number | null;
-          user_id: string | null;
-        };
+          abandoned: boolean | null
+          completed: boolean | null
+          created_at: string | null
+          funnel_name: string
+          id: string
+          metadata: Json | null
+          step_name: string
+          step_order: number
+          time_to_complete_ms: number | null
+          user_id: string | null
+        }
         Insert: {
-          abandoned?: boolean | null;
-          completed?: boolean | null;
-          created_at?: string | null;
-          funnel_name: string;
-          id?: string;
-          metadata?: Json | null;
-          step_name: string;
-          step_order: number;
-          time_to_complete_ms?: number | null;
-          user_id?: string | null;
-        };
+          abandoned?: boolean | null
+          completed?: boolean | null
+          created_at?: string | null
+          funnel_name: string
+          id?: string
+          metadata?: Json | null
+          step_name: string
+          step_order: number
+          time_to_complete_ms?: number | null
+          user_id?: string | null
+        }
         Update: {
-          abandoned?: boolean | null;
-          completed?: boolean | null;
-          created_at?: string | null;
-          funnel_name?: string;
-          id?: string;
-          metadata?: Json | null;
-          step_name?: string;
-          step_order?: number;
-          time_to_complete_ms?: number | null;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
+          abandoned?: boolean | null
+          completed?: boolean | null
+          created_at?: string | null
+          funnel_name?: string
+          id?: string
+          metadata?: Json | null
+          step_name?: string
+          step_order?: number
+          time_to_complete_ms?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       dashboard_layout: {
         Row: {
-          created_at: string;
-          id: string;
-          section_order: Json;
-          updated_at: string;
-          user_id: string;
-        };
+          created_at: string
+          id: string
+          section_order: Json
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          created_at?: string;
-          id?: string;
-          section_order?: Json;
-          updated_at?: string;
-          user_id: string;
-        };
+          created_at?: string
+          id?: string
+          section_order?: Json
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          created_at?: string;
-          id?: string;
-          section_order?: Json;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string
+          id?: string
+          section_order?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       deletion_requests: {
         Row: {
-          completed_at: string | null;
-          created_at: string | null;
-          email: string;
-          id: string;
-          requested_at: string;
-          status: string;
-          user_id: string;
-        };
+          completed_at: string | null
+          created_at: string | null
+          email: string
+          id: string
+          requested_at: string
+          status: string
+          user_id: string
+        }
         Insert: {
-          completed_at?: string | null;
-          created_at?: string | null;
-          email: string;
-          id?: string;
-          requested_at?: string;
-          status?: string;
-          user_id: string;
-        };
+          completed_at?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          requested_at?: string
+          status?: string
+          user_id: string
+        }
         Update: {
-          completed_at?: string | null;
-          created_at?: string | null;
-          email?: string;
-          id?: string;
-          requested_at?: string;
-          status?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          completed_at?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          requested_at?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       device_tokens: {
         Row: {
-          created_at: string | null;
-          id: string;
-          last_used: string | null;
-          platform: string;
-          token: string;
-          user_id: string;
-        };
+          created_at: string | null
+          id: string
+          last_used: string | null
+          platform: string
+          token: string
+          user_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          id?: string;
-          last_used?: string | null;
-          platform: string;
-          token: string;
-          user_id: string;
-        };
+          created_at?: string | null
+          id?: string
+          last_used?: string | null
+          platform: string
+          token: string
+          user_id: string
+        }
         Update: {
-          created_at?: string | null;
-          id?: string;
-          last_used?: string | null;
-          platform?: string;
-          token?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          id?: string
+          last_used?: string | null
+          platform?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_preferences: {
         Row: {
-          appointment_reminders_enabled: boolean | null;
-          client_id: string | null;
-          created_at: string | null;
-          email: string;
-          id: string;
-          marketing_emails_enabled: boolean | null;
-          rebooking_reminders_enabled: boolean | null;
-          unsubscribe_token: string | null;
-          updated_at: string | null;
-        };
+          appointment_reminders_enabled: boolean | null
+          client_id: string | null
+          created_at: string | null
+          email: string
+          id: string
+          marketing_emails_enabled: boolean | null
+          rebooking_reminders_enabled: boolean | null
+          unsubscribe_token: string | null
+          updated_at: string | null
+        }
         Insert: {
-          appointment_reminders_enabled?: boolean | null;
-          client_id?: string | null;
-          created_at?: string | null;
-          email: string;
-          id?: string;
-          marketing_emails_enabled?: boolean | null;
-          rebooking_reminders_enabled?: boolean | null;
-          unsubscribe_token?: string | null;
-          updated_at?: string | null;
-        };
+          appointment_reminders_enabled?: boolean | null
+          client_id?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          marketing_emails_enabled?: boolean | null
+          rebooking_reminders_enabled?: boolean | null
+          unsubscribe_token?: string | null
+          updated_at?: string | null
+        }
         Update: {
-          appointment_reminders_enabled?: boolean | null;
-          client_id?: string | null;
-          created_at?: string | null;
-          email?: string;
-          id?: string;
-          marketing_emails_enabled?: boolean | null;
-          rebooking_reminders_enabled?: boolean | null;
-          unsubscribe_token?: string | null;
-          updated_at?: string | null;
-        };
+          appointment_reminders_enabled?: boolean | null
+          client_id?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          marketing_emails_enabled?: boolean | null
+          rebooking_reminders_enabled?: boolean | null
+          unsubscribe_token?: string | null
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'email_preferences_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: true;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_preferences_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_preferences_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: true;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_preferences_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       email_sequence_enrollments: {
         Row: {
-          client_id: string;
-          completed_at: string | null;
-          created_at: string | null;
-          current_step: number | null;
-          enrolled_at: string | null;
-          id: string;
-          metadata: Json | null;
-          next_send_at: string | null;
-          sequence_id: string;
-          status: string | null;
-          stylist_id: string;
-          unenrolled_at: string | null;
-          unenrolled_reason: string | null;
-          updated_at: string | null;
-        };
+          client_id: string
+          completed_at: string | null
+          created_at: string | null
+          current_step: number | null
+          enrolled_at: string | null
+          id: string
+          metadata: Json | null
+          next_send_at: string | null
+          sequence_id: string
+          status: string | null
+          stylist_id: string
+          unenrolled_at: string | null
+          unenrolled_reason: string | null
+          updated_at: string | null
+        }
         Insert: {
-          client_id: string;
-          completed_at?: string | null;
-          created_at?: string | null;
-          current_step?: number | null;
-          enrolled_at?: string | null;
-          id?: string;
-          metadata?: Json | null;
-          next_send_at?: string | null;
-          sequence_id: string;
-          status?: string | null;
-          stylist_id: string;
-          unenrolled_at?: string | null;
-          unenrolled_reason?: string | null;
-          updated_at?: string | null;
-        };
+          client_id: string
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          enrolled_at?: string | null
+          id?: string
+          metadata?: Json | null
+          next_send_at?: string | null
+          sequence_id: string
+          status?: string | null
+          stylist_id: string
+          unenrolled_at?: string | null
+          unenrolled_reason?: string | null
+          updated_at?: string | null
+        }
         Update: {
-          client_id?: string;
-          completed_at?: string | null;
-          created_at?: string | null;
-          current_step?: number | null;
-          enrolled_at?: string | null;
-          id?: string;
-          metadata?: Json | null;
-          next_send_at?: string | null;
-          sequence_id?: string;
-          status?: string | null;
-          stylist_id?: string;
-          unenrolled_at?: string | null;
-          unenrolled_reason?: string | null;
-          updated_at?: string | null;
-        };
+          client_id?: string
+          completed_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          enrolled_at?: string | null
+          id?: string
+          metadata?: Json | null
+          next_send_at?: string | null
+          sequence_id?: string
+          status?: string | null
+          stylist_id?: string
+          unenrolled_at?: string | null
+          unenrolled_reason?: string | null
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'email_sequence_enrollments_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_enrollments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_enrollments_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_enrollments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_enrollments_sequence_id_fkey';
-            columns: ['sequence_id'];
-            isOneToOne: false;
-            referencedRelation: 'email_sequences';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_enrollments_sequence_id_fkey"
+            columns: ["sequence_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequences"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_enrollments_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_enrollments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_enrollments_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_enrollments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       email_sequence_logs: {
         Row: {
-          bounce_reason: string | null;
-          bounced: boolean | null;
-          clicked_at: string | null;
-          client_id: string;
-          created_at: string | null;
-          email_address: string;
-          enrollment_id: string;
-          id: string;
-          opened_at: string | null;
-          resend_email_id: string | null;
-          sent_at: string | null;
-          step_id: string;
-          stylist_id: string;
-          subject: string;
-          unsubscribed: boolean | null;
-        };
+          bounce_reason: string | null
+          bounced: boolean | null
+          clicked_at: string | null
+          client_id: string
+          created_at: string | null
+          email_address: string
+          enrollment_id: string
+          id: string
+          opened_at: string | null
+          resend_email_id: string | null
+          sent_at: string | null
+          step_id: string
+          stylist_id: string
+          subject: string
+          unsubscribed: boolean | null
+        }
         Insert: {
-          bounce_reason?: string | null;
-          bounced?: boolean | null;
-          clicked_at?: string | null;
-          client_id: string;
-          created_at?: string | null;
-          email_address: string;
-          enrollment_id: string;
-          id?: string;
-          opened_at?: string | null;
-          resend_email_id?: string | null;
-          sent_at?: string | null;
-          step_id: string;
-          stylist_id: string;
-          subject: string;
-          unsubscribed?: boolean | null;
-        };
+          bounce_reason?: string | null
+          bounced?: boolean | null
+          clicked_at?: string | null
+          client_id: string
+          created_at?: string | null
+          email_address: string
+          enrollment_id: string
+          id?: string
+          opened_at?: string | null
+          resend_email_id?: string | null
+          sent_at?: string | null
+          step_id: string
+          stylist_id: string
+          subject: string
+          unsubscribed?: boolean | null
+        }
         Update: {
-          bounce_reason?: string | null;
-          bounced?: boolean | null;
-          clicked_at?: string | null;
-          client_id?: string;
-          created_at?: string | null;
-          email_address?: string;
-          enrollment_id?: string;
-          id?: string;
-          opened_at?: string | null;
-          resend_email_id?: string | null;
-          sent_at?: string | null;
-          step_id?: string;
-          stylist_id?: string;
-          subject?: string;
-          unsubscribed?: boolean | null;
-        };
+          bounce_reason?: string | null
+          bounced?: boolean | null
+          clicked_at?: string | null
+          client_id?: string
+          created_at?: string | null
+          email_address?: string
+          enrollment_id?: string
+          id?: string
+          opened_at?: string | null
+          resend_email_id?: string | null
+          sent_at?: string | null
+          step_id?: string
+          stylist_id?: string
+          subject?: string
+          unsubscribed?: boolean | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'email_sequence_logs_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_logs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_logs_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_logs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_logs_enrollment_id_fkey';
-            columns: ['enrollment_id'];
-            isOneToOne: false;
-            referencedRelation: 'email_sequence_enrollments';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_logs_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequence_enrollments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_logs_step_id_fkey';
-            columns: ['step_id'];
-            isOneToOne: false;
-            referencedRelation: 'email_sequence_steps';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_logs_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequence_steps"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_logs_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_logs_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequence_logs_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_logs_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       email_sequence_steps: {
         Row: {
-          body_html: string;
-          created_at: string | null;
-          delay_amount: number;
-          delay_unit: string;
-          id: string;
-          name: string;
-          send_time_preference: string | null;
-          sequence_id: string;
-          step_order: number;
-          stop_on_conditions: Json | null;
-          subject: string;
-          updated_at: string | null;
-        };
+          body_html: string
+          created_at: string | null
+          delay_amount: number
+          delay_unit: string
+          id: string
+          name: string
+          send_time_preference: string | null
+          sequence_id: string
+          step_order: number
+          stop_on_conditions: Json | null
+          subject: string
+          updated_at: string | null
+        }
         Insert: {
-          body_html: string;
-          created_at?: string | null;
-          delay_amount?: number;
-          delay_unit?: string;
-          id?: string;
-          name: string;
-          send_time_preference?: string | null;
-          sequence_id: string;
-          step_order: number;
-          stop_on_conditions?: Json | null;
-          subject: string;
-          updated_at?: string | null;
-        };
+          body_html: string
+          created_at?: string | null
+          delay_amount?: number
+          delay_unit?: string
+          id?: string
+          name: string
+          send_time_preference?: string | null
+          sequence_id: string
+          step_order: number
+          stop_on_conditions?: Json | null
+          subject: string
+          updated_at?: string | null
+        }
         Update: {
-          body_html?: string;
-          created_at?: string | null;
-          delay_amount?: number;
-          delay_unit?: string;
-          id?: string;
-          name?: string;
-          send_time_preference?: string | null;
-          sequence_id?: string;
-          step_order?: number;
-          stop_on_conditions?: Json | null;
-          subject?: string;
-          updated_at?: string | null;
-        };
+          body_html?: string
+          created_at?: string | null
+          delay_amount?: number
+          delay_unit?: string
+          id?: string
+          name?: string
+          send_time_preference?: string | null
+          sequence_id?: string
+          step_order?: number
+          stop_on_conditions?: Json | null
+          subject?: string
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'email_sequence_steps_sequence_id_fkey';
-            columns: ['sequence_id'];
-            isOneToOne: false;
-            referencedRelation: 'email_sequences';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequence_steps_sequence_id_fkey"
+            columns: ["sequence_id"]
+            isOneToOne: false
+            referencedRelation: "email_sequences"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       email_sequences: {
         Row: {
-          category: string | null;
-          created_at: string | null;
-          created_by: string | null;
-          description: string | null;
-          id: string;
-          is_active: boolean | null;
-          is_global_template: boolean | null;
-          name: string;
-          stylist_id: string | null;
-          trigger_conditions: Json | null;
-          trigger_type: string;
-          updated_at: string | null;
-        };
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          is_global_template: boolean | null
+          name: string
+          stylist_id: string | null
+          trigger_conditions: Json | null
+          trigger_type: string
+          updated_at: string | null
+        }
         Insert: {
-          category?: string | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          description?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          is_global_template?: boolean | null;
-          name: string;
-          stylist_id?: string | null;
-          trigger_conditions?: Json | null;
-          trigger_type: string;
-          updated_at?: string | null;
-        };
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_global_template?: boolean | null
+          name: string
+          stylist_id?: string | null
+          trigger_conditions?: Json | null
+          trigger_type: string
+          updated_at?: string | null
+        }
         Update: {
-          category?: string | null;
-          created_at?: string | null;
-          created_by?: string | null;
-          description?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          is_global_template?: boolean | null;
-          name?: string;
-          stylist_id?: string | null;
-          trigger_conditions?: Json | null;
-          trigger_type?: string;
-          updated_at?: string | null;
-        };
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_global_template?: boolean | null
+          name?: string
+          stylist_id?: string | null
+          trigger_conditions?: Json | null
+          trigger_type?: string
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'email_sequences_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_sequences_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_sequences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       email_settings: {
         Row: {
-          business_logo_url: string | null;
-          created_at: string | null;
-          custom_message: string | null;
-          id: string;
-          rebooking_closing: string | null;
-          rebooking_cta_text: string | null;
-          rebooking_enabled: boolean | null;
-          rebooking_headline: string | null;
-          rebooking_opening: string | null;
-          rebooking_subject: string | null;
-          show_business_logo: boolean | null;
-          updated_at: string | null;
-          user_id: string;
-        };
+          business_logo_url: string | null
+          created_at: string | null
+          custom_message: string | null
+          id: string
+          rebooking_closing: string | null
+          rebooking_cta_text: string | null
+          rebooking_enabled: boolean | null
+          rebooking_headline: string | null
+          rebooking_opening: string | null
+          rebooking_subject: string | null
+          show_business_logo: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
         Insert: {
-          business_logo_url?: string | null;
-          created_at?: string | null;
-          custom_message?: string | null;
-          id?: string;
-          rebooking_closing?: string | null;
-          rebooking_cta_text?: string | null;
-          rebooking_enabled?: boolean | null;
-          rebooking_headline?: string | null;
-          rebooking_opening?: string | null;
-          rebooking_subject?: string | null;
-          show_business_logo?: boolean | null;
-          updated_at?: string | null;
-          user_id: string;
-        };
+          business_logo_url?: string | null
+          created_at?: string | null
+          custom_message?: string | null
+          id?: string
+          rebooking_closing?: string | null
+          rebooking_cta_text?: string | null
+          rebooking_enabled?: boolean | null
+          rebooking_headline?: string | null
+          rebooking_opening?: string | null
+          rebooking_subject?: string | null
+          show_business_logo?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
         Update: {
-          business_logo_url?: string | null;
-          created_at?: string | null;
-          custom_message?: string | null;
-          id?: string;
-          rebooking_closing?: string | null;
-          rebooking_cta_text?: string | null;
-          rebooking_enabled?: boolean | null;
-          rebooking_headline?: string | null;
-          rebooking_opening?: string | null;
-          rebooking_subject?: string | null;
-          show_business_logo?: boolean | null;
-          updated_at?: string | null;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          business_logo_url?: string | null
+          created_at?: string | null
+          custom_message?: string | null
+          id?: string
+          rebooking_closing?: string | null
+          rebooking_cta_text?: string | null
+          rebooking_enabled?: boolean | null
+          rebooking_headline?: string | null
+          rebooking_opening?: string | null
+          rebooking_subject?: string | null
+          show_business_logo?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_templates: {
         Row: {
-          category: string;
-          created_at: string | null;
-          created_by: string | null;
-          description: string | null;
-          html_content: string;
-          id: string;
-          is_global: boolean | null;
-          name: string;
-          preview_text: string | null;
-          stylist_id: string | null;
-          subject_template: string;
-          updated_at: string | null;
-          variables: Json | null;
-        };
+          category: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          html_content: string
+          id: string
+          is_global: boolean | null
+          name: string
+          preview_text: string | null
+          stylist_id: string | null
+          subject_template: string
+          updated_at: string | null
+          variables: Json | null
+        }
         Insert: {
-          category: string;
-          created_at?: string | null;
-          created_by?: string | null;
-          description?: string | null;
-          html_content: string;
-          id?: string;
-          is_global?: boolean | null;
-          name: string;
-          preview_text?: string | null;
-          stylist_id?: string | null;
-          subject_template: string;
-          updated_at?: string | null;
-          variables?: Json | null;
-        };
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          html_content: string
+          id?: string
+          is_global?: boolean | null
+          name: string
+          preview_text?: string | null
+          stylist_id?: string | null
+          subject_template: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
         Update: {
-          category?: string;
-          created_at?: string | null;
-          created_by?: string | null;
-          description?: string | null;
-          html_content?: string;
-          id?: string;
-          is_global?: boolean | null;
-          name?: string;
-          preview_text?: string | null;
-          stylist_id?: string | null;
-          subject_template?: string;
-          updated_at?: string | null;
-          variables?: Json | null;
-        };
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          html_content?: string
+          id?: string
+          is_global?: boolean | null
+          name?: string
+          preview_text?: string | null
+          stylist_id?: string | null
+          subject_template?: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'email_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'email_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "email_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       error_logs: {
         Row: {
-          action: string;
-          attempt_count: number | null;
-          component: string;
-          context: Json | null;
-          created_at: string | null;
-          error_message: string;
-          error_stack: string | null;
-          id: string;
-          user_id: string | null;
-        };
+          action: string
+          attempt_count: number | null
+          component: string
+          context: Json | null
+          created_at: string | null
+          error_message: string
+          error_stack: string | null
+          id: string
+          user_id: string | null
+        }
         Insert: {
-          action: string;
-          attempt_count?: number | null;
-          component: string;
-          context?: Json | null;
-          created_at?: string | null;
-          error_message: string;
-          error_stack?: string | null;
-          id?: string;
-          user_id?: string | null;
-        };
+          action: string
+          attempt_count?: number | null
+          component: string
+          context?: Json | null
+          created_at?: string | null
+          error_message: string
+          error_stack?: string | null
+          id?: string
+          user_id?: string | null
+        }
         Update: {
-          action?: string;
-          attempt_count?: number | null;
-          component?: string;
-          context?: Json | null;
-          created_at?: string | null;
-          error_message?: string;
-          error_stack?: string | null;
-          id?: string;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
+          action?: string
+          attempt_count?: number | null
+          component?: string
+          context?: Json | null
+          created_at?: string | null
+          error_message?: string
+          error_stack?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       favorite_stylists: {
         Row: {
-          client_id: string;
-          created_at: string;
-          id: string;
-          stylist_profile_id: string;
-        };
+          client_id: string
+          created_at: string
+          id: string
+          stylist_profile_id: string
+        }
         Insert: {
-          client_id: string;
-          created_at?: string;
-          id?: string;
-          stylist_profile_id: string;
-        };
+          client_id: string
+          created_at?: string
+          id?: string
+          stylist_profile_id: string
+        }
         Update: {
-          client_id?: string;
-          created_at?: string;
-          id?: string;
-          stylist_profile_id?: string;
-        };
+          client_id?: string
+          created_at?: string
+          id?: string
+          stylist_profile_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'favorite_stylists_stylist_profile_id_fkey';
-            columns: ['stylist_profile_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "favorite_stylists_stylist_profile_id_fkey"
+            columns: ["stylist_profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'favorite_stylists_stylist_profile_id_fkey';
-            columns: ['stylist_profile_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "favorite_stylists_stylist_profile_id_fkey"
+            columns: ["stylist_profile_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       feedback_upvotes: {
         Row: {
-          created_at: string;
-          feedback_id: string;
-          id: string;
-          user_id: string;
-        };
+          created_at: string
+          feedback_id: string
+          id: string
+          user_id: string
+        }
         Insert: {
-          created_at?: string;
-          feedback_id: string;
-          id?: string;
-          user_id: string;
-        };
+          created_at?: string
+          feedback_id: string
+          id?: string
+          user_id: string
+        }
         Update: {
-          created_at?: string;
-          feedback_id?: string;
-          id?: string;
-          user_id?: string;
-        };
+          created_at?: string
+          feedback_id?: string
+          id?: string
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'feedback_upvotes_feedback_id_fkey';
-            columns: ['feedback_id'];
-            isOneToOne: false;
-            referencedRelation: 'product_feedback';
-            referencedColumns: ['id'];
+            foreignKeyName: "feedback_upvotes_feedback_id_fkey"
+            columns: ["feedback_id"]
+            isOneToOne: false
+            referencedRelation: "product_feedback"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       formula_access_log: {
         Row: {
-          access_type: string;
-          accessed_at: string;
-          accessed_by: string | null;
-          formula_id: string | null;
-          id: string;
-          ip_address: unknown;
-          user_agent: string | null;
-        };
+          access_type: string
+          accessed_at: string
+          accessed_by: string | null
+          formula_id: string | null
+          id: string
+          ip_address: unknown
+          user_agent: string | null
+        }
         Insert: {
-          access_type: string;
-          accessed_at?: string;
-          accessed_by?: string | null;
-          formula_id?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          user_agent?: string | null;
-        };
+          access_type: string
+          accessed_at?: string
+          accessed_by?: string | null
+          formula_id?: string | null
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+        }
         Update: {
-          access_type?: string;
-          accessed_at?: string;
-          accessed_by?: string | null;
-          formula_id?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          user_agent?: string | null;
-        };
+          access_type?: string
+          accessed_at?: string
+          accessed_by?: string | null
+          formula_id?: string | null
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'formula_access_log_formula_id_fkey';
-            columns: ['formula_id'];
-            isOneToOne: false;
-            referencedRelation: 'formulas';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_access_log_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "formulas"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       formula_outcomes: {
         Row: {
-          client_id: string | null;
-          conversation_message_id: string | null;
-          created_at: string | null;
-          formula_id: string | null;
-          id: string;
-          outcome_notes: string | null;
-          outcome_rating: string | null;
-          stylist_id: string | null;
-          what_didnt_work: string | null;
-          what_worked: string | null;
-          would_use_again: boolean | null;
-        };
+          client_id: string | null
+          conversation_message_id: string | null
+          created_at: string | null
+          formula_id: string | null
+          id: string
+          outcome_notes: string | null
+          outcome_rating: string | null
+          stylist_id: string | null
+          what_didnt_work: string | null
+          what_worked: string | null
+          would_use_again: boolean | null
+        }
         Insert: {
-          client_id?: string | null;
-          conversation_message_id?: string | null;
-          created_at?: string | null;
-          formula_id?: string | null;
-          id?: string;
-          outcome_notes?: string | null;
-          outcome_rating?: string | null;
-          stylist_id?: string | null;
-          what_didnt_work?: string | null;
-          what_worked?: string | null;
-          would_use_again?: boolean | null;
-        };
+          client_id?: string | null
+          conversation_message_id?: string | null
+          created_at?: string | null
+          formula_id?: string | null
+          id?: string
+          outcome_notes?: string | null
+          outcome_rating?: string | null
+          stylist_id?: string | null
+          what_didnt_work?: string | null
+          what_worked?: string | null
+          would_use_again?: boolean | null
+        }
         Update: {
-          client_id?: string | null;
-          conversation_message_id?: string | null;
-          created_at?: string | null;
-          formula_id?: string | null;
-          id?: string;
-          outcome_notes?: string | null;
-          outcome_rating?: string | null;
-          stylist_id?: string | null;
-          what_didnt_work?: string | null;
-          what_worked?: string | null;
-          would_use_again?: boolean | null;
-        };
+          client_id?: string | null
+          conversation_message_id?: string | null
+          created_at?: string | null
+          formula_id?: string | null
+          id?: string
+          outcome_notes?: string | null
+          outcome_rating?: string | null
+          stylist_id?: string | null
+          what_didnt_work?: string | null
+          what_worked?: string | null
+          would_use_again?: boolean | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'formula_outcomes_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_outcomes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formula_outcomes_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_outcomes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formula_outcomes_conversation_message_id_fkey';
-            columns: ['conversation_message_id'];
-            isOneToOne: false;
-            referencedRelation: 'ai_conversation_messages';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_outcomes_conversation_message_id_fkey"
+            columns: ["conversation_message_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conversation_messages"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formula_outcomes_formula_id_fkey';
-            columns: ['formula_id'];
-            isOneToOne: false;
-            referencedRelation: 'formulas';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_outcomes_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "formulas"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formula_outcomes_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_outcomes_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formula_outcomes_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_outcomes_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       formula_products: {
         Row: {
-          created_at: string;
-          formula_id: string;
-          id: string;
-          product_id: string;
-          quantity_used: number;
-        };
+          created_at: string
+          formula_id: string
+          id: string
+          product_id: string
+          quantity_used: number
+        }
         Insert: {
-          created_at?: string;
-          formula_id: string;
-          id?: string;
-          product_id: string;
-          quantity_used: number;
-        };
+          created_at?: string
+          formula_id: string
+          id?: string
+          product_id: string
+          quantity_used: number
+        }
         Update: {
-          created_at?: string;
-          formula_id?: string;
-          id?: string;
-          product_id?: string;
-          quantity_used?: number;
-        };
+          created_at?: string
+          formula_id?: string
+          id?: string
+          product_id?: string
+          quantity_used?: number
+        }
         Relationships: [
           {
-            foreignKeyName: 'formula_products_formula_id_fkey';
-            columns: ['formula_id'];
-            isOneToOne: false;
-            referencedRelation: 'formulas';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_products_formula_id_fkey"
+            columns: ["formula_id"]
+            isOneToOne: false
+            referencedRelation: "formulas"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formula_products_product_id_fkey';
-            columns: ['product_id'];
-            isOneToOne: false;
-            referencedRelation: 'product_inventory';
-            referencedColumns: ['id'];
+            foreignKeyName: "formula_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "product_inventory"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       formula_validations: {
         Row: {
-          blockers: string[] | null;
-          created_at: string | null;
-          formula_content: Json;
-          id: string;
-          is_safe: boolean;
-          user_id: string | null;
-          validated_at: string | null;
-          validation_result: Json;
-          warnings: string[] | null;
-        };
+          blockers: string[] | null
+          created_at: string | null
+          formula_content: Json
+          id: string
+          is_safe: boolean
+          user_id: string | null
+          validated_at: string | null
+          validation_result: Json
+          warnings: string[] | null
+        }
         Insert: {
-          blockers?: string[] | null;
-          created_at?: string | null;
-          formula_content: Json;
-          id?: string;
-          is_safe: boolean;
-          user_id?: string | null;
-          validated_at?: string | null;
-          validation_result: Json;
-          warnings?: string[] | null;
-        };
+          blockers?: string[] | null
+          created_at?: string | null
+          formula_content: Json
+          id?: string
+          is_safe: boolean
+          user_id?: string | null
+          validated_at?: string | null
+          validation_result: Json
+          warnings?: string[] | null
+        }
         Update: {
-          blockers?: string[] | null;
-          created_at?: string | null;
-          formula_content?: Json;
-          id?: string;
-          is_safe?: boolean;
-          user_id?: string | null;
-          validated_at?: string | null;
-          validation_result?: Json;
-          warnings?: string[] | null;
-        };
-        Relationships: [];
-      };
+          blockers?: string[] | null
+          created_at?: string | null
+          formula_content?: Json
+          id?: string
+          is_safe?: boolean
+          user_id?: string | null
+          validated_at?: string | null
+          validation_result?: Json
+          warnings?: string[] | null
+        }
+        Relationships: []
+      }
       formulas: {
         Row: {
-          application_notes: string | null;
-          client_id: string;
-          color_line: string | null;
-          created_at: string;
-          developer_volume: string | null;
-          formula_text: string;
-          hair_photo_url: string | null;
-          id: string;
-          instructions: string | null;
-          processing_time_minutes: number | null;
-          result_notes: string | null;
-          stylist_id: string;
-          tags: string[] | null;
-          updated_at: string;
-          what_to_avoid: string | null;
-          what_worked: string | null;
-        };
+          application_notes: string | null
+          client_id: string
+          color_line: string | null
+          created_at: string
+          developer_volume: string | null
+          formula_text: string
+          hair_photo_url: string | null
+          id: string
+          instructions: string | null
+          processing_time_minutes: number | null
+          result_notes: string | null
+          stylist_id: string
+          tags: string[] | null
+          updated_at: string
+          what_to_avoid: string | null
+          what_worked: string | null
+        }
         Insert: {
-          application_notes?: string | null;
-          client_id: string;
-          color_line?: string | null;
-          created_at?: string;
-          developer_volume?: string | null;
-          formula_text: string;
-          hair_photo_url?: string | null;
-          id?: string;
-          instructions?: string | null;
-          processing_time_minutes?: number | null;
-          result_notes?: string | null;
-          stylist_id: string;
-          tags?: string[] | null;
-          updated_at?: string;
-          what_to_avoid?: string | null;
-          what_worked?: string | null;
-        };
+          application_notes?: string | null
+          client_id: string
+          color_line?: string | null
+          created_at?: string
+          developer_volume?: string | null
+          formula_text: string
+          hair_photo_url?: string | null
+          id?: string
+          instructions?: string | null
+          processing_time_minutes?: number | null
+          result_notes?: string | null
+          stylist_id: string
+          tags?: string[] | null
+          updated_at?: string
+          what_to_avoid?: string | null
+          what_worked?: string | null
+        }
         Update: {
-          application_notes?: string | null;
-          client_id?: string;
-          color_line?: string | null;
-          created_at?: string;
-          developer_volume?: string | null;
-          formula_text?: string;
-          hair_photo_url?: string | null;
-          id?: string;
-          instructions?: string | null;
-          processing_time_minutes?: number | null;
-          result_notes?: string | null;
-          stylist_id?: string;
-          tags?: string[] | null;
-          updated_at?: string;
-          what_to_avoid?: string | null;
-          what_worked?: string | null;
-        };
+          application_notes?: string | null
+          client_id?: string
+          color_line?: string | null
+          created_at?: string
+          developer_volume?: string | null
+          formula_text?: string
+          hair_photo_url?: string | null
+          id?: string
+          instructions?: string | null
+          processing_time_minutes?: number | null
+          result_notes?: string | null
+          stylist_id?: string
+          tags?: string[] | null
+          updated_at?: string
+          what_to_avoid?: string | null
+          what_worked?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'formulas_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "formulas_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formulas_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "formulas_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formulas_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "formulas_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'formulas_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "formulas_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       gift_card_transactions: {
         Row: {
-          amount: number;
-          created_at: string | null;
-          gift_card_id: string;
-          id: string;
-          order_id: string | null;
-          transaction_type: string;
-        };
+          amount: number
+          created_at: string | null
+          gift_card_id: string
+          id: string
+          order_id: string | null
+          transaction_type: string
+        }
         Insert: {
-          amount: number;
-          created_at?: string | null;
-          gift_card_id: string;
-          id?: string;
-          order_id?: string | null;
-          transaction_type: string;
-        };
+          amount: number
+          created_at?: string | null
+          gift_card_id: string
+          id?: string
+          order_id?: string | null
+          transaction_type: string
+        }
         Update: {
-          amount?: number;
-          created_at?: string | null;
-          gift_card_id?: string;
-          id?: string;
-          order_id?: string | null;
-          transaction_type?: string;
-        };
+          amount?: number
+          created_at?: string | null
+          gift_card_id?: string
+          id?: string
+          order_id?: string | null
+          transaction_type?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'gift_card_transactions_gift_card_id_fkey';
-            columns: ['gift_card_id'];
-            isOneToOne: false;
-            referencedRelation: 'gift_cards';
-            referencedColumns: ['id'];
+            foreignKeyName: "gift_card_transactions_gift_card_id_fkey"
+            columns: ["gift_card_id"]
+            isOneToOne: false
+            referencedRelation: "gift_cards"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'gift_card_transactions_order_id_fkey';
-            columns: ['order_id'];
-            isOneToOne: false;
-            referencedRelation: 'orders';
-            referencedColumns: ['id'];
+            foreignKeyName: "gift_card_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       gift_cards: {
         Row: {
-          balance: number;
-          code: string;
-          created_at: string | null;
-          expires_at: string | null;
-          id: string;
-          is_active: boolean | null;
-          original_balance: number;
-          purchased_by: string | null;
-          recipient_email: string | null;
-          stylist_id: string | null;
-        };
+          balance: number
+          code: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          original_balance: number
+          purchased_by: string | null
+          recipient_email: string | null
+          stylist_id: string | null
+        }
         Insert: {
-          balance: number;
-          code: string;
-          created_at?: string | null;
-          expires_at?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          original_balance: number;
-          purchased_by?: string | null;
-          recipient_email?: string | null;
-          stylist_id?: string | null;
-        };
+          balance: number
+          code: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_balance: number
+          purchased_by?: string | null
+          recipient_email?: string | null
+          stylist_id?: string | null
+        }
         Update: {
-          balance?: number;
-          code?: string;
-          created_at?: string | null;
-          expires_at?: string | null;
-          id?: string;
-          is_active?: boolean | null;
-          original_balance?: number;
-          purchased_by?: string | null;
-          recipient_email?: string | null;
-          stylist_id?: string | null;
-        };
+          balance?: number
+          code?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_balance?: number
+          purchased_by?: string | null
+          recipient_email?: string | null
+          stylist_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'gift_cards_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "gift_cards_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'gift_cards_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "gift_cards_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       hair_analysis_results: {
         Row: {
-          analysis_result: Json;
-          client_id: string | null;
-          confidence_scores: Json | null;
-          created_at: string | null;
-          id: string;
-          image_url: string;
-          user_id: string | null;
-        };
+          analysis_result: Json
+          client_id: string | null
+          confidence_scores: Json | null
+          created_at: string | null
+          id: string
+          image_url: string
+          user_id: string | null
+        }
         Insert: {
-          analysis_result: Json;
-          client_id?: string | null;
-          confidence_scores?: Json | null;
-          created_at?: string | null;
-          id?: string;
-          image_url: string;
-          user_id?: string | null;
-        };
+          analysis_result: Json
+          client_id?: string | null
+          confidence_scores?: Json | null
+          created_at?: string | null
+          id?: string
+          image_url: string
+          user_id?: string | null
+        }
         Update: {
-          analysis_result?: Json;
-          client_id?: string | null;
-          confidence_scores?: Json | null;
-          created_at?: string | null;
-          id?: string;
-          image_url?: string;
-          user_id?: string | null;
-        };
+          analysis_result?: Json
+          client_id?: string | null
+          confidence_scores?: Json | null
+          created_at?: string | null
+          id?: string
+          image_url?: string
+          user_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'hair_analysis_results_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "hair_analysis_results_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'hair_analysis_results_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "hair_analysis_results_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       hair_brands: {
         Row: {
-          affiliate_program_url: string | null;
-          base_commission_rate: number;
-          created_at: string;
-          id: string;
-          is_active: boolean | null;
-          logo_url: string | null;
-          name: string;
-        };
+          affiliate_program_url: string | null
+          base_commission_rate: number
+          created_at: string
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          name: string
+        }
         Insert: {
-          affiliate_program_url?: string | null;
-          base_commission_rate?: number;
-          created_at?: string;
-          id?: string;
-          is_active?: boolean | null;
-          logo_url?: string | null;
-          name: string;
-        };
+          affiliate_program_url?: string | null
+          base_commission_rate?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name: string
+        }
         Update: {
-          affiliate_program_url?: string | null;
-          base_commission_rate?: number;
-          created_at?: string;
-          id?: string;
-          is_active?: boolean | null;
-          logo_url?: string | null;
-          name?: string;
-        };
-        Relationships: [];
-      };
+          affiliate_program_url?: string | null
+          base_commission_rate?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
       intake_form_responses: {
         Row: {
-          client_id: string;
-          completed_at: string | null;
-          created_at: string;
-          id: string;
-          responses: Json;
-          stylist_id: string;
-          template_id: string;
-        };
+          client_id: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          responses: Json
+          stylist_id: string
+          template_id: string
+        }
         Insert: {
-          client_id: string;
-          completed_at?: string | null;
-          created_at?: string;
-          id?: string;
-          responses?: Json;
-          stylist_id: string;
-          template_id: string;
-        };
+          client_id: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          responses?: Json
+          stylist_id: string
+          template_id: string
+        }
         Update: {
-          client_id?: string;
-          completed_at?: string | null;
-          created_at?: string;
-          id?: string;
-          responses?: Json;
-          stylist_id?: string;
-          template_id?: string;
-        };
+          client_id?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          responses?: Json
+          stylist_id?: string
+          template_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'intake_form_responses_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "intake_form_responses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'intake_form_responses_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "intake_form_responses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'intake_form_responses_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "intake_form_responses_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'intake_form_responses_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "intake_form_responses_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'intake_form_responses_template_id_fkey';
-            columns: ['template_id'];
-            isOneToOne: false;
-            referencedRelation: 'intake_form_templates';
-            referencedColumns: ['id'];
+            foreignKeyName: "intake_form_responses_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "intake_form_templates"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       intake_form_templates: {
         Row: {
-          created_at: string;
-          description: string | null;
-          fields: Json;
-          id: string;
-          is_active: boolean | null;
-          is_global: boolean | null;
-          name: string;
-          stylist_id: string | null;
-          updated_at: string;
-        };
+          created_at: string
+          description: string | null
+          fields: Json
+          id: string
+          is_active: boolean | null
+          is_global: boolean | null
+          name: string
+          stylist_id: string | null
+          updated_at: string
+        }
         Insert: {
-          created_at?: string;
-          description?: string | null;
-          fields?: Json;
-          id?: string;
-          is_active?: boolean | null;
-          is_global?: boolean | null;
-          name: string;
-          stylist_id?: string | null;
-          updated_at?: string;
-        };
+          created_at?: string
+          description?: string | null
+          fields?: Json
+          id?: string
+          is_active?: boolean | null
+          is_global?: boolean | null
+          name: string
+          stylist_id?: string | null
+          updated_at?: string
+        }
         Update: {
-          created_at?: string;
-          description?: string | null;
-          fields?: Json;
-          id?: string;
-          is_active?: boolean | null;
-          is_global?: boolean | null;
-          name?: string;
-          stylist_id?: string | null;
-          updated_at?: string;
-        };
+          created_at?: string
+          description?: string | null
+          fields?: Json
+          id?: string
+          is_active?: boolean | null
+          is_global?: boolean | null
+          name?: string
+          stylist_id?: string | null
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'intake_form_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "intake_form_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'intake_form_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "intake_form_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       inventory_predictions: {
         Row: {
-          based_on_appointments: number | null;
-          confidence_score: number | null;
-          created_at: string;
-          current_stock: number | null;
-          days_until_restock: number | null;
-          id: string;
-          predicted_usage_rate: number | null;
-          product_name: string;
-          restock_recommended_at: string | null;
-          stylist_id: string;
-          updated_at: string;
-        };
+          based_on_appointments: number | null
+          confidence_score: number | null
+          created_at: string
+          current_stock: number | null
+          days_until_restock: number | null
+          id: string
+          predicted_usage_rate: number | null
+          product_name: string
+          restock_recommended_at: string | null
+          stylist_id: string
+          updated_at: string
+        }
         Insert: {
-          based_on_appointments?: number | null;
-          confidence_score?: number | null;
-          created_at?: string;
-          current_stock?: number | null;
-          days_until_restock?: number | null;
-          id?: string;
-          predicted_usage_rate?: number | null;
-          product_name: string;
-          restock_recommended_at?: string | null;
-          stylist_id: string;
-          updated_at?: string;
-        };
+          based_on_appointments?: number | null
+          confidence_score?: number | null
+          created_at?: string
+          current_stock?: number | null
+          days_until_restock?: number | null
+          id?: string
+          predicted_usage_rate?: number | null
+          product_name: string
+          restock_recommended_at?: string | null
+          stylist_id: string
+          updated_at?: string
+        }
         Update: {
-          based_on_appointments?: number | null;
-          confidence_score?: number | null;
-          created_at?: string;
-          current_stock?: number | null;
-          days_until_restock?: number | null;
-          id?: string;
-          predicted_usage_rate?: number | null;
-          product_name?: string;
-          restock_recommended_at?: string | null;
-          stylist_id?: string;
-          updated_at?: string;
-        };
+          based_on_appointments?: number | null
+          confidence_score?: number | null
+          created_at?: string
+          current_stock?: number | null
+          days_until_restock?: number | null
+          id?: string
+          predicted_usage_rate?: number | null
+          product_name?: string
+          restock_recommended_at?: string | null
+          stylist_id?: string
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'inventory_predictions_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "inventory_predictions_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'inventory_predictions_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "inventory_predictions_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       knowledge_resources: {
         Row: {
-          category: string | null;
-          content: string;
-          created_at: string;
-          id: string;
-          is_free: boolean | null;
-          resource_url: string | null;
-          title: string;
-        };
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          is_free: boolean | null
+          resource_url: string | null
+          title: string
+        }
         Insert: {
-          category?: string | null;
-          content: string;
-          created_at?: string;
-          id?: string;
-          is_free?: boolean | null;
-          resource_url?: string | null;
-          title: string;
-        };
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          is_free?: boolean | null
+          resource_url?: string | null
+          title: string
+        }
         Update: {
-          category?: string | null;
-          content?: string;
-          created_at?: string;
-          id?: string;
-          is_free?: boolean | null;
-          resource_url?: string | null;
-          title?: string;
-        };
-        Relationships: [];
-      };
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_free?: boolean | null
+          resource_url?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       medical_data_access_log: {
         Row: {
-          access_type: string;
-          accessed_at: string;
-          accessor_user_id: string | null;
-          client_profile_id: string | null;
-          id: string;
-          ip_address: unknown;
-          user_agent: string | null;
-        };
+          access_type: string
+          accessed_at: string
+          accessor_user_id: string | null
+          client_profile_id: string | null
+          id: string
+          ip_address: unknown
+          user_agent: string | null
+        }
         Insert: {
-          access_type: string;
-          accessed_at?: string;
-          accessor_user_id?: string | null;
-          client_profile_id?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          user_agent?: string | null;
-        };
+          access_type: string
+          accessed_at?: string
+          accessor_user_id?: string | null
+          client_profile_id?: string | null
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+        }
         Update: {
-          access_type?: string;
-          accessed_at?: string;
-          accessor_user_id?: string | null;
-          client_profile_id?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          user_agent?: string | null;
-        };
+          access_type?: string
+          accessed_at?: string
+          accessor_user_id?: string | null
+          client_profile_id?: string | null
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'medical_data_access_log_client_profile_id_fkey';
-            columns: ['client_profile_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "medical_data_access_log_client_profile_id_fkey"
+            columns: ["client_profile_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'medical_data_access_log_client_profile_id_fkey';
-            columns: ['client_profile_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "medical_data_access_log_client_profile_id_fkey"
+            columns: ["client_profile_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       messages: {
         Row: {
-          created_at: string;
-          id: string;
-          is_read: boolean | null;
-          message_text: string | null;
-          recipient_id: string;
-          sender_id: string;
-          video_url: string | null;
-        };
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message_text: string | null
+          recipient_id: string
+          sender_id: string
+          video_url: string | null
+        }
         Insert: {
-          created_at?: string;
-          id?: string;
-          is_read?: boolean | null;
-          message_text?: string | null;
-          recipient_id: string;
-          sender_id: string;
-          video_url?: string | null;
-        };
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message_text?: string | null
+          recipient_id: string
+          sender_id: string
+          video_url?: string | null
+        }
         Update: {
-          created_at?: string;
-          id?: string;
-          is_read?: boolean | null;
-          message_text?: string | null;
-          recipient_id?: string;
-          sender_id?: string;
-          video_url?: string | null;
-        };
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message_text?: string | null
+          recipient_id?: string
+          sender_id?: string
+          video_url?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'messages_recipient_id_fkey';
-            columns: ['recipient_id'];
-            isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "messages_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'messages_sender_id_fkey';
-            columns: ['sender_id'];
-            isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       mobile_error_logs: {
         Row: {
-          created_at: string | null;
-          device_info: Json | null;
-          error_message: string;
-          error_type: string;
-          id: string;
-          stack_trace: string | null;
-          user_id: string | null;
-          viewport_size: string | null;
-        };
+          created_at: string | null
+          device_info: Json | null
+          error_message: string
+          error_type: string
+          id: string
+          stack_trace: string | null
+          user_id: string | null
+          viewport_size: string | null
+        }
         Insert: {
-          created_at?: string | null;
-          device_info?: Json | null;
-          error_message: string;
-          error_type: string;
-          id?: string;
-          stack_trace?: string | null;
-          user_id?: string | null;
-          viewport_size?: string | null;
-        };
+          created_at?: string | null
+          device_info?: Json | null
+          error_message: string
+          error_type: string
+          id?: string
+          stack_trace?: string | null
+          user_id?: string | null
+          viewport_size?: string | null
+        }
         Update: {
-          created_at?: string | null;
-          device_info?: Json | null;
-          error_message?: string;
-          error_type?: string;
-          id?: string;
-          stack_trace?: string | null;
-          user_id?: string | null;
-          viewport_size?: string | null;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          device_info?: Json | null
+          error_message?: string
+          error_type?: string
+          id?: string
+          stack_trace?: string | null
+          user_id?: string | null
+          viewport_size?: string | null
+        }
+        Relationships: []
+      }
       mobile_optimization_metrics: {
         Row: {
-          created_at: string | null;
-          device_type: string;
-          id: string;
-          interaction_latency_ms: number | null;
-          offline_events_count: number | null;
-          performance_score: number | null;
-          safe_area_bottom: number | null;
-          safe_area_top: number | null;
-          user_id: string | null;
-          viewport_height: number;
-          viewport_width: number;
-        };
+          created_at: string | null
+          device_type: string
+          id: string
+          interaction_latency_ms: number | null
+          offline_events_count: number | null
+          performance_score: number | null
+          safe_area_bottom: number | null
+          safe_area_top: number | null
+          user_id: string | null
+          viewport_height: number
+          viewport_width: number
+        }
         Insert: {
-          created_at?: string | null;
-          device_type: string;
-          id?: string;
-          interaction_latency_ms?: number | null;
-          offline_events_count?: number | null;
-          performance_score?: number | null;
-          safe_area_bottom?: number | null;
-          safe_area_top?: number | null;
-          user_id?: string | null;
-          viewport_height: number;
-          viewport_width: number;
-        };
+          created_at?: string | null
+          device_type: string
+          id?: string
+          interaction_latency_ms?: number | null
+          offline_events_count?: number | null
+          performance_score?: number | null
+          safe_area_bottom?: number | null
+          safe_area_top?: number | null
+          user_id?: string | null
+          viewport_height: number
+          viewport_width: number
+        }
         Update: {
-          created_at?: string | null;
-          device_type?: string;
-          id?: string;
-          interaction_latency_ms?: number | null;
-          offline_events_count?: number | null;
-          performance_score?: number | null;
-          safe_area_bottom?: number | null;
-          safe_area_top?: number | null;
-          user_id?: string | null;
-          viewport_height?: number;
-          viewport_width?: number;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          device_type?: string
+          id?: string
+          interaction_latency_ms?: number | null
+          offline_events_count?: number | null
+          performance_score?: number | null
+          safe_area_bottom?: number | null
+          safe_area_top?: number | null
+          user_id?: string | null
+          viewport_height?: number
+          viewport_width?: number
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
-          created_at: string | null;
-          id: string;
-          message: string;
-          metadata: Json | null;
-          read: boolean | null;
-          title: string;
-          type: string;
-          user_id: string;
-        };
+          created_at: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          read: boolean | null
+          title: string
+          type: string
+          user_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          id?: string;
-          message: string;
-          metadata?: Json | null;
-          read?: boolean | null;
-          title: string;
-          type: string;
-          user_id: string;
-        };
+          created_at?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          read?: boolean | null
+          title: string
+          type: string
+          user_id: string
+        }
         Update: {
-          created_at?: string | null;
-          id?: string;
-          message?: string;
-          metadata?: Json | null;
-          read?: boolean | null;
-          title?: string;
-          type?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          read?: boolean | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       onboarding_progress: {
         Row: {
-          completed_at: string | null;
-          completed_steps: Json | null;
-          created_at: string;
-          current_step: number | null;
-          id: string;
-          is_completed: boolean | null;
-          updated_at: string;
-          user_id: string;
-        };
+          completed_at: string | null
+          completed_steps: Json | null
+          created_at: string
+          current_step: number | null
+          id: string
+          is_completed: boolean | null
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          completed_at?: string | null;
-          completed_steps?: Json | null;
-          created_at?: string;
-          current_step?: number | null;
-          id?: string;
-          is_completed?: boolean | null;
-          updated_at?: string;
-          user_id: string;
-        };
+          completed_at?: string | null
+          completed_steps?: Json | null
+          created_at?: string
+          current_step?: number | null
+          id?: string
+          is_completed?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          completed_at?: string | null;
-          completed_steps?: Json | null;
-          created_at?: string;
-          current_step?: number | null;
-          id?: string;
-          is_completed?: boolean | null;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          completed_at?: string | null
+          completed_steps?: Json | null
+          created_at?: string
+          current_step?: number | null
+          id?: string
+          is_completed?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
-          created_at: string | null;
-          id: string;
-          order_id: string;
-          price: number;
-          product_id: string;
-          quantity: number;
-        };
+          created_at: string | null
+          id: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
         Insert: {
-          created_at?: string | null;
-          id?: string;
-          order_id: string;
-          price: number;
-          product_id: string;
-          quantity: number;
-        };
+          created_at?: string | null
+          id?: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
         Update: {
-          created_at?: string | null;
-          id?: string;
-          order_id?: string;
-          price?: number;
-          product_id?: string;
-          quantity?: number;
-        };
+          created_at?: string | null
+          id?: string
+          order_id?: string
+          price?: number
+          product_id?: string
+          quantity?: number
+        }
         Relationships: [
           {
-            foreignKeyName: 'order_items_order_id_fkey';
-            columns: ['order_id'];
-            isOneToOne: false;
-            referencedRelation: 'orders';
-            referencedColumns: ['id'];
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'order_items_product_id_fkey';
-            columns: ['product_id'];
-            isOneToOne: false;
-            referencedRelation: 'products';
-            referencedColumns: ['id'];
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       orders: {
         Row: {
-          client_id: string;
-          created_at: string | null;
-          id: string;
-          status: string;
-          stripe_payment_intent_id: string | null;
-          stylist_id: string;
-          total: number;
-          updated_at: string | null;
-        };
+          client_id: string
+          created_at: string | null
+          id: string
+          status: string
+          stripe_payment_intent_id: string | null
+          stylist_id: string
+          total: number
+          updated_at: string | null
+        }
         Insert: {
-          client_id: string;
-          created_at?: string | null;
-          id?: string;
-          status?: string;
-          stripe_payment_intent_id?: string | null;
-          stylist_id: string;
-          total: number;
-          updated_at?: string | null;
-        };
+          client_id: string
+          created_at?: string | null
+          id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stylist_id: string
+          total: number
+          updated_at?: string | null
+        }
         Update: {
-          client_id?: string;
-          created_at?: string | null;
-          id?: string;
-          status?: string;
-          stripe_payment_intent_id?: string | null;
-          stylist_id?: string;
-          total?: number;
-          updated_at?: string | null;
-        };
+          client_id?: string
+          created_at?: string | null
+          id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stylist_id?: string
+          total?: number
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'orders_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'orders_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'orders_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "orders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'orders_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "orders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       payments: {
         Row: {
-          amount: number;
-          appointment_id: string | null;
-          client_id: string;
-          created_at: string;
-          id: string;
-          is_deposit: boolean | null;
-          payment_method: string | null;
-          payment_type: string | null;
-          remaining_balance: number | null;
-          status: string | null;
-          stylist_id: string;
-        };
+          amount: number
+          appointment_id: string | null
+          client_id: string
+          created_at: string
+          id: string
+          is_deposit: boolean | null
+          payment_method: string | null
+          payment_type: string | null
+          remaining_balance: number | null
+          status: string | null
+          stylist_id: string
+        }
         Insert: {
-          amount: number;
-          appointment_id?: string | null;
-          client_id: string;
-          created_at?: string;
-          id?: string;
-          is_deposit?: boolean | null;
-          payment_method?: string | null;
-          payment_type?: string | null;
-          remaining_balance?: number | null;
-          status?: string | null;
-          stylist_id: string;
-        };
+          amount: number
+          appointment_id?: string | null
+          client_id: string
+          created_at?: string
+          id?: string
+          is_deposit?: boolean | null
+          payment_method?: string | null
+          payment_type?: string | null
+          remaining_balance?: number | null
+          status?: string | null
+          stylist_id: string
+        }
         Update: {
-          amount?: number;
-          appointment_id?: string | null;
-          client_id?: string;
-          created_at?: string;
-          id?: string;
-          is_deposit?: boolean | null;
-          payment_method?: string | null;
-          payment_type?: string | null;
-          remaining_balance?: number | null;
-          status?: string | null;
-          stylist_id?: string;
-        };
+          amount?: number
+          appointment_id?: string | null
+          client_id?: string
+          created_at?: string
+          id?: string
+          is_deposit?: boolean | null
+          payment_method?: string | null
+          payment_type?: string | null
+          remaining_balance?: number | null
+          status?: string | null
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'payments_appointment_id_fkey';
-            columns: ['appointment_id'];
-            isOneToOne: false;
-            referencedRelation: 'appointments';
-            referencedColumns: ['id'];
+            foreignKeyName: "payments_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'payments_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "payments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'payments_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "payments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'payments_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "payments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'payments_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "payments_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       performance_metrics: {
         Row: {
-          connection_type: string | null;
-          created_at: string | null;
-          device_type: string | null;
-          id: string;
-          metric_name: string;
-          metric_value: number;
-          page_path: string | null;
-          rating: string | null;
-          user_id: string | null;
-        };
+          connection_type: string | null
+          created_at: string | null
+          device_type: string | null
+          id: string
+          metric_name: string
+          metric_value: number
+          page_path: string | null
+          rating: string | null
+          user_id: string | null
+        }
         Insert: {
-          connection_type?: string | null;
-          created_at?: string | null;
-          device_type?: string | null;
-          id?: string;
-          metric_name: string;
-          metric_value: number;
-          page_path?: string | null;
-          rating?: string | null;
-          user_id?: string | null;
-        };
+          connection_type?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          id?: string
+          metric_name: string
+          metric_value: number
+          page_path?: string | null
+          rating?: string | null
+          user_id?: string | null
+        }
         Update: {
-          connection_type?: string | null;
-          created_at?: string | null;
-          device_type?: string | null;
-          id?: string;
-          metric_name?: string;
-          metric_value?: number;
-          page_path?: string | null;
-          rating?: string | null;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
+          connection_type?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          id?: string
+          metric_name?: string
+          metric_value?: number
+          page_path?: string | null
+          rating?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       portfolio_photos: {
         Row: {
-          before_photo_url: string | null;
-          caption: string | null;
-          created_at: string | null;
-          display_order: number | null;
-          id: string;
-          is_before_after: boolean | null;
-          photo_url: string;
-          stylist_id: string;
-          updated_at: string | null;
-        };
+          before_photo_url: string | null
+          caption: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_before_after: boolean | null
+          photo_url: string
+          stylist_id: string
+          updated_at: string | null
+        }
         Insert: {
-          before_photo_url?: string | null;
-          caption?: string | null;
-          created_at?: string | null;
-          display_order?: number | null;
-          id?: string;
-          is_before_after?: boolean | null;
-          photo_url: string;
-          stylist_id: string;
-          updated_at?: string | null;
-        };
+          before_photo_url?: string | null
+          caption?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_before_after?: boolean | null
+          photo_url: string
+          stylist_id: string
+          updated_at?: string | null
+        }
         Update: {
-          before_photo_url?: string | null;
-          caption?: string | null;
-          created_at?: string | null;
-          display_order?: number | null;
-          id?: string;
-          is_before_after?: boolean | null;
-          photo_url?: string;
-          stylist_id?: string;
-          updated_at?: string | null;
-        };
+          before_photo_url?: string | null
+          caption?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_before_after?: boolean | null
+          photo_url?: string
+          stylist_id?: string
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'portfolio_photos_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "portfolio_photos_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'portfolio_photos_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "portfolio_photos_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       predictive_insights: {
         Row: {
-          confidence_score: number | null;
-          created_at: string | null;
-          expires_at: string | null;
-          id: string;
-          insight_data: Json;
-          insight_type: string;
-          stylist_id: string | null;
-        };
+          confidence_score: number | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          insight_data: Json
+          insight_type: string
+          stylist_id: string | null
+        }
         Insert: {
-          confidence_score?: number | null;
-          created_at?: string | null;
-          expires_at?: string | null;
-          id?: string;
-          insight_data: Json;
-          insight_type: string;
-          stylist_id?: string | null;
-        };
+          confidence_score?: number | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          insight_data: Json
+          insight_type: string
+          stylist_id?: string | null
+        }
         Update: {
-          confidence_score?: number | null;
-          created_at?: string | null;
-          expires_at?: string | null;
-          id?: string;
-          insight_data?: Json;
-          insight_type?: string;
-          stylist_id?: string | null;
-        };
+          confidence_score?: number | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          insight_data?: Json
+          insight_type?: string
+          stylist_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'predictive_insights_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "predictive_insights_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'predictive_insights_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "predictive_insights_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       product_feedback: {
         Row: {
-          admin_response: string | null;
-          category: string | null;
-          created_at: string;
-          description: string;
-          feedback_type: string;
-          id: string;
-          priority: string | null;
-          status: string | null;
-          title: string;
-          updated_at: string;
-          upvotes: number | null;
-          user_id: string;
-        };
+          admin_response: string | null
+          category: string | null
+          created_at: string
+          description: string
+          feedback_type: string
+          id: string
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string
+          upvotes: number | null
+          user_id: string
+        }
         Insert: {
-          admin_response?: string | null;
-          category?: string | null;
-          created_at?: string;
-          description: string;
-          feedback_type: string;
-          id?: string;
-          priority?: string | null;
-          status?: string | null;
-          title: string;
-          updated_at?: string;
-          upvotes?: number | null;
-          user_id: string;
-        };
+          admin_response?: string | null
+          category?: string | null
+          created_at?: string
+          description: string
+          feedback_type: string
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id: string
+        }
         Update: {
-          admin_response?: string | null;
-          category?: string | null;
-          created_at?: string;
-          description?: string;
-          feedback_type?: string;
-          id?: string;
-          priority?: string | null;
-          status?: string | null;
-          title?: string;
-          updated_at?: string;
-          upvotes?: number | null;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          admin_response?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string
+          feedback_type?: string
+          id?: string
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       product_inventory: {
         Row: {
-          brand: string;
-          category: string;
-          cost_per_unit: number | null;
-          created_at: string;
-          current_quantity: number;
-          id: string;
-          notes: string | null;
-          product_name: string;
-          reorder_threshold: number;
-          stylist_id: string;
-          unit_type: string;
-          updated_at: string;
-        };
+          brand: string
+          category: string
+          cost_per_unit: number | null
+          created_at: string
+          current_quantity: number
+          id: string
+          notes: string | null
+          product_name: string
+          reorder_threshold: number
+          stylist_id: string
+          unit_type: string
+          updated_at: string
+        }
         Insert: {
-          brand: string;
-          category: string;
-          cost_per_unit?: number | null;
-          created_at?: string;
-          current_quantity?: number;
-          id?: string;
-          notes?: string | null;
-          product_name: string;
-          reorder_threshold?: number;
-          stylist_id: string;
-          unit_type?: string;
-          updated_at?: string;
-        };
+          brand: string
+          category: string
+          cost_per_unit?: number | null
+          created_at?: string
+          current_quantity?: number
+          id?: string
+          notes?: string | null
+          product_name: string
+          reorder_threshold?: number
+          stylist_id: string
+          unit_type?: string
+          updated_at?: string
+        }
         Update: {
-          brand?: string;
-          category?: string;
-          cost_per_unit?: number | null;
-          created_at?: string;
-          current_quantity?: number;
-          id?: string;
-          notes?: string | null;
-          product_name?: string;
-          reorder_threshold?: number;
-          stylist_id?: string;
-          unit_type?: string;
-          updated_at?: string;
-        };
+          brand?: string
+          category?: string
+          cost_per_unit?: number | null
+          created_at?: string
+          current_quantity?: number
+          id?: string
+          notes?: string | null
+          product_name?: string
+          reorder_threshold?: number
+          stylist_id?: string
+          unit_type?: string
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'product_inventory_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "product_inventory_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'product_inventory_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "product_inventory_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       products: {
         Row: {
-          category: string | null;
-          created_at: string | null;
-          description: string | null;
-          id: string;
-          image_url: string | null;
-          is_active: boolean | null;
-          name: string;
-          price: number;
-          stock_quantity: number | null;
-          stylist_id: string;
-          updated_at: string | null;
-        };
+          category: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          price: number
+          stock_quantity: number | null
+          stylist_id: string
+          updated_at: string | null
+        }
         Insert: {
-          category?: string | null;
-          created_at?: string | null;
-          description?: string | null;
-          id?: string;
-          image_url?: string | null;
-          is_active?: boolean | null;
-          name: string;
-          price: number;
-          stock_quantity?: number | null;
-          stylist_id: string;
-          updated_at?: string | null;
-        };
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          price: number
+          stock_quantity?: number | null
+          stylist_id: string
+          updated_at?: string | null
+        }
         Update: {
-          category?: string | null;
-          created_at?: string | null;
-          description?: string | null;
-          id?: string;
-          image_url?: string | null;
-          is_active?: boolean | null;
-          name?: string;
-          price?: number;
-          stock_quantity?: number | null;
-          stylist_id?: string;
-          updated_at?: string | null;
-        };
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          price?: number
+          stock_quantity?: number | null
+          stylist_id?: string
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'products_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "products_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'products_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "products_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       profiles: {
         Row: {
-          apple_receipt: string | null;
-          avatar_url: string | null;
-          created_at: string;
-          dashboard_preferences: Json | null;
-          deleted_at: string | null;
-          email: string;
-          email_digest_enabled: boolean | null;
-          full_name: string | null;
-          gender: string | null;
-          id: string;
-          notification_preferences: Json | null;
-          phone: string | null;
-          share_contact_with_clients: boolean | null;
-          share_contact_with_stylists: boolean | null;
-          sms_consent: boolean | null;
-          sms_consent_date: string | null;
-          subscription_end: string | null;
-          subscription_product_id: string | null;
-          subscription_status: string | null;
-          theme_preference: string | null;
-          updated_at: string;
-        };
+          apple_receipt: string | null
+          avatar_url: string | null
+          created_at: string
+          dashboard_preferences: Json | null
+          deleted_at: string | null
+          email: string
+          email_digest_enabled: boolean | null
+          full_name: string | null
+          gender: string | null
+          id: string
+          notification_preferences: Json | null
+          phone: string | null
+          share_contact_with_clients: boolean | null
+          share_contact_with_stylists: boolean | null
+          sms_consent: boolean | null
+          sms_consent_date: string | null
+          subscription_end: string | null
+          subscription_product_id: string | null
+          subscription_status: string | null
+          theme_preference: string | null
+          updated_at: string
+        }
         Insert: {
-          apple_receipt?: string | null;
-          avatar_url?: string | null;
-          created_at?: string;
-          dashboard_preferences?: Json | null;
-          deleted_at?: string | null;
-          email: string;
-          email_digest_enabled?: boolean | null;
-          full_name?: string | null;
-          gender?: string | null;
-          id: string;
-          notification_preferences?: Json | null;
-          phone?: string | null;
-          share_contact_with_clients?: boolean | null;
-          share_contact_with_stylists?: boolean | null;
-          sms_consent?: boolean | null;
-          sms_consent_date?: string | null;
-          subscription_end?: string | null;
-          subscription_product_id?: string | null;
-          subscription_status?: string | null;
-          theme_preference?: string | null;
-          updated_at?: string;
-        };
+          apple_receipt?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          dashboard_preferences?: Json | null
+          deleted_at?: string | null
+          email: string
+          email_digest_enabled?: boolean | null
+          full_name?: string | null
+          gender?: string | null
+          id: string
+          notification_preferences?: Json | null
+          phone?: string | null
+          share_contact_with_clients?: boolean | null
+          share_contact_with_stylists?: boolean | null
+          sms_consent?: boolean | null
+          sms_consent_date?: string | null
+          subscription_end?: string | null
+          subscription_product_id?: string | null
+          subscription_status?: string | null
+          theme_preference?: string | null
+          updated_at?: string
+        }
         Update: {
-          apple_receipt?: string | null;
-          avatar_url?: string | null;
-          created_at?: string;
-          dashboard_preferences?: Json | null;
-          deleted_at?: string | null;
-          email?: string;
-          email_digest_enabled?: boolean | null;
-          full_name?: string | null;
-          gender?: string | null;
-          id?: string;
-          notification_preferences?: Json | null;
-          phone?: string | null;
-          share_contact_with_clients?: boolean | null;
-          share_contact_with_stylists?: boolean | null;
-          sms_consent?: boolean | null;
-          sms_consent_date?: string | null;
-          subscription_end?: string | null;
-          subscription_product_id?: string | null;
-          subscription_status?: string | null;
-          theme_preference?: string | null;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
+          apple_receipt?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          dashboard_preferences?: Json | null
+          deleted_at?: string | null
+          email?: string
+          email_digest_enabled?: boolean | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string
+          notification_preferences?: Json | null
+          phone?: string | null
+          share_contact_with_clients?: boolean | null
+          share_contact_with_stylists?: boolean | null
+          sms_consent?: boolean | null
+          sms_consent_date?: string | null
+          subscription_end?: string | null
+          subscription_product_id?: string | null
+          subscription_status?: string | null
+          theme_preference?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rebooking_reminders: {
         Row: {
-          appointment_id: string;
-          client_id: string;
-          created_at: string;
-          id: string;
-          rebooked: boolean | null;
-          rebooked_appointment_id: string | null;
-          reminder_type: string;
-          sent_at: string;
-          status: string;
-          stylist_id: string;
-        };
+          appointment_id: string
+          client_id: string
+          created_at: string
+          id: string
+          rebooked: boolean | null
+          rebooked_appointment_id: string | null
+          reminder_type: string
+          sent_at: string
+          status: string
+          stylist_id: string
+        }
         Insert: {
-          appointment_id: string;
-          client_id: string;
-          created_at?: string;
-          id?: string;
-          rebooked?: boolean | null;
-          rebooked_appointment_id?: string | null;
-          reminder_type?: string;
-          sent_at?: string;
-          status?: string;
-          stylist_id: string;
-        };
+          appointment_id: string
+          client_id: string
+          created_at?: string
+          id?: string
+          rebooked?: boolean | null
+          rebooked_appointment_id?: string | null
+          reminder_type?: string
+          sent_at?: string
+          status?: string
+          stylist_id: string
+        }
         Update: {
-          appointment_id?: string;
-          client_id?: string;
-          created_at?: string;
-          id?: string;
-          rebooked?: boolean | null;
-          rebooked_appointment_id?: string | null;
-          reminder_type?: string;
-          sent_at?: string;
-          status?: string;
-          stylist_id?: string;
-        };
+          appointment_id?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          rebooked?: boolean | null
+          rebooked_appointment_id?: string | null
+          reminder_type?: string
+          sent_at?: string
+          status?: string
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'rebooking_reminders_appointment_id_fkey';
-            columns: ['appointment_id'];
-            isOneToOne: false;
-            referencedRelation: 'appointments';
-            referencedColumns: ['id'];
+            foreignKeyName: "rebooking_reminders_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'rebooking_reminders_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "rebooking_reminders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'rebooking_reminders_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "rebooking_reminders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'rebooking_reminders_rebooked_appointment_id_fkey';
-            columns: ['rebooked_appointment_id'];
-            isOneToOne: false;
-            referencedRelation: 'appointments';
-            referencedColumns: ['id'];
+            foreignKeyName: "rebooking_reminders_rebooked_appointment_id_fkey"
+            columns: ["rebooked_appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'rebooking_reminders_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "rebooking_reminders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'rebooking_reminders_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "rebooking_reminders_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       referral_tracking: {
         Row: {
-          created_at: string;
-          id: string;
-          is_qualified: boolean | null;
-          qualified_at: string | null;
-          referral_code: string;
-          referred_stylist_id: string;
-          referrer_id: string;
-          signup_date: string;
-        };
+          created_at: string
+          id: string
+          is_qualified: boolean | null
+          qualified_at: string | null
+          referral_code: string
+          referred_stylist_id: string
+          referrer_id: string
+          signup_date: string
+        }
         Insert: {
-          created_at?: string;
-          id?: string;
-          is_qualified?: boolean | null;
-          qualified_at?: string | null;
-          referral_code: string;
-          referred_stylist_id: string;
-          referrer_id: string;
-          signup_date?: string;
-        };
+          created_at?: string
+          id?: string
+          is_qualified?: boolean | null
+          qualified_at?: string | null
+          referral_code: string
+          referred_stylist_id: string
+          referrer_id: string
+          signup_date?: string
+        }
         Update: {
-          created_at?: string;
-          id?: string;
-          is_qualified?: boolean | null;
-          qualified_at?: string | null;
-          referral_code?: string;
-          referred_stylist_id?: string;
-          referrer_id?: string;
-          signup_date?: string;
-        };
+          created_at?: string
+          id?: string
+          is_qualified?: boolean | null
+          qualified_at?: string | null
+          referral_code?: string
+          referred_stylist_id?: string
+          referrer_id?: string
+          signup_date?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'referral_tracking_referred_stylist_id_fkey';
-            columns: ['referred_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "referral_tracking_referred_stylist_id_fkey"
+            columns: ["referred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'referral_tracking_referred_stylist_id_fkey';
-            columns: ['referred_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "referral_tracking_referred_stylist_id_fkey"
+            columns: ["referred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'referral_tracking_referrer_id_fkey';
-            columns: ['referrer_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "referral_tracking_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'referral_tracking_referrer_id_fkey';
-            columns: ['referrer_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "referral_tracking_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       revenue_forecasts: {
         Row: {
-          confidence_interval_high: number | null;
-          confidence_interval_low: number | null;
-          created_at: string;
-          factors: Json | null;
-          forecast_end: string;
-          forecast_period: string;
-          forecast_start: string;
-          id: string;
-          predicted_appointments: number | null;
-          predicted_new_clients: number | null;
-          predicted_retention_rate: number | null;
-          predicted_revenue: number;
-          stylist_id: string;
-        };
+          confidence_interval_high: number | null
+          confidence_interval_low: number | null
+          created_at: string
+          factors: Json | null
+          forecast_end: string
+          forecast_period: string
+          forecast_start: string
+          id: string
+          predicted_appointments: number | null
+          predicted_new_clients: number | null
+          predicted_retention_rate: number | null
+          predicted_revenue: number
+          stylist_id: string
+        }
         Insert: {
-          confidence_interval_high?: number | null;
-          confidence_interval_low?: number | null;
-          created_at?: string;
-          factors?: Json | null;
-          forecast_end: string;
-          forecast_period: string;
-          forecast_start: string;
-          id?: string;
-          predicted_appointments?: number | null;
-          predicted_new_clients?: number | null;
-          predicted_retention_rate?: number | null;
-          predicted_revenue: number;
-          stylist_id: string;
-        };
+          confidence_interval_high?: number | null
+          confidence_interval_low?: number | null
+          created_at?: string
+          factors?: Json | null
+          forecast_end: string
+          forecast_period: string
+          forecast_start: string
+          id?: string
+          predicted_appointments?: number | null
+          predicted_new_clients?: number | null
+          predicted_retention_rate?: number | null
+          predicted_revenue: number
+          stylist_id: string
+        }
         Update: {
-          confidence_interval_high?: number | null;
-          confidence_interval_low?: number | null;
-          created_at?: string;
-          factors?: Json | null;
-          forecast_end?: string;
-          forecast_period?: string;
-          forecast_start?: string;
-          id?: string;
-          predicted_appointments?: number | null;
-          predicted_new_clients?: number | null;
-          predicted_retention_rate?: number | null;
-          predicted_revenue?: number;
-          stylist_id?: string;
-        };
+          confidence_interval_high?: number | null
+          confidence_interval_low?: number | null
+          created_at?: string
+          factors?: Json | null
+          forecast_end?: string
+          forecast_period?: string
+          forecast_start?: string
+          id?: string
+          predicted_appointments?: number | null
+          predicted_new_clients?: number | null
+          predicted_retention_rate?: number | null
+          predicted_revenue?: number
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'revenue_forecasts_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "revenue_forecasts_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'revenue_forecasts_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "revenue_forecasts_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       reviews: {
         Row: {
-          appointment_id: string | null;
-          client_id: string;
-          created_at: string;
-          id: string;
-          rating: number;
-          review_text: string | null;
-          stylist_id: string;
-          updated_at: string;
-        };
+          appointment_id: string | null
+          client_id: string
+          created_at: string
+          id: string
+          rating: number
+          review_text: string | null
+          stylist_id: string
+          updated_at: string
+        }
         Insert: {
-          appointment_id?: string | null;
-          client_id: string;
-          created_at?: string;
-          id?: string;
-          rating: number;
-          review_text?: string | null;
-          stylist_id: string;
-          updated_at?: string;
-        };
+          appointment_id?: string | null
+          client_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          review_text?: string | null
+          stylist_id: string
+          updated_at?: string
+        }
         Update: {
-          appointment_id?: string | null;
-          client_id?: string;
-          created_at?: string;
-          id?: string;
-          rating?: number;
-          review_text?: string | null;
-          stylist_id?: string;
-          updated_at?: string;
-        };
+          appointment_id?: string | null
+          client_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          review_text?: string | null
+          stylist_id?: string
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'reviews_appointment_id_fkey';
-            columns: ['appointment_id'];
-            isOneToOne: false;
-            referencedRelation: 'appointments';
-            referencedColumns: ['id'];
+            foreignKeyName: "reviews_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'reviews_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "reviews_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'reviews_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "reviews_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'reviews_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "reviews_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'reviews_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "reviews_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       sensitive_data_access_log: {
         Row: {
-          access_type: string;
-          accessed_at: string;
-          accessed_by: string | null;
-          id: string;
-          ip_address: unknown;
-          record_id: string;
-          table_name: string;
-          user_agent: string | null;
-        };
+          access_type: string
+          accessed_at: string
+          accessed_by: string | null
+          id: string
+          ip_address: unknown
+          record_id: string
+          table_name: string
+          user_agent: string | null
+        }
         Insert: {
-          access_type: string;
-          accessed_at?: string;
-          accessed_by?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          record_id: string;
-          table_name: string;
-          user_agent?: string | null;
-        };
+          access_type: string
+          accessed_at?: string
+          accessed_by?: string | null
+          id?: string
+          ip_address?: unknown
+          record_id: string
+          table_name: string
+          user_agent?: string | null
+        }
         Update: {
-          access_type?: string;
-          accessed_at?: string;
-          accessed_by?: string | null;
-          id?: string;
-          ip_address?: unknown;
-          record_id?: string;
-          table_name?: string;
-          user_agent?: string | null;
-        };
-        Relationships: [];
-      };
+          access_type?: string
+          accessed_at?: string
+          accessed_by?: string | null
+          id?: string
+          ip_address?: unknown
+          record_id?: string
+          table_name?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       service_templates: {
         Row: {
-          created_at: string | null;
-          id: string;
-          name: string;
-          services: string[];
-          stylist_id: string;
-          total_duration: number;
-          total_price: number;
-          updated_at: string | null;
-        };
+          created_at: string | null
+          id: string
+          name: string
+          services: string[]
+          stylist_id: string
+          total_duration: number
+          total_price: number
+          updated_at: string | null
+        }
         Insert: {
-          created_at?: string | null;
-          id?: string;
-          name: string;
-          services?: string[];
-          stylist_id: string;
-          total_duration?: number;
-          total_price?: number;
-          updated_at?: string | null;
-        };
+          created_at?: string | null
+          id?: string
+          name: string
+          services?: string[]
+          stylist_id: string
+          total_duration?: number
+          total_price?: number
+          updated_at?: string | null
+        }
         Update: {
-          created_at?: string | null;
-          id?: string;
-          name?: string;
-          services?: string[];
-          stylist_id?: string;
-          total_duration?: number;
-          total_price?: number;
-          updated_at?: string | null;
-        };
+          created_at?: string | null
+          id?: string
+          name?: string
+          services?: string[]
+          stylist_id?: string
+          total_duration?: number
+          total_price?: number
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'service_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "service_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'service_templates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "service_templates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       service_type_colors: {
         Row: {
-          color: string;
-          created_at: string;
-          id: string;
-          service_type: string;
-          stylist_id: string;
-          updated_at: string;
-        };
+          color: string
+          created_at: string
+          id: string
+          service_type: string
+          stylist_id: string
+          updated_at: string
+        }
         Insert: {
-          color?: string;
-          created_at?: string;
-          id?: string;
-          service_type: string;
-          stylist_id: string;
-          updated_at?: string;
-        };
+          color?: string
+          created_at?: string
+          id?: string
+          service_type: string
+          stylist_id: string
+          updated_at?: string
+        }
         Update: {
-          color?: string;
-          created_at?: string;
-          id?: string;
-          service_type?: string;
-          stylist_id?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
+          color?: string
+          created_at?: string
+          id?: string
+          service_type?: string
+          stylist_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       sms_conversations: {
         Row: {
-          client_id: string | null;
-          created_at: string | null;
-          direction: string;
-          from_number: string;
-          id: string;
-          message_body: string;
-          stylist_id: string | null;
-          to_number: string;
-          twilio_sid: string | null;
-        };
+          client_id: string | null
+          created_at: string | null
+          direction: string
+          from_number: string
+          id: string
+          message_body: string
+          stylist_id: string | null
+          to_number: string
+          twilio_sid: string | null
+        }
         Insert: {
-          client_id?: string | null;
-          created_at?: string | null;
-          direction: string;
-          from_number: string;
-          id?: string;
-          message_body: string;
-          stylist_id?: string | null;
-          to_number: string;
-          twilio_sid?: string | null;
-        };
+          client_id?: string | null
+          created_at?: string | null
+          direction: string
+          from_number: string
+          id?: string
+          message_body: string
+          stylist_id?: string | null
+          to_number: string
+          twilio_sid?: string | null
+        }
         Update: {
-          client_id?: string | null;
-          created_at?: string | null;
-          direction?: string;
-          from_number?: string;
-          id?: string;
-          message_body?: string;
-          stylist_id?: string | null;
-          to_number?: string;
-          twilio_sid?: string | null;
-        };
+          client_id?: string | null
+          created_at?: string | null
+          direction?: string
+          from_number?: string
+          id?: string
+          message_body?: string
+          stylist_id?: string | null
+          to_number?: string
+          twilio_sid?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'sms_conversations_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "sms_conversations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'sms_conversations_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "sms_conversations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'sms_conversations_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "sms_conversations_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'sms_conversations_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "sms_conversations_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_affiliate_codes: {
         Row: {
-          affiliate_link: string | null;
-          brand_id: string | null;
-          created_at: string;
-          custom_commission_rate: number | null;
-          id: string;
-          is_active: boolean | null;
-          referral_code: string;
-          stylist_id: string;
-        };
+          affiliate_link: string | null
+          brand_id: string | null
+          created_at: string
+          custom_commission_rate: number | null
+          id: string
+          is_active: boolean | null
+          referral_code: string
+          stylist_id: string
+        }
         Insert: {
-          affiliate_link?: string | null;
-          brand_id?: string | null;
-          created_at?: string;
-          custom_commission_rate?: number | null;
-          id?: string;
-          is_active?: boolean | null;
-          referral_code: string;
-          stylist_id: string;
-        };
+          affiliate_link?: string | null
+          brand_id?: string | null
+          created_at?: string
+          custom_commission_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          referral_code: string
+          stylist_id: string
+        }
         Update: {
-          affiliate_link?: string | null;
-          brand_id?: string | null;
-          created_at?: string;
-          custom_commission_rate?: number | null;
-          id?: string;
-          is_active?: boolean | null;
-          referral_code?: string;
-          stylist_id?: string;
-        };
+          affiliate_link?: string | null
+          brand_id?: string | null
+          created_at?: string
+          custom_commission_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          referral_code?: string
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_affiliate_codes_brand_id_fkey';
-            columns: ['brand_id'];
-            isOneToOne: false;
-            referencedRelation: 'hair_brands';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_affiliate_codes_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "hair_brands"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_affiliate_codes_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_affiliate_codes_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_affiliate_codes_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_affiliate_codes_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_blocked_dates: {
         Row: {
-          blocked_date: string;
-          created_at: string;
-          id: string;
-          reason: string | null;
-          stylist_id: string;
-        };
+          blocked_date: string
+          created_at: string
+          id: string
+          reason: string | null
+          stylist_id: string
+        }
         Insert: {
-          blocked_date: string;
-          created_at?: string;
-          id?: string;
-          reason?: string | null;
-          stylist_id: string;
-        };
+          blocked_date: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          stylist_id: string
+        }
         Update: {
-          blocked_date?: string;
-          created_at?: string;
-          id?: string;
-          reason?: string | null;
-          stylist_id?: string;
-        };
+          blocked_date?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_blocked_dates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_blocked_dates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_blocked_dates_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_blocked_dates_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_formula_history: {
         Row: {
-          client_id: string | null;
-          created_at: string | null;
-          formula_json: Json;
-          id: string;
-          outcome_rating: string | null;
-          stylist_id: string | null;
-        };
+          client_id: string | null
+          created_at: string | null
+          formula_json: Json
+          id: string
+          outcome_rating: string | null
+          stylist_id: string | null
+        }
         Insert: {
-          client_id?: string | null;
-          created_at?: string | null;
-          formula_json: Json;
-          id?: string;
-          outcome_rating?: string | null;
-          stylist_id?: string | null;
-        };
+          client_id?: string | null
+          created_at?: string | null
+          formula_json: Json
+          id?: string
+          outcome_rating?: string | null
+          stylist_id?: string | null
+        }
         Update: {
-          client_id?: string | null;
-          created_at?: string | null;
-          formula_json?: Json;
-          id?: string;
-          outcome_rating?: string | null;
-          stylist_id?: string | null;
-        };
+          client_id?: string | null
+          created_at?: string | null
+          formula_json?: Json
+          id?: string
+          outcome_rating?: string | null
+          stylist_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_formula_history_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_formula_history_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_formula_history_client_id_fkey';
-            columns: ['client_id'];
-            isOneToOne: false;
-            referencedRelation: 'client_statistics';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_formula_history_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "client_statistics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_formula_history_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_formula_history_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_formula_history_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_formula_history_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_notes: {
         Row: {
-          content: string;
-          created_at: string;
-          id: string;
-          updated_at: string;
-          user_id: string;
-        };
+          content: string
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          content: string;
-          created_at?: string;
-          id?: string;
-          updated_at?: string;
-          user_id: string;
-        };
+          content: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          content?: string;
-          created_at?: string;
-          id?: string;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          content?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       stylist_preferences: {
         Row: {
-          formula_patterns: Json | null;
-          id: string;
-          last_analyzed_at: string | null;
-          preferred_brands: Json | null;
-          processing_time_tendency: string | null;
-          stylist_id: string | null;
-          tone_adjustment_style: string | null;
-          typical_developer_volumes: Json | null;
-          updated_at: string | null;
-        };
+          formula_patterns: Json | null
+          id: string
+          last_analyzed_at: string | null
+          preferred_brands: Json | null
+          processing_time_tendency: string | null
+          stylist_id: string | null
+          tone_adjustment_style: string | null
+          typical_developer_volumes: Json | null
+          updated_at: string | null
+        }
         Insert: {
-          formula_patterns?: Json | null;
-          id?: string;
-          last_analyzed_at?: string | null;
-          preferred_brands?: Json | null;
-          processing_time_tendency?: string | null;
-          stylist_id?: string | null;
-          tone_adjustment_style?: string | null;
-          typical_developer_volumes?: Json | null;
-          updated_at?: string | null;
-        };
+          formula_patterns?: Json | null
+          id?: string
+          last_analyzed_at?: string | null
+          preferred_brands?: Json | null
+          processing_time_tendency?: string | null
+          stylist_id?: string | null
+          tone_adjustment_style?: string | null
+          typical_developer_volumes?: Json | null
+          updated_at?: string | null
+        }
         Update: {
-          formula_patterns?: Json | null;
-          id?: string;
-          last_analyzed_at?: string | null;
-          preferred_brands?: Json | null;
-          processing_time_tendency?: string | null;
-          stylist_id?: string | null;
-          tone_adjustment_style?: string | null;
-          typical_developer_volumes?: Json | null;
-          updated_at?: string | null;
-        };
+          formula_patterns?: Json | null
+          id?: string
+          last_analyzed_at?: string | null
+          preferred_brands?: Json | null
+          processing_time_tendency?: string | null
+          stylist_id?: string | null
+          tone_adjustment_style?: string | null
+          typical_developer_volumes?: Json | null
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_preferences_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: true;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_preferences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: true
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_preferences_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: true;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_preferences_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: true
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_profiles: {
         Row: {
-          accepts_new_clients: boolean | null;
-          average_rating: number | null;
-          bio: string | null;
-          booking_instructions: string | null;
-          booking_link: string | null;
-          booking_page_active: boolean | null;
-          buffer_time_minutes: number | null;
-          business_email: string | null;
-          business_name: string | null;
-          business_phone: string | null;
-          cancellation_policy: string | null;
-          color_line: string | null;
-          commission_rate: number | null;
-          created_at: string;
-          deposit_percentage: number | null;
-          deposit_required: boolean | null;
-          id: string;
-          instant_booking_enabled: boolean | null;
-          is_available: boolean | null;
-          is_public_listing: boolean | null;
-          location: string | null;
-          max_clients_per_day: number | null;
-          parking_instructions: string | null;
-          preferred_communication: string | null;
-          social_media_facebook: string | null;
-          social_media_instagram: string | null;
-          social_media_tiktok: string | null;
-          special_accommodations: string | null;
-          specialty: string | null;
-          timezone: string | null;
-          total_reviews: number | null;
-          trial_end_date: string | null;
-          updated_at: string;
-          user_id: string;
-          weekly_schedule: Json | null;
-          years_experience: number | null;
-        };
+          accepts_new_clients: boolean | null
+          average_rating: number | null
+          bio: string | null
+          booking_instructions: string | null
+          booking_link: string | null
+          booking_page_active: boolean | null
+          buffer_time_minutes: number | null
+          business_email: string | null
+          business_name: string | null
+          business_phone: string | null
+          cancellation_policy: string | null
+          color_line: string | null
+          commission_rate: number | null
+          created_at: string
+          deposit_percentage: number | null
+          deposit_required: boolean | null
+          id: string
+          instant_booking_enabled: boolean | null
+          is_available: boolean | null
+          is_public_listing: boolean | null
+          location: string | null
+          max_clients_per_day: number | null
+          parking_instructions: string | null
+          preferred_communication: string | null
+          social_media_facebook: string | null
+          social_media_instagram: string | null
+          social_media_tiktok: string | null
+          special_accommodations: string | null
+          specialty: string | null
+          timezone: string | null
+          total_reviews: number | null
+          trial_end_date: string | null
+          updated_at: string
+          user_id: string
+          weekly_schedule: Json | null
+          years_experience: number | null
+        }
         Insert: {
-          accepts_new_clients?: boolean | null;
-          average_rating?: number | null;
-          bio?: string | null;
-          booking_instructions?: string | null;
-          booking_link?: string | null;
-          booking_page_active?: boolean | null;
-          buffer_time_minutes?: number | null;
-          business_email?: string | null;
-          business_name?: string | null;
-          business_phone?: string | null;
-          cancellation_policy?: string | null;
-          color_line?: string | null;
-          commission_rate?: number | null;
-          created_at?: string;
-          deposit_percentage?: number | null;
-          deposit_required?: boolean | null;
-          id?: string;
-          instant_booking_enabled?: boolean | null;
-          is_available?: boolean | null;
-          is_public_listing?: boolean | null;
-          location?: string | null;
-          max_clients_per_day?: number | null;
-          parking_instructions?: string | null;
-          preferred_communication?: string | null;
-          social_media_facebook?: string | null;
-          social_media_instagram?: string | null;
-          social_media_tiktok?: string | null;
-          special_accommodations?: string | null;
-          specialty?: string | null;
-          timezone?: string | null;
-          total_reviews?: number | null;
-          trial_end_date?: string | null;
-          updated_at?: string;
-          user_id: string;
-          weekly_schedule?: Json | null;
-          years_experience?: number | null;
-        };
+          accepts_new_clients?: boolean | null
+          average_rating?: number | null
+          bio?: string | null
+          booking_instructions?: string | null
+          booking_link?: string | null
+          booking_page_active?: boolean | null
+          buffer_time_minutes?: number | null
+          business_email?: string | null
+          business_name?: string | null
+          business_phone?: string | null
+          cancellation_policy?: string | null
+          color_line?: string | null
+          commission_rate?: number | null
+          created_at?: string
+          deposit_percentage?: number | null
+          deposit_required?: boolean | null
+          id?: string
+          instant_booking_enabled?: boolean | null
+          is_available?: boolean | null
+          is_public_listing?: boolean | null
+          location?: string | null
+          max_clients_per_day?: number | null
+          parking_instructions?: string | null
+          preferred_communication?: string | null
+          social_media_facebook?: string | null
+          social_media_instagram?: string | null
+          social_media_tiktok?: string | null
+          special_accommodations?: string | null
+          specialty?: string | null
+          timezone?: string | null
+          total_reviews?: number | null
+          trial_end_date?: string | null
+          updated_at?: string
+          user_id: string
+          weekly_schedule?: Json | null
+          years_experience?: number | null
+        }
         Update: {
-          accepts_new_clients?: boolean | null;
-          average_rating?: number | null;
-          bio?: string | null;
-          booking_instructions?: string | null;
-          booking_link?: string | null;
-          booking_page_active?: boolean | null;
-          buffer_time_minutes?: number | null;
-          business_email?: string | null;
-          business_name?: string | null;
-          business_phone?: string | null;
-          cancellation_policy?: string | null;
-          color_line?: string | null;
-          commission_rate?: number | null;
-          created_at?: string;
-          deposit_percentage?: number | null;
-          deposit_required?: boolean | null;
-          id?: string;
-          instant_booking_enabled?: boolean | null;
-          is_available?: boolean | null;
-          is_public_listing?: boolean | null;
-          location?: string | null;
-          max_clients_per_day?: number | null;
-          parking_instructions?: string | null;
-          preferred_communication?: string | null;
-          social_media_facebook?: string | null;
-          social_media_instagram?: string | null;
-          social_media_tiktok?: string | null;
-          special_accommodations?: string | null;
-          specialty?: string | null;
-          timezone?: string | null;
-          total_reviews?: number | null;
-          trial_end_date?: string | null;
-          updated_at?: string;
-          user_id?: string;
-          weekly_schedule?: Json | null;
-          years_experience?: number | null;
-        };
+          accepts_new_clients?: boolean | null
+          average_rating?: number | null
+          bio?: string | null
+          booking_instructions?: string | null
+          booking_link?: string | null
+          booking_page_active?: boolean | null
+          buffer_time_minutes?: number | null
+          business_email?: string | null
+          business_name?: string | null
+          business_phone?: string | null
+          cancellation_policy?: string | null
+          color_line?: string | null
+          commission_rate?: number | null
+          created_at?: string
+          deposit_percentage?: number | null
+          deposit_required?: boolean | null
+          id?: string
+          instant_booking_enabled?: boolean | null
+          is_available?: boolean | null
+          is_public_listing?: boolean | null
+          location?: string | null
+          max_clients_per_day?: number | null
+          parking_instructions?: string | null
+          preferred_communication?: string | null
+          social_media_facebook?: string | null
+          social_media_instagram?: string | null
+          social_media_tiktok?: string | null
+          special_accommodations?: string | null
+          specialty?: string | null
+          timezone?: string | null
+          total_reviews?: number | null
+          trial_end_date?: string | null
+          updated_at?: string
+          user_id?: string
+          weekly_schedule?: Json | null
+          years_experience?: number | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_profiles_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: true;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_referrals: {
         Row: {
-          created_at: string;
-          id: string;
-          referral_code: string;
-          referred_by: string | null;
-          reward_tier: string | null;
-          stylist_id: string;
-          successful_referrals: number | null;
-          updated_at: string;
-        };
+          created_at: string
+          id: string
+          referral_code: string
+          referred_by: string | null
+          reward_tier: string | null
+          stylist_id: string
+          successful_referrals: number | null
+          updated_at: string
+        }
         Insert: {
-          created_at?: string;
-          id?: string;
-          referral_code: string;
-          referred_by?: string | null;
-          reward_tier?: string | null;
-          stylist_id: string;
-          successful_referrals?: number | null;
-          updated_at?: string;
-        };
+          created_at?: string
+          id?: string
+          referral_code: string
+          referred_by?: string | null
+          reward_tier?: string | null
+          stylist_id: string
+          successful_referrals?: number | null
+          updated_at?: string
+        }
         Update: {
-          created_at?: string;
-          id?: string;
-          referral_code?: string;
-          referred_by?: string | null;
-          reward_tier?: string | null;
-          stylist_id?: string;
-          successful_referrals?: number | null;
-          updated_at?: string;
-        };
+          created_at?: string
+          id?: string
+          referral_code?: string
+          referred_by?: string | null
+          reward_tier?: string | null
+          stylist_id?: string
+          successful_referrals?: number | null
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_referrals_referred_by_fkey';
-            columns: ['referred_by'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_referrals_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_referrals_referred_by_fkey';
-            columns: ['referred_by'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_referrals_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_referrals_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_referrals_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_referrals_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_referrals_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_schedule_overrides: {
         Row: {
-          created_at: string;
-          end_date: string;
-          id: string;
-          is_recurring: boolean | null;
-          label: string | null;
-          start_date: string;
-          stylist_id: string;
-          weekly_schedule: Json;
-        };
+          created_at: string
+          end_date: string
+          id: string
+          is_recurring: boolean | null
+          label: string | null
+          start_date: string
+          stylist_id: string
+          weekly_schedule: Json
+        }
         Insert: {
-          created_at?: string;
-          end_date: string;
-          id?: string;
-          is_recurring?: boolean | null;
-          label?: string | null;
-          start_date: string;
-          stylist_id: string;
-          weekly_schedule: Json;
-        };
+          created_at?: string
+          end_date: string
+          id?: string
+          is_recurring?: boolean | null
+          label?: string | null
+          start_date: string
+          stylist_id: string
+          weekly_schedule: Json
+        }
         Update: {
-          created_at?: string;
-          end_date?: string;
-          id?: string;
-          is_recurring?: boolean | null;
-          label?: string | null;
-          start_date?: string;
-          stylist_id?: string;
-          weekly_schedule?: Json;
-        };
+          created_at?: string
+          end_date?: string
+          id?: string
+          is_recurring?: boolean | null
+          label?: string | null
+          start_date?: string
+          stylist_id?: string
+          weekly_schedule?: Json
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_schedule_overrides_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_schedule_overrides_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_schedule_overrides_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_schedule_overrides_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_services: {
         Row: {
-          buffer_time_minutes: number | null;
-          created_at: string;
-          deposit_amount: number | null;
-          deposit_type: string | null;
-          description: string | null;
-          duration_minutes: number;
-          id: string;
-          is_active: boolean | null;
-          price: number;
-          require_deposit: boolean | null;
-          service_name: string;
-          stylist_id: string;
-          updated_at: string;
-        };
+          buffer_time_minutes: number | null
+          created_at: string
+          deposit_amount: number | null
+          deposit_type: string | null
+          description: string | null
+          duration_minutes: number
+          id: string
+          is_active: boolean | null
+          price: number
+          require_deposit: boolean | null
+          service_name: string
+          stylist_id: string
+          updated_at: string
+        }
         Insert: {
-          buffer_time_minutes?: number | null;
-          created_at?: string;
-          deposit_amount?: number | null;
-          deposit_type?: string | null;
-          description?: string | null;
-          duration_minutes?: number;
-          id?: string;
-          is_active?: boolean | null;
-          price: number;
-          require_deposit?: boolean | null;
-          service_name: string;
-          stylist_id: string;
-          updated_at?: string;
-        };
+          buffer_time_minutes?: number | null
+          created_at?: string
+          deposit_amount?: number | null
+          deposit_type?: string | null
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean | null
+          price: number
+          require_deposit?: boolean | null
+          service_name: string
+          stylist_id: string
+          updated_at?: string
+        }
         Update: {
-          buffer_time_minutes?: number | null;
-          created_at?: string;
-          deposit_amount?: number | null;
-          deposit_type?: string | null;
-          description?: string | null;
-          duration_minutes?: number;
-          id?: string;
-          is_active?: boolean | null;
-          price?: number;
-          require_deposit?: boolean | null;
-          service_name?: string;
-          stylist_id?: string;
-          updated_at?: string;
-        };
+          buffer_time_minutes?: number | null
+          created_at?: string
+          deposit_amount?: number | null
+          deposit_type?: string | null
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean | null
+          price?: number
+          require_deposit?: boolean | null
+          service_name?: string
+          stylist_id?: string
+          updated_at?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'stylist_services_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_services_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'stylist_services_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "stylist_services_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       stylist_todos: {
         Row: {
-          completed: boolean;
-          created_at: string;
-          id: string;
-          task: string;
-          updated_at: string;
-          user_id: string;
-        };
+          completed: boolean
+          created_at: string
+          id: string
+          task: string
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          completed?: boolean;
-          created_at?: string;
-          id?: string;
-          task: string;
-          updated_at?: string;
-          user_id: string;
-        };
+          completed?: boolean
+          created_at?: string
+          id?: string
+          task: string
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          completed?: boolean;
-          created_at?: string;
-          id?: string;
-          task?: string;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          completed?: boolean
+          created_at?: string
+          id?: string
+          task?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       team_messages: {
         Row: {
-          created_at: string | null;
-          edited_at: string | null;
-          id: string;
-          message: string;
-          stylist_id: string;
-        };
+          created_at: string | null
+          edited_at: string | null
+          id: string
+          message: string
+          stylist_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          edited_at?: string | null;
-          id?: string;
-          message: string;
-          stylist_id: string;
-        };
+          created_at?: string | null
+          edited_at?: string | null
+          id?: string
+          message: string
+          stylist_id: string
+        }
         Update: {
-          created_at?: string | null;
-          edited_at?: string | null;
-          id?: string;
-          message?: string;
-          stylist_id?: string;
-        };
+          created_at?: string | null
+          edited_at?: string | null
+          id?: string
+          message?: string
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'team_messages_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "team_messages_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'team_messages_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "team_messages_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       todos: {
         Row: {
-          completed: boolean;
-          created_at: string;
-          due_date: string | null;
-          id: string;
-          title: string;
-          updated_at: string;
-          user_id: string;
-        };
+          completed: boolean
+          created_at: string
+          due_date: string | null
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          completed?: boolean;
-          created_at?: string;
-          due_date?: string | null;
-          id?: string;
-          title: string;
-          updated_at?: string;
-          user_id: string;
-        };
+          completed?: boolean
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          completed?: boolean;
-          created_at?: string;
-          due_date?: string | null;
-          id?: string;
-          title?: string;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          completed?: boolean
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_dashboard_preferences: {
         Row: {
-          created_at: string | null;
-          dashboard_layout: Json | null;
-          id: string;
-          updated_at: string | null;
-          user_id: string;
-        };
+          created_at: string | null
+          dashboard_layout: Json | null
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          dashboard_layout?: Json | null;
-          id?: string;
-          updated_at?: string | null;
-          user_id: string;
-        };
+          created_at?: string | null
+          dashboard_layout?: Json | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
         Update: {
-          created_at?: string | null;
-          dashboard_layout?: Json | null;
-          id?: string;
-          updated_at?: string | null;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          dashboard_layout?: Json | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_events: {
         Row: {
-          created_at: string | null;
-          device_type: string | null;
-          event_category: string;
-          event_data: Json | null;
-          event_name: string;
-          id: string;
-          page_path: string | null;
-          platform: string | null;
-          referrer: string | null;
-          session_id: string;
-          user_id: string | null;
-          user_role: string | null;
-          utm_campaign: string | null;
-          utm_medium: string | null;
-          utm_source: string | null;
-        };
+          created_at: string | null
+          device_type: string | null
+          event_category: string
+          event_data: Json | null
+          event_name: string
+          id: string
+          page_path: string | null
+          platform: string | null
+          referrer: string | null
+          session_id: string
+          user_id: string | null
+          user_role: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
         Insert: {
-          created_at?: string | null;
-          device_type?: string | null;
-          event_category: string;
-          event_data?: Json | null;
-          event_name: string;
-          id?: string;
-          page_path?: string | null;
-          platform?: string | null;
-          referrer?: string | null;
-          session_id: string;
-          user_id?: string | null;
-          user_role?: string | null;
-          utm_campaign?: string | null;
-          utm_medium?: string | null;
-          utm_source?: string | null;
-        };
+          created_at?: string | null
+          device_type?: string | null
+          event_category: string
+          event_data?: Json | null
+          event_name: string
+          id?: string
+          page_path?: string | null
+          platform?: string | null
+          referrer?: string | null
+          session_id: string
+          user_id?: string | null
+          user_role?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
         Update: {
-          created_at?: string | null;
-          device_type?: string | null;
-          event_category?: string;
-          event_data?: Json | null;
-          event_name?: string;
-          id?: string;
-          page_path?: string | null;
-          platform?: string | null;
-          referrer?: string | null;
-          session_id?: string;
-          user_id?: string | null;
-          user_role?: string | null;
-          utm_campaign?: string | null;
-          utm_medium?: string | null;
-          utm_source?: string | null;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          device_type?: string | null
+          event_category?: string
+          event_data?: Json | null
+          event_name?: string
+          id?: string
+          page_path?: string | null
+          platform?: string | null
+          referrer?: string | null
+          session_id?: string
+          user_id?: string | null
+          user_role?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       user_mobile_preferences: {
         Row: {
-          created_at: string | null;
-          haptic_feedback_enabled: boolean | null;
-          id: string;
-          offline_mode_enabled: boolean | null;
-          preferred_theme: string | null;
-          reduce_animations: boolean | null;
-          updated_at: string | null;
-          user_id: string | null;
-        };
+          created_at: string | null
+          haptic_feedback_enabled: boolean | null
+          id: string
+          offline_mode_enabled: boolean | null
+          preferred_theme: string | null
+          reduce_animations: boolean | null
+          updated_at: string | null
+          user_id: string | null
+        }
         Insert: {
-          created_at?: string | null;
-          haptic_feedback_enabled?: boolean | null;
-          id?: string;
-          offline_mode_enabled?: boolean | null;
-          preferred_theme?: string | null;
-          reduce_animations?: boolean | null;
-          updated_at?: string | null;
-          user_id?: string | null;
-        };
+          created_at?: string | null
+          haptic_feedback_enabled?: boolean | null
+          id?: string
+          offline_mode_enabled?: boolean | null
+          preferred_theme?: string | null
+          reduce_animations?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
         Update: {
-          created_at?: string | null;
-          haptic_feedback_enabled?: boolean | null;
-          id?: string;
-          offline_mode_enabled?: boolean | null;
-          preferred_theme?: string | null;
-          reduce_animations?: boolean | null;
-          updated_at?: string | null;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          haptic_feedback_enabled?: boolean | null
+          id?: string
+          offline_mode_enabled?: boolean | null
+          preferred_theme?: string | null
+          reduce_animations?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
-          id: string;
-          role: Database['public']['Enums']['app_role'];
-          user_id: string;
-        };
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
         Insert: {
-          id?: string;
-          role: Database['public']['Enums']['app_role'];
-          user_id: string;
-        };
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
         Update: {
-          id?: string;
-          role?: Database['public']['Enums']['app_role'];
-          user_id?: string;
-        };
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'user_roles_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       user_sessions: {
         Row: {
-          device_type: string | null;
-          duration_seconds: number | null;
-          ended_at: string | null;
-          entry_page: string | null;
-          events_count: number | null;
-          exit_page: string | null;
-          id: string;
-          page_views: number | null;
-          platform: string | null;
-          session_id: string;
-          started_at: string | null;
-          user_id: string | null;
-        };
+          device_type: string | null
+          duration_seconds: number | null
+          ended_at: string | null
+          entry_page: string | null
+          events_count: number | null
+          exit_page: string | null
+          id: string
+          page_views: number | null
+          platform: string | null
+          session_id: string
+          started_at: string | null
+          user_id: string | null
+        }
         Insert: {
-          device_type?: string | null;
-          duration_seconds?: number | null;
-          ended_at?: string | null;
-          entry_page?: string | null;
-          events_count?: number | null;
-          exit_page?: string | null;
-          id?: string;
-          page_views?: number | null;
-          platform?: string | null;
-          session_id: string;
-          started_at?: string | null;
-          user_id?: string | null;
-        };
+          device_type?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          entry_page?: string | null
+          events_count?: number | null
+          exit_page?: string | null
+          id?: string
+          page_views?: number | null
+          platform?: string | null
+          session_id: string
+          started_at?: string | null
+          user_id?: string | null
+        }
         Update: {
-          device_type?: string | null;
-          duration_seconds?: number | null;
-          ended_at?: string | null;
-          entry_page?: string | null;
-          events_count?: number | null;
-          exit_page?: string | null;
-          id?: string;
-          page_views?: number | null;
-          platform?: string | null;
-          session_id?: string;
-          started_at?: string | null;
-          user_id?: string | null;
-        };
-        Relationships: [];
-      };
+          device_type?: string | null
+          duration_seconds?: number | null
+          ended_at?: string | null
+          entry_page?: string | null
+          events_count?: number | null
+          exit_page?: string | null
+          id?: string
+          page_views?: number | null
+          platform?: string | null
+          session_id?: string
+          started_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_sidebar_preferences: {
         Row: {
-          created_at: string;
-          id: string;
-          sidebar_order: Json;
-          updated_at: string;
-          user_id: string;
-        };
+          created_at: string
+          id: string
+          sidebar_order: Json
+          updated_at: string
+          user_id: string
+        }
         Insert: {
-          created_at?: string;
-          id?: string;
-          sidebar_order?: Json;
-          updated_at?: string;
-          user_id: string;
-        };
+          created_at?: string
+          id?: string
+          sidebar_order?: Json
+          updated_at?: string
+          user_id: string
+        }
         Update: {
-          created_at?: string;
-          id?: string;
-          sidebar_order?: Json;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string
+          id?: string
+          sidebar_order?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
-          client_email: string | null;
-          client_name: string;
-          client_phone: string | null;
-          created_at: string | null;
-          id: string;
-          notes: string | null;
-          notified_at: string | null;
-          preferred_date: string | null;
-          preferred_time: string | null;
-          service_type: string;
-          status: string;
-          stylist_id: string;
-        };
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          notified_at: string | null
+          preferred_date: string | null
+          preferred_time: string | null
+          service_type: string
+          status: string
+          stylist_id: string
+        }
         Insert: {
-          client_email?: string | null;
-          client_name: string;
-          client_phone?: string | null;
-          created_at?: string | null;
-          id?: string;
-          notes?: string | null;
-          notified_at?: string | null;
-          preferred_date?: string | null;
-          preferred_time?: string | null;
-          service_type: string;
-          status?: string;
-          stylist_id: string;
-        };
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          notified_at?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_type: string
+          status?: string
+          stylist_id: string
+        }
         Update: {
-          client_email?: string | null;
-          client_name?: string;
-          client_phone?: string | null;
-          created_at?: string | null;
-          id?: string;
-          notes?: string | null;
-          notified_at?: string | null;
-          preferred_date?: string | null;
-          preferred_time?: string | null;
-          service_type?: string;
-          status?: string;
-          stylist_id?: string;
-        };
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          notified_at?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_type?: string
+          status?: string
+          stylist_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'waitlist_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "waitlist_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'waitlist_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "waitlist_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       zapier_delivery_log: {
         Row: {
-          attempt_number: number | null;
-          created_at: string | null;
-          error_message: string | null;
-          event_type: string;
-          http_status: number | null;
-          id: string;
-          payload: Json;
-          status: string;
-          webhook_id: string;
-        };
+          attempt_number: number | null
+          created_at: string | null
+          error_message: string | null
+          event_type: string
+          http_status: number | null
+          id: string
+          payload: Json
+          status: string
+          webhook_id: string
+        }
         Insert: {
-          attempt_number?: number | null;
-          created_at?: string | null;
-          error_message?: string | null;
-          event_type: string;
-          http_status?: number | null;
-          id?: string;
-          payload: Json;
-          status: string;
-          webhook_id: string;
-        };
+          attempt_number?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          event_type: string
+          http_status?: number | null
+          id?: string
+          payload: Json
+          status: string
+          webhook_id: string
+        }
         Update: {
-          attempt_number?: number | null;
-          created_at?: string | null;
-          error_message?: string | null;
-          event_type?: string;
-          http_status?: number | null;
-          id?: string;
-          payload?: Json;
-          status?: string;
-          webhook_id?: string;
-        };
+          attempt_number?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          event_type?: string
+          http_status?: number | null
+          id?: string
+          payload?: Json
+          status?: string
+          webhook_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'zapier_delivery_log_webhook_id_fkey';
-            columns: ['webhook_id'];
-            isOneToOne: false;
-            referencedRelation: 'zapier_webhooks';
-            referencedColumns: ['id'];
+            foreignKeyName: "zapier_delivery_log_webhook_id_fkey"
+            columns: ["webhook_id"]
+            isOneToOne: false
+            referencedRelation: "zapier_webhooks"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       zapier_webhooks: {
         Row: {
-          created_at: string;
-          event_type: string;
-          id: string;
-          is_active: boolean | null;
-          last_error_message: string | null;
-          last_failure_at: string | null;
-          last_success_at: string | null;
-          last_triggered_at: string | null;
-          stylist_id: string;
-          total_failures: number | null;
-          total_triggers: number | null;
-          updated_at: string;
-          webhook_url: string;
-        };
+          created_at: string
+          event_type: string
+          id: string
+          is_active: boolean | null
+          last_error_message: string | null
+          last_failure_at: string | null
+          last_success_at: string | null
+          last_triggered_at: string | null
+          stylist_id: string
+          total_failures: number | null
+          total_triggers: number | null
+          updated_at: string
+          webhook_url: string
+        }
         Insert: {
-          created_at?: string;
-          event_type: string;
-          id?: string;
-          is_active?: boolean | null;
-          last_error_message?: string | null;
-          last_failure_at?: string | null;
-          last_success_at?: string | null;
-          last_triggered_at?: string | null;
-          stylist_id: string;
-          total_failures?: number | null;
-          total_triggers?: number | null;
-          updated_at?: string;
-          webhook_url: string;
-        };
+          created_at?: string
+          event_type: string
+          id?: string
+          is_active?: boolean | null
+          last_error_message?: string | null
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          last_triggered_at?: string | null
+          stylist_id: string
+          total_failures?: number | null
+          total_triggers?: number | null
+          updated_at?: string
+          webhook_url: string
+        }
         Update: {
-          created_at?: string;
-          event_type?: string;
-          id?: string;
-          is_active?: boolean | null;
-          last_error_message?: string | null;
-          last_failure_at?: string | null;
-          last_success_at?: string | null;
-          last_triggered_at?: string | null;
-          stylist_id?: string;
-          total_failures?: number | null;
-          total_triggers?: number | null;
-          updated_at?: string;
-          webhook_url?: string;
-        };
+          created_at?: string
+          event_type?: string
+          id?: string
+          is_active?: boolean | null
+          last_error_message?: string | null
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          last_triggered_at?: string | null
+          stylist_id?: string
+          total_failures?: number | null
+          total_triggers?: number | null
+          updated_at?: string
+          webhook_url?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'zapier_webhooks_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "zapier_webhooks_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'zapier_webhooks_stylist_id_fkey';
-            columns: ['stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "zapier_webhooks_stylist_id_fkey"
+            columns: ["stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
-    };
+        ]
+      }
+    }
     Views: {
       admin_activity_log: {
         Row: {
-          action: string | null;
-          created_at: string | null;
-          id: string | null;
-          record_id: string | null;
-          table_name: string | null;
-          user_email: string | null;
-          user_id: string | null;
-          user_name: string | null;
-        };
-        Relationships: [];
-      };
+          action: string | null
+          created_at: string | null
+          id: string | null
+          record_id: string | null
+          table_name: string | null
+          user_email: string | null
+          user_id: string | null
+          user_name: string | null
+        }
+        Relationships: []
+      }
       client_statistics: {
         Row: {
-          completion_rate: number | null;
-          email: string | null;
-          full_name: string | null;
-          id: string | null;
-          last_appointment: string | null;
-          phone: string | null;
-          preferred_stylist_id: string | null;
-          total_appointments: number | null;
-        };
+          completion_rate: number | null
+          email: string | null
+          full_name: string | null
+          id: string | null
+          last_appointment: string | null
+          phone: string | null
+          preferred_stylist_id: string | null
+          total_appointments: number | null
+        }
         Relationships: [
           {
-            foreignKeyName: 'client_profiles_preferred_stylist_id_fkey';
-            columns: ['preferred_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'public_stylist_directory';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
+            columns: ["preferred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "public_stylist_directory"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'client_profiles_preferred_stylist_id_fkey';
-            columns: ['preferred_stylist_id'];
-            isOneToOne: false;
-            referencedRelation: 'stylist_profiles';
-            referencedColumns: ['id'];
+            foreignKeyName: "client_profiles_preferred_stylist_id_fkey"
+            columns: ["preferred_stylist_id"]
+            isOneToOne: false
+            referencedRelation: "stylist_profiles"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       public_stylist_directory: {
         Row: {
-          accepts_new_clients: boolean | null;
-          average_rating: number | null;
-          bio: string | null;
-          booking_link: string | null;
-          business_name: string | null;
-          id: string | null;
-          is_available: boolean | null;
-          location: string | null;
-          social_media_instagram: string | null;
-          social_media_tiktok: string | null;
-          specialty: string | null;
-          total_reviews: number | null;
-          years_experience: number | null;
-        };
+          accepts_new_clients: boolean | null
+          average_rating: number | null
+          bio: string | null
+          booking_link: string | null
+          business_name: string | null
+          id: string | null
+          is_available: boolean | null
+          location: string | null
+          social_media_instagram: string | null
+          social_media_tiktok: string | null
+          specialty: string | null
+          total_reviews: number | null
+          years_experience: number | null
+        }
         Insert: {
-          accepts_new_clients?: boolean | null;
-          average_rating?: number | null;
-          bio?: string | null;
-          booking_link?: string | null;
-          business_name?: string | null;
-          id?: string | null;
-          is_available?: boolean | null;
-          location?: string | null;
-          social_media_instagram?: string | null;
-          social_media_tiktok?: string | null;
-          specialty?: string | null;
-          total_reviews?: number | null;
-          years_experience?: number | null;
-        };
+          accepts_new_clients?: boolean | null
+          average_rating?: number | null
+          bio?: string | null
+          booking_link?: string | null
+          business_name?: string | null
+          id?: string | null
+          is_available?: boolean | null
+          location?: string | null
+          social_media_instagram?: string | null
+          social_media_tiktok?: string | null
+          specialty?: string | null
+          total_reviews?: number | null
+          years_experience?: number | null
+        }
         Update: {
-          accepts_new_clients?: boolean | null;
-          average_rating?: number | null;
-          bio?: string | null;
-          booking_link?: string | null;
-          business_name?: string | null;
-          id?: string | null;
-          is_available?: boolean | null;
-          location?: string | null;
-          social_media_instagram?: string | null;
-          social_media_tiktok?: string | null;
-          specialty?: string | null;
-          total_reviews?: number | null;
-          years_experience?: number | null;
-        };
-        Relationships: [];
-      };
+          accepts_new_clients?: boolean | null
+          average_rating?: number | null
+          bio?: string | null
+          booking_link?: string | null
+          business_name?: string | null
+          id?: string | null
+          is_available?: boolean | null
+          location?: string | null
+          social_media_instagram?: string | null
+          social_media_tiktok?: string | null
+          specialty?: string | null
+          total_reviews?: number | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
       security_audit_summary: {
         Row: {
-          column_name: unknown;
-          data_classification: string | null;
-          table_name: unknown;
-        };
-        Relationships: [];
-      };
-    };
+          column_name: unknown
+          data_classification: string | null
+          table_name: unknown
+        }
+        Relationships: []
+      }
+    }
     Functions: {
       accept_client_invitation: {
         Args: {
-          client_email: string;
-          client_full_name: string;
-          client_phone?: string;
-          client_user_id: string;
-          consent_to_medical_info?: boolean;
-          invitation_token: string;
-        };
-        Returns: string;
-      };
-      anonymize_old_client_data: { Args: never; Returns: number };
+          client_email: string
+          client_full_name: string
+          client_phone?: string
+          client_user_id: string
+          consent_to_medical_info?: boolean
+          invitation_token: string
+        }
+        Returns: string
+      }
+      anonymize_old_client_data: { Args: never; Returns: number }
       assign_user_role: {
         Args: {
-          _role: Database['public']['Enums']['app_role'];
-          _user_id: string;
-        };
-        Returns: undefined;
-      };
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: undefined
+      }
       calculate_retention_score: {
-        Args: { p_client_id: string; p_stylist_id: string };
-        Returns: number;
-      };
+        Args: { p_client_id: string; p_stylist_id: string }
+        Returns: number
+      }
       can_access_stylist_services: {
-        Args: { _stylist_id: string; _user_id: string };
-        Returns: boolean;
-      };
+        Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
       can_view_client_medical: {
-        Args: { _client_id: string; _user_id: string };
-        Returns: boolean;
-      };
-      can_view_client_stats: { Args: { _client_id: string }; Returns: boolean };
+        Args: { _client_id: string; _user_id: string }
+        Returns: boolean
+      }
+      can_view_client_stats: { Args: { _client_id: string }; Returns: boolean }
       can_view_referral_tracking: {
         Args: {
-          _referred_stylist_id: string;
-          _referrer_id: string;
-          _user_id: string;
-        };
-        Returns: boolean;
-      };
-      can_view_security_audit: { Args: never; Returns: boolean };
+          _referred_stylist_id: string
+          _referrer_id: string
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      can_view_security_audit: { Args: never; Returns: boolean }
       check_client_milestones: {
-        Args: { p_client_id: string; p_stylist_id: string };
-        Returns: undefined;
-      };
-      cleanup_expired_insights: { Args: never; Returns: undefined };
-      cleanup_old_error_logs: { Args: never; Returns: undefined };
+        Args: { p_client_id: string; p_stylist_id: string }
+        Returns: undefined
+      }
+      cleanup_expired_insights: { Args: never; Returns: undefined }
+      cleanup_old_error_logs: { Args: never; Returns: undefined }
       generate_referral_code: {
-        Args: { stylist_name: string };
-        Returns: string;
-      };
+        Args: { stylist_name: string }
+        Returns: string
+      }
       get_calendar_token: {
-        Args: { p_connection_id: string };
+        Args: { p_connection_id: string }
         Returns: {
-          access_token: string;
-          refresh_token: string;
-        }[];
-      };
-      get_client_profile_id: { Args: { _user_id: string }; Returns: string };
+          access_token: string
+          refresh_token: string
+        }[]
+      }
+      get_client_profile_id: { Args: { _user_id: string }; Returns: string }
       get_cron_job_status: {
-        Args: never;
+        Args: never
         Returns: {
-          active: boolean;
-          command: string;
-          database: string;
-          jobid: number;
-          jobname: string;
-          nodename: string;
-          nodeport: number;
-          schedule: string;
-          username: string;
-        }[];
-      };
+          active: boolean
+          command: string
+          database: string
+          jobid: number
+          jobname: string
+          nodename: string
+          nodeport: number
+          schedule: string
+          username: string
+        }[]
+      }
       get_experiment_results: {
-        Args: { exp_id: string };
+        Args: { exp_id: string }
         Returns: {
-          conversion_rate: number;
-          conversions: number;
-          variant_key: string;
-          views: number;
-        }[];
-      };
-      get_stylist_profile_id: { Args: { _user_id: string }; Returns: string };
-      get_user_stylist_ids: { Args: { _user_id: string }; Returns: string[] };
-      grant_admin_role: { Args: { _user_id: string }; Returns: undefined };
+          conversion_rate: number
+          conversions: number
+          variant_key: string
+          views: number
+        }[]
+      }
+      get_stylist_client_ids: {
+        Args: { stylist_uuid: string }
+        Returns: {
+          client_id: string
+        }[]
+      }
+      get_stylist_profile_id: { Args: { _user_id: string }; Returns: string }
+      get_user_stylist_ids: {
+        Args: { user_uuid: string }
+        Returns: {
+          stylist_id: string
+        }[]
+      }
+      grant_admin_role: { Args: { _user_id: string }; Returns: undefined }
       has_role: {
         Args: {
-          _role: Database['public']['Enums']['app_role'];
-          _user_id: string;
-        };
-        Returns: boolean;
-      };
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       has_stylist_relationship: {
-        Args: { _stylist_id: string; _user_id: string };
-        Returns: boolean;
-      };
+        Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
       is_client_connected_to_stylist: {
-        Args: { _client_user_id: string; _stylist_id: string };
-        Returns: boolean;
-      };
+        Args: { _client_user_id: string; _stylist_id: string }
+        Returns: boolean
+      }
       is_client_of_stylist: {
-        Args: { _client_id: string; _stylist_user_id: string };
-        Returns: boolean;
-      };
+        Args: { _client_id: string; _stylist_user_id: string }
+        Returns: boolean
+      }
       is_stylist_owner: {
-        Args: { _stylist_id: string; _user_id: string };
-        Returns: boolean;
-      };
+        Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
       needs_rebooking_reminder: {
-        Args: { appointment_id_param: string };
-        Returns: boolean;
-      };
+        Args: { appointment_id_param: string }
+        Returns: boolean
+      }
       profile_shares_contact_with_stylists: {
-        Args: { _profile_id: string };
-        Returns: boolean;
-      };
+        Args: { _profile_id: string }
+        Returns: boolean
+      }
       redeem_access_code: {
-        Args: { _code: string; _user_id: string };
-        Returns: boolean;
-      };
-      revoke_admin_role: { Args: { _user_id: string }; Returns: undefined };
+        Args: { _code: string; _user_id: string }
+        Returns: boolean
+      }
+      revoke_admin_role: { Args: { _user_id: string }; Returns: undefined }
       store_calendar_token: {
         Args: {
-          p_access_token: string;
-          p_provider: string;
-          p_refresh_token?: string;
-          p_user_id: string;
-        };
-        Returns: string;
-      };
+          p_access_token: string
+          p_provider: string
+          p_refresh_token?: string
+          p_user_id: string
+        }
+        Returns: string
+      }
       stylist_has_client_access: {
-        Args: { _client_id: string; _stylist_user_id: string };
-        Returns: boolean;
-      };
+        Args: { _client_id: string; _stylist_user_id: string }
+        Returns: boolean
+      }
       user_is_client_of_stylist: {
-        Args: { _stylist_id: string; _user_id: string };
-        Returns: boolean;
-      };
+        Args: { _stylist_id: string; _user_id: string }
+        Returns: boolean
+      }
       user_is_stylist: {
-        Args: { _user_id: string };
+        Args: { _user_id: string }
         Returns: {
-          stylist_id: string;
-        }[];
-      };
+          stylist_id: string
+        }[]
+      }
       user_owns_formula: {
-        Args: { _formula_id: string; _user_id: string };
-        Returns: boolean;
-      };
-      validate_access_code: { Args: { code_input: string }; Returns: boolean };
-    };
+        Args: { _formula_id: string; _user_id: string }
+        Returns: boolean
+      }
+      validate_access_code: { Args: { code_input: string }; Returns: boolean }
+    }
     Enums: {
-      app_role: 'stylist' | 'client' | 'admin';
-    };
+      app_role: "stylist" | "client" | "admin"
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
-};
+      [_ in never]: never
+    }
+  }
+}
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<
-  keyof Database,
-  'public'
->];
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
-      Row: infer R;
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R;
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
       }
       ? R
       : never
-    : never;
+    : never
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
-      Insert: infer I;
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I;
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
       }
       ? I
       : never
-    : never;
+    : never
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
-      Update: infer U;
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U;
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
       }
       ? U
       : never
-    : never;
+    : never
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
-    : never;
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
-    : never;
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
 
 export const Constants = {
   public: {
     Enums: {
-      app_role: ['stylist', 'client', 'admin'],
+      app_role: ["stylist", "client", "admin"],
     },
   },
-} as const;
+} as const

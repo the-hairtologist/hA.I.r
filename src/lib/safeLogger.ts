@@ -70,6 +70,7 @@ export const safeConsole = {
 
 /**
  * Performance measurement helper
+ * Use browser DevTools Performance tab for detailed profiling
  */
 export const safePerfMark = (label: string) => {
   if (isDevelopment && 'performance' in window) {
@@ -84,8 +85,8 @@ export const safePerfMeasure = (
 ) => {
   if (isDevelopment && 'performance' in window) {
     try {
-      const measure = performance.measure(name, startMark, endMark);
-      safeConsole.log(`⚡ ${name}: ${measure.duration.toFixed(2)}ms`);
+      performance.measure(name, startMark, endMark);
+      // Measurements viewable in DevTools Performance tab
     } catch {
       // Mark doesn't exist, ignore
     }

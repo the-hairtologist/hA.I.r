@@ -10,23 +10,17 @@ import './index.css';
 // Safe initialization wrapper
 const initializeApp = () => {
   try {
-    console.log('[Main] Starting app initialization...');
-
     // Initialize Sentry with error handling
     import('@/lib/monitoring')
       .then(({ initSentry }) => {
         try {
           initSentry();
-          console.log('[Main] Sentry initialized');
         } catch (error) {
-          console.warn(
-            '[Main] Sentry initialization failed (non-critical):',
-            error
-          );
+          // Sentry init failure is non-critical
         }
       })
-      .catch(error => {
-        console.warn('[Main] Failed to load monitoring module:', error);
+      .catch(() => {
+        // Monitoring module load failure is non-critical
       });
 
     // Render app immediately - don't wait for monitoring
@@ -35,9 +29,7 @@ const initializeApp = () => {
       throw new Error('Root element not found');
     }
 
-    console.log('[Main] Rendering app...');
     createRoot(rootElement).render(<App />);
-    console.log('[Main] App rendered successfully');
   } catch (error) {
     console.error('[Main] Critical initialization error:', error);
     // Show error to user

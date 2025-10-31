@@ -74,14 +74,10 @@ export const removeBackground = async (
   onProgress?: (stage: string, progress: number) => void
 ): Promise<Blob> => {
   try {
-    console.log('[BG Removal] Starting background removal process');
     onProgress?.('Initializing AI model...', 10);
 
     // Check WebGPU availability
     const hasWebGPU = await isWebGPUAvailable();
-    console.log(
-      `[BG Removal] WebGPU ${hasWebGPU ? 'available' : 'not available'}`
-    );
 
     // Load the segmentation model
     const segmenter = await pipeline(
@@ -91,7 +87,6 @@ export const removeBackground = async (
     );
 
     onProgress?.('Model loaded', 30);
-    console.log('[BG Removal] Model loaded successfully');
 
     // Convert HTMLImageElement to canvas
     const canvas = document.createElement('canvas');
@@ -100,10 +95,7 @@ export const removeBackground = async (
     if (!ctx) throw new Error('Could not get canvas context');
 
     // Resize image if needed and draw it to canvas
-    const wasResized = resizeImageIfNeeded(canvas, ctx, imageElement);
-    console.log(
-      `[BG Removal] Image ${wasResized ? 'resized' : 'processed'} - Dimensions: ${canvas.width}x${canvas.height}`
-    );
+    resizeImageIfNeeded(canvas, ctx, imageElement);
 
     onProgress?.('Processing image...', 50);
 
@@ -111,11 +103,9 @@ export const removeBackground = async (
     const imageData = canvas.toDataURL('image/jpeg', 0.9);
 
     // Process the image with the segmentation model
-    console.log('[BG Removal] Running AI segmentation...');
     const result = await segmenter(imageData);
 
     onProgress?.('Applying mask...', 70);
-    console.log('[BG Removal] Segmentation complete');
 
     if (
       !result ||
@@ -154,7 +144,6 @@ export const removeBackground = async (
     }
 
     outputCtx.putImageData(outputImageData, 0, 0);
-    console.log('[BG Removal] Mask applied successfully');
 
     onProgress?.('Finalizing...', 90);
 
@@ -163,7 +152,6 @@ export const removeBackground = async (
       outputCanvas.toBlob(
         blob => {
           if (blob) {
-            console.log('[BG Removal] Successfully created final blob');
             onProgress?.('Complete!', 100);
             resolve(blob);
           } else {
