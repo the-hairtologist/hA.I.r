@@ -1,4 +1,3 @@
-const tokens = require('./design-tokens.json');
 {
   "meta": {
     "version": "3.0.0",
