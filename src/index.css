@@ -265,53 +265,171 @@
   }
 }
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
-All colors MUST be HSL.
-*/
+/* ============================================ */
+/* HAIR AI DESIGN SYSTEM */
+/* Based on design-tokens.json */
+/* ============================================ */
 
 @layer base {
   :root {
+    /* ============================================ */
+    /* Surface & Layout Colors - Light Mode */
+    /* ============================================ */
+
     --background: 0 0% 100%;
-    --foreground: 20 14% 10%;
+    --background-subtle: 0 0% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 20 14% 10%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 14% 10%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Pixelated LEGO-inspired color palette */
-    --primary: 8 100% 55%; /* Vibrant red/orange */
-    --primary-foreground: 0 0% 100%; /* White text on red */
-    --primary-glow: 8 100% 65%;
+    /* ============================================ */
+    /* Primary Color Scale (Cyan/Blue) */
+    /* ============================================ */
+    --primary: 210 100% 50%;
+    --primary-50: 210 100% 97%;
+    --primary-100: 210 100% 92%;
+    --primary-200: 210 100% 84%;
+    --primary-300: 210 100% 72%;
+    --primary-400: 210 100% 60%;
+    --primary-500: 210 100% 50%;
+    --primary-600: 210 90% 45%;
+    --primary-700: 210 80% 40%;
+    --primary-800: 210 70% 32%;
+    --primary-900: 210 60% 24%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 210 100% 60%;
 
-    --secondary: 45 100% 50%; /* Bold yellow */
-    --secondary-foreground: 0 0% 0%; /* Black text on yellow */
+    /* ============================================ */
+    /* Secondary Color Scale (Purple) */
+    /* ============================================ */
+    --secondary: 280 80% 60%;
+    --secondary-50: 280 80% 97%;
+    --secondary-100: 280 80% 92%;
+    --secondary-200: 280 80% 84%;
+    --secondary-300: 280 80% 72%;
+    --secondary-400: 280 80% 60%;
+    --secondary-500: 280 80% 60%;
+    --secondary-600: 280 75% 52%;
+    --secondary-700: 280 70% 45%;
+    --secondary-800: 280 65% 36%;
+    --secondary-900: 280 60% 28%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 30%;
+    /* ============================================ */
+    /* Accent Color Scale (Pink) */
+    /* ============================================ */
+    --accent: 330 90% 65%;
+    --accent-50: 330 90% 97%;
+    --accent-100: 330 90% 92%;
+    --accent-200: 330 90% 84%;
+    --accent-300: 330 90% 72%;
+    --accent-400: 330 90% 65%;
+    --accent-500: 330 90% 65%;
+    --accent-600: 330 85% 58%;
+    --accent-700: 330 80% 50%;
+    --accent-800: 330 75% 40%;
+    --accent-900: 330 70% 32%;
+    --accent-foreground: 0 0% 100%;
 
-    --accent: 215 100% 50%; /* Bright blue */
-    --accent-foreground: 0 0% 100%; /* White text on blue */
-
-    --destructive: 0 85% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 142 76% 28%; /* Darker green for better depth and contrast */
+    /* ============================================ */
+    /* Status Colors - Success */
+    /* ============================================ */
+    --success: 142 76% 36%;
+    --success-50: 142 76% 95%;
+    --success-100: 142 76% 88%;
+    --success-200: 142 76% 76%;
+    --success-300: 142 76% 60%;
+    --success-400: 142 76% 48%;
+    --success-500: 142 76% 36%;
+    --success-600: 142 70% 32%;
+    --success-700: 142 65% 28%;
+    --success-800: 142 60% 22%;
+    --success-900: 142 55% 18%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    /* ============================================ */
+    /* Status Colors - Warning */
+    /* ============================================ */
+    --warning: 40 95% 60%;
+    --warning-50: 40 95% 95%;
+    --warning-100: 40 95% 88%;
+    --warning-200: 40 95% 76%;
+    --warning-300: 40 95% 68%;
+    --warning-400: 40 95% 60%;
+    --warning-500: 40 95% 60%;
+    --warning-600: 40 90% 52%;
+    --warning-700: 40 85% 45%;
+    --warning-800: 40 80% 36%;
+    --warning-900: 40 75% 28%;
+    --warning-foreground: 0 0% 0%;
 
-    --info: 217 91% 60%;
+    /* ============================================ */
+    /* Status Colors - Danger/Destructive */
+    /* ============================================ */
+    --destructive: 0 84% 60%;
+    --danger-50: 0 84% 95%;
+    --danger-100: 0 84% 88%;
+    --danger-200: 0 84% 76%;
+    --danger-300: 0 84% 68%;
+    --danger-400: 0 84% 60%;
+    --danger-500: 0 84% 60%;
+    --danger-600: 0 80% 52%;
+    --danger-700: 0 75% 45%;
+    --danger-800: 0 70% 36%;
+    --danger-900: 0 65% 28%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* ============================================ */
+    /* Status Colors - Info */
+    /* ============================================ */
+    --info: 200 95% 60%;
+    --info-50: 200 95% 95%;
+    --info-100: 200 95% 88%;
+    --info-200: 200 95% 76%;
+    --info-300: 200 95% 68%;
+    --info-400: 200 95% 60%;
+    --info-500: 200 95% 60%;
+    --info-600: 200 90% 52%;
+    --info-700: 200 85% 45%;
+    --info-800: 200 80% 36%;
+    --info-900: 200 75% 28%;
     --info-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
+    /* ============================================ */
+    /* Neutral/Muted Colors */
+    /* ============================================ */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 35%;
+    --neutral-50: 0 0% 98%;
+    --neutral-100: 0 0% 95%;
+    --neutral-200: 0 0% 90%;
+    --neutral-300: 0 0% 80%;
+    --neutral-400: 0 0% 65%;
+    --neutral-500: 0 0% 50%;
+    --neutral-600: 0 0% 42%;
+    --neutral-700: 0 0% 35%;
+    --neutral-800: 0 0% 25%;
+    --neutral-900: 0 0% 15%;
+
+    /* ============================================ */
+    /* Border, Input & Focus */
+    /* ============================================ */
+    --border: 0 0% 90%;
     --input: 220 13% 95%;
-    --ring: 270 85% 60%;
+    --ring: 210 100% 50%;
+    --focus-ring: 210 100% 50%;
+    --focus-inner: 0 0% 100%;
 
-    --radius: 1rem;
+    --radius: 0.5rem;
 
+    /* ============================================ */
+    /* Typography System */
+    /* ============================================ */
+    
     /* Typography Scale - Base 16px */
     --text-xs: 0.75rem; /* 12px */
     --text-sm: 0.875rem; /* 14px */
@@ -322,23 +440,36 @@ All colors MUST be HSL.
     --text-3xl: 2.5rem; /* 40px */
 
     /* Line Heights */
-    --leading-body: 1.5; /* 1.4-1.6 for body text */
-    --leading-heading: 1.2; /* Tighter for headings */
+    --leading-tight: 1.2;
+    --leading-snug: 1.3;
+    --leading-body: 1.5;
+    --leading-relaxed: 1.6;
+    
+    /* Letter Spacing */
+    --tracking-normal: 0em;
+    --tracking-tight: -0.01em;
+    --tracking-wide: 0.01em;
 
+    /* ============================================ */
     /* Spacing Scale - 4px grid */
+    /* ============================================ */
+    --space-0: 0;
     --space-1: 0.25rem; /* 4px */
     --space-2: 0.5rem; /* 8px */
     --space-3: 0.75rem; /* 12px */
     --space-4: 1rem; /* 16px */
     --space-5: 1.25rem; /* 20px */
     --space-6: 1.5rem; /* 24px */
+    --space-7: 2rem; /* 32px */
+    --space-8: 2.5rem; /* 40px */
+    --space-9: 3rem; /* 48px */
+    --space-10: 3.5rem; /* 56px */
+    --space-11: 4rem; /* 64px */
+    --space-12: 5rem; /* 80px */
+    --space-13: 6rem; /* 96px */
+    --space-14: 8rem; /* 128px */
 
-    /* Animation Durations */
-    --duration-fast: 150ms;
-    --duration-base: 200ms;
-    --duration-slow: 250ms;
-
-    /* Spacing scale */
+    /* Legacy spacing aliases */
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
     --space-md: 1rem;
@@ -347,51 +478,64 @@ All colors MUST be HSL.
     --space-2xl: 3rem;
     --space-3xl: 4rem;
 
+    /* ============================================ */
+    /* Animation & Motion */
+    /* ============================================ */
+    --duration-instant: 0ms;
+    --duration-fast: 120ms;
+    --duration-base: 180ms;
+    --duration-slow: 240ms;
+    --duration-slower: 300ms;
+
+    /* Easing functions */
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-decel: cubic-bezier(0, 0, 0.2, 1);
+    --ease-accel: cubic-bezier(0.4, 0, 1, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ============================================ */
     /* Glassmorphism & Modern Effects */
+    /* ============================================ */
     --glass-bg: hsla(var(--background), 0.7);
     --glass-border: hsla(var(--foreground), 0.1);
     --glass-blur: 12px;
 
+    /* ============================================ */
     /* Elevation System */
-    --elevation-1: 0 1px 3px hsla(var(--foreground), 0.12);
-    --elevation-2: 0 4px 12px hsla(var(--foreground), 0.15);
-    --elevation-3: 0 8px 24px hsla(var(--foreground), 0.18);
-    --elevation-4: 0 16px 48px hsla(var(--foreground), 0.2);
+    /* ============================================ */
+    --elevation-none: none;
+    --elevation-1: 0 1px 2px 0 hsla(var(--foreground), 0.12);
+    --elevation-2: 0 3px 6px -1px hsla(var(--foreground), 0.16);
+    --elevation-3: 0 8px 24px -4px hsla(var(--foreground), 0.20);
 
+    /* ============================================ */
     /* Glow Effects */
+    /* ============================================ */
     --glow-primary: 0 0 20px hsla(var(--primary), 0.3);
     --glow-accent: 0 0 20px hsla(var(--accent), 0.3);
     --glow-success: 0 0 20px hsla(var(--success), 0.3);
 
-    /* Focus Ring */
-    --focus-ring: 0 0 0 4px hsla(var(--primary), 0.3);
-    --focus-ring-offset: 0 0 0 2px hsl(var(--background));
-
-    /* Pixelated gradients - LEGO brick colors */
+    /* ============================================ */
+    /* Gradients - Preserving Brutal Theme */
+    /* ============================================ */
     --gradient-primary: linear-gradient(
       135deg,
-      hsl(8 100% 55%) 0%,
-      hsl(45 100% 50%) 100%
+      hsl(210 100% 50%) 0%,
+      hsl(280 80% 60%) 100%
     );
     --gradient-accent: linear-gradient(
       135deg,
-      hsl(45 100% 50%) 0%,
-      hsl(215 100% 50%) 100%
+      hsl(330 90% 65%) 0%,
+      hsl(210 100% 50%) 100%
     );
     --gradient-hero: linear-gradient(
       135deg,
-      hsl(8 100% 55%) 0%,
-      hsl(45 100% 50%) 50%,
-      hsl(215 100% 50%) 100%
-    );
-    --gradient-bg-main: linear-gradient(
-      135deg,
-      hsl(8 100% 55%) 0%,
-      hsl(45 100% 50%) 50%,
-      hsl(215 100% 50%) 100%
+      hsl(210 100% 50%) 0%,
+      hsl(280 80% 60%) 50%,
+      hsl(330 90% 65%) 100%
     );
 
-    /* Icon background gradients for sidebar - darkened for white text */
+    /* Icon background gradients */
     --gradient-purple-pink: linear-gradient(
       135deg,
       hsl(270 85% 48%) 0%,
@@ -443,18 +587,9 @@ All colors MUST be HSL.
       hsl(215 16% 40%) 100%
     );
 
-    /* Shadows - Softer, more subtle */
-    --shadow-soft:
-      0 1px 3px 0 hsl(270 85% 60% / 0.05),
-      0 1px 2px -1px hsl(270 85% 60% / 0.05);
-    --shadow-medium:
-      0 4px 6px -1px hsl(270 85% 60% / 0.08),
-      0 2px 4px -2px hsl(270 85% 60% / 0.08);
-    --shadow-large:
-      0 10px 15px -3px hsl(270 85% 60% / 0.1),
-      0 4px 6px -4px hsl(270 85% 60% / 0.1);
-    --shadow-glow: 0 0 20px hsl(270 85% 60% / 0.15);
-
+    /* ============================================ */
+    /* Sidebar Colors */
+    /* ============================================ */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 5%;
     --sidebar-primary: 210 100% 50%;
@@ -465,8 +600,8 @@ All colors MUST be HSL.
     --sidebar-ring: 210 100% 50%;
 
     /* ============================================ */
-    /* ADAPTIVE BRUTALISM DESIGN SYSTEM */
-    /* Visual Language + Typography Tokens */
+    /* BRUTAL DESIGN SYSTEM */
+    /* Preserving existing brutal aesthetic */
     /* ============================================ */
 
     /* Brutal Border Widths */
@@ -474,7 +609,7 @@ All colors MUST be HSL.
     --brutal-border-standard: 3px;
     --brutal-border-bold: 4px;
 
-    /* Brutal Shadow System - Consistent offsets */
+    /* Brutal Shadow System */
     --brutal-shadow-xs: 1px 1px 0px 0px hsl(var(--foreground));
     --brutal-shadow-sm: 2px 2px 0px 0px hsl(var(--foreground));
     --brutal-shadow-md: 3px 3px 0px 0px hsl(var(--foreground));
@@ -482,13 +617,13 @@ All colors MUST be HSL.
     --brutal-shadow-xl: 6px 6px 0px 0px hsl(var(--foreground));
     --brutal-shadow-2xl: 8px 8px 0px 0px hsl(var(--foreground));
 
-    /* Brutal Shadows with Opacity (for subtle variants) */
+    /* Brutal Shadows with Opacity */
     --brutal-shadow-sm-soft: 2px 2px 0px 0px hsl(var(--foreground) / 0.2);
     --brutal-shadow-md-soft: 3px 3px 0px 0px hsl(var(--foreground) / 0.2);
     --brutal-shadow-lg-soft: 4px 4px 0px 0px hsl(var(--foreground) / 0.2);
     --brutal-shadow-xl-soft: 6px 6px 0px 0px hsl(var(--foreground) / 0.3);
 
-    /* On-Surface Colors (for icons on colored backgrounds) */
+    /* On-Surface Colors */
     --on-surface-primary: 0 0% 100%;
     --on-surface-secondary: 0 0% 100%;
     --on-surface-accent: 0 0% 100%;
@@ -497,1404 +632,139 @@ All colors MUST be HSL.
     --on-surface-destructive: 0 0% 100%;
     --on-surface-muted: 0 0% 20%;
 
-    /* Brutal Overlay (for modals/dialogs) */
-    --brutal-overlay: hsl(var(--foreground) / 0.5);
-
-    /* Enhanced Animation Timings */
-    --timing-instant: 100ms;
-    --timing-fast: 200ms;
-    --timing-base: 300ms;
-    --timing-slow: 500ms;
-    --timing-slower: 700ms;
-
-    /* Micro-interaction Effects */
-    --scale-hover: 1.02;
-    --scale-press: 0.98;
-    --lift-subtle: -2px;
-    --lift-hover: -4px;
-
-    /* Security Dashboard Colors (semantic, HSL-based) */
-    --security-critical: 0 85% 60%;
-    --security-high: 25 95% 53%;
-    --security-medium: 45 93% 47%;
-    --security-low: 217 91% 60%;
-    --security-success: 142 76% 36%;
-
-    /* ============================================ */
-    /* HYBRID BRUTALISM SYSTEM */
-    /* Combining Glass Aesthetics with Brutal Accents */
-    /* ============================================ */
-
-    /* Grid Textures (subtle for backgrounds) */
-    --grid-texture-sm:
-      linear-gradient(
-        90deg,
-        transparent 0%,
-        hsl(var(--foreground) / 0.02) 50%,
-        transparent 100%
-      ),
-      linear-gradient(
-        0deg,
-        transparent 0%,
-        hsl(var(--foreground) / 0.02) 50%,
-        transparent 100%
-      );
-    --grid-texture-md:
-      linear-gradient(
-        90deg,
-        transparent 0%,
-        hsl(var(--foreground) / 0.03) 50%,
-        transparent 100%
-      ),
-      linear-gradient(
-        0deg,
-        transparent 0%,
-        hsl(var(--foreground) / 0.03) 50%,
-        transparent 100%
-      );
-    --grid-size-sm: 6px 6px;
-    --grid-size-md: 8px 8px;
-
-    /* Hybrid Brutal Card (glass + borders) */
-    --brutal-glass-bg: hsl(var(--card) / 0.8);
-    --brutal-glass-border: var(--brutal-border-standard);
-    --brutal-glass-blur: 12px;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings:
-      'liga' 1,
-      'calt' 1;
-    font-size: 16px; /* Base 16px */
-    line-height: 1.5; /* Body line-height 1.4-1.6 */
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    /* Support for iOS safe areas (notch) - footer handles bottom padding */
-    padding-top: env(safe-area-inset-top);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-  }
-
-  /* Smooth scrolling for all browsers */
-  html {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Respect user's motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-
-    .animate-bounce-slow,
-    .hover-scale {
-      animation: none !important;
-      transform: none !important;
-    }
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fade-in-fast {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.3s ease-out forwards;
-  }
-
-  .animate-fade-in-fast {
-    animation: fade-in-fast 0.2s ease-out;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: -1000px 0;
-    }
-    100% {
-      background-position: 1000px 0;
-    }
-  }
-
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  @keyframes glow-pulse {
-    0%,
-    100% {
-      box-shadow: var(--glow-primary);
-    }
-    50% {
-      box-shadow: 0 0 30px hsla(var(--primary), 0.5);
-    }
-  }
-
-  @keyframes slide-up-fade {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .shimmer {
-    background: linear-gradient(
-      90deg,
-      hsl(var(--muted)) 0%,
-      hsl(var(--muted) / 0.5) 50%,
-      hsl(var(--muted)) 100%
-    );
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite linear;
-  }
-
-  .hover-scale {
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .hover-scale:hover {
-    transform: scale(1.03) translateY(-4px) rotate(-1deg);
-    box-shadow: var(--shadow-large);
-  }
-
-  /* Smooth transitions - 150-250ms range */
-  .smooth-transition {
-    transition: all var(--duration-base) cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Remove bounce from critical flows (login, payments, forms) */
-  .critical-flow .animate-bounce-slow {
-    animation: none;
-  }
-
-  /* Gradient text */
-  .gradient-text {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Glass effect */
-  .glass-effect {
-    background: hsl(var(--background) / 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  /* Retro window chrome effect */
-  .window-chrome {
-    border: 3px solid hsl(var(--foreground));
-    border-radius: var(--radius);
-    box-shadow: 4px 4px 0px hsl(var(--foreground) / 0.2);
-  }
-
-  /* Playful button effect with micro-motion */
-  .retro-button {
-    border: 1.5px solid hsl(var(--foreground));
-    box-shadow: var(--shadow-soft);
-    transition: all 0.15s ease;
-    position: relative;
-  }
-
-  .retro-button::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: hsl(var(--primary) / 0.05);
-    opacity: 0;
-    transition: opacity 0.15s ease;
-  }
-
-  .retro-button:hover::before {
-    opacity: 1;
-  }
-
-  .retro-button:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-medium);
-  }
-
-  .retro-button:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-soft);
-  }
-
-  /* Browser window chrome aesthetic */
-  .window-frame {
-    border: 2px solid hsl(var(--foreground));
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 4px 4px 0px hsl(var(--foreground) / 0.2);
-  }
-
-  @media (min-width: 640px) {
-    .window-frame {
-      border: 3px solid hsl(var(--foreground));
-      border-radius: 10px;
-      box-shadow: 6px 6px 0px hsl(var(--foreground) / 0.2);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .window-frame {
-      border: 4px solid hsl(var(--foreground));
-      border-radius: 12px;
-      box-shadow: 8px 8px 0px hsl(var(--foreground) / 0.2);
-    }
-  }
-
-  .window-titlebar {
-    background: hsl(var(--foreground));
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid hsl(var(--foreground));
-  }
-
-  @media (min-width: 640px) {
-    .window-titlebar {
-      padding: 10px 16px;
-      border-bottom: 3px solid hsl(var(--foreground));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .window-titlebar {
-      padding: 12px 20px;
-      border-bottom: 4px solid hsl(var(--foreground));
-    }
+    /* Brutal Overlay */
+    --brutal-overlay: hsla(var(--foreground), 0.8);
+    --brutal-overlay-blur: 4px;
   }
 
   /* ============================================ */
-  /* RETRO NAVIGATION ICONS - Mobile-First Universal */
-  /* Optimized for ALL iPhones & Samsung devices */
-  /* Touch targets: WCAG 2.1 AA (44x44px minimum) */
+  /* DARK MODE */
   /* ============================================ */
-
-  .retro-nav-icon-container {
-    /* Blocky borders - visible on all screen sizes */
-    border: 2px solid rgba(0, 0, 0, 0.15);
-
-    /* Hard drop shadows - retro aesthetic */
-    box-shadow:
-      2px 2px 0px rgba(0, 0, 0, 0.2),
-      inset -1px -1px 0px rgba(255, 255, 255, 0.1);
-
-    /* Smooth transitions - 60fps on all devices */
-    transition: all 0.15s ease-out;
-
-    /* Prevent touch delay on mobile */
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Hover state - works on desktop, ignored on touch devices */
-  .retro-nav-icon-container:hover {
-    transform: translate(-1px, -1px);
-    box-shadow:
-      3px 3px 0px rgba(0, 0, 0, 0.25),
-      inset -1px -1px 0px rgba(255, 255, 255, 0.1);
-    border-color: rgba(0, 0, 0, 0.25);
-  }
-
-  /* Active/pressed state - critical for touch feedback */
-  .retro-nav-icon-container:active {
-    transform: translate(1px, 1px);
-    box-shadow:
-      1px 1px 0px rgba(0, 0, 0, 0.2),
-      inset -1px -1px 0px rgba(255, 255, 255, 0.05);
-  }
-
-  /* Chunky icon strokes - retro pixel art style */
-  .retro-nav-icon-container svg[class*='lucide'] {
-    stroke-width: 2.8px;
-    stroke-linecap: square;
-    stroke-linejoin: miter;
-
-    /* Crisp rendering on all devices */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-  }
-
-  /* Active route emphasis - thicker borders */
-  .retro-nav-icon-container.active {
-    border-width: 3px;
-    border-color: currentColor;
-  }
-
-  .retro-nav-icon-container.active svg[class*='lucide'] {
-    stroke-width: 3.2px;
-  }
-
-  /* Dark mode optimizations - OLED/AMOLED displays */
+  .dark,
   @media (prefers-color-scheme: dark) {
-    .retro-nav-icon-container {
-      border-color: rgba(255, 255, 255, 0.15);
-      box-shadow:
-        2px 2px 0px rgba(0, 0, 0, 0.4),
-        inset -1px -1px 0px rgba(255, 255, 255, 0.05);
+    :root:not(.light) {
+      /* Surface Colors - Dark Mode */
+      --background: 222 47% 8%;
+      --background-subtle: 222 47% 10%;
+      --foreground: 0 0% 100%;
+
+      --card: 222 47% 11%;
+      --card-foreground: 0 0% 100%;
+
+      --popover: 222 47% 13%;
+      --popover-foreground: 0 0% 100%;
+
+      /* Border & Input - Dark Mode */
+      --border: 0 0% 25%;
+      --input: 222 47% 13%;
+      --ring: 210 100% 60%;
+      --focus-ring: 210 100% 60%;
+      --focus-inner: 222 47% 11%;
+
+      /* Muted - Dark Mode */
+      --muted: 222 47% 13%;
+      --muted-foreground: 0 0% 65%;
+
+      /* Sidebar - Dark Mode */
+      --sidebar-background: 222 47% 11%;
+      --sidebar-foreground: 0 0% 95%;
+      --sidebar-accent: 222 47% 14%;
+      --sidebar-accent-foreground: 0 0% 95%;
+      --sidebar-border: 0 0% 25%;
+
+      /* Adjust elevation for dark mode */
+      --elevation-1: 0 1px 2px 0 hsla(0, 0%, 0%, 0.3);
+      --elevation-2: 0 3px 6px -1px hsla(0, 0%, 0%, 0.4);
+      --elevation-3: 0 8px 24px -4px hsla(0, 0%, 0%, 0.5);
     }
-
-    .retro-nav-icon-container:hover {
-      border-color: rgba(255, 255, 255, 0.25);
-      box-shadow:
-        3px 3px 0px rgba(0, 0, 0, 0.5),
-        inset -1px -1px 0px rgba(255, 255, 255, 0.05);
-    }
-  }
-
-  .window-controls {
-    display: flex;
-    gap: 6px;
-  }
-
-  @media (min-width: 640px) {
-    .window-controls {
-      gap: 8px;
-    }
-  }
-
-  .window-control {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid hsl(var(--background));
-  }
-
-  @media (min-width: 640px) {
-    .window-control {
-      width: 14px;
-      height: 14px;
-      border: 2.5px solid hsl(var(--background));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .window-control {
-      width: 16px;
-      height: 16px;
-      border: 3px solid hsl(var(--background));
-    }
-  }
-
-  .window-scrollbar {
-    position: absolute;
-    right: 12px;
-    top: 60px;
-    bottom: 12px;
-    width: 20px;
-    background: hsl(var(--foreground) / 0.1);
-    border: 2px solid hsl(var(--foreground));
-    border-radius: 8px;
-  }
-
-  .window-scrollbar::before {
-    content: '';
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: 8px solid hsl(var(--foreground));
-  }
-
-  .window-scrollbar::after {
-    content: '';
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 8px solid hsl(var(--foreground));
-  }
-
-  /* Mobile touch-friendly sizing - Apple HIG minimum 44x44px */
-  @media (max-width: 640px) {
-    button:not(.no-touch-size),
-    a[role='button']:not(.no-touch-size),
-    [role='tab']:not(.no-touch-size),
-    [role='menuitem']:not(.no-touch-size) {
-      min-height: 44px;
-      min-width: 44px;
-      padding: 0.625rem 1rem; /* 10px 16px */
-    }
-
-    /* Ensure clickable areas for small icons */
-    button svg:only-child,
-    a svg:only-child {
-      padding: 0.5rem;
-    }
-  }
-
-  /* Tablet touch targets - slightly smaller but still comfortable */
-  @media (min-width: 641px) and (max-width: 1024px) {
-    button:not(.no-touch-size),
-    a[role='button']:not(.no-touch-size) {
-      min-height: 40px;
-      min-width: 40px;
-    }
-  }
-
-  /* Better touch handling for all interactive elements */
-  button,
-  a,
-  input,
-  select,
-  textarea {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-  }
-
-  /* Prevent text selection on buttons and interactive elements */
-  button,
-  [role='button'],
-  [role='tab'],
-  [role='menuitem'] {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  /* Optimize scrolling performance */
-  .scroll-container {
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-  }
-
-  /* GPU acceleration for animations */
-  .gpu-accelerated {
-    transform: translateZ(0);
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
-  /* Optimize for different connection speeds */
-  @media (prefers-reduced-data: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      background-image: none !important;
-    }
-  }
-
-  /* Safe area support for all devices */
-  .safe-top {
-    padding-top: max(1rem, env(safe-area-inset-top));
-  }
-
-  .safe-bottom {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
-  }
-
-  .safe-left {
-    padding-left: max(1rem, env(safe-area-inset-left));
-  }
-
-  .safe-right {
-    padding-right: max(1rem, env(safe-area-inset-right));
-  }
-
-  /* Container queries for component-level responsiveness */
-  @supports (container-type: inline-size) {
-    .container-responsive {
-      container-type: inline-size;
-      container-name: responsive-container;
-    }
-  }
-
-  /* Landscape mode optimizations for mobile */
-  @media (max-width: 1024px) and (orientation: landscape) {
-    body {
-      font-size: 14px; /* Slightly smaller for landscape mobile */
-    }
-
-    .hide-landscape {
-      display: none !important;
-    }
-  }
-
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    button,
-    a,
-    input {
-      border-width: 2px;
-    }
-  }
-
-  /* Performance optimization for animations */
-  .animate-fade-in,
-  .hover-scale,
-  .smooth-transition,
-  .retro-button {
-    will-change: transform, opacity;
-  }
-
-  /* Better scrolling on mobile */
-  * {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Screen reader only - hide visually but keep accessible */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-  }
-
-  .sr-only:focus,
-  .sr-only:focus-within {
-    position: static;
-    width: auto;
-    height: auto;
-    padding: inherit;
-    margin: inherit;
-    overflow: visible;
-    clip: auto;
-    white-space: normal;
-  }
-
-  /* Enhanced focus styles for accessibility */
-  *:focus-visible {
-    outline: 3px solid hsl(var(--primary));
-    outline-offset: 3px;
-    border-radius: 4px;
-  }
-
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 3px solid hsl(var(--primary));
-    outline-offset: 2px;
   }
 }
 
-/* Brutalist Design System Utilities */
+/* ============================================ */
+/* UTILITY CLASSES */
+/* ============================================ */
+
 @layer utilities {
-  /* ============================================ */
-  /* BRUTAL BORDERS */
-  /* ============================================ */
-  .brutal-border-subtle {
-    border-width: var(--brutal-border-subtle);
-    border-style: solid;
-    border-color: hsl(var(--foreground));
+  /* Gradient text utilities */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
   }
 
-  .brutal-border {
-    border-width: var(--brutal-border-standard);
-    border-style: solid;
-    border-color: hsl(var(--foreground));
+  .text-gradient-accent {
+    @apply bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent;
   }
 
-  .brutal-border-bold {
-    border-width: var(--brutal-border-bold);
-    border-style: solid;
-    border-color: hsl(var(--foreground));
-  }
-
-  /* ============================================ */
-  /* BRUTAL SHADOWS */
-  /* ============================================ */
-  .brutal-shadow-xs {
+  /* Brutal shadow utilities */
+  .shadow-brutal-xs {
     box-shadow: var(--brutal-shadow-xs);
   }
 
-  .brutal-shadow-sm {
+  .shadow-brutal-sm {
     box-shadow: var(--brutal-shadow-sm);
   }
 
-  .brutal-shadow {
+  .shadow-brutal {
     box-shadow: var(--brutal-shadow-md);
   }
 
-  .brutal-shadow-md {
-    box-shadow: var(--brutal-shadow-md);
-  }
-
-  .brutal-shadow-lg {
+  .shadow-brutal-lg {
     box-shadow: var(--brutal-shadow-lg);
   }
 
-  .brutal-shadow-xl {
+  .shadow-brutal-xl {
     box-shadow: var(--brutal-shadow-xl);
   }
 
-  .brutal-shadow-2xl {
+  .shadow-brutal-2xl {
     box-shadow: var(--brutal-shadow-2xl);
   }
 
-  /* Soft variants */
-  .brutal-shadow-sm-soft {
-    box-shadow: var(--brutal-shadow-sm-soft);
-  }
-
-  .brutal-shadow-md-soft {
-    box-shadow: var(--brutal-shadow-md-soft);
-  }
-
-  .brutal-shadow-lg-soft {
-    box-shadow: var(--brutal-shadow-lg-soft);
-  }
-
-  .brutal-shadow-xl-soft {
-    box-shadow: var(--brutal-shadow-xl-soft);
-  }
-
-  /* ============================================ */
-  /* BRUTAL HOVER EFFECTS */
-  /* ============================================ */
-  .brutal-hover {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .brutal-hover:hover {
-    box-shadow: var(--brutal-shadow-xl);
-    transform: translateY(-2px);
-  }
-
-  /* ============================================ */
-  /* BRUTAL CARD COMPONENT */
-  /* ============================================ */
-  .brutal-card {
-    border: var(--brutal-border-standard) solid hsl(var(--foreground));
-    border-radius: var(--radius);
-    box-shadow: var(--brutal-shadow-lg);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .brutal-card:hover {
-    box-shadow: var(--brutal-shadow-xl);
-    transform: translateY(-2px);
-  }
-
-  /* ============================================ */
-  /* BRUTAL BUTTON COMPONENT */
-  /* ============================================ */
-  .brutal-button {
-    border: var(--brutal-border-standard) solid hsl(var(--foreground));
-    box-shadow: var(--brutal-shadow-sm);
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .brutal-button:hover {
-    box-shadow: var(--brutal-shadow-md);
-    transform: translateY(-1px);
-  }
-
-  .brutal-button:active {
-    box-shadow: var(--brutal-shadow-xs);
-    transform: translate(2px, 2px);
-  }
-
-  /* ============================================ */
-  /* ON-SURFACE TEXT COLORS */
-  /* ============================================ */
-  .text-on-surface-primary {
-    color: hsl(var(--on-surface-primary));
-  }
-
-  .text-on-surface-secondary {
-    color: hsl(var(--on-surface-secondary));
-  }
-
-  .text-on-surface-accent {
-    color: hsl(var(--on-surface-accent));
-  }
-
-  .text-on-surface-success {
-    color: hsl(var(--on-surface-success));
-  }
-
-  .text-on-surface-warning {
-    color: hsl(var(--on-surface-warning));
-  }
-
-  .text-on-surface-destructive {
-    color: hsl(var(--on-surface-destructive));
-  }
-
-  .text-on-surface-muted {
-    color: hsl(var(--on-surface-muted));
-  }
-
-  /* ============================================ */
-  /* LEGACY SUPPORT (will be deprecated) */
-  /* ============================================ */
-  .brutal-border-old {
-    border: 3px solid hsl(var(--foreground));
-  }
-
-  .brutal-shadow-hover {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .brutal-shadow-hover:hover {
-    box-shadow: 7px 7px 0px 0px hsl(var(--primary));
-    transform: translateY(-2px);
-  }
-
-  /* ============================================ */
-  /* Glassmorphism Utilities */
-  /* ============================================ */
+  /* Glass effect utilities */
   .glass {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
   }
 
-  .glass-brutal {
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 2px solid hsl(var(--foreground) / 0.2);
-  }
-
-  /* Elevation Utilities */
+  /* Elevation utilities */
   .elevation-1 {
     box-shadow: var(--elevation-1);
   }
+
   .elevation-2 {
     box-shadow: var(--elevation-2);
   }
+
   .elevation-3 {
     box-shadow: var(--elevation-3);
   }
-  .elevation-4 {
-    box-shadow: var(--elevation-4);
-  }
-
-  /* Glow Utilities */
-  .glow-primary {
-    box-shadow: var(--glow-primary);
-  }
-  .glow-accent {
-    box-shadow: var(--glow-accent);
-  }
-  .glow-success {
-    box-shadow: var(--glow-success);
-  }
-  .glow-pulse {
-    animation: glow-pulse 2s ease-in-out infinite;
-  }
-
-  /* Modern Animations */
-  .float {
-    animation: float 3s ease-in-out infinite;
-  }
-  .slide-up-fade {
-    animation: slide-up-fade 0.4s ease-out;
-  }
-
-  /* Focus States */
-  .focus-ring-brutal:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring-offset), var(--focus-ring);
-  }
-
-  /* ============================================ */
-  /* Mobile-Specific Utilities */
-  /* ============================================ */
-
-  /* Safe area spacing for iOS notch/home indicator */
-  .safe-top {
-    padding-top: env(safe-area-inset-top);
-  }
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  .safe-left {
-    padding-left: env(safe-area-inset-left);
-  }
-  .safe-right {
-    padding-right: env(safe-area-inset-right);
-  }
-  .safe-x {
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-  }
-  .safe-y {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  /* Touch-friendly tap targets (minimum 44x44px for WCAG) */
-  .tap-target {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Larger tap targets for primary actions */
-  .tap-target-lg {
-    min-width: 56px;
-    min-height: 56px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Sticky header with safe area support */
-  .sticky-header-mobile {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    padding-top: env(safe-area-inset-top);
-    backdrop-filter: blur(8px);
-    background-color: hsl(var(--background) / 0.95);
-  }
-
-  /* Mobile-optimized modal/dialog */
-  .mobile-modal {
-    position: fixed;
-    inset: 0;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right)
-      env(safe-area-inset-bottom) env(safe-area-inset-left);
-    z-index: 100;
-  }
-
-  /* Prevent text selection during touch interactions */
-  .touch-none-select {
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-  }
-
-  /* Smooth momentum scrolling for mobile */
-  .scroll-smooth-mobile {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    overscroll-behavior: contain;
-  }
-
-  /* Mobile-optimized card spacing */
-  .mobile-card-spacing {
-    @apply p-4 md:p-6 space-y-3 md:space-y-4;
-  }
-
-  /* Responsive tap feedback */
-  @media (hover: none) and (pointer: coarse) {
-    .tap-feedback {
-      transition:
-        transform 0.1s ease,
-        opacity 0.1s ease;
-    }
-
-    .tap-feedback:active {
-      transform: scale(0.97);
-      opacity: 0.8;
-    }
-  }
-
-  /* Hide on mobile utility */
-  @media (max-width: 640px) {
-    .hide-mobile {
-      display: none !important;
-    }
-  }
-
-  /* Show only on mobile */
-  .show-mobile {
-    display: none;
-  }
-  @media (max-width: 640px) {
-    .show-mobile {
-      display: block;
-    }
-  }
-  .show-mobile-flex {
-    display: none;
-  }
-  @media (max-width: 640px) {
-    .show-mobile-flex {
-      display: flex;
-    }
-  }
-
-  /* ============================================
-     PRINT STYLES - Professional Output
-     ============================================ */
-  @media print {
-    /* Hide non-essential elements */
-    .sidebar,
-    .app-sidebar,
-    nav,
-    header nav,
-    footer,
-    button:not(.print-keep),
-    .fab,
-    .floating-action-button,
-    [data-sidebar],
-    [role='navigation'],
-    .offline-indicator,
-    .performance-overlay,
-    .cookie-consent,
-    .toast,
-    .sonner,
-    .dialog-overlay,
-    .dropdown-menu,
-    .popover,
-    .tooltip {
-      display: none !important;
-    }
-
-    /* Optimize layout for paper */
-    body {
-      background: white !important;
-      color: black !important;
-      margin: 0;
-      padding: 0;
-    }
-
-    .main-content,
-    main,
-    .container {
-      max-width: 100% !important;
-      margin: 0 !important;
-      padding: 1cm !important;
-    }
-
-    /* Force light mode for print */
-    * {
-      background: white !important;
-      color: black !important;
-      border-color: #333 !important;
-    }
-
-    /* Keep important colors for branding */
-    .print-color,
-    .logo,
-    .brand {
-      color: inherit !important;
-    }
-
-    /* Typography optimization */
-    h1 {
-      font-size: 24pt !important;
-    }
-    h2 {
-      font-size: 18pt !important;
-    }
-    h3 {
-      font-size: 14pt !important;
-    }
-    p,
-    li,
-    td {
-      font-size: 11pt !important;
-      line-height: 1.5 !important;
-    }
-
-    /* Table optimization */
-    table {
-      width: 100% !important;
-      border-collapse: collapse !important;
-      page-break-inside: avoid;
-    }
-
-    th,
-    td {
-      border: 1px solid #333 !important;
-      padding: 8px !important;
-      text-align: left !important;
-    }
-
-    th {
-      background: #f0f0f0 !important;
-      font-weight: bold !important;
-    }
-
-    /* Formula cards */
-    .formula-card,
-    .appointment-card,
-    .client-card {
-      border: 2px solid #333 !important;
-      padding: 12px !important;
-      margin-bottom: 12px !important;
-      page-break-inside: avoid;
-    }
-
-    /* Page breaks */
-    .page-break,
-    .print-page-break {
-      page-break-after: always;
-    }
-
-    .avoid-break,
-    .card,
-    .formula,
-    .appointment {
-      page-break-inside: avoid;
-    }
-
-    /* Links */
-    a {
-      text-decoration: underline !important;
-      color: black !important;
-    }
-
-    a[href]:after {
-      content: ' (' attr(href) ')';
-      font-size: 9pt;
-      font-style: italic;
-    }
-
-    /* QR codes and images */
-    img,
-    .qr-code {
-      max-width: 100% !important;
-      height: auto !important;
-      page-break-inside: avoid;
-    }
-
-    /* Headers and footers for pages */
-    @page {
-      margin: 1.5cm;
-    }
-
-    /* Print-specific utilities */
-    .print-only {
-      display: block !important;
-    }
-
-    .no-print {
-      display: none !important;
-    }
-
-    /* Invoice specific */
-    .invoice-header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #333 !important;
-    }
-
-    .invoice-total {
-      font-size: 14pt !important;
-      font-weight: bold !important;
-      text-align: right;
-      margin-top: 20px;
-      padding-top: 10px;
-      border-top: 2px solid #333 !important;
-    }
-
-    /* Formula safety warnings */
-    .warning,
-    .alert,
-    .disclaimer {
-      border: 2px solid #333 !important;
-      padding: 10px !important;
-      margin: 10px 0 !important;
-      background: #f9f9f9 !important;
-    }
-
-    /* Ensure badges/pills are visible */
-    .badge,
-    .pill,
-    .tag {
-      border: 1px solid #333 !important;
-      padding: 2px 6px !important;
-      border-radius: 3px !important;
-      display: inline-block !important;
-    }
-
-    /* Legal pages optimization */
-    .prose {
-      max-width: 100% !important;
-    }
-
-    .prose h2 {
-      margin-top: 20px !important;
-      padding-top: 10px !important;
-      border-top: 1px solid #ccc !important;
-    }
-  }
 }
 
-/* Pixelated LEGO design utilities */
-@layer utilities {
-  .pixel-border {
-    border: 4px solid black;
-    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+/* ============================================ */
+/* COMPONENT-SPECIFIC STYLES */
+/* ============================================ */
+
+@layer components {
+  /* Button hover states */
+  .btn-brutal {
+    @apply border-[3px] border-foreground shadow-brutal transition-all duration-200;
   }
 
-  .pixel-shadow-sm {
-    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+  .btn-brutal:hover {
+    @apply translate-x-[2px] translate-y-[2px] shadow-brutal-xs;
   }
 
-  .pixel-shadow-md {
-    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+  .btn-brutal:active {
+    @apply translate-x-[3px] translate-y-[3px] shadow-none;
   }
 
-  .pixel-shadow-lg {
-    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  /* Card styles */
+  .card-brutal {
+    @apply border-[3px] border-foreground bg-card shadow-brutal;
   }
 
-  .pixel-texture {
-    background-image:
-      linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(0, 0, 0, 0.05) 50%,
-        transparent 100%
-      ),
-      linear-gradient(
-        0deg,
-        transparent 0%,
-        rgba(0, 0, 0, 0.05) 50%,
-        transparent 100%
-      );
-    background-size: 8px 8px;
-  }
-
-  .pixel-texture-light {
-    background-image:
-      linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 100%
-      ),
-      linear-gradient(
-        0deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.05) 50%,
-        transparent 100%
-      );
-    background-size: 8px 8px;
-  }
-
-  /* Prevent font smoothing for pixel font to keep it crisp */
-  .font-pixel {
-    -webkit-font-smoothing: none;
-    -moz-osx-font-smoothing: grayscale;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-  }
-
-  /* ============================================ */
-  /* ADAPTIVE BRUTALISM TYPOGRAPHY UTILITIES */
-  /* ============================================ */
-
-  /* Brutalist Headers - Press Start 2P */
-  .brutal-header-xl {
-    @apply font-pixel text-2xl sm:text-3xl lg:text-4xl;
-  }
-
-  .brutal-header-lg {
-    @apply font-pixel text-xl sm:text-2xl lg:text-3xl;
-  }
-
-  .brutal-header-md {
-    @apply font-pixel text-lg sm:text-xl lg:text-2xl;
-  }
-
-  .brutal-header-sm {
-    @apply font-pixel text-base sm:text-lg;
-  }
-
-  /* Brutalist CTA Text - Bold Sans */
-  .brutal-cta-text {
-    @apply font-bold uppercase tracking-wide;
-  }
-
-  /* Readable Body Text - DM Sans */
-  .brutal-body-lg {
-    @apply font-sans text-sm sm:text-base;
-  }
-
-  .brutal-body {
-    @apply font-sans text-xs sm:text-sm;
-  }
-
-  .brutal-body-sm {
-    @apply font-sans text-[11px] sm:text-xs;
-  }
-
-  /* Brutalist Card - Complete pattern */
-  .brutal-card {
-    @apply border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] rounded-xl bg-card;
-  }
-
-  /* ============================================ */
-  /* HYBRID BRUTALISM UTILITIES */
-  /* Glass Morphism + Brutal Accents */
-  /* ============================================ */
-
-  /* Grid Textures for Backgrounds */
-  .brutal-grid-subtle {
-    background-image: var(--grid-texture-sm);
-    background-size: var(--grid-size-sm);
-  }
-
-  .brutal-grid {
-    background-image: var(--grid-texture-md);
-    background-size: var(--grid-size-md);
-  }
-
-  /* Hybrid Glass Cards - Backdrop blur + brutal borders */
-  .brutal-glass-card {
-    @apply bg-card/80 backdrop-blur-xl border-[2px] sm:border-[3px] border-border/50;
-  }
-
-  .brutal-glass-card-interactive {
-    @apply brutal-glass-card transition-all duration-300;
-    box-shadow: var(--brutal-shadow-sm);
-  }
-
-  .brutal-glass-card-interactive:hover {
-    @apply border-primary/50;
-    box-shadow: var(--brutal-shadow-md);
-    transform: translateY(-2px);
-  }
-
-  .brutal-glass-card-interactive:active {
-    box-shadow: var(--brutal-shadow-xs);
-    transform: translateY(0);
-  }
-
-  /* Brutal Headers with Grid Background */
-  .brutal-header-section {
-    @apply brutal-grid-subtle border-b-[3px] sm:border-b-[4px] border-foreground;
-    box-shadow: 0 var(--brutal-border-standard) 0px 0px hsl(var(--foreground));
-  }
-
-  /* Hybrid Buttons - Glass with brutal shadow */
-  .brutal-button-hybrid {
-    @apply bg-card/90 backdrop-blur-sm border-[2px] sm:border-[3px] border-foreground;
-    box-shadow: var(--brutal-shadow-sm);
-    transition: all 200ms ease;
-  }
-
-  .brutal-button-hybrid:hover {
-    box-shadow: var(--brutal-shadow-md);
-    transform: translateY(-2px);
-  }
-
-  .brutal-button-hybrid:active {
-    box-shadow: var(--brutal-shadow-xs);
-    transform: translateY(0);
-  }
-
-  /* Stat Cards - Hybrid style */
-  .brutal-stat-card {
-    @apply brutal-glass-card p-4 sm:p-5 transition-all duration-300;
-    box-shadow: var(--brutal-shadow-sm);
-  }
-
-  .brutal-stat-card:hover {
-    box-shadow: var(--brutal-shadow-lg);
-    transform: translateY(-3px) scale(1.02);
-  }
-
-  /* Quick Action Cards */
-  .brutal-action-card {
-    @apply brutal-glass-card rounded-xl overflow-hidden transition-all duration-300;
-    box-shadow: var(--brutal-shadow-xs);
-  }
-
-  .brutal-action-card:hover {
-    @apply border-primary/50;
-    box-shadow: var(--brutal-shadow-xl);
-    transform: translateY(-4px) scale(1.03);
-  }
-
-  .brutal-action-card:active {
-    box-shadow: var(--brutal-shadow-sm);
-    transform: translateY(0) scale(1);
-  }
-
-  .brutal-card-hover {
-    @apply hover:shadow-[7px_7px_0px_0px_hsl(var(--primary))] hover:-translate-y-1 transition-all;
-  }
-
-  /* Brutalist Button Effects */
-  .brutal-button {
-    @apply border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))];
-  }
-
-  .brutal-button-hover {
-    @apply hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] active:shadow-none active:translate-x-[4px] active:translate-y-[4px];
-  }
-
-  /* Glass Brutal (modern + brutalist fusion) */
-  .glass-brutal {
-    @apply backdrop-blur-xl bg-background/80 border-[3px] border-foreground/20;
+  /* Input styles */
+  .input-brutal {
+    @apply border-[3px] border-foreground bg-input focus:shadow-brutal;
   }
 }

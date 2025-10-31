@@ -2,11 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
-<<<<<<< HEAD
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
-=======
-export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>; // Inherits all textarea attributes without adding new properties
->>>>>>> copilot/fix-a11y-tester-and-comments
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
   return (

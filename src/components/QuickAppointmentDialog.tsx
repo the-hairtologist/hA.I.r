@@ -104,37 +104,19 @@ export const QuickAppointmentDialog = ({
         await supabase.functions.invoke('send-sms-notification', {
           body: { appointmentId: newAppointment.id, notificationType: 'confirmation' },
         });
-<<<<<<< HEAD
       } catch { /* Ignore notification errors */ }
-=======
-      } catch (error) {
-        logger.warn("Non-critical notification failed", error, { context: "QuickAppointmentDialog" });
-      }
->>>>>>> copilot/fix-a11y-tester-and-comments
 
       try {
         await supabase.functions.invoke('send-appointment-confirmation', {
           body: { appointmentId: newAppointment.id },
         });
-<<<<<<< HEAD
       } catch { /* Ignore notification errors */ }
-=======
-      } catch (error) {
-        logger.warn("Non-critical notification failed", error, { context: "QuickAppointmentDialog" });
-      }
->>>>>>> copilot/fix-a11y-tester-and-comments
 
       try {
         await supabase.functions.invoke('sync-calendar-event', {
           body: { appointment_id: newAppointment.id, action: 'create' },
         });
-<<<<<<< HEAD
       } catch { /* Ignore notification errors */ }
-=======
-      } catch (error) {
-        logger.warn("Non-critical notification failed", error, { context: "QuickAppointmentDialog" });
-      }
->>>>>>> copilot/fix-a11y-tester-and-comments
     },
     {
       schema: quickAppointmentSchema,

@@ -48,7 +48,6 @@ export default function AdminUsers() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
-<<<<<<< HEAD
   const loadUsers = async () => {
     try {
       const { data, error } = await supabase
@@ -64,17 +63,10 @@ export default function AdminUsers() {
     }
   };
 
-  // Move useEffect BEFORE conditional returns
   useEffect(() => {
     if (!loading && user && isAdmin) {
       loadUsers();
     }
-=======
-  // Load users effect - must come before conditional returns
-  useEffect(() => {
-    if (loading || !user || !isAdmin) return;
-    loadUsers();
->>>>>>> copilot/fix-a11y-tester-and-comments
   }, [loading, user, isAdmin]);
 
   // Redirect non-admins
@@ -86,13 +78,6 @@ export default function AdminUsers() {
   if (loading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
-
-<<<<<<< HEAD
-=======
-  const loadUsers = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
         .select(`
           *,
           user_roles(role)
