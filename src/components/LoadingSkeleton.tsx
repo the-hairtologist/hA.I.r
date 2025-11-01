@@ -186,3 +186,27 @@ export const FormulaSkeleton = () => (
     </CardContent>
   </Card>
 );
+
+export const ServiceCardSkeleton = () => (
+  <Card className="animate-fade-in shimmer">
+    <CardContent className="p-6">
+      <div className="flex items-start justify-between">
+        <div className="flex-1 space-y-3">
+          <Skeleton className="h-6 w-3/4 shimmer" />
+          <Skeleton className="h-4 w-full shimmer" />
+          <Skeleton className="h-4 w-5/6 shimmer" />
+          <div className="flex gap-2 pt-2">
+            <Skeleton className="h-6 w-20 shimmer" />
+            <Skeleton className="h-6 w-16 shimmer" />
+          </div>
+        </div>
+        <Skeleton className="h-10 w-10 rounded shimmer" />
+      </div>
+    </CardContent>
+  </Card>
+);
+
+// Export all skeletons from new files
+export * from './skeletons/ListSkeleton';
+export * from './skeletons/PageSkeleton';
+
