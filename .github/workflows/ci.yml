@@ -1,20 +1,40 @@
 name: CI
 on:
   push:
-    branches: ['fix/invite-client-dialog-form-refactor']
+    branches: ['main']
   pull_request:
     branches: ['main']
 
 jobs:
   build:
-    name: Install, build and lint
+    name: Install, build, lint and test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-      - run: npm ci
-      - run: npm run build
-      - run: npm run lint
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        # Use your project's test script (npm test). If you use a different command (npx vitest, npx jest, etc.)
+        # replace `npm test` with that command.
+        run: npm test
+        # If your tests output JUnit or other reports, add steps here to upload them as artifacts:
+        # - name: Upload test reports
+        #   uses: actions/upload-artifact@v4
+        #   with:
+        #     name: test-reports
+        #     path: path/to/test-reports
