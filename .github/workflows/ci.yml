@@ -1,70 +1,39 @@
-# CI: Install, build, lint and test (robust, avoids failing when scripts are missing)
-# Triggers: push, pull_request, manual
-name: CI
+name: CI/CD
+
 on:
   push:
-    branches: ['main']
+    branches: [hA.I.r]
   pull_request:
-    branches: ['main']
+    branches: [hA.I.r]
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Install, build, lint and test
+  test:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18'
           cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: npm ci
 
-      - name: Build (if defined)
-        run: |
-          if npm run -s build --silent >/dev/null 2>&1; then
-            npm run build --if-present
-          else
-            echo "No build script defined, skipping build"
-          fi
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
-      - name: Lint (if defined)
-        run: |
-          if npm run -s lint --silent >/dev/null 2>&1; then
-            npm run lint --if-present
-          else
-            echo "No lint script defined, skipping lint"
-          fi
+      - name: Run Playwright tests
+        run: npx playwright test
 
-      - name: Test (if defined)
-        env:
-          CI: true
-        run: |
-          if npm run -s test --silent >/dev/null 2>&1; then
-            npm test --if-present
-          else
-            echo "No test script defined, skipping tests"
-          fi
-
-      - name: Upload test reports (optional)
+      - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports
-          path: |
-            junit.xml
-            test-results/**/*.xml
-            coverage/*.xml
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
