@@ -58,6 +58,7 @@ import { ZapierSettings } from '@/pages/Settings/ZapierSettings';
 import { cn } from '@/lib/utils';
 import { FormFieldError } from '@/components/FormFieldError';
 import { useDevMode } from '@/hooks/useDevMode';
+import { SaveIndicator } from '@/components/SaveIndicator';
 
 const Settings = () => {
   // Performance tracking
@@ -77,6 +78,10 @@ const Settings = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userRole, setUserRole] = useState('');
   const { isDevMode, toggleDevMode } = useDevMode();
+  
+  // Save state tracking
+  const [profileSaveState, setProfileSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [passwordSaveState, setPasswordSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   // Security - Password change
   const [currentPassword, setCurrentPassword] = useState('');
@@ -231,118 +236,128 @@ const Settings = () => {
   const { handleSubmit: handleSaveProfile, isSubmitting: isSavingProfile } =
     useFormSubmit(
       async () => {
-        // Validation
-        if (!fullName?.trim()) {
-          throw new Error('Name is required');
-        }
+        setProfileSaveState('saving');
+        
+        try {
+          // Validation
+          if (!fullName?.trim()) {
+            throw new Error('Name is required');
+          }
 
-        if (fullName.trim().length > 100) {
-          throw new Error('Name must be less than 100 characters');
-        }
+          if (fullName.trim().length > 100) {
+            throw new Error('Name must be less than 100 characters');
+          }
 
-        // Validate phone if provided
-        if (phoneError) {
-          throw new Error('Please fix phone number error');
-        }
+          // Validate phone if provided
+          if (phoneError) {
+            throw new Error('Please fix phone number error');
+          }
 
-        if (bio.length > 1000) {
-          throw new Error('Bio must be less than 1000 characters');
-        }
+          if (bio.length > 1000) {
+            throw new Error('Bio must be less than 1000 characters');
+          }
 
-        if (businessName.length > 100) {
-          throw new Error('Business name must be less than 100 characters');
-        }
+          if (businessName.length > 100) {
+            throw new Error('Business name must be less than 100 characters');
+          }
 
-        if (location.length > 200) {
-          throw new Error('Location must be less than 200 characters');
-        }
+          if (location.length > 200) {
+            throw new Error('Location must be less than 200 characters');
+          }
 
-        const yearsExp = yearsExperience ? parseInt(yearsExperience) : 0;
-        if (yearsExp < 0 || yearsExp > 100) {
-          throw new Error('Years of experience must be between 0 and 100');
-        }
+          const yearsExp = yearsExperience ? parseInt(yearsExperience) : 0;
+          if (yearsExp < 0 || yearsExp > 100) {
+            throw new Error('Years of experience must be between 0 and 100');
+          }
 
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (!session) throw new Error('Not authenticated');
+          const {
+            data: { session },
+          } = await supabase.auth.getSession();
+          if (!session) throw new Error('Not authenticated');
 
-        // Update profiles table
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .update({
-            full_name: fullName.trim(),
-            avatar_url: avatarUrl,
-            gender: selectedGender,
-          })
-          .eq('id', session.user.id);
-
-        if (profileError) throw profileError;
-
-        // Update stylist profile if applicable
-        if (userRole === 'stylist') {
-          const depositPct = depositPercentage
-            ? parseFloat(depositPercentage)
-            : 0;
-          const maxClients = maxClientsPerDay ? parseInt(maxClientsPerDay) : 8;
-
-          const { error: stylistError } = await supabase
-            .from('stylist_profiles')
+          // Update profiles table
+          const { error: profileError } = await supabase
+            .from('profiles')
             .update({
-              business_name: businessName.trim() || null,
-              bio: bio.trim() || null,
-              specialty: specialty.trim() || null,
-              color_line: colorLine.trim() || null,
-              location: location.trim() || null,
-              years_experience: yearsExp || null,
-              social_media_instagram: instagramHandle.trim() || null,
-              social_media_tiktok: tiktokHandle.trim() || null,
-              social_media_facebook: facebookUrl.trim() || null,
-              business_phone: businessPhone.trim() || null,
-              business_email: businessEmail.trim() || null,
-              timezone: timezone,
-              preferred_communication: preferredComm,
-              cancellation_policy: cancellationPolicy.trim() || null,
-              deposit_required: depositRequired,
-              deposit_percentage: depositPct,
-              accepts_new_clients: acceptsNewClients,
-              max_clients_per_day: maxClients,
-              parking_instructions: parkingInstructions.trim() || null,
-              special_accommodations: specialAccommodations.trim() || null,
+              full_name: fullName.trim(),
+              avatar_url: avatarUrl,
+              gender: selectedGender,
             })
-            .eq('user_id', session.user.id);
+            .eq('id', session.user.id);
 
-          if (stylistError) throw stylistError;
+          if (profileError) throw profileError;
+
+          // Update stylist profile if applicable
+          if (userRole === 'stylist') {
+            const depositPct = depositPercentage
+              ? parseFloat(depositPercentage)
+              : 0;
+            const maxClients = maxClientsPerDay ? parseInt(maxClientsPerDay) : 8;
+
+            const { error: stylistError } = await supabase
+              .from('stylist_profiles')
+              .update({
+                business_name: businessName.trim() || null,
+                bio: bio.trim() || null,
+                specialty: specialty.trim() || null,
+                color_line: colorLine.trim() || null,
+                location: location.trim() || null,
+                years_experience: yearsExp || null,
+                social_media_instagram: instagramHandle.trim() || null,
+                social_media_tiktok: tiktokHandle.trim() || null,
+                social_media_facebook: facebookUrl.trim() || null,
+                business_phone: businessPhone.trim() || null,
+                business_email: businessEmail.trim() || null,
+                timezone: timezone,
+                preferred_communication: preferredComm,
+                cancellation_policy: cancellationPolicy.trim() || null,
+                deposit_required: depositRequired,
+                deposit_percentage: depositPct,
+                accepts_new_clients: acceptsNewClients,
+                max_clients_per_day: maxClients,
+                parking_instructions: parkingInstructions.trim() || null,
+                special_accommodations: specialAccommodations.trim() || null,
+              })
+              .eq('user_id', session.user.id);
+
+            if (stylistError) throw stylistError;
+          }
+
+          // Update client profile if applicable
+          if (userRole === 'client') {
+            const { error: clientError } = await supabase
+              .from('client_profiles')
+              .update({
+                birthday: birthday || null,
+                hair_goals: hairGoals.trim() || null,
+                preferred_time_of_day: preferredTimeOfDay || null,
+                referral_source: referralSource.trim() || null,
+                sensitivity_notes: sensitivityNotes.trim() || null,
+                communication_preference: communicationPref,
+                special_requests: specialRequests.trim() || null,
+              })
+              .eq('user_id', session.user.id);
+
+            if (clientError) throw clientError;
+          }
+
+          // Flash save button with success state
+          const saveButton = document.querySelector('[data-save-profile]');
+          if (saveButton) {
+            saveButton.classList.add('animate-pulse', 'bg-green-500');
+            setTimeout(() => {
+              saveButton.classList.remove('animate-pulse', 'bg-green-500');
+            }, 2000);
+          }
+
+          setHasChanges(false);
+          setProfileSaveState('saved');
+          setTimeout(() => setProfileSaveState('idle'), 3000);
+        } catch (error) {
+          setProfileSaveState('error');
+          setTimeout(() => setProfileSaveState('idle'), 5000);
+          throw error;
         }
-
-        // Update client profile if applicable
-        if (userRole === 'client') {
-          const { error: clientError } = await supabase
-            .from('client_profiles')
-            .update({
-              birthday: birthday || null,
-              hair_goals: hairGoals.trim() || null,
-              preferred_time_of_day: preferredTimeOfDay || null,
-              referral_source: referralSource.trim() || null,
-              sensitivity_notes: sensitivityNotes.trim() || null,
-              communication_preference: communicationPref,
-              special_requests: specialRequests.trim() || null,
-            })
-            .eq('user_id', session.user.id);
-
-          if (clientError) throw clientError;
-        }
-
-        // Flash save button with success state
-        const saveButton = document.querySelector('[data-save-profile]');
-        if (saveButton) {
-          saveButton.classList.add('animate-pulse', 'bg-green-500');
-          setTimeout(() => {
-            saveButton.classList.remove('animate-pulse', 'bg-green-500');
-          }, 2000);
-        }
-
-        setHasChanges(false);
       },
       {
         successMessage: 'Locked in. Your profile is updated.',
@@ -414,45 +429,56 @@ const Settings = () => {
     isSubmitting: isChangingPassword,
   } = useFormSubmit(
     async () => {
-      const errors: {
-        currentPassword?: string;
-        newPassword?: string;
-        confirmPassword?: string;
-      } = {};
+      setPasswordSaveState('saving');
+      
+      try {
+        const errors: {
+          currentPassword?: string;
+          newPassword?: string;
+          confirmPassword?: string;
+        } = {};
 
-      if (!currentPassword) {
-        errors.currentPassword = 'Current password is required';
+        if (!currentPassword) {
+          errors.currentPassword = 'Current password is required';
+        }
+
+        if (!newPassword) {
+          errors.newPassword = 'New password is required';
+        } else if (newPassword.length < 8) {
+          errors.newPassword = 'Password must be at least 8 characters';
+        }
+
+        if (!confirmPassword) {
+          errors.confirmPassword = 'Please confirm your new password';
+        } else if (newPassword !== confirmPassword) {
+          errors.confirmPassword = "Passwords don't match";
+        }
+
+        if (Object.keys(errors).length > 0) {
+          setPasswordErrors(errors);
+          throw new Error('Validation failed');
+        }
+
+        setPasswordErrors({});
+
+        const { error } = await supabase.auth.updateUser({
+          password: newPassword,
+        });
+
+        if (error) throw error;
+
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setPasswordErrors({});
+        
+        setPasswordSaveState('saved');
+        setTimeout(() => setPasswordSaveState('idle'), 3000);
+      } catch (error) {
+        setPasswordSaveState('error');
+        setTimeout(() => setPasswordSaveState('idle'), 5000);
+        throw error;
       }
-
-      if (!newPassword) {
-        errors.newPassword = 'New password is required';
-      } else if (newPassword.length < 8) {
-        errors.newPassword = 'Password must be at least 8 characters';
-      }
-
-      if (!confirmPassword) {
-        errors.confirmPassword = 'Please confirm your new password';
-      } else if (newPassword !== confirmPassword) {
-        errors.confirmPassword = "Passwords don't match";
-      }
-
-      if (Object.keys(errors).length > 0) {
-        setPasswordErrors(errors);
-        throw new Error('Validation failed');
-      }
-
-      setPasswordErrors({});
-
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword,
-      });
-
-      if (error) throw error;
-
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      setPasswordErrors({});
     },
     {
       successMessage: 'Perfect. Your password is updated.',
@@ -1309,6 +1335,7 @@ const Settings = () => {
                       Preview Public Profile
                     </Button>
                   )}
+                  <SaveIndicator status={profileSaveState} className="ml-2" />
                 </div>
               </CardContent>
             </Card>
@@ -1447,28 +1474,31 @@ const Settings = () => {
                     )}
                   </div>
 
-                  <Button
-                    onClick={handlePasswordChange}
-                    disabled={
-                      isChangingPassword ||
-                      !currentPassword ||
-                      !newPassword ||
-                      !confirmPassword
-                    }
-                    className="w-full sm:w-auto"
-                  >
-                    {isChangingPassword ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Updating Password...
-                      </>
-                    ) : (
-                      <>
-                        <Lock className="mr-2 h-4 w-4" />
-                        Update Password
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex flex-col sm:flex-row items-center gap-3">
+                    <Button
+                      onClick={handlePasswordChange}
+                      disabled={
+                        isChangingPassword ||
+                        !currentPassword ||
+                        !newPassword ||
+                        !confirmPassword
+                      }
+                      className="w-full sm:w-auto"
+                    >
+                      {isChangingPassword ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Updating Password...
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="mr-2 h-4 w-4" />
+                          Update Password
+                        </>
+                      )}
+                    </Button>
+                    <SaveIndicator status={passwordSaveState} />
+                  </div>
                 </div>
 
                 <div className="mt-6 p-4 bg-muted/50 rounded-lg">
