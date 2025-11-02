@@ -233,8 +233,8 @@ export const QuickAppointmentDialog = ({
         return;
       }
 
-    const appointmentStart = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
-    const appointmentDuration = selectedServiceData.duration_minutes ?? 90;
+      const appointmentStart = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
+      const appointmentDuration = selectedServiceData.duration_minutes ?? 90;
       const appointmentEnd = addMinutes(appointmentStart, appointmentDuration);
 
       const { data: existingAppointments, error } = await supabase
