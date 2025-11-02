@@ -164,7 +164,7 @@ describe('useFormSubmit', () => {
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
       expect(result.current.submitCount).toBe(1);
-      expect((toast.error as Mock)).toHaveBeenCalledWith('Submission failed');
+      expect((toast as Mock).error).toHaveBeenCalledWith('Submission failed');
     });
 
     it('returns initial values after reset', async () => {
@@ -207,6 +207,16 @@ describe('useFormSubmit', () => {
       await act(async () => {
         await result.current.handleSubmit();
       });
+      await waitFor(() => expect(result.current.submitCount).toBe(1));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1100);
+      });
+
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
+      await waitFor(() => expect(result.current.submitCount).toBe(2));
 
       expect(result.current.submitCount).toBe(1);
 

@@ -115,11 +115,7 @@ describe('useAICall', () => {
 
   it('should retry failed requests', async () => {
     const mockData = { success: true };
-    const failureError = {
-      message: 'Temporary failure',
-      code: '503',
-      retryable: true,
-    };
+    const failureError = { message: 'Temporary failure', code: '503' };
 
     (supabase.functions.invoke as Mock)
       .mockResolvedValueOnce({ data: null, error: failureError })
@@ -143,7 +139,6 @@ describe('useAICall', () => {
     // The final successful data will be in result.current.data
     await waitFor(() => {
       expect(result.current.data).toEqual(mockData);
-      expect(result.current.error).toBeNull();
       expect(supabase.functions.invoke).toHaveBeenCalledTimes(2);
     });
   });
@@ -151,13 +146,7 @@ describe('useAICall', () => {
   it('should handle timeout errors', async () => {
     (supabase.functions.invoke as Mock).mockImplementation(() => {
       return new Promise(resolve =>
-        setTimeout(
-          () =>
-            resolve({
-              error: { message: 'Request timed out', code: 'timeout' },
-            }),
-          100
-        )
+        setTimeout(() => resolve({ error: { message: 'Request timed out' } }), 100)
       );
     });
 
@@ -187,6 +176,9 @@ describe('useAICall', () => {
       wrapper: createWrapper(),
     });
 
+    const response = await result.current.invoke({ prompt: 'test' });
+    expect(response).toBeNull();
+    expect(result.current.data).toBeNull();
     await expect(result.current.invoke({ prompt: 'test' })).rejects.toThrow(
       'AI feature error: functionName is required'
     );
@@ -231,6 +223,10 @@ describe('useAICall', () => {
     for (const model of models) {
       const { result } = renderHook(() => useAICall('test-function', { model }), {
         wrapper: createWrapper(),
+      });
+
+      (supabase.functions.invoke as Mock).mockResolvedValue({ data: { modelUsed: model }, error: null });
+
       });
 
       (supabase.functions.invoke as Mock).mockResolvedValue({

@@ -139,13 +139,11 @@ export async function wrapAICall<T>(
         lastError
       );
 
-      if (attempt === maxRetries) {
-        break; // Exit loop if it's the last attempt
+      if (!lastError.retryable || attempt === maxRetries) {
+        return { data: null, error: lastError };
       }
-
-      // Exponential backoff
-      const delay = context.retryDelay ?? 100 * Math.pow(2, attempt);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      // Exponential backoff: 100ms * 2^(attempt + 1)
+      await new Promise(resolve => setTimeout(resolve, 100 * Math.pow(2, attempt + 1)));
     }
   }
 

@@ -86,7 +86,6 @@ export function useAICall<
         model: options?.model || 'gemini-2.5-flash',
         estimatedTokens: options?.estimatedTokens,
         maxRetries: options?.maxRetries,
-        retryDelay: options?.retryDelay,
         timeout: options?.timeout,
       };
 
