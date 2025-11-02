@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { render as rtlRender, RenderOptions, screen } from '@testing-library/react';
+import { render as rtlRender, RenderOptions, screen, renderHook, act } from '@testing-library/react';
 import { waitFor, fireEvent } from '@testing-library/dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
@@ -176,4 +176,4 @@ export const mockFormula = {
 };
 
 // Re-export testing library utilities for convenience
-export { screen, waitFor, fireEvent };
+export { screen, waitFor, fireEvent, renderHook, act };

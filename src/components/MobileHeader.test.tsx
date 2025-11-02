@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@/lib/testing/testUtils';
 import { BrowserRouter } from 'react-router-dom';
 import { MobileHeader } from './MobileHeader';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -29,7 +29,7 @@ vi.mock('@/components/ui/sidebar', async () => {
 
 describe('MobileHeader', () => {
   const renderHeader = (notificationCount = 0) => {
-    return render(
+    return renderWithProviders(
       <BrowserRouter>
         <SidebarProvider>
           <MobileHeader notificationCount={notificationCount} />

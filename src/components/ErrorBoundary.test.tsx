@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@/lib/testing/testUtils';
 import '@testing-library/jest-dom';
 import { ErrorBoundary } from './ErrorBoundary';
 
@@ -17,7 +17,7 @@ const SafeComponent = () => <div>Safe content</div>;
 
 describe('ErrorBoundary', () => {
   it('should render children when there is no error', () => {
-    const { getByText } = render(
+    const { getByText } = renderWithProviders(
       <ErrorBoundary>
         <SafeComponent />
       </ErrorBoundary>
@@ -32,7 +32,7 @@ describe('ErrorBoundary', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
 
-    const { getByText } = render(
+    const { getByText } = renderWithProviders(
       <ErrorBoundary>
         <ThrowError />
       </ErrorBoundary>
@@ -50,7 +50,7 @@ describe('ErrorBoundary', () => {
 
     const CustomFallback = () => <div>Custom error message</div>;
 
-    const { getByText } = render(
+    const { getByText } = renderWithProviders(
       <ErrorBoundary fallback={<CustomFallback />}>
         <ThrowError />
       </ErrorBoundary>

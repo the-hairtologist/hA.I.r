@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@/lib/testing/testUtils';
 import { BrowserRouter } from 'react-router-dom';
 import { PageHeader } from './PageHeader';
 
@@ -14,7 +14,7 @@ vi.mock('react-router-dom', async () => {
 
 describe('PageHeader', () => {
   it('renders title', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <PageHeader title="Test Page" />
       </BrowserRouter>
@@ -24,7 +24,7 @@ describe('PageHeader', () => {
   });
 
   it('renders back button by default', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <PageHeader title="Test Page" />
       </BrowserRouter>
@@ -35,7 +35,7 @@ describe('PageHeader', () => {
   });
 
   it('navigates to backTo path when back button clicked', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <PageHeader title="Test Page" backTo="/custom-path" />
       </BrowserRouter>
@@ -51,7 +51,7 @@ describe('PageHeader', () => {
 
   it('renders actions', () => {
     const actions = <button>Action</button>;
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <PageHeader title="Test Page" actions={actions} />
       </BrowserRouter>
@@ -62,7 +62,7 @@ describe('PageHeader', () => {
 
   it('renders with icon', () => {
     const icon = <span>Icon</span>;
-    const { container } = render(
+    const { container } = renderWithProviders(
       <BrowserRouter>
         <PageHeader title="Test Page" icon={icon} />
       </BrowserRouter>

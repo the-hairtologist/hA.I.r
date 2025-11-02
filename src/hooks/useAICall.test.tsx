@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
-import { renderHook, waitFor, act } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@/lib/testing/testUtils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAICall } from './useAICall';
 import { supabase } from '@/integrations/supabase/client';

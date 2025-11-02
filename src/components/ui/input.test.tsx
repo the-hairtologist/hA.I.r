@@ -3,19 +3,19 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { renderWithProviders } from '@/lib/testing/testUtils';
 import { Input } from './input';
 
 describe('Input', () => {
   it('should render input element', () => {
-    const { container } = render(<Input placeholder="Enter text" />);
+    const { container } = renderWithProviders(<Input placeholder="Enter text" />);
     const input = container.querySelector('input');
     expect(input).toBeInTheDocument();
     expect(input?.placeholder).toBe('Enter text');
   });
 
   it('should apply validation state styling for valid input', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <Input validationState="valid" showValidationIcon={true} />
     );
     const input = container.querySelector('input');
@@ -23,7 +23,7 @@ describe('Input', () => {
   });
 
   it('should apply validation state styling for invalid input', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <Input validationState="invalid" showValidationIcon={true} />
     );
     const input = container.querySelector('input');
@@ -31,7 +31,7 @@ describe('Input', () => {
   });
 
   it('should show validation icon when enabled', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <Input
         validationState="valid"
         showValidationIcon={true}
@@ -44,7 +44,7 @@ describe('Input', () => {
   });
 
   it('should not show validation icon by default', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <Input validationState="valid" data-testid="input-without-icon" />
     );
 
@@ -53,14 +53,14 @@ describe('Input', () => {
   });
 
   it('should render with neutral state by default', () => {
-    const { container } = render(<Input />);
+    const { container } = renderWithProviders(<Input />);
     const input = container.querySelector('input');
     expect(input).not.toHaveClass('border-green-600');
     expect(input).not.toHaveClass('border-destructive');
   });
 
   it('should pass through standard input props', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <Input type="email" required disabled value="test@example.com" readOnly />
     );
     const input = container.querySelector('input') as HTMLInputElement;
@@ -72,13 +72,13 @@ describe('Input', () => {
   });
 
   it('should render with custom className', () => {
-    const { container } = render(<Input className="custom-class" />);
+    const { container } = renderWithProviders(<Input className="custom-class" />);
     const input = container.querySelector('input');
     expect(input).toHaveClass('custom-class');
   });
 
   it('should apply error styling when error prop is provided', () => {
-    const { container } = render(<Input error="Invalid input" />);
+    const { container } = renderWithProviders(<Input error="Invalid input" />);
     const input = container.querySelector('input');
     expect(input).toHaveClass('border-destructive');
     expect(input?.getAttribute('aria-invalid')).toBe('true');

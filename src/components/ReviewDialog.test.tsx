@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { renderWithProviders, screen, waitFor } from '@/lib/testing/testUtils';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReviewDialog } from './ReviewDialog';
@@ -58,7 +58,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
     });
 
     const onSuccess = vi.fn();
-    render(
+    renderWithProviders(
       <Wrapper>
         <ReviewDialog
           open={true}
@@ -100,7 +100,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
       }),
     });
 
-    render(
+    renderWithProviders(
       <Wrapper>
         <ReviewDialog
           open={true}
@@ -143,7 +143,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
       insert: mockInsert,
     });
 
-    render(
+    renderWithProviders(
       <Wrapper>
         <ReviewDialog
           open={true}
@@ -185,7 +185,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
       }),
     });
 
-    render(
+    renderWithProviders(
       <Wrapper>
         <ReviewDialog
           open={true}
@@ -212,7 +212,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
   });
 
   it('should maintain 44px minimum tap target', () => {
-    render(
+    renderWithProviders(
       <Wrapper>
         <ReviewDialog
           open={true}
@@ -243,7 +243,7 @@ describe.skip('ReviewDialog - Form Submit Protection', () => {
       }),
     });
 
-    render(
+    renderWithProviders(
       <Wrapper>
         <ReviewDialog
           open={true}
