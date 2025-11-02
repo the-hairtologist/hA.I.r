@@ -122,7 +122,7 @@ describe('useAICall', () => {
       .mockResolvedValueOnce({ data: mockData, error: null });
 
     const { result } = renderHook(
-      () => useAICall('test-function', { maxRetries: 1 }),
+      () => useAICall('test-function', { maxRetries: 1, retryDelay: 10 }),
       {
         wrapper: createWrapper(),
       }
@@ -179,6 +179,9 @@ describe('useAICall', () => {
     const response = await result.current.invoke({ prompt: 'test' });
     expect(response).toBeNull();
     expect(result.current.data).toBeNull();
+    await expect(result.current.invoke({ prompt: 'test' })).rejects.toThrow(
+      'AI feature error: functionName is required'
+    );
   });
 
   it('should track loading state correctly', async () => {
@@ -214,6 +217,7 @@ describe('useAICall', () => {
     const models = [
       'google/gemini-2.5-pro',
       'google/gemini-2.5-flash',
+      'openai/gpt-4o',
     ];
 
     for (const model of models) {
@@ -222,6 +226,13 @@ describe('useAICall', () => {
       });
 
       (supabase.functions.invoke as Mock).mockResolvedValue({ data: { modelUsed: model }, error: null });
+
+      });
+
+      (supabase.functions.invoke as Mock).mockResolvedValue({
+        data: { modelUsed: model },
+        error: null,
+      });
 
       let response;
       await act(async () => {
