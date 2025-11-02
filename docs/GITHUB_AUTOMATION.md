@@ -55,6 +55,17 @@
 - Forces consideration of performance/a11y
 - **You do:** Fill in the template
 
+### 8. **Auto-Fix Workflow** - Automated Code Maintenance
+**File:** `.github/workflows/auto-fix.yml`
+**Runs on:** Weekly (Monday 2 AM) + Manual + CI Failures
+- Fixes code formatting (Prettier)
+- Fixes linting issues (ESLint)
+- Patches security vulnerabilities
+- Updates package-lock.json
+- Creates PRs for review (no auto-merge)
+- **You do:** Review and merge PRs when created
+- **Details:** See [Auto-Fix Workflow Documentation](AUTO_FIX_WORKFLOW.md)
+
 ---
 
 ## 🎯 What This Means for You
@@ -72,8 +83,9 @@
 - ✅ CI runs tests automatically
 - ✅ Performance checks catch issues
 - ✅ Changelog updates itself
+- ✅ Auto-fix handles formatting, linting, security patches
 
-**Time saved:** ~2-3 hours/week
+**Time saved:** ~4-6 hours/week
 
 ---
 
@@ -105,6 +117,7 @@ GitHub → Security tab → See vulnerabilities
 
 ### Medium Priority (Fix This Week)
 - ⚠️ Dependabot security updates
+- ⚠️ Auto-fix PRs (review and merge)
 - ⚠️ Performance optimization suggestions
 - ⚠️ Non-critical test failures
 
@@ -130,6 +143,11 @@ GitHub → Actions → Performance Check → Run workflow
 ### Force Security Scan
 ```
 GitHub → Actions → Security Scan → Run workflow
+```
+
+### Run Auto-Fix
+```
+GitHub → Actions → Auto Fix Issues → Run workflow
 ```
 
 ---
@@ -163,8 +181,9 @@ Track these in your GitHub Insights:
 | Security | Security Scan | Fix criticals |
 | Documentation | Changelog | Nothing |
 | PR organization | Auto-label | Nothing |
+| Code maintenance | Auto-Fix Workflow | Review PRs |
 
 ---
 
 **Last Updated:** 2025-11-02  
-**Status:** ✅ All automations active
+**Status:** ✅ All 8 automations active
