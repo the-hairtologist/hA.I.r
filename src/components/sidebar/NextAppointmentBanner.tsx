@@ -45,12 +45,14 @@ export function NextAppointmentBanner() {
   }, [user]);
 
   const loadNextAppointment = async () => {
+    if (!user?.id) return;
+    
     try {
       // Get stylist profile
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) {

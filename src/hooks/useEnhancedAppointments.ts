@@ -140,12 +140,15 @@ export function useEnhancedAppointments(
         // Try to create, if offline, queue it
         try {
           const newAppointment = await operation();
+          if (!newAppointment) {
+            throw new Error('Failed to create appointment');
+          }
           toast.success('Appointment created successfully');
           logger.info('Appointment created', 'useEnhancedAppointments', {
             id: newAppointment.id,
           });
           invalidateQueryCache('appointments');
-          return newAppointment;
+          return newAppointment as Appointment;
         } catch (error: any) {
           if (!navigator.onLine) {
             offlineQueue.enqueue(operation);
@@ -250,7 +253,7 @@ export function useEnhancedAppointments(
         logger.warn(
           'SMS notification failed',
           'useEnhancedAppointments',
-          error
+          error as any
         );
         // Don't throw - SMS failures shouldn't block the operation
       }

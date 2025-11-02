@@ -86,7 +86,15 @@ export function useProfile(userId?: string): UseProfileReturn {
         .maybeSingle();
 
       if (profileError) throw profileError;
-      setProfile(profileData);
+      
+      // Map nullable fields to undefined
+      setProfile(profileData ? {
+        ...profileData,
+        full_name: profileData.full_name ?? undefined,
+        phone: profileData.phone ?? undefined,
+        avatar_url: profileData.avatar_url ?? undefined,
+        gender: profileData.gender ?? undefined,
+      } : null);
 
       // Fetch ALL user roles (not just one)
       const { data: rolesData } = await supabase
@@ -106,9 +114,20 @@ export function useProfile(userId?: string): UseProfileReturn {
           .maybeSingle();
 
         if (stylistError && stylistError.code !== 'PGRST116') {
-          log.warn('Stylist profile not found', 'useProfile', stylistError);
+          log.warn('Stylist profile not found', 'useProfile', stylistError as any);
         }
-        setStylistProfile(stylistData);
+        setStylistProfile(stylistData ? {
+          ...stylistData,
+          business_name: stylistData.business_name ?? undefined,
+          bio: stylistData.bio ?? undefined,
+          specialty: stylistData.specialty ?? undefined,
+          location: stylistData.location ?? undefined,
+          years_experience: stylistData.years_experience ?? undefined,
+          color_line: stylistData.color_line ?? undefined,
+          is_available: stylistData.is_available ?? undefined,
+          weekly_schedule: stylistData.weekly_schedule ?? undefined,
+          buffer_time_minutes: stylistData.buffer_time_minutes ?? undefined,
+        } : null);
       }
 
       // Check for client role
@@ -120,9 +139,19 @@ export function useProfile(userId?: string): UseProfileReturn {
           .maybeSingle();
 
         if (clientError && clientError.code !== 'PGRST116') {
-          log.warn('Client profile not found', 'useProfile', clientError);
+          log.warn('Client profile not found', 'useProfile', clientError as any);
         }
-        setClientProfile(clientData);
+        setClientProfile(clientData ? {
+          ...clientData,
+          user_id: clientData.user_id ?? userId,
+          full_name: clientData.full_name ?? undefined,
+          email: clientData.email ?? undefined,
+          phone: clientData.phone ?? undefined,
+          hair_type: clientData.hair_type ?? undefined,
+          allergies: clientData.allergies ?? undefined,
+          notes: clientData.notes ?? undefined,
+          preferred_stylist_id: clientData.preferred_stylist_id ?? undefined,
+        } : null);
       }
 
       log.info('Profile loaded successfully', 'useProfile', { userId, roles });

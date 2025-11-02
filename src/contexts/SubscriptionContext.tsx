@@ -107,13 +107,14 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      const { data: rolesData = [] } = await supabase
-        .from<UserRoleRow>('user_roles')
+      const { data: rolesData } = await supabase
+        .from('user_roles')
         .select('role')
         .eq('user_id', session.user.id);
 
-      const isStylist = rolesData.some(roleRow => roleRow.role === 'stylist');
-      const adminCheck = rolesData.some(roleRow => roleRow.role === 'admin');
+      const roles = (rolesData || []) as UserRoleRow[];
+      const isStylist = roles.some(roleRow => roleRow.role === 'stylist');
+      const adminCheck = roles.some(roleRow => roleRow.role === 'admin');
 
       setUserRole(isStylist ? 'stylist' : 'client');
       setIsAdmin(adminCheck);
