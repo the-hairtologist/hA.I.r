@@ -200,20 +200,22 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </a>
       <OfflineIndicator />
       <div className="min-h-screen w-full max-w-[100vw] flex overflow-x-hidden bg-[image:var(--gradient-bg-main)]">
-        <AppSidebar />
-        <MobileSidebarOverlay />
+        {/* Sidebar hidden on mobile (< lg), visible on desktop */}
+        <div className="hidden lg:block">
+          <AppSidebar />
+        </div>
         <DemoModeIndicator />
 
         <div className="flex-1 min-w-0 max-w-full flex flex-col overflow-x-hidden">
           {/* Mobile Header */}
           <MobileHeader notificationCount={unreadCount} />
 
-          {/* Desktop Header */}
+          {/* Desktop Header - Only on large screens */}
           <header
-            className={`hidden md:flex sticky top-0 z-40 brutal-border-b ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle brutal-shadow-sm md:brutal-shadow-md`}
+            className={`hidden lg:flex sticky top-0 z-40 brutal-border-b ${isAdmin ? 'border-amber-500/50' : 'border-foreground'} bg-background/95 backdrop-blur-sm brutal-grid-subtle brutal-shadow-sm lg:brutal-shadow-md`}
           >
-            <div className="flex h-14 md:h-16 items-center gap-2 md:gap-4 px-3 md:px-4 w-full">
-              {/* CRITICAL: Always-visible sidebar trigger */}
+            <div className="flex h-14 lg:h-16 items-center gap-2 lg:gap-4 px-3 lg:px-4 w-full">
+              {/* Sidebar trigger - desktop only */}
               <SidebarTrigger className="h-9 w-9" />
 
               <button
