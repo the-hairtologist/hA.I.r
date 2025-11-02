@@ -84,7 +84,23 @@ const sanitizeAnalyticsValue = (
     return Number.isFinite(value) ? value : null;
   }
 
-  if (typeof value === 'string' || typeof value === 'boolean') {
+  if (typeof value === 'string') {
+    // Basic sanitization: remove dangerous SQL patterns
+    // This does NOT replace parameterized queries for DB usage!
+    const dangerousPatterns = [
+      /(\bor\b|\band\b|\bunion\b|\bselect\b|\binsert\b|\bdelete\b|\bupdate\b|\bdrop\b|\bexec\b|\b--\b|;)/gi,
+      /('|")\s*=\s*\1/,
+      /(\bOR\b\s+['"]?\d+['"]?\s*=\s*['"]?\d+['"]?)/gi,
+      /(\bUNION\b\s+\bSELECT\b)/gi,
+    ];
+    let sanitized = value;
+    dangerousPatterns.forEach(pattern => {
+      sanitized = sanitized.replace(pattern, '');
+    });
+    return sanitized;
+  }
+
+  if (typeof value === 'boolean') {
     return value;
   }
 

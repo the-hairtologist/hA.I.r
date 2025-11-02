@@ -16,6 +16,8 @@ import { StandardFormField } from "@/components/forms/StandardFormField";
 import { z } from "zod";
 import { logger } from "@/lib/logging/productionLogger";
 
+const DEFAULT_APPOINTMENT_DURATION_MINUTES = 90;
+
 interface QuickAppointmentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -37,12 +39,14 @@ interface QuickAppointmentService {
   service_name: string;
   duration_minutes: number | null;
   price: number | null;
-}
-
 // Quick appointment schema (inline since it's specific to this dialog)
 const quickAppointmentSchema = z.object({
   client_id: z.string().min(1, "Please select a client"),
   service_id: z.string().min(1, "Please select a service"),
+  notes: z.string().max(500).optional(),
+});
+
+const DEFAULT_APPOINTMENT_DURATION_MINUTES = 90;
   notes: z.string().max(500).optional(),
 });
 
@@ -77,9 +81,9 @@ export const QuickAppointmentDialog = ({
       const selectedClientData = clients.find((client) => client.id === data.client_id);
 
       if (!selectedServiceData) throw new Error("Service not found");
-
+      const appointmentDuration = selectedServiceData.duration_minutes ?? DEFAULT_APPOINTMENT_DURATION_MINUTES;
       const appointmentDate = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
-      const appointmentDuration = selectedServiceData.duration_minutes ?? 90;
+      const appointmentDuration = selectedServiceData.duration_minutes ?? DEFAULT_APPOINTMENT_DURATION_MINUTES;
 
       const { data: newAppointment, error } = await supabase
         .from("appointments")
@@ -232,8 +236,8 @@ export const QuickAppointmentDialog = ({
       if (!selectedServiceData) {
         return;
       }
-
-      const appointmentStart = setMinutes(setHours(selectedDate, selectedHour), selectedMinute);
+      const appointmentDuration = selectedServiceData.duration_minutes ?? DEFAULT_APPOINTMENT_DURATION_MINUTES;
+      const appointmentEnd = addMinutes(appointmentStart, appointmentDuration);
       const appointmentDuration = selectedServiceData.duration_minutes ?? 90;
       const appointmentEnd = addMinutes(appointmentStart, appointmentDuration);
 
