@@ -18,8 +18,8 @@ if ($env:TERM_PROGRAM -eq "vscode") {
         Write-Host "⚠️  Could not load VS Code shell integration" -ForegroundColor Yellow
     }
     
-    # AI Hair Genius specific VS Code enhancements
-    Write-Host "🎨 Loading AI Hair Genius development shortcuts..." -ForegroundColor Cyan
+    
+    
     
     # Development functions
     function dev { npm run dev }
