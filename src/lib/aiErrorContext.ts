@@ -12,6 +12,7 @@ export interface AICallContext {
   model?: string;
   estimatedTokens?: number;
   maxRetries?: number;
+  retryDelay?: number;
   timeout?: number;
 }
 
@@ -92,10 +93,12 @@ export async function wrapAICall<T>(
           lastError
         );
 
-        if (!lastError.retryable || attempt === maxRetries) {
+        if (!isRetryableAIError(lastError, lastError.statusCode, lastError.code) || attempt === maxRetries) {
           return { data: null, error: lastError };
         }
-        await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
+        
+        const backoff = Math.pow(2, attempt) * 100; // Exponential backoff
+        await new Promise(resolve => setTimeout(resolve, backoff));
         continue;
       }
 
@@ -128,10 +131,12 @@ export async function wrapAICall<T>(
         lastError
       );
 
-      if (!lastError.retryable || attempt === maxRetries) {
-        return { data: null, error: lastError };
+      if (attempt === maxRetries) {
+        break; // Exit loop if it's the last attempt
       }
-      await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
+      
+      const backoff = Math.pow(2, attempt) * 100; // Exponential backoff
+      await new Promise(resolve => setTimeout(resolve, backoff));
     }
   }
 
@@ -172,7 +177,7 @@ function enrichAIError(
     code,
     statusCode,
     context: context.feature,
-    retryable: isRetryableAIError(statusCode, code),
+    retryable: isRetryableAIError(error, statusCode, code),
     aiContext: {
       feature: context.feature,
       model: context.model,
@@ -294,15 +299,25 @@ function classifyAIError(
 /**
  * Determine if an AI error is retryable
  */
-function isRetryableAIError(statusCode?: number, code?: string): boolean {
+function isRetryableAIError(
+  error: unknown,
+  statusCode?: number,
+  code?: string
+): boolean {
+  if (error && typeof error === 'object' && 'retryable' in error) {
+    return !!(error as AppError).retryable;
+  }
   // Rate limits are retryable after waiting
-  if (statusCode === 429 || code === 'rate_limit_exceeded') return true;
+  if (statusCode === 429 || code === 'rate_limit_exceeded' || code === '429') {
+    return true;
+  }
 
   // Network errors are retryable
   if (code === 'network_error' || code === 'timeout') return true;
 
   // Server errors are retryable
   if (statusCode && statusCode >= 500) return true;
+  if (code && Number(code) >= 500) return true;
 
   // Auth errors, payment errors, validation errors are not retryable
   return false;

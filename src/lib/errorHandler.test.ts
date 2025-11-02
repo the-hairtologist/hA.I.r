@@ -150,16 +150,20 @@ describe('errorHandler', () => {
     });
 
     it('should throw error after max retries', async () => {
-      const operation = vi.fn(async () => {
-        throw new Error('Always fails');
-      });
+      const operation = vi.fn().mockRejectedValue(new Error('Always fails'));
+      const onRetry = vi.fn();
 
-      const promise = withRetry(operation, { maxRetries: 2, delay: 100 });
+      await expect(
+        withRetry(operation, {
+          maxRetries: 3,
+          delay: 10,
+          backoff: false,
+          onRetry,
+        })
+      ).rejects.toThrow('Always fails');
 
-      await vi.runAllTimersAsync();
-
-      await expect(promise).rejects.toThrow('Always fails');
-      expect(operation).toHaveBeenCalledTimes(2);
+      expect(operation).toHaveBeenCalledTimes(4); // 1 initial + 3 retries
+      expect(onRetry).toHaveBeenCalledTimes(3);
     });
 
     it('should call onRetry callback', async () => {

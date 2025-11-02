@@ -16,6 +16,7 @@ interface UseAICallOptions<T> {
   model?: string;
   estimatedTokens?: number;
   maxRetries?: number;
+  retryDelay?: number;
   timeout?: number;
   onSuccess?: (data: T) => void;
   onError?: (error: EnrichedAIError) => void;
@@ -54,6 +55,26 @@ export function useAICall<
 
   const invoke = useCallback(
     async (body: Body): Promise<T | null> => {
+      if (!functionName) {
+        const err = new Error('AI feature error: functionName is required.');
+        const enrichedError: EnrichedAIError = {
+          message: err.message,
+          code: 'validation_error',
+          context: 'useAICall',
+          retryable: false,
+          aiContext: {
+            feature: '',
+            model: '',
+            executionTimeMs: 0,
+            previousSuccessCount: 0,
+            suggestedAction: 'Provide a valid functionName to useAICall.',
+          },
+        };
+        setError(enrichedError);
+        options?.onError?.(enrichedError);
+        throw enrichedError;
+      }
+
       setLoading(true);
       setError(null);
       setData(null);
@@ -65,6 +86,7 @@ export function useAICall<
         model: options?.model || 'gemini-2.5-flash',
         estimatedTokens: options?.estimatedTokens,
         maxRetries: options?.maxRetries,
+        retryDelay: options?.retryDelay,
         timeout: options?.timeout,
       };
 

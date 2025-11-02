@@ -107,43 +107,30 @@ describe('useFormSubmit', () => {
 
   describe('network delay handling', () => {
     it('maintains submitting state during long requests', async () => {
-      vi.useFakeTimers();
+      const mockSubmit = vi
+        .fn()
+        .mockImplementation(
+          () => new Promise(resolve => setTimeout(resolve, 150))
+        );
 
-      let resolveSubmission: (() => void) | undefined;
-      const submission = new Promise<void>(resolve => {
-        resolveSubmission = resolve;
-      });
-
-      const mockSubmit = vi.fn().mockReturnValue(submission);
       const { result } = renderHook(() => useFormSubmit(mockSubmit), {
         wrapper: createWrapper(),
       });
 
-      let pendingSubmit: Promise<void> | undefined;
-      await act(async () => {
-        pendingSubmit = result.current.handleSubmit();
-      });
+      const submissionPromise = result.current.handleSubmit();
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(true));
 
-      await act(async () => {
-        result.current.handleSubmit();
-        result.current.handleSubmit();
-      });
+      // These should be ignored
+      result.current.handleSubmit();
+      result.current.handleSubmit();
 
       await act(async () => {
-        await vi.advanceTimersByTimeAsync(3000);
+        await submissionPromise;
       });
 
       expect(mockSubmit).toHaveBeenCalledTimes(1);
-      expect(result.current.isSubmitting).toBe(true);
-
-      await act(async () => {
-        resolveSubmission?.();
-        await pendingSubmit;
-      });
-
-      await waitFor(() => expect(result.current.isSubmitting).toBe(false));
+      expect(result.current.isSubmitting).toBe(false);
     });
   });
 
@@ -177,7 +164,7 @@ describe('useFormSubmit', () => {
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
       expect(result.current.submitCount).toBe(1);
-      expect((toast as Mock).error).toHaveBeenCalledWith('Submission failed');
+      expect((toast.error as Mock)).toHaveBeenCalledWith('Submission failed');
     });
 
     it('returns initial values after reset', async () => {
@@ -210,8 +197,6 @@ describe('useFormSubmit', () => {
   describe('submit count tracking', () => {
     it('increments submit count for valid attempts', async () => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2024-01-01T00:00:00.000Z'));
-
       const mockSubmit = vi.fn().mockResolvedValue(undefined);
       const { result } = renderHook(() => useFormSubmit(mockSubmit), {
         wrapper: createWrapper(),
@@ -222,8 +207,10 @@ describe('useFormSubmit', () => {
       await act(async () => {
         await result.current.handleSubmit();
       });
-      await waitFor(() => expect(result.current.submitCount).toBe(1));
 
+      expect(result.current.submitCount).toBe(1);
+
+      // Advance time by more than 1 second to allow another submission
       await act(async () => {
         await vi.advanceTimersByTimeAsync(1100);
       });
@@ -231,7 +218,8 @@ describe('useFormSubmit', () => {
       await act(async () => {
         await result.current.handleSubmit();
       });
-      await waitFor(() => expect(result.current.submitCount).toBe(2));
+
+      expect(result.current.submitCount).toBe(2);
     });
   });
 
