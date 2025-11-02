@@ -111,7 +111,7 @@ describe('InviteClientDialog', () => {
     render(<InviteClientDialog {...defaultProps} />);
 
     const sendButton = screen.getByRole('button', { name: /send invite/i });
-    
+
     await act(async () => {
       await user.click(sendButton);
     });

@@ -93,12 +93,20 @@ export async function wrapAICall<T>(
           lastError
         );
 
-        if (!isRetryableAIError(lastError, lastError.statusCode, lastError.code) || attempt === maxRetries) {
+        if (
+          !isRetryableAIError(
+            lastError,
+            lastError.statusCode,
+            lastError.code
+          ) ||
+          attempt === maxRetries
+        ) {
           return { data: null, error: lastError };
         }
-        
-        const backoff = Math.pow(2, attempt) * 100; // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, backoff));
+
+        // Exponential backoff
+        const delay = context.retryDelay ?? 100 * Math.pow(2, attempt);
+        await new Promise(resolve => setTimeout(resolve, delay));
         continue;
       }
 
@@ -134,9 +142,10 @@ export async function wrapAICall<T>(
       if (attempt === maxRetries) {
         break; // Exit loop if it's the last attempt
       }
-      
-      const backoff = Math.pow(2, attempt) * 100; // Exponential backoff
-      await new Promise(resolve => setTimeout(resolve, backoff));
+
+      // Exponential backoff
+      const delay = context.retryDelay ?? 100 * Math.pow(2, attempt);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
 
@@ -156,14 +165,12 @@ function enrichAIError(
   }
 ): EnrichedAIError {
   let statusCode: number | undefined;
-  let errorMessage: string | undefined;
 
   if (isPossibleError(error)) {
     statusCode =
       error.status ||
       error.statusCode ||
       (error.message?.includes('429') ? 429 : undefined);
-    errorMessage = error.message;
   }
 
   // Determine error type and suggested action
