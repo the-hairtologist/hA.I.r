@@ -44,7 +44,11 @@ export function AIInsightsFeed({ stylistId }: { stylistId: string }) {
         .limit(10);
 
       if (error) throw error;
-      setInsights(data || []);
+      setInsights((data || []).map(insight => ({
+        ...insight,
+        potential_revenue: insight.potential_revenue || 0,
+        confidence_score: insight.confidence_score || 0
+      })));
     } catch (error) {
       console.error('Error loading insights:', error);
     } finally {

@@ -61,7 +61,15 @@ export function TeamChat({ stylistId }: TeamChatProps) {
       .order('created_at', { ascending: true })
       .limit(100);
 
-    if (data) setMessages(data);
+    if (data) {
+      setMessages(data.map(msg => ({
+        ...msg,
+        created_at: msg.created_at || new Date().toISOString(),
+        stylist_profiles: msg.stylist_profiles ? {
+          business_name: msg.stylist_profiles.business_name || 'Unknown'
+        } : undefined
+      })));
+    }
   };
 
   const handleSend = async () => {

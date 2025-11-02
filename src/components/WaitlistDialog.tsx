@@ -60,10 +60,12 @@ export function WaitlistDialog() {
   const loadWaitlist = async () => {
     setLoading(true);
     try {
+      if (!user?.id) return;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
@@ -92,10 +94,12 @@ export function WaitlistDialog() {
 
     setLoading(true);
     try {
+      if (!user?.id) throw new Error('User not found');
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) throw new Error('Stylist profile not found');

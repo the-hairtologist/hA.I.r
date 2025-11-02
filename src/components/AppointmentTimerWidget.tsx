@@ -33,7 +33,7 @@ export function AppointmentTimerWidget() {
   const [activeSession, setActiveSession] = useState<TimerSession | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     loadActiveSession();

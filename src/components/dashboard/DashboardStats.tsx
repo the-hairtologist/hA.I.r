@@ -126,7 +126,7 @@ export const DashboardStats = memo(
               gradient={stat.gradient}
               delay={index * 75}
             />
-            {stat.emptyHelp && stat.value === 0 && (
+            {'emptyHelp' in stat && stat.emptyHelp && stat.value === 0 && (
               <div className="absolute -top-1 -right-1 z-10">
                 <HelpTooltip
                   title={stat.label}

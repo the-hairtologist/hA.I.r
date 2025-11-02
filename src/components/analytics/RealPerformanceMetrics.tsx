@@ -220,7 +220,7 @@ export const RealPerformanceMetrics = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={metrics.services}
+                    data={metrics.services as any[]}
                     dataKey="count"
                     nameKey="name"
                     cx="50%"

@@ -87,11 +87,13 @@ John Smith,john@example.com,(555) 987-6543,1985-10-20,straight,Allergic to certa
     setProgress(0);
 
     try {
+      if (!user?.id) throw new Error('User not found');
+      
       // Get stylist profile
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) throw new Error('Stylist profile not found');

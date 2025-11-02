@@ -61,10 +61,12 @@ export function ServiceTemplatesDialog({
     setLoading(true);
     try {
       // Get stylist profile
+      if (!user?.id) return;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
@@ -77,7 +79,10 @@ export function ServiceTemplatesDialog({
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setTemplates(data || []);
+      setTemplates((data || []).map(t => ({
+        ...t,
+        created_at: t.created_at || new Date().toISOString()
+      })));
     } catch (error) {
       console.error('Error loading templates:', error);
     } finally {
@@ -87,10 +92,12 @@ export function ServiceTemplatesDialog({
 
   const loadAvailableServices = async () => {
     try {
+      if (!user?.id) return;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
@@ -116,10 +123,12 @@ export function ServiceTemplatesDialog({
 
     setCreating(true);
     try {
+      if (!user?.id) throw new Error('User not found');
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) throw new Error('Stylist profile not found');

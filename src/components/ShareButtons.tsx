@@ -109,7 +109,7 @@ export const ShareButtons = ({
             {copied ? 'Copied!' : 'Copy Link'}
           </DropdownMenuItem>
 
-          {navigator.share && (
+          {typeof navigator.share === 'function' && (
             <>
               <DropdownMenuItem onClick={nativeShare}>
                 <Share2 className="h-4 w-4 mr-2" />

@@ -99,7 +99,9 @@ export const ServiceTypeColorManager = ({
 
       if (error) throw error;
 
-      setServiceColors(prev => [...prev, data]);
+      if (data) {
+        setServiceColors(prev => [...prev, data]);
+      }
       setNewServiceType('');
       setNewColor('hsl(270 85% 60%)');
       setAddDialogOpen(false);
