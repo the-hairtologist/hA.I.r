@@ -151,15 +151,15 @@ function enrichAIError(
   }
 ): EnrichedAIError {
   let statusCode: number | undefined;
-  let errorMessage: string | undefined;
+
 
   if (isPossibleError(error)) {
     statusCode =
       error.status ||
       error.statusCode ||
       (error.message?.includes('429') ? 429 : undefined);
-    errorMessage = error.message;
   }
+  // (removed unused errorMessage assignment)
 
   // Determine error type and suggested action
   const { code, message, suggestedAction, retryAfterSeconds } = classifyAIError(
