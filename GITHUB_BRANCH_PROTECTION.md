@@ -1,5 +1,5 @@
 # GitHub Branch Protection Guide
-## Recommended Settings for hA.I.r Repository
+## Recommended Settings for main Repository
 
 **Version:** 1.0.0  
 **Date:** 2025-11-02
@@ -16,7 +16,7 @@ Branch protection rules prevent:
 
 ---
 
-## Recommended Settings for `hA.I.r` Branch
+## Recommended Settings for `main` Branch
 
 ### 1. Require Pull Request Reviews
 
@@ -89,7 +89,7 @@ Branch protection rules prevent:
 
 ### Step 2: Add Rule
 1. Click **Add branch protection rule**
-2. Branch name pattern: `hA.I.r`
+2. Branch name pattern: `main`
 3. Enable the settings listed above
 4. Click **Create** or **Save changes**
 
@@ -132,7 +132,7 @@ Branch protection rules prevent:
 **Recommendation:** ⚠️ Only enable for repository admins, not all maintainers
 
 ### Allow Force Pushes for Specific Roles
-**When:** Never recommended for `hA.I.r` branch  
+**When:** Never recommended for `main` branch  
 **Alternative:** Create feature branches for experimental work
 
 ---
@@ -142,9 +142,9 @@ Branch protection rules prevent:
 ### Scenario 1: Try to Push Directly
 ```bash
 # This should be rejected
-git checkout hA.I.r
+git checkout main
 git commit -m "test: direct push"
-git push origin hA.I.r
+git push origin main
 ```
 
 **Expected result:** ❌ Error: "Protected branch update failed"
@@ -152,7 +152,7 @@ git push origin hA.I.r
 ### Scenario 2: Create PR Without Approval
 1. Create feature branch
 2. Push changes
-3. Open PR to `hA.I.r`
+3. Open PR to `main`
 4. Try to merge without approval
 
 **Expected result:** ❌ Merge button disabled until approved
@@ -199,7 +199,7 @@ git push origin feature/new-feature
 ## Troubleshooting
 
 ### Issue: "Can't push to protected branch"
-**Cause:** Trying to push directly to `hA.I.r`  
+**Cause:** Trying to push directly to `main`  
 **Fix:** Create a feature branch instead
 
 ### Issue: "Status checks failed"

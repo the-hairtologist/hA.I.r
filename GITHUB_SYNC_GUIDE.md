@@ -12,7 +12,7 @@
 - **Lovable → GitHub**: Every change in Lovable automatically pushes to GitHub
 - **GitHub → Lovable**: Every push to GitHub automatically syncs to Lovable
 - **Real-time**: No manual pull/push required
-- **Branch**: Currently syncs with `hA.I.r` branch
+- **Branch**: Currently syncs with `main` branch
 
 ---
 
@@ -73,13 +73,13 @@ src/integrations/supabase/types.ts
 2. **To preserve GitHub changes:**
    ```bash
    # Pull latest from Lovable
-   git pull origin hA.I.r
+   git pull origin main
    
    # Resolve conflicts manually
    git mergetool
    
    # Push back to GitHub (will sync to Lovable)
-   git push origin hA.I.r
+   git push origin main
    ```
 
 3. **Emergency rollback in Lovable:**
@@ -100,7 +100,7 @@ cd <repo-name>
 # Make changes locally
 git add .
 git commit -m "feat: add new feature"
-git push origin hA.I.r
+git push origin main
 
 # Changes automatically sync to Lovable
 # Continue editing in Lovable if needed
@@ -172,7 +172,7 @@ git push origin hA.I.r
 ### DON'T ❌
 - Don't edit `supabase/types.ts` manually
 - Don't commit `.env` to GitHub
-- Don't force push to `hA.I.r` branch
+- Don't force push to `main` branch
 - Don't edit migrations after they've run
 - Don't bypass CI/CD checks
 

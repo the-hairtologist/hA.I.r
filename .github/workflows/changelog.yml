@@ -2,7 +2,7 @@ name: Automated Documentation
 
 on:
   push:
-    branches: [hA.I.r]
+    branches: [main]
     tags:
       - 'v*'
   workflow_dispatch:
