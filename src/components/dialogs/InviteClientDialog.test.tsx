@@ -325,14 +325,25 @@ describe('InviteClientDialog - Success/Error Scenarios', () => {
       <InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />
     );
 
+    const messageInput = screen.getByPlaceholderText(
+      /add a personal note to your invitation.../i
+    );
+    await user.type(messageInput, 'Looking forward to working with you!');
+
     const sendButton = screen.getByRole('button', { name: /send invite/i });
-            clientEmail: 'client@example.com',
-            clientName: 'Jane Doe',
-            stylistName: 'John Stylist',
-            customMessage: undefined,
-          },
-        }
-      );
+    await act(async () => {
+      await user.click(sendButton);
+    });
+
+    await waitFor(() => {
+      expect(supabase.functions.invoke).toHaveBeenCalledWith('send-client-invite', {
+        body: {
+          clientEmail: 'client@example.com',
+          clientName: 'Jane Doe',
+          stylistName: 'John Stylist',
+          customMessage: 'Looking forward to working with you!',
+        },
+      });
       expect(onOpenChange).toHaveBeenCalledWith(false);
     });
   });
@@ -365,27 +376,4 @@ describe('InviteClientDialog - Success/Error Scenarios', () => {
     expect(sendButton).not.toBeDisabled();
   });
 
-  it('should include custom message in invitation', async () => {
-    const user = userEvent.setup();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
-      error: null,
-    });
-
-    render(<InviteClientDialog {...defaultProps} />);
-
-    const messageInput = screen.getByPlaceholderText(
-      /add a personal note to your invitation.../i
-    );
-    await user.type(messageInput, 'Looking forward to working with you!');
-
-    const sendButton = screen.getByRole('button', { name: /send invite/i });
-    await act(async () => {
-      await user.click(sendButton);
-    });
-
-    await waitFor(() => {
-      expect(sendButton).not.toBeDisabled();
-      expect(onOpenChange).not.toHaveBeenCalled();
-    });
-  });
 });

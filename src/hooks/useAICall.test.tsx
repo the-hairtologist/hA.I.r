@@ -225,10 +225,6 @@ describe('useAICall', () => {
         wrapper: createWrapper(),
       });
 
-      (supabase.functions.invoke as Mock).mockResolvedValue({ data: { modelUsed: model }, error: null });
-
-      });
-
       (supabase.functions.invoke as Mock).mockResolvedValue({
         data: { modelUsed: model },
         error: null,
