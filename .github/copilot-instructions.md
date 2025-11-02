@@ -1,46 +1,47 @@
-﻿**Architecture**
-- React 18 + Vite + TypeScript lives in `src`; alias `@/...` resolves to `src/...`; `vite.config.ts` enforces Supabase env vars at startup and adds PWA, compression, and manual chunking.
-- `src/main.tsx` guards boot with async Sentry init; keep new bootstrap logic inside the guard to avoid double renders.
+﻿**Architecture & Boot**
+- React 18 + Vite + TypeScript under `src`; `@/...` resolves to `src/...`. `vite.config.ts` enforces `VITE_SUPABASE_*` at startup, stubs Capacitor plugins for web builds, enables PWA/compression, and serves dev on port 8080.
+- `src/main.tsx` wraps bootstrap in `initializeApp`, lazy-imports monitoring, and renders immediately; keep new startup logic inside that guard and preserve the inline crash fallback.
 
 **App Shell & Providers**
-- `src/App.tsx` layers `GlobalErrorBoundary`, `QueryErrorResetBoundary`, `QueryClientProvider`, `SubscriptionProvider`, `DemoModeProvider`, `TooltipProvider`, `BrowserRouter`, `EnhancedAuthProvider`, `TourProvider`, global toasters, announcers, and loading overlays. Add providers alongside these layers without reordering unless necessary.
-- Query client defaults: 5 min stale, 10 min cache, 3 retries, no refetch on focus. Invalidate queries instead of bypassing React Query when data changes.
+- `src/App.tsx` stacks `GlobalErrorBoundary → QueryErrorResetBoundary → QueryClientProvider → SubscriptionProvider → DemoModeProvider → TooltipProvider → BrowserRouter → EnhancedAuthProvider → TourProvider` plus toasters, `GlobalAnnouncer`, `OfflineIndicator`, and `GlobalLoadingIndicator`.
+- `AnalyticsInitializer` defers `initAnalytics`, `initSentry`, `initUTMTracking`, and `performanceTracker.initialize()` by 1s while invoking `useAnalytics`, `useSentryUser`, and `useSessionTracking`; keep additions non-blocking.
 
 **Routing & Access**
-- All routes live in `src/routes/index.tsx` using `lazyWithRetry` (or `lazyWithPreload`) plus `ProtectedRoute` and optional `SubscriptionGate feature="..."` wrappers.
-- Gate stylist/admin surfaces via `allowedRoles`; deep links like `/appointment/:id` stay public. Reuse `DashboardErrorBoundary` and `LoadingSpinner` for error and suspense flows.
+- Centralize routes in `src/routes/index.tsx` with `lazyWithRetry` and `Suspense` fallback to `LoadingSpinner`. Wrap privileged pages with `ProtectedRoute`, optionally `allowedRoles`, plus `SubscriptionGate feature="…"` and `DashboardErrorBoundary`.
+- Deep links (`/appointment/:id`, `/transformation/:id`) stay public. When adding routes, reuse existing gates instead of duplicating auth checks.
 
-**Auth & User Data**
-- `EnhancedAuthContext` loads profile, roles, stylist, and client records in one pass and re-validates critical roles. Consume via `useEnhancedAuth`, call `refreshAuth` after mutations, and rely on helpers (`isStylist`, etc.).
-- Global loading overlay comes from Zustand `useGlobalLoading`; wrap async spans with `setLoading` instead of bespoke spinners.
+**Auth & Subscription**
+- `EnhancedAuthContext` batches profile, roles, stylist, and client fetches, verifies stylist/admin roles via Supabase, and exposes helpers (`isStylist`, etc.). After mutating user data call `refreshAuth`; do not bypass its role integrity checks.
+- `SubscriptionProvider` (see `src/contexts/SubscriptionContext.tsx`) drives `SubscriptionGate`, Apple IAP setup, access-code unlocks, and Supabase function `check-subscription`. After checkout/access code call `useSubscription().checkSubscription()`.
 
-**Supabase & Integrations**
-- Supabase client lives in `src/integrations/supabase/client.ts`; read env via `import.meta.env` only.
-- Edge functions under `supabase/functions/**` share middleware for auth, rate limiting, and error logging. Fetch sessions with `supabase.auth.getSession()` before privileged calls.
-- Billing flows depend on `create-checkout` and `check-subscription`; follow up with `useSubscription().checkSubscription()` after checkout completes.
+**Data & Supabase**
+- `src/integrations/supabase/client.ts` lazily creates the typed client using `import.meta.env`; missing envs throw early. Query types come from `src/integrations/supabase/types.ts` (auto-generated Postgres schema).
+- Edge calls (`create-checkout`, `check-subscription`, `hair-assistant-chat`, etc.) expect a bearer token from `supabase.auth.getSession()`; fetch sessions before making privileged requests.
 
-**Analytics & Monitoring**
-- `AnalyticsInitializer` defers `initAnalytics`, `initSentry`, `initUTMTracking`, and `performanceTracker.initialize()` by one second; keep new trackers non-blocking.
-- Use `userJourney` and `productionLogger` from `src/lib/logging` plus `handleError` utilities for surfaced failures instead of ad hoc console usage.
+**State & Async Patterns**
+- React Query defaults (5 min stale, 10 min cache, retry with backoff, no focus refetch) are configured once in `App.tsx`; prefer `queryClient.invalidateQueries` over manual Supabase fetches from components.
+- Global loading UI is driven by the Zustand store in `src/hooks/useGlobalLoading.ts`; `ProtectedRoute` toggles it automatically. Wrap long spans with `setLoading` instead of bespoke spinners.
 
-**AI, Automation & Self-Healing**
-- AI orchestration lives under `src/lib/ai` and mirrored Supabase functions; extend existing orchestrators before introducing new providers.
-- Self-healing modules (`src/lib/selfHealing/**`) own health checks, data integrity, and recovery workflows; plug into provided strategy interfaces when enhancing resiliency.
+**AI & Self-Healing**
+- AI orchestrators live in `src/lib/ai/**` (e.g., `ClientRetentionAI` invoking `supabase.functions.invoke('hair-assistant-chat')`). Extend these classes or plug into their exposed methods before introducing new services.
+- `src/lib/selfHealing/index.ts` wires health monitoring, performance optimizers, data integrity checks, and AI maintenance. Reuse exported singletons (`healthMonitor`, `performanceMonitor`, etc.) when adding resiliency features.
+
+**Logging & Monitoring**
+- Prefer `logger` (`src/lib/logger.ts`) or `productionLogger` (`src/lib/logging/productionLogger.ts`) over raw console; they scrub PII, buffer events, and forward to Sentry.
+- Surface errors through `handleError` utilities and `ErrorBoundary` components so `userJourney` tracking and monitoring receive context.
+
+**Offline & Integrations**
+- Offline mutations go through `src/lib/offlineQueue.ts`; it batches Supabase CRUD/storage actions, handles retries, and is cleared on logout. Reuse it for any new offline-capable writes.
+- `SubscriptionGate` orchestrates Stripe checkout, Apple IAP (`AppleIAPSubscription`), and access-code unlocks; hook new premium features by checking `useSubscription().isFeatureAllowed(feature)` instead of duplicating logic.
 
 **UI & Accessibility**
-- Tailwind, shadcn/ui, and Radix compose the design system; use `cn` for class merges and respect tokens in `tailwind.config.ts` and safe-area rules in `src/index.css`.
-- Accessibility helpers (`GlobalAnnouncer`, skip links, touch-target utilities) presume proper aria labels and 44px targets; honor `prefers-reduced-motion` when adding animation.
+- Tailwind + shadcn/Radix live under `src/components/ui`; use the `cn` helper, design tokens in `tailwind.config.ts`, and respect safe-areas from `src/index.css`.
+- Accessibility helpers (`GlobalAnnouncer`, skip links, touch-target utilities) assume 44px targets and honor `prefers-reduced-motion`; keep animations opt-in and aria labels descriptive.
 
 **Developer Workflow**
-- Prefer VS Code tasks: `Start Development Server` (`npm run dev` on port 8080), `Lint Code`, `Run Tests`, `Build Production`.
-- Run `npm run lint`, `npm run type-check`, and `npm run build` before commits; ESLint flags many `no-explicit-any` warnings; resolve new ones when you touch affected files.
-- Command aliases live in `VSCODE_SHORTCUTS_REFERENCE.md`; specialty scripts include `npm run test:ui`, `npm run test:headed`, and `npm run test:a11y`.
+- Primary scripts: `npm run dev`, `npm run lint`, `npm run type-check`, `npm run test`, `npm run build`; VS Code tasks mirror these. Run lint + type-check before shipping to catch eslint `no-explicit-any` violations.
+- Playwright suites live in `E2E/**` (see `E2E/README.md`); keep `data-testid` selectors stable across auth/subscription/analytics flows. Shared Vitest setup is `src/test/setup.ts`.
 
-**Testing**
-- Vitest powers unit and integration tests (`npm run test`, `npm run test:watch`) with shared setup in `src/test/setup.ts`.
-- Playwright suites live in `E2E/**`; follow `E2E/README.md` for mobile, accessibility, and performance runs (`npx playwright test`, `--project=mobile`, `--headed`).
-- Maintain `data-testid` selectors and update tests when modifying auth flows, subscription gating, or analytics hooks.
-
-**Docs & References**
-- Start with `README.md`, `GETTING_STARTED.md`, and `DOCUMENTATION_INDEX.md`; feature READMEs live under `src/components`, `src/hooks`, and `src/lib`.
-- When adding routes, hooks, or providers, update the nearest README plus analytics/accessibility guides so future agents stay aligned.
+**Reference Docs**
+- Start with `README.md`, `GETTING_STARTED.md`, and `DOCUMENTATION_INDEX.md`; feature-specific guidance lives in `src/components/README.md`, `src/hooks/README.md`, and `src/lib/README.md`.
+- When adding routes, hooks, or providers, update the nearest README plus relevant analytics/accessibility docs so future agents stay aligned.
