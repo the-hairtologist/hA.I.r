@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Check, Loader2, ExternalLink, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
@@ -26,7 +32,8 @@ export default function SubscriptionPage() {
 
     try {
       setLoading(true);
-      const { data, error } = await supabase.functions.invoke('check-subscription');
+      const { data, error } =
+        await supabase.functions.invoke('check-subscription');
 
       if (error) throw error;
 
@@ -52,13 +59,14 @@ export default function SubscriptionPage() {
 
     try {
       setCheckoutLoading(true);
-      const { data, error } = await supabase.functions.invoke('create-checkout');
+      const { data, error } =
+        await supabase.functions.invoke('create-checkout');
 
       if (error) throw error;
 
       if (data?.url) {
         window.open(data.url, '_blank');
-        
+
         // Check subscription after user returns
         setTimeout(() => {
           checkSubscription();
@@ -77,7 +85,8 @@ export default function SubscriptionPage() {
 
     try {
       setPortalLoading(true);
-      const { data, error } = await supabase.functions.invoke('customer-portal');
+      const { data, error } =
+        await supabase.functions.invoke('customer-portal');
 
       if (error) throw error;
 
@@ -132,11 +141,14 @@ export default function SubscriptionPage() {
               {subscription.subscription_end && (
                 <div className="text-sm text-muted-foreground">
                   <strong>Renewal Date:</strong>{' '}
-                  {new Date(subscription.subscription_end).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                  {new Date(subscription.subscription_end).toLocaleDateString(
+                    'en-US',
+                    {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    }
+                  )}
                 </div>
               )}
 
@@ -198,7 +210,9 @@ export default function SubscriptionPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">Stylist Pro</CardTitle>
-              <CardDescription>Everything you need to grow your business</CardDescription>
+              <CardDescription>
+                Everything you need to grow your business
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-baseline gap-2">
@@ -207,7 +221,9 @@ export default function SubscriptionPage() {
               </div>
 
               <div className="bg-muted p-4 rounded-lg">
-                <p className="font-semibold text-sm mb-1">🎉 7-Day Free Trial</p>
+                <p className="font-semibold text-sm mb-1">
+                  🎉 7-Day Free Trial
+                </p>
                 <p className="text-sm text-muted-foreground">
                   Try all features risk-free. Cancel anytime during trial.
                 </p>

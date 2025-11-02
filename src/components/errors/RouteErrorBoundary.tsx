@@ -64,7 +64,11 @@ interface FallbackProps {
   fallbackRoute?: string;
 }
 
-const RouteErrorFallback: React.FC<FallbackProps> = ({ error, onReset, fallbackRoute = '/dashboard' }) => {
+const RouteErrorFallback: React.FC<FallbackProps> = ({
+  error,
+  onReset,
+  fallbackRoute = '/dashboard',
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -73,7 +77,8 @@ const RouteErrorFallback: React.FC<FallbackProps> = ({ error, onReset, fallbackR
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Page Error</AlertTitle>
         <AlertDescription>
-          This page encountered an error. You can try reloading or go back to the previous page.
+          This page encountered an error. You can try reloading or go back to
+          the previous page.
         </AlertDescription>
       </Alert>
 

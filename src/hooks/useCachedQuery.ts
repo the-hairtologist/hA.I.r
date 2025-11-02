@@ -7,7 +7,8 @@ import { useQuery, UseQueryOptions, QueryKey } from '@tanstack/react-query';
 import { cacheManager, CACHE_STRATEGIES } from '@/lib/cache/CacheManager';
 import { logger } from '@/lib/logger';
 
-interface CachedQueryOptions<TData> extends Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'> {
+interface CachedQueryOptions<TData>
+  extends Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'> {
   queryKey: QueryKey;
   queryFn: () => Promise<TData>;
   cacheType: keyof typeof CACHE_STRATEGIES;
@@ -15,13 +16,13 @@ interface CachedQueryOptions<TData> extends Omit<UseQueryOptions<TData>, 'queryK
 
 /**
  * Enhanced useQuery with automatic cache management
- * 
+ *
  * Features:
  * - Automatic TTL based on data type
  * - Integrated with cache manager
  * - Request deduplication via React Query
  * - Smart refetching strategies
- * 
+ *
  * @example
  * ```tsx
  * const { data, isLoading } = useCachedQuery({
@@ -50,7 +51,7 @@ export function useCachedQuery<TData>({
     refetchOnWindowFocus: strategy.revalidateOnFocus ?? false,
     refetchOnMount: false,
     retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 10000),
     ...options,
   });
 
@@ -66,7 +67,13 @@ export function useInvalidateCache() {
       cacheManager.invalidate(type, identifier);
     },
     invalidateAfterMutation: (
-      mutationType: 'appointment' | 'client' | 'payment' | 'service' | 'message' | 'formula',
+      mutationType:
+        | 'appointment'
+        | 'client'
+        | 'payment'
+        | 'service'
+        | 'message'
+        | 'formula',
       stylistId: string
     ) => {
       cacheManager.invalidateAfterMutation(mutationType, stylistId);

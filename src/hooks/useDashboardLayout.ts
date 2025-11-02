@@ -1,8 +1,12 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "./useAuth";
-import { logger } from "@/lib/logging/productionLogger";
-import { trackSelect, trackUpdate, trackDelete } from "@/lib/logging/supabaseTracker";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+import { logger } from '@/lib/logging/productionLogger';
+import {
+  trackSelect,
+  trackUpdate,
+  trackDelete,
+} from '@/lib/logging/supabaseTracker';
 
 export interface DashboardSection {
   id: string;
@@ -31,9 +35,9 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
       const result = await trackSelect(
         async () => {
           const { data, error } = await supabase
-            .from("user_dashboard_preferences")
-            .select("dashboard_layout")
-            .eq("user_id", user!.id)
+            .from('user_dashboard_preferences')
+            .select('dashboard_layout')
+            .eq('user_id', user!.id)
             .maybeSingle();
           return { data, error };
         },
@@ -41,29 +45,35 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
         'useDashboardLayout'
       );
 
-      if (result.error && result.error.code !== "PGRST116") {
-        logger.error("Error loading dashboard layout", result.error, { 
-          component: 'useDashboardLayout' 
+      if (result.error && result.error.code !== 'PGRST116') {
+        logger.error('Error loading dashboard layout', result.error, {
+          component: 'useDashboardLayout',
         });
         setSections(defaultSections);
         setIsLoading(false);
         return;
       }
 
-      if (result.data?.dashboard_layout && Array.isArray(result.data.dashboard_layout)) {
-        const savedSections = result.data.dashboard_layout as unknown as DashboardSection[];
-        
+      if (
+        result.data?.dashboard_layout &&
+        Array.isArray(result.data.dashboard_layout)
+      ) {
+        const savedSections = result.data
+          .dashboard_layout as unknown as DashboardSection[];
+
         // Merge saved preferences with any new default sections
         const savedIds = savedSections.map(s => s.id);
-        const newSections = defaultSections.filter(s => !savedIds.includes(s.id));
-        
+        const newSections = defaultSections.filter(
+          s => !savedIds.includes(s.id)
+        );
+
         setSections([...savedSections, ...newSections]);
       } else {
         setSections(defaultSections);
       }
     } catch (error) {
-      logger.error("Error loading dashboard layout", error, { 
-        component: 'useDashboardLayout' 
+      logger.error('Error loading dashboard layout', error, {
+        component: 'useDashboardLayout',
       });
       setSections(defaultSections);
     } finally {
@@ -80,22 +90,25 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
       await trackUpdate(
         async () => {
           const { error } = await supabase
-            .from("user_dashboard_preferences")
-            .upsert({
-              user_id: user.id,
-              dashboard_layout: newLayout as any,
-              updated_at: new Date().toISOString(),
-            } as any, {
-              onConflict: 'user_id'
-            });
+            .from('user_dashboard_preferences')
+            .upsert(
+              {
+                user_id: user.id,
+                dashboard_layout: newLayout as any,
+                updated_at: new Date().toISOString(),
+              } as any,
+              {
+                onConflict: 'user_id',
+              }
+            );
           return { data: null, error };
         },
         'user_dashboard_preferences',
         'useDashboardLayout'
       );
     } catch (error) {
-      logger.error("Error saving dashboard layout", error, { 
-        component: 'useDashboardLayout' 
+      logger.error('Error saving dashboard layout', error, {
+        component: 'useDashboardLayout',
       });
     }
   };
@@ -109,17 +122,17 @@ export function useDashboardLayout(defaultSections: DashboardSection[]) {
       await trackDelete(
         async () => {
           const { error } = await supabase
-            .from("user_dashboard_preferences")
+            .from('user_dashboard_preferences')
             .delete()
-            .eq("user_id", user.id);
+            .eq('user_id', user.id);
           return { data: null, error };
         },
         'user_dashboard_preferences',
         'useDashboardLayout'
       );
     } catch (error) {
-      logger.error("Error resetting dashboard layout", error, { 
-        component: 'useDashboardLayout' 
+      logger.error('Error resetting dashboard layout', error, {
+        component: 'useDashboardLayout',
       });
     }
   };

@@ -54,14 +54,17 @@ export function AIInsightsWidget() {
     },
     onError: () => {
       toast.error('Failed to dismiss insight');
-    }
+    },
   });
 
   const generateInsightsMutation = useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke('generate-insights', {
-        body: { type: 'daily_summary' }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'generate-insights',
+        {
+          body: { type: 'daily_summary' },
+        }
+      );
 
       if (error) throw error;
       return data;
@@ -76,7 +79,7 @@ export function AIInsightsWidget() {
       } else {
         toast.error('Failed to generate insights');
       }
-    }
+    },
   });
 
   // Auto-generate insights on mount if none exist
@@ -96,7 +99,9 @@ export function AIInsightsWidget() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-sm text-muted-foreground">Loading insights...</div>
+          <div className="text-sm text-muted-foreground">
+            Loading insights...
+          </div>
         </CardContent>
       </Card>
     );
@@ -148,7 +153,7 @@ export function AIInsightsWidget() {
       </CardHeader>
       <CardContent>
         <ul className="space-y-3">
-          {insights.map((insight) => (
+          {insights.map(insight => (
             <li
               key={insight.id}
               className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg group hover:bg-muted transition-colors"

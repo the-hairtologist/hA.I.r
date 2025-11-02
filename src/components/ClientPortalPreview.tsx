@@ -1,9 +1,16 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, Calendar, Clock, MapPin, ExternalLink, Share2 } from "lucide-react";
-import { haptic } from "@/platform/haptics";
-import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Sparkles,
+  Calendar,
+  Clock,
+  MapPin,
+  ExternalLink,
+  Share2,
+} from 'lucide-react';
+import { haptic } from '@/platform/haptics';
+import { toast } from 'sonner';
 
 interface ClientPortalPreviewProps {
   stylistName: string;
@@ -30,7 +37,7 @@ export const ClientPortalPreview = ({
 }: ClientPortalPreviewProps) => {
   const handleShare = async () => {
     haptic.tap();
-    
+
     const shareData = {
       title: `Book with ${stylistName}`,
       text: `Check out ${stylistName}'s profile on hA.I.r`,
@@ -41,24 +48,27 @@ export const ClientPortalPreview = ({
       try {
         await navigator.share(shareData);
       } catch (error) {
-        console.error("Share failed:", error);
+        console.error('Share failed:', error);
       }
     } else {
       await navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard!");
+      toast.success('Link copied to clipboard!');
     }
   };
 
   const handleBooking = () => {
     haptic.tap();
-    toast.info("Client booking will be available soon!", {
-      description: "Clients will be able to book appointments directly through your profile link",
+    toast.info('Client booking will be available soon!', {
+      description:
+        'Clients will be able to book appointments directly through your profile link',
       duration: 4000,
     });
   };
 
   return (
-    <Card className={`${className} brutal-border bg-gradient-to-br from-primary/5 to-background`}>
+    <Card
+      className={`${className} brutal-border bg-gradient-to-br from-primary/5 to-background`}
+    >
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
@@ -73,7 +83,9 @@ export const ClientPortalPreview = ({
         <div className="space-y-4">
           <div className="flex items-start justify-between">
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold gradient-text">{stylistName}</h3>
+              <h3 className="text-2xl font-bold gradient-text">
+                {stylistName}
+              </h3>
               {stylistSpecialty && (
                 <Badge variant="secondary" className="text-xs">
                   {stylistSpecialty}
@@ -82,7 +94,9 @@ export const ClientPortalPreview = ({
               {stylistRating && (
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-warning">★</span>
-                  <span className="font-semibold">{stylistRating.toFixed(1)}</span>
+                  <span className="font-semibold">
+                    {stylistRating.toFixed(1)}
+                  </span>
                   {stylistReviews && (
                     <span className="text-muted-foreground">
                       ({stylistReviews} reviews)
@@ -123,25 +137,19 @@ export const ClientPortalPreview = ({
             </p>
           </div>
           <p className="text-xs text-accent-foreground/80">
-            Your clients will be able to book appointments, make payments, and manage their hair journey directly from your profile page in a future update.
+            Your clients will be able to book appointments, make payments, and
+            manage their hair journey directly from your profile page in a
+            future update.
           </p>
         </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3 opacity-60">
-          <Button
-            onClick={handleBooking}
-            className="gap-2"
-            disabled
-          >
+          <Button onClick={handleBooking} className="gap-2" disabled>
             <Calendar className="h-4 w-4" />
             Book Now
           </Button>
-          <Button
-            variant="outline"
-            disabled
-            className="gap-2"
-          >
+          <Button variant="outline" disabled className="gap-2">
             <Clock className="h-4 w-4" />
             View Hours
           </Button>

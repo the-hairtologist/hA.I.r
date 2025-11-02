@@ -1,6 +1,17 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DollarSign, CreditCard, AlertCircle, CheckCircle2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  DollarSign,
+  CreditCard,
+  AlertCircle,
+  CheckCircle2,
+} from 'lucide-react';
 
 interface PaymentDetailsCardProps {
   payment?: {
@@ -23,7 +34,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
   const isDeposit = payment?.is_deposit || false;
   const amountPaid = payment?.amount || 0;
   const remainingBalance = payment?.remaining_balance || 0;
-  const fullPrice = service?.price || (amountPaid + remainingBalance);
+  const fullPrice = service?.price || amountPaid + remainingBalance;
   const paymentStatus = payment?.status || 'pending';
 
   const getStatusConfig = () => {
@@ -65,7 +76,7 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
             <DollarSign className="h-5 w-5 text-primary" />
             <CardTitle className="text-base">Payment Details</CardTitle>
           </div>
-          <Badge 
+          <Badge
             variant={paymentStatus === 'completed' ? 'default' : 'secondary'}
             className="flex items-center gap-1"
           >
@@ -101,7 +112,9 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-warning" />
-              <span className="text-sm font-medium text-warning">Balance Due</span>
+              <span className="text-sm font-medium text-warning">
+                Balance Due
+              </span>
             </div>
             <span className="text-base font-bold text-warning">
               ${remainingBalance.toFixed(2)}
@@ -113,8 +126,12 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
         {payment?.payment_method && (
           <div className="pt-2 border-t border-border/50">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">Payment Method</span>
-              <span className="text-xs font-medium capitalize">{payment.payment_method}</span>
+              <span className="text-xs text-muted-foreground">
+                Payment Method
+              </span>
+              <span className="text-xs font-medium capitalize">
+                {payment.payment_method}
+              </span>
             </div>
           </div>
         )}
@@ -123,20 +140,22 @@ const PaymentDetailsCard = ({ payment, service }: PaymentDetailsCardProps) => {
         {isDeposit && remainingBalance > 0 && (
           <div className="mt-3 p-3 bg-warning/10 border border-warning rounded-lg">
             <p className="text-xs text-warning">
-              <strong>Note:</strong> Please pay the remaining balance of ${remainingBalance.toFixed(2)} before or at your appointment.
+              <strong>Note:</strong> Please pay the remaining balance of $
+              {remainingBalance.toFixed(2)} before or at your appointment.
             </p>
           </div>
         )}
 
         {/* Fully Paid Notice */}
-        {!isDeposit || remainingBalance === 0 && paymentStatus === 'completed' && (
-          <div className="mt-3 p-3 bg-success/10 border border-success rounded-lg flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-success" />
-            <p className="text-xs text-success font-medium">
-              Payment complete - You're all set!
-            </p>
-          </div>
-        )}
+        {!isDeposit ||
+          (remainingBalance === 0 && paymentStatus === 'completed' && (
+            <div className="mt-3 p-3 bg-success/10 border border-success rounded-lg flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-success" />
+              <p className="text-xs text-success font-medium">
+                Payment complete - You're all set!
+              </p>
+            </div>
+          ))}
       </CardContent>
     </Card>
   );

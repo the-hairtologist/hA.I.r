@@ -4,7 +4,7 @@
  */
 
 // Re-export with explicit names to prevent circular dependencies
-export { 
+export {
   responsiveBestPractices,
   getResponsivePadding,
   getResponsiveMargin,
@@ -15,7 +15,7 @@ export {
   safeClasses,
 } from './utilities';
 
-export { 
+export {
   useBreakpoint,
   useIsMobile,
   useIsTablet,
@@ -26,7 +26,7 @@ export {
   useOrientation,
 } from './hooks';
 
-export { 
+export {
   BREAKPOINTS,
   fluidText,
   containerWidths,

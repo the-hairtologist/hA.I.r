@@ -16,7 +16,9 @@ export const invalidationPatterns = {
     queryClient.invalidateQueries({ queryKey: ['calendar'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
     if (appointmentId) {
-      queryClient.invalidateQueries({ queryKey: ['appointment', appointmentId] });
+      queryClient.invalidateQueries({
+        queryKey: ['appointment', appointmentId],
+      });
     }
     logger.debug('Invalidated appointment queries', { context: 'QueryCache' });
   },
@@ -104,7 +106,7 @@ export const invalidationPatterns = {
     queryClient.invalidateQueries({ queryKey: ['client-lifetime-value'] });
     queryClient.invalidateQueries({ queryKey: ['service-popularity'] });
     logger.debug('Invalidated analytics queries', { context: 'QueryCache' });
-  }
+  },
 };
 
 /**
@@ -125,7 +127,10 @@ export const invalidateMultiple = (
  */
 export const invalidateRelated = {
   // When appointment is created/updated/deleted
-  appointmentChange: (queryClient: QueryClient, data: { clientId?: string; stylistId?: string }) => {
+  appointmentChange: (
+    queryClient: QueryClient,
+    data: { clientId?: string; stylistId?: string }
+  ) => {
     invalidationPatterns.appointments(queryClient);
     if (data.clientId) {
       invalidationPatterns.clients(queryClient, data.clientId);
@@ -151,5 +156,5 @@ export const invalidateRelated = {
   serviceChange: (queryClient: QueryClient, serviceId?: string) => {
     invalidationPatterns.services(queryClient, serviceId);
     invalidationPatterns.analytics(queryClient);
-  }
+  },
 };

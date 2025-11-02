@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { Award, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { Award, Sparkles } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 
 interface TopServicesProps {
   stylistId: string;
@@ -26,19 +26,27 @@ export function TopServices({ stylistId }: TopServicesProps) {
   const loadTopServices = async () => {
     try {
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select(`
+        .from('appointments')
+        .select(
+          `
           service_type,
           service:services(price)
-        `)
-        .eq("stylist_id", stylistId)
-        .eq("status", "completed");
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .eq('status', 'completed');
 
       if (appointments) {
-        const serviceMap = new Map<string, { count: number; revenue: number }>();
-        
+        const serviceMap = new Map<
+          string,
+          { count: number; revenue: number }
+        >();
+
         appointments.forEach((apt: any) => {
-          const current = serviceMap.get(apt.service_type) || { count: 0, revenue: 0 };
+          const current = serviceMap.get(apt.service_type) || {
+            count: 0,
+            revenue: 0,
+          };
           serviceMap.set(apt.service_type, {
             count: current.count + 1,
             revenue: current.revenue + (apt.service?.price || 0),
@@ -53,19 +61,19 @@ export function TopServices({ stylistId }: TopServicesProps) {
         setServices(stats);
       }
     } catch (error) {
-      console.error("Error loading top services:", error);
-      toast.error("Failed to load service data");
+      console.error('Error loading top services:', error);
+      toast.error('Failed to load service data');
     } finally {
       setLoading(false);
     }
   };
 
   const gradients = [
-    "from-purple-500 to-pink-500",
-    "from-blue-500 to-cyan-500",
-    "from-emerald-500 to-teal-500",
-    "from-amber-500 to-orange-500",
-    "from-indigo-500 to-purple-500",
+    'from-purple-500 to-pink-500',
+    'from-blue-500 to-cyan-500',
+    'from-emerald-500 to-teal-500',
+    'from-amber-500 to-orange-500',
+    'from-indigo-500 to-purple-500',
   ];
 
   return (
@@ -81,8 +89,11 @@ export function TopServices({ stylistId }: TopServicesProps) {
       <CardContent>
         {loading ? (
           <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-muted/50 rounded-lg animate-pulse" />
+            {[1, 2, 3].map(i => (
+              <div
+                key={i}
+                className="h-16 bg-muted/50 rounded-lg animate-pulse"
+              />
             ))}
           </div>
         ) : services.length === 0 ? (
@@ -97,7 +108,7 @@ export function TopServices({ stylistId }: TopServicesProps) {
                 className="relative p-3 rounded-lg brutal-border bg-card/80 hover:bg-card transition-colors brutal-shadow-sm"
               >
                 <div className="flex items-center gap-3">
-                  <div 
+                  <div
                     className={`flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br brutal-border text-on-surface-primary font-display font-bold text-sm ${gradients[index]}`}
                   >
                     {index + 1}
@@ -110,7 +121,10 @@ export function TopServices({ stylistId }: TopServicesProps) {
                       ${service.revenue.toFixed(2)} total
                     </p>
                   </div>
-                  <Badge variant="secondary" className="shrink-0 text-[11px] sm:text-xs">
+                  <Badge
+                    variant="secondary"
+                    className="shrink-0 text-[11px] sm:text-xs"
+                  >
                     {service.count}x
                   </Badge>
                 </div>

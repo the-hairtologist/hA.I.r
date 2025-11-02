@@ -1,12 +1,14 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 interface RebookingReminderData {
   clientName: string;
@@ -16,39 +18,43 @@ interface RebookingReminderData {
   bookingUrl: string;
 }
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
 
     if (!resendApiKey) {
-      console.error("RESEND_API_KEY not configured");
+      console.error('RESEND_API_KEY not configured');
       return new Response(
-        JSON.stringify({ error: "Email service not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: 'Email service not configured' }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const resend = new Resend(resendApiKey);
 
-    console.log("Checking for appointments needing rebooking reminders...");
+    console.log('Checking for appointments needing rebooking reminders...');
 
     // Find completed appointments from 6 weeks ago that haven't received reminders
     const sixWeeksAgo = new Date();
     sixWeeksAgo.setDate(sixWeeksAgo.getDate() - 42);
-    
+
     const sevenWeeksAgo = new Date();
     sevenWeeksAgo.setDate(sevenWeeksAgo.getDate() - 49);
 
     const { data: appointments, error: appointmentsError } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         appointment_date,
         client_id,
@@ -69,13 +75,14 @@ serve(async (req) => {
             full_name
           )
         )
-      `)
-      .eq("status", "completed")
-      .gte("appointment_date", sevenWeeksAgo.toISOString())
-      .lte("appointment_date", sixWeeksAgo.toISOString());
+      `
+      )
+      .eq('status', 'completed')
+      .gte('appointment_date', sevenWeeksAgo.toISOString())
+      .lte('appointment_date', sixWeeksAgo.toISOString());
 
     if (appointmentsError) {
-      console.error("Error fetching appointments:", appointmentsError);
+      console.error('Error fetching appointments:', appointmentsError);
       throw appointmentsError;
     }
 
@@ -88,23 +95,27 @@ serve(async (req) => {
       try {
         // Check if reminder already sent
         const { data: existingReminder } = await supabase
-          .from("rebooking_reminders")
-          .select("id")
-          .eq("appointment_id", appointment.id)
-          .eq("reminder_type", "six_week")
+          .from('rebooking_reminders')
+          .select('id')
+          .eq('appointment_id', appointment.id)
+          .eq('reminder_type', 'six_week')
           .single();
 
         if (existingReminder) {
-          console.log(`Reminder already sent for appointment ${appointment.id}`);
+          console.log(
+            `Reminder already sent for appointment ${appointment.id}`
+          );
           continue;
         }
 
         const clientProfile = appointment.client_profiles as any;
         const stylistProfile = appointment.stylist_profiles as any;
-        
-        const clientEmail = clientProfile?.email || clientProfile?.profiles?.email;
-        const clientName = clientProfile?.full_name || "Valued Client";
-        const stylistName = stylistProfile?.profiles?.full_name || "Your Stylist";
+
+        const clientEmail =
+          clientProfile?.email || clientProfile?.profiles?.email;
+        const clientName = clientProfile?.full_name || 'Valued Client';
+        const stylistName =
+          stylistProfile?.profiles?.full_name || 'Your Stylist';
         const businessName = stylistProfile?.business_name || stylistName;
 
         if (!clientEmail) {
@@ -114,33 +125,37 @@ serve(async (req) => {
 
         // Get stylist's email settings for customization
         const { data: emailSettings } = await supabase
-          .from("email_settings")
-          .select("*")
-          .eq("user_id", stylistProfile?.user_id)
+          .from('email_settings')
+          .select('*')
+          .eq('user_id', stylistProfile?.user_id)
           .single();
 
         // Use custom settings or defaults
         const settings = emailSettings || {
           rebooking_enabled: true,
-          rebooking_subject: "✨ Time for a Touch-Up with {{stylist_name}}!",
-          rebooking_headline: "Hi {{client_name}}! 👋",
-          rebooking_opening: "It's been about 6 weeks since your last visit with {{stylist_name}} at {{business_name}}. Your hair is probably ready for some professional love! 💇",
-          rebooking_cta_text: "📅 Book Your Appointment",
-          rebooking_closing: "{{stylist_name}} is looking forward to seeing you again and help you maintain that fabulous look!",
-          custom_message: "",
+          rebooking_subject: '✨ Time for a Touch-Up with {{stylist_name}}!',
+          rebooking_headline: 'Hi {{client_name}}! 👋',
+          rebooking_opening:
+            "It's been about 6 weeks since your last visit with {{stylist_name}} at {{business_name}}. Your hair is probably ready for some professional love! 💇",
+          rebooking_cta_text: '📅 Book Your Appointment',
+          rebooking_closing:
+            '{{stylist_name}} is looking forward to seeing you again and help you maintain that fabulous look!',
+          custom_message: '',
           show_business_logo: false,
-          business_logo_url: "",
+          business_logo_url: '',
         };
 
         // Skip if stylist has disabled rebooking emails
         if (!settings.rebooking_enabled) {
-          console.log(`Rebooking emails disabled for stylist ${stylistProfile?.id}`);
+          console.log(
+            `Rebooking emails disabled for stylist ${stylistProfile?.id}`
+          );
           continue;
         }
 
         // Function to replace placeholders
         const replacePlaceholders = (text: string) => {
-          if (!text) return "";
+          if (!text) return '';
           return text
             .replace(/\{\{client_name\}\}/g, clientName)
             .replace(/\{\{stylist_name\}\}/g, stylistName)
@@ -149,52 +164,63 @@ serve(async (req) => {
 
         // Check email preferences
         const { data: emailPrefs } = await supabase
-          .from("email_preferences")
-          .select("rebooking_reminders_enabled, unsubscribe_token")
-          .eq("client_id", appointment.client_id)
+          .from('email_preferences')
+          .select('rebooking_reminders_enabled, unsubscribe_token')
+          .eq('client_id', appointment.client_id)
           .single();
 
         // Create email preferences if they don't exist
         let unsubscribeToken = emailPrefs?.unsubscribe_token;
         if (!emailPrefs) {
           const { data: newPrefs } = await supabase
-            .from("email_preferences")
+            .from('email_preferences')
             .insert({
               client_id: appointment.client_id,
               email: clientEmail,
             })
-            .select("unsubscribe_token")
+            .select('unsubscribe_token')
             .single();
           unsubscribeToken = newPrefs?.unsubscribe_token;
         }
 
         // Skip if user has unsubscribed from rebooking reminders
         if (emailPrefs && !emailPrefs.rebooking_reminders_enabled) {
-          console.log(`Client ${clientEmail} has unsubscribed from rebooking reminders`);
+          console.log(
+            `Client ${clientEmail} has unsubscribed from rebooking reminders`
+          );
           continue;
         }
 
         // Create booking URL with tracking
-        const baseUrl = Deno.env.get("SUPABASE_URL")?.replace("supabase.co", "lovableproject.com") || "https://app.example.com";
+        const baseUrl =
+          Deno.env
+            .get('SUPABASE_URL')
+            ?.replace('supabase.co', 'lovableproject.com') ||
+          'https://app.example.com';
         const bookingUrl = `${baseUrl}/appointments?ref=rebooking_email&reminder_id=${appointment.id}`;
         const unsubscribeUrl = `${baseUrl}/unsubscribe?token=${unsubscribeToken}`;
 
         // Build custom email HTML using stylist's settings
-        const logoSection = settings.show_business_logo && settings.business_logo_url ? `
+        const logoSection =
+          settings.show_business_logo && settings.business_logo_url
+            ? `
           <tr>
             <td style="padding: 20px; text-align: center; border-bottom: 1px solid #e5e7eb;">
               <img src="${settings.business_logo_url}" alt="${businessName} Logo" style="max-width: 150px; height: auto;">
             </td>
           </tr>
-        ` : '';
+        `
+            : '';
 
-        const customMessageSection = settings.custom_message ? `
+        const customMessageSection = settings.custom_message
+          ? `
           <div style="background-color: #f8f9fa; border-left: 4px solid #6366f1; padding: 20px; margin: 30px 0; border-radius: 8px;">
             <p style="font-size: 15px; line-height: 1.6; color: #333; margin: 0;">
               ${replacePlaceholders(settings.custom_message)}
             </p>
           </div>
-        ` : '';
+        `
+          : '';
 
         // Send email reminder with stylist's customization
         const emailResult = await resend.emails.send({
@@ -281,17 +307,17 @@ serve(async (req) => {
 
         // Log reminder in database
         const { error: insertError } = await supabase
-          .from("rebooking_reminders")
+          .from('rebooking_reminders')
           .insert({
             appointment_id: appointment.id,
             client_id: appointment.client_id,
             stylist_id: appointment.stylist_id,
-            reminder_type: "six_week",
-            status: "sent",
+            reminder_type: 'six_week',
+            status: 'sent',
           });
 
         if (insertError) {
-          console.error("Error logging reminder:", insertError);
+          console.error('Error logging reminder:', insertError);
           errors.push({ appointment: appointment.id, error: insertError });
         } else {
           remindersSent++;
@@ -312,16 +338,18 @@ serve(async (req) => {
       }),
       {
         status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   } catch (error) {
-    console.error("Error in send-rebooking-reminder function:", error);
+    console.error('Error in send-rebooking-reminder function:', error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({
+        error: error instanceof Error ? error.message : 'Unknown error',
+      }),
       {
         status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
   }

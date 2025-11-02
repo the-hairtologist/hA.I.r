@@ -12,7 +12,7 @@ interface UseLoadingStateOptions {
 
 export const useLoadingState = (options: UseLoadingStateOptions = {}) => {
   const { minDisplayTime = 500, initialLoading = false } = options;
-  
+
   const [isLoading, setIsLoading] = useState(initialLoading);
   const [shouldShowLoading, setShouldShowLoading] = useState(initialLoading);
   const loadingStartTime = useRef<number | null>(null);
@@ -25,11 +25,11 @@ export const useLoadingState = (options: UseLoadingStateOptions = {}) => {
 
   const stopLoading = () => {
     setIsLoading(false);
-    
+
     if (loadingStartTime.current) {
       const elapsedTime = Date.now() - loadingStartTime.current;
       const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
-      
+
       setTimeout(() => {
         setShouldShowLoading(false);
         loadingStartTime.current = null;
@@ -53,7 +53,7 @@ export const useLoadingState = (options: UseLoadingStateOptions = {}) => {
 export const useAsyncLoading = () => {
   const { shouldShowLoading, startLoading, stopLoading } = useLoadingState();
 
-  const executeAsync = async <T,>(asyncFn: () => Promise<T>): Promise<T> => {
+  const executeAsync = async <T>(asyncFn: () => Promise<T>): Promise<T> => {
     startLoading();
     try {
       const result = await asyncFn();

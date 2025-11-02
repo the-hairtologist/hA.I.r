@@ -1,30 +1,35 @@
-import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Skeleton, SkeletonCard, SkeletonList } from "./Skeleton";
+import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Skeleton, SkeletonCard, SkeletonList } from './Skeleton';
 
 interface LoadingStateProps {
-  type?: "spinner" | "skeleton" | "list";
+  type?: 'spinner' | 'skeleton' | 'list';
   message?: string;
   className?: string;
   count?: number;
 }
 
-export const LoadingState = ({ 
-  type = "spinner", 
+export const LoadingState = ({
+  type = 'spinner',
   message,
   className,
   count = 3,
 }: LoadingStateProps) => {
-  if (type === "list") {
+  if (type === 'list') {
     return <SkeletonList count={count} />;
   }
 
-  if (type === "skeleton") {
+  if (type === 'skeleton') {
     return <SkeletonCard className={className} />;
   }
 
   return (
-    <div className={cn("flex flex-col items-center justify-center p-8 space-y-3", className)}>
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center p-8 space-y-3',
+        className
+      )}
+    >
       <Loader2 className="h-8 w-8 animate-spin text-primary" />
       {message && (
         <p className="text-sm text-muted-foreground animate-pulse">{message}</p>

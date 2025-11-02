@@ -1,16 +1,22 @@
-import { useState, useEffect } from "react";
-import { withMemo } from "@/lib/optimizations/withMemo";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, Sparkles, Clock, TrendingUp, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { format } from "date-fns";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { withMemo } from '@/lib/optimizations/withMemo';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Calendar, Sparkles, Clock, TrendingUp, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 interface SchedulingSuggestion {
   datetime: string;
   reason: string;
-  confidence: "high" | "medium" | "low";
+  confidence: 'high' | 'medium' | 'low';
 }
 
 interface SmartSchedulingSuggestionsProps {
@@ -18,9 +24,9 @@ interface SmartSchedulingSuggestionsProps {
   onSelectTime?: (datetime: string) => void;
 }
 
-const SmartSchedulingSuggestionsComponent = ({ 
+const SmartSchedulingSuggestionsComponent = ({
   stylistId,
-  onSelectTime 
+  onSelectTime,
 }: SmartSchedulingSuggestionsProps) => {
   const [suggestions, setSuggestions] = useState<SchedulingSuggestion[]>([]);
   const [patterns, setPatterns] = useState<any>(null);
@@ -35,12 +41,15 @@ const SmartSchedulingSuggestionsComponent = ({
   const fetchSuggestions = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('smart-scheduling-suggestions', {
-        body: { stylistId, timeRange: '7 days' }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'smart-scheduling-suggestions',
+        {
+          body: { stylistId, timeRange: '7 days' },
+        }
+      );
 
       if (error) throw error;
-      
+
       if (data?.suggestions) {
         setSuggestions(data.suggestions);
         setPatterns(data.patterns);
@@ -55,10 +64,14 @@ const SmartSchedulingSuggestionsComponent = ({
 
   const getConfidenceColor = (confidence: string) => {
     switch (confidence) {
-      case 'high': return 'text-success bg-success/10 border-success';
-      case 'medium': return 'text-warning bg-warning/10 border-warning';
-      case 'low': return 'text-destructive bg-destructive/10 border-destructive';
-      default: return 'text-muted-foreground bg-muted border-border';
+      case 'high':
+        return 'text-success bg-success/10 border-success';
+      case 'medium':
+        return 'text-warning bg-warning/10 border-warning';
+      case 'low':
+        return 'text-destructive bg-destructive/10 border-destructive';
+      default:
+        return 'text-muted-foreground bg-muted border-border';
     }
   };
 
@@ -82,8 +95,12 @@ const SmartSchedulingSuggestionsComponent = ({
             <Sparkles className="h-4 w-4 text-on-surface-primary" />
           </div>
           <div>
-            <CardTitle className="text-base font-pixel">Smart Scheduling</CardTitle>
-            <CardDescription className="font-sans text-xs">AI-powered time suggestions</CardDescription>
+            <CardTitle className="text-base font-pixel">
+              Smart Scheduling
+            </CardTitle>
+            <CardDescription className="font-sans text-xs">
+              AI-powered time suggestions
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -110,9 +127,13 @@ const SmartSchedulingSuggestionsComponent = ({
                         {format(date, 'h:mm a')}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground">{suggestion.reason}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {suggestion.reason}
+                    </p>
                   </div>
-                  <span className={`text-[11px] px-2 py-1 min-h-[24px] flex items-center rounded-full border ${getConfidenceColor(suggestion.confidence)}`}>
+                  <span
+                    className={`text-[11px] px-2 py-1 min-h-[24px] flex items-center rounded-full border ${getConfidenceColor(suggestion.confidence)}`}
+                  >
                     {suggestion.confidence}
                   </span>
                 </div>
@@ -126,24 +147,41 @@ const SmartSchedulingSuggestionsComponent = ({
           <div className="pt-3 border-t">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="h-3.5 w-3.5 text-accent" />
-              <span className="text-xs font-medium text-muted-foreground">Your Patterns</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                Your Patterns
+              </span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {Object.keys(patterns.dayCount || {}).length > 0 && (
                 <div className="p-2 rounded-md bg-muted/50 border">
-                  <p className="text-[11px] text-muted-foreground mb-1">Busiest Day</p>
+                  <p className="text-[11px] text-muted-foreground mb-1">
+                    Busiest Day
+                  </p>
                   <p className="text-xs font-medium">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
-                      parseInt(Object.entries(patterns.dayCount).sort((a, b) => (b[1] as number) - (a[1] as number))[0]?.[0] || '0')
-                    ]}
+                    {
+                      ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
+                        parseInt(
+                          Object.entries(patterns.dayCount).sort(
+                            (a, b) => (b[1] as number) - (a[1] as number)
+                          )[0]?.[0] || '0'
+                        )
+                      ]
+                    }
                   </p>
                 </div>
               )}
               {Object.keys(patterns.hourCount || {}).length > 0 && (
                 <div className="p-2 rounded-md bg-muted/50 border">
-                  <p className="text-[11px] text-muted-foreground mb-1">Peak Time</p>
+                  <p className="text-[11px] text-muted-foreground mb-1">
+                    Peak Time
+                  </p>
                   <p className="text-xs font-medium">
-                    {Object.entries(patterns.hourCount).sort((a, b) => (b[1] as number) - (a[1] as number))[0]?.[0]}:00
+                    {
+                      Object.entries(patterns.hourCount).sort(
+                        (a, b) => (b[1] as number) - (a[1] as number)
+                      )[0]?.[0]
+                    }
+                    :00
                   </p>
                 </div>
               )}

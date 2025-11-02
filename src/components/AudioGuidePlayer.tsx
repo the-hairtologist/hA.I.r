@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Play, Pause, Volume2, Loader2, Download } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { useState, useRef, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Play, Pause, Volume2, Loader2, Download } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 interface AudioGuidePlayerProps {
   text: string;
@@ -13,11 +13,11 @@ interface AudioGuidePlayerProps {
   className?: string;
 }
 
-export const AudioGuidePlayer = ({ 
-  text, 
-  title = "Audio Guide",
+export const AudioGuidePlayer = ({
+  text,
+  title = 'Audio Guide',
   voice = 'nova',
-  className 
+  className,
 }: AudioGuidePlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,9 +42,12 @@ export const AudioGuidePlayer = ({
 
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('text-to-speech', {
-        body: { text, voice }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'text-to-speech',
+        {
+          body: { text, voice },
+        }
+      );
 
       if (error) {
         console.error('Audio generation error:', error);
@@ -70,7 +73,7 @@ export const AudioGuidePlayer = ({
       }
       const audioBlob = new Blob([bytes], { type: 'audio/mpeg' });
       const url = URL.createObjectURL(audioBlob);
-      
+
       setAudioUrl(url);
       return url;
     } catch (error: any) {
@@ -131,7 +134,12 @@ export const AudioGuidePlayer = ({
   };
 
   return (
-    <Card className={cn("p-4 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5", className)}>
+    <Card
+      className={cn(
+        'p-4 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5',
+        className
+      )}
+    >
       <div className="flex items-center gap-3">
         <Button
           onClick={handlePlayPause}
@@ -155,7 +163,7 @@ export const AudioGuidePlayer = ({
             <p className="text-sm font-medium truncate">{title}</p>
           </div>
           <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-primary transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />

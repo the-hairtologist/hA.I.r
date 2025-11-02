@@ -1,9 +1,9 @@
-/**
+﻿/**
  * Simple Query Cache
- * 
+ *
  * Prevents duplicate queries when multiple components need the same data.
  * Uses in-memory cache with TTL (time-to-live) for automatic invalidation.
- * 
+ *
  * Features:
  * - Request deduplication
  * - TTL-based invalidation
@@ -20,8 +20,8 @@ interface CacheEntry<T> {
 }
 
 class QueryCache {
-  private cache: Map<string, CacheEntry<any>> = new Map();
-  private pendingRequests: Map<string, Promise<any>> = new Map();
+  private cache: Map<string, CacheEntry<unknown>> = new Map();
+  private pendingRequests: Map<string, Promise<unknown>> = new Map();
 
   /**
    * Get data from cache or fetch it
@@ -53,9 +53,6 @@ class QueryCache {
       const data = await promise;
       this.set(key, data, ttl);
       return data;
-    } catch (error) {
-      // Don't cache errors
-      throw error;
     } finally {
       this.pendingRequests.delete(key);
     }
@@ -102,7 +99,7 @@ class QueryCache {
    */
   invalidatePattern(pattern: RegExp): void {
     const keysToDelete: string[] = [];
-    
+
     for (const key of this.cache.keys()) {
       if (pattern.test(key)) {
         keysToDelete.push(key);
@@ -110,7 +107,9 @@ class QueryCache {
     }
 
     keysToDelete.forEach(key => {
-      logger.debug('Invalidating cache key (pattern match)', 'queryCache', { key });
+      logger.debug('Invalidating cache key (pattern match)', 'queryCache', {
+        key,
+      });
       this.cache.delete(key);
     });
   }
@@ -143,7 +142,7 @@ export const queryCache = new QueryCache();
 export const cacheKeys = {
   stylistProfile: (userId: string) => `stylist-profile:${userId}`,
   clientProfile: (userId: string) => `client-profile:${userId}`,
-  appointments: (stylistId: string, filters?: string) => 
+  appointments: (stylistId: string, filters?: string) =>
     `appointments:${stylistId}${filters ? `:${filters}` : ''}`,
   clients: (stylistId: string) => `clients:${stylistId}`,
   formulas: (stylistId: string, clientId?: string) =>

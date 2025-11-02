@@ -11,14 +11,14 @@ describe('useBulkSelection', () => {
 
   it('should initialize with no selections', () => {
     const { result } = renderHook(() => useBulkSelection(mockItems));
-    
+
     expect(result.current.selectedCount).toBe(0);
     expect(result.current.selectedIds.size).toBe(0);
   });
 
   it('should toggle selection', () => {
     const { result } = renderHook(() => useBulkSelection(mockItems));
-    
+
     act(() => {
       result.current.toggleSelection('1');
     });
@@ -29,7 +29,7 @@ describe('useBulkSelection', () => {
 
   it('should clear all selections', () => {
     const { result } = renderHook(() => useBulkSelection(mockItems));
-    
+
     act(() => {
       result.current.toggleSelection('1');
       result.current.toggleSelection('2');

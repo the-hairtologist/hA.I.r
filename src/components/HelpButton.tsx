@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
-import { HelpCircle, Search, BookOpen, Video, MessageSquare, ExternalLink } from "lucide-react";
-import { haptic } from "@/platform/haptics";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  HelpCircle,
+  Search,
+  BookOpen,
+  Video,
+  MessageSquare,
+  ExternalLink,
+} from 'lucide-react';
+import { haptic } from '@/platform/haptics';
 
 interface HelpArticle {
   id: string;
@@ -22,56 +29,59 @@ interface HelpArticle {
 
 export const HelpButton = () => {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const articles: HelpArticle[] = [
     {
-      id: "visual-edits",
-      title: "💡 Using Visual Edits (FREE)",
-      description: "Customize text, colors, and fonts instantly without using AI credits",
-      category: "Getting Started",
-      url: "https://docs.lovable.dev/features/visual-edit",
+      id: 'visual-edits',
+      title: '💡 Using Visual Edits (FREE)',
+      description:
+        'Customize text, colors, and fonts instantly without using AI credits',
+      category: 'Getting Started',
+      url: 'https://docs.lovable.dev/features/visual-edit',
     },
     {
-      id: "add-client",
-      title: "How to Add Your First Client",
-      description: "Step-by-step guide to adding clients and building their hair history",
-      category: "Getting Started",
+      id: 'add-client',
+      title: 'How to Add Your First Client',
+      description:
+        'Step-by-step guide to adding clients and building their hair history',
+      category: 'Getting Started',
     },
     {
-      id: "formulas",
-      title: "Saving Color Formulas",
-      description: "Learn how to document and save perfect color formulas",
-      category: "Features",
+      id: 'formulas',
+      title: 'Saving Color Formulas',
+      description: 'Learn how to document and save perfect color formulas',
+      category: 'Features',
     },
     {
-      id: "milestones",
-      title: "Understanding Client Milestones",
-      description: "How milestone celebrations work and reward your loyal clients",
-      category: "Features",
+      id: 'milestones',
+      title: 'Understanding Client Milestones',
+      description:
+        'How milestone celebrations work and reward your loyal clients',
+      category: 'Features',
     },
     {
-      id: "referrals",
-      title: "Referral Program Guide",
-      description: "Earn free months by inviting other stylists to join",
-      category: "Growth",
+      id: 'referrals',
+      title: 'Referral Program Guide',
+      description: 'Earn free months by inviting other stylists to join',
+      category: 'Growth',
     },
     {
-      id: "timeline",
-      title: "Hair Memory Timeline",
+      id: 'timeline',
+      title: 'Hair Memory Timeline',
       description: "Track every client's hair journey and share their story",
-      category: "Features",
+      category: 'Features',
     },
     {
-      id: "booking",
-      title: "Managing Appointments",
-      description: "How to create, update, and track client appointments",
-      category: "Getting Started",
+      id: 'booking',
+      title: 'Managing Appointments',
+      description: 'How to create, update, and track client appointments',
+      category: 'Getting Started',
     },
   ];
 
   const filteredArticles = articles.filter(
-    (article) =>
+    article =>
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -125,7 +135,7 @@ export const HelpButton = () => {
                 <Input
                   placeholder="Search help articles..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -137,21 +147,27 @@ export const HelpButton = () => {
                     No articles found. Try a different search term.
                   </p>
                 ) : (
-                  filteredArticles.map((article) => (
+                  filteredArticles.map(article => (
                     <Card
                       key={article.id}
                       className="brutal-border hover:border-primary/40 transition-colors cursor-pointer"
                       onClick={() => {
                         haptic.tap();
                         if (article.url) {
-                          window.open(article.url, '_blank', 'noopener,noreferrer');
+                          window.open(
+                            article.url,
+                            '_blank',
+                            'noopener,noreferrer'
+                          );
                         }
                       }}
                     >
                       <CardContent className="p-4">
                         <div className="space-y-2">
                           <div className="flex items-start justify-between">
-                            <h4 className="font-semibold text-sm">{article.title}</h4>
+                            <h4 className="font-semibold text-sm">
+                              {article.title}
+                            </h4>
                             <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                           </div>
                           <p className="text-xs text-muted-foreground">
@@ -175,7 +191,9 @@ export const HelpButton = () => {
                 <Video className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Video Tutorials</h3>
                 <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  Step-by-step video guides will be available in a future update. In the meantime, explore the app and check our FAQ section!
+                  Step-by-step video guides will be available in a future
+                  update. In the meantime, explore the app and check our FAQ
+                  section!
                 </p>
               </div>
             </TabsContent>
@@ -216,7 +234,7 @@ export const HelpButton = () => {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        window.location.href = "mailto:support@hair.app";
+                        window.location.href = 'mailto:support@hair.app';
                       }}
                       className="border-[2px] border-foreground"
                     >

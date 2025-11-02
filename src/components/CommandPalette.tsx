@@ -3,20 +3,24 @@
  * Quick navigation for Admin and Stylist users
  */
 
-import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { Command } from "lucide-react";
+import { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Command } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { stylistNavigationItems, clientNavigationItems, getAdminNavigationItems } from "@/config/navigationConfig";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import {
+  stylistNavigationItems,
+  clientNavigationItems,
+  getAdminNavigationItems,
+} from '@/config/navigationConfig';
+import { cn } from '@/lib/utils';
 
 interface CommandPaletteProps {
   open: boolean;
@@ -26,17 +30,20 @@ interface CommandPaletteProps {
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const navigate = useNavigate();
   const { isAdmin, isStylist } = useEnhancedAuth();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   // Get all navigation items based on role
   const allItems = useMemo(() => {
     let items: any[] = [];
-    
+
     if (isAdmin) {
       items = [
         ...getAdminNavigationItems(true),
         ...stylistNavigationItems,
-        ...clientNavigationItems.map(item => ({ ...item, group: `client-${item.group}` }))
+        ...clientNavigationItems.map(item => ({
+          ...item,
+          group: `client-${item.group}`,
+        })),
       ];
     } else if (isStylist) {
       items = stylistNavigationItems;
@@ -59,12 +66,13 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   // Filter items based on search
   const filteredItems = useMemo(() => {
     if (!search) return allItems;
-    
+
     const searchLower = search.toLowerCase();
-    return allItems.filter(item => 
-      item.title.toLowerCase().includes(searchLower) ||
-      item.description?.toLowerCase().includes(searchLower) ||
-      item.url.toLowerCase().includes(searchLower)
+    return allItems.filter(
+      item =>
+        item.title.toLowerCase().includes(searchLower) ||
+        item.description?.toLowerCase().includes(searchLower) ||
+        item.url.toLowerCase().includes(searchLower)
     );
   }, [search, allItems]);
 
@@ -72,27 +80,27 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const handleSelect = (url: string) => {
     navigate(url);
     onOpenChange(false);
-    setSearch("");
+    setSearch('');
   };
 
   // Reset search when closed
   useEffect(() => {
     if (!open) {
-      setSearch("");
+      setSearch('');
     }
   }, [open]);
 
   // Keyboard shortcut handler
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         onOpenChange(!open);
       }
     };
 
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
   }, [open, onOpenChange]);
 
   return (
@@ -112,7 +120,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           <Input
             placeholder="Type to search..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
             className="h-10"
             autoFocus
           />
@@ -126,7 +134,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               </div>
             ) : (
               <div className="space-y-1">
-                {filteredItems.map((item) => {
+                {filteredItems.map(item => {
                   const Icon = item.icon;
                   return (
                     <button
@@ -134,17 +142,19 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                       onClick={() => handleSelect(item.url)}
                       disabled={item.comingSoon}
                       className={cn(
-                        "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left",
-                        "hover:bg-muted/80",
-                        item.comingSoon && "opacity-50 cursor-not-allowed"
+                        'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left',
+                        'hover:bg-muted/80',
+                        item.comingSoon && 'opacity-50 cursor-not-allowed'
                       )}
                     >
-                      <div className={cn("flex-shrink-0", item.color)}>
+                      <div className={cn('flex-shrink-0', item.color)}>
                         <Icon className="h-4 w-4" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-xs sm:text-sm">{item.title}</span>
+                          <span className="font-medium text-xs sm:text-sm">
+                            {item.title}
+                          </span>
                           {item.comingSoon && (
                             <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
                               SOON

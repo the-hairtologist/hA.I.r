@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Sparkles, Loader2, LucideIcon } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { useState, useEffect } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Sparkles, Loader2, LucideIcon } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 interface AIEnhancedEmptyStateProps {
   icon: LucideIcon;
@@ -40,16 +40,19 @@ export const AIEnhancedEmptyState = ({
   const fetchAISuggestions = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('contextual-ai-suggestions', {
-        body: { 
-          context: `empty_${context}`, 
-          userRole,
-          recentData: {} 
+      const { data, error } = await supabase.functions.invoke(
+        'contextual-ai-suggestions',
+        {
+          body: {
+            context: `empty_${context}`,
+            userRole,
+            recentData: {},
+          },
         }
-      });
+      );
 
       if (error) throw error;
-      
+
       if (data?.suggestions) {
         setSuggestions(
           data.suggestions.slice(0, 3).map((s: any) => ({
@@ -58,8 +61,14 @@ export const AIEnhancedEmptyState = ({
         );
       }
     } catch (error) {
-      logger.error('Failed to fetch AI suggestions', error, { context: 'AIEnhancedEmptyState', data: { context } });
-      userJourney.trackError(error as Error, { action: 'fetch-ai-suggestions', context });
+      logger.error('Failed to fetch AI suggestions', error, {
+        context: 'AIEnhancedEmptyState',
+        data: { context },
+      });
+      userJourney.trackError(error as Error, {
+        action: 'fetch-ai-suggestions',
+        context,
+      });
       // Fallback suggestions based on context
       setSuggestions(getDefaultSuggestions(context));
     } finally {
@@ -70,19 +79,19 @@ export const AIEnhancedEmptyState = ({
   const getDefaultSuggestions = (ctx: string): Suggestion[] => {
     const defaults: Record<string, Suggestion[]> = {
       clients: [
-        { text: "Start with your most frequent client" },
-        { text: "Import from your contact list" },
-        { text: "Invite via email or SMS" },
+        { text: 'Start with your most frequent client' },
+        { text: 'Import from your contact list' },
+        { text: 'Invite via email or SMS' },
       ],
       appointments: [
-        { text: "Block out your available hours first" },
-        { text: "Set up your booking link to share" },
-        { text: "Add your first client to get started" },
+        { text: 'Block out your available hours first' },
+        { text: 'Set up your booking link to share' },
+        { text: 'Add your first client to get started' },
       ],
       formulas: [
-        { text: "Document your signature color" },
-        { text: "Save your go-to toners" },
-        { text: "Try the AI formula generator" },
+        { text: 'Document your signature color' },
+        { text: 'Save your go-to toners' },
+        { text: 'Try the AI formula generator' },
       ],
     };
     return defaults[ctx] || [];
@@ -101,8 +110,12 @@ export const AIEnhancedEmptyState = ({
 
           {/* Text */}
           <div className="space-y-2">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-pixel font-bold">{title}</h3>
-            <p className="text-xs sm:text-sm lg:text-base font-sans text-muted-foreground">{description}</p>
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-pixel font-bold">
+              {title}
+            </h3>
+            <p className="text-xs sm:text-sm lg:text-base font-sans text-muted-foreground">
+              {description}
+            </p>
           </div>
 
           {/* AI Suggestions */}
@@ -110,21 +123,25 @@ export const AIEnhancedEmptyState = ({
             <div className="flex items-center justify-center py-4">
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
             </div>
-          ) : suggestions.length > 0 && (
-            <div className="space-y-2 pt-2">
-              <div className="flex items-center gap-2 justify-center text-[11px] sm:text-xs text-muted-foreground">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
-                <span className="font-medium">AI Tips</span>
-              </div>
-              {suggestions.map((suggestion, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-lg border-2 border-border bg-background/50 hover:border-primary/30 transition-all text-left"
-                >
-                  <p className="text-[11px] sm:text-xs lg:text-sm text-foreground">{suggestion.text}</p>
+          ) : (
+            suggestions.length > 0 && (
+              <div className="space-y-2 pt-2">
+                <div className="flex items-center gap-2 justify-center text-[11px] sm:text-xs text-muted-foreground">
+                  <Sparkles className="h-3.5 w-3.5 text-primary" />
+                  <span className="font-medium">AI Tips</span>
                 </div>
-              ))}
-            </div>
+                {suggestions.map((suggestion, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-lg border-2 border-border bg-background/50 hover:border-primary/30 transition-all text-left"
+                  >
+                    <p className="text-[11px] sm:text-xs lg:text-sm text-foreground">
+                      {suggestion.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )
           )}
 
           {/* Primary Action */}

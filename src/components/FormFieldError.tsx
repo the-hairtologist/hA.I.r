@@ -1,5 +1,5 @@
-import { AlertCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface FormFieldErrorProps {
   message: string;
@@ -7,14 +7,18 @@ interface FormFieldErrorProps {
   id?: string;
 }
 
-export const FormFieldError = ({ message, className, id }: FormFieldErrorProps) => {
+export const FormFieldError = ({
+  message,
+  className,
+  id,
+}: FormFieldErrorProps) => {
   return (
-    <div 
+    <div
       id={id}
       role="alert"
       aria-live="polite"
       className={cn(
-        "flex items-center gap-2 text-sm text-destructive animate-fade-in mt-1",
+        'flex items-center gap-2 text-sm text-destructive animate-fade-in mt-1',
         className
       )}
     >

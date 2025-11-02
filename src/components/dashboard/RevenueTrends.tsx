@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
-import { startOfMonth, endOfMonth, format, subMonths } from "date-fns";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
+import { startOfMonth, endOfMonth, format, subMonths } from 'date-fns';
+import { toast } from 'sonner';
 
 interface RevenueTrendsProps {
   stylistId: string;
@@ -16,7 +16,7 @@ interface MonthlyRevenue {
 
 export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
   const [revenue, setRevenue] = useState<MonthlyRevenue[]>([]);
-  const [trend, setTrend] = useState<"up" | "down" | "stable">("stable");
+  const [trend, setTrend] = useState<'up' | 'down' | 'stable'>('stable');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,23 +31,29 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
         months.push({
           start: startOfMonth(date),
           end: endOfMonth(date),
-          label: format(date, "MMM"),
+          label: format(date, 'MMM'),
         });
       }
 
       const revenueData: MonthlyRevenue[] = await Promise.all(
-        months.map(async (month) => {
+        months.map(async month => {
           const { data } = await supabase
-            .from("appointments")
-            .select(`
+            .from('appointments')
+            .select(
+              `
               service:services(price)
-            `)
-            .eq("stylist_id", stylistId)
-            .eq("status", "completed")
-            .gte("appointment_date", month.start.toISOString())
-            .lte("appointment_date", month.end.toISOString());
+            `
+            )
+            .eq('stylist_id', stylistId)
+            .eq('status', 'completed')
+            .gte('appointment_date', month.start.toISOString())
+            .lte('appointment_date', month.end.toISOString());
 
-          const total = data?.reduce((sum, apt: any) => sum + (apt.service?.price || 0), 0) || 0;
+          const total =
+            data?.reduce(
+              (sum, apt: any) => sum + (apt.service?.price || 0),
+              0
+            ) || 0;
           return { month: month.label, amount: total };
         })
       );
@@ -58,11 +64,13 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
       if (revenueData.length >= 2) {
         const current = revenueData[revenueData.length - 1].amount;
         const previous = revenueData[revenueData.length - 2].amount;
-        setTrend(current > previous ? "up" : current < previous ? "down" : "stable");
+        setTrend(
+          current > previous ? 'up' : current < previous ? 'down' : 'stable'
+        );
       }
     } catch (error) {
-      console.error("Error loading revenue:", error);
-      toast.error("Failed to load revenue data");
+      console.error('Error loading revenue:', error);
+      toast.error('Failed to load revenue data');
     } finally {
       setLoading(false);
     }
@@ -81,13 +89,13 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
             </div>
             <span>Revenue Trends</span>
           </div>
-          {trend === "up" && (
+          {trend === 'up' && (
             <div className="flex items-center gap-1 text-success text-xs sm:text-sm font-bold">
               <TrendingUp className="h-4 w-4" />
               <span>Up</span>
             </div>
           )}
-          {trend === "down" && (
+          {trend === 'down' && (
             <div className="flex items-center gap-1 text-destructive text-xs sm:text-sm font-bold">
               <TrendingDown className="h-4 w-4" />
               <span>Down</span>
@@ -102,7 +110,7 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
           <div className="space-y-4">
             <div className="text-center">
               <div className="text-2xl sm:text-3xl font-display font-bold text-success">
-                ${currentMonth?.amount.toFixed(2) || "0.00"}
+                ${currentMonth?.amount.toFixed(2) || '0.00'}
               </div>
               <p className="text-xs sm:text-sm font-sans text-muted-foreground font-medium mt-1">
                 This Month
@@ -110,13 +118,18 @@ export function RevenueTrends({ stylistId }: RevenueTrendsProps) {
             </div>
 
             <div className="flex items-end justify-between gap-2 h-24">
-              {revenue.map((month) => (
-                <div key={month.month} className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full bg-muted/30 rounded-t-lg relative overflow-hidden" 
-                    style={{ 
+              {revenue.map(month => (
+                <div
+                  key={month.month}
+                  className="flex-1 flex flex-col items-center gap-2"
+                >
+                  <div
+                    className="w-full bg-muted/30 rounded-t-lg relative overflow-hidden"
+                    style={{
                       height: `${(month.amount / maxRevenue) * 100}%`,
-                      minHeight: month.amount > 0 ? '20px' : '4px'
-                    }}>
+                      minHeight: month.amount > 0 ? '20px' : '4px',
+                    }}
+                  >
                     <div className="absolute inset-0 bg-gradient-to-t from-success to-success/60" />
                   </div>
                   <span className="text-[11px] sm:text-xs font-bold text-muted-foreground">

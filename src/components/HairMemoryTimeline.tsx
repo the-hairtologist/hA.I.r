@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Sparkles, Share2, Download, Camera } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { Calendar, Sparkles, Share2, Download, Camera } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 interface TimelineEvent {
   id: string;
   date: string;
-  type: "appointment" | "milestone";
+  type: 'appointment' | 'milestone';
   title: string;
   description: string;
   serviceType?: string;
@@ -36,46 +36,46 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
     try {
       // Get client info
       const { data: client } = await supabase
-        .from("client_profiles")
-        .select("*")
-        .eq("id", clientId)
+        .from('client_profiles')
+        .select('*')
+        .eq('id', clientId)
         .maybeSingle();
 
       setClientInfo(client);
 
       // Get appointments
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("appointment_date", { ascending: false });
+        .from('appointments')
+        .select('*')
+        .eq('client_id', clientId)
+        .order('appointment_date', { ascending: false });
 
       // Get milestones
       const { data: milestones } = await supabase
-        .from("client_milestones")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("created_at", { ascending: false });
+        .from('client_milestones')
+        .select('*')
+        .eq('client_id', clientId)
+        .order('created_at', { ascending: false });
 
       // Combine all events
       const timeline: TimelineEvent[] = [];
 
-      appointments?.forEach((apt) => {
+      appointments?.forEach(apt => {
         timeline.push({
           id: apt.id,
           date: apt.appointment_date,
-          type: "appointment",
-          title: apt.service_type || "Appointment",
-          description: apt.notes || "",
+          type: 'appointment',
+          title: apt.service_type || 'Appointment',
+          description: apt.notes || '',
           serviceType: apt.service_type,
         });
       });
 
-      milestones?.forEach((milestone) => {
+      milestones?.forEach(milestone => {
         timeline.push({
           id: milestone.id,
           date: milestone.created_at,
-          type: "milestone",
+          type: 'milestone',
           title: `${milestone.milestone_value} ${milestone.milestone_type} Milestone! 🎉`,
           description: `Celebrated ${milestone.milestone_value} ${milestone.milestone_type}`,
           milestone: `$${milestone.discount_amount} off`,
@@ -83,11 +83,13 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
       });
 
       // Sort by date
-      timeline.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      timeline.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
 
       setEvents(timeline);
     } catch (error) {
-      console.error("Error loading timeline:", error);
+      console.error('Error loading timeline:', error);
     } finally {
       setLoading(false);
     }
@@ -99,7 +101,7 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "My Hair Journey",
+          title: 'My Hair Journey',
           text: shareText,
         });
       } catch (error) {
@@ -108,16 +110,17 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
     } else {
       navigator.clipboard.writeText(shareText);
       toast({
-        title: "Copied!",
-        description: "Timeline text copied to clipboard",
+        title: 'Copied!',
+        description: 'Timeline text copied to clipboard',
       });
     }
   };
 
   const downloadTimeline = () => {
     toast({
-      title: "PDF Export",
-      description: "Timeline export functionality will be available in a future update",
+      title: 'PDF Export',
+      description:
+        'Timeline export functionality will be available in a future update',
       duration: 3000,
     });
   };
@@ -179,27 +182,39 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
               {/* Timeline dot */}
               <div
                 className={cn(
-                  "relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-4 border-background",
-                  event.type === "appointment" && "bg-primary",
-                  event.type === "milestone" && "bg-gradient-to-br from-primary to-accent animate-pulse"
+                  'relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full border-4 border-background',
+                  event.type === 'appointment' && 'bg-primary',
+                  event.type === 'milestone' &&
+                    'bg-gradient-to-br from-primary to-accent animate-pulse'
                 )}
               >
-                {event.type === "appointment" && <Calendar className="h-5 w-5 text-on-surface-primary" />}
-                {event.type === "milestone" && <span className="text-xl">🎉</span>}
+                {event.type === 'appointment' && (
+                  <Calendar className="h-5 w-5 text-on-surface-primary" />
+                )}
+                {event.type === 'milestone' && (
+                  <span className="text-xl">🎉</span>
+                )}
               </div>
 
               {/* Content */}
-              <Card className={cn("flex-1", event.type === "milestone" && "border-primary/50")}>
+              <Card
+                className={cn(
+                  'flex-1',
+                  event.type === 'milestone' && 'border-primary/50'
+                )}
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
                       <CardTitle className="text-lg">{event.title}</CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
-                        {format(new Date(event.date), "MMMM d, yyyy")}
+                        {format(new Date(event.date), 'MMMM d, yyyy')}
                       </p>
                     </div>
                     <Badge
-                      variant={event.type === "appointment" ? "default" : "outline"}
+                      variant={
+                        event.type === 'appointment' ? 'default' : 'outline'
+                      }
                     >
                       {event.type}
                     </Badge>
@@ -207,14 +222,20 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {event.description && (
-                    <p className="text-sm text-muted-foreground">{event.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {event.description}
+                    </p>
                   )}
 
                   {/* Milestone Reward */}
                   {event.milestone && (
                     <div className="bg-gradient-to-r from-primary/10 to-accent/10 p-4 rounded-lg text-center">
-                      <div className="text-lg font-bold text-primary">{event.milestone}</div>
-                      <p className="text-sm text-muted-foreground mt-1">Reward unlocked!</p>
+                      <div className="text-lg font-bold text-primary">
+                        {event.milestone}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Reward unlocked!
+                      </p>
                     </div>
                   )}
                 </CardContent>
@@ -240,10 +261,10 @@ export const HairMemoryTimeline = ({ clientId }: HairMemoryTimelineProps) => {
       {/* Powered by hA.I.r */}
       <div className="text-center text-sm text-muted-foreground">
         <p>
-          Powered by{" "}
+          Powered by{' '}
           <span className="font-semibold text-primary cursor-pointer hover:underline">
             hA.I.r
-          </span>{" "}
+          </span>{' '}
           - AI-Powered Salon Assistant
         </p>
       </div>

@@ -3,13 +3,14 @@
  * Validates that security policies are correctly configured
  */
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { requireRole } from '../_shared/auth-middleware.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface TestResult {
@@ -19,7 +20,7 @@ interface TestResult {
   error?: string;
 }
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -43,19 +44,19 @@ serve(async (req) => {
         .from('appointments')
         .select('*')
         .eq('client_id', testUser1);
-      
+
       results.push({
         table: 'appointments',
         scenario: 'user_can_only_see_own',
         passed: !error,
-        error: error?.message
+        error: error?.message,
       });
     } catch (error: any) {
       results.push({
         table: 'appointments',
         scenario: 'user_can_only_see_own',
         passed: false,
-        error: error.message
+        error: error.message,
       });
     }
 
@@ -66,19 +67,22 @@ serve(async (req) => {
         .select('*')
         .neq('user_id', authResult.user.id)
         .limit(1);
-      
+
       results.push({
         table: 'client_profiles',
         scenario: 'cannot_access_other_profiles',
         passed: !data || data.length === 0,
-        error: data && data.length > 0 ? 'User can access other profiles' : undefined
+        error:
+          data && data.length > 0
+            ? 'User can access other profiles'
+            : undefined,
       });
     } catch (error: any) {
       results.push({
         table: 'client_profiles',
         scenario: 'cannot_access_other_profiles',
         passed: false,
-        error: error.message
+        error: error.message,
       });
     }
 
@@ -93,18 +97,19 @@ serve(async (req) => {
         .from('user_roles')
         .select('*')
         .limit(1);
-      
+
       results.push({
         table: 'user_roles',
         scenario: 'anon_cannot_read',
         passed: !!error || !data || data.length === 0,
-        error: data && data.length > 0 ? 'Anonymous can read user_roles' : undefined
+        error:
+          data && data.length > 0 ? 'Anonymous can read user_roles' : undefined,
       });
     } catch (error: any) {
       results.push({
         table: 'user_roles',
         scenario: 'anon_cannot_read',
-        passed: true
+        passed: true,
       });
     }
 
@@ -115,7 +120,7 @@ serve(async (req) => {
       'stylist_profiles',
       'user_roles',
       'formulas',
-      'reviews'
+      'reviews',
     ];
 
     for (const table of criticalTables) {
@@ -126,7 +131,7 @@ serve(async (req) => {
           .eq('schemaname', 'public')
           .eq('tablename', table)
           .single();
-        
+
         // Check if RLS is enabled (this is a simplified check)
         results.push({
           table,
@@ -138,7 +143,7 @@ serve(async (req) => {
           table,
           scenario: 'rls_enabled',
           passed: false,
-          error: error.message
+          error: error.message,
         });
       }
     }
@@ -152,30 +157,29 @@ serve(async (req) => {
           total: results.length,
           passed,
           failed,
-          score: Math.round((passed / results.length) * 100)
+          score: Math.round((passed / results.length) * 100),
         },
-        results
+        results,
       }),
-      { 
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
-        } 
+      {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+        },
       }
     );
-
   } catch (error) {
     console.error('RLS test error:', error);
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Unknown error'
+      JSON.stringify({
+        error: error instanceof Error ? error.message : 'Unknown error',
       }),
-      { 
-        status: 500, 
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
-        } 
+      {
+        status: 500,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+        },
       }
     );
   }

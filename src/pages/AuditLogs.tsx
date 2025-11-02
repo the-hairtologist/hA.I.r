@@ -1,9 +1,9 @@
-/**
+﻿/**
  * Audit Logs Page - Week 3 Admin Feature
  * Comprehensive audit log viewer for admins
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,8 +27,8 @@ interface AuditLog {
   action: string;
   table_name: string;
   record_id: string;
-  old_data: any;
-  new_data: any;
+  old_data: Record<string, unknown> | null;
+  new_data: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -41,26 +41,12 @@ export default function AuditLogs() {
   const [tableFilter, setTableFilter] = useState("all");
   const [dateRange, setDateRange] = useState("7");
 
-  // Redirect non-admins
-  if (!authLoading && (!user || !isAdmin)) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  // Show loading while checking permissions
-  if (authLoading) {
-    return <LoadingSpinner message="Verifying access..." />;
-  }
-
-  useEffect(() => {
-    loadLogs();
-  }, [dateRange]);
-
-  const loadLogs = async () => {
+  const loadLogs = useCallback(async () => {
     try {
       setLoadingLogs(true);
 
       const cutoffDate = new Date();
-      cutoffDate.setDate(cutoffDate.getDate() - parseInt(dateRange));
+      cutoffDate.setDate(cutoffDate.getDate() - parseInt(dateRange, 10));
 
       const result = await trackSelect(
         async () => {
@@ -71,21 +57,41 @@ export default function AuditLogs() {
             .order("created_at", { ascending: false })
             .limit(500);
         },
-        'audit_logs',
-        'AuditLogs'
+        "audit_logs",
+        "AuditLogs"
       );
 
       const { data, error } = result;
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      logger.error("Error loading audit logs", error, { context: 'AuditLogs' });
+      logger.error("Error loading audit logs", error, { context: "AuditLogs" });
       toast.error("Failed to load audit logs");
     } finally {
       setLoadingLogs(false);
     }
-  };
+  }, [dateRange]);
 
+  useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
+    if (!user || !isAdmin) {
+      setLoadingLogs(false);
+      return;
+    }
+
+    void loadLogs();
+  }, [authLoading, isAdmin, loadLogs, user]);
+
+  if (authLoading) {
+    return <LoadingSpinner message="Verifying access..." />;
+  }
+
+  if (!user || !isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
   const filteredLogs = logs.filter(log => {
     const matchesSearch =
       log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -293,3 +299,6 @@ export default function AuditLogs() {
     </DashboardLayout>
   );
 }
+
+
+

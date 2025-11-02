@@ -16,8 +16,10 @@ interface MetaTagsProps {
 
 const DEFAULT_META = {
   title: 'hA.I.r App - Professional Hair Salon Management',
-  description: 'Modern salon management platform with AI-powered features for stylists and clients. Manage appointments, formulas, client profiles, and more.',
-  keywords: 'salon management, hair stylist, appointment booking, formula tracking, client management, AI hair recommendations',
+  description:
+    'Modern salon management platform with AI-powered features for stylists and clients. Manage appointments, formulas, client profiles, and more.',
+  keywords:
+    'salon management, hair stylist, appointment booking, formula tracking, client management, AI hair recommendations',
   image: '/og-image.png',
   type: 'website' as const,
 };
@@ -27,7 +29,7 @@ export function MetaTags({
   description,
   keywords,
   image,
-  type = 'website'
+  type = 'website',
 }: MetaTagsProps) {
   const location = useLocation();
   const baseUrl = window.location.origin;
@@ -47,9 +49,10 @@ export function MetaTags({
 
     // Update or create meta tags
     const updateMeta = (property: string, content: string) => {
-      let element = document.querySelector(`meta[property="${property}"]`) ||
-                    document.querySelector(`meta[name="${property}"]`);
-      
+      let element =
+        document.querySelector(`meta[property="${property}"]`) ||
+        document.querySelector(`meta[name="${property}"]`);
+
       if (!element) {
         element = document.createElement('meta');
         if (property.startsWith('og:') || property.startsWith('twitter:')) {
@@ -80,7 +83,9 @@ export function MetaTags({
     updateMeta('twitter:image', meta.image);
 
     // Canonical URL
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    let canonical = document.querySelector(
+      'link[rel="canonical"]'
+    ) as HTMLLinkElement;
     if (!canonical) {
       canonical = document.createElement('link');
       canonical.rel = 'canonical';
@@ -93,7 +98,13 @@ export function MetaTags({
 }
 
 // Structured Data for SEO
-export function StructuredData({ type, data }: { type: 'Organization' | 'WebApplication'; data: any }) {
+export function StructuredData({
+  type,
+  data,
+}: {
+  type: 'Organization' | 'WebApplication';
+  data: any;
+}) {
   useEffect(() => {
     const script = document.createElement('script');
     script.type = 'application/ld+json';
@@ -102,12 +113,14 @@ export function StructuredData({ type, data }: { type: 'Organization' | 'WebAppl
       '@type': type,
       ...data,
     });
-    
-    const existingScript = document.querySelector('script[type="application/ld+json"]');
+
+    const existingScript = document.querySelector(
+      'script[type="application/ld+json"]'
+    );
     if (existingScript) {
       existingScript.remove();
     }
-    
+
     document.head.appendChild(script);
 
     return () => {

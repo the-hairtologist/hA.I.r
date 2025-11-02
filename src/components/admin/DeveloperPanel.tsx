@@ -3,13 +3,13 @@
  * Hidden panel for power users showing performance metrics and debug info
  */
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Code, Activity, Database, Zap } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Code, Activity, Database, Zap } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PerformanceMetrics {
   pageLoadTime: number;
@@ -38,7 +38,8 @@ export const DeveloperPanel = () => {
     const pageLoadTime = performance.now();
 
     // Get API call count from performance entries
-    const apiCalls = performance.getEntriesByType('resource')
+    const apiCalls = performance
+      .getEntriesByType('resource')
       .filter(entry => entry.name.includes('supabase')).length;
 
     setMetrics({
@@ -55,7 +56,7 @@ export const DeveloperPanel = () => {
         .select('*')
         .order('created_at', { ascending: false })
         .limit(5);
-      
+
       setRecentQueries(data || []);
     } catch (error) {
       console.error('Error loading audit logs:', error);
@@ -68,7 +69,9 @@ export const DeveloperPanel = () => {
         <CardTitle className="flex items-center gap-2">
           <Code className="h-5 w-5 text-primary" />
           Developer Panel
-          <Badge variant="outline" className="ml-auto">BETA</Badge>
+          <Badge variant="outline" className="ml-auto">
+            BETA
+          </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -95,7 +98,9 @@ export const DeveloperPanel = () => {
                   <div className="text-2xl font-bold text-primary">
                     {metrics.pageLoadTime}ms
                   </div>
-                  <div className="text-xs text-muted-foreground">Page Load Time</div>
+                  <div className="text-xs text-muted-foreground">
+                    Page Load Time
+                  </div>
                 </CardContent>
               </Card>
 
@@ -113,7 +118,9 @@ export const DeveloperPanel = () => {
                   <div className="text-2xl font-bold text-primary">
                     {metrics.cacheHitRate.toFixed(1)}%
                   </div>
-                  <div className="text-xs text-muted-foreground">Cache Hit Rate</div>
+                  <div className="text-xs text-muted-foreground">
+                    Cache Hit Rate
+                  </div>
                 </CardContent>
               </Card>
 
@@ -122,7 +129,9 @@ export const DeveloperPanel = () => {
                   <div className="text-xs font-mono text-muted-foreground">
                     {metrics.lastUpdated.toLocaleTimeString()}
                   </div>
-                  <div className="text-xs text-muted-foreground">Last Updated</div>
+                  <div className="text-xs text-muted-foreground">
+                    Last Updated
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -158,7 +167,7 @@ export const DeveloperPanel = () => {
               <div className="flex items-center justify-between p-3 bg-muted rounded-md">
                 <span className="text-sm">Memory Usage</span>
                 <Badge variant="secondary">
-                  {(performance as any).memory?.usedJSHeapSize 
+                  {(performance as any).memory?.usedJSHeapSize
                     ? `${((performance as any).memory.usedJSHeapSize / 1048576).toFixed(1)} MB`
                     : 'N/A'}
                 </Badge>
@@ -167,7 +176,7 @@ export const DeveloperPanel = () => {
               <div className="flex items-center justify-between p-3 bg-muted rounded-md">
                 <span className="text-sm">Navigation Timing</span>
                 <Badge variant="secondary">
-                  {performance.timing 
+                  {performance.timing
                     ? `${performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart}ms`
                     : 'N/A'}
                 </Badge>

@@ -82,10 +82,7 @@ export function VirtualList<T>({
       <div style={{ height: totalHeight, position: 'relative' }}>
         <div style={{ transform: `translateY(${offsetY}px)` }}>
           {visibleItems.map((item, index) => (
-            <div
-              key={startIndex + index}
-              style={{ height: itemHeight }}
-            >
+            <div key={startIndex + index} style={{ height: itemHeight }}>
               {renderItem(item, startIndex + index)}
             </div>
           ))}

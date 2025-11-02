@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { Loader2, Users, TrendingUp, Award } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { Loader2, Users, TrendingUp, Award } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface ClientMetrics {
   totalClients: number;
@@ -38,35 +44,40 @@ export const RealClientMetrics = () => {
 
       // Get stylist profile
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
 
       // Get all clients with appointments
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select(`
+        .from('appointments')
+        .select(
+          `
           client_id,
           appointment_date,
           stylist_services(price),
           client_profiles(full_name)
-        `)
-        .eq("stylist_id", stylistProfile.id)
-        .eq("status", "completed");
+        `
+        )
+        .eq('stylist_id', stylistProfile.id)
+        .eq('status', 'completed');
 
       if (!appointments) return;
 
       // Calculate metrics
-      const clientMap = new Map<string, { name: string; visits: number; totalSpent: number; firstVisit: Date }>();
-      
-      appointments.forEach((apt) => {
+      const clientMap = new Map<
+        string,
+        { name: string; visits: number; totalSpent: number; firstVisit: Date }
+      >();
+
+      appointments.forEach(apt => {
         const clientId = apt.client_id;
         const price = Number(apt.stylist_services?.price || 0);
         const date = new Date(apt.appointment_date);
-        const name = apt.client_profiles?.full_name || "Unknown";
+        const name = apt.client_profiles?.full_name || 'Unknown';
 
         if (!clientMap.has(clientId)) {
           clientMap.set(clientId, {
@@ -87,12 +98,19 @@ export const RealClientMetrics = () => {
 
       // Calculate stats
       const totalClients = clientMap.size;
-      const returningClients = Array.from(clientMap.values()).filter(c => c.visits > 1).length;
+      const returningClients = Array.from(clientMap.values()).filter(
+        c => c.visits > 1
+      ).length;
       const newClients = totalClients - returningClients;
-      const retentionRate = totalClients > 0 ? (returningClients / totalClients) * 100 : 0;
+      const retentionRate =
+        totalClients > 0 ? (returningClients / totalClients) * 100 : 0;
 
-      const totalRevenue = Array.from(clientMap.values()).reduce((sum, c) => sum + c.totalSpent, 0);
-      const averageLifetimeValue = totalClients > 0 ? totalRevenue / totalClients : 0;
+      const totalRevenue = Array.from(clientMap.values()).reduce(
+        (sum, c) => sum + c.totalSpent,
+        0
+      );
+      const averageLifetimeValue =
+        totalClients > 0 ? totalRevenue / totalClients : 0;
 
       // Top 5 clients by spending
       const topClients = Array.from(clientMap.values())
@@ -113,7 +131,7 @@ export const RealClientMetrics = () => {
         topClients,
       });
     } catch (error) {
-      console.error("Error loading client metrics:", error);
+      console.error('Error loading client metrics:', error);
     } finally {
       setLoading(false);
     }
@@ -156,7 +174,9 @@ export const RealClientMetrics = () => {
 
           <div className="p-4 border-2 border-foreground rounded-lg">
             <p className="text-sm text-muted-foreground">Retention Rate</p>
-            <p className="text-3xl font-bold">{metrics.retentionRate.toFixed(1)}%</p>
+            <p className="text-3xl font-bold">
+              {metrics.retentionRate.toFixed(1)}%
+            </p>
             <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
               <TrendingUp className="h-3 w-3" />
               <span>Client loyalty</span>
@@ -165,8 +185,12 @@ export const RealClientMetrics = () => {
 
           <div className="p-4 border-2 border-foreground rounded-lg col-span-2">
             <p className="text-sm text-muted-foreground">Avg Lifetime Value</p>
-            <p className="text-3xl font-bold">${metrics.averageLifetimeValue.toFixed(2)}</p>
-            <p className="text-xs text-muted-foreground mt-1">Per client revenue</p>
+            <p className="text-3xl font-bold">
+              ${metrics.averageLifetimeValue.toFixed(2)}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Per client revenue
+            </p>
           </div>
         </div>
 
@@ -188,11 +212,15 @@ export const RealClientMetrics = () => {
                   </div>
                   <div>
                     <p className="font-medium">{client.name}</p>
-                    <p className="text-xs text-muted-foreground">{client.visits} visits</p>
+                    <p className="text-xs text-muted-foreground">
+                      {client.visits} visits
+                    </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-primary">${client.totalSpent.toFixed(2)}</p>
+                  <p className="font-bold text-primary">
+                    ${client.totalSpent.toFixed(2)}
+                  </p>
                   <p className="text-xs text-muted-foreground">total spent</p>
                 </div>
               </div>

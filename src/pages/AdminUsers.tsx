@@ -48,6 +48,27 @@ export default function AdminUsers() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
+  const loadUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*, user_roles(role)')
+        .order('created_at', { ascending: false});
+
+      if (error) throw error;
+      setUsers(data || []);
+    } catch (error) {
+      console.error('Error loading users:', error);
+      toast.error('Failed to load users');
+    }
+  };
+
+  useEffect(() => {
+    if (!loading && user && isAdmin) {
+      loadUsers();
+    }
+  }, [loading, user, isAdmin]);
+
   // Redirect non-admins
   if (!loading && (!user || !isAdmin)) {
     return <Navigate to="/dashboard" replace />;
@@ -57,28 +78,6 @@ export default function AdminUsers() {
   if (loading) {
     return <LoadingSpinner message="Verifying access..." />;
   }
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
-  const loadUsers = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select(`
-          *,
-          user_roles(role)
-        `)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setUsers(data || []);
-    } catch (error) {
-      console.error('Error loading users:', error);
-      toast.error('Failed to load users');
-    }
-  };
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -109,9 +108,7 @@ export default function AdminUsers() {
   const handleBulkDelete = async () => {
     if (selectedUsers.size === 0) return;
 
-    const confirmed = window.confirm(
-      `Are you sure you want to delete ${selectedUsers.size} user(s)? This action cannot be undone.`
-    );
+    const confirmed = window.confirm("Are you sure you want to delete " + selectedUsers.size + " user(s)? This action cannot be undone.");
 
     if (!confirmed) return;
 
@@ -141,7 +138,7 @@ export default function AdminUsers() {
 
       if (error) throw error;
 
-      toast.success(`Role ${role} assigned successfully`);
+      toast.success('Role assigned successfully');
       loadUsers();
     } catch (error: any) {
       console.error("Error assigning role:", error);
@@ -245,8 +242,7 @@ export default function AdminUsers() {
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={`p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors ${selectedUsers.has(user.id) ? 'bg-primary/5 border-primary' : ''
-                    }`}
+                  className="p-3 sm:p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     <input
@@ -357,4 +353,3 @@ export default function AdminUsers() {
     </DashboardLayout>
   );
 }
-

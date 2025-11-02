@@ -1,27 +1,48 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Copy, ExternalLink, Share2, QrCode, Eye, Facebook, Twitter, Mail, Instagram } from "lucide-react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
-import { useState, useEffect } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import QRCode from "qrcode";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { sanitizeInput, rateLimiter, RATE_LIMITS } from "@/lib";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Copy,
+  ExternalLink,
+  Share2,
+  QrCode,
+  Eye,
+  Facebook,
+  Twitter,
+  Mail,
+  Instagram,
+} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+import { useState, useEffect } from 'react';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import QRCode from 'qrcode';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { sanitizeInput, rateLimiter, RATE_LIMITS } from '@/lib';
 
 const BookingPage = () => {
   const { session } = useAuth();
   const queryClient = useQueryClient();
   const [isPublic, setIsPublic] = useState(true);
-  const [welcomeMessage, setWelcomeMessage] = useState("");
-  const [bookingInstructions, setBookingInstructions] = useState("");
-  const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [welcomeMessage, setWelcomeMessage] = useState('');
+  const [bookingInstructions, setBookingInstructions] = useState('');
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [showQrDialog, setShowQrDialog] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -42,18 +63,18 @@ const BookingPage = () => {
   useEffect(() => {
     if (stylistProfile) {
       setIsPublic(stylistProfile.accepts_new_clients ?? true);
-      setWelcomeMessage(stylistProfile.bio || "");
-      setBookingInstructions(stylistProfile.parking_instructions || "");
+      setWelcomeMessage(stylistProfile.bio || '');
+      setBookingInstructions(stylistProfile.parking_instructions || '');
     }
   }, [stylistProfile]);
 
-  const bookingUrl = stylistProfile?.id 
+  const bookingUrl = stylistProfile?.id
     ? `${window.location.origin}/stylist/${stylistProfile.id}/book`
-    : "";
+    : '';
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(bookingUrl);
-    toast.success("Booking link copied!");
+    toast.success('Booking link copied!');
   };
 
   const shareLink = async () => {
@@ -78,13 +99,15 @@ const BookingPage = () => {
   };
 
   const shareOnTwitter = () => {
-    const text = encodeURIComponent(`Book your next hair appointment with me! 💇‍♀️`);
+    const text = encodeURIComponent(
+      `Book your next hair appointment with me! 💇‍♀️`
+    );
     const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(bookingUrl)}&text=${text}`;
     window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
   const shareViaEmail = () => {
-    const subject = encodeURIComponent("Book Your Next Hair Appointment");
+    const subject = encodeURIComponent('Book Your Next Hair Appointment');
     const body = encodeURIComponent(
       `Hi,\n\nI'd love to help you with your hair! You can book an appointment with me using this link:\n\n${bookingUrl}\n\nLooking forward to seeing you!`
     );
@@ -93,7 +116,7 @@ const BookingPage = () => {
 
   const copyInstagramLink = () => {
     copyToClipboard();
-    toast.success("Link copied! Paste it in your Instagram bio or stories", {
+    toast.success('Link copied! Paste it in your Instagram bio or stories', {
       duration: 4000,
     });
   };
@@ -111,8 +134,8 @@ const BookingPage = () => {
       setQrCodeUrl(qrDataUrl);
       setShowQrDialog(true);
     } catch (error) {
-      console.error("Error generating QR code:", error);
-      toast.error("Failed to generate QR code");
+      console.error('Error generating QR code:', error);
+      toast.error('Failed to generate QR code');
     }
   };
 
@@ -148,11 +171,11 @@ const BookingPage = () => {
 
       if (error) throw error;
 
-      toast.success("Settings saved successfully!");
+      toast.success('Settings saved successfully!');
       queryClient.invalidateQueries({ queryKey: ['stylist-profile'] });
     } catch (error) {
-      console.error("Error saving settings:", error);
-      toast.error("Failed to save settings");
+      console.error('Error saving settings:', error);
+      toast.error('Failed to save settings');
     } finally {
       setIsSaving(false);
     }
@@ -163,14 +186,18 @@ const BookingPage = () => {
       <div className="space-y-6 max-w-4xl">
         <div>
           <h1 className="text-3xl font-pixel">My Booking Page</h1>
-          <p className="font-sans text-muted-foreground">Share your booking link with clients</p>
+          <p className="font-sans text-muted-foreground">
+            Share your booking link with clients
+          </p>
         </div>
 
         {/* Booking Link Card */}
         <Card>
           <CardHeader>
             <CardTitle>Your Booking Link</CardTitle>
-            <CardDescription>Share this link with clients to book appointments</CardDescription>
+            <CardDescription>
+              Share this link with clients to book appointments
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -181,10 +208,20 @@ const BookingPage = () => {
                   className="font-mono text-sm overflow-x-auto"
                   title={bookingUrl}
                 />
-                <Button onClick={copyToClipboard} variant="outline" className="flex-shrink-0" title="Copy link">
+                <Button
+                  onClick={copyToClipboard}
+                  variant="outline"
+                  className="flex-shrink-0"
+                  title="Copy link"
+                >
                   <Copy className="h-4 w-4" />
                 </Button>
-                <Button onClick={shareLink} variant="outline" className="flex-shrink-0" title="Share link">
+                <Button
+                  onClick={shareLink}
+                  variant="outline"
+                  className="flex-shrink-0"
+                  title="Share link"
+                >
                   <Share2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -200,7 +237,11 @@ const BookingPage = () => {
                   Preview Page
                 </a>
               </Button>
-              <Button onClick={generateQrCode} variant="outline" className="flex-1">
+              <Button
+                onClick={generateQrCode}
+                variant="outline"
+                className="flex-1"
+              >
                 <QrCode className="h-4 w-4 mr-2" />
                 Generate QR Code
               </Button>
@@ -229,7 +270,7 @@ const BookingPage = () => {
               <Textarea
                 placeholder="Welcome! I'm excited to work with you..."
                 value={welcomeMessage}
-                onChange={(e) => setWelcomeMessage(e.target.value)}
+                onChange={e => setWelcomeMessage(e.target.value)}
                 rows={4}
               />
             </div>
@@ -239,13 +280,13 @@ const BookingPage = () => {
               <Textarea
                 placeholder="Please arrive 5 minutes early. Parking is available..."
                 value={bookingInstructions}
-                onChange={(e) => setBookingInstructions(e.target.value)}
+                onChange={e => setBookingInstructions(e.target.value)}
                 rows={3}
               />
             </div>
 
             <Button onClick={saveSettings} disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save Settings"}
+              {isSaving ? 'Saving...' : 'Save Settings'}
             </Button>
           </CardContent>
         </Card>
@@ -260,19 +301,35 @@ const BookingPage = () => {
               Share your booking link on social media
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Button onClick={shareOnFacebook} variant="outline" className="justify-start">
+              <Button
+                onClick={shareOnFacebook}
+                variant="outline"
+                className="justify-start"
+              >
                 <Facebook className="h-4 w-4 mr-2" />
                 Share on Facebook
               </Button>
-              <Button onClick={copyInstagramLink} variant="outline" className="justify-start">
+              <Button
+                onClick={copyInstagramLink}
+                variant="outline"
+                className="justify-start"
+              >
                 <Instagram className="h-4 w-4 mr-2" />
                 Copy for Instagram
               </Button>
-              <Button onClick={shareOnTwitter} variant="outline" className="justify-start">
+              <Button
+                onClick={shareOnTwitter}
+                variant="outline"
+                className="justify-start"
+              >
                 <Twitter className="h-4 w-4 mr-2" />
                 Share on Twitter
               </Button>
-              <Button onClick={shareViaEmail} variant="outline" className="justify-start">
+              <Button
+                onClick={shareViaEmail}
+                variant="outline"
+                className="justify-start"
+              >
                 <Mail className="h-4 w-4 mr-2" />
                 Email Link
               </Button>
@@ -289,7 +346,11 @@ const BookingPage = () => {
             <div className="flex flex-col items-center space-y-4 py-4">
               {qrCodeUrl && (
                 <>
-                  <img src={qrCodeUrl} alt="QR Code" className="w-64 h-64 border-4 border-primary rounded-lg" />
+                  <img
+                    src={qrCodeUrl}
+                    alt="QR Code"
+                    className="w-64 h-64 border-4 border-primary rounded-lg"
+                  />
                   <p className="text-sm text-muted-foreground text-center">
                     Clients can scan this QR code to book appointments
                   </p>

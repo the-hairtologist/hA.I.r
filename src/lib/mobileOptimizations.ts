@@ -20,7 +20,9 @@ export const preventElasticScroll = () => {
  */
 export const enableSmoothScrolling = () => {
   if (Platform.isMobile) {
-    const style = document.documentElement.style as CSSStyleDeclaration & { webkitOverflowScrolling?: string };
+    const style = document.documentElement.style as CSSStyleDeclaration & {
+      webkitOverflowScrolling?: string;
+    };
     style.webkitOverflowScrolling = 'touch';
   }
 };
@@ -41,7 +43,10 @@ export const ensureZoomEnabled = () => {
 /**
  * Optimize images for device pixel ratio
  */
-export const getOptimizedImageSrc = (baseSrc: string, pixelRatio: number = window.devicePixelRatio) => {
+export const getOptimizedImageSrc = (
+  baseSrc: string,
+  pixelRatio: number = window.devicePixelRatio
+) => {
   if (pixelRatio >= 3) return baseSrc.replace(/\.(jpg|png)$/, '@3x.$1');
   if (pixelRatio >= 2) return baseSrc.replace(/\.(jpg|png)$/, '@2x.$1');
   return baseSrc;
@@ -55,11 +60,20 @@ export const isSlowConnection = (): boolean => {
     effectiveType?: string;
     saveData?: boolean;
   };
-  const connection = (navigator as unknown as { connection?: NetworkConnection; mozConnection?: NetworkConnection; webkitConnection?: NetworkConnection }).connection || 
-                     (navigator as unknown as { mozConnection?: NetworkConnection }).mozConnection || 
-                     (navigator as unknown as { webkitConnection?: NetworkConnection }).webkitConnection;
+  const connection =
+    (
+      navigator as unknown as {
+        connection?: NetworkConnection;
+        mozConnection?: NetworkConnection;
+        webkitConnection?: NetworkConnection;
+      }
+    ).connection ||
+    (navigator as unknown as { mozConnection?: NetworkConnection })
+      .mozConnection ||
+    (navigator as unknown as { webkitConnection?: NetworkConnection })
+      .webkitConnection;
   if (!connection) return false;
-  
+
   return (
     connection.effectiveType === 'slow-2g' ||
     connection.effectiveType === '2g' ||
@@ -92,19 +106,20 @@ export const initMobileOptimizations = () => {
 
   preventElasticScroll();
   enableSmoothScrolling();
-  
+
   // Prefetch common routes
-  prefetchRoutes([
-    '/dashboard',
-    '/appointments',
-    '/clients',
-    '/messages',
-  ]);
+  prefetchRoutes(['/dashboard', '/appointments', '/clients', '/messages']);
 
   // Set appropriate status bar
   if (Platform.isIOS) {
-    document.documentElement.style.setProperty('--safe-area-inset-top', 'env(safe-area-inset-top)');
-    document.documentElement.style.setProperty('--safe-area-inset-bottom', 'env(safe-area-inset-bottom)');
+    document.documentElement.style.setProperty(
+      '--safe-area-inset-top',
+      'env(safe-area-inset-top)'
+    );
+    document.documentElement.style.setProperty(
+      '--safe-area-inset-bottom',
+      'env(safe-area-inset-bottom)'
+    );
   }
 };
 
@@ -114,8 +129,11 @@ export const initMobileOptimizations = () => {
 export const setupInputHandlers = () => {
   if (!Platform.isMobile) return;
 
-  document.addEventListener('focusin', (e) => {
-    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+  document.addEventListener('focusin', e => {
+    if (
+      e.target instanceof HTMLInputElement ||
+      e.target instanceof HTMLTextAreaElement
+    ) {
       // Ensure zoom is enabled for accessibility
       ensureZoomEnabled();
     }
@@ -128,7 +146,8 @@ export const setupInputHandlers = () => {
 export const isStandalone = (): boolean => {
   return (
     window.matchMedia('(display-mode: standalone)').matches ||
-    (window.navigator as Navigator & { standalone?: boolean }).standalone === true ||
+    (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+      true ||
     document.referrer.includes('android-app://')
   );
 };
@@ -136,7 +155,9 @@ export const isStandalone = (): boolean => {
 /**
  * Get device-appropriate image size
  */
-export const getImageSize = (size: 'thumbnail' | 'medium' | 'large'): number => {
+export const getImageSize = (
+  size: 'thumbnail' | 'medium' | 'large'
+): number => {
   const baseSize = {
     thumbnail: 150,
     medium: 500,

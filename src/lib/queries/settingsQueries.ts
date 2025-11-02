@@ -3,7 +3,7 @@
  * Replaces select("*") with specific field selections
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 
 export interface ProfileFields {
   id: string;
@@ -65,8 +65,9 @@ export interface ClientProfileFields {
  */
 export async function getProfileById(userId: string) {
   const { data, error } = await supabase
-    .from("profiles")
-    .select(`
+    .from('profiles')
+    .select(
+      `
       id,
       email,
       full_name,
@@ -74,8 +75,9 @@ export async function getProfileById(userId: string) {
       gender,
       created_at,
       updated_at
-    `)
-    .eq("id", userId)
+    `
+    )
+    .eq('id', userId)
     .maybeSingle();
 
   if (error) throw error;
@@ -87,8 +89,9 @@ export async function getProfileById(userId: string) {
  */
 export async function getStylistProfile(userId: string) {
   const { data, error } = await supabase
-    .from("stylist_profiles")
-    .select(`
+    .from('stylist_profiles')
+    .select(
+      `
       id,
       user_id,
       business_name,
@@ -114,8 +117,9 @@ export async function getStylistProfile(userId: string) {
       is_available,
       created_at,
       updated_at
-    `)
-    .eq("user_id", userId)
+    `
+    )
+    .eq('user_id', userId)
     .maybeSingle();
 
   if (error) throw error;
@@ -127,8 +131,9 @@ export async function getStylistProfile(userId: string) {
  */
 export async function getClientProfile(userId: string) {
   const { data, error } = await supabase
-    .from("client_profiles")
-    .select(`
+    .from('client_profiles')
+    .select(
+      `
       id,
       user_id,
       full_name,
@@ -143,8 +148,9 @@ export async function getClientProfile(userId: string) {
       special_requests,
       created_at,
       updated_at
-    `)
-    .eq("user_id", userId)
+    `
+    )
+    .eq('user_id', userId)
     .maybeSingle();
 
   if (error) throw error;

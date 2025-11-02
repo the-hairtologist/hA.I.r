@@ -36,7 +36,9 @@ describe('clientSchema', () => {
       notes: '',
       allergies: '',
     };
-    expect(() => clientSchema.parse(invalid)).toThrow(/Please enter a valid email address|Invalid email address/i);
+    expect(() => clientSchema.parse(invalid)).toThrow(
+      /Please enter a valid email address|Invalid email address/i
+    );
   });
 
   it('rejects short names', () => {
@@ -58,7 +60,9 @@ describe('clientSchema', () => {
       notes: '',
       allergies: '',
     };
-    expect(() => clientSchema.parse(tooLong)).toThrow(/less than 100 characters/i);
+    expect(() => clientSchema.parse(tooLong)).toThrow(
+      /less than 100 characters/i
+    );
   });
 });
 
@@ -110,7 +114,9 @@ describe('serviceSchema', () => {
       deposit_amount: 0,
       deposit_type: 'fixed' as const,
     };
-    expect(() => serviceSchema.parse(invalid)).toThrow(/deposit amount required/i);
+    expect(() => serviceSchema.parse(invalid)).toThrow(
+      /deposit amount required/i
+    );
   });
 
   it('enforces minimum duration', () => {
@@ -163,7 +169,9 @@ describe('appointmentSchema', () => {
       appointmentDate: '2025-12-31',
       durationMinutes: 60,
     };
-    expect(() => appointmentSchema.parse(invalid)).toThrow(/service type.*required/i);
+    expect(() => appointmentSchema.parse(invalid)).toThrow(
+      /service type.*required/i
+    );
   });
 });
 
@@ -189,7 +197,9 @@ describe('reviewSchema', () => {
       rating: 4,
       review_text: 'Too short',
     };
-    expect(() => reviewSchema.parse(invalid)).toThrow(/at least 10 characters/i);
+    expect(() => reviewSchema.parse(invalid)).toThrow(
+      /at least 10 characters/i
+    );
   });
 
   it('enforces maximum review length', () => {
@@ -197,7 +207,9 @@ describe('reviewSchema', () => {
       rating: 5,
       review_text: 'A'.repeat(501),
     };
-    expect(() => reviewSchema.parse(invalid)).toThrow(/less than 500 characters/i);
+    expect(() => reviewSchema.parse(invalid)).toThrow(
+      /less than 500 characters/i
+    );
   });
 });
 
@@ -215,7 +227,9 @@ describe('invitationSchema', () => {
       clientEmail: 'not-an-email',
       customMessage: 'Test message',
     };
-    expect(() => invitationSchema.parse(invalid)).toThrow(/Please enter a valid email address|Invalid email address/i);
+    expect(() => invitationSchema.parse(invalid)).toThrow(
+      /Please enter a valid email address|Invalid email address/i
+    );
   });
 
   it('enforces message length limit', () => {
@@ -223,7 +237,9 @@ describe('invitationSchema', () => {
       clientEmail: 'client@example.com',
       customMessage: 'A'.repeat(501),
     };
-    expect(() => invitationSchema.parse(invalid)).toThrow(/less than 500 characters/i);
+    expect(() => invitationSchema.parse(invalid)).toThrow(
+      /less than 500 characters/i
+    );
   });
 });
 
@@ -243,7 +259,9 @@ describe('passwordChangeSchema', () => {
       newPassword: 'newpassword123',
       confirmPassword: 'differentpassword',
     };
-    expect(() => passwordChangeSchema.parse(invalid)).toThrow(/passwords must match/i);
+    expect(() => passwordChangeSchema.parse(invalid)).toThrow(
+      /passwords must match/i
+    );
   });
 
   it('enforces minimum password length', () => {
@@ -252,7 +270,9 @@ describe('passwordChangeSchema', () => {
       newPassword: 'short',
       confirmPassword: 'short',
     };
-    expect(() => passwordChangeSchema.parse(invalid)).toThrow(/at least 8 characters/i);
+    expect(() => passwordChangeSchema.parse(invalid)).toThrow(
+      /at least 8 characters/i
+    );
   });
 });
 
@@ -267,7 +287,9 @@ describe('basic field schemas', () => {
     });
 
     it('rejects invalid format', () => {
-      expect(() => emailSchema.parse('not-an-email')).toThrow(/Please enter a valid email address|Invalid email address/i);
+      expect(() => emailSchema.parse('not-an-email')).toThrow(
+        /Please enter a valid email address|Invalid email address/i
+      );
     });
   });
 
@@ -282,7 +304,9 @@ describe('basic field schemas', () => {
     });
 
     it('rejects invalid characters', () => {
-      expect(() => phoneSchema.parse('555-ABC-DEFG')).toThrow(/Please enter a valid phone number/i);
+      expect(() => phoneSchema.parse('555-ABC-DEFG')).toThrow(
+        /Please enter a valid phone number/i
+      );
     });
   });
 
@@ -296,7 +320,9 @@ describe('basic field schemas', () => {
     });
 
     it('enforces maximum length', () => {
-      expect(() => nameSchema.parse('A'.repeat(101))).toThrow(/less than 100 characters/i);
+      expect(() => nameSchema.parse('A'.repeat(101))).toThrow(
+        /less than 100 characters/i
+      );
     });
   });
 });

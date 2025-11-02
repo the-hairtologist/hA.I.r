@@ -7,7 +7,9 @@ import { logger } from './logging/productionLogger';
  */
 
 // Haptic feedback for important actions
-export const triggerHaptic = (type: 'success' | 'warning' | 'error' | 'selection' = 'selection') => {
+export const triggerHaptic = (
+  type: 'success' | 'warning' | 'error' | 'selection' = 'selection'
+) => {
   if (!Platform.isMobile) return;
 
   try {
@@ -64,28 +66,29 @@ export const getDeviceCapabilities = () => {
     hasHaptics: Platform.isMobile,
     hasShare: Platform.isMobile || !!navigator.share,
     hasCamera: Platform.isMobile,
-    hasNotifications: 'Notification' in window && Notification.permission !== 'denied',
+    hasNotifications:
+      'Notification' in window && Notification.permission !== 'denied',
   };
 };
 
 // Performance optimizations
 export const optimizeForPlatform = () => {
   const capabilities = getDeviceCapabilities();
-  
+
   // Mobile optimizations
   if (Platform.isMobile) {
     // Disable hover effects on mobile
     document.documentElement.classList.add('mobile');
-    
+
     // Optimize touch events
     document.addEventListener('touchstart', () => {}, { passive: true });
   }
 
   // Log capabilities for debugging
   logger.debug('[Platform] Device capabilities', { capabilities });
-  
+
   analytics.track('platform_detected', capabilities);
-  
+
   return capabilities;
 };
 
@@ -101,7 +104,9 @@ export const requestNotificationPermission = async () => {
 
   if (Notification.permission !== 'denied') {
     const permission = await Notification.requestPermission();
-    analytics.track('notification_permission_requested', { result: permission });
+    analytics.track('notification_permission_requested', {
+      result: permission,
+    });
     return permission;
   }
 

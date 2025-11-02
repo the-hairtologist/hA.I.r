@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { getErrorMessage, handleError, withRetry, validateRequired } from './errorHandler';
+import {
+  getErrorMessage,
+  handleError,
+  withRetry,
+  validateRequired,
+} from './errorHandler';
 import { toast } from 'sonner';
 
 vi.mock('sonner', () => ({
@@ -54,7 +59,9 @@ describe('errorHandler', () => {
   describe('handleError', () => {
     it('should create AppError object', async () => {
       const error = new Error('Test error');
-      const appError = await handleError(error, 'testContext', { showToast: false });
+      const appError = await handleError(error, 'testContext', {
+        showToast: false,
+      });
 
       expect(appError.message).toBe('Test error');
       expect(appError.context).toBe('testContext');
@@ -88,7 +95,7 @@ describe('errorHandler', () => {
     it('should show retry button for retryable errors', async () => {
       const error = new Error('Network error');
       const onRetry = vi.fn();
-      
+
       await handleError(error, 'testContext', {
         retryable: true,
         onRetry,
@@ -148,7 +155,7 @@ describe('errorHandler', () => {
       });
 
       const promise = withRetry(operation, { maxRetries: 2, delay: 100 });
-      
+
       await vi.runAllTimersAsync();
 
       await expect(promise).rejects.toThrow('Always fails');
@@ -181,7 +188,9 @@ describe('errorHandler', () => {
   describe('validateRequired', () => {
     it('should not throw for valid data', async () => {
       const data = { name: 'Test', email: 'test@example.com' };
-      await expect(validateRequired(data, ['name', 'email'])).resolves.not.toThrow();
+      await expect(
+        validateRequired(data, ['name', 'email'])
+      ).resolves.not.toThrow();
     });
 
     it('should throw for missing fields', async () => {
@@ -193,9 +202,9 @@ describe('errorHandler', () => {
 
     it('should handle multiple missing fields', async () => {
       const data = {};
-      await expect(validateRequired(data, ['name', 'email', 'phone'])).rejects.toThrow(
-        'Missing required fields: name, email, phone'
-      );
+      await expect(
+        validateRequired(data, ['name', 'email', 'phone'])
+      ).rejects.toThrow('Missing required fields: name, email, phone');
     });
   });
 });

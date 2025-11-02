@@ -3,7 +3,7 @@
  * Provides realistic demo data and enables demo mode across the app
  */
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface DemoContextValue {
   isDemoMode: boolean;
@@ -38,8 +38,8 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
     },
     client: {
       appointments: 12,
-      stylist: "Sarah Martinez",
-      lastVisit: "2 weeks ago",
+      stylist: 'Sarah Martinez',
+      lastVisit: '2 weeks ago',
     },
   };
 
@@ -60,16 +60,16 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
 export function useDemoMode() {
   const context = useContext(DemoContext);
   if (!context) {
-    throw new Error("useDemoMode must be used within DemoModeProvider");
+    throw new Error('useDemoMode must be used within DemoModeProvider');
   }
   return context;
 }
 
 export function DemoModeIndicator() {
   const { isDemoMode } = useDemoMode();
-  
+
   if (!isDemoMode) return null;
-  
+
   return (
     <div className="fixed top-16 right-4 z-50 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium shadow-lg animate-pulse">
       🎭 Demo Mode

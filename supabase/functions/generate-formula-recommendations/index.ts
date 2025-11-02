@@ -1,22 +1,33 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders, compressedJsonResponse } from '../_shared/compression.ts';
 import { authenticateRequest } from '../_shared/auth.ts';
-import { handleError, validateRequestBody, checkRateLimit } from '../_shared/error-handler.ts';
+import {
+  handleError,
+  validateRequestBody,
+  checkRateLimit,
+} from '../_shared/error-handler.ts';
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     // SECURITY: Require stylist or admin role
-    const { user, supabase, stylistId: userStylistId } = await authenticateRequest(req, { 
-      allowStylistOrAdmin: true 
+    const {
+      user,
+      supabase,
+      stylistId: userStylistId,
+    } = await authenticateRequest(req, {
+      allowStylistOrAdmin: true,
     });
-    
+
     // Rate limiting (5 recommendations per minute - they're more expensive)
     if (!checkRateLimit(user.id, 5, 60000)) {
-      return await compressedJsonResponse({ error: 'Rate limit exceeded. Please slow down.' }, 429);
+      return await compressedJsonResponse(
+        { error: 'Rate limit exceeded. Please slow down.' },
+        429
+      );
     }
 
     const body = await req.json();
@@ -25,10 +36,15 @@ serve(async (req) => {
 
     // Verify stylist has access to this client
     if (userStylistId !== stylistId) {
-      throw new Error('Forbidden: You can only generate recommendations for your own clients');
+      throw new Error(
+        'Forbidden: You can only generate recommendations for your own clients'
+      );
     }
 
-    console.log('Generating formula recommendations...', { clientId, stylistId });
+    console.log('Generating formula recommendations...', {
+      clientId,
+      stylistId,
+    });
 
     // Fetch client profile
     const { data: clientProfile, error: clientError } = await supabase
@@ -93,7 +109,7 @@ serve(async (req) => {
     console.log('Fetched client data:', {
       formulas: pastFormulas?.length || 0,
       appointments: pastAppointments?.length || 0,
-      analyses: hairAnalyses?.length || 0
+      analyses: hairAnalyses?.length || 0,
     });
 
     // Build context for AI
@@ -111,18 +127,20 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY not configured');
     }
 
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          {
-            role: 'system',
-            content: `You are an expert hair colorist AI assistant. Analyze client history and provide actionable formula recommendations.
+    const aiResponse = await fetch(
+      'https://ai.gateway.lovable.dev/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            {
+              role: 'system',
+              content: `You are an expert hair colorist AI assistant. Analyze client history and provide actionable formula recommendations.
 
 Your recommendations should:
 1. Be specific and practical (exact ratios, products, timing)
@@ -151,36 +169,48 @@ Format your response as structured JSON with this schema:
     "Pattern noticed from history"
   ],
   "notes": "Additional professional notes"
-}`
-          },
-          {
-            role: 'user',
-            content: context
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 2000
-      }),
-    });
+}`,
+            },
+            {
+              role: 'user',
+              content: context,
+            },
+          ],
+          temperature: 0.7,
+          max_tokens: 2000,
+        }),
+      }
+    );
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
       console.error('Lovable AI error:', aiResponse.status, errorText);
-      
+
       if (aiResponse.status === 429) {
         return new Response(
-          JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          JSON.stringify({
+            error: 'Rate limit exceeded. Please try again in a moment.',
+          }),
+          {
+            status: 429,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
         );
       }
-      
+
       if (aiResponse.status === 402) {
         return new Response(
-          JSON.stringify({ error: 'AI credits exhausted. Please add credits to your workspace.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          JSON.stringify({
+            error:
+              'AI credits exhausted. Please add credits to your workspace.',
+          }),
+          {
+            status: 402,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
         );
       }
-      
+
       throw new Error(`AI request failed: ${errorText}`);
     }
 
@@ -197,21 +227,25 @@ Format your response as structured JSON with this schema:
     let recommendations;
     try {
       // Extract JSON from markdown code blocks if present
-      const jsonMatch = recommendationsText.match(/```json\n([\s\S]+?)\n```/) || 
-                        recommendationsText.match(/```\n([\s\S]+?)\n```/) ||
-                        [null, recommendationsText];
+      const jsonMatch = recommendationsText.match(/```json\n([\s\S]+?)\n```/) ||
+        recommendationsText.match(/```\n([\s\S]+?)\n```/) || [
+          null,
+          recommendationsText,
+        ];
       const jsonString = jsonMatch[1] || recommendationsText;
       recommendations = JSON.parse(jsonString);
     } catch (parseError) {
       console.log('Could not parse as JSON, using text format');
       recommendations = {
-        recommendations: [{
-          title: 'AI Recommendation',
-          priority: 'medium',
-          formula: recommendationsText,
-          reasoning: 'Based on client history'
-        }],
-        rawText: recommendationsText
+        recommendations: [
+          {
+            title: 'AI Recommendation',
+            priority: 'medium',
+            formula: recommendationsText,
+            reasoning: 'Based on client history',
+          },
+        ],
+        rawText: recommendationsText,
       };
     }
 
@@ -233,10 +267,12 @@ Format your response as structured JSON with this schema:
           basedOn: {
             formulaCount: pastFormulas?.length || 0,
             appointmentCount: pastAppointments?.length || 0,
-            analysisCount: hairAnalyses?.length || 0
-          }
+            analysisCount: hairAnalyses?.length || 0,
+          },
         },
-        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // Expires in 7 days
+        expires_at: new Date(
+          Date.now() + 7 * 24 * 60 * 60 * 1000
+        ).toISOString(), // Expires in 7 days
       })
       .select()
       .single();
@@ -250,9 +286,8 @@ Format your response as structured JSON with this schema:
       success: true,
       recommendations,
       insightId: insertedInsight?.id,
-      rawText: recommendationsText
+      rawText: recommendationsText,
     });
-
   } catch (error) {
     console.error('Error in generate-formula-recommendations:', error);
     return handleError(error);
@@ -269,11 +304,11 @@ function buildClientContext(
   let context = `CLIENT PROFILE:\n`;
   context += `Name: ${clientProfile.profiles?.full_name || 'Unknown'}\n`;
   context += `Email: ${clientProfile.email}\n`;
-  
+
   if (clientProfile.allergies) {
     context += `Allergies: ${clientProfile.allergies}\n`;
   }
-  
+
   if (clientProfile.notes) {
     context += `Notes: ${clientProfile.notes}\n`;
   }
@@ -283,7 +318,8 @@ function buildClientContext(
     hairAnalyses.forEach((analysis, i) => {
       context += `Analysis ${i + 1} (${new Date(analysis.created_at).toLocaleDateString()}):\n`;
       if (analysis.analysis_result?.fullText) {
-        context += analysis.analysis_result.fullText.substring(0, 500) + '...\n';
+        context +=
+          analysis.analysis_result.fullText.substring(0, 500) + '...\n';
       }
     });
   }
@@ -314,7 +350,7 @@ function buildClientContext(
       context += `Appointment ${i + 1} (${new Date(apt.appointment_date).toLocaleDateString()}):\n`;
       context += `Service: ${apt.service_type}\n`;
       context += `Status: ${apt.status}\n`;
-      
+
       if (apt.reviews && apt.reviews.length > 0) {
         const review = apt.reviews[0];
         context += `Client Rating: ${review.rating}/5\n`;

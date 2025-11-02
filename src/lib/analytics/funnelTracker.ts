@@ -29,7 +29,10 @@ class FunnelTracker {
       metadata,
     });
 
-    logger.debug(`[FunnelTracker] Started funnel: ${funnelName}`, 'funnelTracker');
+    logger.debug(
+      `[FunnelTracker] Started funnel: ${funnelName}`,
+      'funnelTracker'
+    );
   }
 
   /**
@@ -40,22 +43,22 @@ class FunnelTracker {
     const timeToComplete = startTime ? Date.now() - startTime : null;
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) return;
 
-      const { error } = await supabase
-        .from('conversion_funnel_events')
-        .insert({
-          user_id: user.id,
-          funnel_name: params.funnelName,
-          step_name: params.stepName,
-          step_order: params.stepOrder,
-          completed: true,
-          abandoned: false,
-          time_to_complete_ms: timeToComplete,
-          metadata: params.metadata || {},
-        });
+      const { error } = await supabase.from('conversion_funnel_events').insert({
+        user_id: user.id,
+        funnel_name: params.funnelName,
+        step_name: params.stepName,
+        step_order: params.stepOrder,
+        completed: true,
+        abandoned: false,
+        time_to_complete_ms: timeToComplete,
+        metadata: params.metadata || {},
+      });
 
       if (error) throw error;
 
@@ -64,7 +67,11 @@ class FunnelTracker {
         'funnelTracker'
       );
     } catch (error) {
-      logger.error('[FunnelTracker] Failed to track step', 'funnelTracker', error);
+      logger.error(
+        '[FunnelTracker] Failed to track step',
+        'funnelTracker',
+        error
+      );
     }
   }
 
@@ -73,21 +80,21 @@ class FunnelTracker {
    */
   async abandonFunnel(params: FunnelStep) {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) return;
 
-      const { error } = await supabase
-        .from('conversion_funnel_events')
-        .insert({
-          user_id: user.id,
-          funnel_name: params.funnelName,
-          step_name: params.stepName,
-          step_order: params.stepOrder,
-          completed: false,
-          abandoned: true,
-          metadata: params.metadata || {},
-        });
+      const { error } = await supabase.from('conversion_funnel_events').insert({
+        user_id: user.id,
+        funnel_name: params.funnelName,
+        step_name: params.stepName,
+        step_order: params.stepOrder,
+        completed: false,
+        abandoned: true,
+        metadata: params.metadata || {},
+      });
 
       if (error) throw error;
 
@@ -98,7 +105,11 @@ class FunnelTracker {
         'funnelTracker'
       );
     } catch (error) {
-      logger.error('[FunnelTracker] Failed to track abandonment', 'funnelTracker', error);
+      logger.error(
+        '[FunnelTracker] Failed to track abandonment',
+        'funnelTracker',
+        error
+      );
     }
   }
 
@@ -107,25 +118,29 @@ class FunnelTracker {
    */
   private async trackStep(params: FunnelStep) {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (!user) return;
 
-      const { error } = await supabase
-        .from('conversion_funnel_events')
-        .insert({
-          user_id: user.id,
-          funnel_name: params.funnelName,
-          step_name: params.stepName,
-          step_order: params.stepOrder,
-          completed: false,
-          abandoned: false,
-          metadata: params.metadata || {},
-        });
+      const { error } = await supabase.from('conversion_funnel_events').insert({
+        user_id: user.id,
+        funnel_name: params.funnelName,
+        step_name: params.stepName,
+        step_order: params.stepOrder,
+        completed: false,
+        abandoned: false,
+        metadata: params.metadata || {},
+      });
 
       if (error) throw error;
     } catch (error) {
-      logger.error('[FunnelTracker] Failed to track step view', 'funnelTracker', error);
+      logger.error(
+        '[FunnelTracker] Failed to track step view',
+        'funnelTracker',
+        error
+      );
     }
   }
 
@@ -141,7 +156,10 @@ class FunnelTracker {
     });
 
     this.funnelStarts.delete(funnelName);
-    logger.debug(`[FunnelTracker] Completed funnel: ${funnelName}`, 'funnelTracker');
+    logger.debug(
+      `[FunnelTracker] Completed funnel: ${funnelName}`,
+      'funnelTracker'
+    );
   }
 }
 

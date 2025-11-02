@@ -1,37 +1,38 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
-import { 
-  Mail, 
-  Eye, 
-  Save, 
-  RotateCcw,
-  Sparkles,
-  Info
-} from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
+import { Mail, Eye, Save, RotateCcw, Sparkles, Info } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 const DEFAULT_EMAIL_SETTINGS = {
   rebooking_enabled: true,
-  rebooking_subject: "✨ Time for a Touch-Up with {{stylist_name}}!",
-  rebooking_headline: "Hi {{client_name}}! 👋",
-  rebooking_opening: "It's been about 6 weeks since your last visit with {{stylist_name}} at {{business_name}}. Your hair is probably ready for some professional love! 💇",
-  rebooking_cta_text: "📅 Book Your Appointment",
-  rebooking_closing: "{{stylist_name}} is looking forward to seeing you again and help you maintain that fabulous look!",
-  custom_message: "",
+  rebooking_subject: '✨ Time for a Touch-Up with {{stylist_name}}!',
+  rebooking_headline: 'Hi {{client_name}}! 👋',
+  rebooking_opening:
+    "It's been about 6 weeks since your last visit with {{stylist_name}} at {{business_name}}. Your hair is probably ready for some professional love! 💇",
+  rebooking_cta_text: '📅 Book Your Appointment',
+  rebooking_closing:
+    '{{stylist_name}} is looking forward to seeing you again and help you maintain that fabulous look!',
+  custom_message: '',
   show_business_logo: false,
-  business_logo_url: "",
+  business_logo_url: '',
 };
 
 export default function EmailSettings() {
@@ -41,15 +42,17 @@ export default function EmailSettings() {
 
   // Fetch stylist profile
   const { data: stylistProfile } = useQuery({
-    queryKey: ["stylist-profile"],
+    queryKey: ['stylist-profile'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
 
       const { data, error } = await supabase
-        .from("stylist_profiles")
-        .select("*")
-        .eq("user_id", user.id)
+        .from('stylist_profiles')
+        .select('*')
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (error) throw error;
@@ -59,15 +62,17 @@ export default function EmailSettings() {
 
   // Fetch email settings
   const { data: settings, isLoading } = useQuery({
-    queryKey: ["email-settings"],
+    queryKey: ['email-settings'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
 
       const { data, error } = await supabase
-        .from("email_settings")
-        .select("*")
-        .eq("user_id", user.id)
+        .from('email_settings')
+        .select('*')
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
@@ -78,31 +83,32 @@ export default function EmailSettings() {
   // Save settings mutation
   const saveMutation = useMutation({
     mutationFn: async (newSettings: any) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
 
-      const { error } = await supabase
-        .from("email_settings")
-        .upsert({
-          ...newSettings,
-          user_id: user.id,
-          updated_at: new Date().toISOString(),
-        });
+      const { error } = await supabase.from('email_settings').upsert({
+        ...newSettings,
+        user_id: user.id,
+        updated_at: new Date().toISOString(),
+      });
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["email-settings"] });
+      queryClient.invalidateQueries({ queryKey: ['email-settings'] });
       toast({
-        title: "Settings Saved",
-        description: "Your email customizations have been updated successfully.",
+        title: 'Settings Saved',
+        description:
+          'Your email customizations have been updated successfully.',
       });
     },
     onError: (error: any) => {
       toast({
-        title: "Error",
-        description: error.message || "Failed to save settings",
-        variant: "destructive",
+        title: 'Error',
+        description: error.message || 'Failed to save settings',
+        variant: 'destructive',
       });
     },
   });
@@ -125,9 +131,9 @@ export default function EmailSettings() {
   };
 
   const getPreviewHtml = () => {
-    const clientName = "Sarah Johnson";
-    const stylistName = stylistProfile?.business_name || "Your Stylist";
-    const businessName = stylistProfile?.business_name || "Your Salon";
+    const clientName = 'Sarah Johnson';
+    const stylistName = stylistProfile?.business_name || 'Your Stylist';
+    const businessName = stylistProfile?.business_name || 'Your Salon';
 
     const replacePlaceholders = (text: string) => {
       return text
@@ -148,13 +154,17 @@ export default function EmailSettings() {
           <tr>
             <td align="center">
               <table width="600" cellpadding="0" cellspacing="0" style="background-color: white; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
-                ${formData.show_business_logo && formData.business_logo_url ? `
+                ${
+                  formData.show_business_logo && formData.business_logo_url
+                    ? `
                 <tr>
                   <td style="padding: 20px; text-align: center; border-bottom: 1px solid #e5e7eb;">
                     <img src="${formData.business_logo_url}" alt="Business Logo" style="max-width: 150px; height: auto;">
                   </td>
                 </tr>
-                ` : ''}
+                `
+                    : ''
+                }
                 
                 <tr>
                   <td style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 40px 40px 30px; text-align: center;">
@@ -170,13 +180,17 @@ export default function EmailSettings() {
                       ${replacePlaceholders(formData.rebooking_opening || DEFAULT_EMAIL_SETTINGS.rebooking_opening)}
                     </p>
                     
-                    ${formData.custom_message ? `
+                    ${
+                      formData.custom_message
+                        ? `
                     <div style="background-color: #f8f9fa; border-left: 4px solid #6366f1; padding: 20px; margin: 30px 0; border-radius: 8px;">
                       <p style="font-size: 15px; line-height: 1.6; color: #333; margin: 0;">
                         ${replacePlaceholders(formData.custom_message)}
                       </p>
                     </div>
-                    ` : ''}
+                    `
+                        : ''
+                    }
                     
                     <div style="text-align: center; margin: 40px 0;">
                       <a href="#" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 16px 40px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 12px rgba(99,102,241,0.3);">
@@ -246,13 +260,9 @@ export default function EmailSettings() {
               className="gap-2"
             >
               <Eye className="w-4 h-4" />
-              {showPreview ? "Hide" : "Show"} Preview
+              {showPreview ? 'Hide' : 'Show'} Preview
             </Button>
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              className="gap-2"
-            >
+            <Button onClick={handleReset} variant="outline" className="gap-2">
               <RotateCcw className="w-4 h-4" />
               Reset to Default
             </Button>
@@ -262,7 +272,7 @@ export default function EmailSettings() {
               className="gap-2"
             >
               <Save className="w-4 h-4" />
-              {saveMutation.isPending ? "Saving..." : "Save Changes"}
+              {saveMutation.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         </div>
@@ -271,7 +281,11 @@ export default function EmailSettings() {
         <Alert>
           <Info className="w-4 h-4" />
           <AlertDescription>
-            <strong>Available placeholders:</strong> Use <code>{"{{client_name}}"}</code>, <code>{"{{stylist_name}}"}</code>, and <code>{"{{business_name}}"}</code> to personalize your emails. These will be automatically replaced with actual client and business information.
+            <strong>Available placeholders:</strong> Use{' '}
+            <code>{'{{client_name}}'}</code>, <code>{'{{stylist_name}}'}</code>,
+            and <code>{'{{business_name}}'}</code> to personalize your emails.
+            These will be automatically replaced with actual client and business
+            information.
           </AlertDescription>
         </Alert>
 
@@ -298,7 +312,7 @@ export default function EmailSettings() {
                 </div>
                 <Switch
                   checked={formData.rebooking_enabled ?? true}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={checked =>
                     setFormData({ ...formData, rebooking_enabled: checked })
                   }
                 />
@@ -309,9 +323,12 @@ export default function EmailSettings() {
                 <Label htmlFor="subject">Subject Line</Label>
                 <Input
                   id="subject"
-                  value={formData.rebooking_subject || ""}
-                  onChange={(e) => 
-                    setFormData({ ...formData, rebooking_subject: e.target.value })
+                  value={formData.rebooking_subject || ''}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      rebooking_subject: e.target.value,
+                    })
                   }
                   placeholder="Time for a touch-up!"
                 />
@@ -325,9 +342,12 @@ export default function EmailSettings() {
                 <Label htmlFor="headline">Email Headline</Label>
                 <Input
                   id="headline"
-                  value={formData.rebooking_headline || ""}
-                  onChange={(e) => 
-                    setFormData({ ...formData, rebooking_headline: e.target.value })
+                  value={formData.rebooking_headline || ''}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      rebooking_headline: e.target.value,
+                    })
                   }
                   placeholder="Hi {{client_name}}!"
                 />
@@ -339,9 +359,12 @@ export default function EmailSettings() {
                 <Textarea
                   id="opening"
                   rows={3}
-                  value={formData.rebooking_opening || ""}
-                  onChange={(e) => 
-                    setFormData({ ...formData, rebooking_opening: e.target.value })
+                  value={formData.rebooking_opening || ''}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      rebooking_opening: e.target.value,
+                    })
                   }
                   placeholder="It's been about 6 weeks since your last visit..."
                 />
@@ -353,8 +376,8 @@ export default function EmailSettings() {
                 <Textarea
                   id="custom"
                   rows={3}
-                  value={formData.custom_message || ""}
-                  onChange={(e) => 
+                  value={formData.custom_message || ''}
+                  onChange={e =>
                     setFormData({ ...formData, custom_message: e.target.value })
                   }
                   placeholder="Add a personal touch or special offer..."
@@ -369,9 +392,12 @@ export default function EmailSettings() {
                 <Label htmlFor="cta">Button Text</Label>
                 <Input
                   id="cta"
-                  value={formData.rebooking_cta_text || ""}
-                  onChange={(e) => 
-                    setFormData({ ...formData, rebooking_cta_text: e.target.value })
+                  value={formData.rebooking_cta_text || ''}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      rebooking_cta_text: e.target.value,
+                    })
                   }
                   placeholder="Book Your Appointment"
                 />
@@ -383,9 +409,12 @@ export default function EmailSettings() {
                 <Textarea
                   id="closing"
                   rows={2}
-                  value={formData.rebooking_closing || ""}
-                  onChange={(e) => 
-                    setFormData({ ...formData, rebooking_closing: e.target.value })
+                  value={formData.rebooking_closing || ''}
+                  onChange={e =>
+                    setFormData({
+                      ...formData,
+                      rebooking_closing: e.target.value,
+                    })
                   }
                   placeholder="Looking forward to seeing you..."
                 />
@@ -402,7 +431,7 @@ export default function EmailSettings() {
                   </div>
                   <Switch
                     checked={formData.show_business_logo ?? false}
-                    onCheckedChange={(checked) => 
+                    onCheckedChange={checked =>
                       setFormData({ ...formData, show_business_logo: checked })
                     }
                   />
@@ -414,9 +443,12 @@ export default function EmailSettings() {
                     <Input
                       id="logo"
                       type="url"
-                      value={formData.business_logo_url || ""}
-                      onChange={(e) => 
-                        setFormData({ ...formData, business_logo_url: e.target.value })
+                      value={formData.business_logo_url || ''}
+                      onChange={e =>
+                        setFormData({
+                          ...formData,
+                          business_logo_url: e.target.value,
+                        })
                       }
                       placeholder="https://example.com/logo.png"
                     />
@@ -453,7 +485,8 @@ export default function EmailSettings() {
                 <div className="mt-4 flex items-center gap-2">
                   <Badge variant="outline">Sample Data Used</Badge>
                   <p className="text-xs text-muted-foreground">
-                    Client: Sarah Johnson | Business: {stylistProfile?.business_name || "Your Salon"}
+                    Client: Sarah Johnson | Business:{' '}
+                    {stylistProfile?.business_name || 'Your Salon'}
                   </p>
                 </div>
               </CardContent>

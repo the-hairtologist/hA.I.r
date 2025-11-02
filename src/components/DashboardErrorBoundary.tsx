@@ -1,6 +1,12 @@
 import React, { Component, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 
 interface Props {
@@ -36,13 +42,13 @@ export class DashboardErrorBoundary extends Component<Props, State> {
     import('@/lib/logging/productionLogger').then(({ logger }) => {
       logger.error('Dashboard Error', error, {
         component: 'DashboardErrorBoundary',
-        componentStack: errorInfo.componentStack
+        componentStack: errorInfo.componentStack,
       });
     });
     import('@/lib/logging/userJourneyTracker').then(({ userJourney }) => {
-      userJourney.trackError(error, { 
+      userJourney.trackError(error, {
         boundary: 'Dashboard',
-        componentStack: errorInfo.componentStack 
+        componentStack: errorInfo.componentStack,
       });
     });
     this.setState({
@@ -76,7 +82,9 @@ export class DashboardErrorBoundary extends Component<Props, State> {
                   <AlertTriangle className="h-6 w-6 text-warning" />
                 </div>
                 <div>
-                  <CardTitle className="text-foreground">Something went wrong</CardTitle>
+                  <CardTitle className="text-foreground">
+                    Something went wrong
+                  </CardTitle>
                   <CardDescription className="text-foreground/80 font-medium">
                     The dashboard encountered an error
                   </CardDescription>
@@ -85,12 +93,15 @@ export class DashboardErrorBoundary extends Component<Props, State> {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-foreground/80 font-medium">
-                Don't worry, your data is safe. Try refreshing the page or contact support if this keeps happening.
+                Don't worry, your data is safe. Try refreshing the page or
+                contact support if this keeps happening.
               </p>
-              
+
               {this.state.error && (
                 <details className="text-xs text-foreground/60 bg-card p-3 rounded border-2 border-foreground">
-                  <summary className="cursor-pointer font-medium">Error details</summary>
+                  <summary className="cursor-pointer font-medium">
+                    Error details
+                  </summary>
                   <pre className="mt-2 overflow-auto">
                     {this.state.error.toString()}
                   </pre>
@@ -98,16 +109,13 @@ export class DashboardErrorBoundary extends Component<Props, State> {
               )}
 
               <div className="flex gap-2">
-                <Button 
-                  onClick={this.handleReset}
-                  className="flex-1"
-                >
+                <Button onClick={this.handleReset} className="flex-1">
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Refresh Page
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
-                  onClick={() => window.location.href = '/'}
+                  onClick={() => (window.location.href = '/')}
                   className="flex-1"
                 >
                   Go Home

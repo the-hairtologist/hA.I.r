@@ -3,38 +3,50 @@
  * Uses cached formulas for instant results, falls back to AI if needed
  */
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { PageHeader } from "@/components/PageHeader";
-import { Zap, Sparkles, Clock, TrendingUp } from "lucide-react";
-import { toast } from "sonner";
-import { StructuredFormulaDisplay } from "@/components/StructuredFormulaDisplay";
-import { FormulaSafetyBadge } from "@/components/FormulaSafetyBadge";
-import { HairAnalysisPanel } from "@/components/HairAnalysisPanel";
-import { ModelPerformanceIndicator } from "@/components/ModelPerformanceIndicator";
-import { FormulaOutcomeFeedback } from "@/components/FormulaOutcomeFeedback";
-import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
-import { useAIAnalytics } from "@/hooks/useAIAnalytics";
-import { useFeatureFlag } from "@/lib/featureFlags";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { PageHeader } from '@/components/PageHeader';
+import { Zap, Sparkles, Clock, TrendingUp } from 'lucide-react';
+import { toast } from 'sonner';
+import { StructuredFormulaDisplay } from '@/components/StructuredFormulaDisplay';
+import { FormulaSafetyBadge } from '@/components/FormulaSafetyBadge';
+import { HairAnalysisPanel } from '@/components/HairAnalysisPanel';
+import { ModelPerformanceIndicator } from '@/components/ModelPerformanceIndicator';
+import { FormulaOutcomeFeedback } from '@/components/FormulaOutcomeFeedback';
+import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
+import { useAIAnalytics } from '@/hooks/useAIAnalytics';
+import { useFeatureFlag } from '@/lib/featureFlags';
+import { Badge } from '@/components/ui/badge';
 
 export default function QuickFormula() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { roles } = useUserRole(user?.id);
   const analytics = useAIAnalytics();
-  
-  const [currentLevel, setCurrentLevel] = useState<string>("");
-  const [targetLevel, setTargetLevel] = useState<string>("");
-  const [tone, setTone] = useState<string>("");
-  const [condition, setCondition] = useState<string>("");
+
+  const [currentLevel, setCurrentLevel] = useState<string>('');
+  const [targetLevel, setTargetLevel] = useState<string>('');
+  const [tone, setTone] = useState<string>('');
+  const [condition, setCondition] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [formula, setFormula] = useState<any>(null);
   const [cached, setCached] = useState(false);
@@ -54,7 +66,7 @@ export default function QuickFormula() {
 
   const handleGenerate = async () => {
     if (!currentLevel || !targetLevel || !tone || !condition) {
-      toast.error("Please fill all fields");
+      toast.error('Please fill all fields');
       return;
     }
 
@@ -67,8 +79,8 @@ export default function QuickFormula() {
           currentLevel: parseInt(currentLevel),
           targetLevel: parseInt(targetLevel),
           tone,
-          condition
-        }
+          condition,
+        },
       });
 
       const endTime = performance.now();
@@ -79,40 +91,47 @@ export default function QuickFormula() {
 
       setFormula(data.formula);
       setCached(data.cached || false);
-      
+
       // Track analytics
       analytics.trackQuickFormula({
         cached: data.cached || false,
-        responseTimeMs: timeMs
+        responseTimeMs: timeMs,
       });
 
       // Validate formula
       try {
-        const { data: validationData } = await supabase.functions.invoke('validate-formula', {
-          body: { formula: data.formula }
-        });
-        
-      if (validationData && !validationData.error) {
-        setValidation(validationData);
-        setLastModelUsed('google/gemini-2.5-flash-lite');
-        analytics.trackFormulaValidation({
-          isSafe: validationData.isSafe,
-          warningCount: validationData.warnings?.length || 0,
-          blockerCount: validationData.blockers?.length || 0
-        });
+        const { data: validationData } = await supabase.functions.invoke(
+          'validate-formula',
+          {
+            body: { formula: data.formula },
+          }
+        );
+
+        if (validationData && !validationData.error) {
+          setValidation(validationData);
+          setLastModelUsed('google/gemini-2.5-flash-lite');
+          analytics.trackFormulaValidation({
+            isSafe: validationData.isSafe,
+            warningCount: validationData.warnings?.length || 0,
+            blockerCount: validationData.blockers?.length || 0,
+          });
+        }
+      } catch (validationError) {
+        console.warn(
+          'Validation failed, continuing without it:',
+          validationError
+        );
       }
-    } catch (validationError) {
-      console.warn('Validation failed, continuing without it:', validationError);
-    }
 
       toast.success(`Formula generated in ${timeMs}ms!`, {
-        description: data.cached ? "Instant result from cache ⚡" : "Freshly generated by AI 🌟"
+        description: data.cached
+          ? 'Instant result from cache ⚡'
+          : 'Freshly generated by AI 🌟',
       });
-
     } catch (error: any) {
       console.error('Quick formula error:', error);
-      toast.error("Failed to generate formula", {
-        description: error.message || "Please try again"
+      toast.error('Failed to generate formula', {
+        description: error.message || 'Please try again',
       });
     } finally {
       setLoading(false);
@@ -133,11 +152,16 @@ export default function QuickFormula() {
           <div className="mb-6 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4 animate-pulse">
               <Sparkles className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold">85% Faster Than Chat Mode</span>
+              <span className="text-sm font-semibold">
+                85% Faster Than Chat Mode
+              </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">Lightning Fast Formula Generation</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">
+              Lightning Fast Formula Generation
+            </h1>
             <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-              Get professional hair color formulas in under 2 seconds. Perfect for experienced stylists who know exactly what they need.
+              Get professional hair color formulas in under 2 seconds. Perfect
+              for experienced stylists who know exactly what they need.
             </p>
           </div>
 
@@ -155,14 +179,23 @@ export default function QuickFormula() {
               </CardHeader>
               <CardContent className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="current-level" className="text-base">Current Level</Label>
+                  <Label htmlFor="current-level" className="text-base">
+                    Current Level
+                  </Label>
                   <Select value={currentLevel} onValueChange={setCurrentLevel}>
-                    <SelectTrigger id="current-level" className="h-12 text-base">
+                    <SelectTrigger
+                      id="current-level"
+                      className="h-12 text-base"
+                    >
                       <SelectValue placeholder="Select current level" />
                     </SelectTrigger>
                     <SelectContent>
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(level => (
-                        <SelectItem key={level} value={level.toString()} className="h-10">
+                        <SelectItem
+                          key={level}
+                          value={level.toString()}
+                          className="h-10"
+                        >
                           Level {level}
                         </SelectItem>
                       ))}
@@ -171,14 +204,20 @@ export default function QuickFormula() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="target-level" className="text-base">Target Level</Label>
+                  <Label htmlFor="target-level" className="text-base">
+                    Target Level
+                  </Label>
                   <Select value={targetLevel} onValueChange={setTargetLevel}>
                     <SelectTrigger id="target-level" className="h-12 text-base">
                       <SelectValue placeholder="Select target level" />
                     </SelectTrigger>
                     <SelectContent>
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(level => (
-                        <SelectItem key={level} value={level.toString()} className="h-10">
+                        <SelectItem
+                          key={level}
+                          value={level.toString()}
+                          className="h-10"
+                        >
                           Level {level}
                         </SelectItem>
                       ))}
@@ -187,35 +226,55 @@ export default function QuickFormula() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="tone" className="text-base">Desired Tone</Label>
+                  <Label htmlFor="tone" className="text-base">
+                    Desired Tone
+                  </Label>
                   <Select value={tone} onValueChange={setTone}>
                     <SelectTrigger id="tone" className="h-12 text-base">
                       <SelectValue placeholder="Select tone" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cool" className="h-10">Cool (Ash/Silver)</SelectItem>
-                      <SelectItem value="neutral" className="h-10">Neutral (Natural)</SelectItem>
-                      <SelectItem value="warm" className="h-10">Warm (Golden/Honey)</SelectItem>
+                      <SelectItem value="cool" className="h-10">
+                        Cool (Ash/Silver)
+                      </SelectItem>
+                      <SelectItem value="neutral" className="h-10">
+                        Neutral (Natural)
+                      </SelectItem>
+                      <SelectItem value="warm" className="h-10">
+                        Warm (Golden/Honey)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="condition" className="text-base">Hair Condition</Label>
+                  <Label htmlFor="condition" className="text-base">
+                    Hair Condition
+                  </Label>
                   <Select value={condition} onValueChange={setCondition}>
                     <SelectTrigger id="condition" className="h-12 text-base">
                       <SelectValue placeholder="Select condition" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="healthy" className="h-10">Healthy (Virgin Hair)</SelectItem>
-                      <SelectItem value="damaged" className="h-10">Damaged (Needs Care)</SelectItem>
+                      <SelectItem value="healthy" className="h-10">
+                        Healthy (Virgin Hair)
+                      </SelectItem>
+                      <SelectItem value="damaged" className="h-10">
+                        Damaged (Needs Care)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <Button
                   onClick={handleGenerate}
-                  disabled={loading || !currentLevel || !targetLevel || !tone || !condition}
+                  disabled={
+                    loading ||
+                    !currentLevel ||
+                    !targetLevel ||
+                    !tone ||
+                    !condition
+                  }
                   className="w-full h-14 text-lg font-semibold"
                   size="lg"
                 >
@@ -234,7 +293,10 @@ export default function QuickFormula() {
 
                 {responseTime > 0 && (
                   <div className="flex items-center justify-center gap-2 pt-2">
-                    <Badge variant={cached ? "secondary" : "default"} className="text-xs">
+                    <Badge
+                      variant={cached ? 'secondary' : 'default'}
+                      className="text-xs"
+                    >
                       <TrendingUp className="h-3 w-3 mr-1" />
                       {responseTime}ms
                     </Badge>
@@ -250,44 +312,44 @@ export default function QuickFormula() {
 
             {/* Formula Display */}
             <div className="space-y-4">
-                {formula ? (
+              {formula ? (
                 <>
                   {validation && <FormulaSafetyBadge validation={validation} />}
                   <StructuredFormulaDisplay data={formula} />
-                  
+
                   {validatingFormula && (
                     <div className="text-center text-xs text-muted-foreground animate-pulse">
                       Validating formula safety...
                     </div>
                   )}
-                  
+
                   {lastAnalysis && (
                     <HairAnalysisPanel analysis={lastAnalysis} />
                   )}
-                  
+
                   {analyzingPhoto && (
                     <div className="text-center text-xs text-muted-foreground animate-pulse">
                       Analyzing hair photo...
                     </div>
                   )}
-                  
+
                   {lastModelUsed && responseTime > 0 && (
-                    <ModelPerformanceIndicator 
+                    <ModelPerformanceIndicator
                       modelUsed={lastModelUsed}
                       responseTimeMs={responseTime}
                     />
                   )}
-                  
+
                   {outcomeTrackingEnabled && formula && (
-                    <FormulaOutcomeFeedback 
+                    <FormulaOutcomeFeedback
                       formulaId={'quick-formula-' + Date.now()}
                       onComplete={() => {
                         analytics.trackOutcome('feedback_submitted');
-                        toast.success("Thank you for your feedback!");
+                        toast.success('Thank you for your feedback!');
                       }}
                     />
                   )}
-                  
+
                   <Card className="border-2 border-primary/20 bg-primary/5">
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-3">
@@ -295,8 +357,10 @@ export default function QuickFormula() {
                         <div className="space-y-1">
                           <p className="text-sm font-semibold">Pro Tip</p>
                           <p className="text-xs text-muted-foreground leading-relaxed">
-                            Quick Formula uses a cache of proven formulas for instant results. 
-                            If your exact combination isn't cached, we generate it fresh using AI in under 2 seconds.
+                            Quick Formula uses a cache of proven formulas for
+                            instant results. If your exact combination isn't
+                            cached, we generate it fresh using AI in under 2
+                            seconds.
                           </p>
                         </div>
                       </div>
@@ -309,7 +373,9 @@ export default function QuickFormula() {
                     <div className="text-center py-12">
                       <Zap className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
                       <p className="text-base text-muted-foreground font-medium">
-                        Select parameters above<br />to generate your formula
+                        Select parameters above
+                        <br />
+                        to generate your formula
                       </p>
                     </div>
                   </CardContent>
@@ -321,8 +387,12 @@ export default function QuickFormula() {
           {/* Feature Comparison */}
           <Card className="mt-8 border-2">
             <CardHeader>
-              <CardTitle className="text-xl">Quick Formula vs AI Chat</CardTitle>
-              <CardDescription>Choose the right tool for your workflow</CardDescription>
+              <CardTitle className="text-xl">
+                Quick Formula vs AI Chat
+              </CardTitle>
+              <CardDescription>
+                Choose the right tool for your workflow
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">

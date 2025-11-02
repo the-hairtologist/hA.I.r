@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { Loader2, BarChart3, TrendingUp, X } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { useEffect, useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { Loader2, BarChart3, TrendingUp, X } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface ServiceMetrics {
   name: string;
@@ -21,12 +27,12 @@ interface PerformanceMetrics {
 }
 
 const COLORS = [
-  "hsl(var(--primary))",
-  "hsl(var(--secondary))",
-  "hsl(var(--accent))",
-  "hsl(var(--muted))",
-  "#8884d8",
-  "#82ca9d",
+  'hsl(var(--primary))',
+  'hsl(var(--secondary))',
+  'hsl(var(--accent))',
+  'hsl(var(--muted))',
+  '#8884d8',
+  '#82ca9d',
 ];
 
 export const RealPerformanceMetrics = () => {
@@ -36,7 +42,7 @@ export const RealPerformanceMetrics = () => {
     services: [],
     cancellationRate: 0,
     averageBookingValue: 0,
-    peakDay: "N/A",
+    peakDay: 'N/A',
     totalFormulas: 0,
   });
 
@@ -52,24 +58,26 @@ export const RealPerformanceMetrics = () => {
 
       // Get stylist profile
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) return;
 
       // Get all appointments
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select(`
+        .from('appointments')
+        .select(
+          `
           id,
           service_type,
           status,
           appointment_date,
           stylist_services(price)
-        `)
-        .eq("stylist_id", stylistProfile.id);
+        `
+        )
+        .eq('stylist_id', stylistProfile.id);
 
       if (!appointments) return;
 
@@ -80,18 +88,20 @@ export const RealPerformanceMetrics = () => {
       let totalCompleted = 0;
       let totalRevenue = 0;
 
-      appointments.forEach((apt) => {
-        const service = apt.service_type || "Other";
+      appointments.forEach(apt => {
+        const service = apt.service_type || 'Other';
         const price = Number(apt.stylist_services?.price || 0);
-        const day = new Date(apt.appointment_date).toLocaleDateString("en-US", { weekday: "long" });
+        const day = new Date(apt.appointment_date).toLocaleDateString('en-US', {
+          weekday: 'long',
+        });
 
         // Service tracking
         if (!serviceMap.has(service)) {
           serviceMap.set(service, { count: 0, revenue: 0 });
         }
         serviceMap.get(service)!.count += 1;
-        
-        if (apt.status === "completed") {
+
+        if (apt.status === 'completed') {
           serviceMap.get(service)!.revenue += price;
           totalCompleted += 1;
           totalRevenue += price;
@@ -101,7 +111,7 @@ export const RealPerformanceMetrics = () => {
         dayMap.set(day, (dayMap.get(day) || 0) + 1);
 
         // Cancellation tracking
-        if (apt.status === "cancelled") {
+        if (apt.status === 'cancelled') {
           totalCancelled += 1;
         }
       });
@@ -117,7 +127,7 @@ export const RealPerformanceMetrics = () => {
         .sort((a, b) => b.count - a.count);
 
       // Find peak day
-      let peakDay = "N/A";
+      let peakDay = 'N/A';
       let maxCount = 0;
       dayMap.forEach((count, day) => {
         if (count > maxCount) {
@@ -128,13 +138,15 @@ export const RealPerformanceMetrics = () => {
 
       // Get formula count
       const { count: formulaCount } = await supabase
-        .from("formulas")
-        .select("*", { count: "exact", head: true })
-        .eq("stylist_id", stylistProfile.id);
+        .from('formulas')
+        .select('*', { count: 'exact', head: true })
+        .eq('stylist_id', stylistProfile.id);
 
       const totalAppointments = appointments.length;
-      const cancellationRate = totalAppointments > 0 ? (totalCancelled / totalAppointments) * 100 : 0;
-      const averageBookingValue = totalCompleted > 0 ? totalRevenue / totalCompleted : 0;
+      const cancellationRate =
+        totalAppointments > 0 ? (totalCancelled / totalAppointments) * 100 : 0;
+      const averageBookingValue =
+        totalCompleted > 0 ? totalRevenue / totalCompleted : 0;
 
       setMetrics({
         services,
@@ -144,7 +156,7 @@ export const RealPerformanceMetrics = () => {
         totalFormulas: formulaCount || 0,
       });
     } catch (error) {
-      console.error("Error loading performance metrics:", error);
+      console.error('Error loading performance metrics:', error);
     } finally {
       setLoading(false);
     }
@@ -167,14 +179,18 @@ export const RealPerformanceMetrics = () => {
           <BarChart3 className="h-5 w-5" />
           Performance Metrics
         </CardTitle>
-        <CardDescription>Service popularity and booking insights</CardDescription>
+        <CardDescription>
+          Service popularity and booking insights
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">
           <div className="p-4 border-2 border-foreground rounded-lg">
             <p className="text-sm text-muted-foreground">Avg Booking Value</p>
-            <p className="text-2xl font-bold">${metrics.averageBookingValue.toFixed(2)}</p>
+            <p className="text-2xl font-bold">
+              ${metrics.averageBookingValue.toFixed(2)}
+            </p>
           </div>
           <div className="p-4 border-2 border-foreground rounded-lg">
             <p className="text-sm text-muted-foreground">Peak Day</p>
@@ -185,7 +201,9 @@ export const RealPerformanceMetrics = () => {
               <X className="h-3 w-3" />
               Cancellation Rate
             </p>
-            <p className="text-2xl font-bold">{metrics.cancellationRate.toFixed(1)}%</p>
+            <p className="text-2xl font-bold">
+              {metrics.cancellationRate.toFixed(1)}%
+            </p>
           </div>
           <div className="p-4 border-2 border-foreground rounded-lg">
             <p className="text-sm text-muted-foreground">Total Formulas</p>
@@ -221,7 +239,7 @@ export const RealPerformanceMetrics = () => {
 
             {/* Service List */}
             <div className="flex-1 space-y-2 w-full">
-              {metrics.services.map((service) => (
+              {metrics.services.map(service => (
                 <div
                   key={service.name}
                   className="flex items-center justify-between p-3 border-2 border-foreground rounded-lg"
@@ -235,7 +253,9 @@ export const RealPerformanceMetrics = () => {
                   </div>
                   <div className="text-right">
                     <p className="font-bold">{service.count}</p>
-                    <p className="text-xs text-muted-foreground">${service.revenue.toFixed(0)}</p>
+                    <p className="text-xs text-muted-foreground">
+                      ${service.revenue.toFixed(0)}
+                    </p>
                   </div>
                 </div>
               ))}

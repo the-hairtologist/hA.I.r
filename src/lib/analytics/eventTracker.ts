@@ -49,8 +49,10 @@ class EventTracker {
    * Track an event with automatic batching
    */
   async track(params: TrackEventParams) {
-    const { data: { user } } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     const event = {
       user_id: params.userId || user?.id,
       session_id: this.sessionId,
@@ -103,8 +105,10 @@ class EventTracker {
     this.eventQueue = [];
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       // Only insert if user is authenticated
       if (user) {
         if (sync && navigator.sendBeacon) {
@@ -127,7 +131,11 @@ class EventTracker {
         }
       }
     } catch (error) {
-      logger.error('[EventTracker] Failed to flush events', 'eventTracker', error);
+      logger.error(
+        '[EventTracker] Failed to flush events',
+        'eventTracker',
+        error
+      );
       // Re-queue on failure
       this.eventQueue.unshift(...eventsToSend);
     }
@@ -149,7 +157,11 @@ class EventTracker {
     if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
       return 'tablet';
     }
-    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+    if (
+      /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+        ua
+      )
+    ) {
       return 'mobile';
     }
     return 'desktop';

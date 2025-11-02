@@ -88,7 +88,9 @@ export const TourTooltip = ({
               <span className="hidden xs:inline">Finish</span>
               <span className="inline xs:hidden">Done</span>
             </>
-          ) : 'Next'}
+          ) : (
+            'Next'
+          )}
         </Button>
       </div>
 

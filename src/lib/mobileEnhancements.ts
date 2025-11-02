@@ -21,7 +21,10 @@ export function isLowEndDevice(): boolean {
 
   // Check connection speed
   const connection = (navigator as any).connection;
-  if (connection?.effectiveType && ['2g', 'slow-2g'].includes(connection.effectiveType)) {
+  if (
+    connection?.effectiveType &&
+    ['2g', 'slow-2g'].includes(connection.effectiveType)
+  ) {
     return true;
   }
 
@@ -35,7 +38,9 @@ export function optimizeAnimations(): void {
   if (typeof window === 'undefined') return;
 
   const isLowEnd = isLowEndDevice();
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
 
   if (isLowEnd || prefersReducedMotion) {
     document.documentElement.style.setProperty('--animation-duration', '0.1s');
@@ -50,7 +55,7 @@ export function setupSafeAreaInsets(): void {
   if (typeof window === 'undefined') return;
 
   const root = document.documentElement;
-  
+
   // iOS safe area insets
   root.style.setProperty('padding-top', 'env(safe-area-inset-top)');
   root.style.setProperty('padding-bottom', 'env(safe-area-inset-bottom)');
@@ -66,7 +71,9 @@ export function validateTouchTargets(): void {
   if (!('ontouchstart' in window)) return;
 
   const MIN_SIZE = 44; // WCAG 2.1 requirement
-  const interactiveElements = document.querySelectorAll('button, a[href], input, select, textarea');
+  const interactiveElements = document.querySelectorAll(
+    'button, a[href], input, select, textarea'
+  );
 
   interactiveElements.forEach(el => {
     const rect = el.getBoundingClientRect();
@@ -74,7 +81,7 @@ export function validateTouchTargets(): void {
       safeConsole.warn('Touch target too small:', {
         element: el.tagName,
         size: `${rect.width}x${rect.height}`,
-        minimum: MIN_SIZE
+        minimum: MIN_SIZE,
       });
     }
   });
@@ -83,13 +90,15 @@ export function validateTouchTargets(): void {
 /**
  * Setup haptic feedback for actions (Capacitor only)
  */
-export async function triggerHaptic(type: 'light' | 'medium' | 'heavy' = 'medium'): Promise<void> {
+export async function triggerHaptic(
+  type: 'light' | 'medium' | 'heavy' = 'medium'
+): Promise<void> {
   if (typeof window === 'undefined') return;
 
   try {
     // Check if Capacitor Haptics is available
     const { Haptics, ImpactStyle } = await import('@capacitor/haptics');
-    
+
     switch (type) {
       case 'light':
         await Haptics.impact({ style: ImpactStyle.Light });
@@ -116,8 +125,11 @@ export async function triggerHaptic(type: 'light' | 'medium' | 'heavy' = 'medium
 export function setupNetworkMonitoring(onSlowConnection: () => void): void {
   if (typeof window === 'undefined') return;
 
-  const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
-  
+  const connection =
+    (navigator as any).connection ||
+    (navigator as any).mozConnection ||
+    (navigator as any).webkitConnection;
+
   if (!connection) return;
 
   const checkConnection = () => {
@@ -136,12 +148,12 @@ export function setupNetworkMonitoring(onSlowConnection: () => void): void {
  */
 export function getOptimizedImageSize(baseSize: number): number {
   if (typeof window === 'undefined') return baseSize;
-  
+
   const dpr = window.devicePixelRatio || 1;
-  
+
   // Cap at 2x for very high DPR devices (diminishing returns)
   const effectiveDPR = Math.min(dpr, 2);
-  
+
   return Math.round(baseSize * effectiveDPR);
 }
 
@@ -150,7 +162,7 @@ export function getOptimizedImageSize(baseSize: number): number {
  */
 export function isPWA(): boolean {
   if (typeof window === 'undefined') return false;
-  
+
   return (
     window.matchMedia('(display-mode: standalone)').matches ||
     (window.navigator as any).standalone === true ||
@@ -181,7 +193,7 @@ export function initMobileEnhancements(): void {
   optimizeAnimations();
   setupSafeAreaInsets();
   setupViewportHeightFix();
-  
+
   // Run touch target validation in development
   if (import.meta.env.DEV) {
     setTimeout(validateTouchTargets, 1000);

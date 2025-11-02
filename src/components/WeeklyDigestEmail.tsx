@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Mail, TrendingUp, Calendar, DollarSign } from "lucide-react";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Mail, TrendingUp, Calendar, DollarSign } from 'lucide-react';
+import { toast } from 'sonner';
 
 export const WeeklyDigestEmail = () => {
   const [emailEnabled, setEmailEnabled] = useState(false);
@@ -15,13 +21,15 @@ export const WeeklyDigestEmail = () => {
   }, []);
 
   const loadPreferences = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
 
     const { data: profile } = await supabase
-      .from("profiles")
-      .select("email_digest_enabled")
-      .eq("id", user.id)
+      .from('profiles')
+      .select('email_digest_enabled')
+      .eq('id', user.id)
       .maybeSingle();
 
     if (profile) {
@@ -31,21 +39,25 @@ export const WeeklyDigestEmail = () => {
 
   const toggleEmailDigest = async (enabled: boolean) => {
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
 
     const { error } = await supabase
-      .from("profiles")
+      .from('profiles')
       .update({ email_digest_enabled: enabled })
-      .eq("id", user.id);
+      .eq('id', user.id);
 
     if (error) {
-      toast.error("Failed to update email preferences");
+      toast.error('Failed to update email preferences');
     } else {
       setEmailEnabled(enabled);
-      toast.success(enabled ? "Weekly digest enabled" : "Weekly digest disabled");
+      toast.success(
+        enabled ? 'Weekly digest enabled' : 'Weekly digest disabled'
+      );
     }
-    
+
     setLoading(false);
   };
 
@@ -57,7 +69,8 @@ export const WeeklyDigestEmail = () => {
           <CardTitle>Weekly Digest Email</CardTitle>
         </div>
         <CardDescription>
-          Receive a weekly summary of your stats, upcoming appointments, and insights
+          Receive a weekly summary of your stats, upcoming appointments, and
+          insights
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

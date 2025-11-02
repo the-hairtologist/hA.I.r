@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { X, Activity, Zap } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { X, Activity, Zap } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PerformanceMetrics {
   fps: number;
@@ -25,13 +25,13 @@ export const PerformanceOverlay = () => {
 
     // Toggle with Ctrl+Shift+P
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === "P") {
-        setShow((prev) => !prev);
+      if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+        setShow(prev => !prev);
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
   useEffect(() => {
@@ -43,17 +43,21 @@ export const PerformanceOverlay = () => {
     const measureFPS = () => {
       frameCount++;
       const currentTime = performance.now();
-      
+
       if (currentTime >= lastTime + 1000) {
         const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
-        const memory = (performance as any).memory 
+        const memory = (performance as any).memory
           ? Math.round((performance as any).memory.usedJSHeapSize / 1048576)
           : 0;
-        
+
         setMetrics({
           fps,
           memory,
-          loadTime: Math.round(performance.timing?.loadEventEnd - performance.timing?.navigationStart) || 0,
+          loadTime:
+            Math.round(
+              performance.timing?.loadEventEnd -
+                performance.timing?.navigationStart
+            ) || 0,
         });
 
         frameCount = 0;
@@ -70,17 +74,19 @@ export const PerformanceOverlay = () => {
   if (!show) return null;
 
   const getFPSColor = (fps: number) => {
-    if (fps >= 55) return "text-success";
-    if (fps >= 30) return "text-warning";
-    return "text-destructive";
+    if (fps >= 55) return 'text-success';
+    if (fps >= 30) return 'text-warning';
+    return 'text-destructive';
   };
 
   return (
-    <Card className={cn(
-      "fixed top-4 right-4 z-50 w-64",
-      "border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]",
-      "bg-background/95 backdrop-blur-sm"
-    )}>
+    <Card
+      className={cn(
+        'fixed top-4 right-4 z-50 w-64',
+        'border-2 border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]',
+        'bg-background/95 backdrop-blur-sm'
+      )}
+    >
       <CardContent className="p-4 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -100,7 +106,7 @@ export const PerformanceOverlay = () => {
         <div className="space-y-2 text-xs font-mono">
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">FPS:</span>
-            <span className={cn("font-bold", getFPSColor(metrics.fps))}>
+            <span className={cn('font-bold', getFPSColor(metrics.fps))}>
               {metrics.fps}
             </span>
           </div>

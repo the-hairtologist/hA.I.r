@@ -1,12 +1,12 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star, TrendingUp, Users, MessageSquare } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { format } from "date-fns";
-import { ListItemSkeleton } from "@/components/ui/skeleton-layouts";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Star, TrendingUp, Users, MessageSquare } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { format } from 'date-fns';
+import { ListItemSkeleton } from '@/components/ui/skeleton-layouts';
 
 const ClientReviews = () => {
   const { session } = useAuth();
@@ -29,13 +29,15 @@ const ClientReviews = () => {
     queryFn: async () => {
       const { data } = await supabase
         .from('reviews')
-        .select(`
+        .select(
+          `
           *,
           client_profiles!reviews_client_id_fkey (
             full_name,
             user_id
           )
-        `)
+        `
+        )
         .eq('stylist_id', stylistProfile?.id)
         .order('created_at', { ascending: false });
       return data || [];
@@ -47,7 +49,7 @@ const ClientReviews = () => {
     averageRating: stylistProfile?.average_rating || 0,
     totalReviews: stylistProfile?.total_reviews || 0,
     fiveStarCount: reviews.filter(r => r.rating === 5).length,
-    recentTrend: "+12%",
+    recentTrend: '+12%',
   };
 
   return (
@@ -55,7 +57,9 @@ const ClientReviews = () => {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-pixel">Client Reviews</h1>
-          <p className="font-sans text-muted-foreground">Manage and respond to client feedback</p>
+          <p className="font-sans text-muted-foreground">
+            Manage and respond to client feedback
+          </p>
         </div>
 
         {/* Stats Overview */}
@@ -67,8 +71,12 @@ const ClientReviews = () => {
                   <Star className="h-5 w-5 text-amber-500" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">{stats.averageRating.toFixed(1)}</p>
-                  <p className="text-sm text-muted-foreground">Average Rating</p>
+                  <p className="text-2xl font-bold">
+                    {stats.averageRating.toFixed(1)}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Average Rating
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -96,7 +104,9 @@ const ClientReviews = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.fiveStarCount}</p>
-                  <p className="text-sm text-muted-foreground">5-Star Reviews</p>
+                  <p className="text-sm text-muted-foreground">
+                    5-Star Reviews
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -139,20 +149,20 @@ const ClientReviews = () => {
               </div>
             ) : (
               <div className="space-y-6">
-                {reviews.map((review) => (
+                {reviews.map(review => (
                   <div key={review.id} className="pb-6 border-b last:border-0">
                     <div className="flex items-start gap-4">
                       <Avatar>
                         <AvatarImage src="" />
                         <AvatarFallback>
-                          {review.client_profiles?.full_name?.[0] || "C"}
+                          {review.client_profiles?.full_name?.[0] || 'C'}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
                             <h4 className="font-semibold">
-                              {review.client_profiles?.full_name || "Anonymous"}
+                              {review.client_profiles?.full_name || 'Anonymous'}
                             </h4>
                             <div className="flex items-center gap-2 mt-1">
                               <div className="flex">
@@ -161,14 +171,17 @@ const ClientReviews = () => {
                                     key={i}
                                     className={`h-4 w-4 ${
                                       i < review.rating
-                                        ? "fill-amber-400 text-amber-400"
-                                        : "text-gray-300"
+                                        ? 'fill-amber-400 text-amber-400'
+                                        : 'text-gray-300'
                                     }`}
                                   />
                                 ))}
                               </div>
                               <span className="text-sm text-muted-foreground">
-                                {format(new Date(review.created_at), "MMM d, yyyy")}
+                                {format(
+                                  new Date(review.created_at),
+                                  'MMM d, yyyy'
+                                )}
                               </span>
                             </div>
                           </div>

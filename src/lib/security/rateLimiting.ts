@@ -59,7 +59,10 @@ export class RateLimitManager {
     const state = this.getState();
     if (!state || !state.isLimited) return 0;
 
-    const remaining = Math.max(0, Math.floor((state.resetTime - Date.now()) / 1000));
+    const remaining = Math.max(
+      0,
+      Math.floor((state.resetTime - Date.now()) / 1000)
+    );
     return remaining;
   }
 
@@ -69,15 +72,18 @@ export class RateLimitManager {
   static recordLimit(resetInSeconds: number = 60): void {
     this.setState({
       remainingRequests: 0,
-      resetTime: Date.now() + (resetInSeconds * 1000),
-      isLimited: true
+      resetTime: Date.now() + resetInSeconds * 1000,
+      isLimited: true,
     });
   }
 
   /**
    * Track successful request and check if approaching limit
    */
-  static recordRequest(remaining?: number): { shouldWarn: boolean; message?: string } {
+  static recordRequest(remaining?: number): {
+    shouldWarn: boolean;
+    message?: string;
+  } {
     if (remaining === undefined) {
       return { shouldWarn: false };
     }
@@ -85,13 +91,13 @@ export class RateLimitManager {
     this.setState({
       remainingRequests: remaining,
       resetTime: Date.now() + 60000, // Assume 1-minute window
-      isLimited: false
+      isLimited: false,
     });
 
     if (remaining <= WARNING_THRESHOLD) {
       return {
         shouldWarn: true,
-        message: `⚠️ ${remaining} AI requests remaining. Rate limit resets in 1 minute.`
+        message: `⚠️ ${remaining} AI requests remaining. Rate limit resets in 1 minute.`,
       };
     }
 
@@ -141,12 +147,12 @@ export function setupRateLimitTracking() {
   const originalFetch = window.fetch;
   window.fetch = async (...args) => {
     const response = await originalFetch(...args);
-    
+
     // Only track Supabase function calls
     if (args[0]?.toString().includes('functions/v1')) {
       RateLimitManager.checkResponse(response.clone());
     }
-    
+
     return response;
   };
 }
@@ -158,7 +164,8 @@ export function showRateLimitToast(toast: any) {
   if (RateLimitManager.isRateLimited()) {
     toast.error(RateLimitManager.getUserMessage(), {
       duration: 5000,
-      description: "AI features are temporarily paused. This helps ensure fair usage for all users."
+      description:
+        'AI features are temporarily paused. This helps ensure fair usage for all users.',
     });
     return true;
   }

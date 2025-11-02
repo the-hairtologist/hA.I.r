@@ -3,12 +3,12 @@
  * Optimized for list rendering performance
  */
 
-import React, { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Palette, Calendar, Tag } from "lucide-react";
-import { format } from "date-fns";
+import React, { useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Palette, Calendar, Tag } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface FormulaCardProps {
   formula: {
@@ -27,17 +27,22 @@ interface FormulaCardProps {
   onDelete?: () => void;
 }
 
-const FormulaCardComponent = ({ formula, onClick, onEdit, onDelete }: FormulaCardProps) => {
+const FormulaCardComponent = ({
+  formula,
+  onClick,
+  onEdit,
+  onDelete,
+}: FormulaCardProps) => {
   // Memoize formatted date
   const createdDate = useMemo(
-    () => format(new Date(formula.created_at), "MMM d, yyyy"),
+    () => format(new Date(formula.created_at), 'MMM d, yyyy'),
     [formula.created_at]
   );
 
   // Memoize color swatches rendering
   const colorSwatches = useMemo(() => {
     if (!formula.color_result) return null;
-    
+
     return (
       <div className="flex gap-2 flex-wrap">
         <div
@@ -95,16 +100,16 @@ const FormulaCardComponent = ({ formula, onClick, onEdit, onDelete }: FormulaCar
         {formula.formula_notes && (
           <p className="text-sm line-clamp-2">{formula.formula_notes}</p>
         )}
-        
+
         {colorSwatches}
-        
+
         {tagElements && (
           <div className="flex items-center gap-2">
             <Tag className="h-4 w-4 text-muted-foreground" />
             {tagElements}
           </div>
         )}
-        
+
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
           <span>{createdDate}</span>
@@ -113,18 +118,26 @@ const FormulaCardComponent = ({ formula, onClick, onEdit, onDelete }: FormulaCar
         {(onEdit || onDelete) && (
           <div className="flex gap-2 mt-4">
             {onEdit && (
-              <Button size="sm" variant="outline" onClick={(e) => {
-                e.stopPropagation();
-                onEdit();
-              }}>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={e => {
+                  e.stopPropagation();
+                  onEdit();
+                }}
+              >
                 Edit
               </Button>
             )}
             {onDelete && (
-              <Button size="sm" variant="destructive" onClick={(e) => {
-                e.stopPropagation();
-                onDelete();
-              }}>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={e => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
+              >
                 Delete
               </Button>
             )}
@@ -136,15 +149,19 @@ const FormulaCardComponent = ({ formula, onClick, onEdit, onDelete }: FormulaCar
 };
 
 // Memoize the component with custom comparison
-export const FormulaCard = React.memo(FormulaCardComponent, (prevProps, nextProps) => {
-  return (
-    prevProps.formula.id === nextProps.formula.id &&
-    prevProps.formula.formula_name === nextProps.formula.formula_name &&
-    prevProps.formula.formula_notes === nextProps.formula.formula_notes &&
-    prevProps.formula.color_result === nextProps.formula.color_result &&
-    JSON.stringify(prevProps.formula.tags) === JSON.stringify(nextProps.formula.tags) &&
-    prevProps.formula.created_at === nextProps.formula.created_at
-  );
-});
+export const FormulaCard = React.memo(
+  FormulaCardComponent,
+  (prevProps, nextProps) => {
+    return (
+      prevProps.formula.id === nextProps.formula.id &&
+      prevProps.formula.formula_name === nextProps.formula.formula_name &&
+      prevProps.formula.formula_notes === nextProps.formula.formula_notes &&
+      prevProps.formula.color_result === nextProps.formula.color_result &&
+      JSON.stringify(prevProps.formula.tags) ===
+        JSON.stringify(nextProps.formula.tags) &&
+      prevProps.formula.created_at === nextProps.formula.created_at
+    );
+  }
+);
 
-FormulaCard.displayName = "FormulaCard";
+FormulaCard.displayName = 'FormulaCard';

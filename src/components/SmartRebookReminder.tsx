@@ -1,11 +1,17 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, TrendingUp, Bell } from "lucide-react";
-import { format, differenceInDays, addWeeks } from "date-fns";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Calendar, Clock, TrendingUp, Bell } from 'lucide-react';
+import { format, differenceInDays, addWeeks } from 'date-fns';
+import { toast } from 'sonner';
 
 interface RebookOpportunity {
   clientId: string;
@@ -14,7 +20,7 @@ interface RebookOpportunity {
   daysSinceLastVisit: number;
   recommendedRebookDate: Date;
   avgDaysBetweenVisits: number;
-  priority: "high" | "medium" | "low";
+  priority: 'high' | 'medium' | 'low';
 }
 
 export const SmartRebookReminder = () => {
@@ -26,13 +32,16 @@ export const SmartRebookReminder = () => {
   }, []);
 
   const loadRebookOpportunities = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
 
     // Get all completed appointments for this stylist
     const { data: appointments } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         client_id,
         appointment_date,
@@ -40,10 +49,11 @@ export const SmartRebookReminder = () => {
           id,
           full_name
         )
-      `)
-      .eq("stylist_id", user.id)
-      .eq("status", "completed")
-      .order("appointment_date", { ascending: false });
+      `
+      )
+      .eq('stylist_id', user.id)
+      .eq('status', 'completed')
+      .order('appointment_date', { ascending: false });
 
     if (!appointments) {
       setLoading(false);
@@ -52,7 +62,7 @@ export const SmartRebookReminder = () => {
 
     // Group appointments by client
     const clientMap = new Map<string, any[]>();
-    appointments.forEach((apt) => {
+    appointments.forEach(apt => {
       if (!apt.client_id) return;
       if (!clientMap.has(apt.client_id)) {
         clientMap.set(apt.client_id, []);
@@ -62,18 +72,23 @@ export const SmartRebookReminder = () => {
 
     // Analyze each client for rebook opportunities
     const rebookOps: RebookOpportunity[] = [];
-    
+
     clientMap.forEach((clientApts, clientId) => {
       if (clientApts.length === 0) return;
 
       // Sort appointments by date
-      clientApts.sort((a, b) => 
-        new Date(b.appointment_date).getTime() - new Date(a.appointment_date).getTime()
+      clientApts.sort(
+        (a, b) =>
+          new Date(b.appointment_date).getTime() -
+          new Date(a.appointment_date).getTime()
       );
 
       const lastAppointment = clientApts[0];
       const lastAppointmentDate = new Date(lastAppointment.appointment_date);
-      const daysSinceLastVisit = differenceInDays(new Date(), lastAppointmentDate);
+      const daysSinceLastVisit = differenceInDays(
+        new Date(),
+        lastAppointmentDate
+      );
 
       // Calculate average days between visits
       let totalDays = 0;
@@ -84,27 +99,32 @@ export const SmartRebookReminder = () => {
         );
         totalDays += diff;
       }
-      const avgDaysBetweenVisits = clientApts.length > 1 
-        ? Math.round(totalDays / (clientApts.length - 1))
-        : 42; // Default to 6 weeks
+      const avgDaysBetweenVisits =
+        clientApts.length > 1
+          ? Math.round(totalDays / (clientApts.length - 1))
+          : 42; // Default to 6 weeks
 
       // Determine if client is due for rebook
       const isDue = daysSinceLastVisit >= avgDaysBetweenVisits * 0.8;
-      
+
       if (isDue) {
-        let priority: "high" | "medium" | "low" = "low";
+        let priority: 'high' | 'medium' | 'low' = 'low';
         if (daysSinceLastVisit > avgDaysBetweenVisits * 1.2) {
-          priority = "high";
+          priority = 'high';
         } else if (daysSinceLastVisit > avgDaysBetweenVisits) {
-          priority = "medium";
+          priority = 'medium';
         }
 
         rebookOps.push({
           clientId,
-          clientName: lastAppointment.client_profiles?.full_name || "Unknown Client",
+          clientName:
+            lastAppointment.client_profiles?.full_name || 'Unknown Client',
           lastAppointmentDate,
           daysSinceLastVisit,
-          recommendedRebookDate: addWeeks(lastAppointmentDate, Math.ceil(avgDaysBetweenVisits / 7)),
+          recommendedRebookDate: addWeeks(
+            lastAppointmentDate,
+            Math.ceil(avgDaysBetweenVisits / 7)
+          ),
           avgDaysBetweenVisits,
           priority,
         });
@@ -128,14 +148,14 @@ export const SmartRebookReminder = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "destructive";
-      case "medium":
-        return "default";
-      case "low":
-        return "secondary";
+      case 'high':
+        return 'destructive';
+      case 'medium':
+        return 'default';
+      case 'low':
+        return 'secondary';
       default:
-        return "secondary";
+        return 'secondary';
     }
   };
 
@@ -160,7 +180,7 @@ export const SmartRebookReminder = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {opportunities.slice(0, 5).map((opportunity) => (
+          {opportunities.slice(0, 5).map(opportunity => (
             <div
               key={opportunity.clientId}
               className="flex items-center justify-between p-3 rounded-lg border-2 border-border hover:border-primary/50 transition-colors"
@@ -175,11 +195,15 @@ export const SmartRebookReminder = () => {
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    <span>{opportunity.daysSinceLastVisit} days since last visit</span>
+                    <span>
+                      {opportunity.daysSinceLastVisit} days since last visit
+                    </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    <span>Last: {format(opportunity.lastAppointmentDate, "MMM d")}</span>
+                    <span>
+                      Last: {format(opportunity.lastAppointmentDate, 'MMM d')}
+                    </span>
                   </div>
                 </div>
               </div>

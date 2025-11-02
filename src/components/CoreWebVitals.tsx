@@ -20,7 +20,10 @@ interface VitalsData {
 /**
  * Get rating for a metric based on Web Vitals thresholds
  */
-function getRating(metric: string, value: number): 'good' | 'needs-improvement' | 'poor' {
+function getRating(
+  metric: string,
+  value: number
+): 'good' | 'needs-improvement' | 'poor' {
   const thresholds = {
     CLS: { good: 0.1, poor: 0.25 },
     FID: { good: 100, poor: 300 },
@@ -47,14 +50,17 @@ async function sendToAnalytics(data: VitalsData) {
       (window as any).gtag('event', 'web_vitals', {
         event_category: 'Web Vitals',
         event_label: data.metric,
-        value: Math.round(data.metric === 'CLS' ? data.value * 1000 : data.value),
+        value: Math.round(
+          data.metric === 'CLS' ? data.value * 1000 : data.value
+        ),
         non_interaction: true,
         metric_rating: data.rating,
       });
     }
 
     // Store in database (optional - consider sampling for production)
-    if (Math.random() < 0.1) { // 10% sampling
+    if (Math.random() < 0.1) {
+      // 10% sampling
       await supabase.from('performance_metrics').insert({
         metric_name: data.metric,
         metric_value: data.value,
@@ -64,9 +70,13 @@ async function sendToAnalytics(data: VitalsData) {
       });
     }
 
-    logger.info(`Core Web Vitals: ${data.metric} = ${data.value}`, 'CoreWebVitals', {
-      rating: data.rating,
-    });
+    logger.info(
+      `Core Web Vitals: ${data.metric} = ${data.value}`,
+      'CoreWebVitals',
+      {
+        rating: data.rating,
+      }
+    );
   } catch (error) {
     // Silently fail - don't break user experience for analytics
     console.error('Failed to send vitals:', error);
@@ -108,7 +118,11 @@ export const CoreWebVitals = () => {
 
       logger.info('Core Web Vitals monitoring initialized', 'CoreWebVitals');
     } catch (error) {
-      logger.error('Failed to initialize Core Web Vitals', 'CoreWebVitals', error);
+      logger.error(
+        'Failed to initialize Core Web Vitals',
+        'CoreWebVitals',
+        error
+      );
     }
   }, []);
 

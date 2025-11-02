@@ -28,15 +28,15 @@ class PredictiveAnalytics {
 
   async generateInsights(): Promise<PredictiveInsight[]> {
     this.insights = [];
-    
+
     // Analyze different aspects
     await Promise.all([
       this.analyzePerformanceTrends(),
       this.analyzeSecurityPatterns(),
       this.analyzeUserBehavior(),
-      this.analyzeRevenuePatterns()
+      this.analyzeRevenuePatterns(),
     ]);
-    
+
     return this.insights;
   }
 
@@ -45,16 +45,19 @@ class PredictiveAnalytics {
     const { data: errors } = await supabase
       .from('error_logs')
       .select('*')
-      .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+      .gte(
+        'created_at',
+        new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      )
       .order('created_at', { ascending: false });
-    
+
     if (errors && errors.length > 0) {
       // Group by component
       const errorsByComponent = errors.reduce((acc: any, err) => {
         acc[err.component] = (acc[err.component] || 0) + 1;
         return acc;
       }, {});
-      
+
       // Find components with increasing error rates
       Object.entries(errorsByComponent).forEach(([component, count]) => {
         if ((count as number) > 10) {
@@ -69,9 +72,9 @@ class PredictiveAnalytics {
               'Review recent code changes',
               'Add error boundary',
               'Implement retry logic',
-              'Add monitoring alerts'
+              'Add monitoring alerts',
             ],
-            estimatedImpact: 'Medium - May affect user experience'
+            estimatedImpact: 'Medium - May affect user experience',
           });
         }
       });
@@ -84,7 +87,7 @@ class PredictiveAnalytics {
         .from('suspicious_activity' as any)
         .select('*')
         .eq('resolved', false);
-      
+
       if (suspiciousActivity && suspiciousActivity.length > 0) {
         this.insights.push({
           type: 'security',
@@ -97,9 +100,9 @@ class PredictiveAnalytics {
             'Review suspicious activities',
             'Block high-risk users',
             'Strengthen authentication',
-            'Update security policies'
+            'Update security policies',
           ],
-          estimatedImpact: 'High - Could compromise user data'
+          estimatedImpact: 'High - Could compromise user data',
         });
       }
     } catch (error) {
@@ -115,14 +118,17 @@ class PredictiveAnalytics {
       .select('*, client_profiles(*)')
       .eq('status', 'scheduled')
       .gte('appointment_date', new Date().toISOString());
-    
+
     if (appointments && appointments.length > 0) {
       // Look for clients at risk of not showing up
       const upcomingAppointments = appointments.filter(apt => {
-        const daysUntil = Math.ceil((new Date(apt.appointment_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        const daysUntil = Math.ceil(
+          (new Date(apt.appointment_date).getTime() - Date.now()) /
+            (1000 * 60 * 60 * 24)
+        );
         return daysUntil <= 2 && !apt.reminder_sent;
       });
-      
+
       if (upcomingAppointments.length > 0) {
         this.insights.push({
           type: 'user_experience',
@@ -135,9 +141,9 @@ class PredictiveAnalytics {
             'Send SMS reminders',
             'Send email confirmations',
             'Enable push notifications',
-            'Add calendar invites'
+            'Add calendar invites',
           ],
-          estimatedImpact: 'Medium - Reduce no-shows by 30%'
+          estimatedImpact: 'Medium - Reduce no-shows by 30%',
         });
       }
     }
@@ -147,12 +153,18 @@ class PredictiveAnalytics {
     const { data: payments } = await supabase
       .from('payments')
       .select('*')
-      .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
-    
+      .gte(
+        'created_at',
+        new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+      );
+
     if (payments && payments.length > 0) {
-      const totalRevenue = payments.reduce((sum, p) => sum + Number(p.amount), 0);
+      const totalRevenue = payments.reduce(
+        (sum, p) => sum + Number(p.amount),
+        0
+      );
       const avgPerPayment = totalRevenue / payments.length;
-      
+
       this.insights.push({
         type: 'revenue',
         severity: 'info',
@@ -164,28 +176,33 @@ class PredictiveAnalytics {
           'Implement upselling strategies',
           'Create loyalty programs',
           'Optimize pricing tiers',
-          'Launch referral campaign'
+          'Launch referral campaign',
         ],
-        estimatedImpact: `Potential 15-25% revenue increase ($${(totalRevenue * 0.2).toFixed(2)})`
+        estimatedImpact: `Potential 15-25% revenue increase ($${(totalRevenue * 0.2).toFixed(2)})`,
       });
     }
   }
 
-  async predictChurn(userId: string): Promise<{riskScore: number; reasons: string[]}> {
+  async predictChurn(
+    userId: string
+  ): Promise<{ riskScore: number; reasons: string[] }> {
     // Analyze user activity patterns to predict churn
     const riskFactors: string[] = [];
     let riskScore = 0;
-    
+
     // Check last login
     const { data: profile } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
       .maybeSingle();
-    
+
     if (profile) {
-      const daysSinceUpdate = Math.ceil((Date.now() - new Date(profile.updated_at).getTime()) / (1000 * 60 * 60 * 24));
-      
+      const daysSinceUpdate = Math.ceil(
+        (Date.now() - new Date(profile.updated_at).getTime()) /
+          (1000 * 60 * 60 * 24)
+      );
+
       if (daysSinceUpdate > 30) {
         riskScore += 40;
         riskFactors.push('No activity in over 30 days');
@@ -194,10 +211,10 @@ class PredictiveAnalytics {
         riskFactors.push('Limited recent activity');
       }
     }
-    
+
     return {
       riskScore: Math.min(riskScore, 100),
-      reasons: riskFactors
+      reasons: riskFactors,
     };
   }
 
@@ -205,7 +222,9 @@ class PredictiveAnalytics {
     return this.insights;
   }
 
-  getInsightsBySeverity(severity: 'info' | 'warning' | 'critical'): PredictiveInsight[] {
+  getInsightsBySeverity(
+    severity: 'info' | 'warning' | 'critical'
+  ): PredictiveInsight[] {
     return this.insights.filter(i => i.severity === severity);
   }
 

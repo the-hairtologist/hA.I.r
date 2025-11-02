@@ -28,36 +28,36 @@ export const preloadPage = async (pagePath: string): Promise<void> => {
  */
 export const preloadHighFrequencyPages = async (): Promise<void> => {
   const highFrequencyPages = [
-    "../pages/Dashboard",
-    "../pages/Clients",
-    "../pages/Appointments",
-    "../pages/Messages",
-    "../pages/Formulas",
+    '../pages/Dashboard',
+    '../pages/Clients',
+    '../pages/Appointments',
+    '../pages/Messages',
+    '../pages/Formulas',
   ];
 
   // Preload in parallel
-  await Promise.allSettled(
-    highFrequencyPages.map((page) => preloadPage(page))
-  );
+  await Promise.allSettled(highFrequencyPages.map(page => preloadPage(page)));
 };
 
 /**
  * Preload pages based on user role
  */
-export const preloadRolePages = async (role: "stylist" | "client"): Promise<void> => {
-  if (role === "stylist") {
+export const preloadRolePages = async (
+  role: 'stylist' | 'client'
+): Promise<void> => {
+  if (role === 'stylist') {
     const stylistPages = [
-      "../pages/ScheduleManagement",
-      "../pages/Services",
-      "../pages/Portfolio",
-      "../pages/ClientDiscovery",
+      '../pages/ScheduleManagement',
+      '../pages/Services',
+      '../pages/Portfolio',
+      '../pages/ClientDiscovery',
     ];
-    await Promise.allSettled(stylistPages.map((page) => preloadPage(page)));
+    await Promise.allSettled(stylistPages.map(page => preloadPage(page)));
   } else {
     const clientPages = [
-      "../pages/StylistDiscovery",
-      "../pages/ClientRequests",
+      '../pages/StylistDiscovery',
+      '../pages/ClientRequests',
     ];
-    await Promise.allSettled(clientPages.map((page) => preloadPage(page)));
+    await Promise.allSettled(clientPages.map(page => preloadPage(page)));
   }
 };

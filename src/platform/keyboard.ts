@@ -37,7 +37,9 @@ export const hide = async (): Promise<void> => {
 /**
  * Set keyboard accessory bar visibility (iOS only)
  */
-export const setAccessoryBarVisible = async (visible: boolean): Promise<void> => {
+export const setAccessoryBarVisible = async (
+  visible: boolean
+): Promise<void> => {
   if (Platform.isIOS) {
     try {
       await Keyboard.setAccessoryBarVisible({ isVisible: visible });
@@ -89,10 +91,13 @@ export const useKeyboard = () => {
     let hideHandle: any;
 
     const setupListeners = async () => {
-      showHandle = await Keyboard.addListener('keyboardWillShow', (info: KeyboardInfo) => {
-        setIsVisible(true);
-        setKeyboardHeight(info.keyboardHeight);
-      });
+      showHandle = await Keyboard.addListener(
+        'keyboardWillShow',
+        (info: KeyboardInfo) => {
+          setIsVisible(true);
+          setKeyboardHeight(info.keyboardHeight);
+        }
+      );
 
       hideHandle = await Keyboard.addListener('keyboardWillHide', () => {
         setIsVisible(false);
@@ -116,7 +121,7 @@ export const useKeyboard = () => {
  */
 export const useKeyboardSpacing = () => {
   const { isVisible, keyboardHeight } = useKeyboard();
-  
+
   return {
     paddingBottom: isVisible && Platform.isMobile ? keyboardHeight : 0,
   };

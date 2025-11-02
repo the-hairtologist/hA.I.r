@@ -1,26 +1,69 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { ArrowLeft, Clock, Calendar as CalendarIcon, Save, Loader2, Plus, Trash2, X, CalendarDays, CalendarRange, Info, Sparkles, Edit2 } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, addDays, startOfYear, endOfYear } from "date-fns";
-import { cn } from "@/lib/utils";
-import { DateRange } from "react-day-picker";
-import { Textarea } from "@/components/ui/textarea";
-import CalendarSync from "@/components/CalendarSync";
-import { ServiceTypeColorManager } from "@/components/ServiceTypeColorManager";
-import { VacationConflictDialog } from "@/components/VacationConflictDialog";
-import { ContextualAI } from "@/components/ContextualAI";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import {
+  ArrowLeft,
+  Clock,
+  Calendar as CalendarIcon,
+  Save,
+  Loader2,
+  Plus,
+  Trash2,
+  X,
+  CalendarDays,
+  CalendarRange,
+  Info,
+  Sparkles,
+  Edit2,
+} from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  format,
+  addMonths,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  addDays,
+  startOfYear,
+  endOfYear,
+} from 'date-fns';
+import { cn } from '@/lib/utils';
+import { DateRange } from 'react-day-picker';
+import { Textarea } from '@/components/ui/textarea';
+import CalendarSync from '@/components/CalendarSync';
+import { ServiceTypeColorManager } from '@/components/ServiceTypeColorManager';
+import { VacationConflictDialog } from '@/components/VacationConflictDialog';
+import { ContextualAI } from '@/components/ContextualAI';
 
 interface DaySchedule {
   enabled: boolean;
@@ -36,107 +79,116 @@ const ScheduleManagement = () => {
   const [blockedDates, setBlockedDates] = useState<any[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [reason, setReason] = useState("");
+  const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [rangeReason, setRangeReason] = useState("");
+  const [rangeReason, setRangeReason] = useState('');
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [selectedDatesInMonth, setSelectedDatesInMonth] = useState<Date[]>([]);
   const [scheduleOverrides, setScheduleOverrides] = useState<any[]>([]);
   const [overrideDialogOpen, setOverrideDialogOpen] = useState(false);
-  const [overrideLabel, setOverrideLabel] = useState("");
-  const [overrideDateRange, setOverrideDateRange] = useState<DateRange | undefined>();
-  const [overrideSchedule, setOverrideSchedule] = useState<Record<string, DaySchedule> | null>(null);
+  const [overrideLabel, setOverrideLabel] = useState('');
+  const [overrideDateRange, setOverrideDateRange] = useState<
+    DateRange | undefined
+  >();
+  const [overrideSchedule, setOverrideSchedule] = useState<Record<
+    string,
+    DaySchedule
+  > | null>(null);
   const [editingOverride, setEditingOverride] = useState<any>(null);
-  const [selectedPreset, setSelectedPreset] = useState<string>("");
+  const [selectedPreset, setSelectedPreset] = useState<string>('');
   const [bufferTime, setBufferTime] = useState<number>(15);
   const [conflictDialogOpen, setConflictDialogOpen] = useState(false);
-  const [conflictingAppointments, setConflictingAppointments] = useState<any[]>([]);
-  const [pendingBlockAction, setPendingBlockAction] = useState<(() => Promise<void>) | null>(null);
+  const [conflictingAppointments, setConflictingAppointments] = useState<any[]>(
+    []
+  );
+  const [pendingBlockAction, setPendingBlockAction] = useState<
+    (() => Promise<void>) | null
+  >(null);
 
   // Preset templates for common scenarios
   const presetTemplates = {
     summer: {
-      label: "Summer Hours (Extended)",
+      label: 'Summer Hours (Extended)',
       schedule: {
-        monday: { enabled: true, startTime: "08:00", endTime: "19:00" },
-        tuesday: { enabled: true, startTime: "08:00", endTime: "19:00" },
-        wednesday: { enabled: true, startTime: "08:00", endTime: "19:00" },
-        thursday: { enabled: true, startTime: "08:00", endTime: "19:00" },
-        friday: { enabled: true, startTime: "08:00", endTime: "19:00" },
-        saturday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-      }
+        monday: { enabled: true, startTime: '08:00', endTime: '19:00' },
+        tuesday: { enabled: true, startTime: '08:00', endTime: '19:00' },
+        wednesday: { enabled: true, startTime: '08:00', endTime: '19:00' },
+        thursday: { enabled: true, startTime: '08:00', endTime: '19:00' },
+        friday: { enabled: true, startTime: '08:00', endTime: '19:00' },
+        saturday: { enabled: true, startTime: '09:00', endTime: '17:00' },
+        sunday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+      },
     },
     holiday: {
-      label: "Holiday Hours (Reduced)",
+      label: 'Holiday Hours (Reduced)',
       schedule: {
-        monday: { enabled: true, startTime: "10:00", endTime: "15:00" },
-        tuesday: { enabled: true, startTime: "10:00", endTime: "15:00" },
-        wednesday: { enabled: true, startTime: "10:00", endTime: "15:00" },
-        thursday: { enabled: true, startTime: "10:00", endTime: "15:00" },
-        friday: { enabled: true, startTime: "10:00", endTime: "15:00" },
-        saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-      }
+        monday: { enabled: true, startTime: '10:00', endTime: '15:00' },
+        tuesday: { enabled: true, startTime: '10:00', endTime: '15:00' },
+        wednesday: { enabled: true, startTime: '10:00', endTime: '15:00' },
+        thursday: { enabled: true, startTime: '10:00', endTime: '15:00' },
+        friday: { enabled: true, startTime: '10:00', endTime: '15:00' },
+        saturday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+        sunday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+      },
     },
     weekend: {
-      label: "Weekend Special",
+      label: 'Weekend Special',
       schedule: {
-        monday: { enabled: false, startTime: "09:00", endTime: "17:00" },
-        tuesday: { enabled: false, startTime: "09:00", endTime: "17:00" },
-        wednesday: { enabled: false, startTime: "09:00", endTime: "17:00" },
-        thursday: { enabled: false, startTime: "09:00", endTime: "17:00" },
-        friday: { enabled: false, startTime: "09:00", endTime: "17:00" },
-        saturday: { enabled: true, startTime: "08:00", endTime: "18:00" },
-        sunday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-      }
+        monday: { enabled: false, startTime: '09:00', endTime: '17:00' },
+        tuesday: { enabled: false, startTime: '09:00', endTime: '17:00' },
+        wednesday: { enabled: false, startTime: '09:00', endTime: '17:00' },
+        thursday: { enabled: false, startTime: '09:00', endTime: '17:00' },
+        friday: { enabled: false, startTime: '09:00', endTime: '17:00' },
+        saturday: { enabled: true, startTime: '08:00', endTime: '18:00' },
+        sunday: { enabled: true, startTime: '09:00', endTime: '17:00' },
+      },
     },
     earlybird: {
-      label: "Early Bird Hours",
+      label: 'Early Bird Hours',
       schedule: {
-        monday: { enabled: true, startTime: "07:00", endTime: "15:00" },
-        tuesday: { enabled: true, startTime: "07:00", endTime: "15:00" },
-        wednesday: { enabled: true, startTime: "07:00", endTime: "15:00" },
-        thursday: { enabled: true, startTime: "07:00", endTime: "15:00" },
-        friday: { enabled: true, startTime: "07:00", endTime: "15:00" },
-        saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-      }
+        monday: { enabled: true, startTime: '07:00', endTime: '15:00' },
+        tuesday: { enabled: true, startTime: '07:00', endTime: '15:00' },
+        wednesday: { enabled: true, startTime: '07:00', endTime: '15:00' },
+        thursday: { enabled: true, startTime: '07:00', endTime: '15:00' },
+        friday: { enabled: true, startTime: '07:00', endTime: '15:00' },
+        saturday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+        sunday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+      },
     },
     evening: {
-      label: "Evening Hours",
+      label: 'Evening Hours',
       schedule: {
-        monday: { enabled: true, startTime: "12:00", endTime: "20:00" },
-        tuesday: { enabled: true, startTime: "12:00", endTime: "20:00" },
-        wednesday: { enabled: true, startTime: "12:00", endTime: "20:00" },
-        thursday: { enabled: true, startTime: "12:00", endTime: "20:00" },
-        friday: { enabled: true, startTime: "12:00", endTime: "20:00" },
-        saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-        sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-      }
-    }
+        monday: { enabled: true, startTime: '12:00', endTime: '20:00' },
+        tuesday: { enabled: true, startTime: '12:00', endTime: '20:00' },
+        wednesday: { enabled: true, startTime: '12:00', endTime: '20:00' },
+        thursday: { enabled: true, startTime: '12:00', endTime: '20:00' },
+        friday: { enabled: true, startTime: '12:00', endTime: '20:00' },
+        saturday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+        sunday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+      },
+    },
   };
 
   const [schedule, setSchedule] = useState<Record<string, DaySchedule>>({
-    monday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-    tuesday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-    wednesday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-    thursday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-    friday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-    saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-    sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
+    monday: { enabled: true, startTime: '09:00', endTime: '17:00' },
+    tuesday: { enabled: true, startTime: '09:00', endTime: '17:00' },
+    wednesday: { enabled: true, startTime: '09:00', endTime: '17:00' },
+    thursday: { enabled: true, startTime: '09:00', endTime: '17:00' },
+    friday: { enabled: true, startTime: '09:00', endTime: '17:00' },
+    saturday: { enabled: false, startTime: '10:00', endTime: '16:00' },
+    sunday: { enabled: false, startTime: '10:00', endTime: '16:00' },
   });
 
   const days = [
-    { key: "monday", label: "Monday" },
-    { key: "tuesday", label: "Tuesday" },
-    { key: "wednesday", label: "Wednesday" },
-    { key: "thursday", label: "Thursday" },
-    { key: "friday", label: "Friday" },
-    { key: "saturday", label: "Saturday" },
-    { key: "sunday", label: "Sunday" },
+    { key: 'monday', label: 'Monday' },
+    { key: 'tuesday', label: 'Tuesday' },
+    { key: 'wednesday', label: 'Wednesday' },
+    { key: 'thursday', label: 'Thursday' },
+    { key: 'friday', label: 'Friday' },
+    { key: 'saturday', label: 'Saturday' },
+    { key: 'sunday', label: 'Sunday' },
   ];
 
   useEffect(() => {
@@ -146,50 +198,54 @@ const ScheduleManagement = () => {
 
   const loadData = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        navigate("/auth");
+        navigate('/auth');
         return;
       }
 
       const { data: stylist, error } = await supabase
-        .from("stylist_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
+        .from('stylist_profiles')
+        .select('*')
+        .eq('user_id', session.user.id)
         .maybeSingle();
 
       if (error) {
-        console.error("Error fetching stylist profile:", error);
-        toast.error("Error loading schedule");
-        navigate("/dashboard");
+        console.error('Error fetching stylist profile:', error);
+        toast.error('Error loading schedule');
+        navigate('/dashboard');
         return;
       }
 
       if (!stylist) {
-        toast.error("Stylist profile not found");
-        navigate("/dashboard");
+        toast.error('Stylist profile not found');
+        navigate('/dashboard');
         return;
       }
 
       setStylistProfile(stylist);
-      
+
       if (stylist.weekly_schedule) {
-        setSchedule(stylist.weekly_schedule as unknown as Record<string, DaySchedule>);
+        setSchedule(
+          stylist.weekly_schedule as unknown as Record<string, DaySchedule>
+        );
       }
 
       // Load buffer time
       setBufferTime(stylist.buffer_time_minutes || 15);
 
       const { data: datesData } = await supabase
-        .from("stylist_blocked_dates")
-        .select("*")
-        .eq("stylist_id", stylist.id)
-        .order("blocked_date", { ascending: true });
+        .from('stylist_blocked_dates')
+        .select('*')
+        .eq('stylist_id', stylist.id)
+        .order('blocked_date', { ascending: true });
 
       setBlockedDates(datesData || []);
     } catch (error: any) {
-      console.error("Error loading data:", error);
-      toast.error("Error loading schedule");
+      console.error('Error loading data:', error);
+      toast.error('Error loading schedule');
     } finally {
       setLoading(false);
     }
@@ -197,27 +253,29 @@ const ScheduleManagement = () => {
 
   const loadScheduleOverrides = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
 
       const { data: stylist } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", session.user.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', session.user.id)
         .maybeSingle();
 
       if (!stylist) return;
 
       const { data, error } = await supabase
-        .from("stylist_schedule_overrides")
-        .select("*")
-        .eq("stylist_id", stylist.id)
-        .order("start_date");
+        .from('stylist_schedule_overrides')
+        .select('*')
+        .eq('stylist_id', stylist.id)
+        .order('start_date');
 
       if (error) throw error;
       setScheduleOverrides(data || []);
     } catch (error) {
-      console.error("Error loading schedule overrides:", error);
+      console.error('Error loading schedule overrides:', error);
     }
   };
 
@@ -245,7 +303,11 @@ const ScheduleManagement = () => {
     });
   };
 
-  const handleTimeChange = (day: string, type: "startTime" | "endTime", value: string) => {
+  const handleTimeChange = (
+    day: string,
+    type: 'startTime' | 'endTime',
+    value: string
+  ) => {
     setSchedule({
       ...schedule,
       [day]: { ...schedule[day], [type]: value },
@@ -256,29 +318,38 @@ const ScheduleManagement = () => {
     setSaving(true);
     try {
       const { error } = await supabase
-        .from("stylist_profiles")
-        .update({ 
+        .from('stylist_profiles')
+        .update({
           weekly_schedule: schedule as any,
-          buffer_time_minutes: bufferTime 
+          buffer_time_minutes: bufferTime,
         })
-        .eq("id", stylistProfile.id);
+        .eq('id', stylistProfile.id);
 
       if (error) throw error;
 
-      setStylistProfile({ ...stylistProfile, weekly_schedule: schedule as any, buffer_time_minutes: bufferTime });
-      toast.success("Schedule saved successfully!");
+      setStylistProfile({
+        ...stylistProfile,
+        weekly_schedule: schedule as any,
+        buffer_time_minutes: bufferTime,
+      });
+      toast.success('Schedule saved successfully!');
       loadScheduleOverrides();
     } catch (error: any) {
-      console.error("Error saving schedule:", error);
-      toast.error("Failed to save schedule");
+      console.error('Error saving schedule:', error);
+      toast.error('Failed to save schedule');
     } finally {
       setSaving(false);
     }
   };
 
   const handleSaveOverride = async () => {
-    if (!overrideDateRange?.from || !overrideDateRange?.to || !overrideSchedule || !stylistProfile) {
-      toast.error("Please complete all fields");
+    if (
+      !overrideDateRange?.from ||
+      !overrideDateRange?.to ||
+      !overrideSchedule ||
+      !stylistProfile
+    ) {
+      toast.error('Please complete all fields');
       return;
     }
 
@@ -294,30 +365,30 @@ const ScheduleManagement = () => {
 
       if (editingOverride) {
         const { error } = await supabase
-          .from("stylist_schedule_overrides")
+          .from('stylist_schedule_overrides')
           .update(overrideData)
-          .eq("id", editingOverride.id);
+          .eq('id', editingOverride.id);
 
         if (error) throw error;
-        toast.success("Schedule override updated!");
+        toast.success('Schedule override updated!');
       } else {
         const { error } = await supabase
-          .from("stylist_schedule_overrides")
+          .from('stylist_schedule_overrides')
           .insert(overrideData);
 
         if (error) throw error;
-        toast.success("Schedule override created!");
+        toast.success('Schedule override created!');
       }
 
       setOverrideDialogOpen(false);
-      setOverrideLabel("");
+      setOverrideLabel('');
       setOverrideDateRange(undefined);
       setOverrideSchedule(null);
       setEditingOverride(null);
       loadScheduleOverrides();
     } catch (error) {
-      console.error("Error saving override:", error);
-      toast.error("Failed to save schedule override");
+      console.error('Error saving override:', error);
+      toast.error('Failed to save schedule override');
     } finally {
       setSaving(false);
     }
@@ -326,22 +397,22 @@ const ScheduleManagement = () => {
   const handleDeleteOverride = async (id: string) => {
     try {
       const { error } = await supabase
-        .from("stylist_schedule_overrides")
+        .from('stylist_schedule_overrides')
         .delete()
-        .eq("id", id);
+        .eq('id', id);
 
       if (error) throw error;
-      toast.success("Schedule override deleted!");
+      toast.success('Schedule override deleted!');
       loadScheduleOverrides();
     } catch (error) {
-      console.error("Error deleting override:", error);
-      toast.error("Failed to delete schedule override");
+      console.error('Error deleting override:', error);
+      toast.error('Failed to delete schedule override');
     }
   };
 
   const handleEditOverride = (override: any) => {
     setEditingOverride(override);
-    setOverrideLabel(override.label || "");
+    setOverrideLabel(override.label || '');
     setOverrideDateRange({
       from: new Date(override.start_date),
       to: new Date(override.end_date),
@@ -353,27 +424,33 @@ const ScheduleManagement = () => {
   const toggleGeneralAvailability = async () => {
     try {
       const { error } = await supabase
-        .from("stylist_profiles")
+        .from('stylist_profiles')
         .update({ is_available: !stylistProfile.is_available })
-        .eq("id", stylistProfile.id);
+        .eq('id', stylistProfile.id);
 
       if (error) throw error;
 
-      setStylistProfile({ ...stylistProfile, is_available: !stylistProfile.is_available });
-      toast.success(`You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} bookings`);
+      setStylistProfile({
+        ...stylistProfile,
+        is_available: !stylistProfile.is_available,
+      });
+      toast.success(
+        `You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} bookings`
+      );
     } catch (error: any) {
-      console.error("Error updating availability:", error);
-      toast.error("Error updating availability");
+      console.error('Error updating availability:', error);
+      toast.error('Error updating availability');
     }
   };
 
   const checkConflictingAppointments = async (dates: Date[]) => {
     try {
       const dateStrings = dates.map(d => format(d, 'yyyy-MM-dd'));
-      
+
       const { data: appointments, error } = await supabase
         .from('appointments')
-        .select(`
+        .select(
+          `
           id,
           appointment_date,
           service_type,
@@ -384,30 +461,34 @@ const ScheduleManagement = () => {
             phone,
             user:profiles(full_name, email)
           )
-        `)
+        `
+        )
         .eq('stylist_id', stylistProfile.id)
         .in('status', ['scheduled', 'confirmed'])
         .gte('appointment_date', format(dates[0], 'yyyy-MM-dd'))
-        .lte('appointment_date', format(dates[dates.length - 1], 'yyyy-MM-dd') + 'T23:59:59');
+        .lte(
+          'appointment_date',
+          format(dates[dates.length - 1], 'yyyy-MM-dd') + 'T23:59:59'
+        );
 
       if (error) throw error;
 
       return appointments || [];
     } catch (error) {
-      console.error("Error checking conflicts:", error);
+      console.error('Error checking conflicts:', error);
       return [];
     }
   };
 
   const handleAddBlockedDate = async () => {
     if (!selectedDate) {
-      toast.error("Please select a date");
+      toast.error('Please select a date');
       return;
     }
 
     // Check for conflicts
     const conflicts = await checkConflictingAppointments([selectedDate]);
-    
+
     if (conflicts.length > 0) {
       setConflictingAppointments(conflicts);
       setPendingBlockAction(async () => {
@@ -423,31 +504,29 @@ const ScheduleManagement = () => {
   const executeBlockDate = async () => {
     setSubmitting(true);
     try {
-      const { error } = await supabase
-        .from("stylist_blocked_dates")
-        .insert({
-          stylist_id: stylistProfile.id,
-          blocked_date: format(selectedDate!, 'yyyy-MM-dd'),
-          reason: reason.trim() || null,
-        });
+      const { error } = await supabase.from('stylist_blocked_dates').insert({
+        stylist_id: stylistProfile.id,
+        blocked_date: format(selectedDate!, 'yyyy-MM-dd'),
+        reason: reason.trim() || null,
+      });
 
       if (error) {
         if (error.code === '23505') {
-          toast.error("This date is already blocked");
+          toast.error('This date is already blocked');
         } else {
           throw error;
         }
         return;
       }
 
-      toast.success("Date blocked successfully!");
+      toast.success('Date blocked successfully!');
       setDialogOpen(false);
       setSelectedDate(undefined);
-      setReason("");
+      setReason('');
       loadData();
     } catch (error: any) {
-      console.error("Error blocking date:", error);
-      toast.error("Error blocking date");
+      console.error('Error blocking date:', error);
+      toast.error('Error blocking date');
     } finally {
       setSubmitting(false);
     }
@@ -455,8 +534,10 @@ const ScheduleManagement = () => {
 
   const handleRemoveBlockedDate = async (id: string) => {
     const blockedDate = blockedDates.find(d => d.id === id);
-    const dateStr = blockedDate ? format(new Date(blockedDate.blocked_date), 'MMMM d, yyyy') : "this date";
-    
+    const dateStr = blockedDate
+      ? format(new Date(blockedDate.blocked_date), 'MMMM d, yyyy')
+      : 'this date';
+
     const confirmed = window.confirm(
       `Unblock ${dateStr}?\n\nClients will be able to book appointments on this date again.`
     );
@@ -464,23 +545,23 @@ const ScheduleManagement = () => {
 
     try {
       const { error } = await supabase
-        .from("stylist_blocked_dates")
+        .from('stylist_blocked_dates')
         .delete()
-        .eq("id", id);
+        .eq('id', id);
 
       if (error) throw error;
 
-      toast.success("Blocked date removed");
+      toast.success('Blocked date removed');
       loadData();
     } catch (error: any) {
-      console.error("Error removing blocked date:", error);
-      toast.error("Error removing blocked date");
+      console.error('Error removing blocked date:', error);
+      toast.error('Error removing blocked date');
     }
   };
 
   const handleBlockDateRange = async () => {
     if (!dateRange?.from) {
-      toast.error("Please select a date range");
+      toast.error('Please select a date range');
       return;
     }
 
@@ -489,7 +570,7 @@ const ScheduleManagement = () => {
 
     // Check for conflicts
     const conflicts = await checkConflictingAppointments(dates);
-    
+
     if (conflicts.length > 0) {
       setConflictingAppointments(conflicts);
       setPendingBlockAction(async () => {
@@ -512,7 +593,7 @@ const ScheduleManagement = () => {
       }));
 
       const { error } = await supabase
-        .from("stylist_blocked_dates")
+        .from('stylist_blocked_dates')
         .insert(datesToInsert);
 
       if (error) throw error;
@@ -520,11 +601,11 @@ const ScheduleManagement = () => {
       toast.success(`${dates.length} date(s) blocked successfully!`);
       setRangeDialogOpen(false);
       setDateRange(undefined);
-      setRangeReason("");
+      setRangeReason('');
       loadData();
     } catch (error: any) {
-      console.error("Error blocking date range:", error);
-      toast.error("Error blocking dates");
+      console.error('Error blocking date range:', error);
+      toast.error('Error blocking dates');
     } finally {
       setSubmitting(false);
     }
@@ -532,13 +613,13 @@ const ScheduleManagement = () => {
 
   const handleBlockMultipleDates = async () => {
     if (selectedDatesInMonth.length === 0) {
-      toast.error("Please select at least one date");
+      toast.error('Please select at least one date');
       return;
     }
 
     // Check for conflicts
     const conflicts = await checkConflictingAppointments(selectedDatesInMonth);
-    
+
     if (conflicts.length > 0) {
       setConflictingAppointments(conflicts);
       setPendingBlockAction(async () => {
@@ -561,25 +642,27 @@ const ScheduleManagement = () => {
       }));
 
       const { error } = await supabase
-        .from("stylist_blocked_dates")
+        .from('stylist_blocked_dates')
         .insert(datesToInsert);
 
       if (error) throw error;
 
-      toast.success(`${selectedDatesInMonth.length} date(s) blocked successfully!`);
+      toast.success(
+        `${selectedDatesInMonth.length} date(s) blocked successfully!`
+      );
       setSelectedDatesInMonth([]);
-      setReason("");
+      setReason('');
       loadData();
     } catch (error: any) {
-      console.error("Error blocking dates:", error);
-      toast.error("Error blocking dates");
+      console.error('Error blocking dates:', error);
+      toast.error('Error blocking dates');
     } finally {
       setSubmitting(false);
     }
   };
 
   const blockedDatesArray = blockedDates.map(bd => new Date(bd.blocked_date));
-  
+
   const isDateBlocked = (date: Date) => {
     return blockedDatesArray.some(
       blocked => format(blocked, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
@@ -594,11 +677,13 @@ const ScheduleManagement = () => {
 
   const toggleDateSelection = (date: Date) => {
     if (isDateBlocked(date)) return;
-    
+
     if (isDateSelected(date)) {
-      setSelectedDatesInMonth(selectedDatesInMonth.filter(
-        d => format(d, 'yyyy-MM-dd') !== format(date, 'yyyy-MM-dd')
-      ));
+      setSelectedDatesInMonth(
+        selectedDatesInMonth.filter(
+          d => format(d, 'yyyy-MM-dd') !== format(date, 'yyyy-MM-dd')
+        )
+      );
     } else {
       setSelectedDatesInMonth([...selectedDatesInMonth, date]);
     }
@@ -617,10 +702,10 @@ const ScheduleManagement = () => {
       <header className="border-b-[3px] border-foreground bg-card/95 backdrop-blur-sm sticky top-0 z-10 shadow-brutal-sm">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={() => navigate("/dashboard")}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => navigate('/dashboard')}
               className="border-[3px] border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all h-10 w-10"
               aria-label="Back to dashboard"
             >
@@ -630,7 +715,9 @@ const ScheduleManagement = () => {
               <div className="w-10 h-10 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
                 <CalendarIcon className="h-5 w-5 text-primary" />
               </div>
-              <h1 className="text-xl sm:text-2xl font-pixel">Schedule Management</h1>
+              <h1 className="text-xl sm:text-2xl font-pixel">
+                Schedule Management
+              </h1>
             </div>
           </div>
         </div>
@@ -641,42 +728,64 @@ const ScheduleManagement = () => {
         <ContextualAI
           context="schedule"
           data={{
-            availableSlots: Object.values(schedule).filter(s => s.enabled).length,
+            availableSlots: Object.values(schedule).filter(s => s.enabled)
+              .length,
           }}
-          onAction={(action) => {
-            if (action === "suggest-slots") {
-              toast.info("Schedule optimization suggestions coming soon!");
+          onAction={action => {
+            if (action === 'suggest-slots') {
+              toast.info('Schedule optimization suggestions coming soon!');
             }
           }}
         />
 
         <Tabs defaultValue="availability" className="space-y-6">
           <TabsList className="grid w-full max-w-5xl mx-auto grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 p-1 bg-muted/50 border-[3px] border-foreground rounded-xl">
-            <TabsTrigger value="availability" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
+            <TabsTrigger
+              value="availability"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+            >
               <Clock className="h-4 w-4" />
               Weekly
             </TabsTrigger>
-            <TabsTrigger value="overrides" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
+            <TabsTrigger
+              value="overrides"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+            >
               <CalendarIcon className="h-4 w-4" />
               Overrides
             </TabsTrigger>
-            <TabsTrigger value="blocked" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
+            <TabsTrigger
+              value="blocked"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+            >
               <X className="h-4 w-4" />
               Blocked
             </TabsTrigger>
-            <TabsTrigger value="month" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
+            <TabsTrigger
+              value="month"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+            >
               <CalendarDays className="h-4 w-4" />
               Month
             </TabsTrigger>
-            <TabsTrigger value="year" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
+            <TabsTrigger
+              value="year"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+            >
               <CalendarRange className="h-4 w-4" />
               Year
             </TabsTrigger>
-            <TabsTrigger value="calendar-sync" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
+            <TabsTrigger
+              value="calendar-sync"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+            >
               <CalendarIcon className="h-4 w-4" />
               Sync
             </TabsTrigger>
-            <TabsTrigger value="service-colors" className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm">
+            <TabsTrigger
+              value="service-colors"
+              className="gap-1.5 text-xs data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border-[2px] data-[state=active]:border-foreground data-[state=active]:shadow-brutal-sm"
+            >
               <Sparkles className="h-4 w-4" />
               Colors
             </TabsTrigger>
@@ -688,10 +797,12 @@ const ScheduleManagement = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Weekly Availability</CardTitle>
-                    <CardDescription>Set your regular working hours for each day</CardDescription>
+                    <CardDescription>
+                      Set your regular working hours for each day
+                    </CardDescription>
                   </div>
-                  <Button 
-                    onClick={handleSave} 
+                  <Button
+                    onClick={handleSave}
                     disabled={saving}
                     className="border-[3px] border-foreground shadow-[3px_3px_0px_0px_hsl(var(--foreground))] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_hsl(var(--foreground))] transition-all"
                   >
@@ -721,12 +832,17 @@ const ScheduleManagement = () => {
                   <CalendarDays className="h-5 w-5 text-primary" />
                   Booking Status
                 </CardTitle>
-                <CardDescription>Control whether clients can book appointments with you</CardDescription>
+                <CardDescription>
+                  Control whether clients can book appointments with you
+                </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1 space-y-1">
-                    <Label htmlFor="general-availability" className="text-base font-semibold">
+                    <Label
+                      htmlFor="general-availability"
+                      className="text-base font-semibold"
+                    >
                       Accepting New Bookings
                     </Label>
                     <p className="text-sm text-muted-foreground">
@@ -734,11 +850,15 @@ const ScheduleManagement = () => {
                     </p>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
-                    <Badge 
-                      variant={stylistProfile?.is_available ? "default" : "secondary"}
+                    <Badge
+                      variant={
+                        stylistProfile?.is_available ? 'default' : 'secondary'
+                      }
                       className="border-[2px] border-foreground"
                     >
-                      {stylistProfile?.is_available ? "Available" : "Unavailable"}
+                      {stylistProfile?.is_available
+                        ? 'Available'
+                        : 'Unavailable'}
                     </Badge>
                     <Switch
                       id="general-availability"
@@ -759,7 +879,8 @@ const ScheduleManagement = () => {
                   <CardTitle>Buffer Time Between Appointments</CardTitle>
                 </div>
                 <CardDescription>
-                  Prevent burnout and allow time for cleanup, prep, and client notes
+                  Prevent burnout and allow time for cleanup, prep, and client
+                  notes
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-4">
@@ -774,49 +895,78 @@ const ScheduleManagement = () => {
                   </div>
                   <Select
                     value={bufferTime.toString()}
-                    onValueChange={(value) => setBufferTime(parseInt(value))}
+                    onValueChange={value => setBufferTime(parseInt(value))}
                   >
-                    <SelectTrigger id="bufferTime" className="border-[2px] border-foreground">
+                    <SelectTrigger
+                      id="bufferTime"
+                      className="border-[2px] border-foreground"
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="0">⚡ No buffer - Back to back</SelectItem>
-                      <SelectItem value="10">🏃 10 minutes - Quick reset</SelectItem>
-                      <SelectItem value="15">✨ 15 minutes - Standard (recommended)</SelectItem>
-                      <SelectItem value="20">🌟 20 minutes - Comfortable</SelectItem>
-                      <SelectItem value="30">😌 30 minutes - Relaxed pace</SelectItem>
-                      <SelectItem value="45">🧘 45 minutes - Extended break</SelectItem>
-                      <SelectItem value="60">☕ 60 minutes - Full break</SelectItem>
+                      <SelectItem value="0">
+                        ⚡ No buffer - Back to back
+                      </SelectItem>
+                      <SelectItem value="10">
+                        🏃 10 minutes - Quick reset
+                      </SelectItem>
+                      <SelectItem value="15">
+                        ✨ 15 minutes - Standard (recommended)
+                      </SelectItem>
+                      <SelectItem value="20">
+                        🌟 20 minutes - Comfortable
+                      </SelectItem>
+                      <SelectItem value="30">
+                        😌 30 minutes - Relaxed pace
+                      </SelectItem>
+                      <SelectItem value="45">
+                        🧘 45 minutes - Extended break
+                      </SelectItem>
+                      <SelectItem value="60">
+                        ☕ 60 minutes - Full break
+                      </SelectItem>
                     </SelectContent>
                   </Select>
-                  
+
                   {/* Visual Example */}
                   <div className="p-3 rounded-lg bg-muted/50 border-2 border-dashed space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase">Example Timeline</p>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase">
+                      Example Timeline
+                    </p>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                        <span className="text-sm">1:00 PM - Client appointment starts</span>
+                        <span className="text-sm">
+                          1:00 PM - Client appointment starts
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 ml-4">
-                        <span className="text-xs text-muted-foreground">↓ 90 min service</span>
+                        <span className="text-xs text-muted-foreground">
+                          ↓ 90 min service
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span className="text-sm">2:30 PM - Service complete</span>
+                        <span className="text-sm">
+                          2:30 PM - Service complete
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 ml-4">
-                        <span className="text-xs text-primary font-medium">↓ {bufferTime} min buffer (cleanup & prep)</span>
+                        <span className="text-xs text-primary font-medium">
+                          ↓ {bufferTime} min buffer (cleanup & prep)
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                        <span className="text-sm font-medium">{
-                          (() => {
+                        <span className="text-sm font-medium">
+                          {(() => {
                             const startTime = new Date('2024-01-01 13:00');
-                            const endTime = new Date(startTime.getTime() + (90 + bufferTime) * 60000);
+                            const endTime = new Date(
+                              startTime.getTime() + (90 + bufferTime) * 60000
+                            );
                             return `${endTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} - Next available slot`;
-                          })()
-                        }</span>
+                          })()}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -827,7 +977,9 @@ const ScheduleManagement = () => {
                       <div className="text-sm text-blue-900 dark:text-blue-100">
                         <p className="font-medium mb-1">Pro Tip:</p>
                         <p className="text-xs opacity-90">
-                          Set custom buffer times for specific services in the Services page. For example: color corrections might need 30 min buffer while quick trims only need 10 min.
+                          Set custom buffer times for specific services in the
+                          Services page. For example: color corrections might
+                          need 30 min buffer while quick trims only need 10 min.
                         </p>
                       </div>
                     </div>
@@ -839,7 +991,10 @@ const ScheduleManagement = () => {
             {/* Weekly Schedule */}
             <div className="space-y-4">
               {days.map(({ key, label }) => (
-                <Card key={key} className="border-[3px] border-foreground shadow-brutal overflow-hidden">
+                <Card
+                  key={key}
+                  className="border-[3px] border-foreground shadow-brutal overflow-hidden"
+                >
                   <CardContent className="p-4">
                     <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
                       <div className="w-full sm:w-40 flex items-center gap-3">
@@ -848,31 +1003,44 @@ const ScheduleManagement = () => {
                           onCheckedChange={() => handleDayToggle(key)}
                           className="data-[state=checked]:bg-primary"
                         />
-                        <Label className="text-base font-bold cursor-pointer" onClick={() => handleDayToggle(key)}>
+                        <Label
+                          className="text-base font-bold cursor-pointer"
+                          onClick={() => handleDayToggle(key)}
+                        >
                           {label}
                         </Label>
                       </div>
 
-                      <div className={cn(
-                        "flex-1 flex gap-3 items-center transition-opacity",
-                        !schedule[key].enabled && "opacity-40"
-                      )}>
+                      <div
+                        className={cn(
+                          'flex-1 flex gap-3 items-center transition-opacity',
+                          !schedule[key].enabled && 'opacity-40'
+                        )}
+                      >
                         <div className="flex-1">
-                          <Label className="text-xs text-muted-foreground mb-1 block">Start</Label>
+                          <Label className="text-xs text-muted-foreground mb-1 block">
+                            Start
+                          </Label>
                           <Input
                             type="time"
                             value={schedule[key].startTime}
-                            onChange={(e) => handleTimeChange(key, "startTime", e.target.value)}
+                            onChange={e =>
+                              handleTimeChange(key, 'startTime', e.target.value)
+                            }
                             disabled={!schedule[key].enabled}
                             className="border-[2px] border-foreground"
                           />
                         </div>
                         <div className="flex-1">
-                          <Label className="text-xs text-muted-foreground mb-1 block">End</Label>
+                          <Label className="text-xs text-muted-foreground mb-1 block">
+                            End
+                          </Label>
                           <Input
                             type="time"
                             value={schedule[key].endTime}
-                            onChange={(e) => handleTimeChange(key, "endTime", e.target.value)}
+                            onChange={e =>
+                              handleTimeChange(key, 'endTime', e.target.value)
+                            }
                             disabled={!schedule[key].enabled}
                             className="border-[2px] border-foreground"
                           />
@@ -888,7 +1056,9 @@ const ScheduleManagement = () => {
             <Card className="border-[3px] border-foreground shadow-brutal">
               <CardHeader className="bg-muted/30">
                 <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Apply common schedule templates</CardDescription>
+                <CardDescription>
+                  Apply common schedule templates
+                </CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-3">
                 <Button
@@ -897,10 +1067,14 @@ const ScheduleManagement = () => {
                   onClick={() => {
                     const newSchedule = { ...schedule };
                     Object.keys(newSchedule).forEach(day => {
-                      newSchedule[day] = { enabled: true, startTime: "09:00", endTime: "17:00" };
+                      newSchedule[day] = {
+                        enabled: true,
+                        startTime: '09:00',
+                        endTime: '17:00',
+                      };
                     });
                     setSchedule(newSchedule);
-                    toast.success("Set to business hours (9 AM - 5 PM)");
+                    toast.success('Set to business hours (9 AM - 5 PM)');
                   }}
                 >
                   Set All to Business Hours (9 AM - 5 PM)
@@ -911,12 +1085,15 @@ const ScheduleManagement = () => {
                   onClick={() => {
                     const newSchedule = { ...schedule };
                     Object.keys(newSchedule).forEach(day => {
-                      if (day === "saturday" || day === "sunday") {
-                        newSchedule[day] = { ...newSchedule[day], enabled: false };
+                      if (day === 'saturday' || day === 'sunday') {
+                        newSchedule[day] = {
+                          ...newSchedule[day],
+                          enabled: false,
+                        };
                       }
                     });
                     setSchedule(newSchedule);
-                    toast.success("Weekends disabled");
+                    toast.success('Weekends disabled');
                   }}
                 >
                   Disable Weekends
@@ -933,10 +1110,15 @@ const ScheduleManagement = () => {
                 <div className="flex gap-3">
                   <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">What are Schedule Overrides?</p>
+                    <p className="text-sm font-medium">
+                      What are Schedule Overrides?
+                    </p>
                     <p className="text-sm text-muted-foreground">
-                      Use overrides to temporarily change your working hours for specific periods like holidays, vacations, or seasonal schedules. 
-                      These will override your regular weekly schedule, and clients will automatically see the adjusted availability.
+                      Use overrides to temporarily change your working hours for
+                      specific periods like holidays, vacations, or seasonal
+                      schedules. These will override your regular weekly
+                      schedule, and clients will automatically see the adjusted
+                      availability.
                     </p>
                   </div>
                 </div>
@@ -951,18 +1133,23 @@ const ScheduleManagement = () => {
                       <Sparkles className="h-5 w-5 text-primary" />
                       Schedule Overrides
                     </CardTitle>
-                    <CardDescription>Set different working hours for specific date ranges</CardDescription>
+                    <CardDescription>
+                      Set different working hours for specific date ranges
+                    </CardDescription>
                   </div>
-                  <Dialog open={overrideDialogOpen} onOpenChange={(open) => {
-                    setOverrideDialogOpen(open);
-                    if (!open) {
-                      setEditingOverride(null);
-                      setOverrideLabel("");
-                      setOverrideDateRange(undefined);
-                      setOverrideSchedule(null);
-                      setSelectedPreset("");
-                    }
-                  }}>
+                  <Dialog
+                    open={overrideDialogOpen}
+                    onOpenChange={open => {
+                      setOverrideDialogOpen(open);
+                      if (!open) {
+                        setEditingOverride(null);
+                        setOverrideLabel('');
+                        setOverrideDateRange(undefined);
+                        setOverrideSchedule(null);
+                        setSelectedPreset('');
+                      }
+                    }}
+                  >
                     <DialogTrigger asChild>
                       <Button>
                         <Plus className="h-4 w-4 mr-2" />
@@ -971,7 +1158,9 @@ const ScheduleManagement = () => {
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                       <DialogHeader>
-                        <DialogTitle>{editingOverride ? 'Edit' : 'Add'} Schedule Override</DialogTitle>
+                        <DialogTitle>
+                          {editingOverride ? 'Edit' : 'Add'} Schedule Override
+                        </DialogTitle>
                         <DialogDescription>
                           Set custom working hours for a specific date range
                         </DialogDescription>
@@ -982,7 +1171,7 @@ const ScheduleManagement = () => {
                           <Input
                             placeholder="e.g., Summer Hours, Holiday Season"
                             value={overrideLabel}
-                            onChange={(e) => setOverrideLabel(e.target.value)}
+                            onChange={e => setOverrideLabel(e.target.value)}
                           />
                         </div>
                         <div className="space-y-2">
@@ -993,7 +1182,9 @@ const ScheduleManagement = () => {
                             onSelect={setOverrideDateRange}
                             numberOfMonths={2}
                             className="border rounded-md pointer-events-auto"
-                            disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                            disabled={date =>
+                              date < new Date(new Date().setHours(0, 0, 0, 0))
+                            }
                           />
                         </div>
                         <div className="space-y-2">
@@ -1005,19 +1196,24 @@ const ScheduleManagement = () => {
                                   <Sparkles className="h-4 w-4 text-primary" />
                                   Quick Start with Presets
                                 </p>
-                                <Select value={selectedPreset} onValueChange={(value) => {
-                                  setSelectedPreset(value);
-                                  applyPreset(value);
-                                }}>
+                                <Select
+                                  value={selectedPreset}
+                                  onValueChange={value => {
+                                    setSelectedPreset(value);
+                                    applyPreset(value);
+                                  }}
+                                >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Choose a preset template..." />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {Object.entries(presetTemplates).map(([key, preset]) => (
-                                      <SelectItem key={key} value={key}>
-                                        {preset.label}
-                                      </SelectItem>
-                                    ))}
+                                    {Object.entries(presetTemplates).map(
+                                      ([key, preset]) => (
+                                        <SelectItem key={key} value={key}>
+                                          {preset.label}
+                                        </SelectItem>
+                                      )
+                                    )}
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -1026,7 +1222,9 @@ const ScheduleManagement = () => {
                                   <span className="w-full border-t" />
                                 </div>
                                 <div className="relative flex justify-center text-xs uppercase">
-                                  <span className="bg-background px-2 text-muted-foreground">Or start from scratch</span>
+                                  <span className="bg-background px-2 text-muted-foreground">
+                                    Or start from scratch
+                                  </span>
                                 </div>
                               </div>
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1038,15 +1236,45 @@ const ScheduleManagement = () => {
                                 </Button>
                                 <Button
                                   variant="outline"
-                                  onClick={() => setOverrideSchedule({
-                                    monday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-                                    tuesday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-                                    wednesday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-                                    thursday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-                                    friday: { enabled: true, startTime: "09:00", endTime: "17:00" },
-                                    saturday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-                                    sunday: { enabled: false, startTime: "10:00", endTime: "16:00" },
-                                  })}
+                                  onClick={() =>
+                                    setOverrideSchedule({
+                                      monday: {
+                                        enabled: true,
+                                        startTime: '09:00',
+                                        endTime: '17:00',
+                                      },
+                                      tuesday: {
+                                        enabled: true,
+                                        startTime: '09:00',
+                                        endTime: '17:00',
+                                      },
+                                      wednesday: {
+                                        enabled: true,
+                                        startTime: '09:00',
+                                        endTime: '17:00',
+                                      },
+                                      thursday: {
+                                        enabled: true,
+                                        startTime: '09:00',
+                                        endTime: '17:00',
+                                      },
+                                      friday: {
+                                        enabled: true,
+                                        startTime: '09:00',
+                                        endTime: '17:00',
+                                      },
+                                      saturday: {
+                                        enabled: false,
+                                        startTime: '10:00',
+                                        endTime: '16:00',
+                                      },
+                                      sunday: {
+                                        enabled: false,
+                                        startTime: '10:00',
+                                        endTime: '16:00',
+                                      },
+                                    })
+                                  }
                                 >
                                   Standard Business Hours
                                 </Button>
@@ -1055,7 +1283,9 @@ const ScheduleManagement = () => {
                           ) : (
                             <div className="space-y-3 border rounded-lg p-4">
                               <div className="flex justify-between items-center">
-                                <h4 className="font-semibold">Custom Schedule</h4>
+                                <h4 className="font-semibold">
+                                  Custom Schedule
+                                </h4>
                                 <Button
                                   variant="ghost"
                                   size="sm"
@@ -1067,16 +1297,24 @@ const ScheduleManagement = () => {
                               {days.map(({ key, label }) => {
                                 const daySchedule = overrideSchedule[key];
                                 return (
-                                  <div key={key} className="flex items-center gap-4">
+                                  <div
+                                    key={key}
+                                    className="flex items-center gap-4"
+                                  >
                                     <div className="w-28">
-                                      <span className="font-medium">{label}</span>
+                                      <span className="font-medium">
+                                        {label}
+                                      </span>
                                     </div>
                                     <Switch
                                       checked={daySchedule.enabled}
-                                      onCheckedChange={(checked) => {
+                                      onCheckedChange={checked => {
                                         setOverrideSchedule({
                                           ...overrideSchedule,
-                                          [key]: { ...daySchedule, enabled: checked }
+                                          [key]: {
+                                            ...daySchedule,
+                                            enabled: checked,
+                                          },
                                         });
                                       }}
                                     />
@@ -1085,10 +1323,13 @@ const ScheduleManagement = () => {
                                         <input
                                           type="time"
                                           value={daySchedule.startTime}
-                                          onChange={(e) => {
+                                          onChange={e => {
                                             setOverrideSchedule({
                                               ...overrideSchedule,
-                                              [key]: { ...daySchedule, startTime: e.target.value }
+                                              [key]: {
+                                                ...daySchedule,
+                                                startTime: e.target.value,
+                                              },
                                             });
                                           }}
                                           className="px-3 py-1 border rounded-md bg-background text-sm"
@@ -1097,10 +1338,13 @@ const ScheduleManagement = () => {
                                         <input
                                           type="time"
                                           value={daySchedule.endTime}
-                                          onChange={(e) => {
+                                          onChange={e => {
                                             setOverrideSchedule({
                                               ...overrideSchedule,
-                                              [key]: { ...daySchedule, endTime: e.target.value }
+                                              [key]: {
+                                                ...daySchedule,
+                                                endTime: e.target.value,
+                                              },
                                             });
                                           }}
                                           className="px-3 py-1 border rounded-md bg-background text-sm"
@@ -1123,9 +1367,20 @@ const ScheduleManagement = () => {
                         </Button>
                         <Button
                           onClick={handleSaveOverride}
-                          disabled={saving || !overrideDateRange?.from || !overrideDateRange?.to || !overrideSchedule}
+                          disabled={
+                            saving ||
+                            !overrideDateRange?.from ||
+                            !overrideDateRange?.to ||
+                            !overrideSchedule
+                          }
                         >
-                          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : editingOverride ? 'Update' : 'Create'}
+                          {saving ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : editingOverride ? (
+                            'Update'
+                          ) : (
+                            'Create'
+                          )}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -1136,31 +1391,60 @@ const ScheduleManagement = () => {
                 {scheduleOverrides.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <CalendarIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p className="font-semibold mb-1">No schedule overrides set</p>
-                    <p className="text-sm">Create overrides for special hours during holidays, vacations, seasonal changes, etc.</p>
+                    <p className="font-semibold mb-1">
+                      No schedule overrides set
+                    </p>
+                    <p className="text-sm">
+                      Create overrides for special hours during holidays,
+                      vacations, seasonal changes, etc.
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {scheduleOverrides.map((override) => (
+                    {scheduleOverrides.map(override => (
                       <Card key={override.id} className="border-2">
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               {override.label && (
-                                <h4 className="font-semibold mb-1">{override.label}</h4>
+                                <h4 className="font-semibold mb-1">
+                                  {override.label}
+                                </h4>
                               )}
                               <p className="text-sm text-muted-foreground mb-2">
-                                {format(new Date(override.start_date), 'MMM d, yyyy')} - {format(new Date(override.end_date), 'MMM d, yyyy')}
+                                {format(
+                                  new Date(override.start_date),
+                                  'MMM d, yyyy'
+                                )}{' '}
+                                -{' '}
+                                {format(
+                                  new Date(override.end_date),
+                                  'MMM d, yyyy'
+                                )}
                               </p>
                               <div className="text-xs space-y-1">
-                                {Object.entries(override.weekly_schedule as Record<string, DaySchedule>).map(([day, daySchedule]) => (
-                                  daySchedule.enabled && (
-                                    <div key={day} className="flex items-center gap-2">
-                                      <span className="capitalize font-medium w-24">{day}:</span>
-                                      <span>{daySchedule.startTime} - {daySchedule.endTime}</span>
-                                    </div>
-                                  )
-                                ))}
+                                {Object.entries(
+                                  override.weekly_schedule as Record<
+                                    string,
+                                    DaySchedule
+                                  >
+                                ).map(
+                                  ([day, daySchedule]) =>
+                                    daySchedule.enabled && (
+                                      <div
+                                        key={day}
+                                        className="flex items-center gap-2"
+                                      >
+                                        <span className="capitalize font-medium w-24">
+                                          {day}:
+                                        </span>
+                                        <span>
+                                          {daySchedule.startTime} -{' '}
+                                          {daySchedule.endTime}
+                                        </span>
+                                      </div>
+                                    )
+                                )}
                               </div>
                             </div>
                             <div className="flex gap-2">
@@ -1174,7 +1458,9 @@ const ScheduleManagement = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleDeleteOverride(override.id)}
+                                onClick={() =>
+                                  handleDeleteOverride(override.id)
+                                }
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -1202,7 +1488,8 @@ const ScheduleManagement = () => {
                   <DialogHeader>
                     <DialogTitle>Block a Date</DialogTitle>
                     <DialogDescription>
-                      Mark dates when you're unavailable (vacation, holidays, etc.)
+                      Mark dates when you're unavailable (vacation, holidays,
+                      etc.)
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
@@ -1213,7 +1500,7 @@ const ScheduleManagement = () => {
                         selected={selectedDate}
                         onSelect={setSelectedDate}
                         disabled={blockedDatesArray}
-                        className={cn("rounded-md border pointer-events-auto")}
+                        className={cn('rounded-md border pointer-events-auto')}
                       />
                     </div>
                     <div className="space-y-2">
@@ -1222,17 +1509,21 @@ const ScheduleManagement = () => {
                         id="reason"
                         placeholder="e.g., Vacation, Holiday, Personal"
                         value={reason}
-                        onChange={(e) => setReason(e.target.value)}
+                        onChange={e => setReason(e.target.value)}
                       />
                     </div>
-                    <Button onClick={handleAddBlockedDate} disabled={submitting || !selectedDate} className="w-full">
+                    <Button
+                      onClick={handleAddBlockedDate}
+                      disabled={submitting || !selectedDate}
+                      className="w-full"
+                    >
                       {submitting ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                           Blocking...
                         </>
                       ) : (
-                        "Block Date"
+                        'Block Date'
                       )}
                     </Button>
                   </div>
@@ -1245,7 +1536,9 @@ const ScheduleManagement = () => {
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <X className="h-16 w-16 text-muted-foreground mb-4" />
                   <p className="text-xl font-semibold mb-2">No blocked dates</p>
-                  <p className="text-muted-foreground mb-4">Block dates when you're unavailable for appointments</p>
+                  <p className="text-muted-foreground mb-4">
+                    Block dates when you're unavailable for appointments
+                  </p>
                   <Button onClick={() => setDialogOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Block Your First Date
@@ -1258,26 +1551,37 @@ const ScheduleManagement = () => {
                   <CardHeader>
                     <CardTitle>Blocked Dates Overview</CardTitle>
                     <CardDescription>
-                      You have {blockedDates.length} date{blockedDates.length !== 1 ? 's' : ''} blocked
+                      You have {blockedDates.length} date
+                      {blockedDates.length !== 1 ? 's' : ''} blocked
                     </CardDescription>
                   </CardHeader>
                 </Card>
-                {blockedDates.map((blockedDate) => (
-                  <Card key={blockedDate.id} className="hover:shadow-md transition-shadow">
+                {blockedDates.map(blockedDate => (
+                  <Card
+                    key={blockedDate.id}
+                    className="hover:shadow-md transition-shadow"
+                  >
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div>
                           <CardTitle className="text-lg">
-                            {format(new Date(blockedDate.blocked_date), 'EEEE, MMMM d, yyyy')}
+                            {format(
+                              new Date(blockedDate.blocked_date),
+                              'EEEE, MMMM d, yyyy'
+                            )}
                           </CardTitle>
                           {blockedDate.reason && (
-                            <CardDescription className="mt-1">{blockedDate.reason}</CardDescription>
+                            <CardDescription className="mt-1">
+                              {blockedDate.reason}
+                            </CardDescription>
                           )}
                         </div>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleRemoveBlockedDate(blockedDate.id)}
+                          onClick={() =>
+                            handleRemoveBlockedDate(blockedDate.id)
+                          }
                           className="text-destructive hover:text-destructive hover:bg-destructive/10"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -1294,7 +1598,9 @@ const ScheduleManagement = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Monthly Schedule View</CardTitle>
-                <CardDescription>Select multiple dates in a month to block at once</CardDescription>
+                <CardDescription>
+                  Select multiple dates in a month to block at once
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -1323,21 +1629,24 @@ const ScheduleManagement = () => {
                     modifiers={{
                       blocked: blockedDatesArray,
                       selected: selectedDatesInMonth,
-                      hasOverride: (date) => getOverridesForDate(date).length > 0,
+                      hasOverride: date => getOverridesForDate(date).length > 0,
                     }}
                     modifiersClassNames={{
-                      blocked: "bg-destructive/20 text-destructive line-through",
-                      selected: "bg-primary text-primary-foreground",
-                      hasOverride: "bg-accent/30 border-accent",
+                      blocked:
+                        'bg-destructive/20 text-destructive line-through',
+                      selected: 'bg-primary text-primary-foreground',
+                      hasOverride: 'bg-accent/30 border-accent',
                     }}
                     onDayClick={toggleDateSelection}
-                    className={cn("rounded-md border pointer-events-auto")}
+                    className={cn('rounded-md border pointer-events-auto')}
                   />
 
                   <div className="bg-muted/50 p-4 rounded-lg space-y-2">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-primary rounded"></div>
-                      <span className="text-sm">Selected dates ({selectedDatesInMonth.length})</span>
+                      <span className="text-sm">
+                        Selected dates ({selectedDatesInMonth.length})
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-destructive/20 rounded line-through"></div>
@@ -1357,7 +1666,7 @@ const ScheduleManagement = () => {
                           id="month-reason"
                           placeholder="e.g., Vacation, Holiday"
                           value={reason}
-                          onChange={(e) => setReason(e.target.value)}
+                          onChange={e => setReason(e.target.value)}
                           className="mt-2"
                         />
                       </div>
@@ -1366,7 +1675,7 @@ const ScheduleManagement = () => {
                           variant="outline"
                           onClick={() => {
                             setSelectedDatesInMonth([]);
-                            setReason("");
+                            setReason('');
                           }}
                           className="flex-1"
                         >
@@ -1398,10 +1707,15 @@ const ScheduleManagement = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Year View - Block Date Ranges</CardTitle>
-                <CardDescription>Perfect for planning vacations and extended time off</CardDescription>
+                <CardDescription>
+                  Perfect for planning vacations and extended time off
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <Dialog open={rangeDialogOpen} onOpenChange={setRangeDialogOpen}>
+                <Dialog
+                  open={rangeDialogOpen}
+                  onOpenChange={setRangeDialogOpen}
+                >
                   <DialogTrigger asChild>
                     <Button className="w-full">
                       <CalendarRange className="h-4 w-4 mr-2" />
@@ -1424,7 +1738,9 @@ const ScheduleManagement = () => {
                           onSelect={setDateRange}
                           numberOfMonths={2}
                           disabled={blockedDatesArray}
-                          className={cn("rounded-md border pointer-events-auto")}
+                          className={cn(
+                            'rounded-md border pointer-events-auto'
+                          )}
                         />
                       </div>
                       <div className="space-y-2">
@@ -1433,7 +1749,7 @@ const ScheduleManagement = () => {
                           id="range-reason"
                           placeholder="e.g., Summer Vacation, Conference"
                           value={rangeReason}
-                          onChange={(e) => setRangeReason(e.target.value)}
+                          onChange={e => setRangeReason(e.target.value)}
                         />
                       </div>
                       <Button
@@ -1447,7 +1763,7 @@ const ScheduleManagement = () => {
                             Blocking...
                           </>
                         ) : (
-                          "Block Date Range"
+                          'Block Date Range'
                         )}
                       </Button>
                     </div>
@@ -1465,7 +1781,10 @@ const ScheduleManagement = () => {
                     }).length;
 
                     return (
-                      <Card key={i} className="hover:shadow-md transition-shadow">
+                      <Card
+                        key={i}
+                        className="hover:shadow-md transition-shadow"
+                      >
                         <CardHeader className="pb-3">
                           <CardTitle className="text-base">
                             {format(monthDate, 'MMMM yyyy')}
@@ -1474,8 +1793,14 @@ const ScheduleManagement = () => {
                         <CardContent>
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
-                              <span className="text-muted-foreground">Blocked dates:</span>
-                              <Badge variant={blockedInMonth > 0 ? "default" : "outline"}>
+                              <span className="text-muted-foreground">
+                                Blocked dates:
+                              </span>
+                              <Badge
+                                variant={
+                                  blockedInMonth > 0 ? 'default' : 'outline'
+                                }
+                              >
                                 {blockedInMonth}
                               </Badge>
                             </div>
@@ -1485,7 +1810,11 @@ const ScheduleManagement = () => {
                               className="w-full"
                               onClick={() => {
                                 setCurrentMonth(monthDate);
-                                document.querySelector('[value="month"]')?.dispatchEvent(new Event('click', { bubbles: true }));
+                                document
+                                  .querySelector('[value="month"]')
+                                  ?.dispatchEvent(
+                                    new Event('click', { bubbles: true })
+                                  );
                               }}
                             >
                               View Month
@@ -1498,41 +1827,45 @@ const ScheduleManagement = () => {
                 </div>
               </CardContent>
             </Card>
-            </TabsContent>
+          </TabsContent>
 
-            {/* Calendar Sync Tab */}
-            <TabsContent value="calendar-sync">
-              <CalendarSync />
-            </TabsContent>
+          {/* Calendar Sync Tab */}
+          <TabsContent value="calendar-sync">
+            <CalendarSync />
+          </TabsContent>
 
-            {/* Service Type Colors Tab */}
-            <TabsContent value="service-colors">
-              <ServiceTypeColorManager stylistId={stylistProfile?.id} />
-            </TabsContent>
-          </Tabs>
-        </main>
+          {/* Service Type Colors Tab */}
+          <TabsContent value="service-colors">
+            <ServiceTypeColorManager stylistId={stylistProfile?.id} />
+          </TabsContent>
+        </Tabs>
+      </main>
 
-        {/* Vacation Conflict Dialog */}
-        <VacationConflictDialog
-          open={conflictDialogOpen}
-          onOpenChange={setConflictDialogOpen}
-          conflictingAppointments={conflictingAppointments}
-          blockedDates={
-            selectedDate && selectedDate instanceof Date && !isNaN(selectedDate.getTime())
-              ? [selectedDate]
-              : dateRange?.from && dateRange?.to 
-                ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
-                : selectedDatesInMonth.filter(d => d instanceof Date && !isNaN(d.getTime()))
+      {/* Vacation Conflict Dialog */}
+      <VacationConflictDialog
+        open={conflictDialogOpen}
+        onOpenChange={setConflictDialogOpen}
+        conflictingAppointments={conflictingAppointments}
+        blockedDates={
+          selectedDate &&
+          selectedDate instanceof Date &&
+          !isNaN(selectedDate.getTime())
+            ? [selectedDate]
+            : dateRange?.from && dateRange?.to
+              ? eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
+              : selectedDatesInMonth.filter(
+                  d => d instanceof Date && !isNaN(d.getTime())
+                )
+        }
+        onConfirm={async () => {
+          if (pendingBlockAction) {
+            await pendingBlockAction();
+            setPendingBlockAction(null);
           }
-          onConfirm={async () => {
-            if (pendingBlockAction) {
-              await pendingBlockAction();
-              setPendingBlockAction(null);
-            }
-          }}
-        />
-      </div>
-    );
-  };
+        }}
+      />
+    </div>
+  );
+};
 
 export default ScheduleManagement;

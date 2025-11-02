@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, Package, Calendar } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles, Package, Calendar } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface PredictiveInsight {
   type: string;
@@ -18,7 +18,10 @@ interface PredictiveSuggestionsProps {
   onAction?: (insight: PredictiveInsight) => void;
 }
 
-export const PredictiveSuggestions = ({ insights, onAction }: PredictiveSuggestionsProps) => {
+export const PredictiveSuggestions = ({
+  insights,
+  onAction,
+}: PredictiveSuggestionsProps) => {
   if (!insights || insights.length === 0) {
     return (
       <Card>
@@ -30,7 +33,8 @@ export const PredictiveSuggestions = ({ insights, onAction }: PredictiveSuggesti
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">
-            No upcoming appointments to analyze. Predictions will appear when appointments are scheduled.
+            No upcoming appointments to analyze. Predictions will appear when
+            appointments are scheduled.
           </p>
         </CardContent>
       </Card>
@@ -46,15 +50,20 @@ export const PredictiveSuggestions = ({ insights, onAction }: PredictiveSuggesti
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {insights.map((insight) => (
-          <Alert key={`${insight.type}-${insight.title}`} className="border-primary/20">
+        {insights.map(insight => (
+          <Alert
+            key={`${insight.type}-${insight.title}`}
+            className="border-primary/20"
+          >
             <div className="flex items-start gap-3">
               <Calendar className="h-5 w-5 text-primary mt-0.5" />
               <div className="flex-1 space-y-2">
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="font-semibold">{insight.title}</h4>
-                    <p className="text-sm text-muted-foreground">{insight.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {insight.description}
+                    </p>
                   </div>
                   <Badge variant="outline">
                     {Math.round(insight.confidence * 100)}% confidence
@@ -72,17 +81,20 @@ export const PredictiveSuggestions = ({ insights, onAction }: PredictiveSuggesti
                   </div>
                 )}
 
-                {insight.inventory_items && insight.inventory_items.length > 0 && (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <Package className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-xs font-medium">Check inventory:</span>
-                    {insight.inventory_items.map((item, j) => (
-                      <Badge key={j} variant="secondary" className="text-xs">
-                        {item}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
+                {insight.inventory_items &&
+                  insight.inventory_items.length > 0 && (
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Package className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-xs font-medium">
+                        Check inventory:
+                      </span>
+                      {insight.inventory_items.map((item, j) => (
+                        <Badge key={j} variant="secondary" className="text-xs">
+                          {item}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
 
                 {onAction && (
                   <Button

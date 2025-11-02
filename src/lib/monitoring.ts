@@ -1,6 +1,6 @@
 /**
  * Error Monitoring and Performance Tracking with Sentry
- * 
+ *
  * Setup Instructions:
  * 1. Create free account at https://sentry.io
  * 2. Create new React project
@@ -9,7 +9,7 @@
  * 5. Install packages:
  *    npm install @sentry/react
  * 6. Uncomment the imports below and initialize in src/main.tsx
- * 
+ *
  * Features:
  * - Automatic error tracking
  * - Performance monitoring
@@ -18,13 +18,19 @@
  * - Source map uploads for stack traces
  */
 
-import * as Sentry from "@sentry/react";
-import type { ReactNode } from 'react';
+import * as Sentry from '@sentry/react';
+import type { ComponentType } from 'react';
+import type {
+  Event as SentryEvent,
+  EventHint,
+  Transaction,
+} from '@sentry/types';
 import { logger } from '@/lib/logger';
 
 // Lazy environment variable access to prevent build-time issues
 const getSentryDSN = () => import.meta.env.VITE_SENTRY_DSN || '';
-const getEnvironment = () => import.meta.env.DEV ? 'development' : 'production';
+const getEnvironment = () =>
+  import.meta.env.DEV ? 'development' : 'production';
 
 let sentryInitialized = false;
 
@@ -36,7 +42,7 @@ export const initSentry = () => {
   if (sentryInitialized) {
     return;
   }
-  
+
   const dsn = getSentryDSN(); // Lazy load env var
   if (!dsn) {
     logger.info('Sentry not configured - error monitoring disabled');
@@ -46,11 +52,11 @@ export const initSentry = () => {
 
   try {
     const environment = getEnvironment(); // Lazy load env var
-    
+
     Sentry.init({
       dsn: dsn,
       environment: environment,
-      
+
       // Performance Monitoring
       integrations: [
         Sentry.browserTracingIntegration(),
@@ -78,7 +84,7 @@ export const initSentry = () => {
       ],
 
       // Add custom tags
-      beforeSend(event: any, hint: any) {
+      beforeSend(event: SentryEvent, hint?: EventHint) {
         if (event.request) {
           event.tags = {
             ...event.tags,
@@ -98,7 +104,10 @@ export const initSentry = () => {
 /**
  * Manually capture an error
  */
-export const captureError = (error: Error, context?: Record<string, any>) => {
+export const captureError = (
+  error: Error,
+  context?: Record<string, unknown>
+) => {
   if (!sentryInitialized) return;
 
   Sentry.captureException(error, {
@@ -109,7 +118,10 @@ export const captureError = (error: Error, context?: Record<string, any>) => {
 /**
  * Capture a message (not an error)
  */
-export const captureMessage = (message: string, level: 'info' | 'warning' | 'error' = 'info') => {
+export const captureMessage = (
+  message: string,
+  level: 'info' | 'warning' | 'error' = 'info'
+) => {
   if (!sentryInitialized) return;
 
   Sentry.captureMessage(message, level);
@@ -140,7 +152,11 @@ export const clearUser = () => {
 /**
  * Add breadcrumb for debugging context
  */
-export const addBreadcrumb = (message: string, category: string, data?: Record<string, any>) => {
+export const addBreadcrumb = (
+  message: string,
+  category: string,
+  data?: Record<string, unknown>
+) => {
   if (!sentryInitialized) return;
 
   Sentry.addBreadcrumb({
@@ -154,19 +170,33 @@ export const addBreadcrumb = (message: string, category: string, data?: Record<s
 /**
  * Start a performance transaction (span)
  */
-export const startTransaction = (name: string, operation: string) => {
-  if (!sentryInitialized) return null;
+export const startTransaction = (
+  name: string,
+  operation: string
+): Transaction | null => {
+  if (!sentryInitialized) {
+    return null;
+  }
 
-  return Sentry.startSpan({ name, op: operation }, (span) => span);
+  const transaction = Sentry.getCurrentHub().startTransaction({
+    name,
+    op: operation,
+  });
+  return transaction ?? null;
 };
 
 /**
  * Wrap your router with Sentry (only available after installing @sentry/react)
  * Example: const SentryRoutes = withSentryRouting(Routes);
  */
-export const withSentryRouting = (component: any) => {
-  if (!sentryInitialized) return component;
-  return Sentry.withSentryRouting?.(component) || component;
+export const withSentryRouting = <T extends ComponentType<unknown>>(
+  component: T
+): T => {
+  if (!sentryInitialized || !Sentry.withSentryRouting) {
+    return component;
+  }
+
+  return Sentry.withSentryRouting(component) as T;
 };
 
 /**
@@ -182,20 +212,20 @@ export const isSentryReady = () => sentryInitialized;
 
 /**
  * Usage Examples:
- * 
+ *
  * // In App.tsx
  * import { initSentry } from '@/lib/monitoring';
- * 
+ *
  * function App() {
  *   useEffect(() => {
  *     initSentry();
  *   }, []);
  * }
- * 
+ *
  * // Track user
  * import { setUser } from '@/lib/monitoring';
  * setUser(userId, email, username);
- * 
+ *
  * // Capture errors
  * import { captureError } from '@/lib/monitoring';
  * try {
@@ -203,7 +233,7 @@ export const isSentryReady = () => sentryInitialized;
  * } catch (error) {
  *   captureError(error, { context: 'payment_processing' });
  * }
- * 
+ *
  * // Add breadcrumbs for debugging
  * import { addBreadcrumb } from '@/lib/monitoring';
  * addBreadcrumb('User clicked checkout', 'user_action', { cartTotal: 99.99 });

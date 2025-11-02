@@ -1,77 +1,86 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
+serve(async req => {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { appointment_id } = await req.json();
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get appointment details
     const { data: appointment, error: aptError } = await supabase
-      .from("appointments")
-      .select(`
+      .from('appointments')
+      .select(
+        `
         id,
         service_type,
         client_id,
         stylist_id,
         client_profiles!client_id(full_name, email),
         stylist_profiles!stylist_id(full_name)
-      `)
-      .eq("id", appointment_id)
+      `
+      )
+      .eq('id', appointment_id)
       .single();
 
     if (aptError || !appointment) {
-      throw new Error("Appointment not found");
+      throw new Error('Appointment not found');
     }
 
-    const clientProfile = Array.isArray(appointment.client_profiles) 
-      ? appointment.client_profiles[0] 
+    const clientProfile = Array.isArray(appointment.client_profiles)
+      ? appointment.client_profiles[0]
       : appointment.client_profiles;
-    
-    const stylistProfile = Array.isArray(appointment.stylist_profiles) 
-      ? appointment.stylist_profiles[0] 
+
+    const stylistProfile = Array.isArray(appointment.stylist_profiles)
+      ? appointment.stylist_profiles[0]
       : appointment.stylist_profiles;
 
     if (!clientProfile?.email) {
-      throw new Error("Client email not found");
+      throw new Error('Client email not found');
     }
 
     // Get matching aftercare template
     const { data: template } = await supabase
-      .from("aftercare_templates")
-      .select("*")
-      .eq("service_type", appointment.service_type)
-      .eq("is_global", true)
+      .from('aftercare_templates')
+      .select('*')
+      .eq('service_type', appointment.service_type)
+      .eq('is_global', true)
       .maybeSingle();
 
     if (!template) {
-      console.log(`No aftercare template found for service type: ${appointment.service_type}`);
+      console.log(
+        `No aftercare template found for service type: ${appointment.service_type}`
+      );
       return new Response(
-        JSON.stringify({ success: false, message: "No template found" }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ success: false, message: 'No template found' }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
     // Generate email HTML
     const emailHtml = generateAftercareEmail(
       clientProfile.full_name,
-      stylistProfile?.full_name || "Your Stylist",
+      stylistProfile?.full_name || 'Your Stylist',
       template.title,
       template.content,
       template.tips as string[],
@@ -80,16 +89,21 @@ serve(async (req) => {
 
     // Check email preferences
     const { data: prefs } = await supabase
-      .from("email_preferences")
-      .select("*")
-      .eq("email", clientProfile.email)
+      .from('email_preferences')
+      .select('*')
+      .eq('email', clientProfile.email)
       .maybeSingle();
 
     if (prefs && !prefs.appointment_reminders_enabled) {
-      console.log(`⏭️ Skipping aftercare email - user opted out: ${clientProfile.email}`);
+      console.log(
+        `⏭️ Skipping aftercare email - user opted out: ${clientProfile.email}`
+      );
       return new Response(
-        JSON.stringify({ success: true, message: "User opted out of emails" }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ success: true, message: 'User opted out of emails' }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
@@ -102,7 +116,7 @@ serve(async (req) => {
     });
 
     // Log to email_sequence_logs
-    await supabase.from("email_sequence_logs").insert({
+    await supabase.from('email_sequence_logs').insert({
       client_id: appointment.client_id,
       stylist_id: appointment.stylist_id,
       enrollment_id: null,
@@ -115,17 +129,23 @@ serve(async (req) => {
     console.log(`✅ Aftercare email sent for appointment ${appointment_id}`);
 
     return new Response(
-      JSON.stringify({ success: true, message: "Aftercare email sent" }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ success: true, message: 'Aftercare email sent' }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
     );
   } catch (error) {
-    console.error("Error sending aftercare:", error);
+    console.error('Error sending aftercare:', error);
     return new Response(
       JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : 'Unknown error',
       }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
     );
   }
 });
@@ -138,8 +158,12 @@ function generateAftercareEmail(
   tips: string[],
   products: string[]
 ): string {
-  const tipsHtml = tips.map(tip => `<li style="margin-bottom: 10px;">${tip}</li>`).join("");
-  const productsHtml = products.map(product => `<li style="margin-bottom: 8px;">✓ ${product}</li>`).join("");
+  const tipsHtml = tips
+    .map(tip => `<li style="margin-bottom: 10px;">${tip}</li>`)
+    .join('');
+  const productsHtml = products
+    .map(product => `<li style="margin-bottom: 8px;">✓ ${product}</li>`)
+    .join('');
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -157,7 +181,9 @@ function generateAftercareEmail(
         </ul>
       </div>
       
-      ${products.length > 0 ? `
+      ${
+        products.length > 0
+          ? `
         <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin: 30px 0;">
           <h4 style="color: #333; margin-top: 0; display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 20px;">🛍️</span> Recommended Products
@@ -166,7 +192,9 @@ function generateAftercareEmail(
             ${productsHtml}
           </ul>
         </div>
-      ` : ''}
+      `
+          : ''
+      }
       
       <div style="border-left: 4px solid #667eea; padding-left: 20px; margin: 30px 0; background: #f0f4ff; padding: 15px; border-radius-right: 8px;">
         <p style="color: #666; font-style: italic; margin: 0; font-size: 14px;">

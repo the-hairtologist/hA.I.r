@@ -35,13 +35,13 @@ export function useSmartQuery<T>({
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        
+
         // Track access for AI learning
         smartCacheAI.trackAccess(key);
 
         // Fetch with cache
         const result = await queryCache.fetch(key, fetcher, ttl);
-        
+
         if (isMounted) {
           setData(result);
           setError(null);
@@ -68,7 +68,7 @@ export function useSmartQuery<T>({
   const refetch = async () => {
     queryCache.invalidate(key);
     setIsLoading(true);
-    
+
     try {
       const result = await queryCache.fetch(key, fetcher, ttl);
       setData(result);

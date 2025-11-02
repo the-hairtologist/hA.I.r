@@ -3,8 +3,8 @@
  * Wraps each dashboard section in isolation
  */
 
-import { FeatureErrorBoundary } from "@/components/errors/FeatureErrorBoundary";
-import { ReactNode } from "react";
+import { FeatureErrorBoundary } from '@/components/errors/FeatureErrorBoundary';
+import { ReactNode } from 'react';
 
 interface SectionWrapperProps {
   name: string;
@@ -13,9 +13,7 @@ interface SectionWrapperProps {
 
 export const DashboardSection = ({ name, children }: SectionWrapperProps) => {
   return (
-    <FeatureErrorBoundary featureName={name}>
-      {children}
-    </FeatureErrorBoundary>
+    <FeatureErrorBoundary featureName={name}>{children}</FeatureErrorBoundary>
   );
 };
 

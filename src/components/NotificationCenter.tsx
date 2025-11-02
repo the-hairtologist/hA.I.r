@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Bell } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { format } from "date-fns";
+} from '@/components/ui/dropdown-menu';
+import { format } from 'date-fns';
 
 export const NotificationCenter = ({ userId }: { userId: string }) => {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -34,7 +34,7 @@ export const NotificationCenter = ({ userId }: { userId: string }) => {
           event: 'INSERT',
           schema: 'public',
           table: 'messages',
-          filter: `recipient_id=eq.${userId}`
+          filter: `recipient_id=eq.${userId}`,
         },
         () => loadNotifications()
       )
@@ -49,34 +49,41 @@ export const NotificationCenter = ({ userId }: { userId: string }) => {
     try {
       // Get recent appointments (simplified notification system)
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select("*")
-        .or(`stylist_id.in.(SELECT id FROM stylist_profiles WHERE user_id = '${userId}'),client_id.in.(SELECT id FROM client_profiles WHERE user_id = '${userId}')`)
-        .order("created_at", { ascending: false })
+        .from('appointments')
+        .select('*')
+        .or(
+          `stylist_id.in.(SELECT id FROM stylist_profiles WHERE user_id = '${userId}'),client_id.in.(SELECT id FROM client_profiles WHERE user_id = '${userId}')`
+        )
+        .order('created_at', { ascending: false })
         .limit(5);
 
       // Get unread messages
       const { data: messages } = await supabase
-        .from("messages")
-        .select("id")
-        .eq("recipient_id", userId)
-        .eq("is_read", false);
+        .from('messages')
+        .select('id')
+        .eq('recipient_id', userId)
+        .eq('is_read', false);
 
       setNotifications(appointments || []);
       setUnreadCount(messages?.length || 0);
     } catch (error) {
-      console.error("Error loading notifications:", error);
+      console.error('Error loading notifications:', error);
     }
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative min-h-[44px] min-w-[44px]" aria-label="Notifications">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative min-h-[44px] min-w-[44px]"
+          aria-label="Notifications"
+        >
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <Badge 
-              variant="destructive" 
+            <Badge
+              variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
             >
               {unreadCount}
@@ -90,13 +97,16 @@ export const NotificationCenter = ({ userId }: { userId: string }) => {
             No notifications
           </div>
         ) : (
-          notifications.map((notification) => (
-            <DropdownMenuItem key={notification.id} className="flex-col items-start p-4">
+          notifications.map(notification => (
+            <DropdownMenuItem
+              key={notification.id}
+              className="flex-col items-start p-4"
+            >
               <p className="font-semibold text-sm">
                 Appointment {notification.status}
               </p>
               <p className="text-xs text-muted-foreground">
-                {format(new Date(notification.created_at), "MMM d, h:mm a")}
+                {format(new Date(notification.created_at), 'MMM d, h:mm a')}
               </p>
             </DropdownMenuItem>
           ))

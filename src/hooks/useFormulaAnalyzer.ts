@@ -41,28 +41,37 @@ export function useFormulaAnalyzer() {
     }
 
     setAnalyzing(true);
-    
-    try {
-      logger.info('Analyzing formulas', 'FormulaAnalyzer', { count: formulas.length });
 
-      const { data, error } = await supabase.functions.invoke('ai-formula-analyzer', {
-        body: { formulas },
+    try {
+      logger.info('Analyzing formulas', 'FormulaAnalyzer', {
+        count: formulas.length,
       });
+
+      const { data, error } = await supabase.functions.invoke(
+        'ai-formula-analyzer',
+        {
+          body: { formulas },
+        }
+      );
 
       if (error) throw error;
 
       if (data?.formulas) {
         const analysisMap: Record<string, FormulaAnalysis> = {};
-        data.formulas.forEach((f: Formula & { intelligence?: FormulaAnalysis }) => {
-          if (f.intelligence) {
-            analysisMap[f.id] = f.intelligence;
+        data.formulas.forEach(
+          (f: Formula & { intelligence?: FormulaAnalysis }) => {
+            if (f.intelligence) {
+              analysisMap[f.id] = f.intelligence;
+            }
           }
-        });
-        
+        );
+
         setAnalysis(analysisMap);
-        logger.info('Formula analysis complete', 'FormulaAnalyzer', { analyzed: Object.keys(analysisMap).length });
+        logger.info('Formula analysis complete', 'FormulaAnalyzer', {
+          analyzed: Object.keys(analysisMap).length,
+        });
         toast.success(`Analyzed ${Object.keys(analysisMap).length} formulas`);
-        
+
         return analysisMap;
       }
 

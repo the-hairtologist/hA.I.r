@@ -1,15 +1,15 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  HelpCircle, 
-  MessageSquare, 
-  Book, 
-  Mail, 
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  HelpCircle,
+  MessageSquare,
+  Book,
+  Mail,
   Phone,
   ExternalLink,
   Search,
@@ -19,18 +19,23 @@ import {
   Sparkles,
   Play,
   CheckCircle,
-} from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { haptic } from "@/platform/haptics";
-import { useNavigate } from "react-router-dom";
+} from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
+import { haptic } from '@/platform/haptics';
+import { useNavigate } from 'react-router-dom';
 
 const Help = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const { user } = useAuth();
   const { isStylist, isClient, isAdmin } = useUserRole(user?.id);
   const navigate = useNavigate();
@@ -38,163 +43,196 @@ const Help = () => {
   // Help articles from the help button
   const helpArticles = [
     {
-      id: "add-client",
-      title: "How to Add Your First Client",
-      description: "Step-by-step guide to adding clients and building their hair history",
-      category: "Getting Started",
+      id: 'add-client',
+      title: 'How to Add Your First Client',
+      description:
+        'Step-by-step guide to adding clients and building their hair history',
+      category: 'Getting Started',
     },
     {
-      id: "formulas",
-      title: "Saving Color Formulas",
-      description: "Learn how to document and save perfect color formulas",
-      category: "Features",
+      id: 'formulas',
+      title: 'Saving Color Formulas',
+      description: 'Learn how to document and save perfect color formulas',
+      category: 'Features',
     },
     {
-      id: "milestones",
-      title: "Understanding Client Milestones",
-      description: "How milestone celebrations work and reward your loyal clients",
-      category: "Features",
+      id: 'milestones',
+      title: 'Understanding Client Milestones',
+      description:
+        'How milestone celebrations work and reward your loyal clients',
+      category: 'Features',
     },
     {
-      id: "referrals",
-      title: "Referral Program Guide",
-      description: "Earn free months by inviting other stylists to join",
-      category: "Growth",
+      id: 'referrals',
+      title: 'Referral Program Guide',
+      description: 'Earn free months by inviting other stylists to join',
+      category: 'Growth',
     },
     {
-      id: "timeline",
-      title: "Hair Memory Timeline",
+      id: 'timeline',
+      title: 'Hair Memory Timeline',
       description: "Track every client's hair journey and share their story",
-      category: "Features",
+      category: 'Features',
     },
     {
-      id: "booking",
-      title: "Managing Appointments",
-      description: "How to create, update, and track client appointments",
-      category: "Getting Started",
+      id: 'booking',
+      title: 'Managing Appointments',
+      description: 'How to create, update, and track client appointments',
+      category: 'Getting Started',
     },
   ];
 
   const stylistFaqs = [
     {
-      question: "How do I add a new client?",
-      answer: "Go to 'Client Management' in the sidebar, then click the '+ Add Client' button. Fill in their information and save.",
+      question: 'How do I add a new client?',
+      answer:
+        "Go to 'Client Management' in the sidebar, then click the '+ Add Client' button. Fill in their information and save.",
     },
     {
-      question: "How do I create a formula?",
-      answer: "Navigate to a client's profile, click 'New Formula', and either use AI assistance or manually create your formula with detailed notes and products.",
+      question: 'How do I create a formula?',
+      answer:
+        "Navigate to a client's profile, click 'New Formula', and either use AI assistance or manually create your formula with detailed notes and products.",
     },
     {
-      question: "How do I manage my appointments?",
-      answer: "Click 'Calendar' in the sidebar to view all appointments. You can click any appointment to view details, reschedule, or cancel. You can also filter by date and status.",
+      question: 'How do I manage my appointments?',
+      answer:
+        "Click 'Calendar' in the sidebar to view all appointments. You can click any appointment to view details, reschedule, or cancel. You can also filter by date and status.",
     },
     {
-      question: "How do I set my working hours?",
-      answer: "Go to 'Availability' in the sidebar to set your working hours, breaks, time off, and vacation days. This helps clients know when you're available for bookings.",
+      question: 'How do I set my working hours?',
+      answer:
+        "Go to 'Availability' in the sidebar to set your working hours, breaks, time off, and vacation days. This helps clients know when you're available for bookings.",
     },
     {
-      question: "How do I share my booking page?",
-      answer: "Go to 'My Booking Page' to get your unique booking link. You can customize it with your branding and share it on social media, your website, or via text/email.",
+      question: 'How do I share my booking page?',
+      answer:
+        "Go to 'My Booking Page' to get your unique booking link. You can customize it with your branding and share it on social media, your website, or via text/email.",
     },
     {
-      question: "How do I track my earnings?",
-      answer: "Visit the 'Finance' page to see your earnings, payments, pending amounts, and commission tracking all in one place. You can also export reports.",
+      question: 'How do I track my earnings?',
+      answer:
+        "Visit the 'Finance' page to see your earnings, payments, pending amounts, and commission tracking all in one place. You can also export reports.",
     },
     {
-      question: "How do I manage notifications?",
-      answer: "Click 'Notifications' in the sidebar to view all your notifications. You can also adjust notification preferences in Settings.",
+      question: 'How do I manage notifications?',
+      answer:
+        "Click 'Notifications' in the sidebar to view all your notifications. You can also adjust notification preferences in Settings.",
     },
     {
-      question: "How do I use the AI Assistant?",
-      answer: "The AI Assistant can help you with formula recommendations, client consultations, and hair care advice. Just describe what you need and it will provide personalized suggestions.",
+      question: 'How do I use the AI Assistant?',
+      answer:
+        'The AI Assistant can help you with formula recommendations, client consultations, and hair care advice. Just describe what you need and it will provide personalized suggestions.',
     },
     {
-      question: "How do I build my portfolio?",
-      answer: "Go to 'Portfolio' to upload before/after photos, add descriptions, and showcase your best work. This helps attract new clients and build your brand.",
+      question: 'How do I build my portfolio?',
+      answer:
+        "Go to 'Portfolio' to upload before/after photos, add descriptions, and showcase your best work. This helps attract new clients and build your brand.",
     },
     {
-      question: "How do I invite clients?",
-      answer: "In 'Client Management', click on a client and select 'Invite to Portal'. They'll receive an email to create their account and access their appointments and formulas.",
+      question: 'How do I invite clients?',
+      answer:
+        "In 'Client Management', click on a client and select 'Invite to Portal'. They'll receive an email to create their account and access their appointments and formulas.",
     },
     {
-      question: "How do I integrate with my calendar?",
-      answer: "Visit 'Integrations' to connect with Google Calendar, Outlook, or other calendar apps to sync your appointments automatically.",
+      question: 'How do I integrate with my calendar?',
+      answer:
+        "Visit 'Integrations' to connect with Google Calendar, Outlook, or other calendar apps to sync your appointments automatically.",
     },
     {
-      question: "How do I handle cancellations and reschedules?",
-      answer: "Click on any appointment in your Calendar, then select 'Reschedule' or 'Cancel'. Clients will be notified automatically of any changes.",
+      question: 'How do I handle cancellations and reschedules?',
+      answer:
+        "Click on any appointment in your Calendar, then select 'Reschedule' or 'Cancel'. Clients will be notified automatically of any changes.",
     },
     {
-      question: "What if I forgot my password?",
-      answer: "Click 'Forgot Password' on the login screen. You'll receive an email with instructions to reset your password securely.",
+      question: 'What if I forgot my password?',
+      answer:
+        "Click 'Forgot Password' on the login screen. You'll receive an email with instructions to reset your password securely.",
     },
     {
-      question: "How do I update my profile information?",
-      answer: "Go to 'My Profile' to update your photo, bio, contact information, specialties, and social media links.",
+      question: 'How do I update my profile information?',
+      answer:
+        "Go to 'My Profile' to update your photo, bio, contact information, specialties, and social media links.",
     },
     {
-      question: "How do I refer friends and earn rewards?",
-      answer: "Visit 'Referrals' to get your unique referral link. Share it with other stylists and earn rewards when they sign up!",
+      question: 'How do I refer friends and earn rewards?',
+      answer:
+        "Visit 'Referrals' to get your unique referral link. Share it with other stylists and earn rewards when they sign up!",
     },
   ];
 
   const clientFaqs = [
     {
-      question: "How do I book an appointment with a stylist?",
-      answer: "Go to 'Find a Stylist', browse available stylists, select one you like, and click 'Book Appointment'. You can choose your preferred date, time, and service.",
+      question: 'How do I book an appointment with a stylist?',
+      answer:
+        "Go to 'Find a Stylist', browse available stylists, select one you like, and click 'Book Appointment'. You can choose your preferred date, time, and service.",
     },
     {
-      question: "How can I view my upcoming appointments?",
-      answer: "Click on 'My Appointments' in the sidebar to see all your scheduled appointments, past visits, and available rebooking options.",
+      question: 'How can I view my upcoming appointments?',
+      answer:
+        "Click on 'My Appointments' in the sidebar to see all your scheduled appointments, past visits, and available rebooking options.",
     },
     {
-      question: "How do I see my hair formulas?",
-      answer: "Your stylist will share formulas with you after each appointment. You can view them in your profile under 'My Formulas' to see the exact colors and products used.",
+      question: 'How do I see my hair formulas?',
+      answer:
+        "Your stylist will share formulas with you after each appointment. You can view them in your profile under 'My Formulas' to see the exact colors and products used.",
     },
     {
-      question: "How do I message my stylist?",
-      answer: "Go to 'Messages' in the sidebar, select your stylist from your conversations, and send them a message. You'll get notified when they respond.",
+      question: 'How do I message my stylist?',
+      answer:
+        "Go to 'Messages' in the sidebar, select your stylist from your conversations, and send them a message. You'll get notified when they respond.",
     },
     {
-      question: "How do I leave a review?",
-      answer: "After your appointment is completed, you'll receive a notification to leave a review. You can also go to your appointment history and click 'Leave Review'.",
+      question: 'How do I leave a review?',
+      answer:
+        "After your appointment is completed, you'll receive a notification to leave a review. You can also go to your appointment history and click 'Leave Review'.",
     },
     {
-      question: "How do I reschedule or cancel an appointment?",
-      answer: "Go to 'My Appointments', click on the appointment you want to change, then select 'Reschedule' or 'Cancel'. Your stylist will be notified automatically.",
+      question: 'How do I reschedule or cancel an appointment?',
+      answer:
+        "Go to 'My Appointments', click on the appointment you want to change, then select 'Reschedule' or 'Cancel'. Your stylist will be notified automatically.",
     },
     {
-      question: "Can I save my favorite stylists?",
-      answer: "Yes! Click the heart icon on any stylist's profile to add them to your favorites. You'll see them on your dashboard for quick booking.",
+      question: 'Can I save my favorite stylists?',
+      answer:
+        "Yes! Click the heart icon on any stylist's profile to add them to your favorites. You'll see them on your dashboard for quick booking.",
     },
     {
-      question: "What if I forgot my password?",
-      answer: "Click 'Forgot Password' on the login screen. You'll receive an email with instructions to reset your password securely.",
+      question: 'What if I forgot my password?',
+      answer:
+        "Click 'Forgot Password' on the login screen. You'll receive an email with instructions to reset your password securely.",
     },
     {
-      question: "How do I update my profile?",
-      answer: "Go to 'My Profile' to update your photo, contact information, hair preferences, and notification settings.",
+      question: 'How do I update my profile?',
+      answer:
+        "Go to 'My Profile' to update your photo, contact information, hair preferences, and notification settings.",
     },
     {
-      question: "How do I track my milestones and rewards?",
-      answer: "Check your dashboard for 'Rewards & Milestones'. You'll earn discounts after completing 5, 10, and 25 appointments with the same stylist!",
+      question: 'How do I track my milestones and rewards?',
+      answer:
+        "Check your dashboard for 'Rewards & Milestones'. You'll earn discounts after completing 5, 10, and 25 appointments with the same stylist!",
     },
   ];
 
   // Choose FAQs based on role
-  const faqs = isStylist ? stylistFaqs : isClient ? clientFaqs : [...stylistFaqs, ...clientFaqs];
+  const faqs = isStylist
+    ? stylistFaqs
+    : isClient
+      ? clientFaqs
+      : [...stylistFaqs, ...clientFaqs];
 
   const filteredFaqs = searchQuery
-    ? faqs.filter(faq => 
-        faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+    ? faqs.filter(
+        faq =>
+          faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : faqs;
 
   const filteredArticles = searchQuery
-    ? helpArticles.filter(article =>
-        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ? helpArticles.filter(
+        article =>
+          article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          article.description.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : helpArticles;
 
@@ -209,11 +247,11 @@ const Help = () => {
         <div>
           <h1 className="text-3xl font-pixel">Help & Support</h1>
           <p className="text-muted-foreground font-sans">
-            {isStylist 
-              ? "Get help managing your salon business"
+            {isStylist
+              ? 'Get help managing your salon business'
               : isClient
-              ? "Get help booking appointments and managing your hair care"
-              : "Get help and find answers to your questions"}
+                ? 'Get help booking appointments and managing your hair care'
+                : 'Get help and find answers to your questions'}
           </p>
         </div>
 
@@ -246,7 +284,7 @@ const Help = () => {
                   <Input
                     placeholder="Search help articles and FAQs..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     className="pl-9"
                   />
                 </div>
@@ -264,7 +302,7 @@ const Help = () => {
                     </CardContent>
                   </Card>
                 ) : (
-                  filteredArticles.map((article) => (
+                  filteredArticles.map(article => (
                     <Card
                       key={article.id}
                       className="brutal-border hover:border-primary/40 transition-colors cursor-pointer"
@@ -276,7 +314,9 @@ const Help = () => {
                       <CardContent className="p-4">
                         <div className="space-y-2">
                           <div className="flex items-start justify-between">
-                            <h4 className="font-semibold text-sm">{article.title}</h4>
+                            <h4 className="font-semibold text-sm">
+                              {article.title}
+                            </h4>
                             <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0 ml-2" />
                           </div>
                           <p className="text-xs text-muted-foreground">
@@ -302,7 +342,7 @@ const Help = () => {
               </CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible className="w-full">
-                  {filteredFaqs.map((faq) => (
+                  {filteredFaqs.map(faq => (
                     <AccordionItem key={faq.question} value={faq.question}>
                       <AccordionTrigger>{faq.question}</AccordionTrigger>
                       <AccordionContent>{faq.answer}</AccordionContent>
@@ -325,23 +365,25 @@ const Help = () => {
             <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0 brutal-shadow-md">
-                      <Play className="h-8 w-8 text-primary-foreground" />
-                    </div>
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0 brutal-shadow-md">
+                    <Play className="h-8 w-8 text-primary-foreground" />
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-3 mb-2">
-                      <h3 className="font-bold text-lg">Interactive Feature Demo</h3>
+                      <h3 className="font-bold text-lg">
+                        Interactive Feature Demo
+                      </h3>
                       <Badge variant="secondary" className="shrink-0">
                         <Sparkles className="h-3 w-3 mr-1" />
                         Live Preview
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
-                      {isStylist 
-                        ? "See how hA.I.r helps you save time, increase revenue, and manage your salon business effortlessly"
+                      {isStylist
+                        ? 'See how hA.I.r helps you save time, increase revenue, and manage your salon business effortlessly'
                         : isClient
-                        ? "Experience how easy it is to book appointments and manage your hair care journey"
-                        : "Explore key features with an interactive walkthrough"}
+                          ? 'Experience how easy it is to book appointments and manage your hair care journey'
+                          : 'Explore key features with an interactive walkthrough'}
                     </p>
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -357,7 +399,10 @@ const Help = () => {
                         <span>Works on all devices</span>
                       </div>
                     </div>
-                    <Button onClick={() => navigate("/showcase")} className="gap-2 w-full sm:w-auto hover-scale">
+                    <Button
+                      onClick={() => navigate('/showcase')}
+                      className="gap-2 w-full sm:w-auto hover-scale"
+                    >
                       <Play className="h-4 w-4" />
                       Launch Interactive Demo
                     </Button>
@@ -368,7 +413,10 @@ const Help = () => {
 
             {/* Ad Generator - Stylists and Admins Only */}
             {(isStylist || isAdmin) && (
-              <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <Card
+                className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-primary/20 brutal-border hover:brutal-shadow-lg transition-all duration-300 animate-fade-in"
+                style={{ animationDelay: '100ms' }}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shrink-0 brutal-shadow-md">
@@ -383,7 +431,9 @@ const Help = () => {
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Create professional marketing content in seconds. Generate headlines, body copy, CTAs, and even images for social media, emails, and ads.
+                        Create professional marketing content in seconds.
+                        Generate headlines, body copy, CTAs, and even images for
+                        social media, emails, and ads.
                       </p>
                       <div className="space-y-2 mb-4">
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -399,7 +449,11 @@ const Help = () => {
                           <span>One-click copy to clipboard</span>
                         </div>
                       </div>
-                      <Button onClick={() => navigate("/ad-generator")} variant="outline" className="gap-2 w-full sm:w-auto hover-scale">
+                      <Button
+                        onClick={() => navigate('/ad-generator')}
+                        variant="outline"
+                        className="gap-2 w-full sm:w-auto hover-scale"
+                      >
                         <Sparkles className="h-4 w-4" />
                         Create Marketing Ad
                       </Button>
@@ -410,13 +464,21 @@ const Help = () => {
             )}
 
             {/* Quick Resources */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <Card className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale" onClick={() => navigate("/knowledge")}>
+            <div
+              className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in"
+              style={{ animationDelay: '300ms' }}
+            >
+              <Card
+                className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale"
+                onClick={() => navigate('/knowledge')}
+              >
                 <CardContent className="pt-6">
                   <BookOpen className="h-8 w-8 text-primary mb-3" />
                   <h3 className="font-semibold mb-1">Knowledge Base</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    {isStylist ? "Hair care guides & resources" : "Learn about hair care"}
+                    {isStylist
+                      ? 'Hair care guides & resources'
+                      : 'Learn about hair care'}
                   </p>
                   <Button variant="ghost" size="sm" className="p-0 gap-1">
                     Browse <ChevronRight className="h-4 w-4" />
@@ -424,7 +486,10 @@ const Help = () => {
                 </CardContent>
               </Card>
 
-              <Card className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale" onClick={() => navigate("/help")}>
+              <Card
+                className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale"
+                onClick={() => navigate('/help')}
+              >
                 <CardContent className="pt-6">
                   <MessageSquare className="h-8 w-8 text-primary mb-3" />
                   <h3 className="font-semibold mb-1">FAQs & Articles</h3>
@@ -437,7 +502,10 @@ const Help = () => {
                 </CardContent>
               </Card>
 
-              <Card className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale" onClick={() => navigate("/feedback")}>
+              <Card
+                className="brutal-border hover:brutal-shadow-md transition-all cursor-pointer hover-scale"
+                onClick={() => navigate('/feedback')}
+              >
                 <CardContent className="pt-6">
                   <HelpCircle className="h-8 w-8 text-primary mb-3" />
                   <h3 className="font-semibold mb-1">Need More Help?</h3>
@@ -466,7 +534,11 @@ const Help = () => {
                 <form onSubmit={handleContactSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="subject">Subject</Label>
-                    <Input id="subject" placeholder="What do you need help with?" required />
+                    <Input
+                      id="subject"
+                      placeholder="What do you need help with?"
+                      required
+                    />
                   </div>
 
                   <div className="space-y-2">
@@ -486,23 +558,30 @@ const Help = () => {
                 </form>
 
                 <div className="mt-6 pt-6 border-t space-y-3">
-                  <p className="text-sm font-semibold text-muted-foreground">Or reach us directly:</p>
+                  <p className="text-sm font-semibold text-muted-foreground">
+                    Or reach us directly:
+                  </p>
                   <div className="flex items-center gap-2 text-sm">
                     <Mail className="h-4 w-4 text-primary" />
-                    <a href="mailto:support@hair-ai.com" className="hover:text-primary transition-colors">
+                    <a
+                      href="mailto:support@hair-ai.com"
+                      className="hover:text-primary transition-colors"
+                    >
                       support@hair-ai.com
                     </a>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <Phone className="h-4 w-4 text-primary" />
-                    <a href="tel:1-800-HAIR-AI" className="hover:text-primary transition-colors">
+                    <a
+                      href="tel:1-800-HAIR-AI"
+                      className="hover:text-primary transition-colors"
+                    >
                       1-800-HAIR-AI
                     </a>
                   </div>
                 </div>
               </CardContent>
             </Card>
-
           </TabsContent>
         </Tabs>
       </div>

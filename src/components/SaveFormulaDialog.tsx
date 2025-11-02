@@ -1,28 +1,28 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { Save, Loader2, UserPlus } from "lucide-react";
-import { AddClientDialog } from "./AddClientDialog";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
+import { Save, Loader2, UserPlus } from 'lucide-react';
+import { AddClientDialog } from './AddClientDialog';
+import { cn } from '@/lib/utils';
 
 interface SaveFormulaDialogProps {
   open: boolean;
@@ -39,9 +39,9 @@ export const SaveFormulaDialog = ({
 }: SaveFormulaDialogProps) => {
   const navigate = useNavigate();
   const [clients, setClients] = useState<any[]>([]);
-  const [selectedClient, setSelectedClient] = useState("");
-  const [colorLine, setColorLine] = useState("");
-  const [notes, setNotes] = useState("");
+  const [selectedClient, setSelectedClient] = useState('');
+  const [colorLine, setColorLine] = useState('');
+  const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingClients, setLoadingClients] = useState(true);
   const [addClientDialogOpen, setAddClientDialogOpen] = useState(false);
@@ -58,20 +58,22 @@ export const SaveFormulaDialog = ({
 
       // Get ALL clients linked to this stylist
       const { data: clientsData } = await supabase
-        .from("client_profiles")
-        .select(`
+        .from('client_profiles')
+        .select(
+          `
           id,
           full_name,
           email,
           user:profiles(full_name, email)
-        `)
-        .eq("preferred_stylist_id", stylistId)
-        .order("full_name");
-      
+        `
+        )
+        .eq('preferred_stylist_id', stylistId)
+        .order('full_name');
+
       setClients(clientsData || []);
     } catch (error: any) {
-      console.error("Error loading clients:", error);
-      toast.error("Failed to load clients");
+      console.error('Error loading clients:', error);
+      toast.error('Failed to load clients');
     } finally {
       setLoadingClients(false);
     }
@@ -79,41 +81,39 @@ export const SaveFormulaDialog = ({
 
   const handleSave = async () => {
     if (!selectedClient) {
-      toast.error("Please select a client");
+      toast.error('Please select a client');
       return;
     }
 
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("formulas")
-        .insert({
-          stylist_id: stylistId,
-          client_id: selectedClient,
-          formula_text: formulaText,
-          instructions: notes,
-          color_line: colorLine,
-          result_notes: "Saved from AI Chat Assistant",
-        });
+      const { error } = await supabase.from('formulas').insert({
+        stylist_id: stylistId,
+        client_id: selectedClient,
+        formula_text: formulaText,
+        instructions: notes,
+        color_line: colorLine,
+        result_notes: 'Saved from AI Chat Assistant',
+      });
 
       if (error) throw error;
 
-      toast.success("Formula saved successfully! ✨", {
-        description: "You can find it in your Formula History",
+      toast.success('Formula saved successfully! ✨', {
+        description: 'You can find it in your Formula History',
         action: {
-          label: "View Formulas",
-          onClick: () => navigate("/formulas"),
+          label: 'View Formulas',
+          onClick: () => navigate('/formulas'),
         },
       });
-      
+
       // Reset form
-      setSelectedClient("");
-      setColorLine("");
-      setNotes("");
+      setSelectedClient('');
+      setColorLine('');
+      setNotes('');
       onOpenChange(false);
     } catch (error: any) {
-      console.error("Error saving formula:", error);
-      toast.error("Failed to save formula");
+      console.error('Error saving formula:', error);
+      toast.error('Failed to save formula');
     } finally {
       setLoading(false);
     }
@@ -170,12 +170,18 @@ export const SaveFormulaDialog = ({
                   {clients.length === 0 ? (
                     <div className="p-4 text-sm text-muted-foreground text-center">
                       <p>No clients yet</p>
-                      <p className="text-xs mt-1">Click "Add New" to create your first client</p>
+                      <p className="text-xs mt-1">
+                        Click "Add New" to create your first client
+                      </p>
                     </div>
                   ) : (
-                    clients.map((client) => (
+                    clients.map(client => (
                       <SelectItem key={client.id} value={client.id}>
-                        {client.full_name || client.user?.full_name || client.email || client.user?.email || "Unknown Client"}
+                        {client.full_name ||
+                          client.user?.full_name ||
+                          client.email ||
+                          client.user?.email ||
+                          'Unknown Client'}
                       </SelectItem>
                     ))
                   )}
@@ -190,7 +196,7 @@ export const SaveFormulaDialog = ({
                 id="colorLine"
                 placeholder="e.g., Wella, Redken, L'Oréal"
                 value={colorLine}
-                onChange={(e) => setColorLine(e.target.value)}
+                onChange={e => setColorLine(e.target.value)}
               />
             </div>
 
@@ -201,16 +207,20 @@ export const SaveFormulaDialog = ({
                 id="notes"
                 placeholder="Add any modifications, application notes, or timing..."
                 value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                onChange={e => setNotes(e.target.value)}
                 rows={3}
                 maxLength={500}
                 className="resize-none"
               />
               <div className="flex justify-end">
-                <span className={cn(
-                  "text-xs",
-                  notes.length > 500 ? "text-destructive" : "text-muted-foreground"
-                )}>
+                <span
+                  className={cn(
+                    'text-xs',
+                    notes.length > 500
+                      ? 'text-destructive'
+                      : 'text-muted-foreground'
+                  )}
+                >
                   {notes.length} / 500
                 </span>
               </div>
@@ -252,7 +262,7 @@ export const SaveFormulaDialog = ({
         open={addClientDialogOpen}
         onOpenChange={setAddClientDialogOpen}
         stylistId={stylistId}
-        onClientAdded={(newClientId) => {
+        onClientAdded={newClientId => {
           // Reload clients and select the new one
           loadClients().then(() => {
             setSelectedClient(newClientId);

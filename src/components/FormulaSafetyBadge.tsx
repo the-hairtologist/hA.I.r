@@ -1,12 +1,12 @@
-import { AlertCircle, CheckCircle, XCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, CheckCircle, XCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/tooltip';
+import { Badge } from '@/components/ui/badge';
 
 interface SafetyValidation {
   isSafe: boolean;
@@ -19,7 +19,10 @@ interface FormulaSafetyBadgeProps {
   isLoading?: boolean;
 }
 
-export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadgeProps) => {
+export const FormulaSafetyBadge = ({
+  validation,
+  isLoading,
+}: FormulaSafetyBadgeProps) => {
   if (isLoading) {
     return (
       <Badge variant="outline" className="animate-pulse">
@@ -48,12 +51,13 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
           <AlertDescription>
             <div className="font-semibold mb-2">Critical Safety Issues:</div>
             <ul className="list-disc list-inside space-y-1 text-sm">
-              {blockers.map((blocker) => (
+              {blockers.map(blocker => (
                 <li key={blocker}>{blocker}</li>
               ))}
             </ul>
             <p className="mt-2 text-xs font-semibold">
-              Do NOT proceed with this formula. Adjust parameters and regenerate.
+              Do NOT proceed with this formula. Adjust parameters and
+              regenerate.
             </p>
           </AlertDescription>
         </Alert>
@@ -77,7 +81,7 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
               <div className="text-sm">
                 <p className="font-semibold mb-1">⚠️ Please Note:</p>
                 <ul className="list-disc list-inside space-y-1">
-                  {warnings.map((warning) => (
+                  {warnings.map(warning => (
                     <li key={warning}>{warning}</li>
                   ))}
                 </ul>
@@ -85,13 +89,13 @@ export const FormulaSafetyBadge = ({ validation, isLoading }: FormulaSafetyBadge
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        
+
         <Alert className="border-warning bg-warning/10">
           <AlertCircle className="h-4 w-4 text-warning" />
           <AlertDescription className="text-warning-foreground">
             <div className="font-semibold mb-1">Cautions:</div>
             <ul className="list-disc list-inside space-y-1 text-sm">
-              {warnings.map((warning) => (
+              {warnings.map(warning => (
                 <li key={warning}>{warning}</li>
               ))}
             </ul>

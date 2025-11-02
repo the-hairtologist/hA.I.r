@@ -34,7 +34,7 @@ class OfflineQueue {
     metadata?: Record<string, any>
   ): string {
     const id = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const queuedOp: QueuedOperation = {
       id,
       operation,
@@ -47,7 +47,7 @@ class OfflineQueue {
     this.queue.push(queuedOp);
     this.sortQueue();
     this.saveQueue();
-    
+
     logger.info('Operation queued for offline processing', 'OfflineQueue', {
       id,
       priority,
@@ -66,7 +66,10 @@ class OfflineQueue {
     }
 
     if (!navigator.onLine) {
-      logger.debug('Waiting for online connection to process queue', 'OfflineQueue');
+      logger.debug(
+        'Waiting for online connection to process queue',
+        'OfflineQueue'
+      );
       return;
     }
 
@@ -80,11 +83,11 @@ class OfflineQueue {
 
       try {
         await item.operation();
-        
+
         // Success - remove from queue
         this.queue.shift();
         this.saveQueue();
-        
+
         logger.info('Offline operation completed', 'OfflineQueue', {
           id: item.id,
           remaining: this.queue.length,
@@ -114,7 +117,7 @@ class OfflineQueue {
       }
 
       // Small delay between operations
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
     this.isProcessing = false;
@@ -144,7 +147,7 @@ class OfflineQueue {
    * Get count of failed operations
    */
   getFailedCount(): number {
-    return this.queue.filter((op) => op.retryCount >= this.maxRetries).length;
+    return this.queue.filter(op => op.retryCount >= this.maxRetries).length;
   }
 
   /**
@@ -169,7 +172,7 @@ class OfflineQueue {
   private saveQueue(): void {
     try {
       // Store metadata only, not the actual functions
-      const serializable = this.queue.map((item) => ({
+      const serializable = this.queue.map(item => ({
         id: item.id,
         timestamp: item.timestamp,
         retryCount: item.retryCount,
@@ -203,7 +206,10 @@ class OfflineQueue {
    */
   private setupOnlineListener(): void {
     window.addEventListener('online', () => {
-      logger.info('Connection restored, processing offline queue', 'OfflineQueue');
+      logger.info(
+        'Connection restored, processing offline queue',
+        'OfflineQueue'
+      );
       this.processQueue();
     });
 

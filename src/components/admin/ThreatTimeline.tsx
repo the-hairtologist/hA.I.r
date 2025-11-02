@@ -1,16 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { Card } from "@/components/ui/card";
-import { supabase } from "@/integrations/supabase/client";
-import { formatDistanceToNow } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { AlertTriangle, Shield, Info, XCircle, Clock } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from '@tanstack/react-query';
+import { Card } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { formatDistanceToNow } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { AlertTriangle, Shield, Info, XCircle, Clock } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ThreatEvent {
   id: string;
   type: string;
-  severity: "critical" | "high" | "medium" | "low";
+  severity: 'critical' | 'high' | 'medium' | 'low';
   description: string;
   timestamp: string;
   source: string;
@@ -18,54 +18,57 @@ interface ThreatEvent {
 
 export function ThreatTimeline() {
   const { data: events, isLoading } = useQuery({
-    queryKey: ["threat-timeline"],
+    queryKey: ['threat-timeline'],
     queryFn: async () => {
       // Aggregate security events from multiple sources
       const [failedTokenAccess, suspiciousConnections] = await Promise.all([
         supabase
-          .from("calendar_token_access_log")
-          .select("*")
-          .eq("success", false)
-          .order("accessed_at", { ascending: false })
+          .from('calendar_token_access_log')
+          .select('*')
+          .eq('success', false)
+          .order('accessed_at', { ascending: false })
           .limit(25),
-        
+
         supabase
-          .from("calendar_connections")
-          .select("*")
-          .eq("suspicious_activity_detected", true)
-          .order("updated_at", { ascending: false })
+          .from('calendar_connections')
+          .select('*')
+          .eq('suspicious_activity_detected', true)
+          .order('updated_at', { ascending: false })
           .limit(25),
       ]);
 
       const threats: ThreatEvent[] = [];
 
       // Map failed token access
-      failedTokenAccess.data?.forEach((log) => {
+      failedTokenAccess.data?.forEach(log => {
         threats.push({
           id: log.id,
-          type: "Failed Token Access",
-          severity: log.error_message?.includes("rate limit") ? "high" : "medium",
-          description: log.error_message || "Unauthorized token access attempt",
+          type: 'Failed Token Access',
+          severity: log.error_message?.includes('rate limit')
+            ? 'high'
+            : 'medium',
+          description: log.error_message || 'Unauthorized token access attempt',
           timestamp: log.accessed_at,
-          source: "Calendar Token System",
+          source: 'Calendar Token System',
         });
       });
 
       // Map suspicious connections
-      suspiciousConnections.data?.forEach((conn) => {
+      suspiciousConnections.data?.forEach(conn => {
         threats.push({
           id: conn.id,
-          type: "Suspicious Activity",
-          severity: "high",
+          type: 'Suspicious Activity',
+          severity: 'high',
           description: `Suspicious activity detected on ${conn.provider} connection`,
           timestamp: conn.updated_at,
-          source: "Calendar Connections",
+          source: 'Calendar Connections',
         });
       });
 
       // Sort by timestamp
       return threats.sort(
-        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
     },
     refetchInterval: 30000,
@@ -73,45 +76,45 @@ export function ThreatTimeline() {
 
   const getSeverityConfig = (severity: string) => {
     switch (severity) {
-      case "critical":
+      case 'critical':
         return {
           icon: XCircle,
-          color: "text-destructive",
-          bgColor: "bg-destructive/10 border border-destructive/20",
-          badge: "destructive" as const,
-          ringColor: "ring-destructive/20",
+          color: 'text-destructive',
+          bgColor: 'bg-destructive/10 border border-destructive/20',
+          badge: 'destructive' as const,
+          ringColor: 'ring-destructive/20',
         };
-      case "high":
+      case 'high':
         return {
           icon: AlertTriangle,
-          color: "text-warning",
-          bgColor: "bg-warning/10 border border-warning/20",
-          badge: "destructive" as const,
-          ringColor: "ring-warning/20",
+          color: 'text-warning',
+          bgColor: 'bg-warning/10 border border-warning/20',
+          badge: 'destructive' as const,
+          ringColor: 'ring-warning/20',
         };
-      case "medium":
+      case 'medium':
         return {
           icon: AlertTriangle,
-          color: "text-secondary",
-          bgColor: "bg-secondary/10 border border-secondary/20",
-          badge: "secondary" as const,
-          ringColor: "ring-secondary/20",
+          color: 'text-secondary',
+          bgColor: 'bg-secondary/10 border border-secondary/20',
+          badge: 'secondary' as const,
+          ringColor: 'ring-secondary/20',
         };
-      case "low":
+      case 'low':
         return {
           icon: Info,
-          color: "text-info",
-          bgColor: "bg-info/10 border border-info/20",
-          badge: "outline" as const,
-          ringColor: "ring-info/20",
+          color: 'text-info',
+          bgColor: 'bg-info/10 border border-info/20',
+          badge: 'outline' as const,
+          ringColor: 'ring-info/20',
         };
       default:
         return {
           icon: Shield,
-          color: "text-muted-foreground",
-          bgColor: "bg-muted border border-border",
-          badge: "outline" as const,
-          ringColor: "ring-muted",
+          color: 'text-muted-foreground',
+          bgColor: 'bg-muted border border-border',
+          badge: 'outline' as const,
+          ringColor: 'ring-muted',
         };
     }
   };
@@ -134,7 +137,9 @@ export function ThreatTimeline() {
         <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
           <Shield className="h-5 w-5 text-primary" />
         </div>
-        <h3 className="text-lg font-display font-bold">Security Threat Timeline</h3>
+        <h3 className="text-lg font-display font-bold">
+          Security Threat Timeline
+        </h3>
         <Badge variant="secondary" className="ml-auto font-bold text-xs">
           {events?.length || 0} events
         </Badge>
@@ -144,7 +149,7 @@ export function ThreatTimeline() {
         <div className="space-y-3 relative">
           {/* Timeline line */}
           <div className="absolute left-[22px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-border to-transparent" />
-          
+
           {events?.map((event, index) => {
             const config = getSeverityConfig(event.severity);
             const Icon = config.icon;
@@ -156,9 +161,13 @@ export function ThreatTimeline() {
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 {/* Timeline dot */}
-                <div className={`absolute -left-[9px] top-6 w-4 h-4 rounded-full bg-background border-2 ${config.ringColor} ring-4 ring-background z-10 group-hover:scale-125 transition-transform`} />
-                
-                <div className={`p-3 rounded-xl ${config.bgColor} h-fit flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm`}>
+                <div
+                  className={`absolute -left-[9px] top-6 w-4 h-4 rounded-full bg-background border-2 ${config.ringColor} ring-4 ring-background z-10 group-hover:scale-125 transition-transform`}
+                />
+
+                <div
+                  className={`p-3 rounded-xl ${config.bgColor} h-fit flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm`}
+                >
                   <Icon className={`h-5 w-5 ${config.color}`} />
                 </div>
 
@@ -172,8 +181,8 @@ export function ThreatTimeline() {
                         {event.source}
                       </p>
                     </div>
-                    <Badge 
-                      variant={config.badge} 
+                    <Badge
+                      variant={config.badge}
                       className="text-[10px] uppercase tracking-wider font-bold flex-shrink-0 shadow-sm"
                     >
                       {event.severity}
@@ -202,8 +211,12 @@ export function ThreatTimeline() {
               <div className="p-4 rounded-full bg-success/10 border border-success/20 mb-4">
                 <Shield className="h-10 w-10 text-success" />
               </div>
-              <p className="text-lg font-display font-bold text-foreground mb-2">All Clear!</p>
-              <p className="text-sm text-muted-foreground">No security threats detected</p>
+              <p className="text-lg font-display font-bold text-foreground mb-2">
+                All Clear!
+              </p>
+              <p className="text-sm text-muted-foreground">
+                No security threats detected
+              </p>
             </div>
           )}
         </div>

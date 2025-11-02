@@ -77,7 +77,7 @@ export async function withRetry<T>(
       );
 
       config.onRetry(attempt + 1, error);
-      await new Promise((resolve) => setTimeout(resolve, delay));
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
 
@@ -102,7 +102,7 @@ export async function batchRetry<T>(
   options: RetryOptions = {}
 ): Promise<Array<{ success: boolean; data?: T; error?: any }>> {
   return Promise.all(
-    operations.map(async (op) => {
+    operations.map(async op => {
       try {
         const data = await withRetry(op, options);
         return { success: true, data };

@@ -31,13 +31,15 @@ export const useMobileDetection = (): MobileInfo => {
   useEffect(() => {
     const checkDevice = () => {
       const userAgent = navigator.userAgent.toLowerCase();
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      
+      const isTouchDevice =
+        'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
       const isIOS = /iphone|ipad|ipod/.test(userAgent);
       const isAndroid = /android/.test(userAgent);
       const isMobile = isIOS || isAndroid || /mobile/.test(userAgent);
-      const isTablet = /(tablet|ipad)/.test(userAgent) || 
-                       (isAndroid && !/mobile/.test(userAgent));
+      const isTablet =
+        /(tablet|ipad)/.test(userAgent) ||
+        (isAndroid && !/mobile/.test(userAgent));
 
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;

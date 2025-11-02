@@ -1,11 +1,23 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { AlertTriangle, TrendingUp, Users, Calendar, MessageSquare } from "lucide-react";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import {
+  AlertTriangle,
+  TrendingUp,
+  Users,
+  Calendar,
+  MessageSquare,
+} from 'lucide-react';
+import { toast } from 'sonner';
 
 interface RetentionScore {
   id: string;
@@ -39,13 +51,15 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
   const loadRetentionScores = async () => {
     try {
       const { data, error } = await supabase
-        .from("client_retention_scores")
-        .select(`
+        .from('client_retention_scores')
+        .select(
+          `
           *,
           client:client_profiles(full_name, email, phone)
-        `)
-        .eq("stylist_id", stylistId)
-        .order("retention_score", { ascending: true })
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .order('retention_score', { ascending: true })
         .limit(20);
 
       if (error) throw error;
@@ -53,14 +67,21 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
       setScores(data || []);
 
       // Calculate stats
-      const atRisk = data?.filter(s => s.risk_level === "high" || s.risk_level === "critical").length || 0;
-      const healthy = data?.filter(s => s.risk_level === "low").length || 0;
-      const avgScore = data?.length ? Math.round(data.reduce((acc, s) => acc + s.retention_score, 0) / data.length) : 0;
+      const atRisk =
+        data?.filter(
+          s => s.risk_level === 'high' || s.risk_level === 'critical'
+        ).length || 0;
+      const healthy = data?.filter(s => s.risk_level === 'low').length || 0;
+      const avgScore = data?.length
+        ? Math.round(
+            data.reduce((acc, s) => acc + s.retention_score, 0) / data.length
+          )
+        : 0;
 
       setStats({ atRisk, healthy, avgScore });
     } catch (error) {
-      console.error("Error loading retention scores:", error);
-      toast.error("Failed to load retention data");
+      console.error('Error loading retention scores:', error);
+      toast.error('Failed to load retention data');
     } finally {
       setLoading(false);
     }
@@ -68,18 +89,23 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case "critical": return "destructive";
-      case "high": return "destructive";
-      case "medium": return "secondary";
-      case "low": return "default";
-      default: return "outline";
+      case 'critical':
+        return 'destructive';
+      case 'high':
+        return 'destructive';
+      case 'medium':
+        return 'secondary';
+      case 'low':
+        return 'default';
+      default:
+        return 'outline';
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 80) return 'text-green-600';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-600';
   };
 
   if (loading) {
@@ -128,7 +154,9 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-3xl font-bold ${getScoreColor(stats.avgScore)}`}>
+            <div
+              className={`text-3xl font-bold ${getScoreColor(stats.avgScore)}`}
+            >
               {stats.avgScore}/100
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -148,7 +176,7 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {scores.map((score) => (
+            {scores.map(score => (
               <div
                 key={score.id}
                 className="flex items-center justify-between p-4 border-2 border-border rounded-lg hover:border-primary transition-colors"
@@ -160,28 +188,32 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
                       {score.risk_level} risk
                     </Badge>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {score.days_since_last_visit} days since visit
                       </span>
-                      <span className={`font-semibold ${getScoreColor(score.retention_score)}`}>
+                      <span
+                        className={`font-semibold ${getScoreColor(score.retention_score)}`}
+                      >
                         Score: {score.retention_score}/100
                       </span>
                     </div>
-                    
+
                     <Progress value={score.retention_score} className="h-2" />
-                    
-                    {score.recommended_actions && Array.isArray(score.recommended_actions) && score.recommended_actions.length > 0 && (
-                      <div className="text-sm">
-                        <span className="font-medium">Recommended: </span>
-                        <span className="text-muted-foreground">
-                          {score.recommended_actions[0]}
-                        </span>
-                      </div>
-                    )}
+
+                    {score.recommended_actions &&
+                      Array.isArray(score.recommended_actions) &&
+                      score.recommended_actions.length > 0 && (
+                        <div className="text-sm">
+                          <span className="font-medium">Recommended: </span>
+                          <span className="text-muted-foreground">
+                            {score.recommended_actions[0]}
+                          </span>
+                        </div>
+                      )}
                   </div>
                 </div>
 
@@ -189,13 +221,13 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => toast.info("Message composer coming soon!")}
+                    onClick={() => toast.info('Message composer coming soon!')}
                   >
                     <MessageSquare className="h-4 w-4" />
                   </Button>
                   <Button
                     size="sm"
-                    onClick={() => toast.info("Booking flow coming soon!")}
+                    onClick={() => toast.info('Booking flow coming soon!')}
                   >
                     <Calendar className="h-4 w-4" />
                   </Button>
@@ -206,7 +238,10 @@ export function RetentionDashboard({ stylistId }: { stylistId: string }) {
             {scores.length === 0 && (
               <div className="text-center py-12 text-muted-foreground">
                 <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No retention data yet. Scores will appear after client appointments.</p>
+                <p>
+                  No retention data yet. Scores will appear after client
+                  appointments.
+                </p>
               </div>
             )}
           </div>

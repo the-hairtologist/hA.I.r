@@ -1,22 +1,75 @@
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logger";
+﻿import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
-export interface QueuedAction {
+export type QueuedActionStatus =
+  | 'pending'
+  | 'processing'
+  | 'failed'
+  | 'completed';
+
+interface BaseQueuedAction {
   id: string;
-  type: 'insert' | 'update' | 'delete' | 'upload';
   table: string;
-  data: any;
   userId: string;
   timestamp: number;
   retryCount: number;
-  status: 'pending' | 'processing' | 'failed' | 'completed';
+  status: QueuedActionStatus;
   error?: string;
 }
+
+export type InsertAction = BaseQueuedAction & {
+  type: 'insert';
+  data: Record<string, unknown>;
+};
+
+export type UpdateAction = BaseQueuedAction & {
+  type: 'update';
+  data: Record<string, unknown> & { id: string | number };
+};
+
+export type DeleteAction = BaseQueuedAction & {
+  type: 'delete';
+  data: { id: string | number };
+};
+
+export interface UploadActionData {
+  bucket: string;
+  path: string;
+  file: string;
+}
+
+export type UploadAction = BaseQueuedAction & {
+  type: 'upload';
+  data: UploadActionData;
+};
+
+export type QueuedAction =
+  | InsertAction
+  | UpdateAction
+  | DeleteAction
+  | UploadAction;
+
+export type EnqueuePayload =
+  | Pick<InsertAction, 'type' | 'table' | 'data' | 'userId'>
+  | Pick<UpdateAction, 'type' | 'table' | 'data' | 'userId'>
+  | Pick<DeleteAction, 'type' | 'table' | 'data' | 'userId'>
+  | Pick<UploadAction, 'type' | 'table' | 'data' | 'userId'>;
 
 const QUEUE_KEY = 'offline_action_queue';
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 2000;
-const MAX_QUEUE_AGE_DAYS = 30; // Auto-cleanup old items
+const MAX_QUEUE_AGE_DAYS = 30;
+
+const isQueuedActionArray = (value: unknown): value is QueuedAction[] => {
+  return Array.isArray(value);
+};
+
+const toError = (possibleError: unknown): Error => {
+  if (possibleError instanceof Error) {
+    return possibleError;
+  }
+  return new Error(String(possibleError));
+};
 
 class OfflineQueue {
   private queue: QueuedAction[] = [];
@@ -24,6 +77,9 @@ class OfflineQueue {
   private listeners: Set<() => void> = new Set();
 
   constructor() {
+    if (typeof window === 'undefined') {
+      return;
+    }
     this.loadQueue();
     this.setupOnlineListener();
   }
@@ -32,36 +88,57 @@ class OfflineQueue {
     try {
       const stored = localStorage.getItem(QUEUE_KEY);
       if (stored) {
-        this.queue = JSON.parse(stored);
-        this.cleanupOldItems();
-        logger.info(`Loaded ${this.queue.length} queued actions`, 'offlineQueue');
+        const parsed: unknown = JSON.parse(stored);
+        if (isQueuedActionArray(parsed)) {
+          this.queue = parsed;
+          this.cleanupOldItems();
+          logger.info(
+            `Loaded ${this.queue.length} queued actions`,
+            'offlineQueue'
+          );
+        } else {
+          logger.warn(
+            'Stored offline queue had unexpected shape; clearing queue',
+            'offlineQueue'
+          );
+          this.queue = [];
+          this.saveQueue();
+        }
       }
     } catch (error) {
-      logger.error('Failed to load offline queue', 'offlineQueue', error as Error);
+      logger.error(
+        'Failed to load offline queue',
+        'offlineQueue',
+        toError(error)
+      );
     }
   }
 
   private cleanupOldItems() {
-    const cutoffTime = Date.now() - (MAX_QUEUE_AGE_DAYS * 24 * 60 * 60 * 1000);
+    const cutoffTime = Date.now() - MAX_QUEUE_AGE_DAYS * 24 * 60 * 60 * 1000;
     const originalLength = this.queue.length;
     this.queue = this.queue.filter(item => item.timestamp > cutoffTime);
-    
+
     if (originalLength !== this.queue.length) {
-      logger.info(`Cleaned up ${originalLength - this.queue.length} old queued items`, 'offlineQueue');
+      logger.info(
+        `Cleaned up ${originalLength - this.queue.length} old queued items`,
+        'offlineQueue'
+      );
       this.saveQueue();
     }
   }
 
-  /**
-   * Clear all queue data (call on logout)
-   */
   public clearOnLogout() {
     logger.info('Clearing offline queue on logout', 'offlineQueue');
     this.queue = [];
     try {
       localStorage.removeItem(QUEUE_KEY);
     } catch (error) {
-      logger.error('Failed to clear offline queue', 'offlineQueue', error as Error);
+      logger.error(
+        'Failed to clear offline queue',
+        'offlineQueue',
+        toError(error)
+      );
     }
     this.notifyListeners();
   }
@@ -71,14 +148,18 @@ class OfflineQueue {
       localStorage.setItem(QUEUE_KEY, JSON.stringify(this.queue));
       this.notifyListeners();
     } catch (error) {
-      logger.error('Failed to save offline queue', 'offlineQueue', error as Error);
+      logger.error(
+        'Failed to save offline queue',
+        'offlineQueue',
+        toError(error)
+      );
     }
   }
 
   private setupOnlineListener() {
     window.addEventListener('online', () => {
       logger.info('Network restored, processing queue...', 'offlineQueue');
-      this.processQueue();
+      void this.processQueue();
     });
   }
 
@@ -91,27 +172,30 @@ class OfflineQueue {
     return () => this.listeners.delete(listener);
   }
 
-  enqueue(action: Omit<QueuedAction, 'id' | 'timestamp' | 'retryCount' | 'status'>) {
+  enqueue(action: EnqueuePayload) {
     const queuedAction: QueuedAction = {
       ...action,
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
       timestamp: Date.now(),
       retryCount: 0,
-      status: 'pending'
+      status: 'pending',
     };
 
     this.queue.push(queuedAction);
     this.saveQueue();
 
-    logger.debug(`Enqueued ${action.type} action for ${action.table}`, 'offlineQueue', { 
-      id: queuedAction.id,
-      type: action.type,
-      table: action.table
-    });
+    logger.debug(
+      `Enqueued ${action.type} action for ${action.table}`,
+      'offlineQueue',
+      {
+        id: queuedAction.id,
+        type: action.type,
+        table: action.table,
+      }
+    );
 
-    // Try to process immediately if online
     if (navigator.onLine) {
-      this.processQueue();
+      void this.processQueue();
     }
 
     return queuedAction.id;
@@ -123,9 +207,14 @@ class OfflineQueue {
     }
 
     this.processing = true;
-    logger.info(`Processing ${this.queue.length} queued actions...`, 'offlineQueue');
+    logger.info(
+      `Processing ${this.queue.length} queued actions...`,
+      'offlineQueue'
+    );
 
-    const pendingActions = this.queue.filter(a => a.status === 'pending');
+    const pendingActions = this.queue.filter(
+      action => action.status === 'pending'
+    );
 
     for (const action of pendingActions) {
       try {
@@ -136,16 +225,24 @@ class OfflineQueue {
 
         action.status = 'completed';
         logger.debug(`Completed action ${action.id}`, 'offlineQueue');
-      } catch (error: any) {
-        action.retryCount++;
-        
+      } catch (error) {
+        const err = toError(error);
+        action.retryCount += 1;
+
         if (action.retryCount >= MAX_RETRIES) {
           action.status = 'failed';
-          action.error = error.message;
-          logger.error(`Action ${action.id} failed after ${MAX_RETRIES} retries`, 'offlineQueue', error as Error);
+          action.error = err.message;
+          logger.error(
+            `Action ${action.id} failed after ${MAX_RETRIES} retries`,
+            'offlineQueue',
+            err
+          );
         } else {
           action.status = 'pending';
-          logger.warn(`Action ${action.id} failed, retry ${action.retryCount}/${MAX_RETRIES}`, 'offlineQueue');
+          logger.warn(
+            `Action ${action.id} failed, retry ${action.retryCount}/${MAX_RETRIES}`,
+            'offlineQueue'
+          );
           await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         }
       }
@@ -153,15 +250,17 @@ class OfflineQueue {
       this.saveQueue();
     }
 
-    // Remove completed actions
-    this.queue = this.queue.filter(a => a.status !== 'completed');
+    this.queue = this.queue.filter(action => action.status !== 'completed');
     this.saveQueue();
 
     this.processing = false;
-    logger.info(`Queue processing complete. ${this.queue.length} actions remaining.`, 'offlineQueue');
+    logger.info(
+      `Queue processing complete. ${this.queue.length} actions remaining.`,
+      'offlineQueue'
+    );
   }
 
-  private async executeAction(action: QueuedAction) {
+  private executeAction(action: QueuedAction) {
     switch (action.type) {
       case 'insert':
         return this.executeInsert(action);
@@ -171,51 +270,48 @@ class OfflineQueue {
         return this.executeDelete(action);
       case 'upload':
         return this.executeUpload(action);
-      default:
-        throw new Error(`Unknown action type: ${action.type}`);
+      default: {
+        const exhaustiveCheck: never = action;
+        throw new Error(`Unknown action type: ${exhaustiveCheck}`);
+      }
     }
   }
 
-  private async executeInsert(action: QueuedAction) {
-    const { error } = await supabase
-      .from(action.table as any)
-      .insert(action.data);
+  private async executeInsert(action: InsertAction) {
+    const { error } = await supabase.from(action.table).insert(action.data);
 
     if (error) throw error;
   }
 
-  private async executeUpdate(action: QueuedAction) {
+  private async executeUpdate(action: UpdateAction) {
     const { id, ...updateData } = action.data;
-    
+
     const { error } = await supabase
-      .from(action.table as any)
+      .from(action.table)
       .update(updateData)
       .eq('id', id);
 
     if (error) throw error;
   }
 
-  private async executeDelete(action: QueuedAction) {
+  private async executeDelete(action: DeleteAction) {
     const { error } = await supabase
-      .from(action.table as any)
+      .from(action.table)
       .delete()
       .eq('id', action.data.id);
 
     if (error) throw error;
   }
 
-  private async executeUpload(action: QueuedAction) {
+  private async executeUpload(action: UploadAction) {
     const { bucket, path, file } = action.data;
-    
-    // Convert base64 back to blob
+
     const response = await fetch(file);
     const blob = await response.blob();
 
-    const { error } = await supabase.storage
-      .from(bucket)
-      .upload(path, blob, {
-        upsert: true
-      });
+    const { error } = await supabase.storage.from(bucket).upload(path, blob, {
+      upsert: true,
+    });
 
     if (error) throw error;
   }
@@ -225,15 +321,15 @@ class OfflineQueue {
   }
 
   getPendingCount() {
-    return this.queue.filter(a => a.status === 'pending').length;
+    return this.queue.filter(action => action.status === 'pending').length;
   }
 
   getFailedCount() {
-    return this.queue.filter(a => a.status === 'failed').length;
+    return this.queue.filter(action => action.status === 'failed').length;
   }
 
   clearCompleted() {
-    this.queue = this.queue.filter(a => a.status !== 'completed');
+    this.queue = this.queue.filter(action => action.status !== 'completed');
     this.saveQueue();
   }
 
@@ -248,15 +344,15 @@ class OfflineQueue {
       if (action.status === 'failed') {
         return {
           ...action,
-          status: 'pending' as const,
+          status: 'pending',
           retryCount: 0,
-          error: undefined
+          error: undefined,
         };
       }
       return action;
     });
     this.saveQueue();
-    this.processQueue();
+    void this.processQueue();
   }
 }
 

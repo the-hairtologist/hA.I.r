@@ -3,10 +3,18 @@
  * Centralized appointment data operations
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { trackSelect, trackInsert, trackUpdate, trackDelete } from "@/lib/logging/supabaseTracker";
-import { logger } from "@/lib/logging/productionLogger";
-import { getAppointmentsByStylist, getAppointmentsByClient } from "@/lib/queries/appointmentQueries";
+import { supabase } from '@/integrations/supabase/client';
+import {
+  trackSelect,
+  trackInsert,
+  trackUpdate,
+  trackDelete,
+} from '@/lib/logging/supabaseTracker';
+import { logger } from '@/lib/logging/productionLogger';
+import {
+  getAppointmentsByStylist,
+  getAppointmentsByClient,
+} from '@/lib/queries/appointmentQueries';
 
 export interface Appointment {
   id: string;
@@ -50,7 +58,7 @@ export const fetchAppointmentsByStylist = async (
     async () => {
       // Use optimized query with deduplication
       const data = await getAppointmentsByStylist(stylistId);
-      
+
       // Apply pagination in-memory for now
       const from = (page - 1) * limit;
       const to = from + limit;
@@ -58,8 +66,8 @@ export const fetchAppointmentsByStylist = async (
 
       return { appointments: paginatedData || [], total: data.length || 0 };
     },
-    "appointments",
-    "AppointmentAPI.fetchByStylist"
+    'appointments',
+    'AppointmentAPI.fetchByStylist'
   );
 };
 
@@ -67,35 +75,39 @@ export const fetchAppointmentsByStylist = async (
  * Fetch appointments for a client
  * Now uses optimized query with request deduplication
  */
-export const fetchAppointmentsByClient = async (clientId: string): Promise<Appointment[]> => {
+export const fetchAppointmentsByClient = async (
+  clientId: string
+): Promise<Appointment[]> => {
   return trackSelect(
     async () => {
       // Use optimized query with deduplication
       const data = await getAppointmentsByClient(clientId);
       return data || [];
     },
-    "appointments",
-    "AppointmentAPI.fetchByClient"
+    'appointments',
+    'AppointmentAPI.fetchByClient'
   );
 };
 
 /**
  * Fetch a single appointment
  */
-export const fetchAppointmentById = async (appointmentId: string): Promise<Appointment | null> => {
+export const fetchAppointmentById = async (
+  appointmentId: string
+): Promise<Appointment | null> => {
   return trackSelect(
     async () => {
       const { data, error } = await supabase
-        .from("appointments")
-        .select("*")
-        .eq("id", appointmentId)
+        .from('appointments')
+        .select('*')
+        .eq('id', appointmentId)
         .single();
 
       if (error) throw error;
       return data;
     },
-    "appointments",
-    "AppointmentAPI.fetchById"
+    'appointments',
+    'AppointmentAPI.fetchById'
   );
 };
 
@@ -108,22 +120,22 @@ export const createAppointment = async (
   return trackInsert(
     async () => {
       const { data, error } = await supabase
-        .from("appointments")
+        .from('appointments')
         .insert([appointmentData])
         .select()
         .single();
 
       if (error) throw error;
-      
-      logger.info("Appointment created", { 
-        context: "AppointmentAPI.create",
-        appointmentId: data.id 
+
+      logger.info('Appointment created', {
+        context: 'AppointmentAPI.create',
+        appointmentId: data.id,
       });
-      
+
       return data;
     },
-    "appointments",
-    "AppointmentAPI.create"
+    'appointments',
+    'AppointmentAPI.create'
   );
 };
 
@@ -134,50 +146,52 @@ export const updateAppointment = async (
   updateData: UpdateAppointmentData
 ): Promise<Appointment> => {
   const { id, ...updates } = updateData;
-  
+
   return trackUpdate(
     async () => {
       const { data, error } = await supabase
-        .from("appointments")
+        .from('appointments')
         .update(updates)
-        .eq("id", id)
+        .eq('id', id)
         .select()
         .single();
 
       if (error) throw error;
-      
-      logger.info("Appointment updated", { 
-        context: "AppointmentAPI.update",
-        appointmentId: id 
+
+      logger.info('Appointment updated', {
+        context: 'AppointmentAPI.update',
+        appointmentId: id,
       });
-      
+
       return data;
     },
-    "appointments",
-    "AppointmentAPI.update"
+    'appointments',
+    'AppointmentAPI.update'
   );
 };
 
 /**
  * Delete an appointment
  */
-export const deleteAppointment = async (appointmentId: string): Promise<void> => {
+export const deleteAppointment = async (
+  appointmentId: string
+): Promise<void> => {
   return trackDelete(
     async () => {
       const { error } = await supabase
-        .from("appointments")
+        .from('appointments')
         .delete()
-        .eq("id", appointmentId);
+        .eq('id', appointmentId);
 
       if (error) throw error;
-      
-      logger.info("Appointment deleted", { 
-        context: "AppointmentAPI.delete",
-        appointmentId 
+
+      logger.info('Appointment deleted', {
+        context: 'AppointmentAPI.delete',
+        appointmentId,
       });
     },
-    "appointments",
-    "AppointmentAPI.delete"
+    'appointments',
+    'AppointmentAPI.delete'
   );
 };
 
@@ -191,23 +205,23 @@ export const updateAppointmentStatus = async (
   return trackUpdate(
     async () => {
       const { data, error } = await supabase
-        .from("appointments")
+        .from('appointments')
         .update({ status })
-        .eq("id", appointmentId)
+        .eq('id', appointmentId)
         .select()
         .single();
 
       if (error) throw error;
-      
-      logger.info("Appointment status updated", { 
-        context: "AppointmentAPI.updateStatus",
+
+      logger.info('Appointment status updated', {
+        context: 'AppointmentAPI.updateStatus',
         appointmentId,
-        status 
+        status,
       });
-      
+
       return data;
     },
-    "appointments",
-    "AppointmentAPI.updateStatus"
+    'appointments',
+    'AppointmentAPI.updateStatus'
   );
 };

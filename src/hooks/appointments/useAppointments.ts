@@ -62,8 +62,10 @@ interface UpdateAppointmentData {
 // Query Keys
 export const appointmentKeys = {
   all: ['appointments'] as const,
-  byStylist: (stylistId: string) => [...appointmentKeys.all, 'stylist', stylistId] as const,
-  byClient: (clientId: string) => [...appointmentKeys.all, 'client', clientId] as const,
+  byStylist: (stylistId: string) =>
+    [...appointmentKeys.all, 'stylist', stylistId] as const,
+  byClient: (clientId: string) =>
+    [...appointmentKeys.all, 'client', clientId] as const,
   byId: (id: string) => [...appointmentKeys.all, 'detail', id] as const,
 };
 
@@ -73,10 +75,11 @@ export const useAppointmentsByStylist = (stylistId: string | null) => {
     queryKey: appointmentKeys.byStylist(stylistId || ''),
     queryFn: async () => {
       if (!stylistId) return [];
-      
+
       const { data, error } = await supabase
         .from('appointments')
-        .select(`
+        .select(
+          `
           *,
           client_profiles!appointments_client_id_fkey (
             id,
@@ -90,7 +93,8 @@ export const useAppointmentsByStylist = (stylistId: string | null) => {
             price,
             duration
           )
-        `)
+        `
+        )
         .eq('stylist_id', stylistId)
         .order('appointment_date', { ascending: true });
 
@@ -111,10 +115,11 @@ export const useAppointmentsByClient = (clientId: string | null) => {
     queryKey: appointmentKeys.byClient(clientId || ''),
     queryFn: async () => {
       if (!clientId) return [];
-      
+
       const { data, error } = await supabase
         .from('appointments')
-        .select(`
+        .select(
+          `
           *,
           client_profiles!appointments_client_id_fkey (
             id,
@@ -128,7 +133,8 @@ export const useAppointmentsByClient = (clientId: string | null) => {
             price,
             duration
           )
-        `)
+        `
+        )
         .eq('client_id', clientId)
         .order('appointment_date', { ascending: false });
 
@@ -151,11 +157,14 @@ export const useCreateAppointment = () => {
     mutationFn: async (appointmentData: CreateAppointmentData) => {
       const { data, error } = await supabase
         .from('appointments')
-        .insert([{
-          ...appointmentData,
-          status: appointmentData.status || 'scheduled',
-        }])
-        .select(`
+        .insert([
+          {
+            ...appointmentData,
+            status: appointmentData.status || 'scheduled',
+          },
+        ])
+        .select(
+          `
           *,
           client_profiles!appointments_client_id_fkey (
             id,
@@ -169,7 +178,8 @@ export const useCreateAppointment = () => {
             price,
             duration
           )
-        `)
+        `
+        )
         .single();
 
       if (error) {
@@ -184,9 +194,13 @@ export const useCreateAppointment = () => {
 
       return data as any;
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byStylist(data.stylist_id) });
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byClient(data.client_id) });
+    onSuccess: data => {
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byStylist(data.stylist_id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byClient(data.client_id),
+      });
       toast.success('Appointment created successfully');
       logger.info('Appointment created', { id: data.id });
     },
@@ -209,7 +223,8 @@ export const useUpdateAppointment = () => {
           updated_at: new Date().toISOString(),
         })
         .eq('id', id)
-        .select(`
+        .select(
+          `
           *,
           client_profiles!appointments_client_id_fkey (
             id,
@@ -223,7 +238,8 @@ export const useUpdateAppointment = () => {
             price,
             duration
           )
-        `)
+        `
+        )
         .single();
 
       if (error) {
@@ -233,10 +249,16 @@ export const useUpdateAppointment = () => {
 
       return data as any;
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byStylist(data.stylist_id) });
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byClient(data.client_id) });
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byId(data.id) });
+    onSuccess: data => {
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byStylist(data.stylist_id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byClient(data.client_id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byId(data.id),
+      });
       toast.success('Appointment updated successfully');
       logger.info('Appointment updated', { id: data.id });
     },
@@ -271,10 +293,14 @@ export const useDeleteAppointment = () => {
 
       return { id, appointment };
     },
-    onSuccess: (result) => {
+    onSuccess: result => {
       if (result.appointment) {
-        queryClient.invalidateQueries({ queryKey: appointmentKeys.byStylist(result.appointment.stylist_id) });
-        queryClient.invalidateQueries({ queryKey: appointmentKeys.byClient(result.appointment.client_id) });
+        queryClient.invalidateQueries({
+          queryKey: appointmentKeys.byStylist(result.appointment.stylist_id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: appointmentKeys.byClient(result.appointment.client_id),
+        });
       }
       queryClient.invalidateQueries({ queryKey: appointmentKeys.all });
       toast.success('Appointment deleted successfully');
@@ -299,7 +325,8 @@ export const useUpdateAppointmentStatus = () => {
           updated_at: new Date().toISOString(),
         })
         .eq('id', id)
-        .select(`
+        .select(
+          `
           *,
           client_profiles!appointments_client_id_fkey (
             id,
@@ -313,22 +340,36 @@ export const useUpdateAppointmentStatus = () => {
             price,
             duration
           )
-        `)
+        `
+        )
         .single();
 
       if (error) {
-        logger.error('Failed to update appointment status', { error, id, status });
+        logger.error('Failed to update appointment status', {
+          error,
+          id,
+          status,
+        });
         throw error;
       }
 
       return data as any;
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byStylist(data.stylist_id) });
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byClient(data.client_id) });
-      queryClient.invalidateQueries({ queryKey: appointmentKeys.byId(data.id) });
+    onSuccess: data => {
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byStylist(data.stylist_id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byClient(data.client_id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: appointmentKeys.byId(data.id),
+      });
       toast.success('Appointment status updated');
-      logger.info('Appointment status updated', { id: data.id, status: data.status });
+      logger.info('Appointment status updated', {
+        id: data.id,
+        status: data.status,
+      });
     },
     onError: (error: any) => {
       toast.error(error.message || 'Failed to update appointment status');

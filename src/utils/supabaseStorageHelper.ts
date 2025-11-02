@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 
 export interface UploadProgress {
   progress: number;
@@ -26,7 +26,6 @@ export async function uploadToStorage(
   fileName?: string,
   onProgress?: (progress: UploadProgress) => void
 ): Promise<UploadResult> {
-  
   // Generate filename if not provided
   if (!fileName) {
     const timestamp = Date.now();
@@ -50,9 +49,9 @@ export async function uploadToStorage(
   }
 
   // Get public URL
-  const { data: { publicUrl } } = supabase.storage
-    .from(bucketName)
-    .getPublicUrl(data.path);
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(bucketName).getPublicUrl(data.path);
 
   return {
     url: publicUrl,
@@ -70,9 +69,7 @@ export async function deleteFromStorage(
   bucketName: 'hair-photos' | 'avatars' | 'client-videos',
   filePath: string
 ): Promise<void> {
-  const { error } = await supabase.storage
-    .from(bucketName)
-    .remove([filePath]);
+  const { error } = await supabase.storage.from(bucketName).remove([filePath]);
 
   if (error) {
     console.error('Storage delete error:', error);

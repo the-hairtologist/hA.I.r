@@ -6,9 +6,21 @@
 import { useState } from 'react';
 import { useMessageGenerator } from '@/hooks/useMessageGenerator';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Loader2, Sparkles, Copy, Send } from 'lucide-react';
 import { toast } from 'sonner';
@@ -29,8 +41,14 @@ export const AIMessageComposer = ({
   favoriteServices,
   onSendMessage,
 }: AIMessageComposerProps) => {
-  const { generating, message: generatedMessage, generateMessage } = useMessageGenerator();
-  const [messageType, setMessageType] = useState<'retention' | 'followup' | 'birthday' | 'reengagement'>('retention');
+  const {
+    generating,
+    message: generatedMessage,
+    generateMessage,
+  } = useMessageGenerator();
+  const [messageType, setMessageType] = useState<
+    'retention' | 'followup' | 'birthday' | 'reengagement'
+  >('retention');
   const [customNote, setCustomNote] = useState('');
   const [generatedText, setGeneratedText] = useState('');
 
@@ -84,7 +102,10 @@ export const AIMessageComposer = ({
         {/* Message Type Selector */}
         <div className="space-y-2">
           <Label htmlFor="message-type">Message Type</Label>
-          <Select value={messageType} onValueChange={(value: any) => setMessageType(value)}>
+          <Select
+            value={messageType}
+            onValueChange={(value: any) => setMessageType(value)}
+          >
             <SelectTrigger id="message-type">
               <SelectValue />
             </SelectTrigger>
@@ -104,13 +125,17 @@ export const AIMessageComposer = ({
             id="custom-note"
             placeholder="Add any specific details you want included in the message..."
             value={customNote}
-            onChange={(e) => setCustomNote(e.target.value)}
+            onChange={e => setCustomNote(e.target.value)}
             rows={3}
           />
         </div>
 
         {/* Generate Button */}
-        <Button onClick={handleGenerate} disabled={generating} className="w-full">
+        <Button
+          onClick={handleGenerate}
+          disabled={generating}
+          className="w-full"
+        >
           {generating ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -130,7 +155,7 @@ export const AIMessageComposer = ({
             <Label>Generated Message</Label>
             <Textarea
               value={generatedText}
-              onChange={(e) => setGeneratedText(e.target.value)}
+              onChange={e => setGeneratedText(e.target.value)}
               rows={6}
               className="font-normal"
             />
@@ -159,7 +184,8 @@ export const AIMessageComposer = ({
                   <strong>Tone:</strong> {generatedMessage.tone}
                 </p>
                 <p>
-                  <strong>Call to Action:</strong> {generatedMessage.call_to_action}
+                  <strong>Call to Action:</strong>{' '}
+                  {generatedMessage.call_to_action}
                 </p>
               </div>
             )}

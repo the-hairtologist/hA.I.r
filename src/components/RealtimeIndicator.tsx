@@ -7,7 +7,10 @@ interface RealtimeIndicatorProps {
   className?: string;
 }
 
-export function RealtimeIndicator({ isConnected, className }: RealtimeIndicatorProps) {
+export function RealtimeIndicator({
+  isConnected,
+  className,
+}: RealtimeIndicatorProps) {
   const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
@@ -21,24 +24,26 @@ export function RealtimeIndicator({ isConnected, className }: RealtimeIndicatorP
   }, [isConnected]);
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn('flex items-center gap-2', className)}>
       <div className="relative">
-        <div 
+        <div
           className={cn(
-            "w-2 h-2 rounded-full transition-colors duration-300",
-            isConnected ? "bg-success" : "bg-muted"
+            'w-2 h-2 rounded-full transition-colors duration-300',
+            isConnected ? 'bg-success' : 'bg-muted'
           )}
         />
         {isConnected && pulse && (
           <div className="absolute inset-0 w-2 h-2 rounded-full bg-success animate-ping" />
         )}
       </div>
-      <Activity className={cn(
-        "h-4 w-4 transition-colors duration-300",
-        isConnected ? "text-success" : "text-muted-foreground"
-      )} />
+      <Activity
+        className={cn(
+          'h-4 w-4 transition-colors duration-300',
+          isConnected ? 'text-success' : 'text-muted-foreground'
+        )}
+      />
       <span className="text-xs text-muted-foreground">
-        {isConnected ? "Live" : "Connecting..."}
+        {isConnected ? 'Live' : 'Connecting...'}
       </span>
     </div>
   );

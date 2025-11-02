@@ -1,49 +1,108 @@
-import { useState, useEffect, useMemo, useCallback, memo } from "react";
-import { useOptimizedCallback } from "@/hooks/useOptimizedCallback";
-import { useNavigate } from "react-router-dom";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { toast } from "sonner";
-import { Plus, Loader2, Search, Edit, Save, Trash2, UserPlus, Palette, Mic, Copy, Tag as TagIcon, X, Clock, Beaker, FileText, ThumbsUp, AlertTriangle, Download, ArrowUpDown } from "lucide-react";
-import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
-import { SkeletonList } from "@/components/ui/skeleton-list";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { AddClientDialog } from "@/components/AddClientDialog";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { VoiceInput } from "@/components/VoiceInput";
-import { ContextualAI } from "@/components/ContextualAI";
-import { showCelebration } from "@/components/CelebrationToast";
-import { AIDisclaimer } from "@/components/AIDisclaimer";
-import { AudioGuidePlayer } from "@/components/AudioGuidePlayer";
-import { FormulaFiltersComponent, FormulaFilters } from "@/components/FormulaFilters";
-import { PrerequisiteCheck } from "@/components/PrerequisiteCheck";
-import { EnhancedSearch, HighlightedText, fuzzyMatch } from "@/components/EnhancedSearch";
-import { FormulaSuccessPredictor } from "@/components/FormulaSuccessPredictor";
-import { AIFeatureErrorBoundary } from "@/components/AIFeatureErrorBoundary";
-import { AIFormulaAnalyzer } from "@/components/AIFormulaAnalyzer";
-import { formulaSchema } from "@/lib/validation/formulaSchemas";
-import { cn } from "@/lib/utils";
-import { VirtualList } from "@/components/VirtualList";
-import { FormulaCard } from "@/components/FormulaCard";
-import { useFormulasByStylist, useCreateFormula, useUpdateFormula, useDeleteFormula } from "@/hooks/useFormulas";
-import { useClients } from "@/hooks/useClients";
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import { useOptimizedCallback } from '@/hooks/useOptimizedCallback';
+import { useNavigate } from 'react-router-dom';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { toast } from 'sonner';
+import {
+  Plus,
+  Loader2,
+  Search,
+  Edit,
+  Save,
+  Trash2,
+  UserPlus,
+  Palette,
+  Mic,
+  Copy,
+  Tag as TagIcon,
+  X,
+  Clock,
+  Beaker,
+  FileText,
+  ThumbsUp,
+  AlertTriangle,
+  Download,
+  ArrowUpDown,
+} from 'lucide-react';
+import { exportToCSV, formatDataForExport } from '@/lib/csvExport';
+import { SkeletonList } from '@/components/ui/skeleton-list';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { AddClientDialog } from '@/components/AddClientDialog';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { VoiceInput } from '@/components/VoiceInput';
+import { ContextualAI } from '@/components/ContextualAI';
+import { showCelebration } from '@/components/CelebrationToast';
+import { AIDisclaimer } from '@/components/AIDisclaimer';
+import { AudioGuidePlayer } from '@/components/AudioGuidePlayer';
+import {
+  FormulaFiltersComponent,
+  FormulaFilters,
+} from '@/components/FormulaFilters';
+import { PrerequisiteCheck } from '@/components/PrerequisiteCheck';
+import {
+  EnhancedSearch,
+  HighlightedText,
+  fuzzyMatch,
+} from '@/components/EnhancedSearch';
+import { FormulaSuccessPredictor } from '@/components/FormulaSuccessPredictor';
+import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
+import { AIFormulaAnalyzer } from '@/components/AIFormulaAnalyzer';
+import { formulaSchema } from '@/lib/validation/formulaSchemas';
+import { cn } from '@/lib/utils';
+import { VirtualList } from '@/components/VirtualList';
+import { FormulaCard } from '@/components/FormulaCard';
+import {
+  useFormulasByStylist,
+  useCreateFormula,
+  useUpdateFormula,
+  useDeleteFormula,
+} from '@/hooks/useFormulas';
+import { useClients } from '@/hooks/useClients';
 
 const Formulas = () => {
   const navigate = useNavigate();
   const [stylistId, setStylistId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  
+  const [searchTerm, setSearchTerm] = useState('');
+
   const handleSearchChange = useOptimizedCallback((value: string) => {
     setSearchTerm(value);
   }, []);
@@ -51,50 +110,58 @@ const Formulas = () => {
   const [clientSearchOpen, setClientSearchOpen] = useState(false);
   const [addClientDialogOpen, setAddClientDialogOpen] = useState(false);
   const [filters, setFilters] = useState<FormulaFilters>({
-    clientId: "",
-    colorLine: "",
-    dateRange: "all",
-    sortBy: "date-desc",
+    clientId: '',
+    colorLine: '',
+    dateRange: 'all',
+    sortBy: 'date-desc',
     tags: [],
   });
-  const [processingTimeSort, setProcessingTimeSort] = useState<"asc" | "desc" | null>(null);
-  const [tagInput, setTagInput] = useState("");
-  const [selectedFormulas, setSelectedFormulas] = useState<Set<string>>(new Set());
+  const [processingTimeSort, setProcessingTimeSort] = useState<
+    'asc' | 'desc' | null
+  >(null);
+  const [tagInput, setTagInput] = useState('');
+  const [selectedFormulas, setSelectedFormulas] = useState<Set<string>>(
+    new Set()
+  );
   const [similarFormulasCount, setSimilarFormulasCount] = useState(0);
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-  
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
+
   // Form state
-  const [selectedClient, setSelectedClient] = useState("");
-  const [formulaText, setFormulaText] = useState("");
-  const [instructions, setInstructions] = useState("");
-  const [colorLine, setColorLine] = useState("");
-  const [resultNotes, setResultNotes] = useState("");
+  const [selectedClient, setSelectedClient] = useState('');
+  const [formulaText, setFormulaText] = useState('');
+  const [instructions, setInstructions] = useState('');
+  const [colorLine, setColorLine] = useState('');
+  const [resultNotes, setResultNotes] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   // New structured fields
-  const [processingTime, setProcessingTime] = useState("");
-  const [developerVolume, setDeveloperVolume] = useState("");
-  const [applicationNotes, setApplicationNotes] = useState("");
-  const [whatWorked, setWhatWorked] = useState("");
-  const [whatToAvoid, setWhatToAvoid] = useState("");
+  const [processingTime, setProcessingTime] = useState('');
+  const [developerVolume, setDeveloperVolume] = useState('');
+  const [applicationNotes, setApplicationNotes] = useState('');
+  const [whatWorked, setWhatWorked] = useState('');
+  const [whatToAvoid, setWhatToAvoid] = useState('');
 
   // Load stylist profile
   useEffect(() => {
     const loadStylistProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
-        navigate("/auth");
+        navigate('/auth');
         return;
       }
 
       const { data: stylist } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylist) {
-        toast.error("Stylist profile not found");
-        navigate("/dashboard");
+        toast.error('Stylist profile not found');
+        navigate('/dashboard');
         return;
       }
 
@@ -105,10 +172,12 @@ const Formulas = () => {
   }, [navigate]);
 
   // React Query hooks for data fetching
-  const { data: formulas = [], isLoading: formulasLoading } = useFormulasByStylist(stylistId);
-  const { data: clientsData, isLoading: clientsLoading } = useClients(stylistId);
+  const { data: formulas = [], isLoading: formulasLoading } =
+    useFormulasByStylist(stylistId);
+  const { data: clientsData, isLoading: clientsLoading } =
+    useClients(stylistId);
   const clients = clientsData?.clients || [];
-  
+
   const loading = formulasLoading || clientsLoading;
 
   // Mutation hooks
@@ -123,12 +192,13 @@ const Formulas = () => {
     // Enhanced fuzzy text search
     if (searchTerm) {
       const search = searchTerm.toLowerCase();
-      filtered = filtered.filter(formula =>
-        fuzzyMatch(formula.client?.full_name || "", searchTerm, 2) ||
-        fuzzyMatch(formula.client?.email || "", searchTerm, 2) ||
-        fuzzyMatch(formula.formula_text || "", searchTerm, 2) ||
-        fuzzyMatch(formula.color_line || "", searchTerm, 2) ||
-        formula.tags?.some((tag: string) => fuzzyMatch(tag, searchTerm, 1))
+      filtered = filtered.filter(
+        formula =>
+          fuzzyMatch(formula.client?.full_name || '', searchTerm, 2) ||
+          fuzzyMatch(formula.client?.email || '', searchTerm, 2) ||
+          fuzzyMatch(formula.formula_text || '', searchTerm, 2) ||
+          fuzzyMatch(formula.color_line || '', searchTerm, 2) ||
+          formula.tags?.some((tag: string) => fuzzyMatch(tag, searchTerm, 1))
       );
     }
 
@@ -143,32 +213,32 @@ const Formulas = () => {
     }
 
     // Date range filter
-    if (filters.dateRange !== "all") {
+    if (filters.dateRange !== 'all') {
       const now = new Date();
       const cutoffDate = new Date();
-      
+
       switch (filters.dateRange) {
-        case "week":
+        case 'week':
           cutoffDate.setDate(now.getDate() - 7);
           break;
-        case "month":
+        case 'month':
           cutoffDate.setMonth(now.getMonth() - 1);
           break;
-        case "quarter":
+        case 'quarter':
           cutoffDate.setMonth(now.getMonth() - 3);
           break;
-        case "year":
+        case 'year':
           cutoffDate.setFullYear(now.getFullYear() - 1);
           break;
       }
-      
+
       filtered = filtered.filter(f => new Date(f.created_at) >= cutoffDate);
     }
 
     // Tags filter
     if (filters.tags.length > 0) {
-      filtered = filtered.filter(f =>
-        f.tags && f.tags.some((tag: string) => filters.tags.includes(tag))
+      filtered = filtered.filter(
+        f => f.tags && f.tags.some((tag: string) => filters.tags.includes(tag))
       );
     }
 
@@ -177,20 +247,30 @@ const Formulas = () => {
       filtered.sort((a, b) => {
         const aTime = a.processing_time_minutes || 0;
         const bTime = b.processing_time_minutes || 0;
-        return processingTimeSort === "asc" ? aTime - bTime : bTime - aTime;
+        return processingTimeSort === 'asc' ? aTime - bTime : bTime - aTime;
       });
     } else {
       // Regular sort
       filtered.sort((a, b) => {
         switch (filters.sortBy) {
-          case "date-desc":
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-          case "date-asc":
-            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-          case "client-asc":
-            return (a.client?.full_name || "").localeCompare(b.client?.full_name || "");
-          case "client-desc":
-            return (b.client?.full_name || "").localeCompare(a.client?.full_name || "");
+          case 'date-desc':
+            return (
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+            );
+          case 'date-asc':
+            return (
+              new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime()
+            );
+          case 'client-asc':
+            return (a.client?.full_name || '').localeCompare(
+              b.client?.full_name || ''
+            );
+          case 'client-desc':
+            return (b.client?.full_name || '').localeCompare(
+              a.client?.full_name || ''
+            );
           default:
             return 0;
         }
@@ -223,25 +303,25 @@ const Formulas = () => {
   // Export callback
   const handleExportCSV = useCallback(() => {
     if (filteredFormulas.length === 0) {
-      toast.error("No formulas to export");
+      toast.error('No formulas to export');
       return;
     }
-    
+
     const exportData = filteredFormulas.map(f => ({
-      client_name: f.client?.full_name || "",
-      formula: f.formula_text || "",
-      color_line: f.color_line || "",
-      processing_time: f.processing_time_minutes || "",
-      instructions: f.instructions || "",
-      result_notes: f.result_notes || "",
-      tags: f.tags?.join(", ") || "",
+      client_name: f.client?.full_name || '',
+      formula: f.formula_text || '',
+      color_line: f.color_line || '',
+      processing_time: f.processing_time_minutes || '',
+      instructions: f.instructions || '',
+      result_notes: f.result_notes || '',
+      tags: f.tags?.join(', ') || '',
       created_at: new Date(f.created_at).toLocaleDateString(),
     }));
-    
-    exportToCSV(exportData, "formulas");
-    toast.success("Formulas exported!");
+
+    exportToCSV(exportData, 'formulas');
+    toast.success('Formulas exported!');
   }, [filteredFormulas]);
-  
+
   // Global keyboard shortcuts
   useKeyboardShortcuts([
     {
@@ -269,14 +349,16 @@ const Formulas = () => {
         instructions,
         color_line: colorLine,
         result_notes: resultNotes,
-        processing_time_minutes: processingTime ? parseInt(processingTime) : null,
+        processing_time_minutes: processingTime
+          ? parseInt(processingTime)
+          : null,
         developer_volume: developerVolume,
         application_notes: applicationNotes,
         what_worked: whatWorked,
         what_to_avoid: whatToAvoid,
-        tags: tags.length > 0 ? tags : undefined
+        tags: tags.length > 0 ? tags : undefined,
       });
-      
+
       setValidationErrors({});
     } catch (error: any) {
       const errors: Record<string, string> = {};
@@ -284,7 +366,7 @@ const Formulas = () => {
         errors[err.path[0]] = err.message;
       });
       setValidationErrors(errors);
-      toast.error("Please fix validation errors");
+      toast.error('Please fix validation errors');
       return;
     }
 
@@ -294,7 +376,9 @@ const Formulas = () => {
       formula_text: formulaText,
       instructions: instructions || undefined,
       color_line: colorLine || undefined,
-      processing_time_minutes: processingTime ? parseInt(processingTime) : undefined,
+      processing_time_minutes: processingTime
+        ? parseInt(processingTime)
+        : undefined,
       developer_volume: developerVolume || undefined,
       application_notes: applicationNotes || undefined,
       what_worked: whatWorked || undefined,
@@ -308,8 +392,8 @@ const Formulas = () => {
       // Create new formula
       createFormulaMutation.mutate(formulaData, {
         onSuccess: () => {
-          showCelebration("formula-saved", undefined, formulas.length + 1);
-        }
+          showCelebration('formula-saved', undefined, formulas.length + 1);
+        },
       });
     }
 
@@ -330,73 +414,76 @@ const Formulas = () => {
     editingFormula,
     createFormulaMutation,
     updateFormulaMutation,
-    formulas.length
+    formulas.length,
   ]);
 
   const handleEditFormula = (formula: any) => {
     setEditingFormula(formula);
     setSelectedClient(formula.client_id);
-    setFormulaText(formula.formula_text || "");
-    setInstructions(formula.instructions || "");
-    setColorLine(formula.color_line || "");
-    setResultNotes(formula.result_notes || "");
+    setFormulaText(formula.formula_text || '');
+    setInstructions(formula.instructions || '');
+    setColorLine(formula.color_line || '');
+    setResultNotes(formula.result_notes || '');
     setTags(formula.tags || []);
-    setProcessingTime(formula.processing_time_minutes?.toString() || "");
-    setDeveloperVolume(formula.developer_volume || "");
-    setApplicationNotes(formula.application_notes || "");
-    setWhatWorked(formula.what_worked || "");
-    setWhatToAvoid(formula.what_to_avoid || "");
+    setProcessingTime(formula.processing_time_minutes?.toString() || '');
+    setDeveloperVolume(formula.developer_volume || '');
+    setApplicationNotes(formula.application_notes || '');
+    setWhatWorked(formula.what_worked || '');
+    setWhatToAvoid(formula.what_to_avoid || '');
     setDialogOpen(true);
   };
 
   const handleDuplicateFormula = (formula: any) => {
     setEditingFormula(null); // Not editing, creating new
     setSelectedClient(formula.client_id);
-    setFormulaText(formula.formula_text || "");
-    setInstructions(formula.instructions || "");
-    setColorLine(formula.color_line || "");
-    setResultNotes(formula.result_notes || "");
+    setFormulaText(formula.formula_text || '');
+    setInstructions(formula.instructions || '');
+    setColorLine(formula.color_line || '');
+    setResultNotes(formula.result_notes || '');
     setTags(formula.tags || []);
-    setProcessingTime(formula.processing_time_minutes?.toString() || "");
-    setDeveloperVolume(formula.developer_volume || "");
-    setApplicationNotes(formula.application_notes || "");
-    setWhatWorked(formula.what_worked || "");
-    setWhatToAvoid(formula.what_to_avoid || "");
+    setProcessingTime(formula.processing_time_minutes?.toString() || '');
+    setDeveloperVolume(formula.developer_volume || '');
+    setApplicationNotes(formula.application_notes || '');
+    setWhatWorked(formula.what_worked || '');
+    setWhatToAvoid(formula.what_to_avoid || '');
     setDialogOpen(true);
-    toast.success("Formula duplicated! Make any changes and save.");
+    toast.success('Formula duplicated! Make any changes and save.');
   };
 
-  const handleDeleteFormula = useCallback((formulaId: string) => {
-    const confirmed = window.confirm(
-      "Delete this formula?\n\nThis will permanently remove the formula from your records. This action cannot be undone."
-    );
-    if (!confirmed) return;
+  const handleDeleteFormula = useCallback(
+    (formulaId: string) => {
+      const confirmed = window.confirm(
+        'Delete this formula?\n\nThis will permanently remove the formula from your records. This action cannot be undone.'
+      );
+      if (!confirmed) return;
 
-    deleteFormulaMutation.mutate(formulaId);
-  }, [deleteFormulaMutation]);
+      deleteFormulaMutation.mutate(formulaId);
+    },
+    [deleteFormulaMutation]
+  );
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setEditingFormula(null);
-    setSelectedClient("");
-    setFormulaText("");
-    setInstructions("");
-    setColorLine("");
-    setResultNotes("");
+    setSelectedClient('');
+    setFormulaText('');
+    setInstructions('');
+    setColorLine('');
+    setResultNotes('');
     setTags([]);
-    setTagInput("");
-    setProcessingTime("");
-    setDeveloperVolume("");
-    setApplicationNotes("");
-    setWhatWorked("");
-    setWhatToAvoid("");
+    setTagInput('');
+    setProcessingTime('');
+    setDeveloperVolume('');
+    setApplicationNotes('');
+    setWhatWorked('');
+    setWhatToAvoid('');
   };
 
   const handleAddTag = () => {
     const newTag = tagInput.trim().toLowerCase();
     if (newTag && !tags.includes(newTag)) {
       setTags([...tags, newTag]);
-      setTagInput("");
+      setTagInput('');
     }
   };
 
@@ -405,10 +492,10 @@ const Formulas = () => {
   };
 
   if (loading) {
-  return (
-    <DashboardLayout>
-      <div className="space-y-6">
-        <Breadcrumbs />
+    return (
+      <DashboardLayout>
+        <div className="space-y-6">
+          <Breadcrumbs />
           <SkeletonList count={8} variant="card" showHeader />
         </div>
       </DashboardLayout>
@@ -419,7 +506,7 @@ const Formulas = () => {
     <DashboardLayout>
       <div className="space-y-6">
         <Breadcrumbs />
-        
+
         {/* AI Disclaimer */}
         <AIDisclaimer context="formula" />
 
@@ -428,14 +515,16 @@ const Formulas = () => {
           <ContextualAI
             context="formula"
             data={{ clientId: selectedClient }}
-            onAction={(action) => {
-              if (action === "load-last-formula") {
-                const lastFormula = formulas.find(f => f.client_id === selectedClient);
+            onAction={action => {
+              if (action === 'load-last-formula') {
+                const lastFormula = formulas.find(
+                  f => f.client_id === selectedClient
+                );
                 if (lastFormula) {
-                  setFormulaText(lastFormula.formula_text || "");
-                  setInstructions(lastFormula.instructions || "");
-                  setColorLine(lastFormula.color_line || "");
-                  toast.success("Last formula loaded!");
+                  setFormulaText(lastFormula.formula_text || '');
+                  setInstructions(lastFormula.instructions || '');
+                  setColorLine(lastFormula.color_line || '');
+                  toast.success('Last formula loaded!');
                 }
               }
             }}
@@ -444,19 +533,26 @@ const Formulas = () => {
 
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">Client Formulas</h1>
-            <p className="text-muted-foreground font-sans">View and manage your client formulas</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">
+              Client Formulas
+            </h1>
+            <p className="text-muted-foreground font-sans">
+              View and manage your client formulas
+            </p>
           </div>
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={handleExportCSV}
               disabled={filteredFormulas.length === 0}
             >
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
-            <Button onClick={() => setDialogOpen(true)} disabled={clients.length === 0}>
+            <Button
+              onClick={() => setDialogOpen(true)}
+              disabled={clients.length === 0}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Add Formula
             </Button>
@@ -464,25 +560,30 @@ const Formulas = () => {
         </div>
 
         {/* Show prerequisite alert if no clients */}
-        {clients.length === 0 && (
-          <PrerequisiteCheck type="clients" />
-        )}
+        {clients.length === 0 && <PrerequisiteCheck type="clients" />}
 
         {/* Keyboard shortcut hints */}
         <div className="flex justify-between items-center text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
           <div className="flex gap-4">
             <span>
-              <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+N</kbd> New formula
+              <kbd className="px-2 py-1 font-semibold bg-muted rounded border">
+                Ctrl+N
+              </kbd>{' '}
+              New formula
             </span>
             <span>
-              <kbd className="px-2 py-1 font-semibold bg-muted rounded border">Ctrl+E</kbd> Export
+              <kbd className="px-2 py-1 font-semibold bg-muted rounded border">
+                Ctrl+E
+              </kbd>{' '}
+              Export
             </span>
           </div>
-          {processingTimeSort === null && formulas.some(f => f.processing_time_minutes) && (
-            <span className="text-primary">
-              💡 Tip: Click any processing time to sort formulas
-            </span>
-          )}
+          {processingTimeSort === null &&
+            formulas.some(f => f.processing_time_minutes) && (
+              <span className="text-primary">
+                💡 Tip: Click any processing time to sort formulas
+              </span>
+            )}
         </div>
 
         {/* Enhanced Search */}
@@ -501,7 +602,10 @@ const Formulas = () => {
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-primary" />
                 <span className="text-xs sm:text-sm font-medium">
-                  Sorted by Processing Time: {processingTimeSort === "asc" ? "Shortest First" : "Longest First"}
+                  Sorted by Processing Time:{' '}
+                  {processingTimeSort === 'asc'
+                    ? 'Shortest First'
+                    : 'Longest First'}
                 </span>
               </div>
               <Button
@@ -526,71 +630,82 @@ const Formulas = () => {
           />
         )}
 
-            {/* Bulk Actions Bar */}
-            {selectedFormulas.size > 0 && (
-              <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
-                <CardContent className="p-4 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedFormulas.size === filteredFormulas.length}
-                      onChange={() => {
-                        if (selectedFormulas.size === filteredFormulas.length) {
+        {/* Bulk Actions Bar */}
+        {selectedFormulas.size > 0 && (
+          <Card className="border-[3px] border-primary shadow-[4px_4px_0px_0px_hsl(var(--primary))] mb-4 bg-primary/5">
+            <CardContent className="p-4 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  checked={selectedFormulas.size === filteredFormulas.length}
+                  onChange={() => {
+                    if (selectedFormulas.size === filteredFormulas.length) {
+                      setSelectedFormulas(new Set());
+                    } else {
+                      setSelectedFormulas(
+                        new Set(filteredFormulas.map(f => f.id))
+                      );
+                    }
+                  }}
+                  className="h-5 w-5 rounded border-2 border-foreground cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  aria-label="Select all formulas"
+                />
+                <span className="font-medium">
+                  {selectedFormulas.size} formula
+                  {selectedFormulas.size !== 1 ? 's' : ''} selected
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    const confirmed = window.confirm(
+                      `Delete ${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''}?\n\nThis will permanently remove the selected formulas from your records.`
+                    );
+                    if (confirmed) {
+                      const formulaIds = Array.from(selectedFormulas);
+                      Promise.all(
+                        formulaIds.map(id =>
+                          deleteFormulaMutation.mutateAsync(id)
+                        )
+                      )
+                        .then(() => {
+                          toast.success(
+                            `${formulaIds.length} formula${formulaIds.length !== 1 ? 's' : ''} deleted`
+                          );
                           setSelectedFormulas(new Set());
-                        } else {
-                          setSelectedFormulas(new Set(filteredFormulas.map(f => f.id)));
-                        }
-                      }}
-                      className="h-5 w-5 rounded border-2 border-foreground cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                      aria-label="Select all formulas"
-                    />
-                    <span className="font-medium">
-                      {selectedFormulas.size} formula{selectedFormulas.size !== 1 ? 's' : ''} selected
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={async () => {
-                        const confirmed = window.confirm(
-                          `Delete ${selectedFormulas.size} formula${selectedFormulas.size !== 1 ? 's' : ''}?\n\nThis will permanently remove the selected formulas from your records.`
-                        );
-                        if (confirmed) {
-                          const formulaIds = Array.from(selectedFormulas);
-                          Promise.all(
-                            formulaIds.map(id => deleteFormulaMutation.mutateAsync(id))
-                          ).then(() => {
-                            toast.success(`${formulaIds.length} formula${formulaIds.length !== 1 ? 's' : ''} deleted`);
-                            setSelectedFormulas(new Set());
-                          }).catch(() => {
-                            toast.error("Failed to delete some formulas");
-                          });
-                        }
-                      }}
-                    >
-                      Delete Selected
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setSelectedFormulas(new Set())}
-                    >
-                      Clear
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+                        })
+                        .catch(() => {
+                          toast.error('Failed to delete some formulas');
+                        });
+                    }
+                  }}
+                >
+                  Delete Selected
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedFormulas(new Set())}
+                >
+                  Clear
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* AI Formula Analyzer - Shows insights for selected formulas */}
         {selectedFormulas.size > 0 && (
           <div className="mb-6">
             <AIFeatureErrorBoundary featureName="formula_analyzer">
-              <AIFormulaAnalyzer 
-                formulas={filteredFormulas.filter(f => selectedFormulas.has(f.id))}
-                onAnalysisComplete={(results) => {
-                  toast.success("Formula analysis complete!");
+              <AIFormulaAnalyzer
+                formulas={filteredFormulas.filter(f =>
+                  selectedFormulas.has(f.id)
+                )}
+                onAnalysisComplete={results => {
+                  toast.success('Formula analysis complete!');
                 }}
               />
             </AIFeatureErrorBoundary>
@@ -601,23 +716,29 @@ const Formulas = () => {
         <div className="grid gap-4">
           {filteredFormulas.length === 0 ? (
             <div className="py-16 px-4 text-center animate-fade-in">
-              {searchTerm || filters.clientId || filters.colorLine || filters.tags.length > 0 ? (
+              {searchTerm ||
+              filters.clientId ||
+              filters.colorLine ||
+              filters.tags.length > 0 ? (
                 <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))] bg-secondary/5">
                   <CardContent className="py-12">
                     <Palette className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">No formulas match your filters</h3>
+                    <h3 className="text-base sm:text-lg md:text-xl font-pixel mb-2">
+                      No formulas match your filters
+                    </h3>
                     <p className="text-muted-foreground font-sans mb-4">
-                      Try adjusting your search or filters to find what you're looking for
+                      Try adjusting your search or filters to find what you're
+                      looking for
                     </p>
-                    <Button 
+                    <Button
                       variant="outline"
                       onClick={() => {
-                        setSearchTerm("");
+                        setSearchTerm('');
                         setFilters({
-                          clientId: "",
-                          colorLine: "",
-                          dateRange: "all",
-                          sortBy: "date-desc",
+                          clientId: '',
+                          colorLine: '',
+                          dateRange: 'all',
+                          sortBy: 'date-desc',
                           tags: [],
                         });
                         setProcessingTimeSort(null);
@@ -629,36 +750,49 @@ const Formulas = () => {
                 </Card>
               ) : (
                 <>
-              <div className="relative mb-6 inline-block">
-                <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
-                  <Palette className="h-16 w-16 text-primary" />
-                </div>
-                <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
-                  <span className="text-xl sm:text-2xl md:text-3xl" role="img" aria-label="magic">🔮</span>
-                </div>
-              </div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-pixel mb-2 gradient-text">
-                Your Formula Library Awaits!
-              </h2>
-              <p className="text-muted-foreground font-sans mb-6 max-w-md mx-auto">
-                {searchTerm 
-                  ? "No formulas match your search. Try different keywords or create a new formula!"
-                  : clients.length === 0 
-                    ? "Add clients first to start creating formulas. Each formula is tied to a specific client."
-                    : "Start documenting your color formulas and never forget that perfect shade again"}
-              </p>
-              <Button 
-                onClick={() => setDialogOpen(true)}
-                size="lg"
-                className="gap-2 hover-scale"
-                disabled={clients.length === 0}
-              >
-                <Plus className="h-5 w-5" />
-                Create Your First Formula
-              </Button>
-              <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground mt-4">
-                <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">Ctrl</kbd> + <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">N</kbd> for quick access
-              </p>
+                  <div className="relative mb-6 inline-block">
+                    <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-full border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                      <Palette className="h-16 w-16 text-primary" />
+                    </div>
+                    <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full border-2 border-foreground">
+                      <span
+                        className="text-xl sm:text-2xl md:text-3xl"
+                        role="img"
+                        aria-label="magic"
+                      >
+                        🔮
+                      </span>
+                    </div>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-pixel mb-2 gradient-text">
+                    Your Formula Library Awaits!
+                  </h2>
+                  <p className="text-muted-foreground font-sans mb-6 max-w-md mx-auto">
+                    {searchTerm
+                      ? 'No formulas match your search. Try different keywords or create a new formula!'
+                      : clients.length === 0
+                        ? 'Add clients first to start creating formulas. Each formula is tied to a specific client.'
+                        : 'Start documenting your color formulas and never forget that perfect shade again'}
+                  </p>
+                  <Button
+                    onClick={() => setDialogOpen(true)}
+                    size="lg"
+                    className="gap-2 hover-scale"
+                    disabled={clients.length === 0}
+                  >
+                    <Plus className="h-5 w-5" />
+                    Create Your First Formula
+                  </Button>
+                  <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground mt-4">
+                    <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">
+                      Ctrl
+                    </kbd>{' '}
+                    +{' '}
+                    <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">
+                      N
+                    </kbd>{' '}
+                    for quick access
+                  </p>
                 </>
               )}
             </div>
@@ -668,14 +802,14 @@ const Formulas = () => {
               estimateSize={350}
               overscan={2}
               className="grid gap-4"
-              renderItem={(formula) => (
+              renderItem={formula => (
                 <FormulaCard
                   formula={formula}
                   searchTerm={searchTerm}
                   onEdit={() => handleEditFormula(formula)}
                   onDuplicate={() => handleDuplicateFormula(formula)}
                   onDelete={() => handleDeleteFormula(formula.id)}
-                  onToggleSelection={(id) => {
+                  onToggleSelection={id => {
                     const newSelected = new Set(selectedFormulas);
                     if (newSelected.has(id)) {
                       newSelected.delete(id);
@@ -690,17 +824,19 @@ const Formulas = () => {
             />
           )}
         </div>
-        </div>
+      </div>
 
       {/* Add/Edit Formula Dialog */}
       <Dialog open={dialogOpen} onOpenChange={handleCloseDialog}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {editingFormula ? "Edit Formula" : "Add New Formula"}
+              {editingFormula ? 'Edit Formula' : 'Add New Formula'}
             </DialogTitle>
             <DialogDescription>
-              {editingFormula ? "Update the formula details" : "Create a new formula for a client"}
+              {editingFormula
+                ? 'Update the formula details'
+                : 'Create a new formula for a client'}
             </DialogDescription>
           </DialogHeader>
 
@@ -719,7 +855,10 @@ const Formulas = () => {
                   Add New
                 </Button>
               </div>
-              <Popover open={clientSearchOpen} onOpenChange={setClientSearchOpen}>
+              <Popover
+                open={clientSearchOpen}
+                onOpenChange={setClientSearchOpen}
+              >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -729,8 +868,10 @@ const Formulas = () => {
                     disabled={!!editingFormula}
                   >
                     {selectedClientData
-                      ? (selectedClientData.full_name || selectedClientData.email || "Client")
-                      : "Search and select a client..."}
+                      ? selectedClientData.full_name ||
+                        selectedClientData.email ||
+                        'Client'
+                      : 'Search and select a client...'}
                     <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -739,7 +880,9 @@ const Formulas = () => {
                     <CommandInput placeholder="Search clients..." />
                     <CommandEmpty>
                       <div className="p-4 text-sm text-center">
-                        <p className="text-muted-foreground mb-2">No clients found</p>
+                        <p className="text-muted-foreground mb-2">
+                          No clients found
+                        </p>
                         <Button
                           variant="outline"
                           size="sm"
@@ -754,10 +897,10 @@ const Formulas = () => {
                       </div>
                     </CommandEmpty>
                     <CommandGroup>
-                      {clients.map((client) => (
+                      {clients.map(client => (
                         <CommandItem
                           key={client.id}
-                          value={client.full_name || client.email || ""}
+                          value={client.full_name || client.email || ''}
                           onSelect={() => {
                             setSelectedClient(client.id);
                             setClientSearchOpen(false);
@@ -765,10 +908,12 @@ const Formulas = () => {
                         >
                           <div className="flex flex-col">
                             <span className="font-medium">
-                              {client.full_name || "Client"}
+                              {client.full_name || 'Client'}
                             </span>
                             {client.email && (
-                              <span className="text-[10px] xs:text-xs text-muted-foreground">{client.email}</span>
+                              <span className="text-[10px] xs:text-xs text-muted-foreground">
+                                {client.email}
+                              </span>
                             )}
                           </div>
                         </CommandItem>
@@ -785,19 +930,26 @@ const Formulas = () => {
                 <Label htmlFor="formula">Formula *</Label>
                 <VoiceInput
                   variant="icon"
-                  onTranscription={(text) => setFormulaText(prev => prev ? `${prev}\n${text}` : text)}
+                  onTranscription={text =>
+                    setFormulaText(prev => (prev ? `${prev}\n${text}` : text))
+                  }
                 />
               </div>
               <Textarea
                 id="formula"
                 placeholder="Enter the complete formula or use voice input..."
                 value={formulaText}
-                onChange={(e) => setFormulaText(e.target.value)}
+                onChange={e => setFormulaText(e.target.value)}
                 rows={6}
-                className={cn("resize-none", validationErrors.formula_text && "border-red-500")}
+                className={cn(
+                  'resize-none',
+                  validationErrors.formula_text && 'border-red-500'
+                )}
               />
               {validationErrors.formula_text && (
-                <p className="text-sm text-red-500">{validationErrors.formula_text}</p>
+                <p className="text-sm text-red-500">
+                  {validationErrors.formula_text}
+                </p>
               )}
             </div>
 
@@ -820,7 +972,7 @@ const Formulas = () => {
                 id="instructions"
                 placeholder="Step-by-step application instructions..."
                 value={instructions}
-                onChange={(e) => setInstructions(e.target.value)}
+                onChange={e => setInstructions(e.target.value)}
                 rows={4}
                 className="resize-none"
               />
@@ -833,7 +985,7 @@ const Formulas = () => {
                 id="colorline"
                 placeholder="e.g., Wella, Redken"
                 value={colorLine}
-                onChange={(e) => setColorLine(e.target.value)}
+                onChange={e => setColorLine(e.target.value)}
               />
             </div>
 
@@ -844,7 +996,7 @@ const Formulas = () => {
                 id="notes"
                 placeholder="Notes about the result..."
                 value={resultNotes}
-                onChange={(e) => setResultNotes(e.target.value)}
+                onChange={e => setResultNotes(e.target.value)}
                 rows={2}
                 className="resize-none"
               />
@@ -858,21 +1010,26 @@ const Formulas = () => {
                   id="tags"
                   placeholder="Add tags (e.g., blonde, balayage, correction)"
                   value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
+                  onChange={e => setTagInput(e.target.value)}
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
                       e.preventDefault();
                       handleAddTag();
                     }
                   }}
                 />
-                <Button type="button" variant="outline" onClick={handleAddTag} size="sm">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleAddTag}
+                  size="sm"
+                >
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
               {tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {tags.map((tag) => (
+                  {tags.map(tag => (
                     <Badge key={tag} variant="secondary" className="gap-1">
                       {tag}
                       <X
@@ -898,7 +1055,10 @@ const Formulas = () => {
                 <AccordionContent className="space-y-4 pt-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="processing-time" className="text-[10px] xs:text-xs">
+                      <Label
+                        htmlFor="processing-time"
+                        className="text-[10px] xs:text-xs"
+                      >
                         Processing Time (minutes)
                       </Label>
                       <Input
@@ -906,7 +1066,7 @@ const Formulas = () => {
                         type="number"
                         placeholder="e.g., 30"
                         value={processingTime}
-                        onChange={(e) => setProcessingTime(e.target.value)}
+                        onChange={e => setProcessingTime(e.target.value)}
                         min="1"
                         max="180"
                       />
@@ -919,7 +1079,7 @@ const Formulas = () => {
                         id="developer-volume"
                         placeholder="e.g., 20 vol"
                         value={developerVolume}
-                        onChange={(e) => setDeveloperVolume(e.target.value)}
+                        onChange={e => setDeveloperVolume(e.target.value)}
                         list="developer-options"
                       />
                       <datalist id="developer-options">
@@ -950,7 +1110,7 @@ const Formulas = () => {
                       id="application-notes"
                       placeholder="e.g., Apply root to ends, section by section..."
                       value={applicationNotes}
-                      onChange={(e) => setApplicationNotes(e.target.value)}
+                      onChange={e => setApplicationNotes(e.target.value)}
                       rows={3}
                       className="resize-none text-sm"
                     />
@@ -968,7 +1128,10 @@ const Formulas = () => {
                 </AccordionTrigger>
                 <AccordionContent className="space-y-4 pt-4">
                   <div className="space-y-2">
-                    <Label htmlFor="what-worked" className="text-xs flex items-center gap-1">
+                    <Label
+                      htmlFor="what-worked"
+                      className="text-xs flex items-center gap-1"
+                    >
                       <ThumbsUp className="h-3 w-3" />
                       What Worked Well
                     </Label>
@@ -976,13 +1139,16 @@ const Formulas = () => {
                       id="what-worked"
                       placeholder="e.g., Perfect lift, even tone, client loved it..."
                       value={whatWorked}
-                      onChange={(e) => setWhatWorked(e.target.value)}
+                      onChange={e => setWhatWorked(e.target.value)}
                       rows={2}
                       className="resize-none text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="what-to-avoid" className="text-xs flex items-center gap-1">
+                    <Label
+                      htmlFor="what-to-avoid"
+                      className="text-xs flex items-center gap-1"
+                    >
                       <AlertTriangle className="h-3 w-3" />
                       What to Avoid Next Time
                     </Label>
@@ -990,7 +1156,7 @@ const Formulas = () => {
                       id="what-to-avoid"
                       placeholder="e.g., Watch timing on roots, less developer needed..."
                       value={whatToAvoid}
-                      onChange={(e) => setWhatToAvoid(e.target.value)}
+                      onChange={e => setWhatToAvoid(e.target.value)}
                       rows={2}
                       className="resize-none text-sm"
                     />
@@ -1001,7 +1167,7 @@ const Formulas = () => {
 
             <Button onClick={handleSaveFormula} className="w-full">
               <Save className="h-4 w-4 mr-2" />
-              {editingFormula ? "Update Formula" : "Save Formula"}
+              {editingFormula ? 'Update Formula' : 'Save Formula'}
             </Button>
           </div>
         </DialogContent>
@@ -1014,7 +1180,7 @@ const Formulas = () => {
         stylistId={stylistId || undefined}
         onClientAdded={() => {
           setAddClientDialogOpen(false);
-          toast.success("Client added successfully!");
+          toast.success('Client added successfully!');
         }}
       />
     </DashboardLayout>

@@ -16,32 +16,35 @@ export function HairInspirationGenerator() {
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast({
-        title: "Prompt required",
-        description: "Please describe the hair style you want to generate",
-        variant: "destructive"
+        title: 'Prompt required',
+        description: 'Please describe the hair style you want to generate',
+        variant: 'destructive',
       });
       return;
     }
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('generate-hair-image', {
-        body: { prompt }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'generate-hair-image',
+        {
+          body: { prompt },
+        }
+      );
 
       if (error) throw error;
 
       setGeneratedImage(data.imageUrl);
       toast({
-        title: "Image generated!",
-        description: "Your hair inspiration image is ready"
+        title: 'Image generated!',
+        description: 'Your hair inspiration image is ready',
       });
     } catch (error) {
       console.error('Generation error:', error);
       toast({
-        title: "Generation failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive"
+        title: 'Generation failed',
+        description: error instanceof Error ? error.message : 'Unknown error',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -50,7 +53,7 @@ export function HairInspirationGenerator() {
 
   const handleDownload = () => {
     if (!generatedImage) return;
-    
+
     const link = document.createElement('a');
     link.href = generatedImage;
     link.download = `hair-inspiration-${Date.now()}.png`;
@@ -72,13 +75,13 @@ export function HairInspirationGenerator() {
       <Textarea
         placeholder="e.g., Balayage blonde on brown hair with beach waves, or Curly pixie cut with honey highlights"
         value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={e => setPrompt(e.target.value)}
         rows={3}
         className="resize-none"
       />
 
-      <Button 
-        onClick={handleGenerate} 
+      <Button
+        onClick={handleGenerate}
         disabled={loading || !prompt.trim()}
         className="w-full"
       >
@@ -87,15 +90,19 @@ export function HairInspirationGenerator() {
 
       {generatedImage && (
         <div className="space-y-3">
-          <OptimizedImage 
-            src={generatedImage} 
-            alt="Generated hair style" 
+          <OptimizedImage
+            src={generatedImage}
+            alt="Generated hair style"
             width={800}
             height={600}
             className="w-full rounded-lg border"
           />
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleDownload} className="flex-1">
+            <Button
+              variant="outline"
+              onClick={handleDownload}
+              className="flex-1"
+            >
               <Download className="w-4 h-4 mr-2" />
               Download
             </Button>

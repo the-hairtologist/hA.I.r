@@ -10,18 +10,27 @@ const isDevelopment = import.meta.env.DEV;
  */
 function sanitize(data: any): any {
   if (!data || typeof data !== 'object') return data;
-  
-  const sensitiveKeys = ['password', 'token', 'secret', 'api_key', 'apiKey', 'authorization'];
+
+  const sensitiveKeys = [
+    'password',
+    'token',
+    'secret',
+    'api_key',
+    'apiKey',
+    'authorization',
+  ];
   const sanitized = { ...data };
-  
+
   for (const key of Object.keys(sanitized)) {
-    if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
+    if (
+      sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))
+    ) {
       sanitized[key] = '[REDACTED]';
     } else if (typeof sanitized[key] === 'object') {
       sanitized[key] = sanitize(sanitized[key]);
     }
   }
-  
+
   return sanitized;
 }
 
@@ -34,24 +43,24 @@ export const safeConsole = {
       console.log(...args.map(sanitize));
     }
   },
-  
+
   error: (...args: any[]) => {
     // Always log errors but sanitize them
     console.error(...args.map(sanitize));
   },
-  
+
   warn: (...args: any[]) => {
     if (isDevelopment) {
       console.warn(...args.map(sanitize));
     }
   },
-  
+
   info: (...args: any[]) => {
     if (isDevelopment) {
       console.info(...args.map(sanitize));
     }
   },
-  
+
   debug: (...args: any[]) => {
     if (isDevelopment) {
       console.debug(...args.map(sanitize));
@@ -61,6 +70,7 @@ export const safeConsole = {
 
 /**
  * Performance measurement helper
+ * Use browser DevTools Performance tab for detailed profiling
  */
 export const safePerfMark = (label: string) => {
   if (isDevelopment && 'performance' in window) {
@@ -68,11 +78,15 @@ export const safePerfMark = (label: string) => {
   }
 };
 
-export const safePerfMeasure = (name: string, startMark: string, endMark?: string) => {
+export const safePerfMeasure = (
+  name: string,
+  startMark: string,
+  endMark?: string
+) => {
   if (isDevelopment && 'performance' in window) {
     try {
-      const measure = performance.measure(name, startMark, endMark);
-      safeConsole.log(`⚡ ${name}: ${measure.duration.toFixed(2)}ms`);
+      performance.measure(name, startMark, endMark);
+      // Measurements viewable in DevTools Performance tab
     } catch {
       // Mark doesn't exist, ignore
     }

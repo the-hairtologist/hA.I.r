@@ -64,7 +64,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   return (
     <div
       ref={containerRef}
-      className={cn("relative overflow-auto", className)}
+      className={cn('relative overflow-auto', className)}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -79,8 +79,8 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       >
         <div
           className={cn(
-            "flex items-center justify-center w-8 h-8 rounded-full bg-primary/10",
-            isRefreshing && "animate-spin"
+            'flex items-center justify-center w-8 h-8 rounded-full bg-primary/10',
+            isRefreshing && 'animate-spin'
           )}
           style={{
             transform: `rotate(${rotationDegrees}deg)`,
@@ -88,9 +88,9 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
         >
           <RefreshCw
             className={cn(
-              "w-5 h-5 text-primary",
-              canRefresh && "text-primary",
-              !canRefresh && "text-muted-foreground"
+              'w-5 h-5 text-primary',
+              canRefresh && 'text-primary',
+              !canRefresh && 'text-muted-foreground'
             )}
           />
         </div>
@@ -100,7 +100,8 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       <div
         style={{
           transform: `translateY(${pullMoveY}px)`,
-          transition: isRefreshing || pullMoveY === 0 ? 'transform 0.2s' : 'none',
+          transition:
+            isRefreshing || pullMoveY === 0 ? 'transform 0.2s' : 'none',
         }}
       >
         {children}

@@ -19,19 +19,19 @@ class PerformanceTracker {
    */
   async trackMetric(params: PerformanceMetric) {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-      const { error } = await supabase
-        .from('performance_metrics')
-        .insert({
-          user_id: user?.id || null,
-          metric_name: params.metricName,
-          metric_value: params.metricValue,
-          rating: params.rating,
-          page_path: params.pagePath || window.location.pathname,
-          device_type: this.getDeviceType(),
-          connection_type: this.getConnectionType(),
-        });
+      const { error } = await supabase.from('performance_metrics').insert({
+        user_id: user?.id || null,
+        metric_name: params.metricName,
+        metric_value: params.metricValue,
+        rating: params.rating,
+        page_path: params.pagePath || window.location.pathname,
+        device_type: this.getDeviceType(),
+        connection_type: this.getConnectionType(),
+      });
 
       if (error) throw error;
 
@@ -42,7 +42,11 @@ class PerformanceTracker {
         );
       }
     } catch (error) {
-      logger.error('[PerformanceTracker] Failed to track metric', 'performanceTracker', error);
+      logger.error(
+        '[PerformanceTracker] Failed to track metric',
+        'performanceTracker',
+        error
+      );
     }
   }
 
@@ -62,7 +66,10 @@ class PerformanceTracker {
   /**
    * Get rating for metric
    */
-  private getRating(name: string, value: number): 'good' | 'needs-improvement' | 'poor' {
+  private getRating(
+    name: string,
+    value: number
+  ): 'good' | 'needs-improvement' | 'poor' {
     const thresholds: Record<string, [number, number]> = {
       CLS: [0.1, 0.25],
       INP: [200, 500],
@@ -85,7 +92,11 @@ class PerformanceTracker {
     if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
       return 'tablet';
     }
-    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+    if (
+      /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+        ua
+      )
+    ) {
       return 'mobile';
     }
     return 'desktop';
@@ -95,7 +106,10 @@ class PerformanceTracker {
    * Get connection type
    */
   private getConnectionType(): string {
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const connection =
+      (navigator as any).connection ||
+      (navigator as any).mozConnection ||
+      (navigator as any).webkitConnection;
     return connection?.effectiveType || 'unknown';
   }
 
@@ -112,14 +126,18 @@ class PerformanceTracker {
       if (startMark) {
         performance.measure(measureName, startMark, markName);
         const measure = performance.getEntriesByName(measureName)[0];
-        
+
         await this.trackMetric({
           metricName: measureName,
           metricValue: measure.duration,
         });
       }
     } catch (error) {
-      logger.error('[PerformanceTracker] Failed to track custom mark', 'performanceTracker', error);
+      logger.error(
+        '[PerformanceTracker] Failed to track custom mark',
+        'performanceTracker',
+        error
+      );
     }
   }
 }

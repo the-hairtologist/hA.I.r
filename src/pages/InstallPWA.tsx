@@ -2,11 +2,24 @@
  * PWA Installation Guide Page
  * Helps users install the app on their device
  */
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Smartphone, Download, Share2, MoreVertical, Chrome, CheckCircle2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Smartphone,
+  Download,
+  Share2,
+  MoreVertical,
+  Chrome,
+  CheckCircle2,
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const InstallPWA = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -37,7 +50,10 @@ const InstallPWA = () => {
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt
+      );
     };
   }, []);
 
@@ -46,11 +62,11 @@ const InstallPWA = () => {
 
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       setIsInstalled(true);
     }
-    
+
     setDeferredPrompt(null);
   };
 
@@ -63,7 +79,8 @@ const InstallPWA = () => {
           </div>
           <h1 className="text-3xl font-pixel">Install hA.I.r</h1>
           <p className="font-sans text-muted-foreground">
-            Install our app for quick access, offline support, and a better experience
+            Install our app for quick access, offline support, and a better
+            experience
           </p>
         </div>
 
@@ -75,7 +92,9 @@ const InstallPWA = () => {
                   <CheckCircle2 className="h-8 w-8 text-primary" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold">App Already Installed! 🎉</h3>
+                  <h3 className="text-xl font-semibold">
+                    App Already Installed! 🎉
+                  </h3>
                   <p className="text-muted-foreground">
                     You can find the hA.I.r app icon on your home screen.
                   </p>
@@ -123,19 +142,26 @@ const InstallPWA = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex gap-4 items-start">
-                    <Badge variant="secondary" className="h-8 w-8 rounded-full flex items-center justify-center shrink-0">
+                    <Badge
+                      variant="secondary"
+                      className="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
+                    >
                       1
                     </Badge>
                     <div className="space-y-1">
                       <p className="font-medium">Tap the Share button</p>
                       <p className="text-sm text-muted-foreground flex items-center gap-2">
-                        Look for <Share2 className="h-4 w-4" /> at the bottom of Safari
+                        Look for <Share2 className="h-4 w-4" /> at the bottom of
+                        Safari
                       </p>
                     </div>
                   </div>
 
                   <div className="flex gap-4 items-start">
-                    <Badge variant="secondary" className="h-8 w-8 rounded-full flex items-center justify-center shrink-0">
+                    <Badge
+                      variant="secondary"
+                      className="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
+                    >
                       2
                     </Badge>
                     <div className="space-y-1">
@@ -147,7 +173,10 @@ const InstallPWA = () => {
                   </div>
 
                   <div className="flex gap-4 items-start">
-                    <Badge variant="secondary" className="h-8 w-8 rounded-full flex items-center justify-center shrink-0">
+                    <Badge
+                      variant="secondary"
+                      className="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
+                    >
                       3
                     </Badge>
                     <div className="space-y-1">
@@ -175,25 +204,33 @@ const InstallPWA = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex gap-4 items-start">
-                    <Badge variant="secondary" className="h-8 w-8 rounded-full flex items-center justify-center shrink-0">
+                    <Badge
+                      variant="secondary"
+                      className="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
+                    >
                       1
                     </Badge>
                     <div className="space-y-1">
                       <p className="font-medium">Click the install icon</p>
                       <p className="text-sm text-muted-foreground flex items-center gap-2">
-                        Look for <Download className="h-4 w-4" /> in the address bar
+                        Look for <Download className="h-4 w-4" /> in the address
+                        bar
                       </p>
                     </div>
                   </div>
 
                   <div className="flex gap-4 items-start">
-                    <Badge variant="secondary" className="h-8 w-8 rounded-full flex items-center justify-center shrink-0">
+                    <Badge
+                      variant="secondary"
+                      className="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
+                    >
                       2
                     </Badge>
                     <div className="space-y-1">
                       <p className="font-medium">Or use browser menu</p>
                       <p className="text-sm text-muted-foreground flex items-center gap-2">
-                        Click <MoreVertical className="h-4 w-4" /> → "Install hA.I.r..."
+                        Click <MoreVertical className="h-4 w-4" /> → "Install
+                        hA.I.r..."
                       </p>
                     </div>
                   </div>
@@ -210,23 +247,38 @@ const InstallPWA = () => {
                 <ul className="space-y-3 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span><strong>Instant Access:</strong> One tap from your home screen</span>
+                    <span>
+                      <strong>Instant Access:</strong> One tap from your home
+                      screen
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span><strong>Works Offline:</strong> View your formulas without internet</span>
+                    <span>
+                      <strong>Works Offline:</strong> View your formulas without
+                      internet
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span><strong>Faster Loading:</strong> Opens instantly like a native app</span>
+                    <span>
+                      <strong>Faster Loading:</strong> Opens instantly like a
+                      native app
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span><strong>Push Notifications:</strong> Get appointment reminders</span>
+                    <span>
+                      <strong>Push Notifications:</strong> Get appointment
+                      reminders
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span><strong>Full Screen:</strong> More space, cleaner interface</span>
+                    <span>
+                      <strong>Full Screen:</strong> More space, cleaner
+                      interface
+                    </span>
                   </li>
                 </ul>
               </CardContent>

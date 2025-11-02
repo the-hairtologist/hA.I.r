@@ -11,9 +11,9 @@ interface LoadingState {
   setLoading: (isLoading: boolean, message?: string) => void;
 }
 
-export const useGlobalLoading = create<LoadingState>((set) => ({
+export const useGlobalLoading = create<LoadingState>(set => ({
   isLoading: false,
   message: 'Loading...',
-  setLoading: (isLoading: boolean, message = 'Loading...') => 
+  setLoading: (isLoading: boolean, message = 'Loading...') =>
     set({ isLoading, message }),
 }));

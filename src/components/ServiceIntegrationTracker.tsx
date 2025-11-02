@@ -18,7 +18,11 @@ export const ServiceIntegrationTracker = () => {
         performanceTracker.initialize();
         logger.info('[Services] All integrations initialized');
       } catch (error) {
-        logger.error('[Services] Failed to initialize integrations', 'ServiceIntegrationTracker', error);
+        logger.error(
+          '[Services] Failed to initialize integrations',
+          'ServiceIntegrationTracker',
+          error
+        );
       }
     };
 

@@ -3,17 +3,21 @@
  * Track time during appointments
  */
 
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Square, Clock, CheckCircle } from "lucide-react";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { formatDistanceToNow } from "date-fns";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
-import { trackSelect, trackInsert, trackUpdate } from "@/lib/logging/supabaseTracker";
+import { useState, useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Play, Pause, Square, Clock, CheckCircle } from 'lucide-react';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { formatDistanceToNow } from 'date-fns';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
+import {
+  trackSelect,
+  trackInsert,
+  trackUpdate,
+} from '@/lib/logging/supabaseTracker';
 
 interface TimerSession {
   id: string;
@@ -58,13 +62,14 @@ export function AppointmentTimerWidget() {
   const loadActiveSession = async () => {
     try {
       const result = await trackSelect(
-        async () => await supabase
-          .from("appointment_timers")
-          .select("*")
-          .is("end_time", null)
-          .order("start_time", { ascending: false })
-          .limit(1)
-          .maybeSingle(),
+        async () =>
+          await supabase
+            .from('appointment_timers')
+            .select('*')
+            .is('end_time', null)
+            .order('start_time', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
         'appointment_timers',
         'AppointmentTimerWidget'
       );
@@ -74,7 +79,9 @@ export function AppointmentTimerWidget() {
         setActiveSession(result.data as TimerSession);
       }
     } catch (error) {
-      logger.error('Error loading timer session', error, { component: 'AppointmentTimerWidget' });
+      logger.error('Error loading timer session', error, {
+        component: 'AppointmentTimerWidget',
+      });
       userJourney.trackError(error as Error, { action: 'load-timer-session' });
     }
   };
@@ -82,15 +89,16 @@ export function AppointmentTimerWidget() {
   const startTimer = async (appointmentId: string) => {
     try {
       const result = await trackInsert(
-        async () => await supabase
-          .from("appointment_timers")
-          .insert({
-            appointment_id: appointmentId,
-            start_time: new Date().toISOString(),
-            duration_seconds: 0,
-          })
-          .select()
-          .maybeSingle(),
+        async () =>
+          await supabase
+            .from('appointment_timers')
+            .insert({
+              appointment_id: appointmentId,
+              start_time: new Date().toISOString(),
+              duration_seconds: 0,
+            })
+            .select()
+            .maybeSingle(),
         'appointment_timers',
         'AppointmentTimerWidget',
         { appointmentId }
@@ -100,17 +108,20 @@ export function AppointmentTimerWidget() {
       setActiveSession(result.data as TimerSession);
       setIsPaused(false);
       userJourney.trackAction('Timer Started', { appointmentId });
-      toast.success("Timer started");
+      toast.success('Timer started');
     } catch (error: any) {
-      logger.error('Error starting timer', error, { component: 'AppointmentTimerWidget', appointmentId });
+      logger.error('Error starting timer', error, {
+        component: 'AppointmentTimerWidget',
+        appointmentId,
+      });
       userJourney.trackError(error, { action: 'start-timer' });
-      toast.error("Failed to start timer");
+      toast.error('Failed to start timer');
     }
   };
 
   const pauseTimer = () => {
     setIsPaused(!isPaused);
-    toast.info(isPaused ? "Timer resumed" : "Timer paused");
+    toast.info(isPaused ? 'Timer resumed' : 'Timer paused');
   };
 
   const stopTimer = async () => {
@@ -118,13 +129,14 @@ export function AppointmentTimerWidget() {
 
     try {
       const result = await trackUpdate(
-        async () => await supabase
-          .from("appointment_timers")
-          .update({
-            end_time: new Date().toISOString(),
-            duration_seconds: elapsed,
-          })
-          .eq("id", activeSession.id),
+        async () =>
+          await supabase
+            .from('appointment_timers')
+            .update({
+              end_time: new Date().toISOString(),
+              duration_seconds: elapsed,
+            })
+            .eq('id', activeSession.id),
         'appointment_timers',
         'AppointmentTimerWidget',
         { timerId: activeSession.id, duration: elapsed }
@@ -132,21 +144,21 @@ export function AppointmentTimerWidget() {
 
       if (result.error) throw result.error;
 
-      userJourney.trackAction('Timer Stopped', { 
-        appointmentId: activeSession.appointment_id, 
-        duration: elapsed 
+      userJourney.trackAction('Timer Stopped', {
+        appointmentId: activeSession.appointment_id,
+        duration: elapsed,
       });
       toast.success(`Session completed: ${formatTime(elapsed)}`);
       setActiveSession(null);
       setElapsed(0);
       setIsPaused(false);
     } catch (error: any) {
-      logger.error('Error stopping timer', error, { 
-        component: 'AppointmentTimerWidget', 
-        timerId: activeSession.id 
+      logger.error('Error stopping timer', error, {
+        component: 'AppointmentTimerWidget',
+        timerId: activeSession.id,
       });
       userJourney.trackError(error, { action: 'stop-timer' });
-      toast.error("Failed to stop timer");
+      toast.error('Failed to stop timer');
     }
   };
 
@@ -154,9 +166,9 @@ export function AppointmentTimerWidget() {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${hrs.toString().padStart(2, "0")}:${mins
+    return `${hrs.toString().padStart(2, '0')}:${mins
       .toString()
-      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+      .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   if (!activeSession) {
@@ -177,7 +189,9 @@ export function AppointmentTimerWidget() {
             variant="outline"
             className="w-full"
             onClick={() => {
-              toast.info("Go to Appointments page and click 'Start Timer' on any active appointment");
+              toast.info(
+                "Go to Appointments page and click 'Start Timer' on any active appointment"
+              );
             }}
           >
             <Clock className="mr-2 h-4 w-4" />
@@ -199,7 +213,10 @@ export function AppointmentTimerWidget() {
             <Clock className="h-4 w-4 animate-pulse" />
             Active Session
           </div>
-          <Badge variant="outline" className="text-[11px] sm:text-xs animate-pulse">
+          <Badge
+            variant="outline"
+            className="text-[11px] sm:text-xs animate-pulse"
+          >
             Recording
           </Badge>
         </CardTitle>

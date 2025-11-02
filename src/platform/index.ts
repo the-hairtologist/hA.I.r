@@ -1,21 +1,21 @@
 /**
  * Platform Adapters for Cross-Platform Compatibility
- * 
+ *
  * This module provides unified APIs that work seamlessly across web and mobile platforms.
  * Each adapter abstracts platform-specific implementations while maintaining consistent behavior.
- * 
+ *
  * Usage:
  * ```ts
  * import { Platform, Storage, camera, haptic } from '@/platform';
- * 
+ *
  * // Check platform
  * if (Platform.isMobile) {
  *   await haptic.success();
  * }
- * 
+ *
  * // Use storage
  * await Storage.set('key', 'value');
- * 
+ *
  * // Capture image
  * const image = await camera.captureImage();
  * ```
@@ -23,18 +23,18 @@
 
 export { Platform } from './detector';
 export { Storage } from './storage';
-export { 
-  captureImage, 
-  selectMultipleImages, 
-  isCameraAvailable 
+export {
+  captureImage,
+  selectMultipleImages,
+  isCameraAvailable,
 } from './camera';
-export { 
-  impact, 
-  notification, 
-  selection, 
-  isHapticsAvailable, 
+export {
+  impact,
+  notification,
+  selection,
+  isHapticsAvailable,
   vibratePattern,
-  haptic 
+  haptic,
 } from './haptics';
 export {
   share,

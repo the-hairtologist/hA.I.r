@@ -1,21 +1,78 @@
-import { useState, useEffect, useMemo, lazy, Suspense } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { getPaymentsByStylist, getCommissionsByStylist, getAffiliateCodesByStylist } from "@/lib/queries/financeQueries";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
-import { DollarSign, TrendingUp, Loader2, Plus, Copy, ExternalLink, Tag, Calendar, TrendingDown, ArrowUpRight, ArrowDownRight, Download } from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
-import { format, subDays, subMonths, startOfMonth, endOfMonth, eachMonthOfInterval, eachWeekOfInterval, startOfWeek, endOfWeek } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { exportToCSV, formatDataForExport } from "@/lib/csvExport";
-import type { LineChart as LineChartType, Line as LineType, BarChart as BarChartType, Bar as BarType, XAxis as XAxisType, YAxis as YAxisType, CartesianGrid as CartesianGridType, Tooltip as TooltipType, ResponsiveContainer as ResponsiveContainerType, Legend as LegendType } from "recharts";
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  getPaymentsByStylist,
+  getCommissionsByStylist,
+  getAffiliateCodesByStylist,
+} from '@/lib/queries/financeQueries';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from 'sonner';
+import {
+  DollarSign,
+  TrendingUp,
+  Loader2,
+  Plus,
+  Copy,
+  ExternalLink,
+  Tag,
+  Calendar,
+  TrendingDown,
+  ArrowUpRight,
+  ArrowDownRight,
+  Download,
+} from 'lucide-react';
+import { PageHeader } from '@/components/PageHeader';
+import {
+  format,
+  subDays,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  eachMonthOfInterval,
+  eachWeekOfInterval,
+  startOfWeek,
+  endOfWeek,
+} from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { exportToCSV, formatDataForExport } from '@/lib/csvExport';
+import type {
+  LineChart as LineChartType,
+  Line as LineType,
+  BarChart as BarChartType,
+  Bar as BarType,
+  XAxis as XAxisType,
+  YAxis as YAxisType,
+  CartesianGrid as CartesianGridType,
+  Tooltip as TooltipType,
+  ResponsiveContainer as ResponsiveContainerType,
+  Legend as LegendType,
+} from 'recharts';
 
 // Lazy load recharts components
 let LineChart: typeof LineChartType | undefined;
@@ -30,7 +87,7 @@ let ResponsiveContainer: typeof ResponsiveContainerType | undefined;
 let Legend: typeof LegendType | undefined;
 
 const loadCharts = async () => {
-  const charts = await import("recharts");
+  const charts = await import('recharts');
   LineChart = charts.LineChart;
   Line = charts.Line;
   BarChart = charts.BarChart;
@@ -48,13 +105,15 @@ const Finance = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [chartsLoaded, setChartsLoaded] = useState(false);
-  const [activeTab, setActiveTab] = useState("payments");
+  const [activeTab, setActiveTab] = useState('payments');
   const [payments, setPayments] = useState<any[]>([]);
   const [commissions, setCommissions] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [affiliateCodes, setAffiliateCodes] = useState<any[]>([]);
   const [stylistProfile, setStylistProfile] = useState<any>(null);
-  const [timePeriod, setTimePeriod] = useState<"30d" | "90d" | "year" | "all">("90d");
+  const [timePeriod, setTimePeriod] = useState<'30d' | '90d' | 'year' | 'all'>(
+    '90d'
+  );
 
   // Load charts library on first use
   useEffect(() => {
@@ -77,105 +136,127 @@ const Finance = () => {
 
   const loadData = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
-        navigate("/auth");
+        navigate('/auth');
         return;
       }
 
       const { data: stylist, error: stylistError } = await supabase
-        .from("stylist_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
+        .from('stylist_profiles')
+        .select('*')
+        .eq('user_id', session.user.id)
         .maybeSingle();
 
       if (stylistError) {
-        console.error("Error fetching stylist profile:", stylistError);
-        toast.error("Failed to load stylist profile");
-        navigate("/dashboard");
+        console.error('Error fetching stylist profile:', stylistError);
+        toast.error('Failed to load stylist profile');
+        navigate('/dashboard');
         return;
       }
 
       if (!stylist) {
-        console.warn("Finance: No stylist profile found for user");
-        toast.error("Stylist profile not found. Please complete your profile first.");
-        navigate("/settings");
+        console.warn('Finance: No stylist profile found for user');
+        toast.error(
+          'Stylist profile not found. Please complete your profile first.'
+        );
+        navigate('/settings');
         return;
       }
 
       setStylistProfile(stylist);
 
       // Use optimized queries with request deduplication - load in parallel
-      const [paymentsData, commissionsData, brandsData, codesData] = await Promise.all([
-        getPaymentsByStylist(stylist.id),
-        getCommissionsByStylist(stylist.id),
-        supabase.from("hair_brands").select("id, name, logo_url, base_commission_rate").eq("is_active", true).then(r => r.data),
-        getAffiliateCodesByStylist(stylist.id)
-      ]);
+      const [paymentsData, commissionsData, brandsData, codesData] =
+        await Promise.all([
+          getPaymentsByStylist(stylist.id),
+          getCommissionsByStylist(stylist.id),
+          supabase
+            .from('hair_brands')
+            .select('id, name, logo_url, base_commission_rate')
+            .eq('is_active', true)
+            .then(r => r.data),
+          getAffiliateCodesByStylist(stylist.id),
+        ]);
 
       setPayments(paymentsData || []);
       setCommissions(commissionsData || []);
       setBrands(brandsData || []);
       setAffiliateCodes(codesData || []);
     } catch (error: any) {
-      console.error("Error loading data:", error);
-      toast.error("Failed to load financial data");
+      console.error('Error loading data:', error);
+      toast.error('Failed to load financial data');
     } finally {
       setLoading(false);
     }
   };
 
   // Filter data by time period
-  const getFilteredData = (data: any[], dateField: string = "created_at") => {
-    if (timePeriod === "all") return data;
-    
+  const getFilteredData = (data: any[], dateField: string = 'created_at') => {
+    if (timePeriod === 'all') return data;
+
     const now = new Date();
     let cutoffDate: Date;
-    
+
     switch (timePeriod) {
-      case "30d":
+      case '30d':
         cutoffDate = subDays(now, 30);
         break;
-      case "90d":
+      case '90d':
         cutoffDate = subDays(now, 90);
         break;
-      case "year":
+      case 'year':
         cutoffDate = subDays(now, 365);
         break;
       default:
         return data;
     }
-    
+
     return data.filter(item => new Date(item[dateField]) >= cutoffDate);
   };
 
-  const filteredPayments = getFilteredData(payments.filter(p => p.status === "completed"));
-  const filteredCommissions = getFilteredData(commissions.filter(c => c.status === "paid"));
+  const filteredPayments = getFilteredData(
+    payments.filter(p => p.status === 'completed')
+  );
+  const filteredCommissions = getFilteredData(
+    commissions.filter(c => c.status === 'paid')
+  );
 
-  const totalPayments = filteredPayments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
-  const totalCommissions = filteredCommissions.reduce((sum, c) => sum + parseFloat(c.commission_amount), 0);
+  const totalPayments = filteredPayments.reduce(
+    (sum, p) => sum + parseFloat(p.amount),
+    0
+  );
+  const totalCommissions = filteredCommissions.reduce(
+    (sum, c) => sum + parseFloat(c.commission_amount),
+    0
+  );
 
   const pendingCommissions = commissions
-    .filter(c => c.status === "pending")
+    .filter(c => c.status === 'pending')
     .reduce((sum, c) => sum + parseFloat(c.commission_amount), 0);
 
   const totalRevenue = totalPayments + totalCommissions;
 
   // Chart data - group by month or week based on period
   const chartData = useMemo(() => {
-    const groupByMonth = timePeriod === "year" || timePeriod === "all";
+    const groupByMonth = timePeriod === 'year' || timePeriod === 'all';
     const allData = [...filteredPayments, ...filteredCommissions];
-    
+
     if (allData.length === 0) return [];
 
-    const grouped: Record<string, { date: string; payments: number; commissions: number; total: number }> = {};
+    const grouped: Record<
+      string,
+      { date: string; payments: number; commissions: number; total: number }
+    > = {};
 
     allData.forEach(item => {
       const date = new Date(item.created_at);
-      const key = groupByMonth 
-        ? format(startOfMonth(date), "MMM yyyy")
-        : format(startOfWeek(date), "MMM d");
-      
+      const key = groupByMonth
+        ? format(startOfMonth(date), 'MMM yyyy')
+        : format(startOfWeek(date), 'MMM d');
+
       if (!grouped[key]) {
         grouped[key] = { date: key, payments: 0, commissions: 0, total: 0 };
       }
@@ -190,8 +271,8 @@ const Finance = () => {
     });
 
     return Object.values(grouped).sort((a, b) => {
-      const dateA = groupByMonth ? new Date(a.date + " 1") : new Date(a.date);
-      const dateB = groupByMonth ? new Date(b.date + " 1") : new Date(b.date);
+      const dateA = groupByMonth ? new Date(a.date + ' 1') : new Date(a.date);
+      const dateB = groupByMonth ? new Date(b.date + ' 1') : new Date(b.date);
       return dateA.getTime() - dateB.getTime();
     });
   }, [filteredPayments, filteredCommissions, timePeriod]);
@@ -202,15 +283,15 @@ const Finance = () => {
     let currentStart: Date, previousStart: Date;
 
     switch (timePeriod) {
-      case "30d":
+      case '30d':
         currentStart = subDays(now, 30);
         previousStart = subDays(now, 60);
         break;
-      case "90d":
+      case '90d':
         currentStart = subDays(now, 90);
         previousStart = subDays(now, 180);
         break;
-      case "year":
+      case 'year':
         currentStart = subDays(now, 365);
         previousStart = subDays(now, 730);
         break;
@@ -223,32 +304,37 @@ const Finance = () => {
         const date = new Date(item.created_at);
         return date >= currentStart && date <= now;
       })
-      .reduce((sum, item) => sum + parseFloat(item.amount || item.commission_amount), 0);
+      .reduce(
+        (sum, item) => sum + parseFloat(item.amount || item.commission_amount),
+        0
+      );
 
     const previousPeriodRevenue = [...payments, ...commissions]
       .filter(item => {
         const date = new Date(item.created_at);
         return date >= previousStart && date < currentStart;
       })
-      .reduce((sum, item) => sum + parseFloat(item.amount || item.commission_amount), 0);
+      .reduce(
+        (sum, item) => sum + parseFloat(item.amount || item.commission_amount),
+        0
+      );
 
     const change = currentPeriodRevenue - previousPeriodRevenue;
-    const percentChange = previousPeriodRevenue > 0 
-      ? ((change / previousPeriodRevenue) * 100) 
-      : 0;
+    const percentChange =
+      previousPeriodRevenue > 0 ? (change / previousPeriodRevenue) * 100 : 0;
 
     return {
       current: currentPeriodRevenue,
       previous: previousPeriodRevenue,
       change,
       percentChange,
-      isPositive: change >= 0
+      isPositive: change >= 0,
     };
   }, [payments, commissions, timePeriod]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!");
+    toast.success('Copied to clipboard!');
   };
 
   const handleExportPayments = () => {
@@ -298,16 +384,20 @@ const Finance = () => {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
-                  { value: "30d", label: "Last 30 Days" },
-                  { value: "90d", label: "Last 90 Days" },
-                  { value: "year", label: "Last Year" },
-                  { value: "all", label: "All Time" }
-                ].map((option) => (
+                  { value: '30d', label: 'Last 30 Days' },
+                  { value: '90d', label: 'Last 90 Days' },
+                  { value: 'year', label: 'Last Year' },
+                  { value: 'all', label: 'All Time' },
+                ].map(option => (
                   <Button
                     key={option.value}
-                    variant={timePeriod === option.value ? "default" : "outline"}
+                    variant={
+                      timePeriod === option.value ? 'default' : 'outline'
+                    }
                     size="sm"
-                    onClick={() => setTimePeriod(option.value as typeof timePeriod)}
+                    onClick={() =>
+                      setTimePeriod(option.value as typeof timePeriod)
+                    }
                     className="border-[2px] border-foreground"
                   >
                     {option.label}
@@ -322,7 +412,9 @@ const Finance = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Total Revenue</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">
+                Total Revenue
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-pixel text-primary">
@@ -330,13 +422,19 @@ const Finance = () => {
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <p className="text-xs font-sans text-muted-foreground">
-                  {timePeriod === "30d" ? "Last 30 days" : 
-                   timePeriod === "90d" ? "Last 90 days" :
-                   timePeriod === "year" ? "Last year" : "All time"}
+                  {timePeriod === '30d'
+                    ? 'Last 30 days'
+                    : timePeriod === '90d'
+                      ? 'Last 90 days'
+                      : timePeriod === 'year'
+                        ? 'Last year'
+                        : 'All time'}
                 </p>
                 {periodComparison && periodComparison.percentChange !== 0 && (
-                  <Badge 
-                    variant={periodComparison.isPositive ? "default" : "destructive"}
+                  <Badge
+                    variant={
+                      periodComparison.isPositive ? 'default' : 'destructive'
+                    }
                     className="gap-1 text-xs"
                   >
                     {periodComparison.isPositive ? (
@@ -353,19 +451,25 @@ const Finance = () => {
 
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Service Payments</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">
+                Service Payments
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-pixel text-primary">
                 ${totalPayments.toFixed(2)}
               </div>
-              <p className="text-xs font-sans text-muted-foreground mt-1">Client payments</p>
+              <p className="text-xs font-sans text-muted-foreground mt-1">
+                Client payments
+              </p>
             </CardContent>
           </Card>
 
           <Card className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Commissions</CardTitle>
+              <CardTitle className="text-sm text-muted-foreground">
+                Commissions
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-pixel text-chart-3">
@@ -386,9 +490,7 @@ const Finance = () => {
                 <TrendingUp className="h-5 w-5" />
                 Revenue Trends
               </CardTitle>
-              <CardDescription>
-                Track your earnings over time
-              </CardDescription>
+              <CardDescription>Track your earnings over time</CardDescription>
             </CardHeader>
             <CardContent>
               {!chartsLoaded ? (
@@ -398,85 +500,137 @@ const Finance = () => {
               ) : (
                 <>
                   <div className="h-[300px] w-full">
-                    {ResponsiveContainer && LineChart && Line && XAxis && YAxis && CartesianGrid && Tooltip && Legend && (
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                          <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                          <XAxis 
-                            dataKey="date" 
-                            className="text-xs fill-muted-foreground"
-                          />
-                          <YAxis 
-                            className="text-xs fill-muted-foreground"
-                            tickFormatter={(value) => `$${value}`}
-                          />
-                          <Tooltip 
-                            formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
-                          />
-                          <Legend />
-                          <Line 
-                            type="monotone" 
-                            dataKey="payments" 
-                            stroke="hsl(var(--primary))" 
-                            strokeWidth={2}
-                            name="Service Payments"
-                            dot={{ fill: 'hsl(var(--primary))', r: 4 }}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="commissions" 
-                            stroke="hsl(var(--chart-3))" 
-                            strokeWidth={2}
-                            name="Commissions"
-                            dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="total" 
-                            stroke="hsl(var(--chart-1))" 
-                            strokeWidth={3}
-                            name="Total Revenue"
-                            dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    )}
+                    {ResponsiveContainer &&
+                      LineChart &&
+                      Line &&
+                      XAxis &&
+                      YAxis &&
+                      CartesianGrid &&
+                      Tooltip &&
+                      Legend && (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart
+                            data={chartData}
+                            margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+                          >
+                            <CartesianGrid
+                              strokeDasharray="3 3"
+                              className="stroke-muted"
+                            />
+                            <XAxis
+                              dataKey="date"
+                              className="text-xs fill-muted-foreground"
+                            />
+                            <YAxis
+                              className="text-xs fill-muted-foreground"
+                              tickFormatter={value => `$${value}`}
+                            />
+                            <Tooltip
+                              formatter={(value: number) => [
+                                `$${value.toFixed(2)}`,
+                                '',
+                              ]}
+                            />
+                            <Legend />
+                            <Line
+                              type="monotone"
+                              dataKey="payments"
+                              stroke="hsl(var(--primary))"
+                              strokeWidth={2}
+                              name="Service Payments"
+                              dot={{ fill: 'hsl(var(--primary))', r: 4 }}
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="commissions"
+                              stroke="hsl(var(--chart-3))"
+                              strokeWidth={2}
+                              name="Commissions"
+                              dot={{ fill: 'hsl(var(--chart-3))', r: 4 }}
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="total"
+                              stroke="hsl(var(--chart-1))"
+                              strokeWidth={3}
+                              name="Total Revenue"
+                              dot={{ fill: 'hsl(var(--chart-1))', r: 5 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      )}
                   </div>
 
                   {/* Weekly Breakdown Bar Chart */}
-                  {timePeriod !== "all" && timePeriod !== "year" && BarChart && Bar && (
-                    <div className="mt-8 h-[250px] w-full">
-                      <h3 className="text-sm font-medium mb-4">Weekly Breakdown</h3>
-                      {ResponsiveContainer && XAxis && YAxis && CartesianGrid && Tooltip && Legend && (
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                            <XAxis 
-                              dataKey="date" 
-                              className="text-xs fill-muted-foreground"
-                            />
-                            <YAxis 
-                              className="text-xs fill-muted-foreground"
-                              tickFormatter={(value) => `$${value}`}
-                            />
-                            <Tooltip 
-                              formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
-                            />
-                            <Legend />
-                            <Bar dataKey="payments" fill="hsl(var(--primary))" name="Payments" />
-                            <Bar dataKey="commissions" fill="hsl(var(--chart-3))" name="Commissions" />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      )}
-                    </div>
-                  )}
+                  {timePeriod !== 'all' &&
+                    timePeriod !== 'year' &&
+                    BarChart &&
+                    Bar && (
+                      <div className="mt-8 h-[250px] w-full">
+                        <h3 className="text-sm font-medium mb-4">
+                          Weekly Breakdown
+                        </h3>
+                        {ResponsiveContainer &&
+                          XAxis &&
+                          YAxis &&
+                          CartesianGrid &&
+                          Tooltip &&
+                          Legend && (
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart
+                                data={chartData}
+                                margin={{
+                                  top: 5,
+                                  right: 20,
+                                  bottom: 5,
+                                  left: 0,
+                                }}
+                              >
+                                <CartesianGrid
+                                  strokeDasharray="3 3"
+                                  className="stroke-muted"
+                                />
+                                <XAxis
+                                  dataKey="date"
+                                  className="text-xs fill-muted-foreground"
+                                />
+                                <YAxis
+                                  className="text-xs fill-muted-foreground"
+                                  tickFormatter={value => `$${value}`}
+                                />
+                                <Tooltip
+                                  formatter={(value: number) => [
+                                    `$${value.toFixed(2)}`,
+                                    '',
+                                  ]}
+                                />
+                                <Legend />
+                                <Bar
+                                  dataKey="payments"
+                                  fill="hsl(var(--primary))"
+                                  name="Payments"
+                                />
+                                <Bar
+                                  dataKey="commissions"
+                                  fill="hsl(var(--chart-3))"
+                                  name="Commissions"
+                                />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          )}
+                      </div>
+                    )}
                 </>
               )}
             </CardContent>
           </Card>
         )}
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2">
             <TabsTrigger value="payments">Service Payments</TabsTrigger>
             <TabsTrigger value="commissions">Product Commissions</TabsTrigger>
@@ -490,10 +644,16 @@ const Finance = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Payment History</CardTitle>
-                    <CardDescription>Track service payments from clients</CardDescription>
+                    <CardDescription>
+                      Track service payments from clients
+                    </CardDescription>
                   </div>
                   {filteredPayments.length > 0 && (
-                    <Button onClick={handleExportPayments} variant="outline" size="sm">
+                    <Button
+                      onClick={handleExportPayments}
+                      variant="outline"
+                      size="sm"
+                    >
                       <Download className="h-4 w-4 mr-2" />
                       Export CSV
                     </Button>
@@ -505,34 +665,41 @@ const Finance = () => {
                   <div className="text-center py-12">
                     <DollarSign className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground">
-                      {payments.length === 0 
-                        ? "No payments recorded yet"
+                      {payments.length === 0
+                        ? 'No payments recorded yet'
                         : `No payments in selected time period`}
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {filteredPayments.map((payment) => (
+                    {filteredPayments.map(payment => (
                       <div
                         key={payment.id}
                         className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
                       >
                         <div>
                           <p className="font-semibold">
-                            {payment.client?.user?.full_name || "Walk-in Client"}
+                            {payment.client?.user?.full_name ||
+                              'Walk-in Client'}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {payment.appointment?.service_type || "Service Payment"}
+                            {payment.appointment?.service_type ||
+                              'Service Payment'}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {format(new Date(payment.created_at), "MMM d, yyyy")}
+                            {format(
+                              new Date(payment.created_at),
+                              'MMM d, yyyy'
+                            )}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="font-bold text-lg text-green-600">
                             ${parseFloat(payment.amount).toFixed(2)}
                           </p>
-                          <Badge variant="outline">{payment.payment_method}</Badge>
+                          <Badge variant="outline">
+                            {payment.payment_method}
+                          </Badge>
                         </div>
                       </div>
                     ))}
@@ -549,10 +716,16 @@ const Finance = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Commission Earnings</CardTitle>
-                    <CardDescription>Track product affiliate commissions</CardDescription>
+                    <CardDescription>
+                      Track product affiliate commissions
+                    </CardDescription>
                   </div>
                   {filteredCommissions.length > 0 && (
-                    <Button onClick={handleExportCommissions} variant="outline" size="sm">
+                    <Button
+                      onClick={handleExportCommissions}
+                      variant="outline"
+                      size="sm"
+                    >
                       <Download className="h-4 w-4 mr-2" />
                       Export CSV
                     </Button>
@@ -565,31 +738,45 @@ const Finance = () => {
                     <TrendingUp className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground">
                       {commissions.length === 0
-                        ? "No commissions recorded yet"
+                        ? 'No commissions recorded yet'
                         : `No commissions in selected time period`}
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {filteredCommissions.map((commission) => (
+                    {filteredCommissions.map(commission => (
                       <div
                         key={commission.id}
                         className="flex items-center justify-between p-4 border-[2px] border-foreground rounded-lg hover:bg-secondary/5 transition-colors"
                       >
                         <div>
-                          <p className="font-semibold">{commission.product_name}</p>
+                          <p className="font-semibold">
+                            {commission.product_name}
+                          </p>
                           <p className="text-sm text-muted-foreground">
-                            {commission.brand?.name || "Unknown Brand"}
+                            {commission.brand?.name || 'Unknown Brand'}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {format(new Date(commission.created_at), "MMM d, yyyy")}
+                            {format(
+                              new Date(commission.created_at),
+                              'MMM d, yyyy'
+                            )}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="font-bold text-lg text-purple-600">
-                            ${parseFloat(commission.commission_amount).toFixed(2)}
+                            $
+                            {parseFloat(commission.commission_amount).toFixed(
+                              2
+                            )}
                           </p>
-                          <Badge variant={commission.status === "paid" ? "default" : "secondary"}>
+                          <Badge
+                            variant={
+                              commission.status === 'paid'
+                                ? 'default'
+                                : 'secondary'
+                            }
+                          >
                             {commission.status}
                           </Badge>
                         </div>
@@ -604,12 +791,19 @@ const Finance = () => {
           {/* Affiliate Codes Tab */}
           <TabsContent value="affiliate">
             <div className="grid md:grid-cols-2 gap-6">
-              {brands.map((brand) => {
-                const affiliateCode = affiliateCodes.find(c => c.brand_id === brand.id);
-                const commissionRate = affiliateCode?.custom_commission_rate || brand.base_commission_rate;
+              {brands.map(brand => {
+                const affiliateCode = affiliateCodes.find(
+                  c => c.brand_id === brand.id
+                );
+                const commissionRate =
+                  affiliateCode?.custom_commission_rate ||
+                  brand.base_commission_rate;
 
                 return (
-                  <Card key={brand.id} className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+                  <Card
+                    key={brand.id}
+                    className="border-[3px] border-foreground shadow-[4px_4px_0px_0px_hsl(var(--foreground))]"
+                  >
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div>
@@ -622,7 +816,9 @@ const Finance = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => window.open(brand.affiliate_program_url, '_blank')}
+                            onClick={() =>
+                              window.open(brand.affiliate_program_url, '_blank')
+                            }
                           >
                             <ExternalLink className="h-4 w-4" />
                           </Button>
@@ -633,7 +829,9 @@ const Finance = () => {
                       {affiliateCode ? (
                         <div className="space-y-3">
                           <div className="bg-muted/50 p-4 rounded-lg">
-                            <Label className="text-xs text-muted-foreground">Your Code</Label>
+                            <Label className="text-xs text-muted-foreground">
+                              Your Code
+                            </Label>
                             <div className="flex items-center gap-2 mt-1">
                               <code className="flex-1 text-lg font-bold text-primary">
                                 {affiliateCode.referral_code}
@@ -641,7 +839,9 @@ const Finance = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => copyToClipboard(affiliateCode.referral_code)}
+                                onClick={() =>
+                                  copyToClipboard(affiliateCode.referral_code)
+                                }
                               >
                                 <Copy className="h-4 w-4" />
                               </Button>

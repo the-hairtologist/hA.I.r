@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, Sparkles, X } from "lucide-react";
-import { format } from "date-fns";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Calendar, Sparkles, X } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface RebookingData {
   id: string;
@@ -35,9 +35,9 @@ export function RebookingPrompt() {
     const fetchRebookingReminder = async () => {
       // Get client profile
       const { data: clientProfile } = await supabase
-        .from("client_profiles")
-        .select("id")
-        .eq("user_id", user.id)
+        .from('client_profiles')
+        .select('id')
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!clientProfile) return;
@@ -47,8 +47,9 @@ export function RebookingPrompt() {
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
 
       const { data, error } = await supabase
-        .from("rebooking_reminders")
-        .select(`
+        .from('rebooking_reminders')
+        .select(
+          `
           id,
           appointment_id,
           sent_at,
@@ -62,11 +63,12 @@ export function RebookingPrompt() {
               )
             )
           )
-        `)
-        .eq("client_id", clientProfile.id)
-        .eq("rebooked", false)
-        .gte("sent_at", twoWeeksAgo.toISOString())
-        .order("sent_at", { ascending: false })
+        `
+        )
+        .eq('client_id', clientProfile.id)
+        .eq('rebooked', false)
+        .gte('sent_at', twoWeeksAgo.toISOString())
+        .order('sent_at', { ascending: false })
         .limit(1)
         .maybeSingle();
 
@@ -83,7 +85,7 @@ export function RebookingPrompt() {
   }, [user]);
 
   const handleBookNow = () => {
-    navigate("/appointments");
+    navigate('/appointments');
   };
 
   const handleDismiss = async () => {
@@ -93,10 +95,12 @@ export function RebookingPrompt() {
 
   if (!reminder || dismissed) return null;
 
-  const stylistName = reminder.appointments?.stylist_profiles?.profiles?.full_name || "your stylist";
-  const lastAppointmentDate = reminder.appointments?.appointment_date 
-    ? format(new Date(reminder.appointments.appointment_date), "MMM d, yyyy")
-    : "";
+  const stylistName =
+    reminder.appointments?.stylist_profiles?.profiles?.full_name ||
+    'your stylist';
+  const lastAppointmentDate = reminder.appointments?.appointment_date
+    ? format(new Date(reminder.appointments.appointment_date), 'MMM d, yyyy')
+    : '';
 
   return (
     <Card className="p-6 mb-6 bg-gradient-to-r from-primary/10 to-purple-500/10 border-primary/20 relative overflow-hidden">
@@ -115,15 +119,16 @@ export function RebookingPrompt() {
         <div className="rounded-full bg-primary/20 p-3">
           <Sparkles className="h-6 w-6 text-primary" />
         </div>
-        
+
         <div className="flex-1">
           <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
             Time for a Touch-Up! ✨
           </h3>
-          
+
           <p className="text-muted-foreground mb-4">
-            It's been 6 weeks since your last appointment with <span className="font-semibold text-foreground">{stylistName}</span> on {lastAppointmentDate}. 
-            Ready to book your next session?
+            It's been 6 weeks since your last appointment with{' '}
+            <span className="font-semibold text-foreground">{stylistName}</span>{' '}
+            on {lastAppointmentDate}. Ready to book your next session?
           </p>
 
           <div className="flex flex-wrap gap-3">

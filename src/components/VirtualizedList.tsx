@@ -3,8 +3,8 @@
  * Renders only visible items for better performance with large lists
  */
 
-import { useRef, useState, useEffect, ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { useRef, useState, useEffect, ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface VirtualizedListProps<T> {
   items: T[];
@@ -59,7 +59,7 @@ export function VirtualizedList<T>({
 
   if (loading) {
     return (
-      <div className={cn("flex items-center justify-center p-8", className)}>
+      <div className={cn('flex items-center justify-center p-8', className)}>
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
       </div>
     );
@@ -72,10 +72,10 @@ export function VirtualizedList<T>({
   return (
     <div
       ref={containerRef}
-      className={cn("overflow-auto", className)}
+      className={cn('overflow-auto', className)}
       onScroll={handleScroll}
     >
-      <div style={{ height: `${totalHeight}px`, position: "relative" }}>
+      <div style={{ height: `${totalHeight}px`, position: 'relative' }}>
         <div style={{ transform: `translateY(${offsetY}px)` }}>
           {visibleItems.map((item, index) => (
             <div key={startIndex + index} style={{ height: `${itemHeight}px` }}>

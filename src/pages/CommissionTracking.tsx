@@ -50,10 +50,11 @@ export default function CommissionTracking() {
               Track earnings from product recommendations and referral programs.
             </p>
             <p className="text-sm text-muted-foreground">
-              Commissions are calculated based on your partnership agreements with brands.
+              Commissions are calculated based on your partnership agreements
+              with brands.
             </p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => navigate('/referrals')}
               className="mt-4"
             >

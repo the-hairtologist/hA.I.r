@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Calendar, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { haptic } from "@/platform/haptics";
-import { showCelebration } from "./CelebrationToast";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Calendar, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { haptic } from '@/platform/haptics';
+import { showCelebration } from './CelebrationToast';
+import { cn } from '@/lib/utils';
 
 interface QuickRebookButtonProps {
   appointmentId: string;
@@ -16,7 +16,7 @@ interface QuickRebookButtonProps {
   stylistId: string;
   duration: number;
   className?: string;
-  variant?: "default" | "outline" | "ghost";
+  variant?: 'default' | 'outline' | 'ghost';
 }
 
 export const QuickRebookButton = ({
@@ -27,7 +27,7 @@ export const QuickRebookButton = ({
   stylistId,
   duration,
   className,
-  variant = "default"
+  variant = 'default',
 }: QuickRebookButtonProps) => {
   const navigate = useNavigate();
   const [isRebooking, setIsRebooking] = useState(false);
@@ -39,9 +39,9 @@ export const QuickRebookButton = ({
     try {
       // Get original appointment details
       const { data: originalAppt, error: fetchError } = await supabase
-        .from("appointments")
-        .select("*")
-        .eq("id", appointmentId)
+        .from('appointments')
+        .select('*')
+        .eq('id', appointmentId)
         .maybeSingle();
 
       if (fetchError) {
@@ -49,7 +49,7 @@ export const QuickRebookButton = ({
         toast.error('Failed to load appointment details');
         return;
       }
-      
+
       if (!originalAppt) {
         toast.error('Appointment not found');
         return;
@@ -62,11 +62,11 @@ export const QuickRebookButton = ({
 
       // Get stylist's available slots around that date
       const { data: schedule, error: scheduleError } = await supabase
-        .from("stylist_profiles")
-        .select("weekly_schedule")
-        .eq("id", stylistId)
+        .from('stylist_profiles')
+        .select('weekly_schedule')
+        .eq('id', stylistId)
         .maybeSingle();
-      
+
       if (scheduleError) {
         console.error('Error fetching schedule:', scheduleError);
       }
@@ -83,45 +83,53 @@ export const QuickRebookButton = ({
 
         // Create new appointment
         const { error: createError } = await supabase
-          .from("appointments")
+          .from('appointments')
           .insert({
             client_id: clientId,
             stylist_id: stylistId,
             appointment_date: appointmentTime.toISOString(),
             service_type: serviceType,
             duration: duration,
-            status: "pending",
-            notes: `Rebooked from appointment on ${originalDate.toLocaleDateString()}`
+            status: 'pending',
+            notes: `Rebooked from appointment on ${originalDate.toLocaleDateString()}`,
           });
 
         if (createError) throw createError;
 
         // Send notification to client
-        const { error: notifError } = await supabase.functions.invoke('send-appointment-confirmation', {
-          body: {
-            clientId,
-            appointmentDate: appointmentTime.toISOString(),
-            serviceType,
-            isRebook: true
+        const { error: notifError } = await supabase.functions.invoke(
+          'send-appointment-confirmation',
+          {
+            body: {
+              clientId,
+              appointmentDate: appointmentTime.toISOString(),
+              serviceType,
+              isRebook: true,
+            },
           }
-        });
+        );
 
-        showCelebration("appointment-booked", `${clientName} rebooked for ${appointmentTime.toLocaleDateString()}`);
+        showCelebration(
+          'appointment-booked',
+          `${clientName} rebooked for ${appointmentTime.toLocaleDateString()}`
+        );
         haptic.success();
       } else {
         toast.info(`No available slots found. Opening booking page...`, {
           action: {
-            label: "Book Manually",
+            label: 'Book Manually',
             onClick: () => {
-              navigate(`/book-appointment?clientId=${clientId}&serviceType=${encodeURIComponent(serviceType)}`);
-            }
-          }
+              navigate(
+                `/book-appointment?clientId=${clientId}&serviceType=${encodeURIComponent(serviceType)}`
+              );
+            },
+          },
         });
       }
     } catch (error) {
       console.error('Error rebooking:', error);
       haptic.error();
-      toast.error("Failed to rebook appointment");
+      toast.error('Failed to rebook appointment');
     } finally {
       setIsRebooking(false);
     }
@@ -133,7 +141,7 @@ export const QuickRebookButton = ({
       size="sm"
       onClick={handleQuickRebook}
       disabled={isRebooking}
-      className={cn("gap-2", className)}
+      className={cn('gap-2', className)}
     >
       {isRebooking ? (
         <>

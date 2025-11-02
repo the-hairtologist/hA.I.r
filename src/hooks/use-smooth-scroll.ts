@@ -3,12 +3,15 @@
  * Provides smooth scrolling and scroll-based animations
  */
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 
 /**
  * Detects if element is in viewport
  */
-export const useInView = (ref: React.RefObject<Element>, options?: IntersectionObserverInit) => {
+export const useInView = (
+  ref: React.RefObject<Element>,
+  options?: IntersectionObserverInit
+) => {
   const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
@@ -42,10 +45,10 @@ export const useScrollProgress = () => {
       setProgress(Math.min(Math.max(progress, 0), 1));
     };
 
-    window.addEventListener("scroll", updateProgress);
+    window.addEventListener('scroll', updateProgress);
     updateProgress();
 
-    return () => window.removeEventListener("scroll", updateProgress);
+    return () => window.removeEventListener('scroll', updateProgress);
   }, []);
 
   return progress;
@@ -55,30 +58,30 @@ export const useScrollProgress = () => {
  * Smooth scroll to element or position
  */
 export const useSmoothScroll = () => {
-  const scrollTo = useCallback((
-    target: number | string | Element,
-    options?: ScrollIntoViewOptions
-  ) => {
-    if (typeof target === "number") {
-      window.scrollTo({
-        top: target,
-        behavior: "smooth",
-      });
-    } else if (typeof target === "string") {
-      const element = document.querySelector(target);
-      element?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        ...options,
-      });
-    } else {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        ...options,
-      });
-    }
-  }, []);
+  const scrollTo = useCallback(
+    (target: number | string | Element, options?: ScrollIntoViewOptions) => {
+      if (typeof target === 'number') {
+        window.scrollTo({
+          top: target,
+          behavior: 'smooth',
+        });
+      } else if (typeof target === 'string') {
+        const element = document.querySelector(target);
+        element?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          ...options,
+        });
+      } else {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          ...options,
+        });
+      }
+    },
+    []
+  );
 
   const scrollToTop = useCallback(() => {
     scrollTo(0);
@@ -91,24 +94,26 @@ export const useSmoothScroll = () => {
  * Detects scroll direction
  */
 export const useScrollDirection = () => {
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(
+    null
+  );
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const updateScrollDirection = () => {
       const scrollY = window.scrollY;
-      
+
       if (scrollY > lastScrollY) {
-        setScrollDirection("down");
+        setScrollDirection('down');
       } else if (scrollY < lastScrollY) {
-        setScrollDirection("up");
+        setScrollDirection('up');
       }
 
       setLastScrollY(scrollY);
     };
 
-    window.addEventListener("scroll", updateScrollDirection);
-    return () => window.removeEventListener("scroll", updateScrollDirection);
+    window.addEventListener('scroll', updateScrollDirection);
+    return () => window.removeEventListener('scroll', updateScrollDirection);
   }, [lastScrollY]);
 
   return scrollDirection;
@@ -125,10 +130,10 @@ export const useScrollThreshold = (threshold: number = 100) => {
       setIsAboveThreshold(window.scrollY > threshold);
     };
 
-    window.addEventListener("scroll", updateThreshold);
+    window.addEventListener('scroll', updateThreshold);
     updateThreshold();
 
-    return () => window.removeEventListener("scroll", updateThreshold);
+    return () => window.removeEventListener('scroll', updateThreshold);
   }, [threshold]);
 
   return isAboveThreshold;

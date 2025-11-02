@@ -22,12 +22,12 @@ export function createErrorResponse(
   details?: any
 ): Response {
   const message = error instanceof Error ? error.message : error;
-  
+
   const errorResponse: ErrorResponse = {
     error: message,
     code,
     details,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   // Log error for monitoring (don't expose sensitive info)
@@ -35,16 +35,13 @@ export function createErrorResponse(
     message,
     code,
     status,
-    timestamp: errorResponse.timestamp
+    timestamp: errorResponse.timestamp,
   });
 
-  return new Response(
-    JSON.stringify(errorResponse),
-    {
-      status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    }
-  );
+  return new Response(JSON.stringify(errorResponse), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
 }
 
 /**
@@ -52,14 +49,18 @@ export function createErrorResponse(
  */
 export function handleError(error: any): Response {
   // Authentication errors
-  if (error.message?.includes('Missing authorization') || 
-      error.message?.includes('Unauthorized')) {
+  if (
+    error.message?.includes('Missing authorization') ||
+    error.message?.includes('Unauthorized')
+  ) {
     return createErrorResponse(error, 401, 'UNAUTHORIZED');
   }
 
   // Authorization errors
-  if (error.message?.includes('Forbidden') || 
-      error.message?.includes('role required')) {
+  if (
+    error.message?.includes('Forbidden') ||
+    error.message?.includes('role required')
+  ) {
     return createErrorResponse(error, 403, 'FORBIDDEN');
   }
 
@@ -82,8 +83,10 @@ export function handleError(error: any): Response {
   }
 
   // Validation errors
-  if (error.message?.includes('Invalid') || 
-      error.message?.includes('validation')) {
+  if (
+    error.message?.includes('Invalid') ||
+    error.message?.includes('validation')
+  ) {
     return createErrorResponse(error, 400, 'VALIDATION_ERROR');
   }
 

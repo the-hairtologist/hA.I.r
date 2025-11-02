@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { format } from "date-fns";
-import { AlertCircle, Send, Calendar, Clock, User } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { format } from 'date-fns';
+import { AlertCircle, Send, Calendar, Clock, User } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface ConflictingAppointment {
   id: string;
@@ -65,28 +72,35 @@ export function VacationConflictDialog({
     setSending(true);
     try {
       // Send SMS notifications to selected appointments
-      const notificationPromises = Array.from(selectedAppointments).map(async (appointmentId) => {
-        try {
-          await supabase.functions.invoke('send-sms-notification', {
-            body: {
-              appointmentId,
-              notificationType: 'reschedule',
-              customMessage,
-            },
-          });
-        } catch (error) {
-          console.error(`Failed to send notification for appointment ${appointmentId}:`, error);
+      const notificationPromises = Array.from(selectedAppointments).map(
+        async appointmentId => {
+          try {
+            await supabase.functions.invoke('send-sms-notification', {
+              body: {
+                appointmentId,
+                notificationType: 'reschedule',
+                customMessage,
+              },
+            });
+          } catch (error) {
+            console.error(
+              `Failed to send notification for appointment ${appointmentId}:`,
+              error
+            );
+          }
         }
-      });
+      );
 
       await Promise.all(notificationPromises);
 
-      toast.success(`Notifications sent to ${selectedAppointments.size} client(s)`);
+      toast.success(
+        `Notifications sent to ${selectedAppointments.size} client(s)`
+      );
       onConfirm();
       onOpenChange(false);
     } catch (error) {
-      console.error("Error sending notifications:", error);
-      toast.error("Some notifications failed to send");
+      console.error('Error sending notifications:', error);
+      toast.error('Some notifications failed to send');
     } finally {
       setSending(false);
     }
@@ -106,19 +120,20 @@ export function VacationConflictDialog({
             <DialogTitle>Appointment Conflicts Detected</DialogTitle>
           </div>
           <DialogDescription>
-            You have {conflictingAppointments.length} appointment(s) scheduled during{" "}
-            {blockedDates && blockedDates.length > 0 ? (
-              blockedDates.length === 1 
-                ? format(blockedDates[0], "MMMM d, yyyy")
-                : `${format(blockedDates[0], "MMM d")} - ${format(blockedDates[blockedDates.length - 1], "MMM d, yyyy")}`
-            ) : "the selected dates"}. 
-            Select which clients to notify about rescheduling.
+            You have {conflictingAppointments.length} appointment(s) scheduled
+            during{' '}
+            {blockedDates && blockedDates.length > 0
+              ? blockedDates.length === 1
+                ? format(blockedDates[0], 'MMMM d, yyyy')
+                : `${format(blockedDates[0], 'MMM d')} - ${format(blockedDates[blockedDates.length - 1], 'MMM d, yyyy')}`
+              : 'the selected dates'}
+            . Select which clients to notify about rescheduling.
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[40vh] pr-4">
           <div className="space-y-3">
-            {conflictingAppointments.map((appointment) => (
+            {conflictingAppointments.map(appointment => (
               <Card key={appointment.id} className="p-4">
                 <div className="flex items-start gap-3">
                   <Checkbox
@@ -132,19 +147,26 @@ export function VacationConflictDialog({
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4 text-muted-foreground" />
                           <span className="font-medium">
-                            {appointment.client.full_name || appointment.client.user?.full_name}
+                            {appointment.client.full_name ||
+                              appointment.client.user?.full_name}
                           </span>
                         </div>
                         <p className="text-sm text-muted-foreground mt-1">
-                          {appointment.client.email || appointment.client.user?.email}
+                          {appointment.client.email ||
+                            appointment.client.user?.email}
                         </p>
                       </div>
-                      <Badge variant="secondary">{appointment.service_type}</Badge>
+                      <Badge variant="secondary">
+                        {appointment.service_type}
+                      </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3.5 w-3.5" />
-                        {format(new Date(appointment.appointment_date), "MMM d, yyyy 'at' h:mm a")}
+                        {format(
+                          new Date(appointment.appointment_date),
+                          "MMM d, yyyy 'at' h:mm a"
+                        )}
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="h-3.5 w-3.5" />
@@ -163,13 +185,14 @@ export function VacationConflictDialog({
           <Textarea
             id="message"
             value={customMessage}
-            onChange={(e) => setCustomMessage(e.target.value)}
+            onChange={e => setCustomMessage(e.target.value)}
             placeholder="Enter a message for affected clients..."
             rows={4}
             className="resize-none"
           />
           <p className="text-xs text-muted-foreground">
-            This message will be sent via SMS to {selectedAppointments.size} selected client(s)
+            This message will be sent via SMS to {selectedAppointments.size}{' '}
+            selected client(s)
           </p>
         </div>
 

@@ -6,7 +6,13 @@
 import React from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 interface Props {
   children: React.ReactNode;
@@ -35,22 +41,30 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('[GlobalErrorBoundary] CAUGHT ERROR:', error);
     console.error('[GlobalErrorBoundary] Error Info:', errorInfo);
-    console.error('[GlobalErrorBoundary] Component Stack:', errorInfo.componentStack);
-    
+    console.error(
+      '[GlobalErrorBoundary] Component Stack:',
+      errorInfo.componentStack
+    );
+
     this.setState({
       error,
       errorInfo,
     });
 
     // Send to Sentry (async operation, fire-and-forget)
-    import('@/lib/monitoring').then(monitoring => {
-      monitoring.captureError(error, {
-        componentStack: errorInfo.componentStack,
-        source: 'GlobalErrorBoundary',
+    import('@/lib/monitoring')
+      .then(monitoring => {
+        monitoring.captureError(error, {
+          componentStack: errorInfo.componentStack,
+          source: 'GlobalErrorBoundary',
+        });
+      })
+      .catch(loggingError => {
+        console.error(
+          '[GlobalErrorBoundary] Error logging failed:',
+          loggingError
+        );
       });
-    }).catch(loggingError => {
-      console.error('[GlobalErrorBoundary] Error logging failed:', loggingError);
-    });
   }
 
   handleReset = () => {
@@ -77,7 +91,8 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
                 <CardTitle className="text-2xl">Something went wrong</CardTitle>
               </div>
               <CardDescription>
-                We're sorry for the inconvenience. An unexpected error has occurred.
+                We're sorry for the inconvenience. An unexpected error has
+                occurred.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -88,7 +103,7 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
                   </p>
                 </div>
               )}
-              
+
               <div className="flex flex-wrap gap-3">
                 <Button onClick={this.handleReset} variant="default">
                   <RefreshCw className="mr-2 h-4 w-4" />

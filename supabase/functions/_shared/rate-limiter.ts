@@ -11,10 +11,10 @@ interface RateLimitConfig {
 }
 
 const RATE_LIMITS: Record<string, RateLimitConfig> = {
-  'ai_chat': { requests: 30, windowMs: 3600000 }, // 30/hour
-  'ai_insights': { requests: 10, windowMs: 3600000 }, // 10/hour
-  'ai_scheduling': { requests: 20, windowMs: 3600000 }, // 20/hour
-  'default': { requests: 100, windowMs: 3600000 }, // 100/hour
+  ai_chat: { requests: 30, windowMs: 3600000 }, // 30/hour
+  ai_insights: { requests: 10, windowMs: 3600000 }, // 10/hour
+  ai_scheduling: { requests: 20, windowMs: 3600000 }, // 20/hour
+  default: { requests: 100, windowMs: 3600000 }, // 100/hour
 };
 
 export async function checkRateLimit(
@@ -39,10 +39,10 @@ export async function checkRateLimit(
   if (error) {
     console.error('Rate limit check error:', error);
     // Fail open (allow request) on error to avoid blocking users
-    return { 
-      allowed: true, 
-      remaining: config.requests, 
-      resetAt: new Date(Date.now() + config.windowMs) 
+    return {
+      allowed: true,
+      remaining: config.requests,
+      resetAt: new Date(Date.now() + config.windowMs),
     };
   }
 
@@ -55,50 +55,51 @@ export async function checkRateLimit(
     if (rateLimits) {
       await supabase
         .from('api_rate_limits')
-        .update({ 
-          request_count: currentCount + 1 
+        .update({
+          request_count: currentCount + 1,
         })
         .eq('user_id', userId)
         .eq('endpoint', endpoint)
         .gte('window_start', windowStart.toISOString());
     } else {
-      await supabase
-        .from('api_rate_limits')
-        .insert({
-          user_id: userId,
-          endpoint: endpoint,
-          request_count: 1,
-          window_start: new Date().toISOString()
-        });
+      await supabase.from('api_rate_limits').insert({
+        user_id: userId,
+        endpoint: endpoint,
+        request_count: 1,
+        window_start: new Date().toISOString(),
+      });
     }
   }
 
   return {
     allowed,
     remaining,
-    resetAt: new Date(Date.now() + config.windowMs)
+    resetAt: new Date(Date.now() + config.windowMs),
   };
 }
 
 export function createRateLimitResponse(resetAt: Date): Response {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers':
+      'authorization, x-client-info, apikey, content-type',
   };
 
   return new Response(
-    JSON.stringify({ 
+    JSON.stringify({
       error: 'Rate limit exceeded',
       resetAt: resetAt.toISOString(),
-      message: 'Too many requests. Please try again later.'
+      message: 'Too many requests. Please try again later.',
     }),
-    { 
-      status: 429, 
-      headers: { 
-        ...corsHeaders, 
+    {
+      status: 429,
+      headers: {
+        ...corsHeaders,
         'Content-Type': 'application/json',
-        'Retry-After': Math.ceil((resetAt.getTime() - Date.now()) / 1000).toString()
-      } 
+        'Retry-After': Math.ceil(
+          (resetAt.getTime() - Date.now()) / 1000
+        ).toString(),
+      },
     }
   );
 }

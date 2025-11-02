@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,12 +27,12 @@ export default function GiftCards() {
 
   const handlePurchase = async () => {
     const amount = selectedAmount || parseFloat(customAmount);
-    
+
     if (!amount || amount < 10) {
       toast({
         title: 'Invalid amount',
         description: 'Minimum gift card amount is $10',
-        variant: 'destructive'
+        variant: 'destructive',
       });
       return;
     }
@@ -33,7 +40,7 @@ export default function GiftCards() {
     if (!recipientEmail) {
       toast({
         title: 'Recipient email required',
-        variant: 'destructive'
+        variant: 'destructive',
       });
       return;
     }
@@ -42,18 +49,18 @@ export default function GiftCards() {
     // Stripe payment logic would go here
     toast({
       title: 'Redirecting to checkout...',
-      description: `Purchasing $${amount} gift card`
+      description: `Purchasing $${amount} gift card`,
     });
     setTimeout(() => setLoading(false), 2000);
   };
 
   return (
     <>
-      <MetaTags 
+      <MetaTags
         title="Gift Cards - Give the Gift of Great Hair"
         description="Purchase gift cards for your favorite salon"
       />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="text-center space-y-2">
@@ -71,16 +78,20 @@ export default function GiftCards() {
             <Card>
               <CardHeader>
                 <CardTitle>Purchase Gift Card</CardTitle>
-                <CardDescription>Choose an amount and recipient</CardDescription>
+                <CardDescription>
+                  Choose an amount and recipient
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>Select Amount</Label>
                   <div className="grid grid-cols-2 gap-2">
-                    {PRESET_AMOUNTS.map((amount) => (
+                    {PRESET_AMOUNTS.map(amount => (
                       <Button
                         key={amount}
-                        variant={selectedAmount === amount ? 'default' : 'outline'}
+                        variant={
+                          selectedAmount === amount ? 'default' : 'outline'
+                        }
                         onClick={() => {
                           setSelectedAmount(amount);
                           setCustomAmount('');
@@ -95,13 +106,15 @@ export default function GiftCards() {
                 <div className="space-y-2">
                   <Label>Custom Amount</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2">
+                      $
+                    </span>
                     <Input
                       type="number"
                       min="10"
                       placeholder="Enter amount"
                       value={customAmount}
-                      onChange={(e) => {
+                      onChange={e => {
                         setCustomAmount(e.target.value);
                         setSelectedAmount(null);
                       }}
@@ -116,7 +129,7 @@ export default function GiftCards() {
                     type="email"
                     placeholder="recipient@example.com"
                     value={recipientEmail}
-                    onChange={(e) => setRecipientEmail(e.target.value)}
+                    onChange={e => setRecipientEmail(e.target.value)}
                   />
                 </div>
 
@@ -125,7 +138,7 @@ export default function GiftCards() {
                   <Textarea
                     placeholder="Add a personal message..."
                     value={giftMessage}
-                    onChange={(e) => setGiftMessage(e.target.value)}
+                    onChange={e => setGiftMessage(e.target.value)}
                     rows={3}
                   />
                 </div>
@@ -134,7 +147,11 @@ export default function GiftCards() {
                 <Button
                   className="w-full"
                   onClick={handlePurchase}
-                  disabled={loading || (!selectedAmount && !customAmount) || !recipientEmail}
+                  disabled={
+                    loading ||
+                    (!selectedAmount && !customAmount) ||
+                    !recipientEmail
+                  }
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
                   Purchase Gift Card
@@ -151,10 +168,7 @@ export default function GiftCards() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>Gift Card Code</Label>
-                  <Input
-                    placeholder="XXXX-XXXX-XXXX"
-                    className="font-mono"
-                  />
+                  <Input placeholder="XXXX-XXXX-XXXX" className="font-mono" />
                 </div>
                 <Button className="w-full">Check Balance</Button>
               </CardContent>

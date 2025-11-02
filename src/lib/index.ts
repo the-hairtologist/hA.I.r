@@ -15,10 +15,7 @@ export {
   detectSQLInjection,
 } from './security/inputSanitization';
 
-export {
-  rateLimiter,
-  RATE_LIMITS,
-} from './security/rateLimiter';
+export { rateLimiter, RATE_LIMITS } from './security/rateLimiter';
 
 // Error handling utilities
 export {
@@ -56,7 +53,10 @@ export {
 } from './performance/imageOptimization';
 
 // Hooks
-export { useEnhancedQuery, invalidateQueryCache } from '@/hooks/useEnhancedQuery';
+export {
+  useEnhancedQuery,
+  invalidateQueryCache,
+} from '@/hooks/useEnhancedQuery';
 
 // Logger
 export { logger, log } from './logger';

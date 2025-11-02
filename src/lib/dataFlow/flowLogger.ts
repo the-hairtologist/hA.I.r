@@ -6,7 +6,13 @@
 import { logger } from '@/lib/logging/productionLogger';
 import { safeConsole } from '@/lib/safeLogger';
 
-type FlowStage = 'database' | 'api' | 'transform' | 'state' | 'ui' | 'validation';
+type FlowStage =
+  | 'database'
+  | 'api'
+  | 'transform'
+  | 'state'
+  | 'ui'
+  | 'validation';
 
 interface FlowLogOptions {
   stage: FlowStage;
@@ -17,7 +23,8 @@ interface FlowLogOptions {
 
 class DataFlowLogger {
   private enabled = import.meta.env.DEV;
-  private flows: Map<string, Array<FlowLogOptions & { timestamp: number }>> = new Map();
+  private flows: Map<string, Array<FlowLogOptions & { timestamp: number }>> =
+    new Map();
 
   /**
    * Log a data flow stage
@@ -27,15 +34,15 @@ class DataFlowLogger {
 
     const { stage, feature, data, metadata } = options;
     const timestamp = Date.now();
-    
+
     // Track flow history
     if (!this.flows.has(feature)) {
       this.flows.set(feature, []);
     }
-    
+
     const flowHistory = this.flows.get(feature)!;
     flowHistory.push({ ...options, timestamp });
-    
+
     // Keep only last 10 stages per feature
     if (flowHistory.length > 10) {
       flowHistory.shift();
@@ -44,7 +51,7 @@ class DataFlowLogger {
     // Log with color coding
     const prefix = `🌊 [${stage.toUpperCase()}]`;
     const message = `${prefix} ${feature}`;
-    
+
     logger.debug(message, {
       context: 'DataFlow',
       data: {
@@ -52,8 +59,8 @@ class DataFlowLogger {
         feature,
         dataSize: this.getDataSize(data),
         metadata,
-        flowHistory: flowHistory.length
-      }
+        flowHistory: flowHistory.length,
+      },
     });
 
     // Log actual data only for small payloads
@@ -70,19 +77,24 @@ class DataFlowLogger {
       stage: 'database',
       feature,
       data: result,
-      metadata: { query }
+      metadata: { query },
     });
   }
 
   /**
    * Log API call
    */
-  api(feature: string, endpoint: string, payload?: unknown, response?: unknown): void {
+  api(
+    feature: string,
+    endpoint: string,
+    payload?: unknown,
+    response?: unknown
+  ): void {
     this.log({
       stage: 'api',
       feature,
       data: { payload, response },
-      metadata: { endpoint }
+      metadata: { endpoint },
     });
   }
 
@@ -94,7 +106,7 @@ class DataFlowLogger {
       stage: 'transform',
       feature,
       data,
-      metadata: { from, to }
+      metadata: { from, to },
     });
   }
 
@@ -106,7 +118,7 @@ class DataFlowLogger {
       stage: 'state',
       feature,
       data: newValue,
-      metadata: { stateName }
+      metadata: { stateName },
     });
   }
 
@@ -118,7 +130,7 @@ class DataFlowLogger {
       stage: 'ui',
       feature,
       data: props,
-      metadata: { component }
+      metadata: { component },
     });
   }
 
@@ -130,14 +142,16 @@ class DataFlowLogger {
       stage: 'validation',
       feature,
       data: { isValid, errors },
-      metadata: { isValid }
+      metadata: { isValid },
     });
   }
 
   /**
    * Get flow history for a feature
    */
-  getFlowHistory(feature: string): Array<FlowLogOptions & { timestamp: number }> {
+  getFlowHistory(
+    feature: string
+  ): Array<FlowLogOptions & { timestamp: number }> {
     return this.flows.get(feature) || [];
   }
 
@@ -157,13 +171,13 @@ class DataFlowLogger {
     for (let i = 1; i < history.length; i++) {
       stages.push({
         stage: history[i].stage,
-        duration: history[i].timestamp - history[i - 1].timestamp
+        duration: history[i].timestamp - history[i - 1].timestamp,
       });
     }
 
     return {
       totalTime: history[history.length - 1].timestamp - history[0].timestamp,
-      stages
+      stages,
     };
   }
 

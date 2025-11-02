@@ -3,8 +3,14 @@
  * Enhanced toast notifications with brand personality and micro-interactions
  */
 
-import { toast as sonnerToast } from "sonner";
-import { CheckCircle, AlertCircle, Info, AlertTriangle, Sparkles } from "lucide-react";
+import { toast as sonnerToast } from 'sonner';
+import {
+  CheckCircle,
+  AlertCircle,
+  Info,
+  AlertTriangle,
+  Sparkles,
+} from 'lucide-react';
 
 type ToastType = 'success' | 'error' | 'info' | 'warning' | 'celebration';
 
@@ -21,36 +27,41 @@ interface ToastOptions {
 const toastStyles = {
   success: {
     icon: CheckCircle,
-    className: "border-l-4 border-l-success bg-gradient-to-r from-success/10 to-background",
-    iconColor: "text-success"
+    className:
+      'border-l-4 border-l-success bg-gradient-to-r from-success/10 to-background',
+    iconColor: 'text-success',
   },
   error: {
     icon: AlertCircle,
-    className: "border-l-4 border-l-destructive bg-gradient-to-r from-destructive/10 to-background",
-    iconColor: "text-destructive"
+    className:
+      'border-l-4 border-l-destructive bg-gradient-to-r from-destructive/10 to-background',
+    iconColor: 'text-destructive',
   },
   warning: {
     icon: AlertTriangle,
-    className: "border-l-4 border-l-warning bg-gradient-to-r from-warning/10 to-background",
-    iconColor: "text-warning"
+    className:
+      'border-l-4 border-l-warning bg-gradient-to-r from-warning/10 to-background',
+    iconColor: 'text-warning',
   },
   info: {
     icon: Info,
-    className: "border-l-4 border-l-info bg-gradient-to-r from-info/10 to-background",
-    iconColor: "text-info"
+    className:
+      'border-l-4 border-l-info bg-gradient-to-r from-info/10 to-background',
+    iconColor: 'text-info',
   },
   celebration: {
     icon: Sparkles,
-    className: "border-l-4 border-l-primary bg-gradient-to-r from-primary/10 via-secondary/10 to-background",
-    iconColor: "text-primary"
-  }
+    className:
+      'border-l-4 border-l-primary bg-gradient-to-r from-primary/10 via-secondary/10 to-background',
+    iconColor: 'text-primary',
+  },
 };
 
 export const toast = {
   success: (message: string, options?: ToastOptions) => {
     const config = toastStyles.success;
     const Icon = config.icon;
-    
+
     return sonnerToast.success(options?.title || message, {
       description: options?.description,
       duration: options?.duration || 3000,
@@ -63,7 +74,7 @@ export const toast = {
   error: (message: string, options?: ToastOptions) => {
     const config = toastStyles.error;
     const Icon = config.icon;
-    
+
     return sonnerToast.error(options?.title || message, {
       description: options?.description,
       duration: options?.duration || 4000,
@@ -76,7 +87,7 @@ export const toast = {
   warning: (message: string, options?: ToastOptions) => {
     const config = toastStyles.warning;
     const Icon = config.icon;
-    
+
     return sonnerToast.warning(options?.title || message, {
       description: options?.description,
       duration: options?.duration || 3500,
@@ -89,7 +100,7 @@ export const toast = {
   info: (message: string, options?: ToastOptions) => {
     const config = toastStyles.info;
     const Icon = config.icon;
-    
+
     return sonnerToast.info(options?.title || message, {
       description: options?.description,
       duration: options?.duration || 3000,
@@ -102,7 +113,7 @@ export const toast = {
   celebration: (message: string, options?: ToastOptions) => {
     const config = toastStyles.celebration;
     const Icon = config.icon;
-    
+
     return sonnerToast.success(options?.title || message, {
       description: options?.description,
       duration: options?.duration || 4000,

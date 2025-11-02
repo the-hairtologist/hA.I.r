@@ -1,10 +1,10 @@
 /**
  * AI-Powered Maintenance Assistant
- * 
+ *
  * Uses Lovable AI to analyze errors, suggest fixes, and provide maintenance insights.
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 
 interface ErrorAnalysis {
@@ -51,17 +51,20 @@ Provide:
 
 Format as JSON.`;
 
-      const { data, error } = await supabase.functions.invoke('hair-assistant-chat', {
-        body: {
-          message: prompt,
-          context: 'error_analysis',
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'hair-assistant-chat',
+        {
+          body: {
+            message: prompt,
+            context: 'error_analysis',
+          },
+        }
+      );
 
       if (error) throw error;
 
       const analysis = this.parseAIResponse(data.response);
-      
+
       logger.info('AI error analysis completed', 'AIMaintenanceAssistant', {
         severity: analysis.severity,
         category: analysis.category,
@@ -98,17 +101,20 @@ Provide:
 
 Format as JSON.`;
 
-      const { data, error } = await supabase.functions.invoke('hair-assistant-chat', {
-        body: {
-          message: prompt,
-          context: 'maintenance_report',
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'hair-assistant-chat',
+        {
+          body: {
+            message: prompt,
+            context: 'maintenance_report',
+          },
+        }
+      );
 
       if (error) throw error;
 
       const report = this.parseMaintenanceReport(data.response);
-      
+
       logger.info('Maintenance report generated', 'AIMaintenanceAssistant', {
         health: report.overallHealth,
         issueCount: report.issues.length,
@@ -116,7 +122,11 @@ Format as JSON.`;
 
       return report;
     } catch (error) {
-      logger.error('Failed to generate report', 'AIMaintenanceAssistant', error);
+      logger.error(
+        'Failed to generate report',
+        'AIMaintenanceAssistant',
+        error
+      );
       return this.getFallbackReport();
     }
   }
@@ -137,25 +147,36 @@ Current metrics:
 
 Provide 5 specific, actionable optimization suggestions.`;
 
-      const { data, error } = await supabase.functions.invoke('hair-assistant-chat', {
-        body: {
-          message: prompt,
-          context: 'optimization',
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'hair-assistant-chat',
+        {
+          body: {
+            message: prompt,
+            context: 'optimization',
+          },
+        }
+      );
 
       if (error) throw error;
 
       const suggestions = this.parseOptimizationSuggestions(data.response);
-      
-      logger.info('Optimization suggestions generated', 'AIMaintenanceAssistant', {
-        component: componentName,
-        suggestionCount: suggestions.length,
-      });
+
+      logger.info(
+        'Optimization suggestions generated',
+        'AIMaintenanceAssistant',
+        {
+          component: componentName,
+          suggestionCount: suggestions.length,
+        }
+      );
 
       return suggestions;
     } catch (error) {
-      logger.error('Failed to get optimizations', 'AIMaintenanceAssistant', error);
+      logger.error(
+        'Failed to get optimizations',
+        'AIMaintenanceAssistant',
+        error
+      );
       return this.getFallbackOptimizations();
     }
   }
@@ -174,12 +195,15 @@ ${JSON.stringify(historicalData.slice(-20), null, 2)}
 
 Provide 3-5 predictions with preventive actions.`;
 
-      const { data, error } = await supabase.functions.invoke('hair-assistant-chat', {
-        body: {
-          message: prompt,
-          context: 'prediction',
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'hair-assistant-chat',
+        {
+          body: {
+            message: prompt,
+            context: 'prediction',
+          },
+        }
+      );
 
       if (error) throw error;
 
