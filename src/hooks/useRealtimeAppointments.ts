@@ -15,7 +15,10 @@ interface Appointment {
   duration_minutes?: number;
 }
 
-export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'stylist') => {
+export const useRealtimeAppointments = (
+  userId?: string,
+  role?: 'client' | 'stylist'
+) => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [channel, setChannel] = useState<RealtimeChannel | null>(null);
@@ -69,8 +72,8 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
           { userId, role }
         );
       } catch (error) {
-        logger.error('Error fetching appointments', error, { 
-          component: 'useRealtimeAppointments' 
+        logger.error('Error fetching appointments', error, {
+          component: 'useRealtimeAppointments',
         });
       } finally {
         setIsLoading(false);
@@ -89,30 +92,34 @@ export const useRealtimeAppointments = (userId?: string, role?: 'client' | 'styl
           schema: 'public',
           table: 'appointments',
         },
-        (payload) => {
-          logger.debug('Appointment change received', { 
+        payload => {
+          logger.debug('Appointment change received', {
             component: 'useRealtimeAppointments',
             eventType: payload.eventType,
-            id: (payload.new as any)?.id || (payload.old as any)?.id
+            id: (payload.new as any)?.id || (payload.old as any)?.id,
           });
 
           if (payload.eventType === 'INSERT') {
-            setAppointments((prev) => {
+            setAppointments(prev => {
               const exists = prev.find(a => a.id === payload.new.id);
               if (exists) return prev;
               return [...prev, payload.new as Appointment].sort(
-                (a, b) => new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime()
+                (a, b) =>
+                  new Date(a.appointment_date).getTime() -
+                  new Date(b.appointment_date).getTime()
               );
             });
           } else if (payload.eventType === 'UPDATE') {
-            setAppointments((prev) =>
-              prev.map((appointment) =>
-                appointment.id === payload.new.id ? (payload.new as Appointment) : appointment
+            setAppointments(prev =>
+              prev.map(appointment =>
+                appointment.id === payload.new.id
+                  ? (payload.new as Appointment)
+                  : appointment
               )
             );
           } else if (payload.eventType === 'DELETE') {
-            setAppointments((prev) =>
-              prev.filter((appointment) => appointment.id !== payload.old.id)
+            setAppointments(prev =>
+              prev.filter(appointment => appointment.id !== payload.old.id)
             );
           }
         }

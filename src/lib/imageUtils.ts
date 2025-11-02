@@ -35,31 +35,38 @@ export const processImage = async (
 
   try {
     // Check if already small enough
-    if (file.size <= (opts.maxSizeMB! * 1024 * 1024)) {
-      logger.debug('Image already optimized, skipping compression', 'imageUtils');
+    if (file.size <= opts.maxSizeMB! * 1024 * 1024) {
+      logger.debug(
+        'Image already optimized, skipping compression',
+        'imageUtils'
+      );
       return file;
     }
 
     logger.debug('Original file size', 'imageUtils', {
-      size: (file.size / 1024 / 1024).toFixed(2) + 'MB'
+      size: (file.size / 1024 / 1024).toFixed(2) + 'MB',
     });
-    
+
     const compressedFile = await imageCompression(file, {
       maxSizeMB: opts.maxSizeMB,
       maxWidthOrHeight: Math.max(opts.maxWidth!, opts.maxHeight!),
       useWebWorker: opts.useWebWorker,
       fileType: opts.format,
     });
-    
+
     logger.debug('Image compressed', 'imageUtils', {
       originalSize: (file.size / 1024 / 1024).toFixed(2) + 'MB',
       compressedSize: (compressedFile.size / 1024 / 1024).toFixed(2) + 'MB',
-      ratio: ((1 - compressedFile.size / file.size) * 100).toFixed(1) + '%'
+      ratio: ((1 - compressedFile.size / file.size) * 100).toFixed(1) + '%',
     });
-    
+
     return compressedFile;
   } catch (error) {
-    logger.error('Image processing failed, using original', 'imageUtils', error);
+    logger.error(
+      'Image processing failed, using original',
+      'imageUtils',
+      error
+    );
     return file;
   }
 };
@@ -85,7 +92,7 @@ export const validateImageFile = (
   if (!validTypes.includes(file.type)) {
     return {
       isValid: false,
-      error: 'Please upload a valid image file (JPG, PNG, WebP, or GIF)'
+      error: 'Please upload a valid image file (JPG, PNG, WebP, or GIF)',
     };
   }
 
@@ -93,7 +100,7 @@ export const validateImageFile = (
   if (file.size > maxSizeBytes) {
     return {
       isValid: false,
-      error: `Image must be less than ${maxSizeMB}MB`
+      error: `Image must be less than ${maxSizeMB}MB`,
     };
   }
 
@@ -104,37 +111,41 @@ export const validateImageFile = (
  * Preset configurations for common use cases
  */
 export const ImagePresets = {
-  thumbnail: (file: File) => processImage(file, {
-    maxSizeMB: 0.1,
-    maxWidth: 400,
-    maxHeight: 400,
-  }),
-  
-  avatar: (file: File) => processImage(file, {
-    maxSizeMB: 0.5,
-    maxWidth: 512,
-    maxHeight: 512,
-  }),
-  
-  portfolio: (file: File) => processImage(file, {
-    maxSizeMB: 1.5,
-    maxWidth: 2048,
-    maxHeight: 2048,
-    quality: 0.9,
-  }),
-  
-  standard: (file: File) => processImage(file, {
-    maxSizeMB: 1,
-    maxWidth: 1920,
-    maxHeight: 1920,
-  }),
+  thumbnail: (file: File) =>
+    processImage(file, {
+      maxSizeMB: 0.1,
+      maxWidth: 400,
+      maxHeight: 400,
+    }),
+
+  avatar: (file: File) =>
+    processImage(file, {
+      maxSizeMB: 0.5,
+      maxWidth: 512,
+      maxHeight: 512,
+    }),
+
+  portfolio: (file: File) =>
+    processImage(file, {
+      maxSizeMB: 1.5,
+      maxWidth: 2048,
+      maxHeight: 2048,
+      quality: 0.9,
+    }),
+
+  standard: (file: File) =>
+    processImage(file, {
+      maxSizeMB: 1,
+      maxWidth: 1920,
+      maxHeight: 1920,
+    }),
 };
 
 /**
  * Generate responsive srcset string for an image
  */
 export const generateSrcSet = (
-  baseUrl: string, 
+  baseUrl: string,
   widths: number[] = [320, 640, 960, 1280, 1920]
 ): string => {
   return widths.map(w => `${baseUrl}?w=${w} ${w}w`).join(', ');

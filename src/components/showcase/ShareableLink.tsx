@@ -3,12 +3,18 @@
  * Generate and share custom demo links
  */
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { Share2, Copy, CheckCircle } from "lucide-react";
+import { useState } from 'react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { Share2, Copy, CheckCircle } from 'lucide-react';
 
 export function ShareableLink() {
   const [copied, setCopied] = useState(false);
@@ -18,10 +24,10 @@ export function ShareableLink() {
     try {
       await navigator.clipboard.writeText(demoUrl);
       setCopied(true);
-      toast.success("Demo link copied to clipboard!");
+      toast.success('Demo link copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      toast.error("Failed to copy link");
+      toast.error('Failed to copy link');
     }
   };
 
@@ -29,15 +35,15 @@ export function ShareableLink() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "hA.I.r - AI-Powered Salon Assistant",
-          text: "Check out this amazing salon management app!",
+          title: 'hA.I.r - AI-Powered Salon Assistant',
+          text: 'Check out this amazing salon management app!',
           url: demoUrl,
         });
-        toast.success("Shared successfully!");
+        toast.success('Shared successfully!');
       } catch (error) {
         // User cancelled or error occurred
-        if ((error as Error).name !== "AbortError") {
-          toast.error("Failed to share");
+        if ((error as Error).name !== 'AbortError') {
+          toast.error('Failed to share');
         }
       }
     } else {
@@ -58,13 +64,9 @@ export function ShareableLink() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex gap-2">
-          <Input
-            value={demoUrl}
-            readOnly
-            className="font-mono text-sm"
-          />
+          <Input value={demoUrl} readOnly className="font-mono text-sm" />
           <Button
-            variant={copied ? "default" : "outline"}
+            variant={copied ? 'default' : 'outline'}
             onClick={handleCopy}
             className="shrink-0 gap-2"
           >
@@ -83,10 +85,7 @@ export function ShareableLink() {
         </div>
 
         {navigator.share && (
-          <Button
-            className="w-full gap-2"
-            onClick={handleShare}
-          >
+          <Button className="w-full gap-2" onClick={handleShare}>
             <Share2 className="h-4 w-4" />
             Share Link
           </Button>

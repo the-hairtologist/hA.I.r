@@ -107,7 +107,9 @@ beforeEach(() => {
   insertMock = vi.fn().mockResolvedValue({ data: null, error: null });
   updateEqMock = vi.fn().mockResolvedValue({ data: null, error: null });
   deleteEqMock = vi.fn().mockResolvedValue({ error: null });
-  serviceTypeSelectOrderMock = vi.fn().mockResolvedValue({ data: [], error: null });
+  serviceTypeSelectOrderMock = vi
+    .fn()
+    .mockResolvedValue({ data: [], error: null });
   serviceTypeSelectEqMock = vi.fn().mockReturnValue({
     order: serviceTypeSelectOrderMock,
   });
@@ -190,7 +192,9 @@ describe('Services', () => {
 
       await waitForServiceList();
 
-      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /delete service/i,
+      });
 
       fireEvent.click(deleteButton);
       fireEvent.click(deleteButton);
@@ -206,7 +210,7 @@ describe('Services', () => {
       let resolveDelete: ((value: SupabaseMutationResult) => void) | undefined;
       deleteEqMock.mockImplementationOnce(
         () =>
-          new Promise<SupabaseMutationResult>((resolve) => {
+          new Promise<SupabaseMutationResult>(resolve => {
             resolveDelete = resolve;
           })
       );
@@ -214,7 +218,9 @@ describe('Services', () => {
       renderServices();
       await waitForServiceList();
 
-      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /delete service/i,
+      });
 
       fireEvent.click(deleteButton);
 
@@ -224,7 +230,9 @@ describe('Services', () => {
       resolveDelete?.({ error: null });
 
       await waitFor(() => {
-        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        const refreshedButton = screen.getByRole('button', {
+          name: /delete service/i,
+        });
         expect(refreshedButton.querySelector('.animate-spin')).toBeNull();
       });
     });
@@ -233,12 +241,16 @@ describe('Services', () => {
       renderServices();
       await waitForServiceList();
 
-      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /delete service/i,
+      });
 
       fireEvent.click(deleteButton);
 
       await waitFor(() => {
-        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
+        const refreshedButton = screen.getByRole('button', {
+          name: /delete service/i,
+        });
         expect(refreshedButton.querySelector('.animate-spin')).toBeNull();
       });
     });
@@ -249,7 +261,7 @@ describe('Services', () => {
       let resolveDelete: ((value: SupabaseMutationResult) => void) | undefined;
       deleteEqMock.mockImplementationOnce(
         () =>
-          new Promise<SupabaseMutationResult>((resolve) => {
+          new Promise<SupabaseMutationResult>(resolve => {
             resolveDelete = resolve;
           })
       );
@@ -257,7 +269,9 @@ describe('Services', () => {
       renderServices();
       await waitForServiceList();
 
-      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /delete service/i,
+      });
 
       fireEvent.click(deleteButton);
 
@@ -266,7 +280,9 @@ describe('Services', () => {
       resolveDelete?.({ error: null });
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /delete service/i })).not.toBeDisabled();
+        expect(
+          screen.getByRole('button', { name: /delete service/i })
+        ).not.toBeDisabled();
       });
     });
   });
@@ -276,36 +292,46 @@ describe('Services', () => {
       renderServices();
       await waitForServiceList();
 
-      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /delete service/i,
+      });
 
       fireEvent.click(deleteButton);
 
-      await waitFor(() => {
-        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
-        expect(refreshedButton).not.toBeDisabled();
-      }, { timeout: 2000 });
+      await waitFor(
+        () => {
+          const refreshedButton = screen.getByRole('button', {
+            name: /delete service/i,
+          });
+          expect(refreshedButton).not.toBeDisabled();
+        },
+        { timeout: 2000 }
+      );
     });
 
     it('should re-enable form after delete error', async () => {
-      deleteEqMock.mockResolvedValueOnce({ error: { message: 'Delete failed' } });
+      deleteEqMock.mockResolvedValueOnce({
+        error: { message: 'Delete failed' },
+      });
 
       renderServices();
       await waitForServiceList();
 
-      const deleteButton = screen.getByRole('button', { name: /delete service/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /delete service/i,
+      });
 
       fireEvent.click(deleteButton);
 
-      await waitFor(() => {
-        const refreshedButton = screen.getByRole('button', { name: /delete service/i });
-        expect(refreshedButton).not.toBeDisabled();
-      }, { timeout: 2000 });
+      await waitFor(
+        () => {
+          const refreshedButton = screen.getByRole('button', {
+            name: /delete service/i,
+          });
+          expect(refreshedButton).not.toBeDisabled();
+        },
+        { timeout: 2000 }
+      );
     });
   });
 });
-
-
-
-
-
-

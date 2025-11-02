@@ -18,7 +18,7 @@ class AnalyticsManager {
 
   initialize() {
     if (typeof window === 'undefined') return;
-    
+
     // Initialize GA4 if available
     if (window.gtag) {
       this.isInitialized = true;
@@ -34,7 +34,7 @@ class AnalyticsManager {
       ...event,
       timestamp: Date.now(),
       page: window.location.pathname,
-      referrer: document.referrer
+      referrer: document.referrer,
     };
 
     if (this.isInitialized && window.gtag) {
@@ -42,7 +42,7 @@ class AnalyticsManager {
         event_category: event.category,
         event_label: event.label,
         value: event.value,
-        ...event.metadata
+        ...event.metadata,
       });
     } else {
       this.queue.push(enrichedEvent);
@@ -56,7 +56,7 @@ class AnalyticsManager {
 
   private flushQueue() {
     if (!this.isInitialized) return;
-    
+
     while (this.queue.length > 0) {
       const event = this.queue.shift();
       if (event && window.gtag) {
@@ -64,7 +64,7 @@ class AnalyticsManager {
           event_category: event.category,
           event_label: event.label,
           value: event.value,
-          ...event.metadata
+          ...event.metadata,
         });
       }
     }
@@ -75,7 +75,7 @@ class AnalyticsManager {
     this.track({
       category: 'Navigation',
       action: 'page_view',
-      label: path
+      label: path,
     });
   }
 
@@ -85,7 +85,7 @@ class AnalyticsManager {
       category: 'Feature',
       action: 'used',
       label: featureName,
-      metadata
+      metadata,
     });
   }
 
@@ -95,7 +95,7 @@ class AnalyticsManager {
       category: 'Conversion',
       action: conversionType,
       value,
-      metadata: { conversionType }
+      metadata: { conversionType },
     });
   }
 
@@ -105,7 +105,7 @@ class AnalyticsManager {
       category: 'Error',
       action: 'occurred',
       label: errorMessage,
-      metadata: { context: errorContext }
+      metadata: { context: errorContext },
     });
   }
 
@@ -115,7 +115,7 @@ class AnalyticsManager {
       category: 'Performance',
       action: metricName,
       value,
-      metadata: { metric: metricName }
+      metadata: { metric: metricName },
     });
   }
 
@@ -124,7 +124,7 @@ class AnalyticsManager {
     this.track({
       category: 'Engagement',
       action,
-      metadata
+      metadata,
     });
   }
 }

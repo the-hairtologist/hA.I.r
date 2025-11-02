@@ -85,7 +85,9 @@ const renderSettings = () => {
 
 const waitForSettingsReady = async () => {
   await waitFor(() => {
-    expect(screen.getByRole('heading', { name: /settings/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /settings/i })
+    ).toBeInTheDocument();
   });
 };
 
@@ -104,9 +106,15 @@ const switchToSecurityTab = async () => {
 };
 
 const setPasswordFields = () => {
-  fireEvent.change(screen.getByLabelText('Current Password'), { target: { value: 'oldPass123' } });
-  fireEvent.change(screen.getByLabelText('New Password'), { target: { value: 'newPass123' } });
-  fireEvent.change(screen.getByLabelText('Confirm New Password'), { target: { value: 'newPass123' } });
+  fireEvent.change(screen.getByLabelText('Current Password'), {
+    target: { value: 'oldPass123' },
+  });
+  fireEvent.change(screen.getByLabelText('New Password'), {
+    target: { value: 'newPass123' },
+  });
+  fireEvent.change(screen.getByLabelText('Confirm New Password'), {
+    target: { value: 'newPass123' },
+  });
 };
 
 let profileUpdateEqMock: Mock;
@@ -157,7 +165,10 @@ beforeEach(() => {
     error: null,
   });
 
-  updateUserMock.mockResolvedValue({ data: { user: { id: 'test-user' } }, error: null });
+  updateUserMock.mockResolvedValue({
+    data: { user: { id: 'test-user' } },
+    error: null,
+  });
 
   profileUpdateEqMock = vi.fn().mockResolvedValue({ data: null, error: null });
   stylistUpdateEqMock = vi.fn().mockResolvedValue({ data: null, error: null });
@@ -264,18 +275,22 @@ describe.skip('Settings', () => {
     });
 
     it('should disable save button during submission', async () => {
-      let resolveProfile: ((value: { data: null; error: null }) => void) | undefined;
+      let resolveProfile:
+        | ((value: { data: null; error: null }) => void)
+        | undefined;
       profileUpdateEqMock.mockImplementationOnce(
         () =>
-          new Promise((resolve) => {
+          new Promise(resolve => {
             resolveProfile = resolve;
           })
       );
 
-      let resolveStylist: ((value: { data: null; error: null }) => void) | undefined;
+      let resolveStylist:
+        | ((value: { data: null; error: null }) => void)
+        | undefined;
       stylistUpdateEqMock.mockImplementationOnce(
         () =>
-          new Promise((resolve) => {
+          new Promise(resolve => {
             resolveStylist = resolve;
           })
       );
@@ -296,15 +311,19 @@ describe.skip('Settings', () => {
       resolveProfile?.({ data: null, error: null });
       resolveStylist?.({ data: null, error: null });
 
-      await waitFor(() => expect(saveButton.getAttribute('aria-busy')).not.toBe('true'));
+      await waitFor(() =>
+        expect(saveButton.getAttribute('aria-busy')).not.toBe('true')
+      );
       expect(screen.queryByText(/saving\.\.\./i)).not.toBeInTheDocument();
     });
 
     it('should show loading indicator during profile save', async () => {
-      let resolveProfile: ((value: { data: null; error: null }) => void) | undefined;
+      let resolveProfile:
+        | ((value: { data: null; error: null }) => void)
+        | undefined;
       profileUpdateEqMock.mockImplementationOnce(
         () =>
-          new Promise((resolve) => {
+          new Promise(resolve => {
             resolveProfile = resolve;
           })
       );
@@ -322,7 +341,9 @@ describe.skip('Settings', () => {
 
       resolveProfile?.({ data: null, error: null });
 
-      await waitFor(() => expect(screen.queryByText(/saving\.\.\./i)).not.toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.queryByText(/saving\.\.\./i)).not.toBeInTheDocument()
+      );
     });
 
     it('should allow new changes after successful save', async () => {
@@ -335,7 +356,9 @@ describe.skip('Settings', () => {
 
       fireEvent.click(saveButton);
 
-      await waitFor(() => expect(saveButton.getAttribute('aria-busy')).not.toBe('true'));
+      await waitFor(() =>
+        expect(saveButton.getAttribute('aria-busy')).not.toBe('true')
+      );
 
       changeFullName('Another User');
 
@@ -351,7 +374,9 @@ describe.skip('Settings', () => {
       await switchToSecurityTab();
       setPasswordFields();
 
-      const passwordButton = screen.getByRole('button', { name: /update password/i });
+      const passwordButton = screen.getByRole('button', {
+        name: /update password/i,
+      });
 
       fireEvent.click(passwordButton);
       fireEvent.click(passwordButton);
@@ -362,10 +387,12 @@ describe.skip('Settings', () => {
     });
 
     it('should disable password button during submission', async () => {
-      let resolveUpdate: ((value: { data: null; error: null }) => void) | undefined;
+      let resolveUpdate:
+        | ((value: { data: null; error: null }) => void)
+        | undefined;
       updateUserMock.mockImplementationOnce(
         () =>
-          new Promise((resolve) => {
+          new Promise(resolve => {
             resolveUpdate = resolve;
           })
       );
@@ -376,7 +403,9 @@ describe.skip('Settings', () => {
       await switchToSecurityTab();
       setPasswordFields();
 
-      const passwordButton = screen.getByRole('button', { name: /update password/i });
+      const passwordButton = screen.getByRole('button', {
+        name: /update password/i,
+      });
 
       fireEvent.click(passwordButton);
 
@@ -385,7 +414,9 @@ describe.skip('Settings', () => {
 
       resolveUpdate?.({ data: null, error: null });
 
-      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument()
+      );
       expect(screen.getByLabelText('Current Password')).toHaveValue('');
       expect(screen.getByLabelText('New Password')).toHaveValue('');
       expect(screen.getByLabelText('Confirm New Password')).toHaveValue('');
@@ -393,10 +424,12 @@ describe.skip('Settings', () => {
     });
 
     it('should show loading indicator during password update', async () => {
-      let resolveUpdate: ((value: { data: null; error: null }) => void) | undefined;
+      let resolveUpdate:
+        | ((value: { data: null; error: null }) => void)
+        | undefined;
       updateUserMock.mockImplementationOnce(
         () =>
-          new Promise((resolve) => {
+          new Promise(resolve => {
             resolveUpdate = resolve;
           })
       );
@@ -407,7 +440,9 @@ describe.skip('Settings', () => {
       await switchToSecurityTab();
       setPasswordFields();
 
-      const passwordButton = screen.getByRole('button', { name: /update password/i });
+      const passwordButton = screen.getByRole('button', {
+        name: /update password/i,
+      });
 
       fireEvent.click(passwordButton);
 
@@ -415,7 +450,9 @@ describe.skip('Settings', () => {
 
       resolveUpdate?.({ data: null, error: null });
 
-      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument()
+      );
     });
 
     it('should allow another password update after completion', async () => {
@@ -425,11 +462,15 @@ describe.skip('Settings', () => {
       await switchToSecurityTab();
       setPasswordFields();
 
-      const passwordButton = screen.getByRole('button', { name: /update password/i });
+      const passwordButton = screen.getByRole('button', {
+        name: /update password/i,
+      });
 
       fireEvent.click(passwordButton);
 
-      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument()
+      );
 
       setPasswordFields();
 
@@ -439,7 +480,10 @@ describe.skip('Settings', () => {
 
   describe.skip('Settings - Form Success/Error Handling', () => {
     it('should handle profile save error gracefully', async () => {
-      profileUpdateEqMock.mockResolvedValueOnce({ data: null, error: { message: 'Update failed' } });
+      profileUpdateEqMock.mockResolvedValueOnce({
+        data: null,
+        error: { message: 'Update failed' },
+      });
 
       renderSettings();
       await waitForSettingsReady();
@@ -454,12 +498,17 @@ describe.skip('Settings', () => {
         expect(toastMock.error).toHaveBeenCalledWith('Failed to save profile');
       });
 
-      await waitFor(() => expect(saveButton.getAttribute('aria-busy')).not.toBe('true'));
+      await waitFor(() =>
+        expect(saveButton.getAttribute('aria-busy')).not.toBe('true')
+      );
       expect(saveButton).not.toBeDisabled();
     });
 
     it('should handle password change error gracefully', async () => {
-      updateUserMock.mockResolvedValueOnce({ data: null, error: { message: 'Password update failed' } });
+      updateUserMock.mockResolvedValueOnce({
+        data: null,
+        error: { message: 'Password update failed' },
+      });
 
       renderSettings();
       await waitForSettingsReady();
@@ -467,15 +516,21 @@ describe.skip('Settings', () => {
       await switchToSecurityTab();
       setPasswordFields();
 
-      const passwordButton = screen.getByRole('button', { name: /update password/i });
+      const passwordButton = screen.getByRole('button', {
+        name: /update password/i,
+      });
 
       fireEvent.click(passwordButton);
 
       await waitFor(() => {
-        expect(toastMock.error).toHaveBeenCalledWith('Failed to change password');
+        expect(toastMock.error).toHaveBeenCalledWith(
+          'Failed to change password'
+        );
       });
 
-      await waitFor(() => expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.queryByText(/updating password/i)).not.toBeInTheDocument()
+      );
       expect(passwordButton).not.toBeDisabled();
     });
   });

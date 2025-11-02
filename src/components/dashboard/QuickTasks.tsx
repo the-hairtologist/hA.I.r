@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CheckSquare, Plus, Trash2 } from "lucide-react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { CheckSquare, Plus, Trash2 } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 interface Task {
   id: string;
@@ -18,7 +18,7 @@ interface Task {
 export const QuickTasks = () => {
   const { session } = useAuth();
   const queryClient = useQueryClient();
-  const [newTask, setNewTask] = useState("");
+  const [newTask, setNewTask] = useState('');
 
   const { data: tasks = [] } = useQuery({
     queryKey: ['quick-tasks', session?.user?.id],
@@ -29,7 +29,7 @@ export const QuickTasks = () => {
         .eq('user_id', session?.user?.id)
         .order('created_at', { ascending: false })
         .limit(5);
-      return data as Task[] || [];
+      return (data as Task[]) || [];
     },
     enabled: !!session?.user?.id,
   });
@@ -43,13 +43,19 @@ export const QuickTasks = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['quick-tasks'] });
-      setNewTask("");
-      toast.success("Task added");
+      setNewTask('');
+      toast.success('Task added');
     },
   });
 
   const toggleTask = useMutation({
-    mutationFn: async ({ id, completed }: { id: string; completed: boolean }) => {
+    mutationFn: async ({
+      id,
+      completed,
+    }: {
+      id: string;
+      completed: boolean;
+    }) => {
       const { error } = await supabase
         .from('stylist_todos')
         .update({ completed })
@@ -71,7 +77,7 @@ export const QuickTasks = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['quick-tasks'] });
-      toast.success("Task deleted");
+      toast.success('Task deleted');
     },
   });
 
@@ -88,8 +94,8 @@ export const QuickTasks = () => {
           <Input
             placeholder="Add a task..."
             value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={e => setNewTask(e.target.value)}
+            onKeyDown={e => {
               if (e.key === 'Enter' && newTask.trim()) {
                 addTask.mutate(newTask.trim());
               }
@@ -110,20 +116,20 @@ export const QuickTasks = () => {
               No tasks yet. Add one above!
             </p>
           ) : (
-            tasks.map((task) => (
+            tasks.map(task => (
               <div
                 key={task.id}
                 className="flex items-center gap-3 p-3 rounded-lg brutal-border bg-card/50 group"
               >
                 <Checkbox
                   checked={task.completed}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     toggleTask.mutate({ id: task.id, completed: !!checked })
                   }
                 />
                 <span
                   className={`flex-1 text-xs sm:text-sm lg:text-base ${
-                    task.completed ? "line-through text-muted-foreground" : ""
+                    task.completed ? 'line-through text-muted-foreground' : ''
                   }`}
                 >
                   {task.task}

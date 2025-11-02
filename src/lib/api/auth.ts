@@ -3,9 +3,9 @@
  * Centralized auth operations with Google OAuth support
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "@/lib/logging/productionLogger";
-import { userJourney } from "@/lib/logging/userJourneyTracker";
+import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logging/productionLogger';
+import { userJourney } from '@/lib/logging/userJourneyTracker';
 
 export interface SignUpData {
   email: string;
@@ -24,7 +24,7 @@ export interface SignInData {
 export const signUp = async ({ email, password, full_name }: SignUpData) => {
   try {
     const redirectUrl = `${window.location.origin}/dashboard`;
-    
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -38,17 +38,17 @@ export const signUp = async ({ email, password, full_name }: SignUpData) => {
 
     if (error) throw error;
 
-    logger.info("User signed up", { 
-      context: "AuthAPI.signUp",
+    logger.info('User signed up', {
+      context: 'AuthAPI.signUp',
       email,
-      userId: data.user?.id 
+      userId: data.user?.id,
     });
-    
-    userJourney.trackAction("User signed up", { email, method: "email" });
+
+    userJourney.trackAction('User signed up', { email, method: 'email' });
 
     return { data, error: null };
   } catch (error) {
-    logger.error("Sign up failed", error, { context: "AuthAPI.signUp", email });
+    logger.error('Sign up failed', error, { context: 'AuthAPI.signUp', email });
     return { data: null, error };
   }
 };
@@ -65,17 +65,17 @@ export const signIn = async ({ email, password }: SignInData) => {
 
     if (error) throw error;
 
-    logger.info("User signed in", { 
-      context: "AuthAPI.signIn",
+    logger.info('User signed in', {
+      context: 'AuthAPI.signIn',
       email,
-      userId: data.user?.id 
+      userId: data.user?.id,
     });
-    
-    userJourney.trackAction("User signed in", { email, method: "email" });
+
+    userJourney.trackAction('User signed in', { email, method: 'email' });
 
     return { data, error: null };
   } catch (error) {
-    logger.error("Sign in failed", error, { context: "AuthAPI.signIn", email });
+    logger.error('Sign in failed', error, { context: 'AuthAPI.signIn', email });
     return { data: null, error };
   }
 };
@@ -86,7 +86,7 @@ export const signIn = async ({ email, password }: SignInData) => {
 export const signInWithGoogle = async () => {
   try {
     const redirectUrl = `${window.location.origin}/dashboard`;
-    
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -100,12 +100,18 @@ export const signInWithGoogle = async () => {
 
     if (error) throw error;
 
-    logger.info("Google OAuth initiated", { context: "AuthAPI.signInWithGoogle" });
-    userJourney.trackAction("User initiated Google sign-in", { method: "google" });
+    logger.info('Google OAuth initiated', {
+      context: 'AuthAPI.signInWithGoogle',
+    });
+    userJourney.trackAction('User initiated Google sign-in', {
+      method: 'google',
+    });
 
     return { data, error: null };
   } catch (error) {
-    logger.error("Google OAuth failed", error, { context: "AuthAPI.signInWithGoogle" });
+    logger.error('Google OAuth failed', error, {
+      context: 'AuthAPI.signInWithGoogle',
+    });
     return { data: null, error };
   }
 };
@@ -116,15 +122,15 @@ export const signInWithGoogle = async () => {
 export const signOut = async () => {
   try {
     const { error } = await supabase.auth.signOut();
-    
+
     if (error) throw error;
 
-    logger.info("User signed out", { context: "AuthAPI.signOut" });
-    userJourney.trackAction("User signed out");
+    logger.info('User signed out', { context: 'AuthAPI.signOut' });
+    userJourney.trackAction('User signed out');
 
     return { error: null };
   } catch (error) {
-    logger.error("Sign out failed", error, { context: "AuthAPI.signOut" });
+    logger.error('Sign out failed', error, { context: 'AuthAPI.signOut' });
     return { error };
   }
 };
@@ -135,12 +141,14 @@ export const signOut = async () => {
 export const getCurrentSession = async () => {
   try {
     const { data, error } = await supabase.auth.getSession();
-    
+
     if (error) throw error;
 
     return { data: data.session, error: null };
   } catch (error) {
-    logger.error("Get session failed", error, { context: "AuthAPI.getSession" });
+    logger.error('Get session failed', error, {
+      context: 'AuthAPI.getSession',
+    });
     return { data: null, error };
   }
 };
@@ -151,12 +159,12 @@ export const getCurrentSession = async () => {
 export const getCurrentUser = async () => {
   try {
     const { data, error } = await supabase.auth.getUser();
-    
+
     if (error) throw error;
 
     return { data: data.user, error: null };
   } catch (error) {
-    logger.error("Get user failed", error, { context: "AuthAPI.getUser" });
+    logger.error('Get user failed', error, { context: 'AuthAPI.getUser' });
     return { data: null, error };
   }
 };
@@ -167,14 +175,16 @@ export const getCurrentUser = async () => {
 export const refreshSession = async () => {
   try {
     const { data, error } = await supabase.auth.refreshSession();
-    
+
     if (error) throw error;
 
-    logger.info("Session refreshed", { context: "AuthAPI.refreshSession" });
+    logger.info('Session refreshed', { context: 'AuthAPI.refreshSession' });
 
     return { data: data.session, error: null };
   } catch (error) {
-    logger.error("Session refresh failed", error, { context: "AuthAPI.refreshSession" });
+    logger.error('Session refresh failed', error, {
+      context: 'AuthAPI.refreshSession',
+    });
     return { data: null, error };
   }
 };
@@ -185,19 +195,25 @@ export const refreshSession = async () => {
 export const resetPassword = async (email: string) => {
   try {
     const redirectUrl = `${window.location.origin}/auth?mode=reset`;
-    
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl,
     });
 
     if (error) throw error;
 
-    logger.info("Password reset email sent", { context: "AuthAPI.resetPassword", email });
-    userJourney.trackAction("Password reset requested", { email });
+    logger.info('Password reset email sent', {
+      context: 'AuthAPI.resetPassword',
+      email,
+    });
+    userJourney.trackAction('Password reset requested', { email });
 
     return { error: null };
   } catch (error) {
-    logger.error("Password reset failed", error, { context: "AuthAPI.resetPassword", email });
+    logger.error('Password reset failed', error, {
+      context: 'AuthAPI.resetPassword',
+      email,
+    });
     return { error };
   }
 };
@@ -213,12 +229,14 @@ export const updatePassword = async (newPassword: string) => {
 
     if (error) throw error;
 
-    logger.info("Password updated", { context: "AuthAPI.updatePassword" });
-    userJourney.trackAction("Password updated");
+    logger.info('Password updated', { context: 'AuthAPI.updatePassword' });
+    userJourney.trackAction('Password updated');
 
     return { error: null };
   } catch (error) {
-    logger.error("Password update failed", error, { context: "AuthAPI.updatePassword" });
+    logger.error('Password update failed', error, {
+      context: 'AuthAPI.updatePassword',
+    });
     return { error };
   }
 };

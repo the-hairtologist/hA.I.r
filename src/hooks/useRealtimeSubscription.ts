@@ -1,12 +1,12 @@
 /**
  * Enhanced Realtime Subscription Hook
- * 
+ *
  * Replaces the old useRealtimeUpdates hook with better functionality:
  * - Uses centralized SubscriptionManager
  * - Proper TypeScript typing
  * - Better error handling
  * - Automatic cleanup
- * 
+ *
  * Usage:
  * ```tsx
  * useRealtimeSubscription({
@@ -18,12 +18,12 @@
  * ```
  */
 
-import { useEffect } from "react";
-import { realtimeManager } from "@/lib/realtime/SubscriptionManager";
+import { useEffect } from 'react';
+import { realtimeManager } from '@/lib/realtime/SubscriptionManager';
 
 interface UseRealtimeSubscriptionOptions {
   table: string;
-  event?: "INSERT" | "UPDATE" | "DELETE" | "*";
+  event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*';
   filter?: string;
   onUpdate: (payload?: any) => void;
   enabled?: boolean;
@@ -31,7 +31,7 @@ interface UseRealtimeSubscriptionOptions {
 
 export const useRealtimeSubscription = ({
   table,
-  event = "*",
+  event = '*',
   filter,
   onUpdate,
   enabled = true,
@@ -41,7 +41,7 @@ export const useRealtimeSubscription = ({
 
     const unsubscribe = realtimeManager.subscribe(
       { table, event, filter },
-      (payload) => {
+      payload => {
         onUpdate(payload);
       }
     );

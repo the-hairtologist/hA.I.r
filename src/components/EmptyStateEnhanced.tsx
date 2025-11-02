@@ -3,9 +3,9 @@
  * Provides delightful, actionable empty states with personality
  */
 
-import { LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { LucideIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface EmptyStateEnhancedProps {
   icon: LucideIcon;
@@ -28,12 +28,12 @@ export const EmptyStateEnhanced = ({
   secondaryActionLabel,
   onSecondaryAction,
   illustration,
-  className
+  className,
 }: EmptyStateEnhancedProps) => {
   return (
-    <div 
+    <div
       className={cn(
-        "flex flex-col items-center justify-center py-12 px-4 text-center animate-fade-in",
+        'flex flex-col items-center justify-center py-12 px-4 text-center animate-fade-in',
         className
       )}
       role="region"
@@ -45,32 +45,30 @@ export const EmptyStateEnhanced = ({
             <Icon className="h-16 w-16 text-primary" aria-hidden="true" />
           </div>
           <div className="absolute -bottom-2 -right-2 bg-secondary p-2 rounded-full brutal-border">
-            <span className="text-2xl" role="img" aria-label="sparkles">✨</span>
+            <span className="text-2xl" role="img" aria-label="sparkles">
+              ✨
+            </span>
           </div>
         </div>
       )}
-      
+
       <h2 className="text-2xl font-pixel font-bold mb-2 gradient-text">
         {title}
       </h2>
-      
+
       <p className="font-sans text-muted-foreground mb-6 max-w-md">
         {description}
       </p>
-      
+
       <div className="flex flex-col sm:flex-row gap-3">
         {actionLabel && onAction && (
-          <Button 
-            onClick={onAction}
-            size="lg"
-            className="gap-2 hover-scale"
-          >
+          <Button onClick={onAction} size="lg" className="gap-2 hover-scale">
             {actionLabel}
           </Button>
         )}
-        
+
         {secondaryActionLabel && onSecondaryAction && (
-          <Button 
+          <Button
             onClick={onSecondaryAction}
             variant="outline"
             size="lg"

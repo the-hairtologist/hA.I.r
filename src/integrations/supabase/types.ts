@@ -5330,8 +5330,19 @@ export type Database = {
           views: number
         }[]
       }
+      get_stylist_client_ids: {
+        Args: { stylist_uuid: string }
+        Returns: {
+          client_id: string
+        }[]
+      }
       get_stylist_profile_id: { Args: { _user_id: string }; Returns: string }
-      get_user_stylist_ids: { Args: { _user_id: string }; Returns: string[] }
+      get_user_stylist_ids: {
+        Args: { user_uuid: string }
+        Returns: {
+          stylist_id: string
+        }[]
+      }
       grant_admin_role: { Args: { _user_id: string }; Returns: undefined }
       has_role: {
         Args: {

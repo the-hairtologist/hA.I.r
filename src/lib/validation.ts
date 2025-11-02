@@ -265,11 +265,7 @@ export const sanitizeText = (input: string): string => {
 export const hasSQLInjection = (input: string): boolean => {
   const sqlPatterns = [
     /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE)\b)/i,
-<<<<<<< HEAD
     /(--|\/\*|\*\/|xp_)/i,
-=======
-    /(--|;|\/\*|\*\/|xp_)/i,
->>>>>>> copilot/fix-a11y-tester-and-comments
     /(\bOR\b.*=.*|1\s*=\s*1)/i,
   ];
   return sqlPatterns.some(pattern => pattern.test(input));

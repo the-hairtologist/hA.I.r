@@ -1,21 +1,27 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { DashboardLayout } from '@/components/DashboardLayout';
 import {
-  Mail, 
-  TrendingUp, 
-  Users, 
-  MousePointer, 
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
+import {
+  Mail,
+  TrendingUp,
+  Users,
+  MousePointer,
   CheckCircle,
   Calendar,
   RefreshCw,
-  BarChart3
-} from "lucide-react";
+  BarChart3,
+} from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -23,9 +29,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/table';
+import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
 
 export default function EmailCampaigns() {
   const { toast } = useToast();
@@ -34,13 +40,13 @@ export default function EmailCampaigns() {
 
   // Fetch campaign statistics
   const { data: stats, refetch } = useQuery({
-    queryKey: ["email-campaign-stats"],
+    queryKey: ['email-campaign-stats'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("rebooking_reminders")
-        .select("*")
-        .eq("status", "sent")
-        .order("sent_at", { ascending: false })
+        .from('rebooking_reminders')
+        .select('*')
+        .eq('status', 'sent')
+        .order('sent_at', { ascending: false })
         .limit(100);
 
       if (error) throw error;
@@ -49,16 +55,19 @@ export default function EmailCampaigns() {
       const total = data.length;
       const opened = data.filter((r: any) => r.email_opened === true).length;
       const clicked = data.filter((r: any) => r.email_clicked === true).length;
-      const converted = data.filter((r: any) => r.booked_after_reminder === true).length;
+      const converted = data.filter(
+        (r: any) => r.booked_after_reminder === true
+      ).length;
 
       return {
         total,
         opened,
         clicked,
         converted,
-        openRate: total > 0 ? ((opened / total) * 100).toFixed(1) : "0",
-        clickRate: total > 0 ? ((clicked / total) * 100).toFixed(1) : "0",
-        conversionRate: total > 0 ? ((converted / total) * 100).toFixed(1) : "0",
+        openRate: total > 0 ? ((opened / total) * 100).toFixed(1) : '0',
+        clickRate: total > 0 ? ((clicked / total) * 100).toFixed(1) : '0',
+        conversionRate:
+          total > 0 ? ((converted / total) * 100).toFixed(1) : '0',
         recent: data.slice(0, 20),
       };
     },
@@ -67,25 +76,28 @@ export default function EmailCampaigns() {
   const triggerManualSend = async () => {
     setTriggering(true);
     try {
-      const { error } = await supabase.functions.invoke("send-rebooking-reminder", {
-        body: { manual: true },
-      });
+      const { error } = await supabase.functions.invoke(
+        'send-rebooking-reminder',
+        {
+          body: { manual: true },
+        }
+      );
 
       if (error) throw error;
 
       toast({
-        title: "Reminders Triggered",
-        description: "Checking for clients who need rebooking reminders...",
+        title: 'Reminders Triggered',
+        description: 'Checking for clients who need rebooking reminders...',
       });
 
       // Refetch stats after a delay
       setTimeout(() => refetch(), 3000);
     } catch (error: any) {
-      console.error("Error triggering reminders:", error);
+      console.error('Error triggering reminders:', error);
       toast({
-        title: "Error",
-        description: error.message || "Failed to trigger reminders",
-        variant: "destructive",
+        title: 'Error',
+        description: error.message || 'Failed to trigger reminders',
+        variant: 'destructive',
       });
     } finally {
       setTriggering(false);
@@ -112,13 +124,15 @@ export default function EmailCampaigns() {
               <Mail className="w-4 h-4" />
               Customize Emails
             </Button>
-            <Button 
-              onClick={triggerManualSend} 
+            <Button
+              onClick={triggerManualSend}
               disabled={triggering}
               className="gap-2"
             >
-              <RefreshCw className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`} />
-              {triggering ? "Sending..." : "Send Now"}
+              <RefreshCw
+                className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`}
+              />
+              {triggering ? 'Sending...' : 'Send Now'}
             </Button>
           </div>
         </div>
@@ -146,7 +160,9 @@ export default function EmailCampaigns() {
             <CardContent>
               <div className="text-2xl font-bold">{stats?.openRate || 0}%</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.total ? `${stats?.opened || 0} emails opened` : 'No data yet'}
+                {stats?.total
+                  ? `${stats?.opened || 0} emails opened`
+                  : 'No data yet'}
               </p>
             </CardContent>
           </Card>
@@ -159,7 +175,9 @@ export default function EmailCampaigns() {
             <CardContent>
               <div className="text-2xl font-bold">{stats?.clickRate || 0}%</div>
               <p className="text-xs text-muted-foreground">
-                {stats?.total ? `${stats?.clicked || 0} clicks on booking` : 'No data yet'}
+                {stats?.total
+                  ? `${stats?.clicked || 0} clicks on booking`
+                  : 'No data yet'}
               </p>
             </CardContent>
           </Card>
@@ -170,9 +188,13 @@ export default function EmailCampaigns() {
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats?.conversionRate || 0}%</div>
+              <div className="text-2xl font-bold">
+                {stats?.conversionRate || 0}%
+              </div>
               <p className="text-xs text-muted-foreground">
-                {stats?.total ? `${stats?.converted || 0} rebooked` : 'No data yet'}
+                {stats?.total
+                  ? `${stats?.converted || 0} rebooked`
+                  : 'No data yet'}
               </p>
             </CardContent>
           </Card>
@@ -183,13 +205,23 @@ export default function EmailCampaigns() {
           <Card className="border-dashed">
             <CardContent className="py-8 text-center">
               <Mail className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No campaigns sent yet</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                No campaigns sent yet
+              </h3>
               <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                Your automated rebooking reminders will start sending once you have clients with appointments 6+ weeks ago. Click "Send Now" to trigger a manual check.
+                Your automated rebooking reminders will start sending once you
+                have clients with appointments 6+ weeks ago. Click "Send Now" to
+                trigger a manual check.
               </p>
-              <Button onClick={triggerManualSend} disabled={triggering} className="gap-2">
-                <RefreshCw className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`} />
-                {triggering ? "Checking..." : "Check for Eligible Clients"}
+              <Button
+                onClick={triggerManualSend}
+                disabled={triggering}
+                className="gap-2"
+              >
+                <RefreshCw
+                  className={`w-4 h-4 ${triggering ? 'animate-spin' : ''}`}
+                />
+                {triggering ? 'Checking...' : 'Check for Eligible Clients'}
               </Button>
             </CardContent>
           </Card>
@@ -214,27 +246,36 @@ export default function EmailCampaigns() {
                 {/* Mobile Card Layout */}
                 <div className="md:hidden space-y-3">
                   {stats?.recent?.map((reminder: any) => (
-                    <div 
+                    <div
                       key={reminder.id}
                       className="p-4 border-2 border-foreground rounded-lg space-y-3 shadow-brutal-xs"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-sm font-medium">
-                          {new Date(reminder.sent_at).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })}
+                          {new Date(reminder.sent_at).toLocaleDateString(
+                            'en-US',
+                            {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            }
+                          )}
                         </span>
-                        <Badge variant={reminder.status === 'sent' ? 'default' : 'secondary'}>
+                        <Badge
+                          variant={
+                            reminder.status === 'sent' ? 'default' : 'secondary'
+                          }
+                        >
                           {reminder.status}
                         </Badge>
                       </div>
-                      
+
                       <Badge variant="outline" className="text-xs">
-                        {reminder.reminder_type === 'six_week' ? '6-Week Reminder' : reminder.reminder_type}
+                        {reminder.reminder_type === 'six_week'
+                          ? '6-Week Reminder'
+                          : reminder.reminder_type}
                       </Badge>
-                      
+
                       <div className="flex flex-wrap gap-2">
                         {reminder.email_opened && (
                           <Badge variant="outline" className="text-xs">
@@ -247,7 +288,10 @@ export default function EmailCampaigns() {
                           </Badge>
                         )}
                         {reminder.booked_after_reminder && (
-                          <Badge variant="outline" className="text-xs bg-success/10">
+                          <Badge
+                            variant="outline"
+                            className="text-xs bg-success/10"
+                          >
                             ✅ Booked
                           </Badge>
                         )}
@@ -271,19 +315,30 @@ export default function EmailCampaigns() {
                       {stats?.recent?.map((reminder: any) => (
                         <TableRow key={reminder.id}>
                           <TableCell>
-                            {new Date(reminder.sent_at).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
+                            {new Date(reminder.sent_at).toLocaleDateString(
+                              'en-US',
+                              {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                              }
+                            )}
                           </TableCell>
                           <TableCell>
                             <Badge variant="outline">
-                              {reminder.reminder_type === 'six_week' ? '6-Week Reminder' : reminder.reminder_type}
+                              {reminder.reminder_type === 'six_week'
+                                ? '6-Week Reminder'
+                                : reminder.reminder_type}
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <Badge variant={reminder.status === 'sent' ? 'default' : 'secondary'}>
+                            <Badge
+                              variant={
+                                reminder.status === 'sent'
+                                  ? 'default'
+                                  : 'secondary'
+                              }
+                            >
                               {reminder.status}
                             </Badge>
                           </TableCell>
@@ -300,7 +355,10 @@ export default function EmailCampaigns() {
                                 </Badge>
                               )}
                               {reminder.booked_after_reminder && (
-                                <Badge variant="outline" className="text-xs bg-success/10">
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs bg-success/10"
+                                >
                                   ✅ Booked
                                 </Badge>
                               )}
@@ -337,8 +395,8 @@ export default function EmailCampaigns() {
                       Runs every day at 9:00 AM UTC (4:00 AM EST / 1:00 AM PST)
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Automatically checks for clients who had appointments 6 weeks ago
-                      and haven't received a reminder yet.
+                      Automatically checks for clients who had appointments 6
+                      weeks ago and haven't received a reminder yet.
                     </p>
                     <Badge variant="outline" className="mt-3">
                       ✅ Active

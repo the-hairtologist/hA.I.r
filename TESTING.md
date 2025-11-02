@@ -7,6 +7,11 @@ This document outlines the testing infrastructure and best practices for the hA.
 - **Vitest**: Fast unit test framework with native ESM support
 - **React Testing Library**: Component testing focused on user behavior
 - **Testing Library User Event**: Realistic user interaction simulation
+- **Playwright**: End-to-end testing framework (config: root `playwright.config.ts`)
+
+### Known Platform Issue
+
+⚠️ **tsconfig.app.json baseUrl warning**: This is a harmless TypeScript 5.x deprecation warning from a read-only Lovable platform file. It does not affect functionality or builds and will be resolved when Lovable updates their template.
 
 ## Running Tests
 

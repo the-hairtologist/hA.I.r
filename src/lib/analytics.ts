@@ -100,11 +100,7 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
 
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window) {
-<<<<<<< HEAD
     (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('event', 'page_view', {
-=======
-    (window as unknown as { gtag: (...args: any[]) => void }).gtag('event', 'page_view', {
->>>>>>> copilot/fix-a11y-tester-and-comments
       page_path: pagePath,
       page_title: pageTitle || document.title,
       platform: Platform.platform,
@@ -131,11 +127,7 @@ export const trackEvent = (
 
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window) {
-<<<<<<< HEAD
     (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('event', eventName, eventData);
-=======
-    (window as unknown as { gtag: (...args: any[]) => void }).gtag('event', eventName, eventData);
->>>>>>> copilot/fix-a11y-tester-and-comments
   }
 
   logger.debug('Event tracked', 'analytics', { eventName, eventData });
@@ -149,11 +141,7 @@ export const setUserProperties = (userId: string, properties?: Record<string, an
 
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window) {
-<<<<<<< HEAD
     (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('set', 'user_properties', {
-=======
-    (window as unknown as { gtag: (...args: any[]) => void }).gtag('set', 'user_properties', {
->>>>>>> copilot/fix-a11y-tester-and-comments
       user_id: userId,
       ...properties,
     });
@@ -172,11 +160,7 @@ export const identifyUser = (userId: string, traits?: Record<string, any>) => {
   
   // Google Analytics 4
   if (typeof window !== 'undefined' && 'gtag' in window && measurementId) {
-<<<<<<< HEAD
     (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('config', measurementId, {
-=======
-    (window as unknown as { gtag: (...args: any[]) => void }).gtag('config', measurementId, {
->>>>>>> copilot/fix-a11y-tester-and-comments
       user_id: userId,
       ...traits,
     });

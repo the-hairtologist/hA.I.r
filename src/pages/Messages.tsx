@@ -1,70 +1,84 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { getConversationsByUser, getMessageThread } from "@/lib/queries/messageQueries";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
-import { MessageSquare, Send, Upload, Video, Loader2, User, Plus } from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
-import { format } from "date-fns";
-import { NewConversationDialog } from "@/components/NewConversationDialog";
-import { KeyboardShortcutHint } from "@/components/KeyboardShortcut";
-import { logger } from "@/lib/logging/productionLogger";
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  getConversationsByUser,
+  getMessageThread,
+} from '@/lib/queries/messageQueries';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
+import {
+  MessageSquare,
+  Send,
+  Upload,
+  Video,
+  Loader2,
+  User,
+  Plus,
+} from 'lucide-react';
+import { PageHeader } from '@/components/PageHeader';
+import { format } from 'date-fns';
+import { NewConversationDialog } from '@/components/NewConversationDialog';
+import { KeyboardShortcutHint } from '@/components/KeyboardShortcut';
+import { logger } from '@/lib/logging/productionLogger';
 
 const Messages = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { roles, loading: roleLoading } = useUserRole(user?.id);
-  
+
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState<any[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
-  const [messageText, setMessageText] = useState("");
+  const [messageText, setMessageText] = useState('');
   const [uploading, setUploading] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
-  const [userRole, setUserRole] = useState<string>("");
+  const [userRole, setUserRole] = useState<string>('');
   const [newConversationOpen, setNewConversationOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const {
-    handleSubmit: sendMessage,
-    isSubmitting: sending,
-  } = useFormSubmit(
+  const { handleSubmit: sendMessage, isSubmitting: sending } = useFormSubmit(
     async () => {
       if (!messageText.trim() || !selectedConversation) {
-        throw new Error("Cannot send empty message");
+        throw new Error('Cannot send empty message');
       }
 
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error("Not authenticated");
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
 
-      const { error } = await supabase
-        .from("messages")
-        .insert({
-          sender_id: session.user.id,
-          recipient_id: selectedConversation.id,
-          message_text: messageText.trim(),
-        });
+      const { error } = await supabase.from('messages').insert({
+        sender_id: session.user.id,
+        recipient_id: selectedConversation.id,
+        message_text: messageText.trim(),
+      });
 
       if (error) throw error;
 
-      setMessageText("");
+      setMessageText('');
       await loadMessages(selectedConversation.id);
       await loadConversations(session.user.id);
     },
     {
       successMessage: undefined, // Silent success (realtime will update)
-      errorMessage: "Failed to send message",
+      errorMessage: 'Failed to send message',
       preventDoubleSubmit: true,
     }
   );
@@ -73,18 +87,24 @@ const Messages = () => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       // Enter to send message (if not shift+enter for newline)
-      if (e.key === "Enter" && !e.shiftKey && selectedConversation && messageText.trim() && !sending) {
+      if (
+        e.key === 'Enter' &&
+        !e.shiftKey &&
+        selectedConversation &&
+        messageText.trim() &&
+        !sending
+      ) {
         e.preventDefault();
         sendMessage();
       }
       // Escape to close conversation
-      if (e.key === "Escape" && selectedConversation) {
+      if (e.key === 'Escape' && selectedConversation) {
         setSelectedConversation(null);
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [selectedConversation, messageText, sending, sendMessage]);
 
   useEffect(() => {
@@ -93,13 +113,13 @@ const Messages = () => {
       setUserRole(primaryRole);
       loadData(user);
     } else if (!authLoading && !user) {
-      navigate("/auth");
+      navigate('/auth');
     }
   }, [authLoading, roleLoading, user, roles]);
 
   useEffect(() => {
     if (!user) return;
-    
+
     // Set up realtime subscription for all messages
     const channel = supabase
       .channel('messages-realtime')
@@ -110,9 +130,9 @@ const Messages = () => {
           schema: 'public',
           table: 'messages',
         },
-        (payload) => {
+        payload => {
           logger.debug('Realtime message update', { payload });
-          
+
           // Reload data when any message changes
           if (user) {
             loadData(user);
@@ -138,21 +158,21 @@ const Messages = () => {
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const loadData = async (sessionUser: any) => {
     try {
       if (!sessionUser) {
-        navigate("/auth");
+        navigate('/auth');
         return;
       }
 
       // Get user profile
       const { data: profile } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", sessionUser.id)
+        .from('profiles')
+        .select('*')
+        .eq('id', sessionUser.id)
         .maybeSingle();
 
       setUserProfile(profile);
@@ -160,8 +180,8 @@ const Messages = () => {
       // Get conversations
       await loadConversations(sessionUser.id);
     } catch (error: any) {
-      console.error("Error loading data:", error);
-      toast.error("Error loading messages");
+      console.error('Error loading data:', error);
+      toast.error('Error loading messages');
     } finally {
       setLoading(false);
     }
@@ -176,11 +196,12 @@ const Messages = () => {
 
       // Group by conversation partner
       const conversationsMap = new Map();
-      
+
       allMessages.forEach((msg: any) => {
-        const partnerId = msg.sender_id === userId ? msg.recipient_id : msg.sender_id;
+        const partnerId =
+          msg.sender_id === userId ? msg.recipient_id : msg.sender_id;
         const partner = msg.sender_id === userId ? msg.recipient : msg.sender;
-        
+
         if (!conversationsMap.has(partnerId)) {
           conversationsMap.set(partnerId, {
             id: partnerId,
@@ -198,13 +219,15 @@ const Messages = () => {
 
       setConversations(Array.from(conversationsMap.values()));
     } catch (error: any) {
-      console.error("Error loading conversations:", error);
+      console.error('Error loading conversations:', error);
     }
   };
 
   const loadMessages = async (partnerId: string) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
 
       // Use optimized query with request deduplication
@@ -219,12 +242,15 @@ const Messages = () => {
 
       if (unreadMessages && unreadMessages.length > 0) {
         await supabase
-          .from("messages")
+          .from('messages')
           .update({ is_read: true })
-          .in("id", unreadMessages.map((msg: any) => msg.id));
+          .in(
+            'id',
+            unreadMessages.map((msg: any) => msg.id)
+          );
       }
     } catch (error: any) {
-      console.error("Error loading messages:", error);
+      console.error('Error loading messages:', error);
     }
   };
 
@@ -232,23 +258,25 @@ const Messages = () => {
     const channel = supabase
       .channel(`messages-${partnerId}`)
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "INSERT",
-          schema: "public",
-          table: "messages",
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
         },
-      (payload) => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-          if (
-            (payload.new.sender_id === partnerId && payload.new.recipient_id === session?.user.id) ||
-            (payload.new.sender_id === session?.user.id && payload.new.recipient_id === partnerId)
-          ) {
-            loadMessages(partnerId);
-            loadConversations(session?.user.id || "");
-          }
-        });
-      }
+        payload => {
+          supabase.auth.getSession().then(({ data: { session } }) => {
+            if (
+              (payload.new.sender_id === partnerId &&
+                payload.new.recipient_id === session?.user.id) ||
+              (payload.new.sender_id === session?.user.id &&
+                payload.new.recipient_id === partnerId)
+            ) {
+              loadMessages(partnerId);
+              loadConversations(session?.user.id || '');
+            }
+          });
+        }
       )
       .subscribe();
 
@@ -256,7 +284,6 @@ const Messages = () => {
       supabase.removeChannel(channel);
     };
   };
-
 
   const handleStartConversation = (partnerId: string) => {
     const partner = { id: partnerId };
@@ -268,53 +295,53 @@ const Messages = () => {
     if (!selectedConversation) return;
 
     // Validate file type
-    if (!file.type.startsWith("video/")) {
-      toast.error("Please upload a video file");
+    if (!file.type.startsWith('video/')) {
+      toast.error('Please upload a video file');
       return;
     }
 
     // Validate file size (50MB limit)
     const MAX_SIZE = 50 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      toast.error("Video must be less than 50MB");
+      toast.error('Video must be less than 50MB');
       return;
     }
 
     setUploading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
 
-      const fileExt = file.name.split(".").pop();
+      const fileExt = file.name.split('.').pop();
       const fileName = `${session.user.id}/${Date.now()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("client-videos")
+        .from('client-videos')
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from("client-videos")
-        .getPublicUrl(fileName);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('client-videos').getPublicUrl(fileName);
 
-      const { error } = await supabase
-        .from("messages")
-        .insert({
-          sender_id: session.user.id,
-          recipient_id: selectedConversation.id,
-          video_url: publicUrl,
-          message_text: "Sent a video",
-        });
+      const { error } = await supabase.from('messages').insert({
+        sender_id: session.user.id,
+        recipient_id: selectedConversation.id,
+        video_url: publicUrl,
+        message_text: 'Sent a video',
+      });
 
       if (error) throw error;
 
-      toast.success("Video sent successfully!");
+      toast.success('Video sent successfully!');
       await loadMessages(selectedConversation.id);
       await loadConversations(session.user.id);
     } catch (error: any) {
-      console.error("Error uploading video:", error);
-      toast.error("Error uploading video");
+      console.error('Error uploading video:', error);
+      toast.error('Error uploading video');
     } finally {
       setUploading(false);
     }
@@ -335,7 +362,11 @@ const Messages = () => {
         icon={<MessageSquare className="h-6 w-6" />}
         backTo="/dashboard"
         actions={
-          <Button size="sm" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
+          <Button
+            size="sm"
+            onClick={() => setNewConversationOpen(true)}
+            className="border-2 border-foreground"
+          >
             <Plus className="h-4 w-4 mr-2" />
             New Chat
           </Button>
@@ -347,26 +378,39 @@ const Messages = () => {
           {/* Conversations List */}
           <Card className="w-80 flex flex-col border-[3px] border-foreground shadow-[5px_5px_0px_0px_hsl(var(--foreground))] bg-yellow-300">
             <CardHeader>
-              <CardTitle className="font-pixel text-foreground">Conversations</CardTitle>
-              <CardDescription className="text-foreground/80 font-sans font-medium">Your recent chats</CardDescription>
+              <CardTitle className="font-pixel text-foreground">
+                Conversations
+              </CardTitle>
+              <CardDescription className="text-foreground/80 font-sans font-medium">
+                Your recent chats
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto space-y-2">
               {conversations.length === 0 ? (
                 <div className="text-center py-8">
                   <MessageSquare className="h-12 w-12 mx-auto mb-3 text-foreground/40" />
-                  <p className="text-sm font-sans font-semibold text-foreground mb-1">No conversations yet</p>
-                  <p className="text-xs font-sans text-foreground/70 mb-3">Start chatting with stylists or clients</p>
-                  <Button size="sm" variant="outline" onClick={() => setNewConversationOpen(true)} className="border-2 border-foreground">
+                  <p className="text-sm font-sans font-semibold text-foreground mb-1">
+                    No conversations yet
+                  </p>
+                  <p className="text-xs font-sans text-foreground/70 mb-3">
+                    Start chatting with stylists or clients
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setNewConversationOpen(true)}
+                    className="border-2 border-foreground"
+                  >
                     <Plus className="h-3 w-3 mr-2" />
                     Start a Chat
                   </Button>
                 </div>
               ) : (
-                conversations.map((conv) => (
+                conversations.map(conv => (
                   <div
                     key={conv.id}
                     className={`p-3 rounded-lg cursor-pointer transition-all hover:bg-accent/50 ${
-                      selectedConversation?.id === conv.id ? "bg-accent" : ""
+                      selectedConversation?.id === conv.id ? 'bg-accent' : ''
                     }`}
                     onClick={() => setSelectedConversation(conv)}
                   >
@@ -388,10 +432,13 @@ const Messages = () => {
                           )}
                         </div>
                         <p className="text-xs text-muted-foreground truncate">
-                          {conv.lastMessage?.message_text || "Video message"}
+                          {conv.lastMessage?.message_text || 'Video message'}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {format(new Date(conv.lastMessage?.created_at), "MMM d, h:mm a")}
+                          {format(
+                            new Date(conv.lastMessage?.created_at),
+                            'MMM d, h:mm a'
+                          )}
                         </p>
                       </div>
                     </div>
@@ -409,9 +456,16 @@ const Messages = () => {
                   <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-card/20 flex items-center justify-center">
                     <MessageSquare className="h-10 w-10 text-primary-foreground" />
                   </div>
-                  <h3 className="text-xl font-bold text-primary-foreground mb-2">Ready to Connect?</h3>
-                  <p className="text-primary-foreground/80 mb-4">Select a conversation or start a new chat to begin messaging</p>
-                  <Button onClick={() => setNewConversationOpen(true)} className="bg-card text-primary hover:bg-card/90">
+                  <h3 className="text-xl font-bold text-primary-foreground mb-2">
+                    Ready to Connect?
+                  </h3>
+                  <p className="text-primary-foreground/80 mb-4">
+                    Select a conversation or start a new chat to begin messaging
+                  </p>
+                  <Button
+                    onClick={() => setNewConversationOpen(true)}
+                    className="bg-card text-primary hover:bg-card/90"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
                     New Conversation
                   </Button>
@@ -428,7 +482,8 @@ const Messages = () => {
                     </Avatar>
                     <div>
                       <CardTitle className="text-lg">
-                        {selectedConversation.partner?.full_name || selectedConversation.partner?.email}
+                        {selectedConversation.partner?.full_name ||
+                          selectedConversation.partner?.email}
                       </CardTitle>
                       <CardDescription className="text-xs">
                         {selectedConversation.partner?.email}
@@ -439,19 +494,21 @@ const Messages = () => {
 
                 {/* Messages */}
                 <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {messages.map((message) => {
+                  {messages.map(message => {
                     const isOwnMessage = message.sender_id === userProfile?.id;
                     return (
                       <div
                         key={message.id}
-                        className={`flex ${isOwnMessage ? "justify-end" : "justify-start"} animate-fade-in`}
+                        className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} animate-fade-in`}
                       >
-                        <div className={`max-w-[70%] ${isOwnMessage ? "order-2" : "order-1"}`}>
+                        <div
+                          className={`max-w-[70%] ${isOwnMessage ? 'order-2' : 'order-1'}`}
+                        >
                           <div
                             className={`rounded-2xl px-4 py-2 ${
                               isOwnMessage
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-muted"
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-muted'
                             }`}
                           >
                             {message.video_url ? (
@@ -460,9 +517,11 @@ const Messages = () => {
                                   src={message.video_url}
                                   controls
                                   className="rounded-lg max-w-full"
-                                  style={{ maxHeight: "300px" }}
+                                  style={{ maxHeight: '300px' }}
                                 />
-                                <p className="text-sm">{message.message_text}</p>
+                                <p className="text-sm">
+                                  {message.message_text}
+                                </p>
                               </div>
                             ) : (
                               <p className="text-sm whitespace-pre-wrap break-words">
@@ -470,8 +529,10 @@ const Messages = () => {
                               </p>
                             )}
                           </div>
-                          <p className={`text-xs text-muted-foreground mt-1 ${isOwnMessage ? "text-right" : "text-left"}`}>
-                            {format(new Date(message.created_at), "h:mm a")}
+                          <p
+                            className={`text-xs text-muted-foreground mt-1 ${isOwnMessage ? 'text-right' : 'text-left'}`}
+                          >
+                            {format(new Date(message.created_at), 'h:mm a')}
                           </p>
                         </div>
                       </div>
@@ -483,7 +544,10 @@ const Messages = () => {
                 {/* Message Input */}
                 <div className="border-t p-4">
                   <div className="mb-2 px-1">
-                    <KeyboardShortcutHint shortcut="Enter" description="Send message" />
+                    <KeyboardShortcutHint
+                      shortcut="Enter"
+                      description="Send message"
+                    />
                   </div>
                   <div className="flex gap-2">
                     <Input
@@ -491,7 +555,7 @@ const Messages = () => {
                       accept="video/*"
                       className="hidden"
                       id="video-upload"
-                      onChange={(e) => {
+                      onChange={e => {
                         const file = e.target.files?.[0];
                         if (file) handleVideoUpload(file);
                       }}
@@ -500,7 +564,9 @@ const Messages = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => document.getElementById("video-upload")?.click()}
+                      onClick={() =>
+                        document.getElementById('video-upload')?.click()
+                      }
                       disabled={uploading}
                       title="Upload video"
                       aria-label="Upload video"
@@ -514,9 +580,14 @@ const Messages = () => {
                     <Textarea
                       placeholder="Type your message... (Shift+Enter for new line)"
                       value={messageText}
-                      onChange={(e) => setMessageText(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey && !sending && messageText.trim()) {
+                      onChange={e => setMessageText(e.target.value)}
+                      onKeyDown={e => {
+                        if (
+                          e.key === 'Enter' &&
+                          !e.shiftKey &&
+                          !sending &&
+                          messageText.trim()
+                        ) {
                           e.preventDefault();
                           sendMessage();
                         }
@@ -529,11 +600,14 @@ const Messages = () => {
                       disabled={!messageText.trim() || sending}
                       size="icon"
                       className="h-[60px] w-[60px] min-h-[44px]"
-                      aria-label={sending ? "Sending message" : "Send message"}
+                      aria-label={sending ? 'Sending message' : 'Send message'}
                       aria-busy={sending}
                     >
                       {sending ? (
-                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                        <Loader2
+                          className="h-4 w-4 animate-spin"
+                          aria-hidden="true"
+                        />
                       ) : (
                         <Send className="h-4 w-4" />
                       )}

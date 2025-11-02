@@ -1,26 +1,28 @@
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Plus, Loader2 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
-import { logger } from "@/lib/logging/productionLogger";
-import { clientSchema, type ClientInput } from "@/lib/validation";
-import { StandardFormField } from "@/components/forms/StandardFormField";
-import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog';
+import { Plus, Loader2 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logging/productionLogger';
+import { clientSchema, type ClientInput } from '@/lib/validation';
+import { StandardFormField } from '@/components/forms/StandardFormField';
+import { useFormSubmit } from '@/hooks/useFormSubmit';
+import { cn } from '@/lib/utils';
 
 interface QuickAddClientFABProps {
   onClientAdded?: (clientId: string) => void;
 }
 
-export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => {
+export const QuickAddClientFAB = ({
+  onClientAdded,
+}: QuickAddClientFABProps) => {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
 
@@ -34,13 +36,13 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
     handleSubmit,
     reset,
   } = useFormSubmit<ClientInput>(
-    async (data) => {
+    async data => {
       if (!user?.id) {
-        throw new Error("No user ID");
+        throw new Error('No user ID');
       }
 
       const { data: newClient, error } = await supabase
-        .from("client_profiles")
+        .from('client_profiles')
         .insert([
           {
             full_name: data.full_name,
@@ -55,7 +57,7 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
 
       if (error) throw error;
 
-      logger.info("Client added successfully", { clientId: newClient.id });
+      logger.info('Client added successfully', { clientId: newClient.id });
 
       if (onClientAdded && newClient) {
         onClientAdded(newClient.id);
@@ -64,14 +66,14 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
     {
       schema: clientSchema,
       initialValues: {
-        full_name: "",
-        email: "",
-        phone: "",
-        notes: "",
-        allergies: "",
+        full_name: '',
+        email: '',
+        phone: '',
+        notes: '',
+        allergies: '',
         medical_info_consent: false,
       },
-      successMessage: "Client added successfully! ✨",
+      successMessage: 'Client added successfully! ✨',
       onSuccess: () => {
         reset();
         setOpen(false);
@@ -85,12 +87,12 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
         onClick={() => setOpen(true)}
         size="lg"
         className={cn(
-          "fixed bottom-20 right-6 z-[45] h-14 w-14 rounded-full shadow-lg",
-          "lg:bottom-6 lg:right-6",
-          "bg-gradient-to-br from-emerald-500 to-green-600",
-          "hover:from-emerald-600 hover:to-green-700",
-          "transition-all duration-200 hover:scale-110 active:scale-95",
-          "group touch-manipulation"
+          'fixed bottom-20 right-6 z-[45] h-14 w-14 rounded-full shadow-lg',
+          'lg:bottom-6 lg:right-6',
+          'bg-gradient-to-br from-emerald-500 to-green-600',
+          'hover:from-emerald-600 hover:to-green-700',
+          'transition-all duration-200 hover:scale-110 active:scale-95',
+          'group touch-manipulation'
         )}
         aria-label="Quick add client"
       >
@@ -112,8 +114,8 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
               label="Full Name"
               type="text"
               value={values.full_name}
-              onChange={(value) => setFieldValue("full_name", value)}
-              onBlur={() => setFieldTouched("full_name")}
+              onChange={value => setFieldValue('full_name', value)}
+              onBlur={() => setFieldTouched('full_name')}
               error={errors.full_name}
               touched={touched.full_name}
               required
@@ -125,9 +127,9 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
               name="email"
               label="Email"
               type="email"
-              value={values.email || ""}
-              onChange={(value) => setFieldValue("email", value)}
-              onBlur={() => setFieldTouched("email")}
+              value={values.email || ''}
+              onChange={value => setFieldValue('email', value)}
+              onBlur={() => setFieldTouched('email')}
               error={errors.email}
               touched={touched.email}
               placeholder="e.g., sarah@example.com"
@@ -138,9 +140,9 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
               name="phone"
               label="Phone"
               type="tel"
-              value={values.phone || ""}
-              onChange={(value) => setFieldValue("phone", value)}
-              onBlur={() => setFieldTouched("phone")}
+              value={values.phone || ''}
+              onChange={value => setFieldValue('phone', value)}
+              onBlur={() => setFieldTouched('phone')}
               error={errors.phone}
               touched={touched.phone}
               placeholder="e.g., (555) 123-4567"
@@ -151,9 +153,9 @@ export const QuickAddClientFAB = ({ onClientAdded }: QuickAddClientFABProps) => 
               name="notes"
               label="Notes"
               type="textarea"
-              value={values.notes || ""}
-              onChange={(value) => setFieldValue("notes", value)}
-              onBlur={() => setFieldTouched("notes")}
+              value={values.notes || ''}
+              onChange={value => setFieldValue('notes', value)}
+              onBlur={() => setFieldTouched('notes')}
               error={errors.notes}
               touched={touched.notes}
               placeholder="Any special notes..."

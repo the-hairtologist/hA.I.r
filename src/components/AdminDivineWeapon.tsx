@@ -11,18 +11,18 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
-import { 
-  Shield, 
-  Activity, 
-  AlertTriangle, 
-  Zap, 
+import {
+  Shield,
+  Activity,
+  AlertTriangle,
+  Zap,
   Eye,
   Lock,
   RefreshCw,
   Users,
   DollarSign,
   Brain,
-  Target
+  Target,
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -42,7 +42,7 @@ export const AdminDivineWeapon = () => {
 
   useEffect(() => {
     loadDashboardData();
-    
+
     // Refresh every 30 seconds
     const interval = setInterval(loadDashboardData, 30000);
     return () => clearInterval(interval);
@@ -50,26 +50,29 @@ export const AdminDivineWeapon = () => {
 
   const loadDashboardData = async () => {
     setIsLoading(true);
-    
+
     try {
       // Load security status
       const security = await securityGuardian.getSecurityStatus();
       setSecurityStatus(security);
-      
+
       // Load predictive insights
       const predictions = await predictiveAnalytics.generateInsights();
       setInsights(predictions);
-      
+
       // Load system health from database
       setSystemHealth({ healthy: true });
-      
     } catch (error) {
-      logger.error('Error loading admin dashboard', error, { context: 'AdminDivineWeapon' });
-      userJourney.trackError(error as Error, { action: 'load-admin-dashboard' });
+      logger.error('Error loading admin dashboard', error, {
+        context: 'AdminDivineWeapon',
+      });
+      userJourney.trackError(error as Error, {
+        action: 'load-admin-dashboard',
+      });
       toast({
-        title: "Error",
-        description: "Failed to load dashboard data",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to load dashboard data',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -78,25 +81,29 @@ export const AdminDivineWeapon = () => {
 
   const runFullMaintenance = async () => {
     toast({
-      title: "Running Full Maintenance",
-      description: "Activating all divine systems..."
+      title: 'Running Full Maintenance',
+      description: 'Activating all divine systems...',
     });
-    
+
     // Run security and analytics checks
     await loadDashboardData();
-    
+
     toast({
-      title: "Maintenance Complete",
-      description: "All systems optimized and protected"
+      title: 'Maintenance Complete',
+      description: 'All systems optimized and protected',
     });
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'destructive';
-      case 'warning': return 'warning';
-      case 'info': return 'default';
-      default: return 'secondary';
+      case 'critical':
+        return 'destructive';
+      case 'warning':
+        return 'warning';
+      case 'info':
+        return 'default';
+      default:
+        return 'secondary';
     }
   };
 
@@ -105,7 +112,9 @@ export const AdminDivineWeapon = () => {
       <div className="flex items-center justify-center p-12">
         <div className="text-center space-y-4">
           <Brain className="h-12 w-12 animate-pulse mx-auto text-primary" />
-          <p className="text-muted-foreground">Initializing Divine Systems...</p>
+          <p className="text-muted-foreground">
+            Initializing Divine Systems...
+          </p>
         </div>
       </div>
     );
@@ -135,9 +144,13 @@ export const AdminDivineWeapon = () => {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm">Security</CardTitle>
-              <Shield className={`h-5 w-5 ${
-                securityStatus?.status === 'secure' ? 'text-success' : 'text-warning'
-              }`} />
+              <Shield
+                className={`h-5 w-5 ${
+                  securityStatus?.status === 'secure'
+                    ? 'text-success'
+                    : 'text-warning'
+                }`}
+              />
             </div>
           </CardHeader>
           <CardContent>
@@ -234,7 +247,8 @@ export const AdminDivineWeapon = () => {
                     <div>
                       <p className="font-medium">Threats Detected</p>
                       <p className="text-sm text-muted-foreground">
-                        {securityStatus.unresolvedThreats} suspicious activities require review
+                        {securityStatus.unresolvedThreats} suspicious activities
+                        require review
                       </p>
                     </div>
                   </div>
@@ -250,7 +264,9 @@ export const AdminDivineWeapon = () => {
                     <Eye className="h-4 w-4 text-info" />
                     <span className="text-sm font-medium">Events Logged</span>
                   </div>
-                  <p className="text-2xl font-bold">{securityStatus?.recentEvents || 0}</p>
+                  <p className="text-2xl font-bold">
+                    {securityStatus?.recentEvents || 0}
+                  </p>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
@@ -270,10 +286,18 @@ export const AdminDivineWeapon = () => {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    {insight.type === 'security' && <Shield className="h-5 w-5" />}
-                    {insight.type === 'performance' && <Activity className="h-5 w-5" />}
-                    {insight.type === 'revenue' && <DollarSign className="h-5 w-5" />}
-                    {insight.type === 'user_experience' && <Users className="h-5 w-5" />}
+                    {insight.type === 'security' && (
+                      <Shield className="h-5 w-5" />
+                    )}
+                    {insight.type === 'performance' && (
+                      <Activity className="h-5 w-5" />
+                    )}
+                    {insight.type === 'revenue' && (
+                      <DollarSign className="h-5 w-5" />
+                    )}
+                    {insight.type === 'user_experience' && (
+                      <Users className="h-5 w-5" />
+                    )}
                     <CardTitle>{insight.title}</CardTitle>
                   </div>
                   <Badge variant={getSeverityColor(insight.severity) as any}>
@@ -282,7 +306,9 @@ export const AdminDivineWeapon = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-muted-foreground">{insight.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {insight.description}
+                </p>
                 <div className="p-3 bg-muted rounded-lg">
                   <p className="text-sm font-medium mb-2">🔮 Prediction:</p>
                   <p className="text-sm">{insight.prediction}</p>
@@ -294,7 +320,10 @@ export const AdminDivineWeapon = () => {
                   <p className="text-sm font-medium mb-2">Suggested Actions:</p>
                   <ul className="space-y-1">
                     {insight.suggestedActions.map((action: string) => (
-                      <li key={action} className="text-sm text-muted-foreground flex items-center gap-2">
+                      <li
+                        key={action}
+                        className="text-sm text-muted-foreground flex items-center gap-2"
+                      >
                         <Target className="h-3 w-3" />
                         {action}
                       </li>
@@ -303,18 +332,21 @@ export const AdminDivineWeapon = () => {
                 </div>
                 <div className="pt-2 border-t">
                   <p className="text-sm">
-                    <span className="font-medium">Estimated Impact:</span> {insight.estimatedImpact}
+                    <span className="font-medium">Estimated Impact:</span>{' '}
+                    {insight.estimatedImpact}
                   </p>
                 </div>
               </CardContent>
             </Card>
           ))}
-          
+
           {insights.length === 0 && (
             <Card>
               <CardContent className="py-12 text-center">
                 <Brain className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">No insights at this time</p>
+                <p className="text-muted-foreground">
+                  No insights at this time
+                </p>
                 <p className="text-sm text-muted-foreground mt-2">
                   AI angels are analyzing your kingdom
                 </p>
@@ -330,9 +362,13 @@ export const AdminDivineWeapon = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">
-                Advanced user management and role control will be available here.
+                Advanced user management and role control will be available
+                here.
               </p>
-              <Button onClick={() => navigate('/admin/users')} className="gap-2">
+              <Button
+                onClick={() => navigate('/admin/users')}
+                className="gap-2"
+              >
                 <Users className="h-4 w-4" />
                 Go to User Management
               </Button>
@@ -351,11 +387,19 @@ export const AdminDivineWeapon = () => {
                   System-level controls and configurations.
                 </p>
                 <div className="grid gap-3">
-                  <Button onClick={() => navigate('/system-health')} variant="outline" className="justify-start">
+                  <Button
+                    onClick={() => navigate('/system-health')}
+                    variant="outline"
+                    className="justify-start"
+                  >
                     <Activity className="h-4 w-4 mr-2" />
                     View System Health
                   </Button>
-                  <Button onClick={() => navigate('/access-codes')} variant="outline" className="justify-start">
+                  <Button
+                    onClick={() => navigate('/access-codes')}
+                    variant="outline"
+                    className="justify-start"
+                  >
                     <Lock className="h-4 w-4 mr-2" />
                     Manage Access Codes
                   </Button>

@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, DollarSign, Users, Calendar } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { TrendingUp, DollarSign, Users, Calendar } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface RevenueForecast {
   id: string;
@@ -28,18 +34,18 @@ export function RevenueForecasting({ stylistId }: { stylistId: string }) {
   const loadForecast = async () => {
     try {
       const { data, error } = await supabase
-        .from("revenue_forecasts")
-        .select("*")
-        .eq("stylist_id", stylistId)
-        .eq("forecast_period", "month")
-        .order("created_at", { ascending: false })
+        .from('revenue_forecasts')
+        .select('*')
+        .eq('stylist_id', stylistId)
+        .eq('forecast_period', 'month')
+        .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
 
       if (error) throw error;
       setForecast(data);
     } catch (error) {
-      console.error("Error loading forecast:", error);
+      console.error('Error loading forecast:', error);
     } finally {
       setLoading(false);
     }
@@ -89,7 +95,8 @@ export function RevenueForecasting({ stylistId }: { stylistId: string }) {
               ${forecast.predicted_revenue.toFixed(0)}
             </div>
             <div className="text-xs text-muted-foreground mt-1">
-              Range: ${forecast.confidence_interval_low.toFixed(0)} - ${forecast.confidence_interval_high.toFixed(0)}
+              Range: ${forecast.confidence_interval_low.toFixed(0)} - $
+              {forecast.confidence_interval_high.toFixed(0)}
             </div>
           </div>
 
@@ -130,7 +137,9 @@ export function RevenueForecasting({ stylistId }: { stylistId: string }) {
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Client Retention</span>
                 <span className="font-medium">
-                  {forecast.predicted_retention_rate > 80 ? "Strong" : "Moderate"}
+                  {forecast.predicted_retention_rate > 80
+                    ? 'Strong'
+                    : 'Moderate'}
                 </span>
               </div>
             </div>
@@ -140,8 +149,8 @@ export function RevenueForecasting({ stylistId }: { stylistId: string }) {
         <div className="mt-4 p-3 bg-muted/50 rounded-lg text-sm text-muted-foreground">
           <p className="font-medium mb-1">💡 Tip:</p>
           <p>
-            Based on current trends, focus on retaining existing clients through follow-ups
-            to maximize this forecast.
+            Based on current trends, focus on retaining existing clients through
+            follow-ups to maximize this forecast.
           </p>
         </div>
       </CardContent>

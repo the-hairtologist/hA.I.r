@@ -4,14 +4,14 @@
  * OPTIMIZED: Uses EnhancedAuth context to avoid duplicate queries
  */
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Gift, Star, Trophy, Sparkles } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Gift, Star, Trophy, Sparkles } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
 
 interface Milestone {
   id: string;
@@ -41,23 +41,23 @@ export function LoyaltyProgressWidget() {
     try {
       // Get completed appointment count - NO DUPLICATE QUERY
       const { count } = await supabase
-        .from("appointments")
-        .select("*", { count: "exact", head: true })
-        .eq("client_id", clientProfile.id)
-        .eq("status", "completed");
+        .from('appointments')
+        .select('*', { count: 'exact', head: true })
+        .eq('client_id', clientProfile.id)
+        .eq('status', 'completed');
 
       setAppointmentCount(count || 0);
 
       // Get milestones
       const { data: milestonesData } = await supabase
-        .from("client_milestones")
-        .select("*")
-        .eq("client_id", clientProfile.id)
-        .order("created_at", { ascending: false });
+        .from('client_milestones')
+        .select('*')
+        .eq('client_id', clientProfile.id)
+        .order('created_at', { ascending: false });
 
       setMilestones(milestonesData || []);
     } catch (error) {
-      console.error("Error loading loyalty data:", error);
+      console.error('Error loading loyalty data:', error);
     } finally {
       setLoading(false);
     }
@@ -65,8 +65,10 @@ export function LoyaltyProgressWidget() {
 
   // Calculate next milestone
   const milestoneThresholds = [5, 10, 25, 50, 100];
-  const nextMilestone = milestoneThresholds.find(m => m > appointmentCount) || 100;
-  const prevMilestone = milestoneThresholds.filter(m => m <= appointmentCount).pop() || 0;
+  const nextMilestone =
+    milestoneThresholds.find(m => m > appointmentCount) || 100;
+  const prevMilestone =
+    milestoneThresholds.filter(m => m <= appointmentCount).pop() || 0;
   const progressRange = nextMilestone - prevMilestone;
   const currentProgress = appointmentCount - prevMilestone;
   const progressPercent = (currentProgress / progressRange) * 100;
@@ -99,16 +101,20 @@ export function LoyaltyProgressWidget() {
         {/* Progress to next reward */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs sm:text-sm">
-            <span className="text-muted-foreground">Progress to next reward</span>
+            <span className="text-muted-foreground">
+              Progress to next reward
+            </span>
             <span className="font-bold text-primary">
               {appointmentCount} / {nextMilestone} visits
             </span>
           </div>
-          
+
           <Progress value={progressPercent} className="h-3" />
-          
+
           <p className="text-[11px] sm:text-xs text-muted-foreground">
-            {nextMilestone - appointmentCount} more {nextMilestone - appointmentCount === 1 ? 'visit' : 'visits'} until your next reward!
+            {nextMilestone - appointmentCount} more{' '}
+            {nextMilestone - appointmentCount === 1 ? 'visit' : 'visits'} until
+            your next reward!
           </p>
         </div>
 
@@ -117,10 +123,13 @@ export function LoyaltyProgressWidget() {
           <div className="pt-2 border-t">
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="h-4 w-4 text-amber-500" />
-              <span className="text-xs sm:text-sm font-medium">You have {unclaimedRewards.length} reward{unclaimedRewards.length !== 1 ? 's' : ''}!</span>
+              <span className="text-xs sm:text-sm font-medium">
+                You have {unclaimedRewards.length} reward
+                {unclaimedRewards.length !== 1 ? 's' : ''}!
+              </span>
             </div>
             <div className="space-y-2">
-              {unclaimedRewards.map((reward) => (
+              {unclaimedRewards.map(reward => (
                 <div
                   key={reward.id}
                   className="p-3 rounded-lg bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20"
@@ -137,7 +146,7 @@ export function LoyaltyProgressWidget() {
                     </code>
                   </div>
                   <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
-                    {reward.milestone_type === 'appointments' 
+                    {reward.milestone_type === 'appointments'
                       ? `${reward.milestone_value} appointments milestone`
                       : `${reward.milestone_value} year anniversary`}
                   </p>

@@ -1,14 +1,14 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SequenceList } from "@/components/email-sequences/SequenceList";
-import { SequenceBuilder } from "@/components/email-sequences/SequenceBuilder";
-import { SequenceAnalytics } from "@/components/email-sequences/SequenceAnalytics";
-import { EmailTemplates } from "@/components/email-sequences/EmailTemplates";
-import { ClientEnrollments } from "@/components/email-sequences/ClientEnrollments";
-import { EmailTestPanel } from "@/components/email-automation/EmailTestPanel";
-import { Mail, TrendingUp, Users, Layout, Zap } from "lucide-react";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SequenceList } from '@/components/email-sequences/SequenceList';
+import { SequenceBuilder } from '@/components/email-sequences/SequenceBuilder';
+import { SequenceAnalytics } from '@/components/email-sequences/SequenceAnalytics';
+import { EmailTemplates } from '@/components/email-sequences/EmailTemplates';
+import { ClientEnrollments } from '@/components/email-sequences/ClientEnrollments';
+import { EmailTestPanel } from '@/components/email-automation/EmailTestPanel';
+import { Mail, TrendingUp, Users, Layout, Zap } from 'lucide-react';
 
 const EmailSequences = () => {
   const { user } = useAuth();

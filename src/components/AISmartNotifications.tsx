@@ -63,10 +63,13 @@ export const AISmartNotifications = () => {
         if (appointments && appointments.length > 0) {
           // Group by client and find those overdue
           const clientLastVisit = new Map<string, Date>();
-          
+
           appointments.forEach(apt => {
             const date = new Date(apt.appointment_date);
-            if (!clientLastVisit.has(apt.client_id) || date > clientLastVisit.get(apt.client_id)!) {
+            if (
+              !clientLastVisit.has(apt.client_id) ||
+              date > clientLastVisit.get(apt.client_id)!
+            ) {
               clientLastVisit.set(apt.client_id, date);
             }
           });
@@ -74,9 +77,11 @@ export const AISmartNotifications = () => {
           // Find clients overdue (>60 days)
           const now = new Date();
           let overdueCount = 0;
-          
+
           clientLastVisit.forEach((lastDate, clientId) => {
-            const daysSince = Math.floor((now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+            const daysSince = Math.floor(
+              (now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24)
+            );
             if (daysSince > 60) {
               overdueCount++;
             }
@@ -91,7 +96,7 @@ export const AISmartNotifications = () => {
               priority: 'high',
               actionLabel: 'View Details',
               actionUrl: '/system-health?tab=retention',
-              createdAt: new Date()
+              createdAt: new Date(),
             });
           }
         }
@@ -114,20 +119,24 @@ export const AISmartNotifications = () => {
           notifications.push({
             id: 'today-appointments',
             type: 'reminder',
-            title: '📅 Today\'s Schedule',
+            title: "📅 Today's Schedule",
             message: `You have ${count} appointment${count > 1 ? 's' : ''} scheduled today`,
             priority: 'medium',
             actionLabel: 'View Calendar',
             actionUrl: '/appointments',
-            createdAt: new Date()
+            createdAt: new Date(),
           });
         }
       }
 
       setNotifications(notifications);
     } catch (error) {
-      logger.error('Failed to load AI smart notifications', error, { context: 'AISmartNotifications' });
-      userJourney.trackError(error as Error, { action: 'load-smart-notifications' });
+      logger.error('Failed to load AI smart notifications', error, {
+        context: 'AISmartNotifications',
+      });
+      userJourney.trackError(error as Error, {
+        action: 'load-smart-notifications',
+      });
     }
   };
 
@@ -165,19 +174,34 @@ export const AISmartNotifications = () => {
             </div>
 
             {notifications.map(notification => (
-              <Card key={notification.id} className="border-l-4" style={{
-                borderLeftColor: notification.priority === 'high' ? 'hsl(var(--destructive))' : 
-                                 notification.priority === 'medium' ? 'hsl(var(--warning))' : 'hsl(var(--muted-foreground))'
-              }}>
+              <Card
+                key={notification.id}
+                className="border-l-4"
+                style={{
+                  borderLeftColor:
+                    notification.priority === 'high'
+                      ? 'hsl(var(--destructive))'
+                      : notification.priority === 'medium'
+                        ? 'hsl(var(--warning))'
+                        : 'hsl(var(--muted-foreground))',
+                }}
+              >
                 <CardContent className="pt-4">
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="font-medium text-xs sm:text-sm">{notification.title}</h4>
-                      <Badge variant={
-                        notification.priority === 'high' ? 'destructive' : 
-                        notification.priority === 'medium' ? 'default' : 
-                        'secondary'
-                      } className="text-[11px] sm:text-xs">
+                      <h4 className="font-medium text-xs sm:text-sm">
+                        {notification.title}
+                      </h4>
+                      <Badge
+                        variant={
+                          notification.priority === 'high'
+                            ? 'destructive'
+                            : notification.priority === 'medium'
+                              ? 'default'
+                              : 'secondary'
+                        }
+                        className="text-[11px] sm:text-xs"
+                      >
                         {notification.priority}
                       </Badge>
                     </div>

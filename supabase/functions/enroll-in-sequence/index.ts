@@ -1,18 +1,20 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 // Input validation helper
 const validateUUID = (uuid: string): boolean => {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(uuid);
 };
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -21,7 +23,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const authHeader = req.headers.get('Authorization')!;
-    
+
     const supabase = createClient(supabaseUrl, supabaseKey, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -32,16 +34,29 @@ serve(async (req) => {
     // Validate required fields
     if (!client_id || !sequence_id || !stylist_id) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields: client_id, sequence_id, and stylist_id are required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({
+          error:
+            'Missing required fields: client_id, sequence_id, and stylist_id are required',
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
     // Validate UUIDs
-    if (!validateUUID(client_id) || !validateUUID(sequence_id) || !validateUUID(stylist_id)) {
+    if (
+      !validateUUID(client_id) ||
+      !validateUUID(sequence_id) ||
+      !validateUUID(stylist_id)
+    ) {
       return new Response(
         JSON.stringify({ error: 'Invalid UUID format for one or more IDs' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
@@ -57,11 +72,14 @@ serve(async (req) => {
 
     if (existing && existing.status === 'active') {
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: 'Client is already enrolled in this sequence',
-          enrollment_id: existing.id 
+          enrollment_id: existing.id,
         }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
@@ -76,12 +94,18 @@ serve(async (req) => {
     if (!firstStep) {
       return new Response(
         JSON.stringify({ error: 'Sequence has no steps configured' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
     // Calculate when first email should be sent
-    const nextSendAt = calculateNextSendTime(firstStep.delay_amount, firstStep.delay_unit);
+    const nextSendAt = calculateNextSendTime(
+      firstStep.delay_amount,
+      firstStep.delay_unit
+    );
 
     // Create or reactivate enrollment
     let enrollmentId: string;
@@ -121,7 +145,9 @@ serve(async (req) => {
       enrollmentId = data.id;
     }
 
-    console.log(`✅ Successfully enrolled client. Enrollment ID: ${enrollmentId}`);
+    console.log(
+      `✅ Successfully enrolled client. Enrollment ID: ${enrollmentId}`
+    );
 
     return new Response(
       JSON.stringify({
@@ -131,20 +157,20 @@ serve(async (req) => {
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-
   } catch (error) {
     console.error('Error in enroll-in-sequence:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });
 
 function calculateNextSendTime(amount: number, unit: string): string {
   const now = new Date();
-  
+
   switch (unit) {
     case 'minutes':
       now.setMinutes(now.getMinutes() + amount);
@@ -156,11 +182,11 @@ function calculateNextSendTime(amount: number, unit: string): string {
       now.setDate(now.getDate() + amount);
       break;
     case 'weeks':
-      now.setDate(now.getDate() + (amount * 7));
+      now.setDate(now.getDate() + amount * 7);
       break;
     default:
       now.setDate(now.getDate() + amount);
   }
-  
+
   return now.toISOString();
 }

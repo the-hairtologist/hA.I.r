@@ -1,12 +1,12 @@
-import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface StaggeredListProps {
   children: ReactNode[];
   className?: string;
   itemClassName?: string;
   delay?: number;
-  animation?: "fade" | "slide" | "scale";
+  animation?: 'fade' | 'slide' | 'scale';
 }
 
 export const StaggeredList = ({
@@ -14,16 +14,16 @@ export const StaggeredList = ({
   className,
   itemClassName,
   delay = 50,
-  animation = "fade",
+  animation = 'fade',
 }: StaggeredListProps) => {
   const animations = {
-    fade: "animate-fade-in",
-    slide: "animate-slide-in-right",
-    scale: "animate-scale-in",
+    fade: 'animate-fade-in',
+    slide: 'animate-slide-in-right',
+    scale: 'animate-scale-in',
   };
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       {children.map((child, index) => (
         <div
           key={index}

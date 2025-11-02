@@ -4,18 +4,35 @@
  * Admin-only access
  */
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { ArrowLeft, FileText, User, Calendar, Activity, Download, RefreshCw } from "lucide-react";
-import { format } from "date-fns";
-import { ActivityLogFilter, ActivityFilters } from "@/components/admin/ActivityLogFilter";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { useAuth } from "@/hooks/useAuth";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+import {
+  ArrowLeft,
+  FileText,
+  User,
+  Calendar,
+  Activity,
+  Download,
+  RefreshCw,
+} from 'lucide-react';
+import { format } from 'date-fns';
+import {
+  ActivityLogFilter,
+  ActivityFilters,
+} from '@/components/admin/ActivityLogFilter';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ActivityLogEntry {
   id: string;
@@ -41,27 +58,27 @@ const ActivityLog = () => {
   useEffect(() => {
     const checkRole = async () => {
       if (!user) return;
-      
+
       try {
         const { data, error } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", user.id)
-          .eq("role", "admin")
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .eq('role', 'admin')
           .maybeSingle();
 
         if (error) throw error;
 
         if (data) {
-          setUserRole("admin");
+          setUserRole('admin');
           loadActivities();
         } else {
-          toast.error("Access denied. Admin privileges required.");
-          navigate("/dashboard");
+          toast.error('Access denied. Admin privileges required.');
+          navigate('/dashboard');
         }
       } catch (error) {
-        console.error("Error checking role:", error);
-        navigate("/dashboard");
+        console.error('Error checking role:', error);
+        navigate('/dashboard');
       } finally {
         setRoleLoading(false);
       }
@@ -74,20 +91,22 @@ const ActivityLog = () => {
     setLoading(true);
     try {
       let query = supabase
-        .from("audit_logs")
-        .select(`
+        .from('audit_logs')
+        .select(
+          `
           *,
           user:profiles(full_name, email)
-        `)
-        .order("created_at", { ascending: false })
+        `
+        )
+        .order('created_at', { ascending: false })
         .limit(200);
 
       // Apply date filters
       if (filters.dateFrom) {
-        query = query.gte("created_at", filters.dateFrom.toISOString());
+        query = query.gte('created_at', filters.dateFrom.toISOString());
       }
       if (filters.dateTo) {
-        query = query.lte("created_at", filters.dateTo.toISOString());
+        query = query.lte('created_at', filters.dateTo.toISOString());
       }
 
       const { data, error } = await query;
@@ -96,7 +115,7 @@ const ActivityLog = () => {
 
       // Apply client-side filters for role and type
       let filteredData = (data || []) as any[];
-      
+
       if (filters.role) {
         filteredData = filteredData.filter((log: any) => {
           // This would need to be enhanced with actual role data from user_roles
@@ -105,15 +124,17 @@ const ActivityLog = () => {
       }
 
       if (filters.type) {
-        filteredData = filteredData.filter((log: any) => 
-          log.table_name.toLowerCase().includes(filters.type?.toLowerCase() || "")
+        filteredData = filteredData.filter((log: any) =>
+          log.table_name
+            .toLowerCase()
+            .includes(filters.type?.toLowerCase() || '')
         );
       }
 
       setActivities(filteredData);
     } catch (error: any) {
-      console.error("Error loading activities:", error);
-      toast.error("Failed to load activity log. Please try again.");
+      console.error('Error loading activities:', error);
+      toast.error('Failed to load activity log. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -121,46 +142,51 @@ const ActivityLog = () => {
 
   const exportToCSV = () => {
     try {
-      const headers = ["Date", "User", "Action", "Table", "Record ID"];
+      const headers = ['Date', 'User', 'Action', 'Table', 'Record ID'];
       const rows = activities.map(activity => [
-        format(new Date(activity.created_at), "yyyy-MM-dd HH:mm:ss"),
-        activity.user?.full_name || "Unknown User",
+        format(new Date(activity.created_at), 'yyyy-MM-dd HH:mm:ss'),
+        activity.user?.full_name || 'Unknown User',
         activity.action,
         activity.table_name,
-        activity.record_id || "N/A"
+        activity.record_id || 'N/A',
       ]);
 
       const csvContent = [
-        headers.join(","),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
-      ].join("\n");
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
+      ].join('\n');
 
-      const blob = new Blob([csvContent], { type: "text/csv" });
+      const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = `activity-log-${format(new Date(), "yyyy-MM-dd")}.csv`;
+      a.download = `activity-log-${format(new Date(), 'yyyy-MM-dd')}.csv`;
       a.click();
-      
-      toast.success("Activity log exported successfully!");
+
+      toast.success('Activity log exported successfully!');
     } catch (error) {
-      console.error("Error exporting:", error);
-      toast.error("Failed to export activity log");
+      console.error('Error exporting:', error);
+      toast.error('Failed to export activity log');
     }
   };
 
   const getActionBadge = (action: string) => {
-    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-      INSERT: "default",
-      UPDATE: "secondary",
-      DELETE: "destructive",
-      ADMIN_GRANT: "outline",
-      ADMIN_REVOKE: "destructive",
+    const variants: Record<
+      string,
+      'default' | 'secondary' | 'destructive' | 'outline'
+    > = {
+      INSERT: 'default',
+      UPDATE: 'secondary',
+      DELETE: 'destructive',
+      ADMIN_GRANT: 'outline',
+      ADMIN_REVOKE: 'destructive',
     };
-    return <Badge variant={variants[action] || "secondary"}>{action}</Badge>;
+    return <Badge variant={variants[action] || 'secondary'}>{action}</Badge>;
   };
 
-  const activeFilterCount = Object.values(filters).filter(v => v !== undefined).length;
+  const activeFilterCount = Object.values(filters).filter(
+    v => v !== undefined
+  ).length;
 
   if (roleLoading || (loading && activities.length === 0)) {
     return <LoadingSpinner message="Loading activity log..." />;
@@ -172,10 +198,10 @@ const ActivityLog = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-4">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                onClick={() => navigate("/admin/command")}
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => navigate('/admin/command')}
                 className="min-h-[44px] min-w-[44px] border-2 shadow-brutal"
                 aria-label="Go back to admin command center"
               >
@@ -184,12 +210,18 @@ const ActivityLog = () => {
               <div className="flex items-center gap-2">
                 <Activity className="h-6 w-6 text-primary" />
                 <div>
-                  <h1 className="text-2xl font-pixel gradient-text">Activity Log</h1>
-                  <p className="text-sm font-sans text-muted-foreground">System-wide activity tracking</p>
+                  <h1 className="text-2xl font-pixel gradient-text">
+                    Activity Log
+                  </h1>
+                  <p className="text-sm font-sans text-muted-foreground">
+                    System-wide activity tracking
+                  </p>
                 </div>
               </div>
             </div>
-            <Badge variant="destructive" className="font-semibold">ADMIN ACCESS</Badge>
+            <Badge variant="destructive" className="font-semibold">
+              ADMIN ACCESS
+            </Badge>
           </div>
         </div>
       </header>
@@ -213,7 +245,9 @@ const ActivityLog = () => {
                   disabled={loading}
                   className="border-2 shadow-brutal"
                 >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                  <RefreshCw
+                    className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`}
+                  />
                   Refresh
                 </Button>
                 <Button
@@ -232,7 +266,7 @@ const ActivityLog = () => {
           <CardContent>
             <ActivityLogFilter
               filters={filters}
-              onFiltersChange={(newFilters) => {
+              onFiltersChange={newFilters => {
                 setFilters(newFilters);
                 // Reload activities with new filters
                 setTimeout(loadActivities, 100);
@@ -266,16 +300,24 @@ const ActivityLog = () => {
               </div>
             ) : (
               <div className="space-y-3 max-h-[600px] overflow-y-auto">
-                {activities.map((activity) => (
+                {activities.map(activity => (
                   <div
                     key={activity.id}
                     className="flex items-start gap-4 p-4 border-2 border-foreground rounded-lg hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex-shrink-0 mt-1">
-                      {activity.action === "INSERT" && <FileText className="h-5 w-5 text-primary" />}
-                      {activity.action === "UPDATE" && <Calendar className="h-5 w-5 text-secondary" />}
-                      {activity.action === "DELETE" && <Activity className="h-5 w-5 text-destructive" />}
-                      {activity.action.includes("ADMIN") && <User className="h-5 w-5 text-accent" />}
+                      {activity.action === 'INSERT' && (
+                        <FileText className="h-5 w-5 text-primary" />
+                      )}
+                      {activity.action === 'UPDATE' && (
+                        <Calendar className="h-5 w-5 text-secondary" />
+                      )}
+                      {activity.action === 'DELETE' && (
+                        <Activity className="h-5 w-5 text-destructive" />
+                      )}
+                      {activity.action.includes('ADMIN') && (
+                        <User className="h-5 w-5 text-accent" />
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -284,7 +326,10 @@ const ActivityLog = () => {
                           {activity.table_name}
                         </span>
                         {activity.record_id && (
-                          <Badge variant="outline" className="text-xs font-mono">
+                          <Badge
+                            variant="outline"
+                            className="text-xs font-mono"
+                          >
                             ID: {activity.record_id.substring(0, 8)}
                           </Badge>
                         )}
@@ -292,12 +337,15 @@ const ActivityLog = () => {
                       <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
                         <span className="flex items-center gap-1">
                           <User className="h-3 w-3" />
-                          {activity.user?.full_name || "System"}
+                          {activity.user?.full_name || 'System'}
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {format(new Date(activity.created_at), "MMM d, yyyy 'at' h:mm a")}
+                          {format(
+                            new Date(activity.created_at),
+                            "MMM d, yyyy 'at' h:mm a"
+                          )}
                         </span>
                       </div>
                       {(activity.old_data || activity.new_data) && (
@@ -308,14 +356,20 @@ const ActivityLog = () => {
                           <div className="mt-2 p-2 bg-muted rounded border font-mono text-xs overflow-x-auto">
                             {activity.old_data && (
                               <div className="mb-2">
-                                <strong className="text-destructive">Before:</strong>
-                                <pre className="mt-1">{JSON.stringify(activity.old_data, null, 2)}</pre>
+                                <strong className="text-destructive">
+                                  Before:
+                                </strong>
+                                <pre className="mt-1">
+                                  {JSON.stringify(activity.old_data, null, 2)}
+                                </pre>
                               </div>
                             )}
                             {activity.new_data && (
                               <div>
                                 <strong className="text-primary">After:</strong>
-                                <pre className="mt-1">{JSON.stringify(activity.new_data, null, 2)}</pre>
+                                <pre className="mt-1">
+                                  {JSON.stringify(activity.new_data, null, 2)}
+                                </pre>
                               </div>
                             )}
                           </div>

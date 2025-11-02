@@ -6,7 +6,13 @@
 import React, { Component, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { logger } from '@/lib/logging/productionLogger';
 import { userJourney } from '@/lib/logging/userJourneyTracker';
 
@@ -31,7 +37,7 @@ export class DataErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-      showDetails: false
+      showDetails: false,
     };
   }
 
@@ -47,8 +53,8 @@ export class DataErrorBoundary extends Component<Props, State> {
       context: 'DataErrorBoundary',
       data: {
         feature,
-        componentStack: errorInfo.componentStack
-      }
+        componentStack: errorInfo.componentStack,
+      },
     });
 
     this.setState({ errorInfo });
@@ -59,7 +65,7 @@ export class DataErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-      showDetails: false
+      showDetails: false,
     });
 
     if (this.props.onReset) {
@@ -86,7 +92,10 @@ export class DataErrorBoundary extends Component<Props, State> {
                 <CardTitle className="text-base">Unable to Load Data</CardTitle>
                 <CardDescription className="mt-1">
                   {this.props.feature ? (
-                    <>There was a problem loading <strong>{this.props.feature}</strong> data.</>
+                    <>
+                      There was a problem loading{' '}
+                      <strong>{this.props.feature}</strong> data.
+                    </>
                   ) : (
                     'There was a problem loading this data.'
                   )}
@@ -96,7 +105,7 @@ export class DataErrorBoundary extends Component<Props, State> {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex flex-wrap gap-2">
-              <Button 
+              <Button
                 onClick={this.handleReset}
                 variant="outline"
                 size="sm"
@@ -112,26 +121,28 @@ export class DataErrorBoundary extends Component<Props, State> {
                   size="sm"
                   className="gap-2"
                 >
-                  <ChevronDown 
+                  <ChevronDown
                     className={`h-4 w-4 transition-transform ${
                       this.state.showDetails ? 'rotate-180' : ''
-                    }`} 
+                    }`}
                   />
                   {this.state.showDetails ? 'Hide' : 'Show'} Details
                 </Button>
               )}
             </div>
 
-            {import.meta.env.DEV && this.state.showDetails && this.state.error && (
-              <div className="rounded-md bg-muted p-3 text-xs font-mono overflow-auto max-h-48">
-                <div className="text-destructive font-bold mb-2">
-                  {this.state.error.toString()}
+            {import.meta.env.DEV &&
+              this.state.showDetails &&
+              this.state.error && (
+                <div className="rounded-md bg-muted p-3 text-xs font-mono overflow-auto max-h-48">
+                  <div className="text-destructive font-bold mb-2">
+                    {this.state.error.toString()}
+                  </div>
+                  <div className="text-muted-foreground whitespace-pre-wrap">
+                    {this.state.errorInfo?.componentStack}
+                  </div>
                 </div>
-                <div className="text-muted-foreground whitespace-pre-wrap">
-                  {this.state.errorInfo?.componentStack}
-                </div>
-              </div>
-            )}
+              )}
           </CardContent>
         </Card>
       );

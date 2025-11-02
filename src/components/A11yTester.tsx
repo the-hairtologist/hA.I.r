@@ -5,7 +5,13 @@
 
 import { useEffect, useState } from 'react';
 import { AlertTriangle, CheckCircle2, XCircle, Eye } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -27,7 +33,7 @@ export const A11yTester = () => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
         e.preventDefault();
-        setIsVisible((prev) => !prev);
+        setIsVisible(prev => !prev);
       }
     };
 
@@ -111,7 +117,9 @@ export const A11yTester = () => {
     });
 
     // Check for headings hierarchy
-    const headings = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+    const headings = Array.from(
+      document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    );
     let lastLevel = 0;
     headings.forEach((heading, index) => {
       const level = parseInt(heading.tagName[1]);
@@ -128,7 +136,9 @@ export const A11yTester = () => {
     });
 
     // Check for touch target sizes (mobile)
-    const interactiveElements = document.querySelectorAll('button, a, input, select, textarea');
+    const interactiveElements = document.querySelectorAll(
+      'button, a, input, select, textarea'
+    );
     interactiveElements.forEach((element, index) => {
       const rect = element.getBoundingClientRect();
       const minSize = 44; // WCAG 2.2 AA requirement
@@ -162,8 +172,8 @@ export const A11yTester = () => {
     );
   }
 
-  const errorCount = issues.filter((i) => i.type === 'error').length;
-  const warningCount = issues.filter((i) => i.type === 'warning').length;
+  const errorCount = issues.filter(i => i.type === 'error').length;
+  const warningCount = issues.filter(i => i.type === 'warning').length;
 
   return (
     <Card className="fixed bottom-4 left-4 z-50 w-96 max-h-[80vh] overflow-auto shadow-lg">
@@ -214,7 +224,7 @@ export const A11yTester = () => {
             </div>
 
             <div className="space-y-2 max-h-[50vh] overflow-auto">
-              {issues.map((issue) => (
+              {issues.map(issue => (
                 <div
                   key={issue.id}
                   className={`p-3 rounded-md border ${

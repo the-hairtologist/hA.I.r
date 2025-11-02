@@ -29,11 +29,14 @@ class PerformanceMonitor {
 
   private observeFCP() {
     try {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           if (entry.name === 'first-contentful-paint') {
             this.metrics.fcp = entry.startTime;
-            logger.debug(`FCP: ${entry.startTime.toFixed(2)}ms`, 'performanceMonitor');
+            logger.debug(
+              `FCP: ${entry.startTime.toFixed(2)}ms`,
+              'performanceMonitor'
+            );
           }
         }
       });
@@ -46,11 +49,14 @@ class PerformanceMonitor {
 
   private observeLCP() {
     try {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
         this.metrics.lcp = lastEntry.startTime;
-        logger.debug(`LCP: ${lastEntry.startTime.toFixed(2)}ms`, 'performanceMonitor');
+        logger.debug(
+          `LCP: ${lastEntry.startTime.toFixed(2)}ms`,
+          'performanceMonitor'
+        );
       });
       observer.observe({ entryTypes: ['largest-contentful-paint'] });
       this.observers.push(observer);
@@ -61,11 +67,14 @@ class PerformanceMonitor {
 
   private observeFID() {
     try {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           const fidEntry = entry as any;
           this.metrics.fid = fidEntry.processingStart - fidEntry.startTime;
-          logger.debug(`FID: ${this.metrics.fid.toFixed(2)}ms`, 'performanceMonitor');
+          logger.debug(
+            `FID: ${this.metrics.fid.toFixed(2)}ms`,
+            'performanceMonitor'
+          );
         }
       });
       observer.observe({ entryTypes: ['first-input'] });
@@ -78,7 +87,7 @@ class PerformanceMonitor {
   private observeCLS() {
     try {
       let clsValue = 0;
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           const layoutShift = entry as any;
           if (!layoutShift.hadRecentInput) {
@@ -97,12 +106,15 @@ class PerformanceMonitor {
 
   private observeTTFB() {
     try {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           const navEntry = entry as PerformanceNavigationTiming;
           this.metrics.ttfb = navEntry.responseStart - navEntry.requestStart;
-          logger.debug(`TTFB: ${this.metrics.ttfb.toFixed(2)}ms`, 'performanceMonitor');
+          logger.debug(
+            `TTFB: ${this.metrics.ttfb.toFixed(2)}ms`,
+            'performanceMonitor'
+          );
         });
       });
       observer.observe({ entryTypes: ['navigation'] });
@@ -118,7 +130,7 @@ class PerformanceMonitor {
 
   getScore(): number {
     let score = 100;
-    
+
     // FCP scoring (good < 1800ms, needs improvement < 3000ms, poor >= 3000ms)
     if (this.metrics.fcp) {
       if (this.metrics.fcp > 3000) score -= 20;
@@ -162,13 +174,31 @@ class PerformanceMonitor {
       fid: metrics.fid,
       cls: metrics.cls,
       ttfb: metrics.ttfb,
-      grade: score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F'
+      grade:
+        score >= 90
+          ? 'A'
+          : score >= 80
+            ? 'B'
+            : score >= 70
+              ? 'C'
+              : score >= 60
+                ? 'D'
+                : 'F',
     });
-    
+
     return {
       score,
       metrics: this.getMetrics(),
-      grade: score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F'
+      grade:
+        score >= 90
+          ? 'A'
+          : score >= 80
+            ? 'B'
+            : score >= 70
+              ? 'C'
+              : score >= 60
+                ? 'D'
+                : 'F',
     };
   }
 

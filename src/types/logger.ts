@@ -5,7 +5,15 @@
 export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 
 export interface LogContext {
-  [key: string]: string | number | boolean | null | undefined | object | LogContext | LogContext[];
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | object
+    | LogContext
+    | LogContext[];
 }
 
 export interface LogEntry {

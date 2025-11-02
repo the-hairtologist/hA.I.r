@@ -3,14 +3,24 @@
  * Provides consistent logging across the application
  */
 
-import type { LogLevel, LogEntry, LogContext, LoggerInterface } from '@/types/logger';
+import type {
+  LogLevel,
+  LogEntry,
+  LogContext,
+  LoggerInterface,
+} from '@/types/logger';
 import { safeConsole } from '@/lib/safeLogger';
 
 class Logger implements LoggerInterface {
   private logs: LogEntry[] = [];
   private maxLogs = 1000;
 
-  private log(level: LogLevel, message: string, label?: string, context?: LogContext | Error | unknown) {
+  private log(
+    level: LogLevel,
+    message: string,
+    label?: string,
+    context?: LogContext | Error | unknown
+  ) {
     // Convert Error objects to LogContext
     let logContext: LogContext | undefined;
     if (context instanceof Error) {
@@ -32,7 +42,7 @@ class Logger implements LoggerInterface {
     };
 
     this.logs.push(entry);
-    
+
     // Keep only recent logs
     if (this.logs.length > this.maxLogs) {
       this.logs.shift();

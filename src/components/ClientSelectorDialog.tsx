@@ -1,9 +1,15 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { User, X, Search } from "lucide-react";
-import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { User, X, Search } from 'lucide-react';
+import { useState } from 'react';
 
 interface ClientSelectorDialogProps {
   open: boolean;
@@ -18,19 +24,20 @@ export const ClientSelectorDialog = ({
   onOpenChange,
   clients,
   selectedClientId,
-  onSelectClient
+  onSelectClient,
 }: ClientSelectorDialogProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredClients = clients.filter(client =>
-    client.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.email?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredClients = clients.filter(
+    client =>
+      client.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      client.email?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleSelect = (clientId: string | null) => {
     onSelectClient(clientId);
     onOpenChange(false);
-    setSearchQuery("");
+    setSearchQuery('');
   };
 
   return (
@@ -48,7 +55,7 @@ export const ClientSelectorDialog = ({
 
         <div className="space-y-4">
           {selectedClientId && (
-            <Button 
+            <Button
               onClick={() => handleSelect(null)}
               variant="outline"
               className="w-full"
@@ -63,7 +70,7 @@ export const ClientSelectorDialog = ({
             <Input
               placeholder="Search clients..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -72,17 +79,17 @@ export const ClientSelectorDialog = ({
             <div className="space-y-2">
               {filteredClients.length === 0 ? (
                 <div className="text-center text-sm text-muted-foreground py-8">
-                  {searchQuery ? "No clients found" : "No clients yet"}
+                  {searchQuery ? 'No clients found' : 'No clients yet'}
                 </div>
               ) : (
-                filteredClients.map((client) => (
+                filteredClients.map(client => (
                   <div
                     key={client.id}
                     onClick={() => handleSelect(client.id)}
                     className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       client.id === selectedClientId
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/40 hover:bg-muted/50"
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:border-primary/40 hover:bg-muted/50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -91,7 +98,7 @@ export const ClientSelectorDialog = ({
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">
-                          {client.full_name || "Unnamed Client"}
+                          {client.full_name || 'Unnamed Client'}
                         </p>
                         {client.email && (
                           <p className="text-xs text-muted-foreground truncate">

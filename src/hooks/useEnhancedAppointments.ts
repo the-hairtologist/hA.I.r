@@ -38,20 +38,32 @@ interface UseEnhancedAppointmentsOptions {
   enabled?: boolean;
 }
 
-export function useEnhancedAppointments(options: UseEnhancedAppointmentsOptions = {}) {
+export function useEnhancedAppointments(
+  options: UseEnhancedAppointmentsOptions = {}
+) {
   const { stylistId, clientId, status, enabled = true } = options;
-  
+
   const queryKey = ['appointments', { stylistId, clientId, status }];
 
   // Use enhanced query with retry, caching, and offline support
-  const { data: appointments = [], isLoading, error, refetch } = useEnhancedQuery<Appointment[]>({
+  const {
+    data: appointments = [],
+    isLoading,
+    error,
+    refetch,
+  } = useEnhancedQuery<Appointment[]>({
     queryKey,
     queryFn: async () => {
-      logger.debug('Fetching appointments', 'useEnhancedAppointments', { stylistId, clientId, status });
+      logger.debug('Fetching appointments', 'useEnhancedAppointments', {
+        stylistId,
+        clientId,
+        status,
+      });
 
       let query = supabase
         .from('appointments')
-        .select(`
+        .select(
+          `
           *,
           client:client_profiles(
             id,
@@ -71,7 +83,8 @@ export function useEnhancedAppointments(options: UseEnhancedAppointmentsOptions 
             price,
             duration_minutes
           )
-        `)
+        `
+        )
         .order('appointment_date', { ascending: false });
 
       if (stylistId) {
@@ -90,7 +103,11 @@ export function useEnhancedAppointments(options: UseEnhancedAppointmentsOptions 
 
       if (fetchError) throw fetchError;
 
-      logger.info('Appointments loaded successfully', 'useEnhancedAppointments', { count: data?.length });
+      logger.info(
+        'Appointments loaded successfully',
+        'useEnhancedAppointments',
+        { count: data?.length }
+      );
       return (data as Appointment[]) || [];
     },
     cacheTable: 'appointments',
@@ -104,112 +121,142 @@ export function useEnhancedAppointments(options: UseEnhancedAppointmentsOptions 
   });
 
   // Mutation functions with offline support
-  const createAppointment = useCallback(async (data: Partial<Appointment>): Promise<Appointment> => {
-    try {
-      logger.debug('Creating appointment', 'useEnhancedAppointments', data);
-
-      const operation = async () => {
-        const { data: newAppointment, error } = await supabase
-          .from('appointments')
-          .insert(data as any)
-          .select()
-          .maybeSingle();
-
-        if (error) throw error;
-        return newAppointment;
-      };
-
-      // Try to create, if offline, queue it
+  const createAppointment = useCallback(
+    async (data: Partial<Appointment>): Promise<Appointment> => {
       try {
-        const newAppointment = await operation();
-        toast.success('Appointment created successfully');
-        logger.info('Appointment created', 'useEnhancedAppointments', { id: newAppointment.id });
-        invalidateQueryCache('appointments');
-        return newAppointment;
-      } catch (error: any) {
-        if (!navigator.onLine) {
-          offlineQueue.enqueue(operation);
-          toast.info('Appointment saved offline. Will sync when online.');
-          throw new Error('Offline - queued for later');
-        }
-        throw error;
-      }
-    } catch (error) {
-      handleError(error, 'Create Appointment');
-      throw error;
-    }
-  }, []);
+        logger.debug('Creating appointment', 'useEnhancedAppointments', data);
 
-  const updateAppointment = useCallback(async (id: string, data: Partial<Appointment>) => {
-    try {
-      logger.debug('Updating appointment', 'useEnhancedAppointments', { id, data });
+        const operation = async () => {
+          const { data: newAppointment, error } = await supabase
+            .from('appointments')
+            .insert(data as any)
+            .select()
+            .maybeSingle();
 
-      const operation = async () => {
-        const { error } = await supabase
-          .from('appointments')
-          .update(data)
-          .eq('id', id);
+          if (error) throw error;
+          return newAppointment;
+        };
 
-        if (error) throw error;
-      };
-
-      try {
-        await operation();
-        toast.success('Appointment updated successfully');
-        logger.info('Appointment updated', 'useEnhancedAppointments', { id });
-        invalidateQueryCache('appointments');
-      } catch (error: any) {
-        if (!navigator.onLine) {
-          offlineQueue.enqueue(operation);
-          toast.info('Update saved offline. Will sync when online.');
-        } else {
+        // Try to create, if offline, queue it
+        try {
+          const newAppointment = await operation();
+          toast.success('Appointment created successfully');
+          logger.info('Appointment created', 'useEnhancedAppointments', {
+            id: newAppointment.id,
+          });
+          invalidateQueryCache('appointments');
+          return newAppointment;
+        } catch (error: any) {
+          if (!navigator.onLine) {
+            offlineQueue.enqueue(operation);
+            toast.info('Appointment saved offline. Will sync when online.');
+            throw new Error('Offline - queued for later');
+          }
           throw error;
         }
+      } catch (error) {
+        handleError(error, 'Create Appointment');
+        throw error;
       }
-    } catch (error) {
-      handleError(error, 'Update Appointment');
-      throw error;
-    }
-  }, []);
+    },
+    []
+  );
 
-  const cancelAppointment = useCallback(async (id: string, reason?: string) => {
-    try {
-      logger.debug('Cancelling appointment', 'useEnhancedAppointments', { id, reason });
+  const updateAppointment = useCallback(
+    async (id: string, data: Partial<Appointment>) => {
+      try {
+        logger.debug('Updating appointment', 'useEnhancedAppointments', {
+          id,
+          data,
+        });
 
-      const updateData = {
-        status: 'cancelled',
-        ...(reason && { cancellation_reason: reason }),
-      };
+        const operation = async () => {
+          const { error } = await supabase
+            .from('appointments')
+            .update(data)
+            .eq('id', id);
 
-      await updateAppointment(id, updateData);
-      toast.success('Appointment cancelled');
-      logger.info('Appointment cancelled', 'useEnhancedAppointments', { id });
-    } catch (error) {
-      handleError(error, 'Cancel Appointment');
-      throw error;
-    }
-  }, [updateAppointment]);
+          if (error) throw error;
+        };
 
-  const sendSMSNotification = useCallback(async (
-    appointmentId: string,
-    type: 'confirmation' | 'reminder' | 'cancellation' | 'reschedule'
-  ) => {
-    try {
-      logger.debug('Sending SMS notification', 'useEnhancedAppointments', { appointmentId, type });
+        try {
+          await operation();
+          toast.success('Appointment updated successfully');
+          logger.info('Appointment updated', 'useEnhancedAppointments', { id });
+          invalidateQueryCache('appointments');
+        } catch (error: any) {
+          if (!navigator.onLine) {
+            offlineQueue.enqueue(operation);
+            toast.info('Update saved offline. Will sync when online.');
+          } else {
+            throw error;
+          }
+        }
+      } catch (error) {
+        handleError(error, 'Update Appointment');
+        throw error;
+      }
+    },
+    []
+  );
 
-      await supabase.functions.invoke('send-sms-notification', {
-        body: {
+  const cancelAppointment = useCallback(
+    async (id: string, reason?: string) => {
+      try {
+        logger.debug('Cancelling appointment', 'useEnhancedAppointments', {
+          id,
+          reason,
+        });
+
+        const updateData = {
+          status: 'cancelled',
+          ...(reason && { cancellation_reason: reason }),
+        };
+
+        await updateAppointment(id, updateData);
+        toast.success('Appointment cancelled');
+        logger.info('Appointment cancelled', 'useEnhancedAppointments', { id });
+      } catch (error) {
+        handleError(error, 'Cancel Appointment');
+        throw error;
+      }
+    },
+    [updateAppointment]
+  );
+
+  const sendSMSNotification = useCallback(
+    async (
+      appointmentId: string,
+      type: 'confirmation' | 'reminder' | 'cancellation' | 'reschedule'
+    ) => {
+      try {
+        logger.debug('Sending SMS notification', 'useEnhancedAppointments', {
           appointmentId,
-          notificationType: type,
-        },
-      });
+          type,
+        });
 
-      logger.info('SMS notification sent', 'useEnhancedAppointments', { appointmentId, type });
-    } catch (error) {
-      logger.warn('SMS notification failed', 'useEnhancedAppointments', error);
-      // Don't throw - SMS failures shouldn't block the operation
-    }
-  }, []);
+        await supabase.functions.invoke('send-sms-notification', {
+          body: {
+            appointmentId,
+            notificationType: type,
+          },
+        });
+
+        logger.info('SMS notification sent', 'useEnhancedAppointments', {
+          appointmentId,
+          type,
+        });
+      } catch (error) {
+        logger.warn(
+          'SMS notification failed',
+          'useEnhancedAppointments',
+          error
+        );
+        // Don't throw - SMS failures shouldn't block the operation
+      }
+    },
+    []
+  );
 
   return {
     appointments,

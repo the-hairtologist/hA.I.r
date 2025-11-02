@@ -6,7 +6,13 @@
 import { useState } from 'react';
 import { useSchedulePredictor } from '@/hooks/useSchedulePredictor';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Calendar, Clock, TrendingUp, Sparkles } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
@@ -28,7 +34,8 @@ export const AIScheduleOptimizer = ({
   serviceHistory,
   onSuggestionSelect,
 }: AIScheduleOptimizerProps) => {
-  const { predicting, prediction, predictNextAppointment } = useSchedulePredictor();
+  const { predicting, prediction, predictNextAppointment } =
+    useSchedulePredictor();
   const [showPredictions, setShowPredictions] = useState(false);
 
   const handlePredict = async () => {
@@ -98,20 +105,30 @@ export const AIScheduleOptimizer = ({
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <span className="font-medium">
-                      {format(parseISO(prediction.suggested_date), 'EEEE, MMMM d, yyyy')}
+                      {format(
+                        parseISO(prediction.suggested_date),
+                        'EEEE, MMMM d, yyyy'
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">{prediction.suggested_time}</span>
+                    <span className="font-medium">
+                      {prediction.suggested_time}
+                    </span>
                   </div>
                   {prediction.reasoning && (
-                    <p className="text-sm text-muted-foreground mt-2">{prediction.reasoning}</p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {prediction.reasoning}
+                    </p>
                   )}
                   {onSuggestionSelect && (
                     <Button
                       onClick={() =>
-                        onSuggestionSelect(prediction.suggested_date, prediction.suggested_time)
+                        onSuggestionSelect(
+                          prediction.suggested_date,
+                          prediction.suggested_time
+                        )
                       }
                       className="w-full mt-2"
                     >
@@ -122,42 +139,50 @@ export const AIScheduleOptimizer = ({
               </Card>
 
               {/* Alternative Suggestions */}
-              {prediction.alternative_dates && prediction.alternative_dates.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-semibold mb-2">Alternative Times</h4>
-                  <div className="space-y-2">
-                    {prediction.alternative_dates.map((alt, idx) => (
-                      <Card key={idx}>
-                        <CardContent className="p-3">
-                          <div className="flex items-center justify-between">
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2 text-sm">
-                                <Calendar className="h-3 w-3" />
-                                {format(parseISO(alt.date), 'MMM d, yyyy')} at {alt.time}
+              {prediction.alternative_dates &&
+                prediction.alternative_dates.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-semibold mb-2">
+                      Alternative Times
+                    </h4>
+                    <div className="space-y-2">
+                      {prediction.alternative_dates.map((alt, idx) => (
+                        <Card key={idx}>
+                          <CardContent className="p-3">
+                            <div className="flex items-center justify-between">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Calendar className="h-3 w-3" />
+                                  {format(
+                                    parseISO(alt.date),
+                                    'MMM d, yyyy'
+                                  )} at {alt.time}
+                                </div>
+                                <Badge
+                                  variant={getConfidenceColor(alt.confidence)}
+                                  className="text-xs"
+                                >
+                                  {Math.round(alt.confidence * 100)}% match
+                                </Badge>
                               </div>
-                              <Badge
-                                variant={getConfidenceColor(alt.confidence)}
-                                className="text-xs"
-                              >
-                                {Math.round(alt.confidence * 100)}% match
-                              </Badge>
+                              {onSuggestionSelect && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() =>
+                                    onSuggestionSelect(alt.date, alt.time)
+                                  }
+                                >
+                                  Select
+                                </Button>
+                              )}
                             </div>
-                            {onSuggestionSelect && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => onSuggestionSelect(alt.date, alt.time)}
-                              >
-                                Select
-                              </Button>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           )}
         </CardContent>

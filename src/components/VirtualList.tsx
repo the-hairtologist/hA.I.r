@@ -14,7 +14,7 @@ export function VirtualList<T>({
   renderItem,
   estimateSize = 100,
   overscan = 3,
-  className = ''
+  className = '',
 }: VirtualListProps<T>) {
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -22,7 +22,7 @@ export function VirtualList<T>({
     count: items.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => estimateSize,
-    overscan
+    overscan,
   });
 
   return (
@@ -35,10 +35,10 @@ export function VirtualList<T>({
         style={{
           height: `${virtualizer.getTotalSize()}px`,
           width: '100%',
-          position: 'relative'
+          position: 'relative',
         }}
       >
-        {virtualizer.getVirtualItems().map((virtualItem) => (
+        {virtualizer.getVirtualItems().map(virtualItem => (
           <div
             key={virtualItem.key}
             style={{
@@ -47,7 +47,7 @@ export function VirtualList<T>({
               left: 0,
               width: '100%',
               height: `${virtualItem.size}px`,
-              transform: `translateY(${virtualItem.start}px)`
+              transform: `translateY(${virtualItem.start}px)`,
             }}
           >
             {renderItem(items[virtualItem.index], virtualItem.index)}

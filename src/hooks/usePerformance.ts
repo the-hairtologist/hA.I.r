@@ -5,7 +5,10 @@
 
 import { useEffect, useRef } from 'react';
 import { customMetrics } from '@/lib/performance/customMetrics';
-import { measurePerformance, getPerformanceMetrics } from '@/lib/performanceOptimizer';
+import {
+  measurePerformance,
+  getPerformanceMetrics,
+} from '@/lib/performanceOptimizer';
 import { logger } from '@/lib/logger';
 
 interface PerformanceOptions {
@@ -38,7 +41,7 @@ export const usePerformance = ({
       if (loadTime > 100 && import.meta.env.DEV) {
         logger.warn('Slow component mount detected', 'performance', {
           component: componentName,
-          loadTime: `${loadTime}ms`
+          loadTime: `${loadTime}ms`,
         });
       }
 
@@ -46,10 +49,10 @@ export const usePerformance = ({
         const unmountTime = performance.now();
         const mountDuration = unmountTime - mountTime.current;
         measurePerformance(`${componentName}-unmount`);
-        
+
         logger.debug('Component unmounted', 'performance', {
           component: componentName,
-          duration: `${Math.round(mountDuration)}ms`
+          duration: `${Math.round(mountDuration)}ms`,
         });
       };
     }
@@ -72,7 +75,7 @@ export const usePerformance = ({
           component: componentName,
           renderTime: `${renderTime}ms`,
           threshold: `${reportThreshold}ms`,
-          renderNumber: renderCount.current
+          renderNumber: renderCount.current,
         });
       }
 
@@ -80,7 +83,7 @@ export const usePerformance = ({
       if (import.meta.env.DEV && renderCount.current > 10) {
         logger.warn('Excessive renders detected', 'performance', {
           component: componentName,
-          renderCount: renderCount.current
+          renderCount: renderCount.current,
         });
       }
 
@@ -106,7 +109,7 @@ export const usePerformance = ({
  * Hook to track async operations with performance metrics
  */
 export const useAsyncTracking = (operationName: string) => {
-  const trackAsync = async <T,>(operation: () => Promise<T>): Promise<T> => {
+  const trackAsync = async <T>(operation: () => Promise<T>): Promise<T> => {
     return customMetrics.trackAsync(operationName, operation);
   };
 

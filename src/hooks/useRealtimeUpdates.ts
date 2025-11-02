@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 export const useRealtimeUpdates = (
   table: string,
@@ -13,22 +13,22 @@ export const useRealtimeUpdates = (
     const channel = supabase
       .channel(`${table}-changes-${userId}`)
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
+          event: '*',
+          schema: 'public',
           table: table,
         },
-        (payload) => {
+        payload => {
           // Show notifications for specific events
-          if (payload.eventType === "INSERT") {
-            if (table === "messages") {
-              toast.info("New message received");
-            } else if (table === "appointments") {
-              toast.info("New appointment created");
+          if (payload.eventType === 'INSERT') {
+            if (table === 'messages') {
+              toast.info('New message received');
+            } else if (table === 'appointments') {
+              toast.info('New appointment created');
             }
           }
-          
+
           // Trigger refresh
           onUpdate();
         }

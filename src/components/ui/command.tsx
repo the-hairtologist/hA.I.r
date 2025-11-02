@@ -21,11 +21,7 @@ const Command = React.forwardRef<
 ));
 Command.displayName = CommandPrimitive.displayName;
 
-<<<<<<< HEAD
 type CommandDialogProps = DialogProps;
-=======
-type CommandDialogProps = DialogProps; // Inherits all DialogProps without adding new properties
->>>>>>> copilot/fix-a11y-tester-and-comments
 
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   return (

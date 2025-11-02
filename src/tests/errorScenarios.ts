@@ -26,7 +26,7 @@ export const authTimeoutScenario: ErrorScenario = {
     try {
       // Try to access a protected resource with invalid token
       const { error } = await supabase.from('profiles').select('*').limit(1);
-      
+
       if (error && error.message.includes('JWT')) {
         logger.warn('Auth timeout detected', { error: error.message });
         return {
@@ -34,7 +34,7 @@ export const authTimeoutScenario: ErrorScenario = {
           message: 'Successfully detected auth timeout',
         };
       }
-      
+
       return {
         success: false,
         message: 'Auth timeout not triggered',
@@ -61,16 +61,21 @@ export const databaseConnectionScenario: ErrorScenario = {
   execute: async () => {
     try {
       // Attempt query with extremely large limit to trigger potential issues
-      const { error } = await supabase.from('profiles').select('*').limit(999999);
-      
+      const { error } = await supabase
+        .from('profiles')
+        .select('*')
+        .limit(999999);
+
       if (error) {
-        logger.warn('Database connection issue detected', { error: error.message });
+        logger.warn('Database connection issue detected', {
+          error: error.message,
+        });
         return {
           success: true,
           message: 'Successfully detected database error',
         };
       }
-      
+
       return {
         success: true,
         message: 'Database connection healthy',
@@ -98,20 +103,20 @@ export const networkTimeoutScenario: ErrorScenario = {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 100); // 100ms timeout
-      
+
       try {
         await fetch('https://httpstat.us/200?sleep=5000', {
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
-        
+
         return {
           success: false,
           message: 'Network request succeeded (unexpected)',
         };
       } catch (error) {
         clearTimeout(timeoutId);
-        
+
         if (error instanceof Error && error.name === 'AbortError') {
           logger.warn('Network timeout detected');
           return {
@@ -119,7 +124,7 @@ export const networkTimeoutScenario: ErrorScenario = {
             message: 'Successfully detected network timeout',
           };
         }
-        
+
         throw error;
       }
     } catch (error) {
@@ -148,18 +153,21 @@ export const rlsPolicyScenario: ErrorScenario = {
         .from('profiles')
         .update({ email: 'test@unauthorized.com' } as any)
         .eq('id', '00000000-0000-0000-0000-000000000000');
-      
+
       if (error) {
-        logger.info('RLS policy correctly blocked unauthorized access', { error: error.message });
+        logger.info('RLS policy correctly blocked unauthorized access', {
+          error: error.message,
+        });
         return {
           success: true,
           message: 'RLS policy working correctly',
         };
       }
-      
+
       return {
         success: false,
-        message: 'RLS policy did not block unauthorized access (security issue)',
+        message:
+          'RLS policy did not block unauthorized access (security issue)',
       };
     } catch (error) {
       logger.error('RLS policy scenario failed', error);
@@ -183,21 +191,21 @@ export const validationErrorScenario: ErrorScenario = {
   execute: async () => {
     try {
       // Try to insert data with missing required fields
-      const { error } = await supabase
-        .from('appointments')
-        .insert({
-          appointment_date: 'invalid-date-format',
-          client_id: '00000000-0000-0000-0000-000000000000',
-        } as any);
-      
+      const { error } = await supabase.from('appointments').insert({
+        appointment_date: 'invalid-date-format',
+        client_id: '00000000-0000-0000-0000-000000000000',
+      } as any);
+
       if (error) {
-        logger.info('Validation correctly rejected invalid data', { error: error.message });
+        logger.info('Validation correctly rejected invalid data', {
+          error: error.message,
+        });
         return {
           success: true,
           message: 'Validation working correctly',
         };
       }
-      
+
       return {
         success: false,
         message: 'Validation did not catch invalid data',
@@ -223,10 +231,13 @@ export const edgeFunctionErrorScenario: ErrorScenario = {
   severity: 'medium',
   execute: async () => {
     try {
-      const { error } = await supabase.functions.invoke('non-existent-function', {
-        body: { invalid: 'data' },
-      });
-      
+      const { error } = await supabase.functions.invoke(
+        'non-existent-function',
+        {
+          body: { invalid: 'data' },
+        }
+      );
+
       if (error) {
         logger.info('Edge function error handled', { error: error.message });
         return {
@@ -234,7 +245,7 @@ export const edgeFunctionErrorScenario: ErrorScenario = {
           message: 'Edge function error detected correctly',
         };
       }
-      
+
       return {
         success: false,
         message: 'Edge function error not detected',
@@ -272,23 +283,27 @@ export async function runAllScenarios(): Promise<{
   results: Array<{ scenario: string; success: boolean; message: string }>;
 }> {
   const results = [];
-  
+
   for (const scenario of errorScenarios) {
     logger.info(`Running scenario: ${scenario.name}`);
     const result = await scenario.execute();
-    
+
     results.push({
       scenario: scenario.name,
       success: result.success,
       message: result.message,
     });
   }
-  
-  const passed = results.filter((r) => r.success).length;
+
+  const passed = results.filter(r => r.success).length;
   const failed = results.length - passed;
-  
-  logger.info('Scenario testing complete', { total: results.length, passed, failed });
-  
+
+  logger.info('Scenario testing complete', {
+    total: results.length,
+    passed,
+    failed,
+  });
+
   return {
     total: results.length,
     passed,

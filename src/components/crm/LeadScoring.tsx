@@ -1,49 +1,55 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { TrendingUp, Mail, Phone, Calendar } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { TrendingUp, Mail, Phone, Calendar } from 'lucide-react';
 
 export function LeadScoring() {
   const leads = [
     {
-      name: "Sample Lead 1",
-      email: "lead1@example.com",
+      name: 'Sample Lead 1',
+      email: 'lead1@example.com',
       score: 85,
-      tier: "Hot",
-      lastContact: "2 days ago",
-      nextAction: "Follow-up call"
+      tier: 'Hot',
+      lastContact: '2 days ago',
+      nextAction: 'Follow-up call',
     },
     {
-      name: "Sample Lead 2",
-      email: "lead2@example.com",
+      name: 'Sample Lead 2',
+      email: 'lead2@example.com',
       score: 65,
-      tier: "Warm",
-      lastContact: "1 week ago",
-      nextAction: "Send pricing info"
+      tier: 'Warm',
+      lastContact: '1 week ago',
+      nextAction: 'Send pricing info',
     },
     {
-      name: "Sample Lead 3",
-      email: "lead3@example.com",
+      name: 'Sample Lead 3',
+      email: 'lead3@example.com',
       score: 35,
-      tier: "Cold",
-      lastContact: "2 weeks ago",
-      nextAction: "Re-engagement email"
+      tier: 'Cold',
+      lastContact: '2 weeks ago',
+      nextAction: 'Re-engagement email',
     },
   ];
 
   const getScoreColor = (score: number) => {
-    if (score >= 70) return "text-success";
-    if (score >= 40) return "text-warning";
-    return "text-muted-foreground";
+    if (score >= 70) return 'text-success';
+    if (score >= 40) return 'text-warning';
+    return 'text-muted-foreground';
   };
 
   const getTierBadge = (tier: string) => {
-    const variants: Record<string, "default" | "secondary" | "destructive"> = {
-      Hot: "destructive",
-      Warm: "default",
-      Cold: "secondary"
+    const variants: Record<string, 'default' | 'secondary' | 'destructive'> = {
+      Hot: 'destructive',
+      Warm: 'default',
+      Cold: 'secondary',
     };
-    return variants[tier] || "secondary";
+    return variants[tier] || 'secondary';
   };
 
   return (
@@ -93,7 +99,9 @@ export function LeadScoring() {
                 <div className="sm:w-32 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-medium">Score</span>
-                    <span className={`text-lg font-bold ${getScoreColor(lead.score)}`}>
+                    <span
+                      className={`text-lg font-bold ${getScoreColor(lead.score)}`}
+                    >
                       {lead.score}
                     </span>
                   </div>

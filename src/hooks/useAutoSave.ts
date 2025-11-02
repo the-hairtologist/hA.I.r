@@ -1,8 +1,8 @@
-import React from "react";
-import { useEffect, useRef, useCallback, useState } from "react";
-import { toast } from "sonner";
-import { useDebounce } from "./useDebounce";
-import { logger } from "@/lib/logging/productionLogger";
+import React from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
+import { toast } from 'sonner';
+import { useDebounce } from './useDebounce';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface UseAutoSaveOptions<T> {
   data: T;
@@ -34,7 +34,9 @@ export function useAutoSave<T>({
 
     const save = async () => {
       // Skip if data hasn't changed
-      if (JSON.stringify(debouncedData) === JSON.stringify(lastSavedData.current)) {
+      if (
+        JSON.stringify(debouncedData) === JSON.stringify(lastSavedData.current)
+      ) {
         return;
       }
 
@@ -43,17 +45,17 @@ export function useAutoSave<T>({
         await onSave(debouncedData);
         lastSavedData.current = debouncedData;
         // Subtle auto-save notification
-        toast.success("Draft saved", {
+        toast.success('Draft saved', {
           duration: 1500,
-          position: "bottom-right",
-          className: "text-xs"
+          position: 'bottom-right',
+          className: 'text-xs',
         });
       } catch (error) {
-        logger.error("Auto-save failed", error, { context: 'useAutoSave' });
-        toast.error("Draft save failed", {
-          description: "Your changes are still in the form",
+        logger.error('Auto-save failed', error, { context: 'useAutoSave' });
+        toast.error('Draft save failed', {
+          description: 'Your changes are still in the form',
           duration: 3000,
-          position: "bottom-right",
+          position: 'bottom-right',
         });
       } finally {
         if (isMounted.current) {
@@ -72,10 +74,10 @@ export function useAutoSave<T>({
     try {
       await onSave(data);
       lastSavedData.current = data;
-      toast.success("Saved successfully");
+      toast.success('Saved successfully');
     } catch (error) {
-      logger.error("Save failed", error, { context: 'useAutoSave' });
-      toast.error("Save failed");
+      logger.error('Save failed', error, { context: 'useAutoSave' });
+      toast.error('Save failed');
     } finally {
       setIsSaving(false);
     }
@@ -83,4 +85,3 @@ export function useAutoSave<T>({
 
   return { isSaving, forceSave };
 }
-

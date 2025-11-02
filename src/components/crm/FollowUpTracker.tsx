@@ -1,49 +1,61 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, CheckCircle, Clock, Mail, Phone } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, CheckCircle, Clock, Mail, Phone } from 'lucide-react';
 
 export function FollowUpTracker() {
   const followUps = [
     {
-      client: "Sample Client 1",
-      type: "Appointment reminder",
-      dueDate: "Today",
-      priority: "high",
-      status: "pending",
-      method: "SMS"
+      client: 'Sample Client 1',
+      type: 'Appointment reminder',
+      dueDate: 'Today',
+      priority: 'high',
+      status: 'pending',
+      method: 'SMS',
     },
     {
-      client: "Sample Client 2",
-      type: "Review request",
-      dueDate: "Tomorrow",
-      priority: "medium",
-      status: "pending",
-      method: "Email"
+      client: 'Sample Client 2',
+      type: 'Review request',
+      dueDate: 'Tomorrow',
+      priority: 'medium',
+      status: 'pending',
+      method: 'Email',
     },
     {
-      client: "Sample Client 3",
-      type: "Birthday message",
-      dueDate: "In 3 days",
-      priority: "low",
-      status: "scheduled",
-      method: "Email"
+      client: 'Sample Client 3',
+      type: 'Birthday message',
+      dueDate: 'In 3 days',
+      priority: 'low',
+      status: 'scheduled',
+      method: 'Email',
     },
   ];
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high": return "text-destructive";
-      case "medium": return "text-warning";
-      default: return "text-muted-foreground";
+      case 'high':
+        return 'text-destructive';
+      case 'medium':
+        return 'text-warning';
+      default:
+        return 'text-muted-foreground';
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case "high": return "destructive";
-      case "medium": return "default";
-      default: return "secondary";
+      case 'high':
+        return 'destructive';
+      case 'medium':
+        return 'default';
+      default:
+        return 'secondary';
     }
   };
 
@@ -78,14 +90,16 @@ export function FollowUpTracker() {
                       {item.priority}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">{item.type}</p>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {item.type}
+                  </p>
                   <div className="flex items-center gap-3 text-xs">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {item.dueDate}
                     </span>
                     <span className="flex items-center gap-1">
-                      {item.method === "Email" ? (
+                      {item.method === 'Email' ? (
                         <Mail className="h-3 w-3" />
                       ) : (
                         <Phone className="h-3 w-3" />

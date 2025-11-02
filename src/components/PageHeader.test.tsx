@@ -19,7 +19,7 @@ describe('PageHeader', () => {
         <PageHeader title="Test Page" />
       </BrowserRouter>
     );
-    
+
     expect(container.textContent).toContain('Test Page');
   });
 
@@ -29,7 +29,7 @@ describe('PageHeader', () => {
         <PageHeader title="Test Page" />
       </BrowserRouter>
     );
-    
+
     const backButton = container.querySelector('[aria-label="Go back"]');
     expect(backButton).toBeTruthy();
   });
@@ -40,10 +40,12 @@ describe('PageHeader', () => {
         <PageHeader title="Test Page" backTo="/custom-path" />
       </BrowserRouter>
     );
-    
-    const backButton = container.querySelector('[aria-label="Go back"]') as HTMLButtonElement;
+
+    const backButton = container.querySelector(
+      '[aria-label="Go back"]'
+    ) as HTMLButtonElement;
     backButton?.click();
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/custom-path');
   });
 
@@ -54,7 +56,7 @@ describe('PageHeader', () => {
         <PageHeader title="Test Page" actions={actions} />
       </BrowserRouter>
     );
-    
+
     expect(container.textContent).toContain('Action');
   });
 
@@ -65,7 +67,7 @@ describe('PageHeader', () => {
         <PageHeader title="Test Page" icon={icon} />
       </BrowserRouter>
     );
-    
+
     expect(container.textContent).toContain('Icon');
   });
 });

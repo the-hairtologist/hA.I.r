@@ -1,31 +1,46 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { SEOHead } from "@/components/SEOHead";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Calendar, BarChart3, Users, DollarSign } from "lucide-react";
-import { RevenueChart } from "@/components/sales/RevenueChart";
-import { ServicePopularity } from "@/components/sales/ServicePopularity";
-import { StylistPerformance } from "@/components/sales/StylistPerformance";
-import { RevenueForecast } from "@/components/sales/RevenueForecast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { SEOHead } from '@/components/SEOHead';
+import { useAuth } from '@/hooks/useAuth';
+import { useUserRole } from '@/hooks/useUserRole';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  TrendingUp,
+  Calendar,
+  BarChart3,
+  Users,
+  DollarSign,
+} from 'lucide-react';
+import { RevenueChart } from '@/components/sales/RevenueChart';
+import { ServicePopularity } from '@/components/sales/ServicePopularity';
+import { StylistPerformance } from '@/components/sales/StylistPerformance';
+import { RevenueForecast } from '@/components/sales/RevenueForecast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 const SalesDashboard = () => {
   const { user } = useAuth();
   const { isAdmin, isStylist } = useUserRole(user?.id);
 
   const { data: quickStats, isLoading } = useQuery({
-    queryKey: ["sales-quick-stats", user?.id],
+    queryKey: ['sales-quick-stats', user?.id],
     queryFn: async () => {
       const { data: stylistProfile } = await supabase
-        .from("stylist_profiles")
-        .select("id")
-        .eq("user_id", user?.id)
+        .from('stylist_profiles')
+        .select('id')
+        .eq('user_id', user?.id)
         .maybeSingle();
 
-      if (!stylistProfile) return { today: 0, week: 0, month: 0, forecast: 0, todayBookings: 0, weekBookings: 0, monthBookings: 0 };
+      if (!stylistProfile)
+        return {
+          today: 0,
+          week: 0,
+          month: 0,
+          forecast: 0,
+          todayBookings: 0,
+          weekBookings: 0,
+          monthBookings: 0,
+        };
 
       const now = new Date();
       const todayStart = new Date(now.setHours(0, 0, 0, 0));
@@ -33,34 +48,47 @@ const SalesDashboard = () => {
       const monthStart = new Date(now.setDate(1));
 
       const { data: appointments } = await supabase
-        .from("appointments")
-        .select("appointment_date, status, stylist_services(price)")
-        .eq("stylist_id", stylistProfile.id)
-        .eq("status", "completed");
+        .from('appointments')
+        .select('appointment_date, status, stylist_services(price)')
+        .eq('stylist_id', stylistProfile.id)
+        .eq('status', 'completed');
 
-      let todayRevenue = 0, weekRevenue = 0, monthRevenue = 0;
-      let todayBookings = 0, weekBookings = 0, monthBookings = 0;
+      let todayRevenue = 0,
+        weekRevenue = 0,
+        monthRevenue = 0;
+      let todayBookings = 0,
+        weekBookings = 0,
+        monthBookings = 0;
 
       appointments?.forEach(apt => {
         const aptDate = new Date(apt.appointment_date);
         const price = Number(apt.stylist_services?.price || 0);
-        
-        if (aptDate >= todayStart) { todayRevenue += price; todayBookings++; }
-        if (aptDate >= weekStart) { weekRevenue += price; weekBookings++; }
-        if (aptDate >= monthStart) { monthRevenue += price; monthBookings++; }
+
+        if (aptDate >= todayStart) {
+          todayRevenue += price;
+          todayBookings++;
+        }
+        if (aptDate >= weekStart) {
+          weekRevenue += price;
+          weekBookings++;
+        }
+        if (aptDate >= monthStart) {
+          monthRevenue += price;
+          monthBookings++;
+        }
       });
 
       const avgDailyRevenue = monthRevenue / 30;
       const forecast = avgDailyRevenue * 30;
 
-      return { 
-        today: todayRevenue, 
-        week: weekRevenue, 
-        month: monthRevenue, 
+      return {
+        today: todayRevenue,
+        week: weekRevenue,
+        month: monthRevenue,
         forecast: forecast,
         todayBookings,
         weekBookings,
-        monthBookings
+        monthBookings,
       };
     },
     enabled: !!user?.id && isStylist,
@@ -82,11 +110,11 @@ const SalesDashboard = () => {
 
   return (
     <DashboardLayout>
-      <SEOHead 
+      <SEOHead
         title="Sales Performance | hA.I.r"
         description="Real-time revenue analytics, forecasting, and performance metrics"
       />
-      
+
       <div className="container mx-auto p-4 sm:p-6 max-w-7xl">
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-pixel mb-2">
@@ -101,11 +129,15 @@ const SalesDashboard = () => {
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-6">
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Today's Revenue</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Today's Revenue
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {isLoading ? "..." : `$${quickStats?.today.toFixed(2) || "0.00"}`}
+                {isLoading
+                  ? '...'
+                  : `$${quickStats?.today.toFixed(2) || '0.00'}`}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
                 <Calendar className="inline h-3 w-3 mr-1" />
@@ -116,11 +148,15 @@ const SalesDashboard = () => {
 
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">This Week</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                This Week
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {isLoading ? "..." : `$${quickStats?.week.toFixed(2) || "0.00"}`}
+                {isLoading
+                  ? '...'
+                  : `$${quickStats?.week.toFixed(2) || '0.00'}`}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
                 <Calendar className="inline h-3 w-3 mr-1" />
@@ -131,11 +167,15 @@ const SalesDashboard = () => {
 
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">This Month</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                This Month
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {isLoading ? "..." : `$${quickStats?.month.toFixed(2) || "0.00"}`}
+                {isLoading
+                  ? '...'
+                  : `$${quickStats?.month.toFixed(2) || '0.00'}`}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
                 <Calendar className="inline h-3 w-3 mr-1" />
@@ -146,11 +186,15 @@ const SalesDashboard = () => {
 
           <Card className="brutal-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">30-Day Forecast</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                30-Day Forecast
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-primary">
-                {isLoading ? "..." : `$${quickStats?.forecast.toFixed(2) || "0.00"}`}
+                {isLoading
+                  ? '...'
+                  : `$${quickStats?.forecast.toFixed(2) || '0.00'}`}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
                 <TrendingUp className="inline h-3 w-3 mr-1" />

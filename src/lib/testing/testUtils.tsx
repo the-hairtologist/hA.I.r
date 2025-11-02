@@ -19,21 +19,21 @@ export const renderWithProviders = (
   ui: React.ReactElement,
   options?: RenderOptions & { queryClient?: QueryClient }
 ) => {
-  const queryClient = options?.queryClient || new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        gcTime: 0,
+  const queryClient =
+    options?.queryClient ||
+    new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+          gcTime: 0,
+        },
       },
-    },
-  });
+    });
 
   const AllProviders = ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <TooltipProvider>
-          {children}
-        </TooltipProvider>
+        <TooltipProvider>{children}</TooltipProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
@@ -57,17 +57,19 @@ export const createMockSupabaseClient = () => ({
     single: vi.fn().mockResolvedValue({ data: null, error: null }),
   })),
   auth: {
-      getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
-      getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
-      signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
-      signOut: vi.fn().mockResolvedValue({ error: null }),
-      onAuthStateChange: vi.fn().mockReturnValue({
-        data: {
-          subscription: {
-            unsubscribe: vi.fn()
-          }
-        }
-      })
+    getSession: vi
+      .fn()
+      .mockResolvedValue({ data: { session: null }, error: null }),
+    getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+    signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
+    signOut: vi.fn().mockResolvedValue({ error: null }),
+    onAuthStateChange: vi.fn().mockReturnValue({
+      data: {
+        subscription: {
+          unsubscribe: vi.fn(),
+        },
+      },
+    }),
   },
   storage: {
     from: vi.fn(() => ({
@@ -80,11 +82,14 @@ export const createMockSupabaseClient = () => ({
 /**
  * Wait for async updates in tests
  */
-export const waitFor = (callback: () => void | Promise<void>, options?: { timeout?: number }) => {
+export const waitFor = (
+  callback: () => void | Promise<void>,
+  options?: { timeout?: number }
+) => {
   return new Promise<void>((resolve, reject) => {
     const timeout = options?.timeout || 1000;
     const startTime = Date.now();
-    
+
     const check = async () => {
       try {
         await callback();
@@ -97,7 +102,7 @@ export const waitFor = (callback: () => void | Promise<void>, options?: { timeou
         }
       }
     };
-    
+
     check();
   });
 };
@@ -105,7 +110,8 @@ export const waitFor = (callback: () => void | Promise<void>, options?: { timeou
 /**
  * Wait for async updates in tests
  */
-export const waitForAsync = () => new Promise(resolve => setTimeout(resolve, 0));
+export const waitForAsync = () =>
+  new Promise(resolve => setTimeout(resolve, 0));
 
 /**
  * Mock user data for tests
@@ -168,7 +174,6 @@ export const mockFormula = {
   processing_time_minutes: 30,
   color_line: 'Test Color Line',
 };
-
 
 // Re-export testing library utilities
 export { screen } from '@testing-library/react';

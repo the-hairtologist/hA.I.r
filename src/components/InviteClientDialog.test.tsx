@@ -36,7 +36,9 @@ type MockedSupabaseInvoke = ReturnType<typeof vi.fn>;
 describe.skip('InviteClientDialog - Double Submit Prevention', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
   });
 
   it('should prevent multiple rapid clicks on send button', async () => {
@@ -86,7 +88,9 @@ describe.skip('InviteClientDialog - Double Submit Prevention', () => {
   it('should re-enable form after successful send', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
-    render(<InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />);
+    render(
+      <InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />
+    );
 
     const sendButton = screen.getByRole('button', { name: /send invitation/i });
     await user.click(sendButton);
@@ -101,7 +105,9 @@ describe.skip('InviteClientDialog - Double Submit Prevention', () => {
 describe.skip('InviteClientDialog - Loading State Visibility', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
   });
 
   it('should show loading spinner during submission', async () => {
@@ -130,10 +136,11 @@ describe.skip('InviteClientDialog - Loading State Visibility', () => {
 
   it('should maintain loading state throughout submission', async () => {
     const user = userEvent.setup();
-    
+
     // Delay the response
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
+      () =>
+        new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
     );
 
     render(<InviteClientDialog {...defaultProps} />);
@@ -153,7 +160,9 @@ describe.skip('InviteClientDialog - Loading State Visibility', () => {
 describe.skip('InviteClientDialog - Button Disabled States', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
   });
 
   it('should disable button when form is submitting', async () => {
@@ -168,9 +177,10 @@ describe.skip('InviteClientDialog - Button Disabled States', () => {
 
   it('should re-enable cancel button during submission', async () => {
     const user = userEvent.setup();
-    
+
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({ error: null }), 200))
+      () =>
+        new Promise(resolve => setTimeout(() => resolve({ error: null }), 200))
     );
 
     render(<InviteClientDialog {...defaultProps} />);
@@ -190,10 +200,14 @@ describe.skip('InviteClientDialog - Form Re-enabling', () => {
 
   it('should re-enable form after successful submission', async () => {
     const user = userEvent.setup();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
-    
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
+
     const onOpenChange = vi.fn();
-    render(<InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />);
+    render(
+      <InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />
+    );
 
     const sendButton = screen.getByRole('button', { name: /send invitation/i });
     await user.click(sendButton);
@@ -205,8 +219,8 @@ describe.skip('InviteClientDialog - Form Re-enabling', () => {
 
   it('should re-enable form after error', async () => {
     const user = userEvent.setup();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ 
-      error: new Error('Failed to send') 
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: new Error('Failed to send'),
     });
 
     render(<InviteClientDialog {...defaultProps} />);
@@ -231,31 +245,38 @@ describe.skip('InviteClientDialog - Success/Error Scenarios', () => {
 
   it('should handle successful invitation send', async () => {
     const user = userEvent.setup();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
 
     const onOpenChange = vi.fn();
-    render(<InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />);
+    render(
+      <InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />
+    );
 
     const sendButton = screen.getByRole('button', { name: /send invitation/i });
     await user.click(sendButton);
 
     await waitFor(() => {
-      expect(supabase.functions.invoke).toHaveBeenCalledWith('send-client-invite', {
-        body: {
-          clientEmail: 'client@example.com',
-          clientName: 'Jane Doe',
-          stylistName: 'John Stylist',
-          customMessage: undefined,
-        },
-      });
+      expect(supabase.functions.invoke).toHaveBeenCalledWith(
+        'send-client-invite',
+        {
+          body: {
+            clientEmail: 'client@example.com',
+            clientName: 'Jane Doe',
+            stylistName: 'John Stylist',
+            customMessage: undefined,
+          },
+        }
+      );
       expect(onOpenChange).toHaveBeenCalledWith(false);
     });
   });
 
   it('should handle invitation send error', async () => {
     const user = userEvent.setup();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ 
-      error: new Error('Network error') 
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: new Error('Network error'),
     });
 
     render(<InviteClientDialog {...defaultProps} />);
@@ -273,7 +294,9 @@ describe.skip('InviteClientDialog - Success/Error Scenarios', () => {
 
   it('should include custom message in invitation', async () => {
     const user = userEvent.setup();
-    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({ error: null });
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
 
     render(<InviteClientDialog {...defaultProps} />);
 
@@ -284,11 +307,14 @@ describe.skip('InviteClientDialog - Success/Error Scenarios', () => {
     await user.click(sendButton);
 
     await waitFor(() => {
-      expect(supabase.functions.invoke).toHaveBeenCalledWith('send-client-invite', {
-        body: expect.objectContaining({
-          customMessage: 'Looking forward to working with you!',
-        }),
-      });
+      expect(supabase.functions.invoke).toHaveBeenCalledWith(
+        'send-client-invite',
+        {
+          body: expect.objectContaining({
+            customMessage: 'Looking forward to working with you!',
+          }),
+        }
+      );
     });
   });
 });

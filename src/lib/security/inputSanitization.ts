@@ -15,7 +15,7 @@ export function sanitizeHtml(input: string): string {
     "'": '&#x27;',
     '/': '&#x2F;',
   };
-  return input.replace(/[&<>"'/]/g, (char) => map[char]);
+  return input.replace(/[&<>"'/]/g, char => map[char]);
 }
 
 /**
@@ -39,7 +39,10 @@ export function sanitizeEmail(email: string): string {
  * Validate and sanitize phone numbers
  */
 export function sanitizePhone(phone: string): string {
-  return phone.replace(/[^\d+()-\s]/g, '').trim().slice(0, 20);
+  return phone
+    .replace(/[^\d+()-\s]/g, '')
+    .trim()
+    .slice(0, 20);
 }
 
 /**
@@ -80,7 +83,7 @@ export function detectSQLInjection(input: string): boolean {
     /(\bOR\b|\bAND\b).*?[=<>]/i,
     /\bUNION\b.*?\bSELECT\b/i,
   ];
-  
+
   return sqlPatterns.some(pattern => pattern.test(input));
 }
 

@@ -17,16 +17,16 @@ class ClientRateLimiter {
   isAllowed(key: string, config: RateLimitConfig): boolean {
     const now = Date.now();
     const requests = this.requests.get(key) || [];
-    
+
     // Remove old requests outside the time window
     const validRequests = requests.filter(
-      (timestamp) => now - timestamp < config.windowMs
+      timestamp => now - timestamp < config.windowMs
     );
-    
+
     if (validRequests.length >= config.maxRequests) {
       return false;
     }
-    
+
     validRequests.push(now);
     this.requests.set(key, validRequests);
     return true;
@@ -39,7 +39,7 @@ class ClientRateLimiter {
     const now = Date.now();
     const requests = this.requests.get(key) || [];
     const validRequests = requests.filter(
-      (timestamp) => now - timestamp < config.windowMs
+      timestamp => now - timestamp < config.windowMs
     );
     return Math.max(0, config.maxRequests - validRequests.length);
   }
@@ -50,7 +50,7 @@ class ClientRateLimiter {
   getRetryAfter(key: string, config: RateLimitConfig): number {
     const requests = this.requests.get(key) || [];
     if (requests.length === 0) return 0;
-    
+
     const oldestRequest = Math.min(...requests);
     const resetTime = oldestRequest + config.windowMs;
     return Math.max(0, resetTime - Date.now());
@@ -72,16 +72,16 @@ export const rateLimiter = new ClientRateLimiter();
 export const RATE_LIMITS = {
   // API calls: 60 requests per minute
   API: { maxRequests: 60, windowMs: 60 * 1000 },
-  
+
   // Form submissions: 5 per minute
   FORM: { maxRequests: 5, windowMs: 60 * 1000 },
-  
+
   // Search: 30 per minute
   SEARCH: { maxRequests: 30, windowMs: 60 * 1000 },
-  
+
   // File uploads: 10 per 5 minutes
   UPLOAD: { maxRequests: 10, windowMs: 5 * 60 * 1000 },
-  
+
   // AI requests: 20 per minute
   AI: { maxRequests: 20, windowMs: 60 * 1000 },
 } as const;

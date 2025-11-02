@@ -32,7 +32,10 @@ interface IAPPurchase {
 class AppleIAPManager {
   private store: any = null;
   private isInitialized = false;
-  private purchaseCallbacks: Map<string, (success: boolean, data?: any) => void> = new Map();
+  private purchaseCallbacks: Map<
+    string,
+    (success: boolean, data?: any) => void
+  > = new Map();
 
   async initialize(): Promise<void> {
     if (!this.isIOS()) {
@@ -53,9 +56,9 @@ class AppleIAPManager {
       }
 
       this.store = CdvPurchase.store;
-      
+
       logger.info('Registering products...', 'IAP');
-      
+
       // Register products
       this.store.register([
         {
@@ -69,10 +72,10 @@ class AppleIAPManager {
       ]);
 
       this.setupEventHandlers();
-      
+
       await this.store.initialize();
       this.isInitialized = true;
-      
+
       logger.info('Initialization complete', 'IAP');
     } catch (error) {
       console.error('[IAP] Initialization failed:', error);
@@ -84,9 +87,12 @@ class AppleIAPManager {
     if (!this.store) return;
 
     // Handle approved purchases
-    this.store.when()
+    this.store
+      .when()
       .approved((transaction: any) => {
-        logger.info('Purchase approved', 'IAP', { transactionId: transaction.id });
+        logger.info('Purchase approved', 'IAP', {
+          transactionId: transaction.id,
+        });
         transaction.verify();
       })
       .verified((receipt: any) => {
@@ -118,14 +124,17 @@ class AppleIAPManager {
   private async handleVerifiedPurchase(receipt: any): Promise<void> {
     try {
       logger.info('Sending receipt to backend for verification...', 'IAP');
-      
-      const { data, error } = await supabase.functions.invoke('verify-apple-receipt', {
-        body: {
-          receipt: receipt.receipt,
-          productId: receipt.id,
-          transactionId: receipt.transaction?.id,
-        },
-      });
+
+      const { data, error } = await supabase.functions.invoke(
+        'verify-apple-receipt',
+        {
+          body: {
+            receipt: receipt.receipt,
+            productId: receipt.id,
+            transactionId: receipt.transaction?.id,
+          },
+        }
+      );
 
       if (error) {
         logger.error('Backend verification failed', 'IAP', error);
@@ -159,21 +168,23 @@ class AppleIAPManager {
     }));
   }
 
-  async purchaseProduct(productId: string): Promise<{ success: boolean; error?: string }> {
+  async purchaseProduct(
+    productId: string
+  ): Promise<{ success: boolean; error?: string }> {
     if (!this.isIOS()) {
       return { success: false, error: 'Not available on this platform' };
     }
 
     await this.ensureInitialized();
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.purchaseCallbacks.set(productId, (success, data) => {
         if (success) {
           resolve({ success: true });
         } else {
-          resolve({ 
-            success: false, 
-            error: data?.message || 'Purchase failed' 
+          resolve({
+            success: false,
+            error: data?.message || 'Purchase failed',
           });
         }
       });
@@ -187,9 +198,9 @@ class AppleIAPManager {
         logger.info('Ordering product', 'IAP', { productId });
         this.store.order(product);
       } catch (error: any) {
-        resolve({ 
-          success: false, 
-          error: error.message || 'Failed to initiate purchase' 
+        resolve({
+          success: false,
+          error: error.message || 'Failed to initiate purchase',
         });
       }
     });
@@ -208,9 +219,9 @@ class AppleIAPManager {
       return { success: true };
     } catch (error: any) {
       logger.error('Restore failed', 'IAP', error);
-      return { 
-        success: false, 
-        error: error.message || 'Failed to restore purchases' 
+      return {
+        success: false,
+        error: error.message || 'Failed to restore purchases',
       };
     }
   }
@@ -226,7 +237,7 @@ class AppleIAPManager {
       const monthlyProduct = this.store.get(IAP_PRODUCTS.STYLIST_PRO_MONTHLY);
       const yearlyProduct = this.store.get(IAP_PRODUCTS.STYLIST_PRO_YEARLY);
 
-      return (monthlyProduct?.owned || yearlyProduct?.owned) || false;
+      return monthlyProduct?.owned || yearlyProduct?.owned || false;
     } catch (error) {
       logger.error('Error checking subscription', 'IAP', error as Error);
       return false;

@@ -241,7 +241,6 @@ export const MobileBottomNav = () => {
         {isAdmin && (
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500 to-transparent animate-pulse-subtle" />
         )}
-<<<<<<< HEAD
         <div className="flex justify-evenly items-stretch h-16 px-3">
           {items.map((item) => (
             <NavButton 
@@ -252,124 +251,8 @@ export const MobileBottomNav = () => {
               handleNavigation={handleNavigation}
             />
           ))}
-=======
-        <div className="flex justify-evenly items-stretch h-16 px-3">{/* Better spacing with justify-evenly */}
-          {items.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.path);
-            // Hooks removed from map callback for React compliance
-            
-            return (
-              <button
-                
-                key={item.path}
-                onClick={() => !item.disabled && handleNavigation(item.path)}
-                disabled={item.disabled}
-                className={cn(
-                  "relative flex flex-col items-center justify-center flex-1",
-                  "min-w-[60px] min-h-[60px] gap-0.5",
-                  "transition-all duration-200 ease-out",
-                  "active:scale-95",
-                  "touch-manipulation",
-                  active && "text-primary",
-                  item.disabled && "opacity-50 cursor-not-allowed"
-                )}
-                aria-label={`Navigate to ${item.label}`}
-                aria-current={active ? "page" : undefined}
-              >
-                {/* Background glow effect for active item */}
-                {active && (
-                    <div 
-                      className={cn(
-                        "absolute inset-0 rounded-2xl",
-                        "bg-gradient-to-br",
-                        item.gradient,
-                        isAdmin ? "opacity-30" : "opacity-20"
-                      )}
-                      aria-hidden="true"
-                    />
-                )}
-
-                {/* Icon container */}
-                <div className="relative flex items-center justify-center">
-                  <div 
-                    className={cn(
-                      "flex items-center justify-center rounded-2xl",
-                      "transition-all duration-200",
-                      "retro-nav-icon-container", // Retro styling
-                      // Enhanced Home highlight
-                      item.highlight && !active && [
-                        "w-12 h-12", // Larger highlight container
-                        "bg-gradient-to-br from-primary/10 to-secondary/10",
-                        "ring-1 ring-primary/20"
-                      ],
-                      !item.highlight && "w-11 h-11", // Increased from w-10 h-10
-                      active && [
-                        "bg-gradient-to-br",
-                        item.gradient,
-                        "shadow-lg",
-                        "active", // Active state for retro styling
-                        item.highlight ? "scale-115" : "scale-110"
-                      ],
-                      !active && !item.highlight && "hover:bg-accent/50"
-                    )}
-                  >
-                    <Icon 
-                      className={cn(
-                        "h-6 w-6 transition-all duration-200",
-                        active ? "text-on-surface-primary" : "text-muted-foreground",
-                        item.highlight && !active && "text-primary/60"
-                      )} 
-                      strokeWidth={active ? 2.5 : 2}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  
-                  {/* Notification badge */}
-                  {item.badge !== undefined && item.badge > 0 && (
-                    <NotificationDot 
-                      count={item.badge} 
-                      size="sm"
-                      className="absolute -top-1 -right-1"
-                    />
-                  )}
-                </div>
-
-                {/* Label */}
-                <span 
-                  className={cn(
-                    "text-xs font-sans font-medium transition-all duration-200 truncate max-w-[70px]",
-                    active ? "text-primary scale-105" : "text-muted-foreground"
-                  )}
-                >
-                  {item.label}
-                </span>
-
-                {/* Active indicator line */}
-                {active && (
-                  <div 
-                    className={cn(
-                      "absolute bottom-0 left-1/2 -translate-x-1/2",
-                      "h-2 w-12 rounded-t-full",
-                      "bg-gradient-to-r",
-                      item.gradient,
-                      "animate-fade-in shadow-lg"
-                    )}
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
-            );
-          })}
->>>>>>> copilot/fix-a11y-tester-and-comments
         </div>
       </nav>
     </>
   );
-<<<<<<< HEAD
 };
-=======
-};
-
-
->>>>>>> copilot/fix-a11y-tester-and-comments

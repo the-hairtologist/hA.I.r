@@ -5,7 +5,8 @@
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 /**
@@ -17,18 +18,18 @@ export async function gzipEncode(data: string): Promise<Uint8Array> {
     start(controller) {
       controller.enqueue(encoder.encode(data));
       controller.close();
-    }
+    },
   }).pipeThrough(new CompressionStream('gzip'));
-  
+
   const reader = stream.getReader();
   const chunks: Uint8Array[] = [];
-  
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
     chunks.push(value);
   }
-  
+
   const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
   const result = new Uint8Array(totalLength);
   let offset = 0;
@@ -36,7 +37,7 @@ export async function gzipEncode(data: string): Promise<Uint8Array> {
     result.set(chunk, offset);
     offset += chunk.length;
   }
-  
+
   return result;
 }
 
@@ -45,12 +46,12 @@ export async function gzipEncode(data: string): Promise<Uint8Array> {
  * Only compresses payloads > 1KB (smaller payloads not worth compressing)
  */
 export async function compressedJsonResponse(
-  data: any, 
+  data: any,
   status = 200,
   additionalHeaders: Record<string, string> = {}
 ): Promise<Response> {
   const json = JSON.stringify(data);
-  
+
   // Only compress if payload > 1KB
   if (json.length < 1024) {
     return new Response(json, {
@@ -58,11 +59,11 @@ export async function compressedJsonResponse(
       headers: {
         'Content-Type': 'application/json',
         ...corsHeaders,
-        ...additionalHeaders
-      }
+        ...additionalHeaders,
+      },
     });
   }
-  
+
   try {
     const compressed = await gzipEncode(json);
     return new Response(compressed as unknown as BodyInit, {
@@ -71,8 +72,8 @@ export async function compressedJsonResponse(
         'Content-Type': 'application/json',
         'Content-Encoding': 'gzip',
         ...corsHeaders,
-        ...additionalHeaders
-      }
+        ...additionalHeaders,
+      },
     });
   } catch (error) {
     console.error('Compression failed, returning uncompressed:', error);
@@ -82,8 +83,8 @@ export async function compressedJsonResponse(
       headers: {
         'Content-Type': 'application/json',
         ...corsHeaders,
-        ...additionalHeaders
-      }
+        ...additionalHeaders,
+      },
     });
   }
 }
@@ -92,14 +93,12 @@ export async function compressedJsonResponse(
  * Create a compressed error response
  */
 export async function compressedErrorResponse(
-  error: string, 
+  error: string,
   status = 500,
   details?: any
 ): Promise<Response> {
-  const errorData = details 
-    ? { error, details }
-    : { error };
-  
+  const errorData = details ? { error, details } : { error };
+
   return compressedJsonResponse(errorData, status);
 }
 

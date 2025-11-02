@@ -3,15 +3,15 @@
  * Shows visible focus rings and keyboard hints for accessibility
  */
 
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 export const useKeyboardNavigation = () => {
   const [isKeyboardUser, setIsKeyboardUser] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Tab") {
+      if (e.key === 'Tab') {
         setIsKeyboardUser(true);
       }
     };
@@ -20,12 +20,12 @@ export const useKeyboardNavigation = () => {
       setIsKeyboardUser(false);
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('mousedown', handleMouseDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('mousedown', handleMouseDown);
     };
   }, []);
 
@@ -36,11 +36,11 @@ export const useKeyboardNavigation = () => {
  * Enhanced focus ring for keyboard navigation
  */
 export const focusRingClasses = cn(
-  "focus-visible:outline-none",
-  "focus-visible:ring-4",
-  "focus-visible:ring-primary",
-  "focus-visible:ring-offset-2",
-  "focus-visible:ring-offset-background",
-  "transition-shadow",
-  "duration-200"
+  'focus-visible:outline-none',
+  'focus-visible:ring-4',
+  'focus-visible:ring-primary',
+  'focus-visible:ring-offset-2',
+  'focus-visible:ring-offset-background',
+  'transition-shadow',
+  'duration-200'
 );

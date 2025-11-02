@@ -3,8 +3,8 @@
  * Reduces database load with specific field selection and request deduplication
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { requestDeduplicator } from "@/lib/api/requestDeduplicator";
+import { supabase } from '@/integrations/supabase/client';
+import { requestDeduplicator } from '@/lib/api/requestDeduplicator';
 
 /**
  * Get payments by stylist - optimized
@@ -14,8 +14,9 @@ export const getPaymentsByStylist = async (stylistId: string) => {
     `payments-stylist-${stylistId}`,
     async () => {
       const { data, error } = await supabase
-        .from("payments")
-        .select(`
+        .from('payments')
+        .select(
+          `
           id,
           amount,
           payment_method,
@@ -29,9 +30,10 @@ export const getPaymentsByStylist = async (stylistId: string) => {
             profiles!inner(full_name)
           ),
           appointments(service_type)
-        `)
-        .eq("stylist_id", stylistId)
-        .order("created_at", { ascending: false });
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data;
@@ -47,8 +49,9 @@ export const getCommissionsByStylist = async (stylistId: string) => {
     `commissions-stylist-${stylistId}`,
     async () => {
       const { data, error } = await supabase
-        .from("commissions")
-        .select(`
+        .from('commissions')
+        .select(
+          `
           id,
           commission_amount,
           status,
@@ -59,9 +62,10 @@ export const getCommissionsByStylist = async (stylistId: string) => {
             name,
             logo_url
           )
-        `)
-        .eq("stylist_id", stylistId)
-        .order("created_at", { ascending: false });
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data;
@@ -77,8 +81,9 @@ export const getAffiliateCodesByStylist = async (stylistId: string) => {
     `affiliate-codes-${stylistId}`,
     async () => {
       const { data, error } = await supabase
-        .from("stylist_affiliate_codes")
-        .select(`
+        .from('stylist_affiliate_codes')
+        .select(
+          `
           id,
           code,
           commission_rate,
@@ -91,9 +96,10 @@ export const getAffiliateCodesByStylist = async (stylistId: string) => {
             logo_url,
             website_url
           )
-        `)
-        .eq("stylist_id", stylistId)
-        .eq("is_active", true);
+        `
+        )
+        .eq('stylist_id', stylistId)
+        .eq('is_active', true);
 
       if (error) throw error;
       return data;
@@ -110,15 +116,15 @@ export const getFinanceSummary = async (stylistId: string) => {
     async () => {
       const [paymentsResult, commissionsResult] = await Promise.all([
         supabase
-          .from("payments")
-          .select("amount, status, created_at")
-          .eq("stylist_id", stylistId)
-          .eq("status", "completed"),
-        
+          .from('payments')
+          .select('amount, status, created_at')
+          .eq('stylist_id', stylistId)
+          .eq('status', 'completed'),
+
         supabase
-          .from("commissions")
-          .select("commission_amount, status, created_at")
-          .eq("stylist_id", stylistId)
+          .from('commissions')
+          .select('commission_amount, status, created_at')
+          .eq('stylist_id', stylistId),
       ]);
 
       if (paymentsResult.error) throw paymentsResult.error;

@@ -20,17 +20,17 @@ const localStorageMock = (() => {
     },
     clear: () => {
       store = {};
-    }
+    },
   };
 })();
 
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+  value: localStorageMock,
 });
 
 // Mock react-router-dom
 vi.mock('react-router-dom', () => ({
-  useLocation: () => ({ pathname: '/dashboard' })
+  useLocation: () => ({ pathname: '/dashboard' }),
 }));
 
 // Mock tours config
@@ -39,7 +39,7 @@ vi.mock('@/config/tours', () => ({
     if (path === '/dashboard') return { id: 'dashboard' };
     if (path === '/clients') return { id: 'clients' };
     return null;
-  })
+  }),
 }));
 
 describe('useTour', () => {

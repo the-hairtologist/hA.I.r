@@ -1,28 +1,30 @@
-import { Upload, Zap, CheckCircle } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Upload, Zap, CheckCircle } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
 const steps = [
   {
-    number: "01",
-    title: "Sign Up in 60 Seconds",
-    description: "Create your account, set your services, add your booking link. You're live.",
+    number: '01',
+    title: 'Sign Up in 60 Seconds',
+    description:
+      "Create your account, set your services, add your booking link. You're live.",
     icon: Upload,
-    color: "bg-primary/10"
+    color: 'bg-primary/10',
   },
   {
-    number: "02",
-    title: "Let AI Assist You",
-    description: "Get AI-powered formula suggestions. Bookings available 24/7. Set up automated reminders.",
+    number: '02',
+    title: 'Let AI Assist You',
+    description:
+      'Get AI-powered formula suggestions. Bookings available 24/7. Set up automated reminders.',
     icon: Zap,
-    color: "bg-accent/10"
+    color: 'bg-accent/10',
   },
   {
-    number: "03",
-    title: "Focus on Hair",
-    description: "No more admin chaos. Just you doing what you do best.",
+    number: '03',
+    title: 'Focus on Hair',
+    description: 'No more admin chaos. Just you doing what you do best.',
     icon: CheckCircle,
-    color: "bg-secondary/10"
-  }
+    color: 'bg-secondary/10',
+  },
 ];
 
 export const HowItWorks = () => {
@@ -39,9 +41,14 @@ export const HowItWorks = () => {
 
       <div className="space-y-6">
         {steps.map((step, idx) => (
-          <Card key={idx} className="brutal-border brutal-shadow-lg p-6 hover-scale transition-all bg-card">
+          <Card
+            key={idx}
+            className="brutal-border brutal-shadow-lg p-6 hover-scale transition-all bg-card"
+          >
             <div className="flex items-start gap-4">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 border-foreground flex-shrink-0 ${step.color}`}>
+              <div
+                className={`w-12 h-12 rounded-full flex items-center justify-center border-2 border-foreground flex-shrink-0 ${step.color}`}
+              >
                 <step.icon className="h-6 w-6" />
               </div>
               <div className="flex-1 pt-1">
@@ -49,9 +56,7 @@ export const HowItWorks = () => {
                   <span className="text-xs font-bold px-2 py-1 rounded border border-foreground bg-muted">
                     {step.number}
                   </span>
-                  <h3 className="font-pixel font-bold text-lg">
-                    {step.title}
-                  </h3>
+                  <h3 className="font-pixel font-bold text-lg">{step.title}</h3>
                 </div>
                 <p className="text-sm font-sans text-muted-foreground">
                   {step.description}

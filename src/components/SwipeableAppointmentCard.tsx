@@ -30,11 +30,11 @@ export function SwipeableAppointmentCard({
 }: SwipeableAppointmentCardProps) {
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [revealed, setRevealed] = useState<'left' | 'right' | null>(null);
-  
+
   const handlers = useSwipeable({
-    onSwiping: (eventData) => {
+    onSwiping: eventData => {
       const delta = eventData.deltaX;
-      
+
       // Limit swipe distance
       if (delta > 0 && delta < 150) {
         setSwipeOffset(delta);
@@ -42,11 +42,11 @@ export function SwipeableAppointmentCard({
         setSwipeOffset(delta);
       }
     },
-    onSwiped: (eventData) => {
+    onSwiped: eventData => {
       haptic.tap();
-      
+
       const delta = eventData.deltaX;
-      
+
       // Reveal left actions (swipe right)
       if (delta > 75) {
         setRevealed('left');
@@ -66,12 +66,12 @@ export function SwipeableAppointmentCard({
     trackMouse: false,
     trackTouch: true,
   });
-  
+
   const resetSwipe = () => {
     setRevealed(null);
     setSwipeOffset(0);
   };
-  
+
   const handleAction = (action?: () => void) => {
     if (action) {
       haptic.success();
@@ -79,7 +79,7 @@ export function SwipeableAppointmentCard({
       resetSwipe();
     }
   };
-  
+
   return (
     <div className="relative overflow-hidden">
       {/* Left actions (green - positive actions) */}
@@ -107,7 +107,7 @@ export function SwipeableAppointmentCard({
           )}
         </div>
       )}
-      
+
       {/* Right actions (red/yellow - destructive/caution actions) */}
       {revealed === 'right' && (
         <div className="absolute right-0 top-0 bottom-0 flex items-center gap-2 pr-4 bg-gradient-to-l from-destructive to-destructive/80 text-on-surface-primary animate-fade-in">
@@ -133,14 +133,11 @@ export function SwipeableAppointmentCard({
           )}
         </div>
       )}
-      
+
       {/* Main card content */}
       <div
         {...handlers}
-        className={cn(
-          'transition-transform duration-200 ease-out',
-          className
-        )}
+        className={cn('transition-transform duration-200 ease-out', className)}
         style={{
           transform: `translateX(${swipeOffset}px)`,
         }}
@@ -150,9 +147,7 @@ export function SwipeableAppointmentCard({
           }
         }}
       >
-        <Card className="cursor-grab active:cursor-grabbing">
-          {children}
-        </Card>
+        <Card className="cursor-grab active:cursor-grabbing">{children}</Card>
       </div>
     </div>
   );

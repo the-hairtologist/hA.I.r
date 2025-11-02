@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { X } from "lucide-react";
-import { initAnalytics } from "@/lib/analytics";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { X } from 'lucide-react';
+import { initAnalytics } from '@/lib/analytics';
 
-const COOKIE_CONSENT_KEY = "hair-cookie-consent";
+const COOKIE_CONSENT_KEY = 'hair-cookie-consent';
 
 interface ConsentPreferences {
   essential: boolean;
@@ -42,12 +42,12 @@ export const CookieConsent = () => {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(consentData));
-    
+
     // 🔐 GDPR Compliance: Only initialize analytics if user consents
     if (prefs.analytics) {
       initAnalytics();
     }
-    
+
     setShowBanner(false);
     setShowPreferences(false);
   };
@@ -83,10 +83,13 @@ export const CookieConsent = () => {
           <div className="space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold mb-2">Cookie Preferences</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  Cookie Preferences
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  We use cookies to enhance your experience, analyze site usage, and personalize content. 
-                  You can manage your preferences below or accept all cookies.
+                  We use cookies to enhance your experience, analyze site usage,
+                  and personalize content. You can manage your preferences below
+                  or accept all cookies.
                 </p>
               </div>
               <Button
@@ -103,11 +106,15 @@ export const CookieConsent = () => {
               <Button onClick={acceptAll} className="flex-1">
                 Accept All Cookies
               </Button>
-              <Button onClick={acceptEssential} variant="outline" className="flex-1">
+              <Button
+                onClick={acceptEssential}
+                variant="outline"
+                className="flex-1"
+              >
                 Essential Only
               </Button>
-              <Button 
-                onClick={() => setShowPreferences(true)} 
+              <Button
+                onClick={() => setShowPreferences(true)}
                 variant="outline"
                 className="flex-1"
               >
@@ -116,8 +123,8 @@ export const CookieConsent = () => {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              By clicking "Accept All", you consent to our use of cookies. 
-              Learn more in our{" "}
+              By clicking "Accept All", you consent to our use of cookies. Learn
+              more in our{' '}
               <a href="/cookie-policy" className="text-primary hover:underline">
                 Cookie Policy
               </a>
@@ -127,7 +134,9 @@ export const CookieConsent = () => {
         ) : (
           <div className="space-y-4">
             <div className="flex items-start justify-between">
-              <h3 className="text-lg font-semibold">Manage Cookie Preferences</h3>
+              <h3 className="text-lg font-semibold">
+                Manage Cookie Preferences
+              </h3>
               <Button
                 variant="ghost"
                 size="icon"
@@ -142,50 +151,66 @@ export const CookieConsent = () => {
               <div className="flex items-start space-x-3 p-3 border rounded-lg bg-muted/50">
                 <Checkbox id="essential" checked={true} disabled />
                 <div className="space-y-1 flex-1">
-                  <Label htmlFor="essential" className="text-sm font-medium cursor-pointer">
+                  <Label
+                    htmlFor="essential"
+                    className="text-sm font-medium cursor-pointer"
+                  >
                     Essential Cookies (Required)
                   </Label>
                   <p className="text-xs text-muted-foreground">
-                    Necessary for the website to function. These cookies enable core functionality 
-                    such as security, authentication, and accessibility.
+                    Necessary for the website to function. These cookies enable
+                    core functionality such as security, authentication, and
+                    accessibility.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3 p-3 border rounded-lg">
-                <Checkbox 
-                  id="analytics" 
+                <Checkbox
+                  id="analytics"
                   checked={preferences.analytics}
-                  onCheckedChange={(checked) => 
-                    setPreferences({ ...preferences, analytics: checked as boolean })
+                  onCheckedChange={checked =>
+                    setPreferences({
+                      ...preferences,
+                      analytics: checked as boolean,
+                    })
                   }
                 />
                 <div className="space-y-1 flex-1">
-                  <Label htmlFor="analytics" className="text-sm font-medium cursor-pointer">
+                  <Label
+                    htmlFor="analytics"
+                    className="text-sm font-medium cursor-pointer"
+                  >
                     Analytics Cookies
                   </Label>
                   <p className="text-xs text-muted-foreground">
-                    Help us understand how visitors interact with our website by collecting and 
-                    reporting information anonymously.
+                    Help us understand how visitors interact with our website by
+                    collecting and reporting information anonymously.
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3 p-3 border rounded-lg">
-                <Checkbox 
-                  id="marketing" 
+                <Checkbox
+                  id="marketing"
                   checked={preferences.marketing}
-                  onCheckedChange={(checked) => 
-                    setPreferences({ ...preferences, marketing: checked as boolean })
+                  onCheckedChange={checked =>
+                    setPreferences({
+                      ...preferences,
+                      marketing: checked as boolean,
+                    })
                   }
                 />
                 <div className="space-y-1 flex-1">
-                  <Label htmlFor="marketing" className="text-sm font-medium cursor-pointer">
+                  <Label
+                    htmlFor="marketing"
+                    className="text-sm font-medium cursor-pointer"
+                  >
                     Marketing Cookies
                   </Label>
                   <p className="text-xs text-muted-foreground">
-                    Used to track visitors across websites to display relevant advertisements 
-                    and campaigns.
+                    Used to track visitors across websites to display relevant
+                    advertisements and campaigns.
                   </p>
                 </div>
               </div>
@@ -195,7 +220,11 @@ export const CookieConsent = () => {
               <Button onClick={saveCustomPreferences} className="flex-1">
                 Save Preferences
               </Button>
-              <Button onClick={() => setShowPreferences(false)} variant="outline" className="flex-1">
+              <Button
+                onClick={() => setShowPreferences(false)}
+                variant="outline"
+                className="flex-1"
+              >
                 Back
               </Button>
             </div>

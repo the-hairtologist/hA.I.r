@@ -1,13 +1,13 @@
-import { Check, Sparkles, TrendingUp, Calendar } from "lucide-react";
-import { toast } from "sonner";
-import { haptic } from "@/platform/haptics";
+import { Check, Sparkles, TrendingUp, Calendar } from 'lucide-react';
+import { toast } from 'sonner';
+import { haptic } from '@/platform/haptics';
 
-export type CelebrationType = 
-  | "appointment-booked"
-  | "formula-saved"
-  | "client-added"
-  | "milestone"
-  | "income-secured";
+export type CelebrationType =
+  | 'appointment-booked'
+  | 'formula-saved'
+  | 'client-added'
+  | 'milestone'
+  | 'income-secured';
 
 interface CelebrationConfig {
   icon: React.ElementType;
@@ -17,36 +17,36 @@ interface CelebrationConfig {
 }
 
 const celebrations: Record<CelebrationType, CelebrationConfig> = {
-  "appointment-booked": {
+  'appointment-booked': {
     icon: Calendar,
-    title: "Time Protected",
-    message: "Income secured ✨",
-    emoji: "📅"
+    title: 'Time Protected',
+    message: 'Income secured ✨',
+    emoji: '📅',
   },
-  "formula-saved": {
+  'formula-saved': {
     icon: Check,
-    title: "Look Archived",
-    message: "Your masterpiece is saved!",
-    emoji: "💅"
+    title: 'Look Archived',
+    message: 'Your masterpiece is saved!',
+    emoji: '💅',
   },
-  "client-added": {
+  'client-added': {
     icon: Sparkles,
-    title: "New Client Added",
-    message: "Your salon family is growing!",
-    emoji: "✨"
+    title: 'New Client Added',
+    message: 'Your salon family is growing!',
+    emoji: '✨',
   },
-  "milestone": {
+  milestone: {
     icon: TrendingUp,
-    title: "Milestone Reached",
+    title: 'Milestone Reached',
     message: "You're crushing it!",
-    emoji: "🎉"
+    emoji: '🎉',
   },
-  "income-secured": {
+  'income-secured': {
     icon: TrendingUp,
-    title: "Income Secured",
-    message: "Another step toward your goals!",
-    emoji: "💰"
-  }
+    title: 'Income Secured',
+    message: 'Another step toward your goals!',
+    emoji: '💰',
+  },
 };
 
 export const showCelebration = (
@@ -56,7 +56,7 @@ export const showCelebration = (
 ) => {
   const config = celebrations[type];
   const Icon = config.icon;
-  
+
   // Trigger haptic feedback
   haptic.success();
 
@@ -73,14 +73,15 @@ export const showCelebration = (
         </p>
         {count !== undefined && (
           <p className="text-xs text-primary font-medium mt-1">
-            {count} {type === "formula-saved" ? "looks" : "total"} archived! {config.emoji}
+            {count} {type === 'formula-saved' ? 'looks' : 'total'} archived!{' '}
+            {config.emoji}
           </p>
         )}
       </div>
     </div>,
     {
       duration: 3000,
-      className: "border-2 border-success/20 bg-success/5",
+      className: 'border-2 border-success/20 bg-success/5',
     }
   );
 };
@@ -88,7 +89,7 @@ export const showCelebration = (
 // Streak celebration component
 export const showStreakCelebration = (count: number, type: string) => {
   haptic.success();
-  
+
   toast.success(
     <div className="flex items-center gap-3">
       <div className="text-4xl animate-bounce">🔥</div>
@@ -97,13 +98,13 @@ export const showStreakCelebration = (count: number, type: string) => {
           {count} {type} Streak!
         </p>
         <p className="text-sm text-muted-foreground">
-          Keep up the amazing work! 
+          Keep up the amazing work!
         </p>
       </div>
     </div>,
     {
       duration: 4000,
-      className: "border-2 border-warning/20 bg-warning/5",
+      className: 'border-2 border-warning/20 bg-warning/5',
     }
   );
 };

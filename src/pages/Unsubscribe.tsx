@@ -1,21 +1,27 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/hooks/use-toast";
-import { Mail, CheckCircle2, XCircle } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useToast } from '@/hooks/use-toast';
+import { Mail, CheckCircle2, XCircle } from 'lucide-react';
 
 export default function Unsubscribe() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get('token');
   const { toast } = useToast();
-  
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [preferences, setPreferences] = useState({
     rebooking: true,
     appointments: true,
@@ -25,16 +31,16 @@ export default function Unsubscribe() {
   useEffect(() => {
     if (!token) {
       toast({
-        title: "Invalid Link",
-        description: "This unsubscribe link is invalid or expired.",
-        variant: "destructive",
+        title: 'Invalid Link',
+        description: 'This unsubscribe link is invalid or expired.',
+        variant: 'destructive',
       });
     }
   }, [token]);
 
   const handleUnsubscribe = async (type: string = 'all') => {
     if (!token) return;
-    
+
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('unsubscribe', {
@@ -47,18 +53,19 @@ export default function Unsubscribe() {
         setSuccess(true);
         setEmail(data.email);
         toast({
-          title: "Successfully Unsubscribed",
+          title: 'Successfully Unsubscribed',
           description: `${data.email} has been unsubscribed from ${type === 'all' ? 'all' : type} emails.`,
         });
       } else {
         throw new Error(data?.message || 'Failed to unsubscribe');
       }
     } catch (error: any) {
-      console.error("Unsubscribe error:", error);
+      console.error('Unsubscribe error:', error);
       toast({
-        title: "Error",
-        description: error.message || "Failed to unsubscribe. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description:
+          error.message || 'Failed to unsubscribe. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
@@ -98,12 +105,10 @@ export default function Unsubscribe() {
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-sm text-muted-foreground mb-4">
-              Changed your mind? Contact your stylist to update your preferences.
+              Changed your mind? Contact your stylist to update your
+              preferences.
             </p>
-            <Button
-              onClick={() => navigate('/')}
-              variant="outline"
-            >
+            <Button onClick={() => navigate('/')} variant="outline">
               Return to Home
             </Button>
           </CardContent>
@@ -130,7 +135,7 @@ export default function Unsubscribe() {
               <Checkbox
                 id="rebooking"
                 checked={!preferences.rebooking}
-                onCheckedChange={(checked) => 
+                onCheckedChange={checked =>
                   setPreferences(p => ({ ...p, rebooking: !checked }))
                 }
               />
@@ -149,7 +154,7 @@ export default function Unsubscribe() {
               <Checkbox
                 id="appointments"
                 checked={!preferences.appointments}
-                onCheckedChange={(checked) => 
+                onCheckedChange={checked =>
                   setPreferences(p => ({ ...p, appointments: !checked }))
                 }
               />
@@ -168,7 +173,7 @@ export default function Unsubscribe() {
               <Checkbox
                 id="marketing"
                 checked={!preferences.marketing}
-                onCheckedChange={(checked) => 
+                onCheckedChange={checked =>
                   setPreferences(p => ({ ...p, marketing: !checked }))
                 }
               />
@@ -191,22 +196,28 @@ export default function Unsubscribe() {
                 if (!preferences.rebooking) types.push('rebooking');
                 if (!preferences.appointments) types.push('appointments');
                 if (!preferences.marketing) types.push('marketing');
-                
+
                 if (types.length === 0) {
                   toast({
-                    title: "No Changes",
-                    description: "Please select at least one email type to unsubscribe from.",
+                    title: 'No Changes',
+                    description:
+                      'Please select at least one email type to unsubscribe from.',
                   });
                   return;
                 }
-                
+
                 handleUnsubscribe(types.length === 3 ? 'all' : types[0]);
               }}
-              disabled={loading || (preferences.rebooking && preferences.appointments && preferences.marketing)}
+              disabled={
+                loading ||
+                (preferences.rebooking &&
+                  preferences.appointments &&
+                  preferences.marketing)
+              }
             >
-              {loading ? "Processing..." : "Update Preferences"}
+              {loading ? 'Processing...' : 'Update Preferences'}
             </Button>
-            
+
             <Button
               onClick={() => handleUnsubscribe('all')}
               variant="outline"
@@ -217,7 +228,8 @@ export default function Unsubscribe() {
           </div>
 
           <p className="text-xs text-center text-muted-foreground pt-2">
-            We respect your privacy. You can always resubscribe by contacting your stylist.
+            We respect your privacy. You can always resubscribe by contacting
+            your stylist.
           </p>
         </CardContent>
       </Card>

@@ -1,7 +1,13 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { logger } from '@/lib/logging/productionLogger';
 
 interface Props {
@@ -28,7 +34,7 @@ export class FeatureErrorBoundary extends Component<Props, State> {
     this.state = {
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     };
   }
 
@@ -36,7 +42,7 @@ export class FeatureErrorBoundary extends Component<Props, State> {
     return {
       hasError: true,
       error,
-      errorInfo: null
+      errorInfo: null,
     };
   }
 
@@ -44,19 +50,15 @@ export class FeatureErrorBoundary extends Component<Props, State> {
     const { featureName, onError } = this.props;
 
     // Log to production logger
-    logger.error(
-      `Feature error in ${featureName}`,
-      error,
-      {
-        component: featureName,
-        action: 'feature_error',
-        errorInfo: errorInfo.componentStack
-      }
-    );
+    logger.error(`Feature error in ${featureName}`, error, {
+      component: featureName,
+      action: 'feature_error',
+      errorInfo: errorInfo.componentStack,
+    });
 
     // Update state with error info
     this.setState({
-      errorInfo
+      errorInfo,
     });
 
     // Call custom error handler if provided
@@ -69,7 +71,7 @@ export class FeatureErrorBoundary extends Component<Props, State> {
     this.setState({
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     });
   };
 
@@ -110,7 +112,7 @@ export class FeatureErrorBoundary extends Component<Props, State> {
                 )}
               </div>
             )}
-            
+
             <div className="flex gap-2">
               <Button
                 onClick={this.handleReset}
@@ -121,7 +123,7 @@ export class FeatureErrorBoundary extends Component<Props, State> {
                 <RefreshCw className="h-4 w-4" />
                 Try Again
               </Button>
-              
+
               <Button
                 onClick={() => window.location.reload()}
                 variant="outline"
@@ -132,7 +134,8 @@ export class FeatureErrorBoundary extends Component<Props, State> {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              If this problem persists, please contact support with error code: {error?.name}
+              If this problem persists, please contact support with error code:{' '}
+              {error?.name}
             </p>
           </CardContent>
         </Card>

@@ -3,7 +3,10 @@
  * Provides consistent role-based access control across all edge functions
  */
 
-import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+import {
+  createClient,
+  SupabaseClient,
+} from 'https://esm.sh/@supabase/supabase-js@2';
 
 export interface AuthContext {
   user: any;
@@ -36,7 +39,10 @@ export async function authenticateRequest(
   );
 
   // Get authenticated user
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
   if (authError || !user) {
     throw new Error('Unauthorized: Invalid or expired session');
   }
@@ -76,7 +82,7 @@ export async function authenticateRequest(
       .select('id')
       .eq('user_id', user.id)
       .maybeSingle();
-    
+
     stylistId = stylistProfile?.id;
   }
 
@@ -86,7 +92,7 @@ export async function authenticateRequest(
     roles,
     isStylist,
     isAdmin,
-    stylistId
+    stylistId,
   };
 }
 

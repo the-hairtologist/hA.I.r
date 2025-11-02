@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { StickyNote, Save } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { StickyNote, Save } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Note {
   id: string;
@@ -20,7 +20,7 @@ interface QuickNotesProps {
 export function QuickNotes({ compact = false }: QuickNotesProps) {
   const { user } = useAuth();
   const [notes, setNotes] = useState<Note[]>([]);
-  const [newNote, setNewNote] = useState("");
+  const [newNote, setNewNote] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,20 +29,20 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
 
   const loadNotes = async () => {
     if (!user?.id) return;
-    
+
     try {
       const { data, error } = await supabase
-        .from("stylist_notes")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
+        .from('stylist_notes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
         .limit(3);
 
       if (error) throw error;
       setNotes(data || []);
     } catch (error) {
-      console.error("Error loading notes:", error);
-      toast.error("Failed to load notes. Please try again.");
+      console.error('Error loading notes:', error);
+      toast.error('Failed to load notes. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -50,31 +50,31 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
 
   const handleSaveNote = async () => {
     if (!user?.id) return;
-    
+
     const trimmedNote = newNote.trim();
     if (!trimmedNote) {
-      toast.error("Note cannot be empty");
+      toast.error('Note cannot be empty');
       return;
     }
-    
+
     if (trimmedNote.length > 500) {
-      toast.error("Note must be less than 500 characters");
+      toast.error('Note must be less than 500 characters');
       return;
     }
 
     try {
       const { error } = await supabase
-        .from("stylist_notes")
+        .from('stylist_notes')
         .insert({ user_id: user.id, content: trimmedNote });
 
       if (error) throw error;
 
-      toast.success("Note saved");
-      setNewNote("");
+      toast.success('Note saved');
+      setNewNote('');
       loadNotes();
     } catch (error) {
-      console.error("Error saving note:", error);
-      toast.error("Failed to save note. Please try again.");
+      console.error('Error saving note:', error);
+      toast.error('Failed to save note. Please try again.');
     }
   };
 
@@ -84,32 +84,34 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
         {/* Notepad ruled lines */}
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(12)].map((_, i) => (
-            <div 
-              key={i} 
-              className="border-b border-border/30" 
+            <div
+              key={i}
+              className="border-b border-border/30"
               style={{ height: '28px', marginTop: i === 0 ? '6px' : '0' }}
             />
           ))}
         </div>
-        
+
         {/* Margin line */}
         <div className="absolute left-10 top-0 bottom-0 w-px bg-destructive/20 pointer-events-none" />
-        
+
         <div className="relative z-10 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <StickyNote className="h-4 w-4 text-warning" />
-            <h3 className="text-xs font-bold text-foreground uppercase tracking-wide">Quick Notes</h3>
+            <h3 className="text-xs font-bold text-foreground uppercase tracking-wide">
+              Quick Notes
+            </h3>
           </div>
-          
+
           <Textarea
             placeholder="Jot down your thoughts..."
             value={newNote}
-            onChange={(e) => setNewNote(e.target.value)}
+            onChange={e => setNewNote(e.target.value)}
             maxLength={500}
             className="flex-1 min-h-[200px] resize-none bg-transparent border-none focus:ring-1 focus:ring-warning text-foreground placeholder:text-muted-foreground shadow-none rounded p-2 pl-12 font-mono text-xs leading-7"
             style={{ lineHeight: '28px' }}
           />
-          
+
           <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/30">
             <span className="text-xs text-muted-foreground font-mono">
               {newNote.length}/500
@@ -133,7 +135,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
           </div>
         ) : notes.length > 0 ? (
           <div className="relative z-10 mt-2 pt-2 border-t border-border/30 max-h-32 overflow-y-auto space-y-1.5">
-            {notes.map((note) => (
+            {notes.map(note => (
               <div
                 key={note.id}
                 className="p-2 rounded bg-card border border-border hover:border-primary/50 transition-colors"
@@ -142,10 +144,10 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
                   {note.content}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1 font-mono">
-                  {new Date(note.created_at).toLocaleDateString('en-US', { 
-                    month: 'short', 
+                  {new Date(note.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
                     day: 'numeric',
-                    year: 'numeric'
+                    year: 'numeric',
                   })}
                 </p>
               </div>
@@ -172,7 +174,7 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
             <Textarea
               placeholder="Jot down a quick note..."
               value={newNote}
-              onChange={(e) => setNewNote(e.target.value)}
+              onChange={e => setNewNote(e.target.value)}
               maxLength={500}
               className="min-h-[80px] resize-none brutal-border"
             />
@@ -194,13 +196,16 @@ export function QuickNotes({ compact = false }: QuickNotesProps) {
 
           {loading ? (
             <div className="space-y-2">
-              {[1, 2].map((i) => (
-                <div key={i} className="h-16 bg-muted/50 rounded-lg animate-pulse" />
+              {[1, 2].map(i => (
+                <div
+                  key={i}
+                  className="h-16 bg-muted/50 rounded-lg animate-pulse"
+                />
               ))}
             </div>
           ) : notes.length > 0 ? (
             <div className="space-y-2 max-h-48 overflow-y-auto">
-              {notes.map((note) => (
+              {notes.map(note => (
                 <div
                   key={note.id}
                   className="p-3 rounded-lg bg-muted/30 brutal-border text-sm"

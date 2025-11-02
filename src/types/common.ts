@@ -8,32 +8,45 @@ import type { Database } from '@/integrations/supabase/types';
 
 // ============= Database Table Types (Re-export from Supabase) =============
 
-export type ClientProfile = Database['public']['Tables']['client_profiles']['Row'];
-export type ClientProfileInsert = Database['public']['Tables']['client_profiles']['Insert'];
-export type ClientProfileUpdate = Database['public']['Tables']['client_profiles']['Update'];
+export type ClientProfile =
+  Database['public']['Tables']['client_profiles']['Row'];
+export type ClientProfileInsert =
+  Database['public']['Tables']['client_profiles']['Insert'];
+export type ClientProfileUpdate =
+  Database['public']['Tables']['client_profiles']['Update'];
 
-export type StylistProfile = Database['public']['Tables']['stylist_profiles']['Row'];
-export type StylistProfileInsert = Database['public']['Tables']['stylist_profiles']['Insert'];
-export type StylistProfileUpdate = Database['public']['Tables']['stylist_profiles']['Update'];
+export type StylistProfile =
+  Database['public']['Tables']['stylist_profiles']['Row'];
+export type StylistProfileInsert =
+  Database['public']['Tables']['stylist_profiles']['Insert'];
+export type StylistProfileUpdate =
+  Database['public']['Tables']['stylist_profiles']['Update'];
 
 export type Appointment = Database['public']['Tables']['appointments']['Row'];
-export type AppointmentInsert = Database['public']['Tables']['appointments']['Insert'];
-export type AppointmentUpdate = Database['public']['Tables']['appointments']['Update'];
+export type AppointmentInsert =
+  Database['public']['Tables']['appointments']['Insert'];
+export type AppointmentUpdate =
+  Database['public']['Tables']['appointments']['Update'];
 
 export type Formula = Database['public']['Tables']['formulas']['Row'];
 export type FormulaInsert = Database['public']['Tables']['formulas']['Insert'];
 export type FormulaUpdate = Database['public']['Tables']['formulas']['Update'];
 
-export type StylistService = Database['public']['Tables']['stylist_services']['Row'];
-export type StylistServiceInsert = Database['public']['Tables']['stylist_services']['Insert'];
-export type StylistServiceUpdate = Database['public']['Tables']['stylist_services']['Update'];
+export type StylistService =
+  Database['public']['Tables']['stylist_services']['Row'];
+export type StylistServiceInsert =
+  Database['public']['Tables']['stylist_services']['Insert'];
+export type StylistServiceUpdate =
+  Database['public']['Tables']['stylist_services']['Update'];
 
 export type Review = Database['public']['Tables']['reviews']['Row'];
 export type ReviewInsert = Database['public']['Tables']['reviews']['Insert'];
 export type ReviewUpdate = Database['public']['Tables']['reviews']['Update'];
 
-export type CalendarConnection = Database['public']['Tables']['calendar_connections']['Row'];
-export type CalendarEvent = Database['public']['Tables']['appointment_calendar_events']['Row'];
+export type CalendarConnection =
+  Database['public']['Tables']['calendar_connections']['Row'];
+export type CalendarEvent =
+  Database['public']['Tables']['appointment_calendar_events']['Row'];
 
 // ============= Formula Analysis Types =============
 
@@ -152,7 +165,16 @@ export interface SuccessResponse<T = any> {
 export interface FormField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'tel' | 'textarea' | 'select' | 'date' | 'time' | 'checkbox' | 'number';
+  type:
+    | 'text'
+    | 'email'
+    | 'tel'
+    | 'textarea'
+    | 'select'
+    | 'date'
+    | 'time'
+    | 'checkbox'
+    | 'number';
   placeholder?: string;
   required?: boolean;
   validation?: (value: any) => string | null;
@@ -261,6 +283,6 @@ export interface ShareData {
 
 // ============= Generic API Response =============
 
-export type ApiResponse<T> = 
+export type ApiResponse<T> =
   | { success: true; data: T }
   | { success: false; error: string; code?: string };

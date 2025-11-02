@@ -3,8 +3,8 @@
  * Uses the zapier-trigger edge function with retry logic, failure tracking, and monitoring
  */
 
-import { supabase } from "@/integrations/supabase/client";
-import { logger } from "./logging/productionLogger";
+import { supabase } from '@/integrations/supabase/client';
+import { logger } from './logging/productionLogger';
 
 /**
  * Trigger Zapier webhooks via edge function (with automatic retries and tracking)
@@ -31,7 +31,9 @@ const triggerZapierEvent = async (
     }
 
     if (data?.triggered > 0) {
-      logger.info(`[Zapier] ✅ Triggered ${data.triggered} webhook(s) for ${eventType}`);
+      logger.info(
+        `[Zapier] ✅ Triggered ${data.triggered} webhook(s) for ${eventType}`
+      );
     } else {
       logger.info(`[Zapier] No active webhooks for ${eventType}`);
     }
@@ -47,17 +49,14 @@ export const triggerAppointmentBooked = async (
   stylistId: string,
   appointmentData: any
 ) => {
-  await triggerZapierEvent(stylistId, "appointment.booked", appointmentData);
+  await triggerZapierEvent(stylistId, 'appointment.booked', appointmentData);
 };
 
 /**
  * Trigger when a new client is added
  */
-export const triggerNewClient = async (
-  stylistId: string,
-  clientData: any
-) => {
-  await triggerZapierEvent(stylistId, "client.created", clientData);
+export const triggerNewClient = async (stylistId: string, clientData: any) => {
+  await triggerZapierEvent(stylistId, 'client.created', clientData);
 };
 
 /**
@@ -67,7 +66,7 @@ export const triggerPaymentReceived = async (
   stylistId: string,
   paymentData: any
 ) => {
-  await triggerZapierEvent(stylistId, "payment.received", paymentData);
+  await triggerZapierEvent(stylistId, 'payment.received', paymentData);
 };
 
 /**
@@ -77,7 +76,7 @@ export const triggerReviewReceived = async (
   stylistId: string,
   reviewData: any
 ) => {
-  await triggerZapierEvent(stylistId, "review.received", reviewData);
+  await triggerZapierEvent(stylistId, 'review.received', reviewData);
 };
 
 /**
@@ -87,5 +86,5 @@ export const triggerAppointmentCompleted = async (
   stylistId: string,
   appointmentData: any
 ) => {
-  await triggerZapierEvent(stylistId, "appointment.completed", appointmentData);
+  await triggerZapierEvent(stylistId, 'appointment.completed', appointmentData);
 };

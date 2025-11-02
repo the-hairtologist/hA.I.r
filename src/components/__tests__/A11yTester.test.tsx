@@ -21,10 +21,10 @@ describe('A11yTester', () => {
 
   it('should toggle visibility when button is clicked', () => {
     render(<A11yTester />);
-    
+
     const toggleButton = screen.getByTitle('Open A11y Tester (Ctrl+Shift+A)');
     fireEvent.click(toggleButton);
-    
+
     // After clicking, the panel should be visible with the correct title
     expect(screen.getByText('A11y Tester')).toBeInTheDocument();
   });

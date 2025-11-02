@@ -29,19 +29,26 @@ export function useSchedulePredictor() {
 
   const predictNextAppointment = async (context: ClientContext) => {
     setPredicting(true);
-    
-    try {
-      logger.info('Predicting appointment schedule', 'SchedulePredictor', { clientId: context.clientId });
 
-      const { data, error } = await supabase.functions.invoke('ai-schedule-predictor', {
-        body: context,
+    try {
+      logger.info('Predicting appointment schedule', 'SchedulePredictor', {
+        clientId: context.clientId,
       });
+
+      const { data, error } = await supabase.functions.invoke(
+        'ai-schedule-predictor',
+        {
+          body: context,
+        }
+      );
 
       if (error) throw error;
 
       if (data) {
         setPrediction(data);
-        logger.info('Schedule prediction complete', 'SchedulePredictor', { confidence: data.confidence });
+        logger.info('Schedule prediction complete', 'SchedulePredictor', {
+          confidence: data.confidence,
+        });
         return data;
       }
 

@@ -37,7 +37,9 @@ export default function TeamSchedule() {
   }, [stylistId, currentWeek]);
 
   const fetchStylistId = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
 
     const { data } = await supabase
@@ -45,7 +47,7 @@ export default function TeamSchedule() {
       .select('id')
       .eq('user_id', user.id)
       .maybeSingle();
-    
+
     if (data) setStylistId(data.id);
   };
 
@@ -55,15 +57,17 @@ export default function TeamSchedule() {
 
     const { data } = await supabase
       .from('appointments')
-      .select(`
+      .select(
+        `
         *,
         client_profiles(full_name),
         stylist_profiles(business_name)
-      `)
+      `
+      )
       .gte('appointment_date', weekStart.toISOString())
       .lt('appointment_date', weekEnd.toISOString())
       .order('appointment_date', { ascending: true });
-    
+
     if (data) setAppointments(data);
     setLoading(false);
   };
@@ -72,11 +76,11 @@ export default function TeamSchedule() {
 
   return (
     <>
-      <MetaTags 
+      <MetaTags
         title="Team Schedule"
         description="View all team member schedules"
       />
-      
+
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex items-center gap-3">
@@ -85,7 +89,9 @@ export default function TeamSchedule() {
             </div>
             <div>
               <h1 className="text-3xl font-bold">Team Schedule</h1>
-              <p className="text-muted-foreground">Collaborative calendar view</p>
+              <p className="text-muted-foreground">
+                Collaborative calendar view
+              </p>
             </div>
           </div>
 
@@ -103,33 +109,57 @@ export default function TeamSchedule() {
                   {loading ? (
                     <div className="space-y-2">
                       {[1, 2, 3].map(i => (
-                        <div key={i} className="h-16 bg-muted animate-pulse rounded" />
+                        <div
+                          key={i}
+                          className="h-16 bg-muted animate-pulse rounded"
+                        />
                       ))}
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {weekDays.map((day) => {
+                      {weekDays.map(day => {
                         const dayAppointments = appointments.filter(
-                          apt => format(new Date(apt.appointment_date), 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
+                          apt =>
+                            format(
+                              new Date(apt.appointment_date),
+                              'yyyy-MM-dd'
+                            ) === format(day, 'yyyy-MM-dd')
                         );
 
                         return (
-                          <div key={day.toISOString()} className="border-l-4 border-primary/20 pl-4">
+                          <div
+                            key={day.toISOString()}
+                            className="border-l-4 border-primary/20 pl-4"
+                          >
                             <h3 className="font-semibold mb-2">
                               {format(day, 'EEEE, MMM d')}
                             </h3>
                             {dayAppointments.length === 0 ? (
-                              <p className="text-sm text-muted-foreground">No appointments</p>
+                              <p className="text-sm text-muted-foreground">
+                                No appointments
+                              </p>
                             ) : (
                               <div className="space-y-2">
-                                {dayAppointments.map((apt) => (
-                                  <div key={apt.id} className="flex items-center gap-3 p-2 bg-muted/50 rounded">
+                                {dayAppointments.map(apt => (
+                                  <div
+                                    key={apt.id}
+                                    className="flex items-center gap-3 p-2 bg-muted/50 rounded"
+                                  >
                                     <span className="text-sm font-medium">
-                                      {format(new Date(apt.appointment_date), 'h:mm a')}
+                                      {format(
+                                        new Date(apt.appointment_date),
+                                        'h:mm a'
+                                      )}
                                     </span>
-                                    <Badge variant="outline">{apt.stylist_profiles?.business_name}</Badge>
-                                    <span className="text-sm">{apt.client_profiles?.full_name}</span>
-                                    <Badge variant="secondary">{apt.service_type}</Badge>
+                                    <Badge variant="outline">
+                                      {apt.stylist_profiles?.business_name}
+                                    </Badge>
+                                    <span className="text-sm">
+                                      {apt.client_profiles?.full_name}
+                                    </span>
+                                    <Badge variant="secondary">
+                                      {apt.service_type}
+                                    </Badge>
                                   </div>
                                 ))}
                               </div>
@@ -144,9 +174,7 @@ export default function TeamSchedule() {
             </div>
 
             {/* Team Chat */}
-            <div>
-              {stylistId && <TeamChat stylistId={stylistId} />}
-            </div>
+            <div>{stylistId && <TeamChat stylistId={stylistId} />}</div>
           </div>
         </div>
       </div>

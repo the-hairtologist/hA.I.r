@@ -33,29 +33,33 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    logger.error(`AI Feature Error: ${this.props.featureName}`, error, { 
+    logger.error(`AI Feature Error: ${this.props.featureName}`, error, {
       context: 'AIFeatureErrorBoundary',
       data: {
         feature: this.props.featureName,
-        componentStack: errorInfo.componentStack
-      }
+        componentStack: errorInfo.componentStack,
+      },
     });
-    userJourney.trackError(error, { 
+    userJourney.trackError(error, {
       feature: this.props.featureName,
-      componentStack: errorInfo.componentStack
+      componentStack: errorInfo.componentStack,
     });
     this.setState({ errorInfo });
 
     // Send to Sentry (async operation, fire-and-forget)
-    import('@/lib/monitoring').then(monitoring => {
-      monitoring.captureError(error, {
-        feature: this.props.featureName,
-        componentStack: errorInfo.componentStack,
-        source: 'AIFeatureErrorBoundary',
+    import('@/lib/monitoring')
+      .then(monitoring => {
+        monitoring.captureError(error, {
+          feature: this.props.featureName,
+          componentStack: errorInfo.componentStack,
+          source: 'AIFeatureErrorBoundary',
+        });
+      })
+      .catch(e => {
+        logger.error('Error logging failed', e, {
+          context: 'AIFeatureErrorBoundary',
+        });
       });
-    }).catch(e => {
-      logger.error('Error logging failed', e, { context: 'AIFeatureErrorBoundary' });
-    });
   }
 
   handleReset = () => {
@@ -77,13 +81,15 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
             </AlertTitle>
             <AlertDescription className="mt-2 space-y-3">
               <p className="text-sm">
-                This feature encountered an unexpected issue. The error has been logged
-                and our team will investigate.
+                This feature encountered an unexpected issue. The error has been
+                logged and our team will investigate.
               </p>
-              
+
               {import.meta.env.DEV && this.state.error && (
                 <details className="text-xs opacity-70">
-                  <summary className="cursor-pointer">Error Details (dev only)</summary>
+                  <summary className="cursor-pointer">
+                    Error Details (dev only)
+                  </summary>
                   <pre className="mt-2 p-2 bg-muted/50 rounded overflow-auto">
                     {this.state.error.toString()}
                   </pre>
@@ -110,8 +116,8 @@ export class AIFeatureErrorBoundary extends React.Component<Props, State> {
               </div>
 
               <p className="text-xs text-muted-foreground pt-2">
-                If this problem persists, please contact support or use the standard
-                AI Assistant features.
+                If this problem persists, please contact support or use the
+                standard AI Assistant features.
               </p>
             </AlertDescription>
           </Alert>

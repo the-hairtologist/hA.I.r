@@ -1,13 +1,15 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
-import { Resend } from "https://esm.sh/resend@2.0.0";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.58.0';
+import { Resend } from 'https://esm.sh/resend@2.0.0';
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const FROM_EMAIL =
+  Deno.env.get('FROM_EMAIL') || 'hA.I.r <onboarding@resend.dev>';
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 /**
@@ -26,16 +28,16 @@ interface ClientRiskScore {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log("🤖 Starting automated retention messages service");
+    console.log('🤖 Starting automated retention messages service');
 
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
     let totalSent = 0;
@@ -43,13 +45,20 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Get all stylists
     const { data: stylists } = await supabase
-      .from("stylist_profiles")
-      .select("id, business_name, user_id");
+      .from('stylist_profiles')
+      .select('id, business_name, user_id');
 
     if (!stylists || stylists.length === 0) {
       return new Response(
-        JSON.stringify({ success: true, message: "No stylists found", totalSent: 0 }),
-        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        JSON.stringify({
+          success: true,
+          message: 'No stylists found',
+          totalSent: 0,
+        }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        }
       );
     }
 
@@ -58,38 +67,42 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         // Get all appointments for this stylist
         const { data: appointments } = await supabase
-          .from("appointments")
-          .select("client_id, appointment_date, status")
-          .eq("stylist_id", stylist.id)
-          .order("appointment_date", { ascending: false });
+          .from('appointments')
+          .select('client_id, appointment_date, status')
+          .eq('stylist_id', stylist.id)
+          .order('appointment_date', { ascending: false });
 
         if (!appointments || appointments.length === 0) continue;
 
         // Calculate risk scores
         const clientScores = calculateClientRiskScores(appointments);
-        
-        // Filter for high-risk clients (only send to critical/high risk)
-        const atRiskClients = clientScores.filter(
-          c => c.riskLevel === 'critical' || c.riskLevel === 'high'
-        ).slice(0, 5); // Limit to 5 per stylist per week
 
-        console.log(`📊 Stylist ${stylist.business_name}: ${atRiskClients.length} at-risk clients`);
+        // Filter for high-risk clients (only send to critical/high risk)
+        const atRiskClients = clientScores
+          .filter(c => c.riskLevel === 'critical' || c.riskLevel === 'high')
+          .slice(0, 5); // Limit to 5 per stylist per week
+
+        console.log(
+          `📊 Stylist ${stylist.business_name}: ${atRiskClients.length} at-risk clients`
+        );
 
         // Send retention messages
         for (const client of atRiskClients) {
           try {
             // Get client profile
             const { data: profile } = await supabase
-              .from("client_profiles")
-              .select(`
+              .from('client_profiles')
+              .select(
+                `
                 id,
                 full_name,
                 email,
                 phone,
                 user_id,
                 communication_preference
-              `)
-              .eq("id", client.clientId)
+              `
+              )
+              .eq('id', client.clientId)
               .maybeSingle();
 
             if (!profile || !profile.email) {
@@ -99,12 +112,15 @@ const handler = async (req: Request): Promise<Response> => {
 
             // Check email preferences
             const { data: emailPrefs } = await supabase
-              .from("email_preferences")
-              .select("rebooking_reminders_enabled")
-              .eq("email", profile.email)
+              .from('email_preferences')
+              .select('rebooking_reminders_enabled')
+              .eq('email', profile.email)
               .maybeSingle();
 
-            if (emailPrefs && emailPrefs.rebooking_reminders_enabled === false) {
+            if (
+              emailPrefs &&
+              emailPrefs.rebooking_reminders_enabled === false
+            ) {
               console.log(`⏭️ Skipping - user opted out: ${profile.email}`);
               totalSkipped++;
               continue;
@@ -112,7 +128,7 @@ const handler = async (req: Request): Promise<Response> => {
 
             // Generate personalized message
             const message = generateRetentionMessage(client, profile, stylist);
-            
+
             // Send email
             const emailHtml = `
               <!DOCTYPE html>
@@ -158,49 +174,55 @@ const handler = async (req: Request): Promise<Response> => {
             await resend.emails.send({
               from: FROM_EMAIL,
               to: [profile.email],
-              subject: client.riskLevel === 'critical' 
-                ? `${profile.full_name}, we miss you! 💜`
-                : `Time for your next appointment? 💇‍♀️`,
+              subject:
+                client.riskLevel === 'critical'
+                  ? `${profile.full_name}, we miss you! 💜`
+                  : `Time for your next appointment? 💇‍♀️`,
               html: emailHtml,
             });
 
             totalSent++;
             console.log(`✅ Sent retention message to ${profile.email}`);
           } catch (clientError) {
-            console.error(`❌ Error processing client ${client.clientId}:`, clientError);
+            console.error(
+              `❌ Error processing client ${client.clientId}:`,
+              clientError
+            );
           }
         }
       } catch (stylistError) {
-        console.error(`❌ Error processing stylist ${stylist.id}:`, stylistError);
+        console.error(
+          `❌ Error processing stylist ${stylist.id}:`,
+          stylistError
+        );
       }
     }
 
-    console.log(`📧 Retention messages complete: ${totalSent} sent, ${totalSkipped} skipped`);
+    console.log(
+      `📧 Retention messages complete: ${totalSent} sent, ${totalSkipped} skipped`
+    );
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         totalSent,
         totalSkipped,
-        processedStylists: stylists.length
+        processedStylists: stylists.length,
       }),
       {
         status: 200,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...corsHeaders,
         },
       }
     );
   } catch (error: any) {
-    console.error("❌ Error in retention-messages:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    console.error('❌ Error in retention-messages:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    });
   }
 };
 
@@ -209,7 +231,7 @@ const handler = async (req: Request): Promise<Response> => {
  */
 function calculateClientRiskScores(appointments: any[]): ClientRiskScore[] {
   const clientMap = new Map<string, any[]>();
-  
+
   // Group appointments by client
   appointments.forEach(apt => {
     if (!clientMap.has(apt.client_id)) {
@@ -223,11 +245,15 @@ function calculateClientRiskScores(appointments: any[]): ClientRiskScore[] {
   // Analyze each client
   for (const [clientId, clientAppointments] of clientMap.entries()) {
     const now = new Date();
-    const lastAppointment = clientAppointments[0] ? new Date(clientAppointments[0].appointment_date) : null;
+    const lastAppointment = clientAppointments[0]
+      ? new Date(clientAppointments[0].appointment_date)
+      : null;
     const totalVisits = clientAppointments.length;
-    
-    const daysSinceLastVisit = lastAppointment 
-      ? Math.floor((now.getTime() - lastAppointment.getTime()) / (1000 * 60 * 60 * 24))
+
+    const daysSinceLastVisit = lastAppointment
+      ? Math.floor(
+          (now.getTime() - lastAppointment.getTime()) / (1000 * 60 * 60 * 24)
+        )
       : 999;
 
     // Calculate average gap
@@ -284,7 +310,7 @@ function calculateClientRiskScores(appointments: any[]): ClientRiskScore[] {
       reasons,
       daysSinceLastVisit,
       totalVisits,
-      avgGap
+      avgGap,
     });
   }
 
@@ -295,8 +321,8 @@ function calculateClientRiskScores(appointments: any[]): ClientRiskScore[] {
  * Generate personalized retention message
  */
 function generateRetentionMessage(
-  client: ClientRiskScore, 
-  profile: any, 
+  client: ClientRiskScore,
+  profile: any,
   stylist: any
 ): string {
   const name = profile.full_name?.split(' ')[0] || 'there';

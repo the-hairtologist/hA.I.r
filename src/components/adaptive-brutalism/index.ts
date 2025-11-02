@@ -3,6 +3,6 @@
  * Export all brutalist components for easy import
  */
 
-export { BrutalCard } from "./BrutalCard";
-export { BrutalHeader } from "./BrutalHeader";
-export { BrutalText } from "./BrutalText";
+export { BrutalCard } from './BrutalCard';
+export { BrutalHeader } from './BrutalHeader';
+export { BrutalText } from './BrutalText';

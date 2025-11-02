@@ -29,7 +29,9 @@ export const StickyCTA = ({ ctaText }: StickyCTAProps) => {
   // Track scroll position to show after 20%
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      const scrollPercent =
+        (window.scrollY / (document.body.scrollHeight - window.innerHeight)) *
+        100;
       setIsVisible(scrollPercent > 20);
     };
 

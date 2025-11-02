@@ -1,6 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { compressedJsonResponse, compressedErrorResponse, corsHeaders } from '../_shared/compression.ts';
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
+import {
+  compressedJsonResponse,
+  compressedErrorResponse,
+  corsHeaders,
+} from '../_shared/compression.ts';
 
 // Input validation schema
 const requestSchema = z.object({
@@ -9,14 +13,14 @@ const requestSchema = z.object({
   colorLine: z.string().max(200).optional(),
 });
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const body = await req.json();
-    
+
     // Validate input
     const validationResult = requestSchema.safeParse(body);
     if (!validationResult.success) {
@@ -26,9 +30,9 @@ serve(async (req) => {
         validationResult.error.issues.map(i => i.message).join(', ')
       );
     }
-    
+
     const { location, specialty, colorLine } = validationResult.data;
-    
+
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
@@ -45,19 +49,21 @@ serve(async (req) => {
 
     // Perform web searches using Lovable AI
     const searchResults = await Promise.all(
-      queries.map(async (query) => {
-        const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'google/gemini-2.5-flash',
-            messages: [
-              {
-                role: 'system',
-                content: `You are a stylist discovery assistant. Search the web and extract information about professional hair stylists/colorists. 
+      queries.map(async query => {
+        const response = await fetch(
+          'https://ai.gateway.lovable.dev/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${LOVABLE_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'google/gemini-2.5-flash',
+              messages: [
+                {
+                  role: 'system',
+                  content: `You are a stylist discovery assistant. Search the web and extract information about professional hair stylists/colorists. 
                 
 Return results as a JSON array with this structure:
 [
@@ -76,16 +82,17 @@ Return results as a JSON array with this structure:
   }
 ]
 
-Focus on verified professionals with portfolios. Include 3-5 top results.`
-              },
-              {
-                role: 'user',
-                content: query
-              }
-            ],
-            temperature: 0.7,
-          }),
-        });
+Focus on verified professionals with portfolios. Include 3-5 top results.`,
+                },
+                {
+                  role: 'user',
+                  content: query,
+                },
+              ],
+              temperature: 0.7,
+            }),
+          }
+        );
 
         if (!response.ok) {
           console.error('AI Gateway error:', response.status);
@@ -94,11 +101,13 @@ Focus on verified professionals with portfolios. Include 3-5 top results.`
 
         const data = await response.json();
         const content = data.choices[0].message.content;
-        
+
         // Try to parse JSON from the response
         try {
-          const jsonMatch = content.match(/```json\n?([\s\S]*?)\n?```/) || content.match(/\[([\s\S]*)\]/);
-          const jsonString = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : content;
+          const jsonMatch =
+            content.match(/```json\n?([\s\S]*?)\n?```/) ||
+            content.match(/\[([\s\S]*)\]/);
+          const jsonString = jsonMatch ? jsonMatch[1] || jsonMatch[0] : content;
           return JSON.parse(jsonString);
         } catch (parseError) {
           console.error('JSON parse error:', parseError);
@@ -110,7 +119,9 @@ Focus on verified professionals with portfolios. Include 3-5 top results.`
     // Flatten and deduplicate results
     const allResults = searchResults.flat();
     const uniqueResults = Array.from(
-      new Map(allResults.map(item => [item.name + item.businessName, item])).values()
+      new Map(
+        allResults.map(item => [item.name + item.businessName, item])
+      ).values()
     );
 
     console.log(`Found ${uniqueResults.length} unique stylists`);
@@ -118,6 +129,9 @@ Focus on verified professionals with portfolios. Include 3-5 top results.`
     return await compressedJsonResponse({ stylists: uniqueResults }, 200);
   } catch (error: any) {
     console.error('Error in search-stylists function:', error);
-    return await compressedErrorResponse(error.message || 'An unexpected error occurred', 500);
+    return await compressedErrorResponse(
+      error.message || 'An unexpected error occurred',
+      500
+    );
   }
 });

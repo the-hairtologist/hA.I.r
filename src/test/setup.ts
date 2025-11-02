@@ -1,6 +1,6 @@
-import '@testing-library/jest-dom'
-import { cleanup } from '@testing-library/react'
-import { afterEach, vi } from 'vitest'
+import '@testing-library/jest-dom';
+import { cleanup } from '@testing-library/react';
+import { afterEach, vi } from 'vitest';
 
 // Fix JSDOM layout issues for accessibility testing
 Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
@@ -10,15 +10,15 @@ Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
 });
 
 // Fix getComputedStyle for JSDOM
-global.getComputedStyle = (element) => {
+global.getComputedStyle = element => {
   return {
     display: 'block',
     visibility: 'visible',
-    getPropertyValue: (prop) => {
+    getPropertyValue: prop => {
       if (prop === 'display') return 'block';
       if (prop === 'visibility') return 'visible';
       return '';
-    }
+    },
   } as any;
 };
 
@@ -60,17 +60,19 @@ vi.mock('@/integrations/supabase/client', () => ({
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
     })),
     auth: {
-      getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
+      getSession: vi
+        .fn()
+        .mockResolvedValue({ data: { session: null }, error: null }),
       getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
       signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
       signOut: vi.fn().mockResolvedValue({ error: null }),
       onAuthStateChange: vi.fn().mockReturnValue({
         data: {
           subscription: {
-            unsubscribe: vi.fn()
-          }
-        }
-      })
+            unsubscribe: vi.fn(),
+          },
+        },
+      }),
     },
     storage: {
       from: vi.fn(() => ({
@@ -80,8 +82,8 @@ vi.mock('@/integrations/supabase/client', () => ({
     },
     channel: vi.fn(() => mockChannel),
     removeChannel: vi.fn().mockResolvedValue({ status: 'ok' }),
-  }
-}))
+  },
+}));
 
 // Also mock @/lib/supabase
 vi.mock('@/lib/supabase', () => ({
@@ -99,17 +101,19 @@ vi.mock('@/lib/supabase', () => ({
       single: vi.fn().mockResolvedValue({ data: null, error: null }),
     })),
     auth: {
-      getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
+      getSession: vi
+        .fn()
+        .mockResolvedValue({ data: { session: null }, error: null }),
       getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
       signIn: vi.fn().mockResolvedValue({ data: {}, error: null }),
       signOut: vi.fn().mockResolvedValue({ error: null }),
       onAuthStateChange: vi.fn().mockReturnValue({
         data: {
           subscription: {
-            unsubscribe: vi.fn()
-          }
-        }
-      })
+            unsubscribe: vi.fn(),
+          },
+        },
+      }),
     },
     storage: {
       from: vi.fn(() => ({
@@ -119,9 +123,9 @@ vi.mock('@/lib/supabase', () => ({
     },
     channel: vi.fn(() => mockChannel),
     removeChannel: vi.fn().mockResolvedValue({ status: 'ok' }),
-  }
-}))
+  },
+}));
 
 afterEach(() => {
-  cleanup()
-})
+  cleanup();
+});

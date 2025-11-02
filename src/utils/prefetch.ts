@@ -33,8 +33,9 @@ class PrefetchManager {
   set(key: string, data: any) {
     // Evict oldest if cache is full
     if (Object.keys(this.cache).length >= this.maxEntries) {
-      const oldest = Object.entries(this.cache)
-        .sort(([, a], [, b]) => a.timestamp - b.timestamp)[0];
+      const oldest = Object.entries(this.cache).sort(
+        ([, a], [, b]) => a.timestamp - b.timestamp
+      )[0];
       if (oldest) {
         delete this.cache[oldest[0]];
       }
@@ -42,7 +43,7 @@ class PrefetchManager {
 
     this.cache[key] = {
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 

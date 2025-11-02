@@ -1,35 +1,36 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Download, X } from "lucide-react";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Download, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
 export function PWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
+
       // Show prompt after 30 seconds if user hasn't installed
       setTimeout(() => {
-        const hasSeenPrompt = localStorage.getItem("pwa-install-prompt-seen");
+        const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-seen');
         if (!hasSeenPrompt) {
           setShowPrompt(true);
         }
       }, 30000);
     };
 
-    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener('beforeinstallprompt', handler);
 
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstall = async () => {
@@ -38,18 +39,18 @@ export function PWAInstallPrompt() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === "accepted") {
-      toast.success("App installed successfully!");
+    if (outcome === 'accepted') {
+      toast.success('App installed successfully!');
     }
 
     setDeferredPrompt(null);
     setShowPrompt(false);
-    localStorage.setItem("pwa-install-prompt-seen", "true");
+    localStorage.setItem('pwa-install-prompt-seen', 'true');
   };
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem("pwa-install-prompt-seen", "true");
+    localStorage.setItem('pwa-install-prompt-seen', 'true');
   };
 
   if (!showPrompt || !deferredPrompt) return null;
@@ -65,19 +66,11 @@ export function PWAInstallPrompt() {
                 Get instant access with one tap. Works offline!
               </p>
               <div className="flex gap-2">
-                <Button
-                  onClick={handleInstall}
-                  className="gap-2"
-                  size="sm"
-                >
+                <Button onClick={handleInstall} className="gap-2" size="sm">
                   <Download className="h-4 w-4" />
                   Install Now
                 </Button>
-                <Button
-                  onClick={handleDismiss}
-                  variant="outline"
-                  size="sm"
-                >
+                <Button onClick={handleDismiss} variant="outline" size="sm">
                   Not Now
                 </Button>
               </div>

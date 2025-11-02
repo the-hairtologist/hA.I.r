@@ -1,15 +1,21 @@
-import { useEffect, useState } from "react";
-import { DashboardLayout } from "@/components/DashboardLayout";
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { Key, Copy, CheckCircle, XCircle, Calendar, User } from "lucide-react";
-import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { logger } from "@/lib/logging/productionLogger";
-import { trackSelect } from "@/lib/logging/supabaseTracker";
+import { useEffect, useState } from 'react';
+import { DashboardLayout } from '@/components/DashboardLayout';
+import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { Key, Copy, CheckCircle, XCircle, Calendar, User } from 'lucide-react';
+import { format } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import { logger } from '@/lib/logging/productionLogger';
+import { trackSelect } from '@/lib/logging/supabaseTracker';
 
 interface AccessCode {
   id: string;
@@ -23,24 +29,24 @@ interface AccessCode {
 
 export default function AccessCodes() {
   const { user, isAdmin, loading: authLoading } = useEnhancedAuth();
-  
+
   const [codes, setCodes] = useState<AccessCode[]>([]);
   const [loadingCodes, setLoadingCodes] = useState(true);
 
   useEffect(() => {
     if (!authLoading) {
       if (!user) {
-        toast.error("Please sign in");
+        toast.error('Please sign in');
         setLoadingCodes(false);
         return;
       }
-      
+
       if (!isAdmin) {
-        toast.error("Admin access required");
+        toast.error('Admin access required');
         setLoadingCodes(false);
         return;
       }
-      
+
       loadCodes();
     }
   }, [authLoading, user, isAdmin]);
@@ -50,9 +56,9 @@ export default function AccessCodes() {
       const result = await trackSelect(
         async () => {
           return await supabase
-            .from("access_codes")
-            .select("*")
-            .order("created_at", { ascending: true });
+            .from('access_codes')
+            .select('*')
+            .order('created_at', { ascending: true });
         },
         'access_codes',
         'AccessCodes'
@@ -62,8 +68,10 @@ export default function AccessCodes() {
       if (error) throw error;
       setCodes(data || []);
     } catch (error) {
-      logger.error("Error loading access codes", error, { context: 'AccessCodes' });
-      toast.error("Failed to load access codes");
+      logger.error('Error loading access codes', error, {
+        context: 'AccessCodes',
+      });
+      toast.error('Failed to load access codes');
     } finally {
       setLoadingCodes(false);
     }
@@ -71,11 +79,13 @@ export default function AccessCodes() {
 
   const copyToClipboard = (code: string) => {
     navigator.clipboard.writeText(code);
-    toast.success("Code copied to clipboard");
+    toast.success('Code copied to clipboard');
   };
 
   const usedCount = codes.filter(c => c.used_by !== null).length;
-  const availableCount = codes.filter(c => c.used_by === null && c.is_active).length;
+  const availableCount = codes.filter(
+    c => c.used_by === null && c.is_active
+  ).length;
 
   if (!isAdmin) {
     return (
@@ -98,7 +108,9 @@ export default function AccessCodes() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Access Code Management</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
+            Access Code Management
+          </h1>
           <p className="text-muted-foreground">
             Manage early access codes for testing users
           </p>
@@ -111,7 +123,9 @@ export default function AccessCodes() {
               <Key className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold">{codes.length}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold">
+                {codes.length}
+              </div>
             </CardContent>
           </Card>
 
@@ -121,7 +135,9 @@ export default function AccessCodes() {
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold">{usedCount}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold">
+                {usedCount}
+              </div>
             </CardContent>
           </Card>
 
@@ -131,7 +147,9 @@ export default function AccessCodes() {
               <XCircle className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold">{availableCount}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold">
+                {availableCount}
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -145,7 +163,7 @@ export default function AccessCodes() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {codes.map((codeItem) => (
+              {codes.map(codeItem => (
                 <div
                   key={codeItem.id}
                   className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
@@ -156,25 +174,31 @@ export default function AccessCodes() {
                         {codeItem.code}
                       </code>
                       {codeItem.used_by ? (
-                        <Badge variant="default" className="bg-green-500">Used</Badge>
+                        <Badge variant="default" className="bg-green-500">
+                          Used
+                        </Badge>
                       ) : (
                         <Badge variant="secondary">Available</Badge>
                       )}
                     </div>
-                    
+
                     {codeItem.notes && (
-                      <p className="text-xs sm:text-sm text-muted-foreground">{codeItem.notes}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">
+                        {codeItem.notes}
+                      </p>
                     )}
 
                     <div className="flex items-center gap-4 text-[10px] xs:text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        Created {format(new Date(codeItem.created_at), "MMM d, yyyy")}
+                        Created{' '}
+                        {format(new Date(codeItem.created_at), 'MMM d, yyyy')}
                       </div>
                       {codeItem.used_at && (
                         <div className="flex items-center gap-1">
                           <User className="h-3 w-3" />
-                          Used {format(new Date(codeItem.used_at), "MMM d, yyyy")}
+                          Used{' '}
+                          {format(new Date(codeItem.used_at), 'MMM d, yyyy')}
                         </div>
                       )}
                     </div>

@@ -38,8 +38,13 @@ export interface ErrorHandlerOptions {
  * Recovery Strategy Types
  */
 export interface RecoveryStrategy {
-  action: 'redirect_login' | 'queue_retry' | 'retry_backoff' | 
-          'show_upgrade_prompt' | 'cache_bust' | 'retry_shorter_timeout';
+  action:
+    | 'redirect_login'
+    | 'queue_retry'
+    | 'retry_backoff'
+    | 'show_upgrade_prompt'
+    | 'cache_bust'
+    | 'retry_shorter_timeout';
   config?: {
     returnUrl?: boolean;
     delay?: number;

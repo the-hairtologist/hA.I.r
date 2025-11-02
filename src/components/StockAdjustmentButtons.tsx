@@ -3,11 +3,11 @@
  * Quick +/- controls for product inventory
  */
 
-import { Button } from "@/components/ui/button";
-import { Plus, Minus } from "lucide-react";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { Button } from '@/components/ui/button';
+import { Plus, Minus } from 'lucide-react';
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface StockAdjustmentButtonsProps {
   productId: string;
@@ -30,19 +30,23 @@ export const StockAdjustmentButtons = ({
     setIsAdjusting(true);
     try {
       const newQuantity = Math.max(0, currentQuantity + delta);
-      
+
       const { error } = await supabase
-        .from("product_inventory")
+        .from('product_inventory')
         .update({ current_quantity: newQuantity })
-        .eq("id", productId);
+        .eq('id', productId);
 
       if (error) throw error;
-      
-      toast.success(delta > 0 ? `Added ${delta} ${unitType}` : `Removed ${Math.abs(delta)} ${unitType}`);
+
+      toast.success(
+        delta > 0
+          ? `Added ${delta} ${unitType}`
+          : `Removed ${Math.abs(delta)} ${unitType}`
+      );
       onUpdate();
     } catch (error) {
-      console.error("Error adjusting stock:", error);
-      toast.error("Failed to update stock");
+      console.error('Error adjusting stock:', error);
+      toast.error('Failed to update stock');
     } finally {
       setIsAdjusting(false);
     }
@@ -53,7 +57,7 @@ export const StockAdjustmentButtons = ({
       <Button
         variant="outline"
         size="sm"
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           adjustStock(-incrementAmount);
         }}
@@ -66,7 +70,7 @@ export const StockAdjustmentButtons = ({
       <Button
         variant="outline"
         size="sm"
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           adjustStock(incrementAmount);
         }}

@@ -10,7 +10,13 @@ export interface Appointment {
   duration_minutes?: number;
   service_type: string;
   service_id?: string | null;
-  status: 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+  status:
+    | 'scheduled'
+    | 'confirmed'
+    | 'in_progress'
+    | 'completed'
+    | 'cancelled'
+    | 'no_show';
   notes?: string | null;
   cancellation_reason?: string | null;
   confirmed_by_client?: boolean;

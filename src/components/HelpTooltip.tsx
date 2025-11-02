@@ -1,4 +1,4 @@
-import { HelpCircle } from "lucide-react";
+import { HelpCircle } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -8,9 +8,9 @@ import {
   AlertDialogTrigger,
   AlertDialogAction,
   AlertDialogFooter,
-} from "@/components/ui/alert-dialog";
-import { useUserRole } from "@/hooks/useUserRole";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/alert-dialog';
+import { useUserRole } from '@/hooks/useUserRole';
+import { Badge } from '@/components/ui/badge';
 
 interface RoleSpecificContent {
   client?: string;
@@ -24,13 +24,18 @@ interface HelpTooltipProps {
   tips?: string[];
 }
 
-export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpTooltipProps) => {
+export const HelpTooltip = ({
+  content,
+  title = 'Help',
+  examples,
+  tips,
+}: HelpTooltipProps) => {
   const { isStylist, isClient } = useUserRole();
-  
+
   // Determine what content to show based on role
   let displayContent = '';
   let shouldShow = true;
-  
+
   if (typeof content === 'string') {
     // Generic content - show to everyone
     displayContent = content;
@@ -45,12 +50,12 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
       shouldShow = false;
     }
   }
-  
+
   // Don't render if there's no relevant content for this user
   if (!shouldShow || !displayContent) {
     return null;
   }
-  
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -64,15 +69,21 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
       </AlertDialogTrigger>
       <AlertDialogContent className="brutal-border brutal-shadow-lg max-w-lg">
         <AlertDialogHeader>
-          <AlertDialogTitle className="font-pixel text-2xl">{title}</AlertDialogTitle>
+          <AlertDialogTitle className="font-pixel text-2xl">
+            {title}
+          </AlertDialogTitle>
           <AlertDialogDescription className="font-sans text-base leading-relaxed space-y-4">
-            <div className="text-foreground/90 whitespace-pre-wrap">{displayContent}</div>
-            
+            <div className="text-foreground/90 whitespace-pre-wrap">
+              {displayContent}
+            </div>
+
             {examples && examples.length > 0 && (
               <div className="pt-3 border-t-2 border-foreground/10">
-                <p className="font-semibold text-foreground mb-2">💡 Examples:</p>
+                <p className="font-semibold text-foreground mb-2">
+                  💡 Examples:
+                </p>
                 <ul className="space-y-1.5 text-sm text-foreground/80">
-                  {examples.map((example) => (
+                  {examples.map(example => (
                     <li key={example} className="flex gap-2">
                       <span className="text-secondary">•</span>
                       <span>{example}</span>
@@ -81,12 +92,12 @@ export const HelpTooltip = ({ content, title = "Help", examples, tips }: HelpToo
                 </ul>
               </div>
             )}
-            
+
             {tips && tips.length > 0 && (
               <div className="pt-3 border-t-2 border-foreground/10">
                 <p className="font-semibold text-foreground mb-2">✨ Tips:</p>
                 <ul className="space-y-1.5 text-sm text-foreground/80">
-                  {tips.map((tip) => (
+                  {tips.map(tip => (
                     <li key={tip} className="flex gap-2">
                       <span className="text-secondary">•</span>
                       <span>{tip}</span>
