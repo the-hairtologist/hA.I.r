@@ -17,7 +17,7 @@ export const DashboardStatsSection = memo(
 
     return (
       <div className="animate-fade-in" style={{ animationDelay: '300ms' }}>
-        <DashboardStats stats={stats} userRole={userRole} />
+        <DashboardStats stats={stats} userRole={userRole ?? ''} />
       </div>
     );
   }

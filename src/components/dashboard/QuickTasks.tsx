@@ -23,10 +23,12 @@ export const QuickTasks = () => {
   const { data: tasks = [] } = useQuery({
     queryKey: ['quick-tasks', session?.user?.id],
     queryFn: async () => {
+      if (!session?.user?.id) return [];
+      
       const { data } = await supabase
         .from('stylist_todos')
         .select('*')
-        .eq('user_id', session?.user?.id)
+        .eq('user_id', session.user.id)
         .order('created_at', { ascending: false })
         .limit(5);
       return (data as Task[]) || [];
@@ -36,9 +38,11 @@ export const QuickTasks = () => {
 
   const addTask = useMutation({
     mutationFn: async (task: string) => {
+      if (!session?.user?.id) throw new Error('Not authenticated');
+      
       const { error } = await supabase
         .from('stylist_todos')
-        .insert({ user_id: session?.user?.id, task, completed: false });
+        .insert([{ user_id: session.user.id, task, completed: false }]);
       if (error) throw error;
     },
     onSuccess: () => {

@@ -81,7 +81,7 @@ export const InviteClientDialog = ({
             label="Client Email"
             type="email"
             value={values.clientEmail}
-            onChange={value => setFieldValue('clientEmail', value)}
+            onChange={value => setFieldValue('clientEmail', String(value))}
             onBlur={() => setFieldTouched('clientEmail')}
             error={errors.clientEmail}
             touched={touched.clientEmail}
@@ -95,7 +95,7 @@ export const InviteClientDialog = ({
             label="Personal Message"
             type="textarea"
             value={values.customMessage || ''}
-            onChange={value => setFieldValue('customMessage', value)}
+            onChange={value => setFieldValue('customMessage', String(value))}
             onBlur={() => setFieldTouched('customMessage')}
             error={errors.customMessage}
             touched={touched.customMessage}

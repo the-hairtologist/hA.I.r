@@ -72,6 +72,7 @@ export function NextAppointmentWidget() {
       if (data) {
         setAppointment({
           ...data,
+          notes: data.notes ?? undefined,
           stylist_name:
             (data.stylist_profiles as any)?.user?.full_name || 'Your Stylist',
         });

@@ -10,43 +10,47 @@ export const SequenceAnalytics = () => {
   const { data: stats, isLoading } = useQuery({
     queryKey: ['sequence_analytics'],
     queryFn: async () => {
+      if (!user?.id) return null;
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
+
+      if (!stylistProfile?.id) return null;
 
       // Total sequences
       const { count: totalSequences } = await supabase
         .from('email_sequences')
         .select('*', { count: 'exact', head: true })
-        .eq('stylist_id', stylistProfile?.id);
+        .eq('stylist_id', stylistProfile.id);
 
       // Active enrollments
       const { count: activeEnrollments } = await supabase
         .from('email_sequence_enrollments')
         .select('*', { count: 'exact', head: true })
-        .eq('stylist_id', stylistProfile?.id)
+        .eq('stylist_id', stylistProfile.id)
         .eq('status', 'active');
 
       // Total emails sent
       const { count: emailsSent } = await supabase
         .from('email_sequence_logs')
         .select('*', { count: 'exact', head: true })
-        .eq('stylist_id', stylistProfile?.id);
+        .eq('stylist_id', stylistProfile.id);
 
       // Opened emails
       const { count: emailsOpened } = await supabase
         .from('email_sequence_logs')
         .select('*', { count: 'exact', head: true })
-        .eq('stylist_id', stylistProfile?.id)
+        .eq('stylist_id', stylistProfile.id)
         .not('opened_at', 'is', null);
 
       // Completed sequences
       const { count: completedSequences } = await supabase
         .from('email_sequence_enrollments')
         .select('*', { count: 'exact', head: true })
-        .eq('stylist_id', stylistProfile?.id)
+        .eq('stylist_id', stylistProfile.id)
         .eq('status', 'completed');
 
       const openRate =

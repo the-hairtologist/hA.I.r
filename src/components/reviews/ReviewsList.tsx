@@ -69,16 +69,25 @@ export const ReviewsList = ({ stylistId, limit }: ReviewsListProps) => {
         // Get client profile info
         const reviewsWithProfiles = await Promise.all(
           reviewsData.map(async review => {
+            const userId = review.client_profiles.user_id;
+            if (!userId) {
+              return {
+                ...review,
+                clientName: 'Anonymous',
+                clientAvatar: null,
+              };
+            }
+            
             const { data: profile } = await supabase
               .from('profiles')
               .select('full_name, avatar_url')
-              .eq('id', review.client_profiles.user_id)
+              .eq('id', userId)
               .maybeSingle();
 
             return {
               ...review,
               clientName: profile?.full_name || 'Anonymous',
-              clientAvatar: profile?.avatar_url,
+              clientAvatar: profile?.avatar_url ?? null,
             };
           })
         );

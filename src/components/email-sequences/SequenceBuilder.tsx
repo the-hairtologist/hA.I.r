@@ -93,17 +93,24 @@ export const SequenceBuilder = ({
       .order('step_order');
 
     if (data && data.length > 0) {
-      setSteps(data);
+      setSteps(
+        data.map(step => ({
+          ...step,
+          send_time_preference: step.send_time_preference ?? 'any_time',
+        }))
+      );
     }
   };
 
   const saveMutation = useMutation({
     mutationFn: async () => {
+      if (!user?.id) throw new Error('Not authenticated');
+      
       // Get stylist profile
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) throw new Error('Stylist profile not found');
@@ -137,6 +144,7 @@ export const SequenceBuilder = ({
           .maybeSingle();
 
         if (error) throw error;
+        if (!data) throw new Error('Failed to create sequence');
         sequenceId = data.id;
       }
 

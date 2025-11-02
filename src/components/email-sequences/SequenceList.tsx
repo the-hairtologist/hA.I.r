@@ -49,10 +49,12 @@ export const SequenceList = () => {
   const { data: sequences, isLoading } = useQuery({
     queryKey: ['email_sequences'],
     queryFn: async () => {
+      if (!user?.id) return [];
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       let query = supabase
@@ -116,10 +118,12 @@ export const SequenceList = () => {
   // Copy global template to stylist's account
   const copyTemplateMutation = useMutation({
     mutationFn: async (sequence: any) => {
+      if (!user?.id) throw new Error('Not authenticated');
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
 
       if (!stylistProfile) throw new Error('Stylist profile not found');
@@ -140,6 +144,7 @@ export const SequenceList = () => {
         .maybeSingle();
 
       if (seqError) throw seqError;
+      if (!newSequence) throw new Error('Failed to copy sequence');
 
       // Copy steps
       const { data: steps } = await supabase
@@ -148,7 +153,7 @@ export const SequenceList = () => {
         .eq('sequence_id', sequence.id)
         .order('step_order');
 
-      if (steps && steps.length > 0) {
+      if (steps && steps.length > 0 && newSequence) {
         const newSteps = steps.map((step: any) => ({
           sequence_id: newSequence.id,
           step_order: step.step_order,

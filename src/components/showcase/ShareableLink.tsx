@@ -84,7 +84,7 @@ export function ShareableLink() {
           </Button>
         </div>
 
-        {navigator.share && (
+        {'share' in navigator && (
           <Button className="w-full gap-2" onClick={handleShare}>
             <Share2 className="h-4 w-4" />
             Share Link

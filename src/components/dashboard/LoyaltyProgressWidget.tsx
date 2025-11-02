@@ -55,7 +55,14 @@ export function LoyaltyProgressWidget() {
         .eq('client_id', clientProfile.id)
         .order('created_at', { ascending: false });
 
-      setMilestones(milestonesData || []);
+      setMilestones(
+        milestonesData?.map(m => ({
+          ...m,
+          discount_amount: m.discount_amount ?? 0,
+          discount_code: m.discount_code ?? '',
+          celebrated: m.celebrated ?? false,
+        })) || []
+      );
     } catch (error) {
       console.error('Error loading loyalty data:', error);
     } finally {

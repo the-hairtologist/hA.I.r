@@ -36,11 +36,15 @@ export const ClientEnrollments = () => {
   const { data: enrollments, isLoading } = useQuery({
     queryKey: ['email_enrollments'],
     queryFn: async () => {
+      if (!user?.id) return [];
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
+
+      if (!stylistProfile?.id) return [];
 
       const { data, error } = await supabase
         .from('email_sequence_enrollments')
@@ -51,7 +55,7 @@ export const ClientEnrollments = () => {
           sequence:email_sequences!email_sequence_enrollments_sequence_id_fkey(name, trigger_type)
         `
         )
-        .eq('stylist_id', stylistProfile?.id)
+        .eq('stylist_id', stylistProfile.id)
         .order('enrolled_at', { ascending: false });
 
       if (error) throw error;
@@ -64,16 +68,20 @@ export const ClientEnrollments = () => {
   const { data: clients } = useQuery({
     queryKey: ['stylist_clients'],
     queryFn: async () => {
+      if (!user?.id) return [];
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
+
+      if (!stylistProfile?.id) return [];
 
       const { data, error } = await supabase
         .from('client_profiles')
         .select('id, full_name, email')
-        .eq('preferred_stylist_id', stylistProfile?.id)
+        .eq('preferred_stylist_id', stylistProfile.id)
         .order('full_name');
 
       if (error) throw error;
@@ -86,16 +94,20 @@ export const ClientEnrollments = () => {
   const { data: sequences } = useQuery({
     queryKey: ['active_sequences'],
     queryFn: async () => {
+      if (!user?.id) return [];
+      
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
+
+      if (!stylistProfile?.id) return [];
 
       const { data, error } = await supabase
         .from('email_sequences')
         .select('id, name, trigger_type')
-        .eq('stylist_id', stylistProfile?.id)
+        .eq('stylist_id', stylistProfile.id)
         .eq('is_active', true)
         .order('name');
 
@@ -122,6 +134,8 @@ export const ClientEnrollments = () => {
   // Enroll client
   const enrollMutation = useMutation({
     mutationFn: async () => {
+      if (!user?.id) throw new Error('Not authenticated');
+      
       // Check for duplicate before enrolling
       const existing = await checkDuplicateEnrollment();
       if (existing && existing.status === 'active') {
@@ -131,8 +145,10 @@ export const ClientEnrollments = () => {
       const { data: stylistProfile } = await supabase
         .from('stylist_profiles')
         .select('id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .maybeSingle();
+
+      if (!stylistProfile?.id) throw new Error('Stylist profile not found');
 
       const { data, error } = await supabase.functions.invoke(
         'enroll-in-sequence',
@@ -140,7 +156,7 @@ export const ClientEnrollments = () => {
           body: {
             client_id: selectedClient,
             sequence_id: selectedSequence,
-            stylist_id: stylistProfile?.id,
+            stylist_id: stylistProfile.id,
           },
         }
       );
