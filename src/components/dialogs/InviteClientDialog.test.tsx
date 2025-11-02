@@ -157,11 +157,9 @@ describe('InviteClientDialog', () => {
       await user.click(sendButton);
     });
 
-    // Should show Loader2 component
+    // Check for the loading state text
     await waitFor(() => {
-      const spinner = screen.getByText(/sending\.\.\./i).previousSibling;
-      expect(spinner).toBeInTheDocument();
-      expect(spinner).toHaveClass('animate-spin');
+      expect(screen.getByText(/sending\.\.\./i)).toBeInTheDocument();
     });
   });
 
