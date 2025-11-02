@@ -64,6 +64,8 @@ import CalendarSync from '@/components/CalendarSync';
 import { ServiceTypeColorManager } from '@/components/ServiceTypeColorManager';
 import { VacationConflictDialog } from '@/components/VacationConflictDialog';
 import { ContextualAI } from '@/components/ContextualAI';
+import { PageHeader } from '@/components/PageHeader';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 interface DaySchedule {
   enabled: boolean;
@@ -698,32 +700,13 @@ const ScheduleManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 pb-20">
-      <header className="border-b-[3px] border-foreground bg-card/95 backdrop-blur-sm sticky top-0 z-10 shadow-brutal-sm">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate('/dashboard')}
-              className="border-[3px] border-foreground bg-background hover:bg-primary hover:text-primary-foreground shadow-[2px_2px_0px_0px_hsl(var(--foreground))] hover:translate-x-0.5 hover:translate-y-0.5 transition-all h-10 w-10"
-              aria-label="Back to dashboard"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl border-[3px] border-foreground bg-primary/10 flex items-center justify-center">
-                <CalendarIcon className="h-5 w-5 text-primary" />
-              </div>
-              <h1 className="text-xl sm:text-2xl font-pixel">
-                Schedule Management
-              </h1>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="container mx-auto px-4 py-6 max-w-5xl space-y-6">
+    <DashboardLayout>
+      <PageHeader
+        title="Schedule Management"
+        icon={<CalendarIcon className="h-6 w-6" />}
+        backTo="/dashboard"
+      />
+      <div className="space-y-6 pb-20 px-4 py-6">
         {/* Contextual AI Suggestions */}
         <ContextualAI
           context="schedule"
@@ -1839,7 +1822,7 @@ const ScheduleManagement = () => {
             <ServiceTypeColorManager stylistId={stylistProfile?.id} />
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
 
       {/* Vacation Conflict Dialog */}
       <VacationConflictDialog
@@ -1864,7 +1847,7 @@ const ScheduleManagement = () => {
           }
         }}
       />
-    </div>
+    </DashboardLayout>
   );
 };
 

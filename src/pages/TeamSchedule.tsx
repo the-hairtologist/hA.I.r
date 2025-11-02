@@ -6,6 +6,8 @@ import { Calendar as CalendarIcon, Users } from 'lucide-react';
 import { MetaTags } from '@/components/MetaTags';
 import { format, startOfWeek, addDays } from 'date-fns';
 import { TeamChat } from '@/components/TeamChat';
+import { PageHeader } from '@/components/PageHeader';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 interface TeamAppointment {
   id: string;
@@ -80,20 +82,13 @@ export default function TeamSchedule() {
         title="Team Schedule"
         description="View all team member schedules"
       />
-
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-primary/10 rounded-xl">
-              <Users className="w-8 h-8 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold">Team Schedule</h1>
-              <p className="text-muted-foreground">
-                Collaborative calendar view
-              </p>
-            </div>
-          </div>
+      <DashboardLayout>
+        <PageHeader
+          title="Team Schedule"
+          icon={<Users className="h-6 w-6" />}
+          backTo="/dashboard"
+        />
+        <div className="space-y-6 px-4 py-6">
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Schedule Grid */}
@@ -177,7 +172,7 @@ export default function TeamSchedule() {
             <div>{stylistId && <TeamChat stylistId={stylistId} />}</div>
           </div>
         </div>
-      </div>
+      </DashboardLayout>
     </>
   );
 }

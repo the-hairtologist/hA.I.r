@@ -33,6 +33,8 @@ import {
 } from '@/components/admin/ActivityLogFilter';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useAuth } from '@/hooks/useAuth';
+import { PageHeader } from '@/components/PageHeader';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 interface ActivityLogEntry {
   id: string;
@@ -193,40 +195,39 @@ const ActivityLog = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-      <header className="border-b-[3px] border-foreground bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-brutal">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => navigate('/admin/command')}
-                className="min-h-[44px] min-w-[44px] border-2 shadow-brutal"
-                aria-label="Go back to admin command center"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center gap-2">
-                <Activity className="h-6 w-6 text-primary" />
-                <div>
-                  <h1 className="text-2xl font-pixel gradient-text">
-                    Activity Log
-                  </h1>
-                  <p className="text-sm font-sans text-muted-foreground">
-                    System-wide activity tracking
-                  </p>
-                </div>
-              </div>
-            </div>
-            <Badge variant="destructive" className="font-semibold">
-              ADMIN ACCESS
-            </Badge>
-          </div>
-        </div>
-      </header>
-
-      <main className="container mx-auto px-4 py-8">
+    <DashboardLayout>
+      <PageHeader
+        title="Activity Log"
+        icon={<Activity className="h-6 w-6" />}
+        backTo="/admin/command-center"
+        actions={
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={loadActivities}
+              disabled={loading}
+              className="border-2 shadow-brutal"
+            >
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`}
+              />
+              Refresh
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={exportToCSV}
+              disabled={activities.length === 0}
+              className="shadow-brutal"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </Button>
+          </>
+        }
+      />
+      <div className="space-y-6 px-4 py-6">
         {/* Filters & Actions */}
         <Card className="mb-6 brutal-border brutal-shadow-sm">
           <CardHeader>
@@ -236,30 +237,6 @@ const ActivityLog = () => {
                 <CardDescription>
                   Track all system actions and changes
                 </CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={loadActivities}
-                  disabled={loading}
-                  className="border-2 shadow-brutal"
-                >
-                  <RefreshCw
-                    className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`}
-                  />
-                  Refresh
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={exportToCSV}
-                  disabled={activities.length === 0}
-                  className="shadow-brutal"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Export CSV
-                </Button>
               </div>
             </div>
           </CardHeader>
@@ -382,8 +359,8 @@ const ActivityLog = () => {
             )}
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 

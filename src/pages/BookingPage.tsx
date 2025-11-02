@@ -35,6 +35,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { sanitizeInput, rateLimiter, RATE_LIMITS } from '@/lib';
+import { PageHeader } from '@/components/PageHeader';
 
 const BookingPage = () => {
   const { session } = useAuth();
@@ -183,13 +184,12 @@ const BookingPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-4xl">
-        <div>
-          <h1 className="text-3xl font-pixel">My Booking Page</h1>
-          <p className="font-sans text-muted-foreground">
-            Share your booking link with clients
-          </p>
-        </div>
+      <PageHeader
+        title="My Booking Page"
+        icon={<Share2 className="h-6 w-6" />}
+        backTo="/settings"
+      />
+      <div className="space-y-6 max-w-4xl px-4 py-6">
 
         {/* Booking Link Card */}
         <Card>

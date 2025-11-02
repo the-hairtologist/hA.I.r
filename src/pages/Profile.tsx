@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { useUserRole } from '@/hooks/useUserRole';
+import { PageHeader } from '@/components/PageHeader';
 
 const Profile = () => {
   const { session } = useAuth();
@@ -98,15 +99,12 @@ const Profile = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-3xl">
-        <div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-pixel">
-            My Profile
-          </h1>
-          <p className="text-muted-foreground font-sans">
-            Manage your personal information
-          </p>
-        </div>
+      <PageHeader
+        title="My Profile"
+        icon={<User className="h-6 w-6" />}
+        backTo="/dashboard"
+      />
+      <div className="space-y-6 max-w-3xl px-4 py-6">
 
         <Card>
           <CardHeader>

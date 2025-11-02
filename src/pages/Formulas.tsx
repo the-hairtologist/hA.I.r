@@ -96,6 +96,7 @@ import {
   useDeleteFormula,
 } from '@/hooks/useFormulas';
 import { useClients } from '@/hooks/useClients';
+import { PageHeader } from '@/components/PageHeader';
 
 const Formulas = () => {
   const navigate = useNavigate();
@@ -494,7 +495,12 @@ const Formulas = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="space-y-6">
+        <PageHeader
+          title="Color Formulas"
+          icon={<Beaker className="h-6 w-6" />}
+          backTo="/dashboard"
+        />
+        <div className="space-y-6 px-4 py-6">
           <Breadcrumbs />
           <SkeletonList count={8} variant="card" showHeader />
         </div>
@@ -504,7 +510,12 @@ const Formulas = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <PageHeader
+        title="Color Formulas"
+        icon={<Beaker className="h-6 w-6" />}
+        backTo="/dashboard"
+      />
+      <div className="space-y-6 px-4 py-6">
         <Breadcrumbs />
 
         {/* AI Disclaimer */}
