@@ -10,6 +10,107 @@ import { logger } from './logger';
 let GA4_MEASUREMENT_ID: string | null = null;
 let MIXPANEL_TOKEN: string | null = null;
 
+type GtagFunction = (...args: unknown[]) => unknown;
+
+interface GtagWindow extends Window {
+  gtag: GtagFunction;
+}
+
+const getGtag = (): GtagFunction | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  const potentialWindow = window as Partial<GtagWindow>;
+  return typeof potentialWindow.gtag === 'function'
+    ? potentialWindow.gtag
+    : null;
+};
+
+type AnalyticsPrimitive = string | number | boolean | null;
+
+export type AnalyticsValue =
+  | AnalyticsPrimitive
+  | Date
+  | AnalyticsValue[]
+  | { [key: string]: AnalyticsValue }
+  | undefined;
+
+export type AnalyticsProperties = Record<string, AnalyticsValue>;
+
+type SanitizedAnalyticsValue =
+  | AnalyticsPrimitive
+  | SanitizedAnalyticsValue[]
+  | { [key: string]: SanitizedAnalyticsValue };
+
+const sanitizeAnalyticsValue = (
+  value: AnalyticsValue
+): SanitizedAnalyticsValue | undefined => {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (value === null) {
+    return null;
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+
+  if (Array.isArray(value)) {
+    const sanitizedArray = value
+      .map(item => sanitizeAnalyticsValue(item))
+      .filter((item): item is SanitizedAnalyticsValue => item !== undefined);
+
+    return sanitizedArray;
+  }
+
+  if (typeof value === 'object') {
+    return Object.entries(value).reduce<
+      Record<string, SanitizedAnalyticsValue>
+    >((acc, [key, nestedValue]) => {
+      const sanitized = sanitizeAnalyticsValue(nestedValue);
+
+      if (sanitized !== undefined) {
+        acc[key] = sanitized;
+      }
+
+      return acc;
+    }, {});
+  }
+
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : null;
+  }
+
+  if (typeof value === 'string' || typeof value === 'boolean') {
+    return value;
+  }
+
+  return undefined;
+};
+
+const sanitizeAnalyticsProperties = (
+  properties?: AnalyticsProperties
+): Record<string, SanitizedAnalyticsValue> => {
+  if (!properties) {
+    return {};
+  }
+
+  return Object.entries(properties).reduce<
+    Record<string, SanitizedAnalyticsValue>
+  >((acc, [key, value]) => {
+    const sanitized = sanitizeAnalyticsValue(value);
+
+    if (sanitized !== undefined) {
+      acc[key] = sanitized;
+    }
+
+    return acc;
+  }, {});
+};
+
 const getGA4Id = () => {
   if (GA4_MEASUREMENT_ID === null) {
     GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID || '';
@@ -45,7 +146,7 @@ export const initAnalytics = () => {
   if (analyticsInitialized) return;
 
   const measurementId = getGA4Id(); // Lazy load env var
-  
+
   // Google Analytics 4 - with security validation
   if (!measurementId || !isValidGA4Id(measurementId)) {
     logger.info('GA4 not configured or invalid', 'analytics');
@@ -96,18 +197,22 @@ export const isAnalyticsReady = (): boolean => {
  * Track a page view
  */
 export const trackPageView = (pagePath: string, pageTitle?: string) => {
-  if (!analyticsInitialized) return;
-
-  // Google Analytics 4
-  if (typeof window !== 'undefined' && 'gtag' in window) {
-    (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('event', 'page_view', {
-      page_path: pagePath,
-      page_title: pageTitle || document.title,
-      platform: Platform.platform,
-    });
+  if (!analyticsInitialized) {
+    logger.debug(
+      'trackPageView called before analytics initialized',
+      'analytics',
+      { pagePath }
+    );
+    return;
   }
 
-  logger.debug('Page view tracked', 'analytics', { pagePath });
+  const pageTitleValue =
+    pageTitle ?? (typeof document !== 'undefined' ? document.title : undefined);
+
+  trackEvent('page_view', {
+    page_path: pagePath,
+    page_title: pageTitleValue,
+  });
 };
 
 /**
@@ -115,19 +220,33 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
  */
 export const trackEvent = (
   eventName: string,
-  properties?: Record<string, any>
+  properties?: AnalyticsProperties
 ) => {
-  if (!analyticsInitialized) return;
+  if (!analyticsInitialized) {
+    logger.debug(
+      'trackEvent called before analytics initialized',
+      'analytics',
+      { eventName }
+    );
+    return;
+  }
 
+  const sanitizedProperties = sanitizeAnalyticsProperties(properties);
   const eventData = {
-    ...properties,
-    platform: Platform.platform,
-    timestamp: new Date().toISOString(),
+    ...sanitizedProperties,
+    platform:
+      typeof sanitizedProperties.platform === 'string'
+        ? sanitizedProperties.platform
+        : Platform.platform,
+    timestamp:
+      typeof sanitizedProperties.timestamp === 'string'
+        ? sanitizedProperties.timestamp
+        : new Date().toISOString(),
   };
 
-  // Google Analytics 4
-  if (typeof window !== 'undefined' && 'gtag' in window) {
-    (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('event', eventName, eventData);
+  const gtag = getGtag();
+  if (gtag) {
+    gtag('event', eventName, eventData);
   }
 
   logger.debug('Event tracked', 'analytics', { eventName, eventData });
@@ -136,43 +255,77 @@ export const trackEvent = (
 /**
  * Set user properties
  */
-export const setUserProperties = (userId: string, properties?: Record<string, any>) => {
-  if (!analyticsInitialized) return;
-
-  // Google Analytics 4
-  if (typeof window !== 'undefined' && 'gtag' in window) {
-    (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('set', 'user_properties', {
-      user_id: userId,
-      ...properties,
-    });
+export const setUserProperties = (
+  userId: string,
+  properties?: AnalyticsProperties
+) => {
+  if (!analyticsInitialized) {
+    logger.debug(
+      'setUserProperties called before analytics initialized',
+      'analytics',
+      { userId }
+    );
+    return;
   }
 
-  logger.debug('User properties set', 'analytics', { userId });
+  const gtag = getGtag();
+  if (!gtag) {
+    return;
+  }
+
+  const sanitizedProperties = sanitizeAnalyticsProperties(properties);
+
+  gtag('set', 'user_properties', {
+    user_id: userId,
+    ...sanitizedProperties,
+  });
+
+  logger.debug('User properties set', 'analytics', {
+    userId,
+    properties: sanitizedProperties,
+  });
 };
 
 /**
  * Track user identification
  */
-export const identifyUser = (userId: string, traits?: Record<string, any>) => {
-  if (!analyticsInitialized) return;
-
-  const measurementId = getGA4Id(); // Lazy load env var
-  
-  // Google Analytics 4
-  if (typeof window !== 'undefined' && 'gtag' in window && measurementId) {
-    (window as unknown as { gtag: (...args: unknown[]) => unknown }).gtag('config', measurementId, {
-      user_id: userId,
-      ...traits,
-    });
+export const identifyUser = (userId: string, traits?: AnalyticsProperties) => {
+  if (!analyticsInitialized) {
+    logger.debug(
+      'identifyUser called before analytics initialized',
+      'analytics',
+      { userId }
+    );
+    return;
   }
 
-  logger.debug('User identified', 'analytics', { userId });
-};
+  const measurementId = getGA4Id();
+  if (!measurementId) {
+    logger.debug(
+      'identifyUser skipped due to missing measurement id',
+      'analytics',
+      { userId }
+    );
+    return;
+  }
 
-interface AnalyticsEvent {
-  event_name: string;
-  event_data?: Record<string, any>;
-}
+  const gtag = getGtag();
+  if (!gtag) {
+    return;
+  }
+
+  const sanitizedTraits = sanitizeAnalyticsProperties(traits);
+
+  gtag('config', measurementId, {
+    user_id: userId,
+    ...sanitizedTraits,
+  });
+
+  logger.debug('User identified', 'analytics', {
+    userId,
+    traits: sanitizedTraits,
+  });
+};
 
 class Analytics {
   private enabled: boolean;
@@ -185,7 +338,7 @@ class Analytics {
   /**
    * Track a custom event
    */
-  track(eventName: string, eventData?: Record<string, any>): void {
+  track(eventName: string, eventData?: AnalyticsProperties): void {
     trackEvent(eventName, eventData);
   }
 
@@ -199,8 +352,12 @@ class Analytics {
   /**
    * Track user signup (with optional campaign data)
    */
-  signup(method: string, role: string, campaignData?: Record<string, any>): void {
-    this.track('sign_up', { method, role, ...campaignData });
+  signup(
+    method: string,
+    role: string,
+    campaignData?: AnalyticsProperties
+  ): void {
+    this.track('sign_up', { method, role, ...(campaignData ?? {}) });
   }
 
   /**
@@ -221,9 +378,9 @@ class Analytics {
    * Track appointment completion
    */
   appointmentCompleted(serviceType: string, amount?: number): void {
-    this.track('appointment_completed', { 
+    this.track('appointment_completed', {
       service_type: serviceType,
-      value: amount 
+      value: amount,
     });
   }
 
@@ -238,22 +395,26 @@ class Analytics {
    * Track subscription purchase
    */
   purchaseStarted(plan: string, amount: number): void {
-    this.track('purchase_started', { 
+    this.track('purchase_started', {
       plan,
       value: amount,
-      currency: 'USD'
+      currency: 'USD',
     });
   }
 
   /**
    * Track subscription success (with optional campaign data)
    */
-  purchaseCompleted(plan: string, amount: number, campaignData?: Record<string, any>): void {
-    this.track('purchase_completed', { 
+  purchaseCompleted(
+    plan: string,
+    amount: number,
+    campaignData?: AnalyticsProperties
+  ): void {
+    this.track('purchase_completed', {
       plan,
       value: amount,
       currency: 'USD',
-      ...campaignData
+      ...(campaignData ?? {}),
     });
   }
 
@@ -268,9 +429,9 @@ class Analytics {
    * Track errors
    */
   error(errorMessage: string, errorContext?: string): void {
-    this.track('error_shown', { 
+    this.track('error_shown', {
       error_message: errorMessage,
-      error_context: errorContext 
+      error_context: errorContext,
     });
   }
 
@@ -288,7 +449,11 @@ class Analytics {
     this.track('profile_completed', { role });
   }
 
-  firstServiceCreated(serviceData: { name: string; price: number; duration: number }): void {
+  firstServiceCreated(serviceData: {
+    name: string;
+    price: number;
+    duration: number;
+  }): void {
     this.track('first_service_created', serviceData);
   }
 
@@ -301,11 +466,11 @@ class Analytics {
   }
 
   subscriptionConverted(plan: string, amount: number): void {
-    this.track('subscription_converted', { 
-      plan, 
+    this.track('subscription_converted', {
+      plan,
       amount,
       currency: 'USD',
-      value: amount 
+      value: amount,
     });
   }
 
@@ -313,16 +478,23 @@ class Analytics {
     this.track('subscription_cancelled', { reason });
   }
 
-  appointmentBooked(serviceType: string, amount: number, isFirst: boolean = false): void {
-    this.track(isFirst ? 'first_appointment_booked' : 'appointment_booked', { 
-      serviceType, 
+  appointmentBooked(
+    serviceType: string,
+    amount: number,
+    isFirst: boolean = false
+  ): void {
+    this.track(isFirst ? 'first_appointment_booked' : 'appointment_booked', {
+      serviceType,
       amount,
       currency: 'USD',
-      value: amount 
+      value: amount,
     });
   }
 
-  appointmentCancelled(reason?: string, cancelledBy?: 'client' | 'stylist'): void {
+  appointmentCancelled(
+    reason?: string,
+    cancelledBy?: 'client' | 'stylist'
+  ): void {
     this.track('appointment_cancelled', { reason, cancelledBy });
   }
 
@@ -343,11 +515,11 @@ class Analytics {
   }
 
   commissionEarned(amount: number, productName: string): void {
-    this.track('commission_earned', { 
-      amount, 
+    this.track('commission_earned', {
+      amount,
       productName,
       currency: 'USD',
-      value: amount 
+      value: amount,
     });
   }
 
@@ -373,7 +545,6 @@ class Analytics {
     this.track('portfolio_upload');
   }
 
-
   // Subscriptions
   subscriptionStarted(tier: string): void {
     this.track('subscription_started', { tier });
@@ -384,7 +555,7 @@ class Analytics {
   }
 
   // Micro-Conversion Tracking (Landing Page Optimizations)
-  
+
   stickyCTAClicked(variant: string): void {
     this.track('sticky_cta_clicked', { variant });
   }
@@ -431,9 +602,9 @@ export const analytics = new Analytics();
 
 /**
  * Instructions for integration:
- * 
+ *
  * 1. Add Google Analytics 4 to index.html:
- * 
+ *
  * <!-- Google tag (gtag.js) -->
  * <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
  * <script>
@@ -442,21 +613,21 @@ export const analytics = new Analytics();
  *   gtag('js', new Date());
  *   gtag('config', 'G-XXXXXXXXXX');
  * </script>
- * 
+ *
  * 2. Use in components:
- * 
+ *
  * import { analytics } from '@/lib/analytics';
- * 
+ *
  * // Track page views
  * useEffect(() => {
  *   analytics.pageView(location.pathname);
  * }, [location]);
- * 
+ *
  * // Track events
  * const handleSignup = async () => {
  *   await signup();
  *   analytics.signup('email', userRole);
  * };
- * 
+ *
  * 3. For Segment integration, install their SDK and replace window.gtag with window.analytics
  */
