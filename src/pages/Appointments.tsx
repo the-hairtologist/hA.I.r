@@ -110,8 +110,8 @@ const Appointments = () => {
   }>({ open: false, title: '', description: '', onConfirm: () => {} });
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearchChange = useOptimizedCallback((value: string) => {
-    setSearchQuery(value);
+  const handleSearchChange = useOptimizedCallback((...args: any[]) => {
+    setSearchQuery(args[0] as string);
   }, []);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [rebookDialogOpen, setRebookDialogOpen] = useState(false);
@@ -240,7 +240,7 @@ const Appointments = () => {
   }, [navigate]);
 
   // Keyboard shortcuts
-  useGlobalShortcuts(searchInputRef);
+  useGlobalShortcuts(searchInputRef as any);
 
   // Helper function to refetch appointments
   const refetchAppointments = () => {
@@ -278,7 +278,7 @@ const Appointments = () => {
     appointmentId: string,
     newStatus: string
   ) => {
-    const appointment = appointments.find(a => a.id === appointmentId);
+    const appointment = appointments.find((a: any) => a.id === appointmentId);
     const clientName = appointment?.client_profiles?.full_name || 'this client';
     const statusAction = newStatus === 'cancelled' ? 'cancel' : newStatus;
 
@@ -357,7 +357,7 @@ const Appointments = () => {
 
   // Get today's appointments
   const todayAppointments = appointments
-    .filter(apt => {
+    .filter((apt: any) => {
       const aptDate = new Date(apt.appointment_date);
       const today = new Date();
       return (
@@ -366,7 +366,7 @@ const Appointments = () => {
       );
     })
     .sort(
-      (a, b) =>
+      (a: any, b: any) =>
         new Date(a.appointment_date).getTime() -
         new Date(b.appointment_date).getTime()
     );
@@ -526,7 +526,7 @@ const Appointments = () => {
                 <AIFeatureErrorBoundary featureName="revenue_optimizer">
                   <RevenueOptimizer
                     appointments={appointments}
-                    clientData={appointments.map(apt => ({
+                    clientData={appointments.map((apt: any) => ({
                       id: apt.client_id,
                       last_appointment_date: apt.appointment_date,
                       total_appointments: 1,

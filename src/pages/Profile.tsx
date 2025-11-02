@@ -25,7 +25,7 @@ const Profile = () => {
       const { data } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', session?.user?.id)
+        .eq('id', session?.user?.id || '')
         .maybeSingle();
       return data;
     },
@@ -38,7 +38,7 @@ const Profile = () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', session?.user?.id)
+        .eq('user_id', session?.user?.id || '')
         .maybeSingle();
       return data;
     },
@@ -63,7 +63,7 @@ const Profile = () => {
           full_name: data.full_name,
           phone: data.phone,
         })
-        .eq('id', session?.user?.id);
+        .eq('id', session?.user?.id || '');
 
       if (profileError) throw profileError;
 
@@ -76,7 +76,7 @@ const Profile = () => {
             business_name: data.business_name,
             location: data.location,
           })
-          .eq('user_id', session?.user?.id);
+          .eq('user_id', session?.user?.id || '');
 
         if (stylistError) throw stylistError;
       }

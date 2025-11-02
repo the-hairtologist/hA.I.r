@@ -52,7 +52,7 @@ const BookingPage = () => {
       const { data } = await supabase
         .from('stylist_profiles')
         .select('*')
-        .eq('user_id', session?.user?.id)
+        .eq('user_id', session?.user?.id || '')
         .maybeSingle();
       return data;
     },

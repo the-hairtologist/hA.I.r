@@ -362,17 +362,17 @@ const FeedbackBoard = () => {
                       </div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <Badge
-                          className={`${getStatusColor(item.status)} font-semibold uppercase text-xs`}
+                          className={`${getStatusColor(item.status || 'new')} font-semibold uppercase text-xs`}
                           variant="outline"
                         >
-                          {item.status.replace('_', ' ')}
+                          {(item.status || 'new').replace('_', ' ')}
                         </Badge>
                         {isAdmin && (
                           <AdminFeedbackActions
                             feedbackId={item.id}
-                            currentStatus={item.status}
+                            currentStatus={item.status || 'new'}
                             currentPriority={item.priority || 'medium'}
-                            currentAdminResponse={item.admin_response}
+                            currentAdminResponse={item.admin_response ?? undefined}
                           />
                         )}
                       </div>

@@ -141,8 +141,8 @@ export default function Clients() {
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  const handleSearchChange = useOptimizedCallback((value: string) => {
-    setSearchQuery(value);
+  const handleSearchChange = useOptimizedCallback((...args: any[]) => {
+    setSearchQuery(args[0] as string);
   }, []);
   const [sortBy, setSortBy] = useState<'name' | 'recent' | 'inactive'>(
     'recent'
@@ -299,7 +299,7 @@ export default function Clients() {
         .eq('client_id', client.id)
         .order('created_at', { ascending: false });
 
-      setClientFormulas(formulas || []);
+      setClientFormulas(formulas as any || []);
     } catch (error) {
       console.error('Error loading formulas:', error);
       setClientFormulas([]);
@@ -327,11 +327,11 @@ export default function Clients() {
       await createClientMutation.mutateAsync({
         preferred_stylist_id: stylistId,
         full_name: validatedData.full_name.trim(),
-        email: validatedData.email?.trim() || null,
-        phone: validatedData.phone?.trim() || null,
-        hair_type: validatedData.hair_type?.trim() || null,
-        allergies: validatedData.allergies?.trim() || null,
-        notes: validatedData.notes?.trim() || null,
+        email: validatedData.email?.trim() || '',
+        phone: validatedData.phone?.trim() ?? undefined,
+        hair_type: validatedData.hair_type?.trim() ?? undefined,
+        allergies: validatedData.allergies?.trim() ?? undefined,
+        notes: validatedData.notes?.trim() ?? undefined,
       });
 
       showCelebration('client-added', undefined, clients.length + 1);
@@ -372,11 +372,11 @@ export default function Clients() {
       await updateClientMutation.mutateAsync({
         id: selectedClient.id,
         full_name: validatedData.full_name.trim(),
-        email: validatedData.email?.trim() || null,
-        phone: validatedData.phone?.trim() || null,
-        hair_type: validatedData.hair_type?.trim() || null,
-        allergies: validatedData.allergies?.trim() || null,
-        notes: validatedData.notes?.trim() || null,
+        email: validatedData.email?.trim() ?? undefined,
+        phone: validatedData.phone?.trim() ?? undefined,
+        hair_type: validatedData.hair_type?.trim() ?? undefined,
+        allergies: validatedData.allergies?.trim() ?? undefined,
+        notes: validatedData.notes?.trim() ?? undefined,
       });
 
       setSaveStatus('saved');

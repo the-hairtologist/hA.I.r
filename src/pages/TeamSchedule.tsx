@@ -68,7 +68,7 @@ export default function TeamSchedule() {
       .lt('appointment_date', weekEnd.toISOString())
       .order('appointment_date', { ascending: true });
 
-    if (data) setAppointments(data);
+    if (data) setAppointments(data as any);
     setLoading(false);
   };
 

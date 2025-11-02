@@ -123,7 +123,7 @@ const Services = () => {
         price: 0,
         deposit_amount: 0,
         deposit_type: 'fixed',
-        buffer_time_minutes: null,
+        buffer_time_minutes: undefined,
       },
       successMessage: editingService
         ? 'Service updated successfully!'
@@ -198,7 +198,7 @@ const Services = () => {
     setFieldValue('price', Number(service.price));
     setFieldValue('deposit_amount', service.deposit_amount ?? 0);
     setFieldValue('deposit_type', service.deposit_type ?? 'fixed');
-    setFieldValue('buffer_time_minutes', service.buffer_time_minutes ?? null);
+    setFieldValue('buffer_time_minutes', service.buffer_time_minutes ?? undefined);
     setIsActive(service.is_active);
     setRequireDeposit(service.require_deposit ?? false);
     setUseCustomBuffer(service.buffer_time_minutes !== null);
@@ -310,7 +310,7 @@ const Services = () => {
               label="Service Name"
               type="text"
               value={values.service_name || ''}
-              onChange={val => setFieldValue('service_name', val)}
+              onChange={val => setFieldValue('service_name', String(val))}
               onBlur={() => setFieldTouched('service_name')}
               error={errors.service_name}
               touched={touched.service_name}
@@ -324,7 +324,7 @@ const Services = () => {
               label="Description"
               type="textarea"
               value={values.description || ''}
-              onChange={val => setFieldValue('description', val)}
+              onChange={val => setFieldValue('description', String(val || ''))}
               onBlur={() => setFieldTouched('description')}
               error={errors.description}
               touched={touched.description}
@@ -362,7 +362,7 @@ const Services = () => {
                   label=""
                   type="number"
                   value={values.duration_minutes || 90}
-                  onChange={val => setFieldValue('duration_minutes', val)}
+                  onChange={val => setFieldValue('duration_minutes', Number(val))}
                   onBlur={() => setFieldTouched('duration_minutes')}
                   error={errors.duration_minutes}
                   touched={touched.duration_minutes}
@@ -400,7 +400,7 @@ const Services = () => {
                   label=""
                   type="number"
                   value={values.price || 0}
-                  onChange={val => setFieldValue('price', val)}
+                  onChange={val => setFieldValue('price', Number(val))}
                   onBlur={() => setFieldTouched('price')}
                   error={errors.price}
                   touched={touched.price}
@@ -562,7 +562,7 @@ const Services = () => {
                     label={`Deposit ${values.deposit_type === 'fixed' ? 'Amount ($)' : 'Percentage (%)'}`}
                     type="number"
                     value={values.deposit_amount || 0}
-                    onChange={val => setFieldValue('deposit_amount', val)}
+                    onChange={val => setFieldValue('deposit_amount', Number(val || 0))}
                     onBlur={() => setFieldTouched('deposit_amount')}
                     error={errors.deposit_amount}
                     touched={touched.deposit_amount}

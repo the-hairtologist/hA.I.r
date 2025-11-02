@@ -335,7 +335,7 @@ export function generateTestDataset(options?: {
 
     // Generate services for stylist
     for (let j = 0; j < 5; j++) {
-      dataset.services.push(generateTestService(stylist.user_id));
+      dataset.services.push(generateTestService(stylist.user_id || ''));
     }
 
     // Generate clients for this stylist
@@ -348,15 +348,15 @@ export function generateTestDataset(options?: {
       // Generate appointments for this client
       for (let k = 0; k < numAppointmentsPerClient; k++) {
         const appointment = generateTestAppointment(
-          stylist.user_id,
-          client.user_id!
+          stylist.user_id || '',
+          client.user_id || ''
         );
         dataset.appointments.push(appointment);
 
         // Generate formula for some appointments
         if (faker.datatype.boolean()) {
           dataset.formulas.push(
-            generateTestFormula(stylist.user_id, client.user_id!)
+            generateTestFormula(stylist.user_id || '', client.user_id || '')
           );
         }
       }

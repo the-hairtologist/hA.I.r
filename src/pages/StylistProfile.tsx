@@ -47,7 +47,7 @@ const StylistProfile = () => {
       const { data, error } = await supabase
         .from('public_stylist_directory')
         .select('*')
-        .eq('id', stylistId)
+        .eq('id', stylistId || '')
         .maybeSingle();
 
       if (error) throw error;

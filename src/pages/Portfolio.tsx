@@ -127,7 +127,7 @@ const Portfolio = () => {
       console.error('Error loading photos:', error);
       toast.error('Failed to load photos');
     } else {
-      setPhotos(data || []);
+      setPhotos(data as any || []);
     }
   };
 

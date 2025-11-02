@@ -103,8 +103,8 @@ const Formulas = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearchChange = useOptimizedCallback((value: string) => {
-    setSearchTerm(value);
+  const handleSearchChange = useOptimizedCallback((...args: any[]) => {
+    setSearchTerm(args[0] as string);
   }, []);
   const [editingFormula, setEditingFormula] = useState<any>(null);
   const [clientSearchOpen, setClientSearchOpen] = useState(false);
@@ -624,7 +624,7 @@ const Formulas = () => {
           <FormulaFiltersComponent
             filters={filters}
             onFiltersChange={setFilters}
-            clients={clients}
+            clients={clients as any}
             colorLines={uniqueColorLines}
             availableTags={availableTags}
           />
@@ -1177,7 +1177,7 @@ const Formulas = () => {
       <AddClientDialog
         open={addClientDialogOpen}
         onOpenChange={setAddClientDialogOpen}
-        stylistId={stylistId || undefined}
+        stylistId={stylistId || ''}
         onClientAdded={() => {
           setAddClientDialogOpen(false);
           toast.success('Client added successfully!');

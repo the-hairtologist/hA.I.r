@@ -41,7 +41,7 @@ export default function Marketplace() {
       .eq('is_active', true)
       .order('created_at', { ascending: false });
 
-    if (data) setProducts(data);
+    if (data) setProducts(data as any);
     setLoading(false);
   };
 
