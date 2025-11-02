@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { toast } from 'sonner';
+import type { Mock } from 'vitest';
 
 vi.mock('sonner', () => {
   const toastMock = Object.assign(vi.fn(), {
@@ -118,20 +119,29 @@ describe('useFormSubmit', () => {
         wrapper: createWrapper(),
       });
 
-      const pendingSubmit = result.current.handleSubmit();
+      let pendingSubmit: Promise<void> | undefined;
+      await act(async () => {
+        pendingSubmit = result.current.handleSubmit();
+      });
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(true));
 
-      result.current.handleSubmit();
-      result.current.handleSubmit();
+      await act(async () => {
+        result.current.handleSubmit();
+        result.current.handleSubmit();
+      });
 
-      await vi.advanceTimersByTimeAsync(3000);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(3000);
+      });
 
       expect(mockSubmit).toHaveBeenCalledTimes(1);
       expect(result.current.isSubmitting).toBe(true);
 
-      resolveSubmission?.();
-      await pendingSubmit;
+      await act(async () => {
+        resolveSubmission?.();
+        await pendingSubmit;
+      });
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
     });
@@ -167,7 +177,7 @@ describe('useFormSubmit', () => {
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
       expect(result.current.submitCount).toBe(1);
-      expect((toast as any).error).toHaveBeenCalledWith('Submission failed');
+      expect((toast as Mock).error).toHaveBeenCalledWith('Submission failed');
     });
 
     it('returns initial values after reset', async () => {
@@ -209,12 +219,18 @@ describe('useFormSubmit', () => {
 
       expect(result.current.submitCount).toBe(0);
 
-      await result.current.handleSubmit();
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
       await waitFor(() => expect(result.current.submitCount).toBe(1));
 
-      await vi.advanceTimersByTimeAsync(1100);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1100);
+      });
 
-      await result.current.handleSubmit();
+      await act(async () => {
+        await result.current.handleSubmit();
+      });
       await waitFor(() => expect(result.current.submitCount).toBe(2));
     });
   });
@@ -231,11 +247,16 @@ describe('useFormSubmit', () => {
         wrapper: createWrapper(),
       });
 
-      const pendingSubmit = result.current.handleSubmit();
+      let pendingSubmit: Promise<void> | undefined;
+      act(() => {
+        pendingSubmit = result.current.handleSubmit();
+      });
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(true));
 
-      await pendingSubmit;
+      await act(async () => {
+        await pendingSubmit;
+      });
 
       await waitFor(() => expect(result.current.isSubmitting).toBe(false));
     });

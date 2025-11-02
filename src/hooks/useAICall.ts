@@ -21,8 +21,8 @@ interface UseAICallOptions<T> {
   onError?: (error: EnrichedAIError) => void;
 }
 
-interface UseAICallReturn<T> {
-  invoke: (body: any) => Promise<T | null>;
+interface UseAICallReturn<T, Body> {
+  invoke: (body: Body) => Promise<T | null>;
   loading: boolean;
   error: EnrichedAIError | null;
   data: T | null;
@@ -33,77 +33,62 @@ interface UseAICallReturn<T> {
  *
  * @example
  * ```typescript
- * const { invoke, loading, error } = useAICall('ai-formula-analyzer', {
+ * const { invoke, loading, error } = useAICall<{ result: string }, { prompt: string }>('ai-formula-analyzer', {
  *   model: 'gemini-2.5-flash',
- *   onSuccess: (data) => console.log('Success:', data)
+ *   onSuccess: (data) => console.log('Success:', data.result)
  * });
  *
- * await invoke({ formulas: [...] });
+ * await invoke({ prompt: "some formula" });
  * ```
  */
-export function useAICall<T = any>(
+export function useAICall<
+  T = unknown,
+  Body extends Record<string, unknown> = Record<string, unknown>,
+>(
   functionName: string,
   options?: UseAICallOptions<T>
-): UseAICallReturn<T> {
+): UseAICallReturn<T, Body> {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<EnrichedAIError | null>(null);
   const [data, setData] = useState<T | null>(null);
 
   const invoke = useCallback(
-    async (body: any): Promise<T | null> => {
+    async (body: Body): Promise<T | null> => {
       setLoading(true);
       setError(null);
+      setData(null);
 
       log.info(`AI call invoked: ${functionName}`, 'useAICall', { body });
 
-      try {
-        const context: AICallContext = {
-          feature: functionName,
-          model: options?.model || 'gemini-2.5-flash',
-          estimatedTokens: options?.estimatedTokens,
-          maxRetries: options?.maxRetries,
-          timeout: options?.timeout,
-        };
+      const context: AICallContext = {
+        feature: functionName,
+        model: options?.model || 'gemini-2.5-flash',
+        estimatedTokens: options?.estimatedTokens,
+        maxRetries: options?.maxRetries,
+        timeout: options?.timeout,
+      };
 
-        const result = await wrapAICall<T>(
-          () => supabase.functions.invoke(functionName, { body }),
-          context
-        );
+      const result = await wrapAICall<T>(
+        () => supabase.functions.invoke(functionName, { body }),
+        context
+      );
 
-        if (result.error) {
-          setError(result.error);
-          options?.onError?.(result.error);
-          return null;
-        }
-
-        if (result.data) {
-          setData(result.data);
-          options?.onSuccess?.(result.data);
-          return result.data;
-        }
-
-        return null;
-      } catch (err: any) {
-        const enrichedError: EnrichedAIError = {
-          message: err.message || 'Unknown error',
-          code: 'ai_call_failed',
-          context: functionName,
-          retryable: false,
-          aiContext: {
-            feature: functionName,
-            model: options?.model || 'gemini-2.5-flash',
-            executionTimeMs: 0,
-            previousSuccessCount: 0,
-            suggestedAction: 'Try again or contact support',
-          },
-        };
-
-        setError(enrichedError);
-        options?.onError?.(enrichedError);
-        return null;
-      } finally {
+      if (result.error) {
+        setError(result.error);
+        options?.onError?.(result.error);
         setLoading(false);
+        return null;
       }
+
+      if (result.data) {
+        setData(result.data);
+        options?.onSuccess?.(result.data);
+        setLoading(false);
+        return result.data;
+      }
+
+      setLoading(false);
+      return null;
     },
     [functionName, options]
   );
