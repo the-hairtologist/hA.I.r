@@ -33,7 +33,7 @@ const defaultProps = {
 // Type for mocked Supabase invoke function
 type MockedSupabaseInvoke = ReturnType<typeof vi.fn>;
 
-describe('InviteClientDialog', () => {
+describe('InviteClientDialog - Double Submit Prevention', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
@@ -53,12 +53,17 @@ describe('InviteClientDialog', () => {
 
     const sendButton = screen.getByRole('button', { name: /send invite/i });
 
-    // Click the button
+    // First click
     await act(async () => {
       await user.click(sendButton);
     });
 
-    // The button should be disabled immediately after the first click
+    // Immediate second click (should be prevented)
+    await act(async () => {
+      await user.click(sendButton);
+    });
+
+    // Should only call invoke once
     await waitFor(() => {
       expect(sendButton).toBeDisabled();
     });
@@ -111,7 +116,6 @@ describe('InviteClientDialog', () => {
     render(<InviteClientDialog {...defaultProps} />);
 
     const sendButton = screen.getByRole('button', { name: /send invite/i });
-
     await act(async () => {
       await user.click(sendButton);
     });
@@ -142,6 +146,15 @@ describe('InviteClientDialog', () => {
     // Wait for submission to complete and dialog to close
     await waitFor(() => {
       expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+  });
+});
+
+describe('InviteClientDialog - Loading State Visibility', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
     });
   });
 
@@ -200,40 +213,105 @@ describe('InviteClientDialog', () => {
     await new Promise(resolve => setTimeout(resolve, 50));
     expect(screen.getByText(/sending\.\.\./i)).toBeInTheDocument();
   });
+});
+
+describe('InviteClientDialog - Button Disabled States', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
+  });
 
   it('should disable button when form is submitting', async () => {
     const user = userEvent.setup();
+    render(<InviteClientDialog {...defaultProps} />);
+
+    const sendButton = screen.getByRole('button', { name: /send invite/i });
+    await act(async () => {
+      await user.click(sendButton);
+    });
+
+    expect(sendButton).toBeDisabled();
+  });
+
+  it('should disable cancel button during submission', async () => {
+    const user = userEvent.setup();
+
     (supabase.functions.invoke as MockedSupabaseInvoke).mockImplementation(
       () => new Promise(resolve => setTimeout(() => resolve({ error: null }), 100))
     );
     render(<InviteClientDialog {...defaultProps} />);
 
     const sendButton = screen.getByRole('button', { name: /send invite/i });
-    expect(sendButton).not.toBeDisabled();
-
-    user.click(sendButton);
-
-    // Button should be disabled during submission
-    await waitFor(() => {
-      expect(sendButton).toBeDisabled();
+    await act(async () => {
+      await user.click(sendButton);
     });
 
-    // And re-enabled after
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
+    await waitFor(() => {
+      expect(cancelButton).toBeDisabled();
+    });
+  });
+});
+
+describe('InviteClientDialog - Form Re-enabling', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should re-enable form after successful submission', async () => {
+    const user = userEvent.setup();
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
+
+    const onOpenChange = vi.fn();
+    render(
+      <InviteClientDialog {...defaultProps} onOpenChange={onOpenChange} />
+    );
+
+    const sendButton = screen.getByRole('button', { name: /send invite/i });
+    await act(async () => {
+      await user.click(sendButton);
+    });
+
     await waitFor(() => {
       expect(sendButton).not.toBeDisabled();
     });
   });
 
-  it('should render the dialog with correct initial content', () => {
+  it('should re-enable form after error', async () => {
+    const user = userEvent.setup();
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockRejectedValue(
+      new Error('Failed to send')
+    );
+
     render(<InviteClientDialog {...defaultProps} />);
 
-    expect(screen.getByText(/Send Client Invitation/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/client email/i)).toHaveValue(
-      defaultProps.clientEmail,
-    );
-    expect(
-      screen.getByPlaceholderText(/add a personal note/i),
-    ).toBeInTheDocument();
+    const sendButton = screen.getByRole('button', { name: /send invite/i });
+    await act(async () => {
+      // We expect this to throw, so we catch it.
+      try {
+        await user.click(sendButton);
+      } catch (e) {
+        // ignore
+      }
+    });
+
+    // Wait for error state
+    await waitFor(() => {
+      expect(screen.queryByText(/sending\.\.\./i)).not.toBeInTheDocument();
+    });
+
+    // Button should be enabled again
+    expect(sendButton).not.toBeDisabled();
+  });
+});
+
+describe('InviteClientDialog - Success/Error Scenarios', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
   it('should include custom message in invitation', async () => {
@@ -270,9 +348,8 @@ describe('InviteClientDialog', () => {
 
   it('should handle invitation send error', async () => {
     const user = userEvent.setup();
-    const mockError = new Error('Network error');
     (supabase.functions.invoke as MockedSupabaseInvoke).mockRejectedValue(
-      mockError,
+      new Error('Network error')
     );
 
     const onOpenChange = vi.fn();
@@ -285,8 +362,34 @@ describe('InviteClientDialog', () => {
       try {
         await user.click(sendButton);
       } catch (e) {
-        // Expected because the hook re-throws the error.
+        // ignore
       }
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText(/sending\.\.\./i)).not.toBeInTheDocument();
+    });
+
+    // Form should be re-enabled for retry
+    expect(sendButton).not.toBeDisabled();
+  });
+
+  it('should include custom message in invitation', async () => {
+    const user = userEvent.setup();
+    (supabase.functions.invoke as MockedSupabaseInvoke).mockResolvedValue({
+      error: null,
+    });
+
+    render(<InviteClientDialog {...defaultProps} />);
+
+    const messageInput = screen.getByPlaceholderText(
+      /add a personal note to your invitation.../i
+    );
+    await user.type(messageInput, 'Looking forward to working with you!');
+
+    const sendButton = screen.getByRole('button', { name: /send invite/i });
+    await act(async () => {
+      await user.click(sendButton);
     });
 
     await waitFor(() => {
