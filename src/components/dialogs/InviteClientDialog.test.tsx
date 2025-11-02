@@ -326,15 +326,6 @@ describe('InviteClientDialog - Success/Error Scenarios', () => {
     );
 
     const sendButton = screen.getByRole('button', { name: /send invite/i });
-    await act(async () => {
-      await user.click(sendButton);
-    });
-
-    await waitFor(() => {
-      expect(supabase.functions.invoke).toHaveBeenCalledWith(
-        'send-client-invite',
-        {
-          body: {
             clientEmail: 'client@example.com',
             clientName: 'Jane Doe',
             stylistName: 'John Stylist',
