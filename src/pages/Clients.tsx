@@ -191,22 +191,6 @@ export default function Clients() {
     refetch: refetchClients,
   } = useClients(stylistId);
 
-  // Override with optimized query when stylistId available
-  useEffect(() => {
-    if (!stylistId) return;
-
-    const loadOptimizedClients = async () => {
-      try {
-        const data = await getClientsByStylist(stylistId);
-        // React Query will cache this automatically
-      } catch (error) {
-        logger.error('Error loading optimized clients', 'Clients', error as Error);
-      }
-    };
-
-    loadOptimizedClients();
-  }, [stylistId]);
-
   const clients = clientsData?.clients || [];
   const totalClients = clientsData?.total || 0;
 
