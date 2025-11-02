@@ -12,6 +12,7 @@ import { Calendar, Sparkles, Clock, TrendingUp, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface SchedulingSuggestion {
   datetime: string;
@@ -55,7 +56,7 @@ const SmartSchedulingSuggestionsComponent = ({
         setPatterns(data.patterns);
       }
     } catch (error) {
-      console.error('Failed to fetch scheduling suggestions:', error);
+      logger.error('Failed to fetch scheduling suggestions', 'SmartSchedulingSuggestions', error);
       toast.error('Could not load scheduling suggestions');
     } finally {
       setLoading(false);

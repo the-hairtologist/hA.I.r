@@ -104,10 +104,7 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
             errorCount++;
           }
         } catch (error) {
-          console.error(
-            `Failed to send message to ${client.full_name}:`,
-            error
-          );
+          logger.error('Failed to send message', error, { component: 'ReEngagementDialog', clientId: client.id, clientName: client.full_name });
           errorCount++;
         }
       }
@@ -126,7 +123,7 @@ export const ReEngagementDialog: React.FC<ReEngagementDialogProps> = ({
       setOpen(false);
       setCustomMessage('');
     } catch (error) {
-      console.error('Error sending messages:', error);
+      logger.error('Error sending messages', error, { component: 'ReEngagementDialog', clientCount: selectedClients.length });
       toast.error('Failed to send messages');
     } finally {
       setSending(false);

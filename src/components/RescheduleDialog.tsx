@@ -26,6 +26,7 @@ import {
 } from 'date-fns';
 import { useFormSubmit } from '@/hooks/useFormSubmit';
 import { z } from 'zod';
+import { logger } from '@/lib/logging/productionLogger';
 
 // Inline schema for reschedule (simple date/time validation)
 const rescheduleSchema = z.object({
@@ -97,7 +98,7 @@ export const RescheduleDialog = ({
             },
           });
         } catch (smsError) {
-          console.error('SMS notification failed:', smsError);
+          logger.error('SMS notification failed', smsError, { component: 'RescheduleDialog', appointmentId: appointment.id });
         }
       },
       {
@@ -132,7 +133,7 @@ export const RescheduleDialog = ({
 
       setStylistSchedule(data?.weekly_schedule);
     } catch (error) {
-      console.error('Error loading schedule:', error);
+      logger.error('Error loading schedule', error, { component: 'RescheduleDialog', stylistId: appointment.stylist_id });
     }
   };
 

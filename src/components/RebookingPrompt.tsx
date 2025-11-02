@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Sparkles, X } from 'lucide-react';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface RebookingData {
   id: string;
@@ -73,7 +74,7 @@ export function RebookingPrompt() {
         .maybeSingle();
 
       if (error) {
-        console.error('Error fetching rebooking reminder:', error);
+        logger.error('Error fetching rebooking reminder', error, { component: 'RebookingPrompt', userId: user?.id });
       }
 
       if (data) {

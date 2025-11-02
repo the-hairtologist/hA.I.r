@@ -22,6 +22,7 @@ import { Bookmark, Plus, Trash2, Check, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface ServiceTemplate {
   id: string;
@@ -84,7 +85,7 @@ export function ServiceTemplatesDialog({
         created_at: t.created_at || new Date().toISOString()
       })));
     } catch (error) {
-      console.error('Error loading templates:', error);
+      logger.error('Error loading templates', error, { component: 'ServiceTemplatesDialog', userId: user?.id });
     } finally {
       setLoading(false);
     }
@@ -111,7 +112,7 @@ export function ServiceTemplatesDialog({
       if (error) throw error;
       setAvailableServices(data || []);
     } catch (error) {
-      console.error('Error loading services:', error);
+      logger.error('Error loading services', error, { component: 'ServiceTemplatesDialog', userId: user?.id });
     }
   };
 
@@ -161,7 +162,7 @@ export function ServiceTemplatesDialog({
       setSelectedServices([]);
       loadTemplates();
     } catch (error: any) {
-      console.error('Error creating template:', error);
+      logger.error('Error creating template', error, { component: 'ServiceTemplatesDialog', templateName: newTemplateName });
       toast.error(error.message || 'Failed to create template');
     } finally {
       setCreating(false);
@@ -179,7 +180,7 @@ export function ServiceTemplatesDialog({
       toast.success('Template deleted');
       loadTemplates();
     } catch (error: any) {
-      console.error('Error deleting template:', error);
+      logger.error('Error deleting template', error, { component: 'ServiceTemplatesDialog', templateId: id });
       toast.error('Failed to delete template');
     }
   };

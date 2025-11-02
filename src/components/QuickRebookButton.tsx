@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { haptic } from '@/platform/haptics';
 import { showCelebration } from './CelebrationToast';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface QuickRebookButtonProps {
   appointmentId: string;
@@ -45,7 +46,7 @@ export const QuickRebookButton = ({
         .maybeSingle();
 
       if (fetchError) {
-        console.error('Error fetching appointment:', fetchError);
+        logger.error('Error fetching appointment', fetchError, { component: 'QuickRebookButton', appointmentId });
         toast.error('Failed to load appointment details');
         return;
       }
@@ -68,7 +69,7 @@ export const QuickRebookButton = ({
         .maybeSingle();
 
       if (scheduleError) {
-        console.error('Error fetching schedule:', scheduleError);
+        logger.error('Error fetching schedule', scheduleError, { component: 'QuickRebookButton', stylistId });
       }
 
       // Find next available slot
@@ -130,7 +131,7 @@ export const QuickRebookButton = ({
         });
       }
     } catch (error) {
-      console.error('Error rebooking:', error);
+      logger.error('Error rebooking', error, { component: 'QuickRebookButton', appointmentId, clientId });
       haptic.error();
       toast.error('Failed to rebook appointment');
     } finally {

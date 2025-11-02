@@ -105,7 +105,7 @@ export const ReferralSystem = () => {
         })));
       }
     } catch (error) {
-      console.error('Error loading referral data:', error);
+      logger.error('Error loading referral data', 'ReferralSystem', error);
     } finally {
       setLoading(false);
     }

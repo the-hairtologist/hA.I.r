@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Bell, Calendar, MessageSquare, Star, Gift } from 'lucide-react';
 import { haptic } from '@/platform/haptics';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface NotificationEnhancerProps {
   userId: string;
@@ -58,7 +59,7 @@ export const NotificationEnhancer = ({
       }
       setLastCheck(new Date());
     } catch (error) {
-      console.error('Error checking notifications:', error);
+      logger.error('Error checking notifications', error, { component: 'NotificationEnhancer', userId, userRole });
     }
   };
 
@@ -128,7 +129,7 @@ export const NotificationEnhancer = ({
         .maybeSingle();
 
       if (profileError) {
-        console.error('Error loading stylist profile:', profileError);
+        logger.error('Error loading stylist profile', profileError, { component: 'NotificationEnhancer', userId });
       }
 
       if (stylistProfile) {

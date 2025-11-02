@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { addDays } from 'date-fns';
+import { addDays, differenceInDays } from 'date-fns';
 import { logger } from '@/lib/logging/productionLogger';
 
 interface ClientInsight {

@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Scissors, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface RoleSelectionDialogProps {
   open: boolean;
@@ -78,7 +79,7 @@ export const RoleSelectionDialog = ({
 
       onComplete();
     } catch (error: any) {
-      console.error('Error assigning role:', error);
+      logger.error('Error assigning role', error, { component: 'RoleSelectionDialog', selectedRole });
       toast({
         title: 'Error',
         description:

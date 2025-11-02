@@ -13,6 +13,7 @@ import { useSubscription } from '@/contexts/SubscriptionContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { logger } from '@/lib/logging/productionLogger';
 
 export const SubscriptionManagementCard = () => {
   const { subscribed, inTrial, subscriptionEnd, loading } = useSubscription();
@@ -46,7 +47,7 @@ export const SubscriptionManagementCard = () => {
         toast.success('Opening subscription management...');
       }
     } catch (error: any) {
-      console.error('Portal error:', error);
+      logger.error('Portal error', error, { component: 'SubscriptionManagementCard' });
       toast.error('Failed to open subscription management');
     } finally {
       setManagingSubscription(false);
@@ -80,7 +81,7 @@ export const SubscriptionManagementCard = () => {
         toast.success('Redirecting to checkout...');
       }
     } catch (error: any) {
-      console.error('Subscription error:', error);
+      logger.error('Subscription error', error, { component: 'SubscriptionManagementCard', action: 'subscribe' });
       toast.error('Failed to start subscription process');
     } finally {
       setSubscribing(false);

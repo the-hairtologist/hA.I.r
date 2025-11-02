@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { logger } from '@/lib/logging/productionLogger';
 
 export const RoleSwitchProtection = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ export const RoleSwitchProtection = () => {
 
         setHasChecked(true);
       } catch (error) {
-        console.error('Role switch protection error:', error);
+        logger.error('Role switch protection error', error, { component: 'RoleSwitchProtection' });
       }
     };
 

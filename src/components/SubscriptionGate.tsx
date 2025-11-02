@@ -14,6 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { AccessCodeDialog } from './AccessCodeDialog';
 import { AppleIAPSubscription } from './AppleIAPSubscription';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface SubscriptionGateProps {
   children: ReactNode;
@@ -82,7 +83,7 @@ export const SubscriptionGate = ({
           toast.success('Redirecting to checkout...');
         }
       } catch (error: any) {
-        console.error('Subscription error:', error);
+        logger.error('Subscription error', error, { component: 'SubscriptionGate', feature });
         toast.error('Failed to start subscription process');
       } finally {
         setSubscribing(false);

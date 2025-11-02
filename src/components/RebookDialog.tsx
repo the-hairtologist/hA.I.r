@@ -13,6 +13,7 @@ import { addWeeks, format, isSameDay, isBefore, startOfDay } from 'date-fns';
 import { Calendar, Clock, AlertCircle, CheckCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { triggerAppointmentBooked } from '@/lib/zapierTriggers';
+import { logger } from '@/lib/logging/productionLogger';
 
 interface RebookDialogProps {
   open: boolean;
@@ -65,7 +66,7 @@ export const RebookDialog = ({
         setStylistSchedule(schedule.weekly_schedule);
       }
     } catch (error) {
-      console.error('Error loading schedule:', error);
+      logger.error('Error loading schedule', error, { component: 'RebookDialog', stylistId: appointment.stylist_id });
     }
   };
 
@@ -154,7 +155,7 @@ export const RebookDialog = ({
         setSelectedTime(null);
       }
     } catch (error) {
-      console.error('Error checking availability:', error);
+      logger.error('Error checking availability', error, { component: 'RebookDialog', proposedDate });
       toast.error('Error checking availability');
     } finally {
       setChecking(false);
@@ -229,7 +230,7 @@ export const RebookDialog = ({
             is_rebook: true,
           });
         } catch (zapierError) {
-          console.error('Zapier webhook failed:', zapierError);
+          logger.error('Zapier webhook failed', zapierError, { component: 'RebookDialog', appointmentId: newAppointment.id });
           // Don't block success if Zapier fails
         }
 
@@ -242,7 +243,7 @@ export const RebookDialog = ({
             },
           });
         } catch (smsError) {
-          console.error('SMS notification failed:', smsError);
+          logger.error('SMS notification failed', smsError, { component: 'RebookDialog', appointmentId: newAppointment.id });
         }
 
         // Send email confirmation
@@ -253,7 +254,7 @@ export const RebookDialog = ({
             },
           });
         } catch (emailError) {
-          console.error('Email notification failed:', emailError);
+          logger.error('Email notification failed', emailError, { component: 'RebookDialog', appointmentId: newAppointment.id });
         }
 
         // Sync to calendar
@@ -265,7 +266,7 @@ export const RebookDialog = ({
             },
           });
         } catch (calendarError) {
-          console.error('Calendar sync failed:', calendarError);
+          logger.error('Calendar sync failed', calendarError, { component: 'RebookDialog', appointmentId: newAppointment.id });
         }
       }
 
@@ -288,7 +289,7 @@ export const RebookDialog = ({
       setSelectedWeeks(null);
       setSelectedTime(null);
     } catch (error: any) {
-      console.error('Error rebooking:', error);
+      logger.error('Error rebooking', error, { component: 'RebookDialog', appointmentId: appointment?.id });
       toast.error('Failed to rebook appointment');
     } finally {
       setLoading(false);

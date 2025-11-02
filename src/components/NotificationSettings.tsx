@@ -24,6 +24,7 @@ import {
 } from '@/utils/pushNotifications';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logging/productionLogger';
 
 export const NotificationSettings = () => {
   const { user } = useAuth();
@@ -44,7 +45,7 @@ export const NotificationSettings = () => {
         toast.error('Failed to enable notifications');
       }
     } catch (error) {
-      console.error('Error enabling notifications:', error);
+      logger.error('Error enabling notifications', error, { component: 'NotificationSettings' });
       toast.error('Failed to enable notifications');
     } finally {
       setRegistering(false);
