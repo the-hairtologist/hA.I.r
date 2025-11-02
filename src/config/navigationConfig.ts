@@ -319,22 +319,13 @@ export const stylistNavigationItems: NavigationItem[] = [
   },
   {
     id: 'help',
-    title: 'Help',
+    title: 'Support Center',
     url: '/help',
     icon: HelpCircle,
     gradient: 'bg-[image:var(--gradient-cyan-blue)]',
     group: 'tools',
     color: 'text-cyan-400 dark:text-cyan-300',
-  },
-  {
-    id: 'feedback',
-    title: 'Feedback',
-    url: '/feedback',
-    icon: MessageCircle,
-    gradient: 'bg-[image:var(--gradient-orange-red)]',
-    group: 'tools',
-    color: 'text-orange-400 dark:text-orange-300',
-    description: 'Share ideas & report issues',
+    description: 'Help docs, FAQs & feedback',
   },
 ];
 

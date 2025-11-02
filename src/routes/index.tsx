@@ -3,7 +3,7 @@
  * Centralized routing with advanced lazy loading and retry logic
  */
 
-import { Route } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
 import { lazy } from 'react';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SubscriptionGate } from '@/components/SubscriptionGate';
@@ -209,11 +209,7 @@ export const AppRoutes = () => (
     />
     <Route
       path="/feedback"
-      element={
-        <ProtectedRoute>
-          <FeedbackBoard />
-        </ProtectedRoute>
-      }
+      element={<Navigate to="/help" replace />}
     />
     <Route
       path="/subscription"

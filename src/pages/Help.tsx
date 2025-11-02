@@ -245,7 +245,7 @@ const Help = () => {
     <DashboardLayout>
       <div className="space-y-6 max-w-4xl">
         <div>
-          <h1 className="text-3xl font-pixel">Help & Support</h1>
+          <h1 className="text-3xl font-pixel">Support Center</h1>
           <p className="text-muted-foreground font-sans">
             {isStylist
               ? 'Get help managing your salon business'
