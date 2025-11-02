@@ -95,7 +95,8 @@ export async function wrapAICall<T>(
         if (!lastError.retryable || attempt === maxRetries) {
           return { data: null, error: lastError };
         }
-        await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
+        // Exponential backoff: 100ms * 2^attempt
+        await new Promise(resolve => setTimeout(resolve, 100 * Math.pow(2, attempt)));
         continue;
       }
 
@@ -131,7 +132,8 @@ export async function wrapAICall<T>(
       if (!lastError.retryable || attempt === maxRetries) {
         return { data: null, error: lastError };
       }
-      await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
+      // Exponential backoff: 100ms * 2^attempt
+      await new Promise(resolve => setTimeout(resolve, 100 * Math.pow(2, attempt)));
     }
   }
 
@@ -151,14 +153,12 @@ function enrichAIError(
   }
 ): EnrichedAIError {
   let statusCode: number | undefined;
-  let errorMessage: string | undefined;
 
   if (isPossibleError(error)) {
     statusCode =
       error.status ||
       error.statusCode ||
       (error.message?.includes('429') ? 429 : undefined);
-    errorMessage = error.message;
   }
 
   // Determine error type and suggested action
