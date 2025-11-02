@@ -66,6 +66,17 @@ jobs:
         run: npm run build
         continue-on-error: true
 
+      - name: Analyze query patterns
+        run: node scripts/analyze-queries.js
+        continue-on-error: true
+
+      - name: Check for duplicate requests
+        run: |
+          echo "Checking for duplicate database queries..."
+          grep -r "supabase.from" src/ --include="*.tsx" --include="*.ts" | \
+          awk -F: '{print $1}' | sort | uniq -c | sort -rn | head -10 || true
+        continue-on-error: true
+
       - name: Comment PR with results
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7

@@ -93,7 +93,7 @@ export function useSessionTracking() {
     };
   }, []);
 
-  // Track page views
+  // Track page views with debounce (batch updates every 5 seconds)
   useEffect(() => {
     pageViewsRef.current += 1;
 
@@ -120,7 +120,9 @@ export function useSessionTracking() {
       }
     };
 
-    updatePageViews();
+    // Debounce: batch multiple page views into single update
+    const timeoutId = setTimeout(updatePageViews, 5000);
+    return () => clearTimeout(timeoutId);
   }, [location.pathname]);
 
   return {
