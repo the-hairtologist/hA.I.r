@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -25,7 +25,8 @@ interface Notification {
   title: string;
   message: string;
   read: boolean;
-  created_at: string;
+  created_at: string | null;
+  metadata?: Record<string, any>;
 }
 
 const Notifications = () => {
@@ -34,73 +35,121 @@ const Notifications = () => {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
 
   const { data: notifications = [], isLoading } = useQuery({
-    queryKey: ['notifications', session?.user?.id, filter],
+    queryKey: ['notifications', session?.user?.id ?? 'anonymous', filter],
     queryFn: async () => {
-      // For now, return mock data. In production, fetch from notifications table
-      const mockNotifications: Notification[] = [
-        {
-          id: '1',
-          type: 'appointment',
-          title: 'New Appointment Booked',
-          message:
-            'Sarah Johnson booked a color consultation for tomorrow at 2 PM',
-          read: false,
-          created_at: new Date().toISOString(),
-        },
-        {
-          id: '2',
-          type: 'message',
-          title: 'New Message',
-          message: 'You have a new message from Mike Davis',
-          read: false,
-          created_at: new Date(Date.now() - 3600000).toISOString(),
-        },
-        {
-          id: '3',
-          type: 'payment',
-          title: 'Payment Received',
-          message: 'Payment of $150 received from Emily Chen',
-          read: true,
-          created_at: new Date(Date.now() - 86400000).toISOString(),
-        },
-      ];
-      return filter === 'unread'
-        ? mockNotifications.filter(n => !n.read)
-        : mockNotifications;
+      if (!session?.user?.id) return [];
+
+      let query = supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false });
+
+      if (filter === 'unread') {
+        query = query.eq('read', false);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error fetching notifications:', error);
+        toast.error('Failed to load notifications');
+        throw error;
+      }
+
+      return data || [];
     },
     enabled: !!session?.user?.id,
   });
 
+  // Realtime subscription for new notifications
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    const channel = supabase
+      .channel('notifications-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${session.user.id}`,
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['notifications'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session?.user?.id, queryClient]);
+
   const markAsRead = useMutation({
     mutationFn: async (notificationId: string) => {
-      // In production: update notification in database
-      await new Promise(resolve => setTimeout(resolve, 500));
+      if (!session?.user?.id) throw new Error('Not authenticated');
+
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('id', notificationId)
+        .eq('user_id', session.user.id);
+
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('Marked as read');
     },
+    onError: (error) => {
+      console.error('Error marking as read:', error);
+      toast.error('Failed to mark as read');
+    },
   });
 
   const deleteNotification = useMutation({
     mutationFn: async (notificationId: string) => {
-      // In production: delete notification from database
-      await new Promise(resolve => setTimeout(resolve, 500));
+      if (!session?.user?.id) throw new Error('Not authenticated');
+
+      const { error } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('id', notificationId)
+        .eq('user_id', session.user.id);
+
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('Notification deleted');
     },
+    onError: (error) => {
+      console.error('Error deleting notification:', error);
+      toast.error('Failed to delete notification');
+    },
   });
 
   const markAllAsRead = useMutation({
     mutationFn: async () => {
-      // In production: update all notifications
-      await new Promise(resolve => setTimeout(resolve, 500));
+      if (!session?.user?.id) throw new Error('Not authenticated');
+
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('user_id', session.user.id)
+        .eq('read', false);
+
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       toast.success('All notifications marked as read');
+    },
+    onError: (error) => {
+      console.error('Error marking all as read:', error);
+      toast.error('Failed to mark all as read');
     },
   });
 
@@ -215,7 +264,7 @@ const Notifications = () => {
                               {notification.message}
                             </p>
                             <p className="text-xs text-muted-foreground mt-2">
-                              {format(
+                              {notification.created_at && format(
                                 new Date(notification.created_at),
                                 "MMM d, yyyy 'at' h:mm a"
                               )}

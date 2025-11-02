@@ -5295,6 +5295,16 @@ export type Database = {
       }
       cleanup_expired_insights: { Args: never; Returns: undefined }
       cleanup_old_error_logs: { Args: never; Returns: undefined }
+      create_notification: {
+        Args: {
+          p_message: string
+          p_metadata?: Json
+          p_title: string
+          p_type: string
+          p_user_id: string
+        }
+        Returns: string
+      }
       generate_referral_code: {
         Args: { stylist_name: string }
         Returns: string
