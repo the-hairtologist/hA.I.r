@@ -87,6 +87,8 @@ let Tooltip: typeof TooltipType | undefined;
 let ResponsiveContainer: typeof ResponsiveContainerType | undefined;
 let Legend: typeof LegendType | undefined;
 
+import { logger } from '@/lib/logger';
+
 const loadCharts = async () => {
   const charts = await import('recharts');
   LineChart = charts.LineChart;
@@ -160,14 +162,14 @@ const Finance = () => {
         .maybeSingle();
 
       if (stylistError) {
-        console.error('Error fetching stylist profile:', stylistError);
+        logger.error('Error fetching stylist profile', 'Finance', stylistError as Error);
         toast.error('Failed to load stylist profile');
         navigate('/dashboard');
         return;
       }
 
       if (!stylist) {
-        console.warn('Finance: No stylist profile found for user');
+        logger.warn('No stylist profile found for user', 'Finance', { userId: session.user.id });
         toast.error(
           'Stylist profile not found. Please complete your profile first.'
         );
@@ -195,7 +197,7 @@ const Finance = () => {
       setBrands(brandsData || []);
       setAffiliateCodes(codesData || []);
     } catch (error: any) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data', 'Finance', error as Error);
       toast.error('Failed to load financial data');
     } finally {
       setLoading(false);

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 const STORAGE_KEY = 'search_history';
 const MAX_HISTORY = 5;
@@ -12,7 +13,7 @@ export const useSearchHistory = () => {
       try {
         setHistory(JSON.parse(stored));
       } catch (e) {
-        console.error('Failed to parse search history:', e);
+        logger.error('Failed to parse search history', 'useSearchHistory', e as Error);
       }
     }
   }, []);

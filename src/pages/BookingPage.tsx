@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/dialog';
 import { sanitizeInput, rateLimiter, RATE_LIMITS } from '@/lib';
 import { PageHeader } from '@/components/PageHeader';
+import { logger } from '@/lib/logger';
 
 const BookingPage = () => {
   const { session } = useAuth();
@@ -98,7 +99,7 @@ const BookingPage = () => {
           url: bookingUrl,
         });
       } catch (err) {
-        console.log('Share cancelled');
+        logger.info('Share cancelled', 'BookingPage', { feature: 'share' });
       }
     } else {
       copyToClipboard();

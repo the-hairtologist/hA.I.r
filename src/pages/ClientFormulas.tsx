@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import { Loader2, Clock, Palette, FileText } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { SkeletonList } from '@/components/ui/skeleton-list';
+import { logger } from '@/lib/logger';
 
 const ClientFormulas = () => {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ const ClientFormulas = () => {
 
       setFormulas(formulasData || []);
     } catch (error) {
-      console.error('Error loading formulas:', error);
+      logger.error('Error loading formulas', 'ClientFormulas', error as Error);
     } finally {
       setLoading(false);
     }

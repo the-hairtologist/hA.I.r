@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 /**
  * Validates if a phone number is in a valid format
  * Accepts formats like: (555) 555-5555, 555-555-5555, 5555555555, +15555555555
@@ -63,7 +65,7 @@ export const sendAppointmentSMS = async (
 
     return { success: true };
   } catch (error: any) {
-    console.error('SMS notification failed:', error);
+    logger.error('SMS notification failed', 'smsUtils', error as Error);
     return {
       success: false,
       error: error.message || 'Failed to send SMS notification',

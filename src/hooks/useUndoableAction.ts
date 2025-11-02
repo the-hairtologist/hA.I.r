@@ -6,6 +6,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import { Undo } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 interface UndoableActionOptions<T> {
   action: () => Promise<void>;
@@ -51,7 +52,7 @@ export const useUndoableAction = <T = void>() => {
                 await undoAction();
                 toast.success(undoMessage);
               } catch (error) {
-                console.error('Undo failed:', error);
+                logger.error('Undo failed', 'useUndoableAction', error as Error);
                 toast.error('Failed to undo action');
               } finally {
                 setIsUndoing(false);
@@ -69,7 +70,7 @@ export const useUndoableAction = <T = void>() => {
         }, undoTimeout);
         timeoutRef.current = timeout;
       } catch (error) {
-        console.error('Action failed:', error);
+        logger.error('Action failed', 'useUndoableAction', error as Error);
         toast.error('Action failed');
         throw error;
       }

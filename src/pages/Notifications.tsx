@@ -18,6 +18,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { ListItemSkeleton } from '@/components/ui/skeleton-layouts';
+import { logger } from '@/lib/logger';
 
 interface Notification {
   id: string;
@@ -52,7 +53,7 @@ const Notifications = () => {
       const { data, error } = await query;
 
       if (error) {
-        console.error('Error fetching notifications:', error);
+        logger.error('Error fetching notifications', 'Notifications', error as Error);
         toast.error('Failed to load notifications');
         throw error;
       }
@@ -104,7 +105,7 @@ const Notifications = () => {
       toast.success('Marked as read');
     },
     onError: (error) => {
-      console.error('Error marking as read:', error);
+      logger.error('Error marking as read', 'Notifications', error as Error);
       toast.error('Failed to mark as read');
     },
   });
@@ -126,7 +127,7 @@ const Notifications = () => {
       toast.success('Notification deleted');
     },
     onError: (error) => {
-      console.error('Error deleting notification:', error);
+      logger.error('Error deleting notification', 'Notifications', error as Error);
       toast.error('Failed to delete notification');
     },
   });
@@ -148,7 +149,7 @@ const Notifications = () => {
       toast.success('All notifications marked as read');
     },
     onError: (error) => {
-      console.error('Error marking all as read:', error);
+      logger.error('Error marking all as read', 'Notifications', error as Error);
       toast.error('Failed to mark all as read');
     },
   });

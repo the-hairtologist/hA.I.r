@@ -41,6 +41,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useBulkSelection } from '@/hooks/useBulkSelection';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 import {
   Dialog,
   DialogContent,
@@ -199,7 +200,7 @@ export default function Clients() {
         const data = await getClientsByStylist(stylistId);
         // React Query will cache this automatically
       } catch (error) {
-        console.error('Error loading optimized clients:', error);
+        logger.error('Error loading optimized clients', 'Clients', error as Error);
       }
     };
 
@@ -250,7 +251,7 @@ export default function Clients() {
           });
         }
       } catch (error) {
-        console.error('Error loading stylist profile:', error);
+        logger.error('Error loading stylist profile', 'Clients', error as Error);
         toast.error('Failed to load profile');
       }
     };
@@ -310,7 +311,7 @@ export default function Clients() {
 
       setClientFormulas(formulas as any || []);
     } catch (error) {
-      console.error('Error loading formulas:', error);
+      logger.error('Error loading formulas', 'Clients', error as Error);
       setClientFormulas([]);
     }
 

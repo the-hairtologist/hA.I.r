@@ -59,6 +59,7 @@ import { cn } from '@/lib/utils';
 import { FormFieldError } from '@/components/FormFieldError';
 import { useDevMode } from '@/hooks/useDevMode';
 import { SaveIndicator } from '@/components/SaveIndicator';
+import { logger } from '@/lib/logger';
 
 const Settings = () => {
   // Performance tracking
@@ -226,7 +227,7 @@ const Settings = () => {
         }
       }
     } catch (error: any) {
-      console.error('Error loading user:', error);
+      logger.error('Error loading user', 'Settings', error as Error);
       toast.error('Failed to load settings');
     } finally {
       setLoading(false);
@@ -403,7 +404,7 @@ const Settings = () => {
 
       toast.success('Data exported successfully');
     } catch (error: any) {
-      console.error('Error exporting data:', error);
+      logger.error('Error exporting data', 'Settings', error as Error);
       toast.error('Failed to export data');
     }
   };
@@ -419,7 +420,7 @@ const Settings = () => {
       toast.success('Please contact support to complete account deletion');
       navigate('/auth');
     } catch (error: any) {
-      console.error('Error deleting account:', error);
+      logger.error('Error deleting account', 'Settings', error as Error);
       toast.error('Failed to delete account');
     }
   };

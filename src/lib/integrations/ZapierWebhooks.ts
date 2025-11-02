@@ -45,7 +45,7 @@ export class ZapierWebhooks {
       logger.info('[Zapier] Webhook triggered', { eventType });
       return true;
     } catch (error) {
-      console.error('[Zapier] Webhook failed:', error);
+      logger.error('[Zapier] Webhook failed', { eventType }, error as Error);
       analytics.track('zapier_webhook_failed', {
         event_type: eventType,
         error: (error as Error).message,

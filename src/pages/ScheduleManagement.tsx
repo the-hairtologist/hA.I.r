@@ -66,6 +66,7 @@ import { VacationConflictDialog } from '@/components/VacationConflictDialog';
 import { ContextualAI } from '@/components/ContextualAI';
 import { PageHeader } from '@/components/PageHeader';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { logger } from '@/lib/logger';
 
 interface DaySchedule {
   enabled: boolean;
@@ -215,7 +216,7 @@ const ScheduleManagement = () => {
         .maybeSingle();
 
       if (error) {
-        console.error('Error fetching stylist profile:', error);
+        logger.error('Error fetching stylist profile', 'ScheduleManagement', error as Error);
         toast.error('Error loading schedule');
         navigate('/dashboard');
         return;
@@ -246,7 +247,7 @@ const ScheduleManagement = () => {
 
       setBlockedDates(datesData || []);
     } catch (error: any) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data', 'ScheduleManagement', error as Error);
       toast.error('Error loading schedule');
     } finally {
       setLoading(false);
@@ -277,7 +278,7 @@ const ScheduleManagement = () => {
       if (error) throw error;
       setScheduleOverrides(data || []);
     } catch (error) {
-      console.error('Error loading schedule overrides:', error);
+      logger.error('Error loading schedule overrides', 'ScheduleManagement', error as Error);
     }
   };
 
@@ -337,7 +338,7 @@ const ScheduleManagement = () => {
       toast.success('Schedule saved successfully!');
       loadScheduleOverrides();
     } catch (error: any) {
-      console.error('Error saving schedule:', error);
+      logger.error('Error saving schedule', 'ScheduleManagement', error as Error);
       toast.error('Failed to save schedule');
     } finally {
       setSaving(false);
@@ -389,7 +390,7 @@ const ScheduleManagement = () => {
       setEditingOverride(null);
       loadScheduleOverrides();
     } catch (error) {
-      console.error('Error saving override:', error);
+      logger.error('Error saving override', 'ScheduleManagement', error as Error);
       toast.error('Failed to save schedule override');
     } finally {
       setSaving(false);
@@ -407,7 +408,7 @@ const ScheduleManagement = () => {
       toast.success('Schedule override deleted!');
       loadScheduleOverrides();
     } catch (error) {
-      console.error('Error deleting override:', error);
+      logger.error('Error deleting override', 'ScheduleManagement', error as Error);
       toast.error('Failed to delete schedule override');
     }
   };
@@ -440,7 +441,7 @@ const ScheduleManagement = () => {
         `You are now ${!stylistProfile.is_available ? 'accepting' : 'not accepting'} bookings`
       );
     } catch (error: any) {
-      console.error('Error updating availability:', error);
+      logger.error('Error updating availability', 'ScheduleManagement', error as Error);
       toast.error('Error updating availability');
     }
   };
@@ -477,7 +478,7 @@ const ScheduleManagement = () => {
 
       return appointments || [];
     } catch (error) {
-      console.error('Error checking conflicts:', error);
+      logger.error('Error checking conflicts', 'ScheduleManagement', error as Error);
       return [];
     }
   };
@@ -656,7 +657,7 @@ const ScheduleManagement = () => {
       setReason('');
       loadData();
     } catch (error: any) {
-      console.error('Error blocking dates:', error);
+      logger.error('Error blocking dates', 'ScheduleManagement', error as Error);
       toast.error('Error blocking dates');
     } finally {
       setSubmitting(false);

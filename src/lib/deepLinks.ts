@@ -4,6 +4,8 @@
  * Drives viral growth through easy sharing
  */
 
+import { logger } from '@/lib/logger';
+
 export interface DeepLinkData {
   type: 'appointment' | 'formula' | 'transformation' | 'stylist' | 'booking';
   id: string;
@@ -79,7 +81,7 @@ export async function shareDeepLink(
       return true;
     } catch (error: any) {
       if (error.name !== 'AbortError') {
-        console.error('Share failed:', error);
+        logger.error('Share failed', 'deepLinks', error as Error);
       }
       // User cancelled, that's ok
       return false;
@@ -91,7 +93,7 @@ export async function shareDeepLink(
     await navigator.clipboard.writeText(link);
     return true;
   } catch (error) {
-    console.error('Clipboard copy failed:', error);
+    logger.error('Clipboard copy failed', 'deepLinks', error as Error);
     return false;
   }
 }

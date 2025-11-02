@@ -36,6 +36,7 @@ import { offlineQueue } from '@/lib/offlineQueue';
 import { OptimizedImage } from '@/components/OptimizedImage';
 import { EmptyState } from '@/components/EmptyState';
 import { networkErrors } from '@/lib/errorMessages';
+import { logger } from '@/lib/logger';
 
 const BackgroundRemovalDialog = lazy(() =>
   import('@/components/BackgroundRemovalDialog').then(m => ({
@@ -97,7 +98,7 @@ const Portfolio = () => {
         .maybeSingle();
 
       if (error) {
-        console.error('Error fetching stylist profile:', error);
+        logger.error('Error fetching stylist profile', 'Portfolio', error as Error);
         toast.error('Error loading portfolio');
         navigate('/dashboard');
         return;
@@ -112,7 +113,7 @@ const Portfolio = () => {
       setStylistProfileId(profile.id);
       await loadPhotos(profile.id);
     } catch (error) {
-      console.error('Error:', error);
+      logger.error('Error loading portfolio', 'Portfolio', error as Error);
       toast.error('Error loading portfolio');
     } finally {
       setLoading(false);
@@ -127,7 +128,7 @@ const Portfolio = () => {
       .order('display_order');
 
     if (error) {
-      console.error('Error loading photos:', error);
+      logger.error('Error loading photos', 'Portfolio', error as Error);
       toast.error('Failed to load photos');
     } else {
       setPhotos(data as any || []);
@@ -234,7 +235,7 @@ const Portfolio = () => {
       setIsBeforeAfter(false);
       await loadPhotos(stylistProfileId);
     } catch (error: any) {
-      console.error('Upload error:', error);
+      logger.error('Upload error', 'Portfolio', error as Error);
       if (!navigator.onLine) {
         toast.error('You\'re offline. Photo will upload when you reconnect.', {
           description: 'Keep creating - we\'ll save it locally.',
@@ -269,7 +270,7 @@ const Portfolio = () => {
           toast.success('Photo deleted');
           await loadPhotos(stylistProfileId);
         } catch (error) {
-          console.error('Delete error:', error);
+          logger.error('Delete error', 'Portfolio', error as Error);
           toast.error('Failed to delete photo');
         }
       },
@@ -299,7 +300,7 @@ const Portfolio = () => {
 
       await loadPhotos(stylistProfileId);
     } catch (error) {
-      console.error('Reorder error:', error);
+      logger.error('Reorder error', 'Portfolio', error as Error);
       toast.error('Failed to reorder photos');
     }
   };

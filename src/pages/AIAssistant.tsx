@@ -48,6 +48,7 @@ import { FormulaSafetyBadge } from '@/components/FormulaSafetyBadge';
 import { AIFeedbackPrompt } from '@/components/AIFeedbackPrompt';
 import { HairAnalysisPanel } from '@/components/HairAnalysisPanel';
 import { ModelPerformanceIndicator } from '@/components/ModelPerformanceIndicator';
+import { logger } from '@/lib/logger';
 import { FormulaOutcomeFeedback } from '@/components/FormulaOutcomeFeedback';
 import { AIFeatureErrorBoundary } from '@/components/AIFeatureErrorBoundary';
 import { CameraCapture } from '@/components/CameraCapture';
@@ -180,7 +181,7 @@ const Knowledge = () => {
       if (error) throw error;
       setSavedFormulas(data || []);
     } catch (error: any) {
-      console.error('Error loading formulas:', error);
+      logger.error('Error loading formulas', 'AIAssistant', error as Error);
     }
   };
 
@@ -208,7 +209,7 @@ const Knowledge = () => {
       setFormulaToSave('');
       loadSavedFormulas();
     } catch (error: any) {
-      console.error('Error saving formula:', error);
+      logger.error('Error saving formula', 'AIAssistant', error as Error);
       toast.error('Failed to save formula');
     }
   };
@@ -225,7 +226,7 @@ const Knowledge = () => {
       toast.success('Formula removed. All good.');
       loadSavedFormulas();
     } catch (error: any) {
-      console.error('Error deleting formula:', error);
+      logger.error('Error deleting formula', 'AIAssistant', error as Error);
       toast.error("Couldn't delete that. Let's give it another shot.");
     }
   };
@@ -246,7 +247,7 @@ const Knowledge = () => {
       if (error) throw error;
       setConversations(data || []);
     } catch (error: any) {
-      console.error('Error loading conversations:', error);
+      logger.error('Error loading conversations', 'AIAssistant', error as Error);
     }
   };
 
@@ -269,7 +270,7 @@ const Knowledge = () => {
 
       setAiMessages(messages);
     } catch (error: any) {
-      console.error('Error loading conversation messages:', error);
+      logger.error('Error loading conversation messages', 'AIAssistant', error as Error);
       toast.error("Couldn't load that conversation. Mind trying again?");
     }
   };
@@ -317,7 +318,7 @@ const Knowledge = () => {
       if (error) throw error;
       loadConversations();
     } catch (error: any) {
-      console.error('Error saving message:', error);
+      logger.error('Error saving message', 'AIAssistant', error as Error);
     }
   };
 
@@ -337,7 +338,7 @@ const Knowledge = () => {
       if (error) throw error;
       setStylistContext(data);
     } catch (error: any) {
-      console.error('Error loading stylist context:', error);
+      logger.error('Error loading stylist context', 'AIAssistant', error as Error);
     }
   };
 
@@ -365,7 +366,7 @@ const Knowledge = () => {
       if (error) throw error;
       setClientsList(data || []);
     } catch (error: any) {
-      console.error('Error loading clients list:', error);
+      logger.error('Error loading clients list', 'AIAssistant', error as Error);
     }
   };
 
@@ -411,7 +412,7 @@ const Knowledge = () => {
         recentAppointments: appointments || [],
       });
     } catch (error: any) {
-      console.error('Error loading client context:', error);
+      logger.error('Error loading client context', 'AIAssistant', error as Error);
       toast.error("Couldn't load that client's info. Let's try again.");
     }
   };
@@ -488,10 +489,7 @@ const Knowledge = () => {
             });
           }
         } catch (analysisError) {
-          console.warn(
-            'Hair analysis failed, continuing with chat:',
-            analysisError
-          );
+          logger.warn('Hair analysis failed, continuing with chat', 'AIAssistant', { error: String(analysisError) });
         } finally {
           setAnalyzingPhoto(false);
         }

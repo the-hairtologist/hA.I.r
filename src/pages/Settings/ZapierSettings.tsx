@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Zap, Plus, Trash2, ExternalLink, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface WebhookConfig {
   id: string;
@@ -94,7 +95,7 @@ export const ZapierSettings = () => {
       if (error) throw error;
       setWebhooks(data as any || []);
     } catch (error: any) {
-      console.error('Error loading webhooks:', error);
+      logger.error('Error loading webhooks', 'ZapierSettings', error as Error);
       toast.error('Failed to load webhooks');
     } finally {
       setLoading(false);
@@ -143,7 +144,7 @@ export const ZapierSettings = () => {
       setNewWebhook({ event_type: '', webhook_url: '' });
       loadWebhooks();
     } catch (error: any) {
-      console.error('Error saving webhook:', error);
+      logger.error('Error saving webhook', 'ZapierSettings', error as Error);
       toast.error('Failed to save webhook');
     } finally {
       setSaving(false);
@@ -162,7 +163,7 @@ export const ZapierSettings = () => {
       toast.success('Webhook deleted');
       loadWebhooks();
     } catch (error: any) {
-      console.error('Error deleting webhook:', error);
+      logger.error('Error deleting webhook', 'ZapierSettings', error as Error);
       toast.error('Failed to delete webhook');
     }
   };
@@ -179,7 +180,7 @@ export const ZapierSettings = () => {
       toast.success(`Webhook ${!currentStatus ? 'enabled' : 'disabled'}`);
       loadWebhooks();
     } catch (error: any) {
-      console.error('Error toggling webhook:', error);
+      logger.error('Error toggling webhook', 'ZapierSettings', error as Error);
       toast.error('Failed to update webhook');
     }
   };

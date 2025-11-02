@@ -48,6 +48,7 @@ import { HelpTooltip } from '@/components/HelpTooltip';
 import { ServiceTypeColorManager } from '@/components/ServiceTypeColorManager';
 import { ServiceTemplatesDialog } from '@/components/ServiceTemplatesDialog';
 import type { StylistProfile } from '@/types/common';
+import { logger } from '@/lib/logger';
 
 const Services = () => {
   const navigate = useNavigate();
@@ -152,7 +153,7 @@ const Services = () => {
         .maybeSingle();
 
       if (stylistError) {
-        console.error('Error fetching stylist profile:', stylistError);
+        logger.error('Error fetching stylist profile', 'Services', stylistError as Error);
         toast.error('Failed to load stylist profile');
         navigate('/dashboard');
         return;
@@ -169,7 +170,7 @@ const Services = () => {
       const servicesData = await getServicesByStylist(stylist.id);
       setServices(servicesData);
     } catch (error: unknown) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data', 'Services', error as Error);
       toast.error(
         'Unable to load your services. Please refresh or check your connection.'
       );
