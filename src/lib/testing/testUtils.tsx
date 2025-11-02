@@ -4,13 +4,13 @@
  */
 
 import React from 'react';
-import { render as rtlRender, RenderOptions } from '@testing-library/react';
+import { render as rtlRender, RenderOptions, screen } from '@testing-library/react';
+import { waitFor, fireEvent } from '@testing-library/dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import * as rtl from '@testing-library/react';
 
 /**
  * Custom render function that includes common providers
@@ -80,9 +80,9 @@ export const createMockSupabaseClient = () => ({
 });
 
 /**
- * Wait for async updates in tests
+ * Wait for async updates in tests (custom implementation)
  */
-export const waitFor = (
+export const waitForCustom = (
   callback: () => void | Promise<void>,
   options?: { timeout?: number }
 ) => {
@@ -175,5 +175,5 @@ export const mockFormula = {
   color_line: 'Test Color Line',
 };
 
-// Re-export testing library utilities
-export { screen } from '@testing-library/react';
+// Re-export testing library utilities for convenience
+export { screen, waitFor, fireEvent };
