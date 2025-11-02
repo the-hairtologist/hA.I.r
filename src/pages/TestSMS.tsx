@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '@/lib/logger';
 
 const TestSMS = () => {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ const TestSMS = () => {
       });
       toast.success('SMS notification sent!');
     } catch (error: any) {
-      console.error('Error sending SMS:', error);
+      logger.error('Error sending SMS', 'TestSMS', error);
       setTestResult({
         success: false,
         message: error.message || 'Failed to send SMS',

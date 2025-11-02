@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { logger } from '@/lib/logging/productionLogger';
+import { logger } from '@/lib/logger';
 
 const ZapierIntegration = () => {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ const ZapierIntegration = () => {
     setTestSuccess(false);
 
     try {
-      logger.info('[Zapier] Testing webhook', { webhookUrl });
+      logger.info('[Zapier] Testing webhook', 'ZapierIntegration', { webhookUrl });
 
       const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -68,7 +68,7 @@ const ZapierIntegration = () => {
         description: "Check your Zap's history to confirm it was triggered",
       });
     } catch (error) {
-      console.error('[Zapier] Test failed:', error);
+      logger.error('[Zapier] Test failed', 'ZapierIntegration', error as Error);
       toast.error('Failed to send test', {
         description: 'Please check your webhook URL and try again',
       });

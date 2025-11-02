@@ -9,6 +9,7 @@ import { TeamChat } from '@/components/TeamChat';
 import { PageHeader } from '@/components/PageHeader';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 interface TeamAppointment {
   id: string;
@@ -58,7 +59,7 @@ export default function TeamSchedule() {
       if (error) throw error;
       if (data) setStylistId(data.id);
     } catch (error) {
-      console.error('Failed to load stylist:', error);
+      logger.error('Failed to load stylist', 'TeamSchedule', error as Error);
       toast.error("Couldn't load your profile. Mind trying again?");
     }
   };
@@ -84,7 +85,7 @@ export default function TeamSchedule() {
       if (error) throw error;
       if (data) setAppointments(data as any);
     } catch (error) {
-      console.error('Failed to load team schedule:', error);
+      logger.error('Failed to load team schedule', 'TeamSchedule', error as Error);
       toast.error("Couldn't load the schedule. Let's give that another shot.");
     } finally {
       setLoading(false);

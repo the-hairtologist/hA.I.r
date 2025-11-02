@@ -35,6 +35,7 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useAuth } from '@/hooks/useAuth';
 import { PageHeader } from '@/components/PageHeader';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { logger } from '@/lib/logger';
 
 interface ActivityLogEntry {
   id: string;
@@ -79,7 +80,7 @@ const ActivityLog = () => {
           navigate('/dashboard');
         }
       } catch (error) {
-        console.error('Error checking role:', error);
+        logger.error('Error checking role', 'ActivityLog', error as Error);
         navigate('/dashboard');
       } finally {
         setRoleLoading(false);
@@ -135,7 +136,7 @@ const ActivityLog = () => {
 
       setActivities(filteredData);
     } catch (error: any) {
-      console.error('Error loading activities:', error);
+      logger.error('Error loading activities', 'ActivityLog', error);
       toast.error('Failed to load activity log. Please try again.');
     } finally {
       setLoading(false);
@@ -167,7 +168,7 @@ const ActivityLog = () => {
 
       toast.success('Activity log exported successfully!');
     } catch (error) {
-      console.error('Error exporting:', error);
+      logger.error('Error exporting', 'ActivityLog', error as Error);
       toast.error('Failed to export activity log');
     }
   };

@@ -540,7 +540,7 @@ export default function Clients() {
       await bulkDeleteMutation.mutateAsync(clientIds);
       clearSelection();
     } catch (error) {
-      console.error('Error deleting clients:', error);
+      logger.error('Error deleting clients', 'Clients', error as Error);
     }
   };
 

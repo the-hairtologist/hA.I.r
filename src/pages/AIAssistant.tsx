@@ -589,7 +589,7 @@ const Knowledge = () => {
             });
           }
         } catch (validationError) {
-          console.warn('Formula validation failed:', validationError);
+          logger.warn('Formula validation failed', 'AIAssistant', { error: String(validationError) });
         } finally {
           setValidatingFormula(false);
         }
@@ -604,7 +604,7 @@ const Knowledge = () => {
       // Clear uploaded images after successful send
       setUploadedImages([]);
     } catch (error: any) {
-      console.error('AI Error:', error);
+      logger.error('AI Error', 'AIAssistant', error as Error);
 
       // Provide actionable error message
       const errorMessage = error.message?.includes('rate limit')
