@@ -20,7 +20,6 @@ import { DashboardFullSkeleton } from '@/components/LoadingSkeleton';
 import { NextAppointmentWidget } from '@/components/dashboard/NextAppointmentWidget';
 import { LoyaltyProgressWidget } from '@/components/dashboard/LoyaltyProgressWidget';
 import { CommissionTrackerWidget } from '@/components/dashboard/CommissionTrackerWidget';
-import { QuickAddClientFAB } from '@/components/QuickAddClientFAB';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, format } from 'date-fns';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { NotificationEnhancer } from '@/components/NotificationEnhancer';
@@ -447,9 +446,10 @@ const Dashboard = () => {
   const checkProfileCompletion = () => {
     if (!profile || !user || !userProfile) return;
 
-    // Don't show if already completed before
+    // Don't show if already completed OR dismissed
     const profileCompleted = localStorage.getItem('profile_completed');
-    if (profileCompleted === 'true') return;
+    const profileDismissed = localStorage.getItem('profile_setup_dismissed');
+    if (profileCompleted === 'true' || profileDismissed === 'true') return;
 
     // Check basic profile from profiles table
     const basicIncomplete = !userProfile.full_name;
@@ -679,9 +679,6 @@ const Dashboard = () => {
           userRole={userRole as 'stylist' | 'client'}
         />
       )}
-
-      {/* Quick Add Client FAB - Only for stylists */}
-      {userRole === 'stylist' && !isAdmin && <QuickAddClientFAB />}
 
       <div className="w-full space-y-4 sm:space-y-6">
         <div className="mb-4 sm:mb-6 md:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
