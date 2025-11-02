@@ -52,7 +52,7 @@ import {
 import { InviteClientDialog } from '@/components/clients';
 import { SearchInput } from '@/components/SearchInput';
 import { ClientCardSkeleton } from '@/components/LoadingSkeleton';
-import { useRealtimeUpdates } from '@/hooks/useRealtimeUpdates';
+
 import { useDebounce } from '@/hooks/useDebounce';
 import {
   Select,

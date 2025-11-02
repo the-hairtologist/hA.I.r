@@ -55,6 +55,7 @@ import { DashboardSectionRenderer } from '@/components/dashboard/DashboardSectio
 import { useAIAnalytics } from '@/hooks/useAIAnalytics';
 import { useFeatureFlag } from '@/lib/featureFlags';
 import { Button } from '@/components/ui/button';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Edit3,
   RotateCcw,
@@ -93,6 +94,9 @@ const Dashboard = () => {
     trackMounts: true,
     reportThreshold: 16,
   });
+
+  // Query client for cache management
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -406,6 +410,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (userRole && profile) {
+      // Force fresh data from React Query cache on dashboard load
+      queryClient.invalidateQueries();
+      
       loadDashboardData();
 
       // GuidedTour handles onboarding automatically via useTour hook
