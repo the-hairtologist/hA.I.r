@@ -4,220 +4,234 @@
  */
 
 import React from 'react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAICall } from './useAICall';
+import { supabase } from '@/integrations/supabase/client';
 
-// Mock fetch globally
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
+// Mock supabase client
+vi.mock('@/integrations/supabase/client', () => ({
+  supabase: {
+    functions: {
+      invoke: vi.fn(),
+    },
+  },
+}));
 
-// Create wrapper with QueryClient
 const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
+      queries: {
+        retry: false,
+      },
     },
   });
-  
-  const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+  return ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
-  
-  return Wrapper;
 };
 
 describe('useAICall', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   it('should handle successful AI call', async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        choices: [{
-          message: { content: 'Test response' }
-        }]
-      }),
+    const mockData = { success: true };
+    (supabase.functions.invoke as Mock).mockResolvedValue({
+      data: mockData,
+      error: null,
     });
 
-    const { result } = renderHook(() => useAICall(), {
+    const { result } = renderHook(() => useAICall('test-function'), {
       wrapper: createWrapper(),
     });
 
-    const response = await result.current.callAI({
-      model: 'google/gemini-2.5-flash',
-      messages: [{ role: 'user', content: 'Test' }],
+    let response;
+    await act(async () => {
+      response = await result.current.invoke({ prompt: 'test' });
     });
 
-    expect(response).toBeDefined();
-    expect(mockFetch).toHaveBeenCalledTimes(1);
+    expect(response).toEqual(mockData);
+
+    await waitFor(() => {
+      expect(result.current.data).toEqual(mockData);
+      expect(result.current.error).toBeNull();
+    });
+
+    expect(supabase.functions.invoke).toHaveBeenCalledWith('test-function', {
+      body: { prompt: 'test' },
+    });
   });
 
   it('should handle API errors gracefully', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('Network error'));
+    const mockError = { message: 'API Error', code: '500' };
+    (supabase.functions.invoke as Mock).mockResolvedValue({
+      data: null,
+      error: mockError,
+    });
 
-    const { result } = renderHook(() => useAICall(), {
+    const { result } = renderHook(() => useAICall('test-function'), {
       wrapper: createWrapper(),
     });
 
-    await expect(
-      result.current.callAI({
-        model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'user', content: 'Test' }],
-      })
-    ).rejects.toThrow('Network error');
+    let response;
+    await act(async () => {
+      response = await result.current.invoke({ prompt: 'test' });
+    });
+
+    expect(response).toBeNull();
+
+    await waitFor(() => {
+      expect(result.current.data).toBeNull();
+      expect(result.current.error).toBeDefined();
+      expect(result.current.error?.message).toContain('API Error');
+    });
   });
 
   it('should handle rate limit errors', async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      status: 429,
-      json: async () => ({ error: 'Rate limit exceeded' }),
+    const mockError = { message: 'Rate limit exceeded', code: '429' };
+    (supabase.functions.invoke as Mock).mockResolvedValue({
+      data: null,
+      error: mockError,
     });
 
-    const { result } = renderHook(() => useAICall(), {
+    const { result } = renderHook(() => useAICall('test-function'), {
       wrapper: createWrapper(),
     });
 
-    await expect(
-      result.current.callAI({
-        model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'user', content: 'Test' }],
-      })
-    ).rejects.toThrow();
+    await act(async () => {
+      await result.current.invoke({ prompt: 'test' });
+    });
+
+    await waitFor(() => {
+      expect(result.current.error).toBeDefined();
+      expect(result.current.error?.message).toContain(
+        'High AI usage right now'
+      );
+    });
   });
 
   it('should retry failed requests', async () => {
-    let attempts = 0;
-    mockFetch.mockImplementation(() => {
-      attempts++;
-      if (attempts < 2) {
-        return Promise.reject(new Error('Temporary failure'));
+    const mockData = { success: true };
+    const failureError = { message: 'Temporary failure', code: '503' };
+
+    (supabase.functions.invoke as Mock)
+      .mockResolvedValueOnce({ data: null, error: failureError })
+      .mockResolvedValueOnce({ data: mockData, error: null });
+
+    const { result } = renderHook(
+      () => useAICall('test-function', { maxRetries: 1 }),
+      {
+        wrapper: createWrapper(),
       }
-      return Promise.resolve({
-        ok: true,
-        json: async () => ({
-          choices: [{
-            message: { content: 'Success after retry' }
-          }]
-        }),
-      });
+    );
+
+    let response;
+    await act(async () => {
+      response = await result.current.invoke({ prompt: 'test' });
     });
 
-    const { result } = renderHook(() => useAICall(), {
-      wrapper: createWrapper(),
-    });
+    // The hook should return the successful response after retrying
+    expect(response).toEqual(mockData);
 
-    const response = await result.current.callAI({
-      model: 'google/gemini-2.5-flash',
-      messages: [{ role: 'user', content: 'Test' }],
+    // The final successful data will be in result.current.data
+    await waitFor(() => {
+      expect(result.current.data).toEqual(mockData);
+      expect(supabase.functions.invoke).toHaveBeenCalledTimes(2);
     });
-
-    expect(attempts).toBeGreaterThan(1);
-    expect(response).toBeDefined();
   });
 
   it('should handle timeout errors', async () => {
-    mockFetch.mockImplementation(
-      () => new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 100)
-      )
-    );
-
-    const { result } = renderHook(() => useAICall(), {
-      wrapper: createWrapper(),
+    (supabase.functions.invoke as Mock).mockImplementation(() => {
+      return new Promise(resolve =>
+        setTimeout(() => resolve({ error: { message: 'Request timed out' } }), 100)
+      );
     });
 
-    await expect(
-      result.current.callAI({
-        model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'user', content: 'Test' }],
-      })
-    ).rejects.toThrow('Timeout');
+    const { result } = renderHook(
+      () => useAICall('test-function', { timeout: 50 }),
+      {
+        wrapper: createWrapper(),
+      }
+    );
+
+    let response;
+    await act(async () => {
+      response = await result.current.invoke({ prompt: 'test' });
+    });
+
+    expect(response).toBeNull();
+    await waitFor(() => {
+      expect(result.current.error).toBeDefined();
+      expect(result.current.error?.message).toContain(
+        'AI feature error: Request timed out'
+      );
+    });
   });
 
   it('should validate required parameters', async () => {
-    const { result } = renderHook(() => useAICall(), {
+    const { result } = renderHook(() => useAICall(''), {
       wrapper: createWrapper(),
     });
 
-    await expect(
-      result.current.callAI({
-        model: '',
-        messages: [],
-      })
-    ).rejects.toThrow();
+    const response = await result.current.invoke({ prompt: 'test' });
+    expect(response).toBeNull();
+    expect(result.current.data).toBeNull();
   });
 
   it('should track loading state correctly', async () => {
-    mockFetch.mockImplementation(
-      () => new Promise(resolve => 
-        setTimeout(() => resolve({
-          ok: true,
-          json: async () => ({
-            choices: [{ message: { content: 'Done' } }]
-          }),
-        }), 50)
-      )
+    (supabase.functions.invoke as Mock).mockImplementation(
+      () =>
+        new Promise(resolve =>
+          setTimeout(
+            () => resolve({ data: { done: true }, error: null }),
+            50
+          )
+        )
     );
 
-    const { result } = renderHook(() => useAICall(), {
+    const { result } = renderHook(() => useAICall('test-function'), {
       wrapper: createWrapper(),
     });
 
-    const callPromise = result.current.callAI({
-      model: 'google/gemini-2.5-flash',
-      messages: [{ role: 'user', content: 'Test' }],
+    let invokePromise: Promise<unknown>;
+    act(() => {
+      invokePromise = result.current.invoke({ prompt: 'test' });
     });
 
-    // Should be loading initially
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(true);
+    expect(result.current.loading).toBe(true);
+
+    await act(async () => {
+      await invokePromise;
     });
 
-    await callPromise;
-
-    // Should not be loading after completion
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
+    expect(result.current.loading).toBe(false);
   });
 
   it('should support different AI models', async () => {
     const models = [
       'google/gemini-2.5-pro',
       'google/gemini-2.5-flash',
-      'google/gemini-2.5-flash-lite',
     ];
 
     for (const model of models) {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          choices: [{ message: { content: `Response from ${model}` } }]
-        }),
-      });
-
-      const { result } = renderHook(() => useAICall(), {
+      const { result } = renderHook(() => useAICall('test-function', { model }), {
         wrapper: createWrapper(),
       });
 
-      const response = await result.current.callAI({
-        model,
-        messages: [{ role: 'user', content: 'Test' }],
+      (supabase.functions.invoke as Mock).mockResolvedValue({ data: { modelUsed: model }, error: null });
+
+      let response;
+      await act(async () => {
+        response = await result.current.invoke({ prompt: 'test' });
       });
 
-      expect(response).toBeDefined();
+      expect(response).toEqual({ modelUsed: model });
+      expect(supabase.functions.invoke).toHaveBeenCalledWith('test-function', {
+        body: { prompt: 'test' },
+      });
     }
   });
 });

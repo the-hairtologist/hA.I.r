@@ -27,6 +27,17 @@ export interface EnrichedAIError extends AppError {
   };
 }
 
+interface PossibleError {
+  message?: string;
+  error?: string;
+  status?: number;
+  statusCode?: number;
+}
+
+function isPossibleError(e: unknown): e is PossibleError {
+  return typeof e === 'object' && e !== null;
+}
+
 // Track AI call success/failure counts
 const aiCallStats = new Map<
   string,
@@ -37,90 +48,101 @@ const aiCallStats = new Map<
  * Wrapper for AI edge function calls with context enrichment
  */
 export async function wrapAICall<T>(
-  aiFunction: () => Promise<{ data: T | null; error: any }>,
+  aiFunction: () => Promise<{ data: T | null; error: unknown }>,
   context: AICallContext
 ): Promise<{ data: T | null; error: EnrichedAIError | null }> {
   const startTime = performance.now();
   const feature = context.feature;
   const model = context.model || 'gemini-2.5-flash';
+  const maxRetries = context.maxRetries ?? 0;
+  let lastError: EnrichedAIError | null = null;
 
-  // Get previous stats for this feature
-  const stats = aiCallStats.get(feature) || {
-    success: 0,
-    failure: 0,
-    lastSuccess: 0,
-  };
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const stats = aiCallStats.get(feature) || {
+      success: 0,
+      failure: 0,
+      lastSuccess: 0,
+    };
 
-  log.info(`AI call starting: ${feature}`, 'aiErrorContext', {
-    model,
-    estimatedTokens: context.estimatedTokens,
-  });
+    log.info(
+      `AI call attempt ${attempt + 1}/${maxRetries + 1} for: ${feature}`,
+      'aiErrorContext',
+      {
+        model,
+        estimatedTokens: context.estimatedTokens,
+      }
+    );
 
-  try {
-    const result = await aiFunction();
-    const executionTimeMs = Math.round(performance.now() - startTime);
+    try {
+      const result = await aiFunction();
+      const executionTimeMs = Math.round(performance.now() - startTime);
 
-    if (result.error) {
-      // Error occurred, enrich it
-      const enrichedError = enrichAIError(result.error, {
+      if (result.error) {
+        lastError = enrichAIError(result.error, {
+          feature,
+          model,
+          executionTimeMs,
+          previousSuccessCount: stats.success,
+        });
+
+        aiCallStats.set(feature, { ...stats, failure: stats.failure + 1 });
+        log.error(
+          `AI call failed (attempt ${attempt + 1}): ${feature}`,
+          'aiErrorContext',
+          lastError
+        );
+
+        if (!lastError.retryable || attempt === maxRetries) {
+          return { data: null, error: lastError };
+        }
+        await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
+        continue;
+      }
+
+      const now = Date.now();
+      aiCallStats.set(feature, {
+        ...stats,
+        success: stats.success + 1,
+        lastSuccess: now,
+      });
+
+      log.info(`AI call succeeded: ${feature}`, 'aiErrorContext', {
+        executionTimeMs,
+        dataReceived: !!result.data,
+      });
+
+      return { data: result.data, error: null };
+    } catch (error: unknown) {
+      const executionTimeMs = Math.round(performance.now() - startTime);
+      lastError = enrichAIError(error, {
         feature,
         model,
         executionTimeMs,
         previousSuccessCount: stats.success,
       });
 
-      // Update stats
-      aiCallStats.set(feature, {
-        ...stats,
-        failure: stats.failure + 1,
-      });
+      aiCallStats.set(feature, { ...stats, failure: stats.failure + 1 });
+      log.error(
+        `AI call exception (attempt ${attempt + 1}): ${feature}`,
+        'aiErrorContext',
+        lastError
+      );
 
-      log.error(`AI call failed: ${feature}`, 'aiErrorContext', enrichedError);
-
-      return { data: null, error: enrichedError };
+      if (!lastError.retryable || attempt === maxRetries) {
+        return { data: null, error: lastError };
+      }
+      await new Promise(resolve => setTimeout(resolve, 100)); // Simple backoff
     }
-
-    // Success
-    const now = Date.now();
-    aiCallStats.set(feature, {
-      ...stats,
-      success: stats.success + 1,
-      lastSuccess: now,
-    });
-
-    log.info(`AI call succeeded: ${feature}`, 'aiErrorContext', {
-      executionTimeMs,
-      dataReceived: !!result.data,
-    });
-
-    return { data: result.data, error: null };
-  } catch (error: any) {
-    const executionTimeMs = Math.round(performance.now() - startTime);
-
-    const enrichedError = enrichAIError(error, {
-      feature,
-      model,
-      executionTimeMs,
-      previousSuccessCount: stats.success,
-    });
-
-    // Update stats
-    aiCallStats.set(feature, {
-      ...stats,
-      failure: stats.failure + 1,
-    });
-
-    log.error(`AI call exception: ${feature}`, 'aiErrorContext', enrichedError);
-
-    return { data: null, error: enrichedError };
   }
+
+  return { data: null, error: lastError };
 }
 
 /**
  * Enrich an AI error with contextual information
  */
 function enrichAIError(
-  error: any,
+  error: unknown,
   context: {
     feature: string;
     model: string;
@@ -128,11 +150,16 @@ function enrichAIError(
     previousSuccessCount: number;
   }
 ): EnrichedAIError {
-  // Extract status code from error
-  const statusCode =
-    error.status ||
-    error.statusCode ||
-    (error.message?.includes('429') ? 429 : undefined);
+  let statusCode: number | undefined;
+
+
+  if (isPossibleError(error)) {
+    statusCode =
+      error.status ||
+      error.statusCode ||
+      (error.message?.includes('429') ? 429 : undefined);
+  }
+  // (removed unused errorMessage assignment)
 
   // Determine error type and suggested action
   const { code, message, suggestedAction, retryAfterSeconds } = classifyAIError(
@@ -163,7 +190,7 @@ function enrichAIError(
  * Classify AI error and provide user-friendly message
  */
 function classifyAIError(
-  error: any,
+  error: unknown,
   context: { feature: string; executionTimeMs: number }
 ): {
   code: string;
@@ -171,8 +198,13 @@ function classifyAIError(
   suggestedAction: string;
   retryAfterSeconds?: number;
 } {
-  const errorMessage = error.message || error.error || String(error);
-  const statusCode = error.status || error.statusCode;
+  let errorMessage = String(error);
+  let statusCode: number | undefined;
+
+  if (isPossibleError(error)) {
+    errorMessage = error.message || error.error || String(error);
+    statusCode = error.status || error.statusCode;
+  }
 
   // Rate limit exceeded (429)
   if (statusCode === 429 || errorMessage.toLowerCase().includes('rate limit')) {
