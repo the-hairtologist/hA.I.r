@@ -190,7 +190,7 @@ export default function AccessCodes() {
                       </p>
                     )}
 
-                    <div className="flex items-center gap-4 text-[10px] xs:text-xs text-muted-foreground">
+                    <div className="flex items-center gap-4 text-xs sm:text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         Created{' '}

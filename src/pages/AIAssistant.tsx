@@ -669,7 +669,7 @@ const Knowledge = () => {
                 AI Hair Pro
               </h2>
             </div>
-            <p className="text-[10px] xs:text-xs sm:text-sm font-sans text-muted-foreground leading-relaxed">
+            <p className="text-xs sm:text-sm font-sans text-muted-foreground leading-relaxed">
               <span className="font-semibold text-foreground">
                 Ask anything hair-related!
               </span>{' '}

@@ -130,7 +130,7 @@ const BookAppointment = () => {
                       <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                         <Badge
                           variant="secondary"
-                          className="text-[11px] sm:text-xs"
+                          className="text-xs sm:text-sm"
                         >
                           {service.price}
                         </Badge>

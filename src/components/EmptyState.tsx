@@ -35,10 +35,10 @@ export const EmptyState = ({
         >
           <Icon className="h-10 w-10 text-on-surface-primary" />
         </div>
-        <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 font-pixel">
+        <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-2 font-pixel">
           {title}
         </h3>
-        <p className="font-sans text-muted-foreground mb-6 max-w-md text-sm sm:text-base lg:text-lg">
+        <p className="font-sans text-muted-foreground mb-6 max-w-md text-sm sm:text-base md:text-lg">
           {description}
         </p>
         {actionLabel && onAction && (

@@ -711,7 +711,7 @@ const Dashboard = () => {
       <div className="w-full space-y-4 sm:space-y-6">
         <div className="mb-4 sm:mb-6 md:mb-8 window-frame bg-gradient-to-br from-blue-400 via-cyan-300 to-green-300 relative animate-fade-in-fast">
           <div className="window-titlebar">
-            <span className="text-background font-mono text-[10px] xs:text-[11px] sm:text-xs md:text-sm font-bold truncate max-w-[70vw]">
+            <span className="text-background font-mono text-xs sm:text-sm md:text-base font-bold truncate max-w-[70vw]">
               {new Date().toLocaleDateString('en-US', {
                 month: '2-digit',
                 day: '2-digit',
@@ -777,7 +777,7 @@ const Dashboard = () => {
                   <Edit3 className="h-3.5 w-3.5 text-primary flex-shrink-0" />
                   <span className="truncate">Customize Dashboard</span>
                 </h3>
-                <p className="text-[10px] xs:text-[11px] sm:text-xs font-sans text-muted-foreground">
+                <p className="text-xs sm:text-sm font-sans text-muted-foreground">
                   <span className="hidden sm:inline">
                     Drag sections to reorder • Click eye icon to show/hide
                     sections
@@ -792,7 +792,7 @@ const Dashboard = () => {
                   size="sm"
                   variant="outline"
                   onClick={handleReset}
-                  className="text-[10px] xs:text-xs font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
+                  className="text-xs sm:text-sm font-bold uppercase tracking-wide flex-1 sm:flex-none min-h-[44px]"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
                   <span className="hidden xs:inline">Reset</span>

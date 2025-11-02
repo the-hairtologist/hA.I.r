@@ -135,7 +135,7 @@ export default function AdGenerator() {
                     <span className="font-semibold capitalize">
                       {type.replace('-', ' ')}
                     </span>
-                    <span className="text-[10px] xs:text-xs opacity-70 text-left">
+                    <span className="text-xs sm:text-sm opacity-70 text-left">
                       {adTypeExamples[type]}
                     </span>
                   </Button>
@@ -154,7 +154,7 @@ export default function AdGenerator() {
                 rows={4}
                 className="resize-none"
               />
-              <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Be specific about your offer, target audience, and key benefits
               </p>
             </div>

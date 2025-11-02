@@ -655,7 +655,7 @@ const Appointments = () => {
                         ? 'No appointments match your filters'
                         : 'Your schedule is clear today! ☕'}
                     </p>
-                    <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                       {searchQuery || statusFilter !== 'all'
                         ? 'Try adjusting your search or filters'
                         : 'Time to relax or catch up on other tasks'}

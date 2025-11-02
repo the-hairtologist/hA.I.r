@@ -88,7 +88,7 @@ const Index = () => {
           <Button
             onClick={handleCTAClick}
             size="sm"
-            className="font-pixel text-[10px] xs:text-xs uppercase bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-white brutal-shadow-sm hover:brutal-shadow-md transition-all duration-300 hover:-translate-y-0.5 rounded-none px-4 xs:px-6 py-2.5 xs:py-3 min-h-[44px] flex-shrink-0"
+            className="font-pixel text-xs sm:text-sm uppercase bg-accent text-accent-foreground hover:bg-accent/90 brutal-border border-white brutal-shadow-sm hover:brutal-shadow-md transition-all duration-300 hover:-translate-y-0.5 rounded-none px-4 xs:px-6 py-2.5 xs:py-3 min-h-[44px] flex-shrink-0"
           >
             <span className="hidden xxs:inline">Get Started</span>
             <span className="xxs:hidden">Start</span>

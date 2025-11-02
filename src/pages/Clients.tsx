@@ -862,7 +862,7 @@ export default function Clients() {
         )}
 
         {/* Keyboard shortcut hints */}
-        <div className="flex justify-end text-[10px] xs:text-xs sm:text-sm text-muted-foreground gap-4">
+        <div className="flex justify-end text-xs sm:text-sm text-muted-foreground gap-4">
           <span>
             <kbd className="px-2 py-1 font-semibold bg-muted rounded border">
               Ctrl+N

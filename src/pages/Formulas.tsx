@@ -585,7 +585,7 @@ const Formulas = () => {
         {clients.length === 0 && <PrerequisiteCheck type="clients" />}
 
         {/* Keyboard shortcut hints */}
-        <div className="flex justify-between items-center text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
+        <div className="flex justify-between items-center text-xs sm:text-sm text-muted-foreground">
           <div className="flex gap-4">
             <span>
               <kbd className="px-2 py-1 font-semibold bg-muted rounded border">
@@ -805,12 +805,12 @@ const Formulas = () => {
                     <Plus className="h-5 w-5" />
                     Create Your First Formula
                   </Button>
-                  <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground mt-4">
-                    <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-4">
+                    <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">
                       Ctrl
                     </kbd>{' '}
                     +{' '}
-                    <kbd className="px-2 py-1 text-[10px] xs:text-xs font-semibold bg-muted rounded border">
+                    <kbd className="px-2 py-1 text-xs font-semibold bg-muted rounded border">
                       N
                     </kbd>{' '}
                     for quick access
@@ -933,7 +933,7 @@ const Formulas = () => {
                               {client.full_name || 'Client'}
                             </span>
                             {client.email && (
-                              <span className="text-[10px] xs:text-xs text-muted-foreground">
+                              <span className="text-xs sm:text-sm text-muted-foreground">
                                 {client.email}
                               </span>
                             )}

@@ -162,7 +162,7 @@ const Profile = () => {
                     className="pl-9"
                   />
                 </div>
-                <p className="text-[10px] xs:text-xs sm:text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Email cannot be changed here
                 </p>
               </div>
